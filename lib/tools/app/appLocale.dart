@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:iris_tools/api/helpers/localeHelper.dart';
 
 import '/managers/settingsManager.dart';
@@ -49,9 +50,9 @@ class AppLocale {
       localeDelegate(),
       DefaultMaterialLocalizations.delegate,
       DefaultCupertinoLocalizations.delegate,
-      /*GlobalMaterialLocalizations.delegate,
+      GlobalMaterialLocalizations.delegate,
       GlobalCupertinoLocalizations.delegate,
-      GlobalWidgetsLocalizations.delegate,*/
+      GlobalWidgetsLocalizations.delegate,
     ];
     // https://flutter.dev/docs/development/accessibility-and-localization/internationalization
   }

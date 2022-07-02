@@ -169,6 +169,8 @@
   "guest" : "مهمان",
   "calculate" : "محاسبه",
   "systemMessage": "پیام سیستم",
+  "pleaseWait" : "چند لحظه صبر کنید",
+  "errorOccur" : "خطایی رخ داده است",
   "contactSelection" : "انتخاب مخاطب",
   "selectYourGender": "لطفا جنسیت خود را انتخاب کنید",
   "selectYourLanguage" : "زبان خود را انتخاب کنید",
@@ -178,6 +180,7 @@
   "wantToBlockThisItem": "آیا این مورد مسدود شود؟",
   "noChangesHaveBeenMade": "هیچ تغییری ایجاد نشده است",
   "wantToLeave": "آیا می خواهید خارج شوید؟",
+  "thisPageNotFound": "صفحه مورد نظر یافت نشد",
   "shouldNotBeEmpty": "این گزینه نباید خالی باشد",
   "enterTitle": "لطفا یک عنوان وارد کنید",
   "enterName": "لطفا یک نام وارد کنید",
@@ -197,9 +200,9 @@
 
 
   "httpCodes" : {
-    "tokenIsIncorrect": "توکن صحیح نیست، لطفا دوباره وارد حساب کاربری خود شوید",
+    "tokenIsIncorrectOrExpire": "توکن صحیح نیست یا منقضی شده، لطفا دوباره وارد حساب کاربری خود شوید",
     "dataNotFound": "داده ای یافت نشد",
-    "errorUploadingData": "خطا در آپلود دیتا",
+    "errorUploadingData": "خطا در آپلود اطلاعات",
     "accountIsBlock": "حساب کاربری مسدود است",
     "databaseError": "خطای دیتابیس",
     "userNameOrPasswordIncorrect": "نام کاربری یا کلمه عبور اشتباه است.",
@@ -209,6 +212,14 @@
     "netConnectionIsDisconnect": "ارتباط شبکه قطع می باشد",
     "informationWasSend": "اطلاعات مورد نظر ارسال شد",
     "errorCommunicatingServer": "خطا در برقراری ارتباط با سرور"
+  },
+
+  "operationSection" : {
+    "successOperation": "عملیات با موفقیت انجام شد",
+    "operationFailed": "عملیات انجام نـشد",
+    "operationFailedTryAgain": "عملیات انجام نشد، لطفا دوباره تلاش کنید",
+    "operationCannotBePerformed": "این عملیات قابل انجام نیست",
+    "operationCanceled": "عملیات لغو شد"
   },
 
   "loginSection" : {
@@ -259,14 +270,6 @@
     "thisMobileExistManager": "این شماره موبایل قبلا ثبت شده است، لطفا یک شماره دیگر وارد کنید",
     "thanksRegisterDescription" : "ثبت نام شما انجام شد.شما می توانید با مشخصات خود وارد شوید",
     "validationDescription": "لطفا کد ارسال شده به شماره ی #1 را وارد کنید"
-  },
-
-  "operationSection" : {
-    "successOperation": "عملیات با موفقیت انجام شد",
-    "operationFailed": "عملیات انجام نـشد",
-    "operationFailedTryAgain": "عملیات انجام نشد، لطفا دوباره تلاش کنید",
-    "operationCannotBePerformed": "این عملیات قابل انجام نیست",
-    "operationCanceled": "عملیات لغو شد"
   },
 
   "calendarOptions": {

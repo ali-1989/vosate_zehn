@@ -5,9 +5,7 @@ import 'package:vosate_zehn/tools/app/appRoute.dart';
 class AppMessages {
   AppMessages._();
 
-  static const _noText = "nn";
-  static const errorOccur = "خطایی رخ داده است";
-  static const pleaseWait = 'چند لحظه صبر کنید...';
+  static const _noText = "n_n";
 
   static String get ok {
     return AppRoute.getContext().tC('ok')?? _noText;
@@ -22,7 +20,15 @@ class AppMessages {
   }
 
   static String get notice {
-    return AppRoute.getContext().tC('notice')?? _noText;
+    return AppRoute.getContext().t('notice')?? _noText;
+  }
+
+  static String get pleaseWait {
+    return AppRoute.getContext().t('pleaseWait')?? _noText;
+  }
+
+  static String get errorOccur {
+    return AppRoute.getContext().t('errorOccur')?? _noText;
   }
 
   static String get wantToLeave {
@@ -42,7 +48,7 @@ class AppMessages {
   }
 
   static String get tokenIsIncorrectOrExpire {
-    return AppRoute.getContext().tInMap('httpCodes', 'tokenIsIncorrect')?? _noText;
+    return AppRoute.getContext().tInMap('httpCodes', 'tokenIsIncorrectOrExpire')?? _noText;
   }
 
   static String get databaseError {
@@ -65,48 +71,52 @@ class AppMessages {
     return AppRoute.getContext().tInMap('httpCodes', 'thisRequestNotDefined')?? _noText;
   }
 
+  static String get informationWasSend {
+    return AppRoute.getContext().tInMap('httpCodes', 'informationWasSend')?? _noText;
+  }
+
   static String get errorUploadingData {
     return AppRoute.getContext().tInMap('httpCodes', 'errorUploadingData')?? _noText;
   }
 
   static String get netConnectionIsDisconnect {
-    return AppRoute.getContext().tC('netConnectionIsDisconnect')?? _noText;
+    return AppRoute.getContext().tInMap('httpCodes', 'netConnectionIsDisconnect')?? _noText;
   }
 
   static String get errorCommunicatingServer {
-    return AppRoute.getContext().tC('errorCommunicatingServer')?? _noText;
+    return AppRoute.getContext().tInMap('httpCodes', 'errorCommunicatingServer')?? _noText;
   }
 
   static String get serverNotRespondProperly {
-    return AppRoute.getContext().tC('serverNotRespondProperly')?? _noText;
+    return AppRoute.getContext().tInMap('httpCodes', 'serverNotRespondProperly')?? _noText;
+  }
+
+  static String get accountIsBlock {
+    return AppRoute.getContext().tInMap('httpCodes', 'accountIsBlock')?? _noText;
   }
 
   static String get operationCannotBePerformed {
-    return AppRoute.getContext().tC('operationCannotBePerformed')?? _noText;
+    return AppRoute.getContext().tInMap('operationSection', 'operationCannotBePerformed')?? _noText;
   }
 
   static String get successOperation {
-    return AppRoute.getContext().tC('successOperation')?? _noText;
+    return AppRoute.getContext().tInMap('operationSection', 'successOperation')?? _noText;
   }
 
   static String get operationFailed {
-    return AppRoute.getContext().tC('operationFailed')?? _noText;
+    return AppRoute.getContext().tInMap('operationSection', 'operationFailed')?? _noText;
   }
 
   static String get operationFailedTryAgain {
-    return AppRoute.getContext().tC('operationFailedTryAgain')?? _noText;
+    return AppRoute.getContext().tInMap('operationSection','operationFailedTryAgain')?? _noText;
   }
 
   static String get operationCanceled {
-    return AppRoute.getContext().tC('operationCanceled')?? _noText;
+    return AppRoute.getContext().tInMap('operationSection', 'operationCanceled')?? _noText;
   }
 
   static String get sorryYouDoNotHaveAccess {
     return AppRoute.getContext().tC('sorryYouDoNotHaveAccess')?? _noText;
-  }
-
-  static String get accountIsBlock {
-    return AppRoute.getContext().tC('accountIsBlock')?? _noText;
   }
 
   static String get thereAreNoResults {

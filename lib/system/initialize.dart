@@ -9,6 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:iris_tools/api/helpers/storageHelper.dart';
 import 'package:iris_tools/api/logger/logger.dart';
+import 'package:vosate_zehn/tools/app/appLocale.dart';
 import 'package:vosate_zehn/tools/netListenerTools.dart';
 import 'package:vosate_zehn/tools/userLoginTools.dart';
 
@@ -44,8 +45,8 @@ class InitialApplication {
 		  AppManager.logger = Logger('${AppDirectories.getTempDir$ex()}/events.txt');
 		}
 
-		// ignore: unawaited_futures
-		//AppLocale.localeDelegate().getLocalization().setFallbackByLocale(const Locale('en', 'US'));
+		await AppLocale.localeDelegate().getLocalization().setFallbackByLocale(const Locale('en', 'EE'));
+
 		//await WsCenter.prepareWebSocket(SettingsManager.settingsModel.wsAddress!);
 		/*PlayerTools.init();
 		DownloadUpload.downloadManager = DownloadManager('${Constants.appName}DownloadManager');

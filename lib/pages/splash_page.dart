@@ -5,6 +5,7 @@ import 'package:vosate_zehn/managers/settingsManager.dart';
 import 'package:vosate_zehn/managers/versionManager.dart';
 import 'package:vosate_zehn/system/session.dart';
 import 'package:vosate_zehn/tools/app/appImages.dart';
+import 'package:vosate_zehn/tools/app/appLocale.dart';
 import 'package:vosate_zehn/tools/app/appManager.dart';
 import 'package:vosate_zehn/tools/app/appRoute.dart';
 import 'package:vosate_zehn/tools/app/appThemes.dart';
@@ -96,16 +97,15 @@ class SplashScreenState extends State<SplashPage> {
       themeMode: AppThemes.instance.currentThemeMode,
       scaffoldMessengerKey: AppBroadcast.rootScaffoldMessengerKey,
       //navigatorKey: AppBroadcast.rootNavigatorStateKey,
-      //localizationsDelegates: AppLocale.getLocaleDelegates(),
-      //supportedLocales: AppLocale.getAssetSupportedLocales(),
-      //locale: SettingsManager.settingsModel.appLocale,
+      localizationsDelegates: AppLocale.getLocaleDelegates(),
+      supportedLocales: AppLocale.getAssetSupportedLocales(),
+      locale: SettingsManager.settingsModel.appLocale,
       /*localeResolutionCallback: (deviceLocale, supportedLocales) {
         return SettingsManager.settingsModel.appLocale;
       },*/
       //home: const HomePage(),
       builder: (context, home) {
         AppRoute.materialContext = context;
-        InitialApplication.oncePreparing(context);
         final mediaQueryData = MediaQuery.of(context);
 
         /// detect orientation change and rotate screen
@@ -144,6 +144,8 @@ class SplashScreenState extends State<SplashPage> {
     if (_loadAppSettings) {
       await checkInstallVersion();
       await Session.fetchLoginUsers();
+
+      await InitialApplication.oncePreparing(context);
 
       AppBroadcast.reBuildMaterialBySetTheme();
     }
