@@ -25,7 +25,7 @@ class InitialApplication {
 	static bool isInitialOk = false;
 	static bool isLaunchOk = false;
 
-	static Future<bool> waitForImportant() async {
+	static Future<bool> importantInit() async {
 		await AppDirectories.prepareStoragePaths(Constants.appName);
 		await DeviceInfoTools.prepareDeviceInfo();
 		await DeviceInfoTools.prepareDeviceId();
@@ -33,7 +33,7 @@ class InitialApplication {
 		return true;
 	}
 
-	static Future<bool> oncePreparing(BuildContext context) async {
+	static Future<bool> onceInit(BuildContext context) async {
 		if(isCallInit) {
 			return true;
 		}
@@ -55,7 +55,6 @@ class InitialApplication {
 		await precacheImage(AppCache.screenBack!, context);
 		// ignore: unawaited_futures
 		//CountryTools.fetchCountries();
-
 
 		if(!kIsWeb) {
 			//await AppNotification.initial();

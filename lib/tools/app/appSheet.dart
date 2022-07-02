@@ -24,42 +24,44 @@ import '/tools/app/appNavigator.dart';
 class AppSheet {
   AppSheet._();
 
-  static void closeSheet<T>(BuildContext context, {T? result}){
+  static void closeSheet<T>(BuildContext context, {T? result}) {
     Navigator.of(context).pop(result);
   }
 
-  static void closeSheetByName<T>(BuildContext context, String routeName, {T? result}){
+  static void closeSheetByName<T>(BuildContext context, String routeName, {T? result}) {
     AppNavigator.popByRouteName(context, routeName, result: result);
   }
+
   ///=======================================================================================================
-  static PersistentBottomSheetController<T> showBottomSheetInScaffold<T>(
-      BuildContext ctx,
+  static _SheetTheme _genTheme() {
+    return _SheetTheme();
+  }
+
+  static PersistentBottomSheetController<T> showBottomSheetInScaffold<T>(BuildContext ctx,
       Widget Function(BuildContext context) builder, {
         Color? backgroundColor,
         double elevation = 0.0,
         ShapeBorder? shape,
-      }){
-
+      }) {
     return showBottomSheet<T>(
       context: ctx,
       shape: shape,
-      clipBehavior: shape!= null? Clip.antiAlias : Clip.none,
+      clipBehavior: shape != null ? Clip.antiAlias : Clip.none,
       elevation: elevation,
-      backgroundColor: backgroundColor?? Colors.transparent,
+      backgroundColor: backgroundColor ?? Colors.transparent,
       builder: builder,
     );
   }
 
-  static Future<T?> showCupertinoSheet<T>(BuildContext context, Widget view,{
+  static Future<T?> showCupertinoSheet<T>(BuildContext context, Widget view, {
     Color? dimColor,
     bool dismissible = true,
     RouteSettings? routeSettings,
-  }){
-
+  }) {
     final res = showCupertinoModalPopup<T>(
       context: context,
       builder: (BuildContext context) => view,
-      barrierColor: dimColor?? Colors.black12,
+      barrierColor: dimColor ?? Colors.black12,
       barrierDismissible: dismissible,
       routeSettings: routeSettings,
     );
@@ -67,8 +69,7 @@ class AppSheet {
     return res;
   }
 
-  static Future<T?> showModalSheet<T>(
-      BuildContext ctx,
+  static Future<T?> showModalSheet<T>(BuildContext ctx,
       Widget Function(BuildContext context) builder, {
         Color? backgroundColor,
         Color? barrierColor,
@@ -79,8 +80,7 @@ class AppSheet {
         // if true can have full screen
         bool isScrollControlled = true,
         String routeName = 'ModalBottomSheet',
-      }){
-
+      }) {
     FocusHelper.hideKeyboardByUnFocus(ctx);
 
     return showModalBottomSheet<T>(
@@ -88,8 +88,8 @@ class AppSheet {
         elevation: elevation,
         shape: shape,
         isDismissible: isDismissible,
-        clipBehavior: shape!= null? Clip.antiAlias : Clip.none,
-        backgroundColor: backgroundColor?? Colors.transparent,
+        clipBehavior: shape != null ? Clip.antiAlias : Clip.none,
+        backgroundColor: backgroundColor ?? Colors.transparent,
         barrierColor: barrierColor,
         routeSettings: RouteSettings(name: routeName),
         //constraints: BoxConstraints.tightFor(),
@@ -97,10 +97,10 @@ class AppSheet {
         builder: builder
     );
   }
+
   ///=======================================================================================================
   /// T: is returned value from Navigator.Pop()
-  static Future<T?> showSheetOneAction<T>(
-      BuildContext context,
+  static Future<T?> showSheetOneAction<T>(BuildContext context,
       String message,
       VoidCallback? fn, {
         String? title,
@@ -108,21 +108,18 @@ class AppSheet {
         bool dismissOnAction = true,
         bool isDismissible = true,
         String? routeName,
-      }){
+      }) {
 
     buttonText ??= AppMessages.ok;
-    final contentColor = AppThemes.instance.currentTheme.primaryColor;
-    final buttonbarColor = AppThemes.instance.currentTheme.primaryColor;
-    final barrierColor = ColorHelper.isNearColors(AppThemes.instance.currentTheme.primaryColor, [Colors.black,])
-        ? Colors.white.withAlpha(80) : Colors.black.withAlpha(120);
+    final theme = _genTheme();
 
-    void close(){
+    void close() {
       Navigator.maybeOf(context)?.pop();
       fn?.call();
     }
 
     final posBtn = TextButton(
-        onPressed: dismissOnAction? close : fn,
+        onPressed: dismissOnAction ? close : fn,
         child: Text(buttonText, style: AppThemes.relativeSheetTextStyle(),)
     );
     //TextButton.icon(onPressed: fn, label: Text(btnText,), icon: Icon(icon, color: textColor,),);
@@ -130,17 +127,17 @@ class AppSheet {
     final content = Text(message, style: AppThemes.relativeSheetTextStyle(),);
     Widget? titleView;
 
-    if(title != null) {
+    if (title != null) {
       titleView = Text(title, style: AppThemes.relativeSheetTextStyle(),);
     }
 
     final body = _getBody(
       context,
-      contentColor,
+      theme.contentColor,
       content,
       posButton: posBtn,
       title: titleView,
-      buttonBarColor: buttonbarColor,
+      buttonBarColor: theme.buttonbarColor,
       padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 18.0),
     );
 
@@ -149,21 +146,20 @@ class AppSheet {
           (ctx) => body,
       isDismissible: isDismissible,
       isScrollControlled: false,
-      routeName : routeName?? Generator.generateKey(5),
-      barrierColor: barrierColor,
+      routeName: routeName ?? Generator.generateKey(5),
+      barrierColor: theme.barrierColor,
     );
   }
 
-  static Future<T?> showSheetOk<T>(BuildContext context, String msg, {bool isDismissible = true,}){
+  static Future<T?> showSheetOk<T>(BuildContext context, String msg, {bool isDismissible = true,}) {
     return showSheetOneAction(context, msg, null, isDismissible: isDismissible);
   }
 
-  static Future<T?> showSheetNotice<T>(BuildContext context, String msg, {bool isDismissible = true}){
+  static Future<T?> showSheetNotice<T>(BuildContext context, String msg, {bool isDismissible = true}) {
     return showSheetOneAction(context, msg, null, title: AppMessages.notice, isDismissible: isDismissible);
   }
-  ///=======================================================================================================
-  static Future<T?> showSheetYesNo<T>(
-      BuildContext context,
+
+  static Future<T?> showSheetYesNo<T>(BuildContext context,
       Text msg,
       VoidCallback? posFn,
       VoidCallback? negFn, {
@@ -174,19 +170,15 @@ class AppSheet {
         bool dismissOnAction = true,
         bool isDismissible = true,
         String? routeName,
-      }){
+      }) {
+    final theme = _genTheme();
 
-    final contentColor = AppThemes.instance.currentTheme.primaryColor;
-    final btnBarColor = AppThemes.instance.currentTheme.primaryColor;
-    final barrierColor = ColorHelper.isNearColors(AppThemes.instance.currentTheme.primaryColor,
-        [Colors.black])? Colors.white.withAlpha(80) : Colors.black.withAlpha(120);
-
-    void posClose(){
+    void posClose() {
       Navigator.of(context).pop();
       posFn?.call();
     }
 
-    void negClose(){
+    void negClose() {
       Navigator.of(context).pop();
       negFn?.call();
     }
@@ -198,19 +190,20 @@ class AppSheet {
       color: ColorHelper.getUnNearColor(Colors.white, AppThemes.instance.currentTheme.primaryColor, Colors.black),
     );
 
-    final posBtn = TextButton(onPressed: dismissOnAction? posClose: posFn,
+    final posBtn = TextButton(onPressed: dismissOnAction ? posClose : posFn,
         child: Text(posBtnText, style: ts)
     );
-    final negBtn = TextButton(onPressed: dismissOnAction? negClose: negFn,
+    final negBtn = TextButton(onPressed: dismissOnAction ? negClose : negFn,
         child: Text(negBtnText, style: ts)
     );
 
     final body = _getBody(
-      context, contentColor, msg,
+      context, theme.contentColor,
+      msg,
       posButton: posBtn,
       negButton: negBtn,
       title: title,
-      buttonBarColor: btnBarColor,
+      buttonBarColor: theme.btnBarColor,
       padding: const EdgeInsets.fromLTRB(16, 22, 16, 12),
     );
 
@@ -219,13 +212,12 @@ class AppSheet {
           (ctx) => body,
       isDismissible: isDismissible,
       isScrollControlled: true,
-      routeName: routeName?? Generator.generateKey(5),
-      barrierColor: barrierColor,
+      routeName: routeName ?? Generator.generateKey(5),
+      barrierColor: theme.barrierColor,
     );
   }
 
-  static Future<T?> showSheetCustom<T>(
-      BuildContext context,
+  static Future<T?> showSheetCustom<T>(BuildContext context,
       Widget content, {
         required String routeName,
         Widget? positiveButton,
@@ -240,16 +232,16 @@ class AppSheet {
         double elevation = 0.0,
         Widget? negativeButton,
         Text? title,
-      }){
+      }) {
 
+    final theme = _genTheme();
     backgroundColor ??= Colors.transparent;
-    contentColor ??= AppThemes.instance.currentTheme.primaryColor;
-    barrierColor ??= ColorHelper.isNearColors(AppThemes.instance.currentTheme.primaryColor, [Colors.black])
-        ? Colors.white.withAlpha(80) : Colors.black.withAlpha(120);
+    contentColor ??= theme.contentColor;
+    barrierColor ??= theme.barrierColor;
 
     Widget body;
 
-    if(useExpanded) {
+    if (useExpanded) {
       body = _getBodyForList(
           context, contentColor, content,
           posButton: positiveButton,
@@ -269,19 +261,19 @@ class AppSheet {
     }
 
     return showModalSheet<T>(context,
-            (ctx) => body,
-        backgroundColor: backgroundColor,
-        isDismissible: isDismissible,
-        isScrollControlled: isScrollControlled,
-        barrierColor: barrierColor,
-        shape: shape,
-        elevation: elevation,
-        routeName: routeName,
+          (ctx) => body,
+      backgroundColor: backgroundColor,
+      isDismissible: isDismissible,
+      isScrollControlled: isScrollControlled,
+      barrierColor: barrierColor,
+      shape: shape,
+      elevation: elevation,
+      routeName: routeName,
     );
   }
+
   ///=======================================================================================================
-  static Widget _getBodyForList(
-      BuildContext ctx,
+  static Widget _getBodyForList(BuildContext ctx,
       Color contentColor,
       Widget description, {
         Widget? title,
@@ -289,21 +281,20 @@ class AppSheet {
         Widget? negButton,
         Color? buttonBarColor,
         EdgeInsets padding = EdgeInsets.zero,
-      }){
-
+      }) {
     final theme = Theme.of(ctx);
 
-      return ColoredBox(
-        color: contentColor,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.end,
+    return ColoredBox(
+      color: contentColor,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.end,
         //crossAxisAlignment: CrossAxisAlignment.stretch,
         crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
+        children: <Widget>[
 
-            Expanded(
-              child: Padding(
+          Expanded(
+            child: Padding(
               padding: padding,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -326,30 +317,29 @@ class AppSheet {
                 ],
               ),
             ),
-            ),
+          ),
 
-            ///------- buttons
-            if(posButton != null || negButton != null)
-              ColoredBox(
-              color: buttonBarColor?? contentColor,
+          ///------- buttons
+          if(posButton != null || negButton != null)
+            ColoredBox(
+              color: buttonBarColor ?? contentColor,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    posButton?? const SizedBox(),
-                    negButton?? const SizedBox(),
+                    posButton ?? const SizedBox(),
+                    negButton ?? const SizedBox(),
                   ],
                 ),
               ),
             )
-          ],
-        ),
-      );
+        ],
+      ),
+    );
   }
 
-  static Widget _getBody(
-      BuildContext ctx,
+  static Widget _getBody(BuildContext ctx,
       Color contentColor,
       Widget description, {
         Widget? title,
@@ -377,7 +367,7 @@ class AppSheet {
                 if (title != null)
                   DefaultTextStyle(
                       style: theme.textTheme.headline6!.copyWith(
-                        fontSize: 16,
+                        fontSize: 17,
                         fontWeight: FontWeight.bold,
                       ),
                       textAlign: TextAlign.start,
@@ -412,21 +402,25 @@ class AppSheet {
       ),
     );
   }
+
   ///=======================================================================================================
   static void showSheetMenu(BuildContext ctx,
       List<Widget> widgets,
-      String routeName,{
-      Color? backgroundColor,
-    }){
+      String routeName, {
+        Color? backgroundColor,
+        bool isDismissible = true,
+      }) {
+
     final view = BottomSheet(
       onClosing: () {},
+      constraints: const BoxConstraints.tightFor(),
       shape: const RoundedRectangleBorder(
           side: BorderSide(style: BorderStyle.none),
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20),
-              topRight: Radius.circular(20))
+              topRight: Radius.circular(20)
+          )
       ),
-      constraints: const BoxConstraints.tightFor(),
       builder: (BuildContext context) {
         return Column(
           mainAxisSize: MainAxisSize.min,
@@ -438,15 +432,17 @@ class AppSheet {
       },
     ).wrapListTileTheme();
 
-    showModalSheet(ctx, (context) => view,
+    showModalSheet(ctx,
+          (context) => view,
       routeName: routeName,
-      backgroundColor: backgroundColor?? Colors.transparent,
+      backgroundColor: backgroundColor ?? Colors.transparent,
       elevation: 0,
+      isDismissible: isDismissible,
     );
   }
+
   ///===================================================================================================
-  static Widget generateSheetMenu(
-      BuildContext context,
+  static Widget generateSheetMenu(BuildContext context,
       List<Widget> items,
       {
         Color? backColor,
@@ -471,13 +467,15 @@ class AppSheet {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   if(!Platform.isAndroid)
-                  const Icon(
-                    AppIcons.close,
-                  ).wrapMaterial(
-                      materialColor: AppThemes.instance.currentTheme.primaryColor.withAlpha(70),
-                      padding: const EdgeInsets.all(4),
-                      onTapDelay: (){AppNavigator.pop(context);}
-                  ),
+                    const Icon(
+                      AppIcons.close,
+                    ).wrapMaterial(
+                        materialColor: AppThemes.instance.currentTheme.primaryColor.withAlpha(70),
+                        padding: const EdgeInsets.all(4),
+                        onTapDelay: () {
+                          AppNavigator.pop(context);
+                        }
+                    ),
                 ],
               ),
 
@@ -488,64 +486,86 @@ class AppSheet {
       ),
     );
   }
+
   ///=======================================================================================================
-  static Future<T?> showSheet$NetDisconnected<T>(BuildContext context){
+  static Future<T?> showSheet$NetDisconnected<T>(BuildContext context) {
     return showSheetOneAction<T>(context, AppMessages.netConnectionIsDisconnect, null);
   }
 
-  static Future<T?> showSheet$ErrorCommunicatingServer<T>(BuildContext context){
+  static Future<T?> showSheet$ErrorCommunicatingServer<T>(BuildContext context) {
     return showSheetOneAction<T>(context, AppMessages.errorCommunicatingServer, null);
   }
 
-  static Future<T?> showSheet$ServerNotRespondProperly<T>(BuildContext context){
+  static Future<T?> showSheet$ServerNotRespondProperly<T>(BuildContext context) {
     return showSheetOneAction<T>(context, AppMessages.serverNotRespondProperly, null);
   }
 
-  static Future<T?> showSheet$OperationCannotBePerformed<T>(BuildContext context){
+  static Future<T?> showSheet$OperationCannotBePerformed<T>(BuildContext context) {
     return showSheetOneAction<T>(context, AppMessages.operationCannotBePerformed, null);
   }
 
-  static Future<T?> showSheet$SuccessOperation<T>(BuildContext context){
-    return showSheetOneAction<T>(context, AppMessages.successOperation, null);
+  static Future<T?> showSheet$SuccessOperation<T>(BuildContext context) {
+    return showSheetOneAction<T>(context, AppMessages.operationSuccess, null);
   }
 
-  static Future<T?> showSheet$OperationFailed<T>(BuildContext context){
+  static Future<T?> showSheet$OperationFailed<T>(BuildContext context) {
     return showSheetOneAction<T>(context, AppMessages.operationFailed, null);
   }
 
-  static Future<T?> showSheet$OperationFailedTryAgain<T>(BuildContext context){
+  static Future<T?> showSheet$OperationFailedTryAgain<T>(BuildContext context) {
     return showSheetOneAction<T>(context, AppMessages.operationFailedTryAgain, null);
   }
 
-  static Future<T?> showSheet$OperationCanceled<T>(BuildContext context){
+  static Future<T?> showSheet$OperationCanceled<T>(BuildContext context) {
     return showSheetOneAction<T>(context, AppMessages.operationCanceled, null);
   }
 
-  static Future<T?> showSheet$YouDoNotHaveAccess<T>(BuildContext context){
+  static Future<T?> showSheet$YouDoNotHaveAccess<T>(BuildContext context) {
     return showSheetOneAction<T>(context, AppMessages.sorryYouDoNotHaveAccess, null);
   }
 
-  static Future<T?> showSheet$AccountIsBlock<T>(BuildContext context){
+  static Future<T?> showSheet$AccountIsBlock<T>(BuildContext context) {
     return showSheetOneAction<T>(context, AppMessages.accountIsBlock, null);
   }
 
-  static Future<T?> showSheet$ThereAreNoResults<T>(BuildContext context){
+  static Future<T?> showSheet$ThereAreNoResults<T>(BuildContext context) {
     return showSheetOneAction<T>(context, AppMessages.thereAreNoResults, null);
   }
+
   ///=====================================================================================================
-  static void showSheet(BuildContext context, {
-   String? title,
-   String? message,
-   List<Widget>? actions,
-  }){
+  static void showSheetDialog(BuildContext context, {
+    String? title,
+    String? message,
+    bool dismissible = true,
+    List<Widget>? actions,
+  }) {
+
+    final theme = _genTheme();
+
     return Dialogs.bottomMaterialDialog(
         msg: message,
         title: title,
+        barrierDismissible: dismissible,
+        isDismissible: dismissible,
+        color: theme.backgroundColor,
         context: context,
         actions: [
           ...?actions
         ]);
   }
+}
+///======================================================================================================
+class _SheetTheme {
+  Color backgroundColor = Colors.white;
+  Color contentColor = AppThemes.instance.currentTheme.primaryColor;
+  Color buttonbarColor = AppThemes.instance.currentTheme.primaryColor;
+  Color btnBarColor = AppThemes.instance.currentTheme.primaryColor;
+  Color barrierColor = ColorHelper.isNearColors(AppThemes.instance.currentTheme.primaryColor, [Colors.black,])
+      ? Colors.white.withAlpha(80)
+      : Colors.black.withAlpha(150);
+
+  _SheetTheme();
+}
 
   /*IconsOutlineButton(
             onPressed: () {},
@@ -562,7 +582,7 @@ class AppSheet {
             textStyle: TextStyle(color: Colors.white),
             iconColor: Colors.white,
           ),*/
-}
+
 
 /*
 final items = <Map>[];

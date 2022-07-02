@@ -41,8 +41,6 @@ class SplashScreenState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    callOnBuild(context);
-
     /// ReBuild First Widgets tree, not call on Navigator pages
     return StreamBuilder<bool>(
         initialData: false,
@@ -132,7 +130,7 @@ class SplashScreenState extends State<SplashPage> {
 
     _isInit = true;
 
-    await InitialApplication.waitForImportant();
+    await InitialApplication.importantInit();
     await prepareReporter();
     await prepareDatabase();
 
@@ -145,9 +143,10 @@ class SplashScreenState extends State<SplashPage> {
       await checkInstallVersion();
       await Session.fetchLoginUsers();
 
-      await InitialApplication.oncePreparing(context);
+      await InitialApplication.onceInit(context);
 
       AppBroadcast.reBuildMaterialBySetTheme();
+      asyncInitial(context);
     }
   }
 
@@ -180,7 +179,7 @@ class SplashScreenState extends State<SplashPage> {
     }
   }
 
-  void callOnBuild(BuildContext context) {
+  void asyncInitial(BuildContext context) {
     if (!InitialApplication.isLaunchOk) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         Timer.periodic(const Duration(milliseconds: 50), (Timer timer) {

@@ -99,7 +99,7 @@ class AppMessages {
     return AppRoute.getContext().tInMap('operationSection', 'operationCannotBePerformed')?? _noText;
   }
 
-  static String get successOperation {
+  static String get operationSuccess {
     return AppRoute.getContext().tInMap('operationSection', 'successOperation')?? _noText;
   }
 
