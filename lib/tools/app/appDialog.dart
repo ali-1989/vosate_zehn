@@ -1,15 +1,15 @@
 import 'package:iris_tools/api/helpers/colorHelper.dart';
-import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 import 'package:vosate_zehn/tools/app/appIcons.dart';
 import 'package:flutter/material.dart';
 import 'package:material_dialogs/material_dialogs.dart';
 import 'package:vosate_zehn/tools/app/appMessages.dart';
+import 'package:vosate_zehn/tools/app/appNavigator.dart';
 import 'package:vosate_zehn/tools/app/appThemes.dart';
 
 class AppDialog {
 	static final _instance = AppDialog._();
 	static bool _isInit = false;
-	static late DialogDecoration _dialogDecoration;
+	static late DialogDecoration _dialogTheme;
 
 	static AppDialog get instance {
 		_init();
@@ -18,7 +18,7 @@ class AppDialog {
 	}
 
 
-	DialogDecoration get dialogDecoration => _dialogDecoration;
+	DialogDecoration get dialogDecoration => _dialogTheme;
 
 	static void _init(){
 		if(!_isInit){
@@ -36,7 +36,7 @@ class AppDialog {
 	}
 
 	static void _prepareDialogDecoration(){
-		_dialogDecoration = DialogDecoration();
+		_dialogTheme = DialogDecoration();
 
 		Color textColor(){
 			if(ColorHelper.isNearColor(AppThemes.instance.currentTheme.dialogBackColor, Colors.white)) {
@@ -46,15 +46,18 @@ class AppDialog {
 			return Colors.white;
 		}
 
-		_dialogDecoration.descriptionColor = textColor();
+		_dialogTheme.dimColor = ColorHelper.isNearColors(AppThemes.instance.currentTheme.primaryColor, [Colors.black,])
+				? Colors.white.withAlpha(80)
+				: Colors.black.withAlpha(150);
+		_dialogTheme.descriptionColor = textColor();
 		//_dialogDecoration.titleColor = textColor();
-		_dialogDecoration.titleColor = Colors.white;
-		_dialogDecoration.titleBackgroundColor = AppThemes.instance.currentTheme.accentColor;
-		_dialogDecoration.iconBackgroundColor = Colors.black;
-		_dialogDecoration.positiveButtonTextColor = AppThemes.instance.currentTheme.buttonTextColor;
-		_dialogDecoration.negativeButtonTextColor = AppThemes.instance.currentTheme.buttonTextColor;
-		_dialogDecoration.positiveButtonBackColor = AppThemes.buttonBackgroundColor();
-		_dialogDecoration.negativeButtonBackColor = AppThemes.buttonBackgroundColor();
+		_dialogTheme.titleColor = Colors.white;
+		_dialogTheme.titleBackgroundColor = AppThemes.instance.currentTheme.accentColor;
+		_dialogTheme.iconBackgroundColor = Colors.black;
+		_dialogTheme.positiveButtonTextColor = AppThemes.instance.currentTheme.buttonTextColor;
+		_dialogTheme.negativeButtonTextColor = AppThemes.instance.currentTheme.buttonTextColor;
+		_dialogTheme.positiveButtonBackColor = AppThemes.buttonBackgroundColor();
+		_dialogTheme.negativeButtonBackColor = AppThemes.buttonBackgroundColor();
 	}
 	///============================================================================================================
 	Future showDialog(
@@ -62,27 +65,55 @@ class AppDialog {
 				String? title,
 				String? desc,
 				String? yesText,
-				Widget? descView,
 				Widget? icon,
 				Function? yesFn,
-				bool dismissOnButtons = true,
+				bool barrierDismissible = true,
 				DialogDecoration? decoration,
+				List<Widget>? actions,
 			}) {
+
 		decoration ??= AppDialog.instance.dialogDecoration;
+		var topView = Dialogs.holder;
+
+		if(icon != null){
+			topView = ClipRRect(
+				borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+			  child: ColoredBox(
+			  		color: Colors.black87,
+			  		child: SizedBox(
+			  				width: double.maxFinite,
+			  				child: icon
+			  		),
+			  ),
+			);
+		}
+
+		if(yesText != null){
+			actions ??= [];
+
+			actions.add(ElevatedButton(
+					onPressed: (){
+						if(yesFn != null) {
+							yesFn.call();
+						}
+						else {
+							AppNavigator.pop(context);
+						}
+					},
+					child: Text(yesText)
+			));
+		}
+
 		return Dialogs.materialDialog(
-				color: Colors.white,
+				color: decoration.backgroundColor,
+				barrierColor: decoration.dimColor,
 				msg: desc,
 				title: title,
 				context: context,
+				barrierDismissible: barrierDismissible,
+				customView: topView,
 				actions: [
-					IconsButton(
-						onPressed: () {},
-						text: 'Claim',
-						iconData: Icons.done,
-						color: Colors.blue,
-						textStyle: const TextStyle(color: Colors.white),
-						iconColor: Colors.white,
-					),
+					...?actions
 				]
 		);
 	}
@@ -90,7 +121,6 @@ class AppDialog {
   Future showYesNoDialog(
 			BuildContext context, {
 				String? desc,
-				Widget? descView,
 				String? yesText,
 				Function? yesFn,
 				String? noText,
@@ -113,6 +143,14 @@ class AppDialog {
 						child: Text(yesText?? AppMessages.yes)
 				),
 
+				/*IconsOutlineButton(
+					onPressed: () {},
+					text: 'Cancel',
+					iconData: Icons.cancel_outlined,
+					textStyle: TextStyle(color: Colors.grey),
+					iconColor: Colors.grey,
+				),*/
+
 				OutlinedButton(
 						onPressed: (){
 							yesFn?.call();
@@ -124,50 +162,42 @@ class AppDialog {
 	}
 
 	void showSuccessDialog(BuildContext context, String? title, String desc) {//shield-check, sticker-check, thump-up
-		showDialog(context, title: title, desc: desc,
-				icon: const Icon(AppIcons.eye, size: 48, color: Colors.green,)
+		showDialog(context, title: title, desc: desc, yesText: AppMessages.ok,
+				icon: Icon(AppIcons.fileDownloadDone, size: 48, color: AppThemes.instance.currentTheme.successColor,)
 		);
 	}
 
 	void showWarningDialog(BuildContext context, String? title, String desc) {
-		showDialog(context, title: title, desc: desc, icon:
-		const Icon(AppIcons.eye, size: 48, color: Colors.orange,)
+		showDialog(context, title: title, desc: desc, yesText: AppMessages.ok,
+				icon: Icon(AppIcons.light, size: 48, color: AppThemes.instance.currentTheme.warningColor)
 		);
 	}
 
 	void showInfoDialog(BuildContext context, String? title, String desc) { //library
-		showDialog(context, title: title, desc: desc,
-				icon: const Icon(AppIcons.eye, size: 48, color: Colors.blue,)
+		showDialog(context, title: title, desc: desc, yesText: AppMessages.ok,
+				icon: Icon(AppIcons.lightBulb, size: 48, color: AppThemes.instance.currentTheme.infoColor)
 		);
 	}
 
 	Future showErrorDialog(BuildContext context, String? title, String desc) { //alert, minus-circle
-		return showDialog(context, title: title, desc: desc,
-				icon: const Icon(AppIcons.eye, size: 48, color: Colors.redAccent,)
+		return showDialog(context, title: title, desc: desc, yesText: AppMessages.ok,
+				icon: Icon(AppIcons.close, size: 48, color: AppThemes.instance.currentTheme.errorColor)
 		);
 	}
 	///============================================================================================================
 	Future showDialog$NetDisconnected(BuildContext context) {
 		return showErrorDialog(
 			context,
-			null,
 			AppMessages.netConnectionIsDisconnect,
+			'',
 		);
-	}
-
-	Future<bool> showDialog$wantClose(BuildContext context, {Widget? view}) {
-		Dialogs.materialDialog(
-			context: context,
-		);
-
-		return Future.value(false);
 	}
 }
 ///========================================================================================
 class DialogDecoration {
 	ThemeData? themeData;
 	Color? dimColor;
-	Color? backgroundColor;
+	Color backgroundColor = Colors.white;
 	Color? titleColor;
 	Color? descriptionColor;
 	Color? positiveButtonTextColor;

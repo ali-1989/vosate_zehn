@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:material_dialogs/widgets/buttons/icon_button.dart';
+import 'package:vosate_zehn/tools/app/appLoading.dart';
 import 'package:vosate_zehn/tools/app/appMessages.dart';
-import 'package:vosate_zehn/tools/app/appNavigator.dart';
-import 'package:vosate_zehn/tools/app/appSheet.dart';
-import 'package:vosate_zehn/tools/app/appSnack.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -30,20 +27,7 @@ class _HomePageState extends State<HomePage> {
             builder: (ccc) {
               return ElevatedButton(
                   onPressed: (){
-                    AppSheet.showSheetDialog(ccc,
-                        title: 'hasan',
-                        message: 'fgfg dfgfgfdg fdgg',
-                      actions: [
-                        IconsButton(
-                          onPressed: () {},
-                          text: 'Delete',
-                          iconData: Icons.delete,
-                          color: Colors.red,
-                          textStyle: TextStyle(color: Colors.white),
-                          iconColor: Colors.white,
-                        )
-                      ]
-                    );
+                    AppLoading.showWaiting();
                   },
                   child: Text('dialog'),
               );

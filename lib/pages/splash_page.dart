@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:vosate_zehn/constants.dart';
 import 'package:vosate_zehn/managers/settingsManager.dart';
 import 'package:vosate_zehn/managers/versionManager.dart';
@@ -31,7 +32,6 @@ class SplashPage extends StatefulWidget {
 }
 ///======================================================================================================
 class SplashScreenState extends State<SplashPage> {
-
   @override
   void initState() {
     super.initState();
@@ -52,9 +52,9 @@ class SplashScreenState extends State<SplashPage> {
           else {
             return getMaterialApp();
           }
-        }
-        );
+        });
   }
+
   ///==================================================================================================
   Widget getSplashView() {
     return Padding(
@@ -64,10 +64,7 @@ class SplashScreenState extends State<SplashPage> {
         children: <Widget>[
           Container(
             height: 100.0,
-            decoration: const BoxDecoration(
-                image: DecorationImage(image: AssetImage(AppImages.logoSplash)
-                )
-            ),
+            decoration: const BoxDecoration(image: DecorationImage(image: AssetImage(AppImages.logoSplash))),
           ),
           /*Container(
             height: 25.0,
@@ -82,44 +79,44 @@ class SplashScreenState extends State<SplashPage> {
   // MaterialApp/ CupertinoApp/ WidgetsApp
   Widget getMaterialApp() {
     return MaterialApp.router(
-      key: AppBroadcast.materialAppKey,
-      debugShowCheckedModeBanner: false,
-      routeInformationProvider: routers.routeInformationProvider,
-      routeInformationParser: routers.routeInformationParser,
-      routerDelegate: routers.routerDelegate,
-      //navigatorObservers: [ClearFocusOnPush()],
-      //scrollBehavior: MyCustomScrollBehavior(),
-      title: Constants.appTitle,
-      theme: AppThemes.instance.themeData, // ThemeData.light()
-      //darkTheme: ThemeData.dark(),
-      themeMode: AppThemes.instance.currentThemeMode,
-      scaffoldMessengerKey: AppBroadcast.rootScaffoldMessengerKey,
-      //navigatorKey: AppBroadcast.rootNavigatorStateKey,
-      localizationsDelegates: AppLocale.getLocaleDelegates(),
-      supportedLocales: AppLocale.getAssetSupportedLocales(),
-      locale: SettingsManager.settingsModel.appLocale,
-      /*localeResolutionCallback: (deviceLocale, supportedLocales) {
+        key: AppBroadcast.materialAppKey,
+        debugShowCheckedModeBanner: false,
+        routeInformationProvider: routers.routeInformationProvider,
+        routeInformationParser: routers.routeInformationParser,
+        routerDelegate: routers.routerDelegate,
+        //navigatorObservers: [ClearFocusOnPush()],
+        //scrollBehavior: MyCustomScrollBehavior(),
+        title: Constants.appTitle,
+        theme: AppThemes.instance.themeData,
+        // ThemeData.light()
+        //darkTheme: ThemeData.dark(),
+        themeMode: AppThemes.instance.currentThemeMode,
+        scaffoldMessengerKey: AppBroadcast.rootScaffoldMessengerKey,
+        //navigatorKey: AppBroadcast.rootNavigatorStateKey,
+        localizationsDelegates: AppLocale.getLocaleDelegates(),
+        supportedLocales: AppLocale.getAssetSupportedLocales(),
+        locale: SettingsManager.settingsModel.appLocale,
+        /*localeResolutionCallback: (deviceLocale, supportedLocales) {
         return SettingsManager.settingsModel.appLocale;
       },*/
-      //home: const HomePage(),
-      builder: (context, home) {
-        AppRoute.materialContext = context;
-        final mediaQueryData = MediaQuery.of(context);
+        //home: const HomePage(),
+        builder: EasyLoading.init(
+          builder: (context, home) {
+            AppRoute.materialContext = context;
+            final mediaQueryData = MediaQuery.of(context);
 
-        /// detect orientation change and rotate screen
-        return MediaQuery(
-          data: mediaQueryData.copyWith(textScaleFactor: 1.0),
-          child: OrientationBuilder(builder: (context, orientation) {
-            //AppLocale.detectLocaleDirection(SettingsManager.settingsModel.appLocale); //Localizations.localeOf(context)
-            testCodes(context);
+            /// detect orientation change and rotate screen
+            return MediaQuery(
+              data: mediaQueryData.copyWith(textScaleFactor: 1.0),
+              child: OrientationBuilder(builder: (context, orientation) {
+                //AppLocale.detectLocaleDirection(SettingsManager.settingsModel.appLocale); //Localizations.localeOf(context)
+                testCodes(context);
 
-            return Directionality(
-                textDirection: AppThemes.instance.textDirection,
-                child: home!
+                return Directionality(textDirection: AppThemes.instance.textDirection, child: home!);
+              }),
             );
-          }),
-        );
-      },
+          },
+        )
     );
   }
 
@@ -204,4 +201,3 @@ class SplashScreenState extends State<SplashPage> {
     //await DbCenter.db.clearTable(DbCenter.tbKv);
   }
 }
-
