@@ -1,0 +1,49 @@
+def args = ["--scan","-Xlint:deprecation","-Xlint:unchecked","-Werror"]
+
+buildscript {
+    ext.kotlin_version = "1.6.10"  //1.3.72, 1.4.32, 1.5.31, 1.6.10
+
+    repositories {
+        google()
+        mavenCentral()
+        //jcenter()
+        //maven { url "https://maven.google.com" }
+        //maven { url "https://dl.google.com/dl/android/maven2/" }
+        //maven { url "http://jcenter.bintray.com/" }
+        //maven { url "https://plugins.gradle.org/m2/" }
+        //maven { url "https://jitpack.io" }
+        //maven { url "http://maven.aliyun.com/nexus/content/groups/public" }
+        //maven { url 'https://clojars.org/repo/' metadataSources { gradleMetadata() }}
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.1.2' // 4.0.2, 4.1.0, 4.1.3, 7.1.2
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+	//classpath 'com.google.gms:google-services:4.3.10' // 4.2.0, 4.3.3
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.buildDir = '../build'
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+    project.evaluationDependsOn(':app')
+}
+
+project.getTasks().withType(JavaCompile) {
+    options.compilerArgs.addAll(args)
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+
+//compilerArgs:  "-Xlint:all", "-Xlint:none", "-Xlint:deprecation", "-Xlint:unchecked", "-parameters"
+//compilerArgs:  "--stacktrace", "--scan", "--info", "-nowarn", "-Werror"

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <external-path
+        name="External_data"
+        path="Android/data/${applicationId}/"/>
+
+    <files-path
+        name="AppFolder"
+        path="${AppFolderName}" />
+
+
+    <external-path
+        name="external-path"
+        path="."/>
+
+    <external-cache-path
+        name="external-cache-path"
+        path="."/>
+
+    <external-files-path
+        name="external-files-path"
+        path="."/>
+
+    <files-path
+        name="files_path"
+        path="."/>
+
+    <cache-path
+        name="cache-path"
+        path="."/>
+
+    <root-path
+        name="name"
+        path="."/>
+</paths>
+
+<!--
+<root-path name="root" path="/" />
+
+<files-path name="name" path="path" />
+<cache-path name="name" path="path" />
+
+<files-path name="my_images" path="images/"/>
+
+<external-media-path name="name" path="path" />
+<external-cache-path name="name" path="path" />
+-->
+
+
+
+<!--
+File imagePath = new File(getFilesDir(), "external_files");
+File imageFile = new File(imagePath.getPath(), "test.jpg");
+==================================================================
+Uri uri = FileProvider.getUriForFile(this, "authority", imageFile);
+
+Intent intent = ShareCompat.IntentBuilder.from(this)
+.setStream(uri) // uri from FileProvider
+.setType("text/html")
+.setAction(Intent.ACTION_VIEW)
+.setDataAndType(uri, "image/*")
+.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+startActivity(intent);
+==================================================================
+Intent intent = new Intent(Intent.ACTION_VIEW);
+intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+String uri = FileProvider.getUriForFile(this, "authority", file);
+intent.setDataAndType(uri, "application/pdf");
+-->

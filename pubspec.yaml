@@ -1,0 +1,122 @@
+# Flutter: 3.0.1     old: -
+# Dart: 2.17.0        old: -
+# Java: 17
+
+name: vosate_zehn
+description: Fitness
+homepage: https://iris.ir
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.17.1 <3.0.0"
+  flutter: ">=3.0.0"                                  # null Safety
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  #flutter_rename_app: ^1.0.0
+  import_sorter: ^4.6.0
+  flutter_launcher_icons: ^0.9.3
+  
+  cupertino_icons: ^1.0.5
+  device_info_plus: ^4.0.0
+  platform_device_id: ^1.0.1
+  permission_handler: ^9.2.0          # NoWeb
+  connectivity_plus: ^2.3.5
+  go_router: ^4.1.0
+  animate_do: ^2.1.0                  # https://animate.style/
+  simple_animations: ^4.2.0
+  lottie: ^1.3.0
+  file_picker: ^4.6.1
+  just_audio: ^0.9.27
+  chewie: ^1.3.4
+  http: ^0.13.4
+  dio: ^4.0.6
+  badges: ^2.0.3
+  photo_view: ^0.14.0                 # image view gallery
+  flutter_easyloading: ^3.0.5
+  material_dialogs: ^1.1.3
+
+  iris_tools:
+    git: https://github.com/ali-1989/IrisTools.git
+  iris_db:
+    git: https://github.com/ali-1989/IrisDB.git
+  getsocket:
+    git: https://github.com/ali-1989/GetSocket.git
+  iris_download_manager:
+    git: https://github.com/ali-1989/IrisDownloadManager.git
+
+#dependency_overrides:
+#  photo_view: ^0.14.0
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
+
+  # Image.asset('assets/images/food6.jpg')
+  assets:
+    - assets/images/
+    - assets/locales/
+    - assets/audio/
+    - assets/raw/
+
+
+  #style: italic  weight: 700
+  fonts:
+    - family: OpenSans
+      fonts:
+        - asset: assets/fonts/OpenSans.ttf
+    - family: Nazanin # base-sub
+      fonts:
+        - asset: assets/fonts/nazanin-base-sub.ttf
+    - family: Sans # sub
+      fonts:
+        - asset: assets/fonts/sans-sub.ttf
+    - family: IranSans # any
+      fonts:
+        - asset: assets/fonts/iran-sans.ttf
+    - family: Icomoon # any
+      fonts:
+        - asset: assets/fonts/icomoon.ttf
+
+
+
+
+flutter_icons:
+  image_path: "dep/app_icon.png"
+  android: true
+  ios: true
+  remove_alpha_ios: true
+
+
+import_sorter:
+  emojis: false
+  comments: false
+
+
+## flutter pub run import_sorter:main
+## flutter pub run flutter_launcher_icons:main
+## flutter pub run flutter_rename_app_plus
+# import '[^pd/]
+
+#  flutter_rename_app_plus: ^1.1.0:
+#    application_name: ARE
+#    dart_package_name: are
+#    application_id: ir.iris.are
+#    bundle_id: ir.iris.are
+#    android_package_name: ir.iris.are
+
+
+# caret sign:
+# ^0.1.2 is the same as '>=0.1.2 <0.2.0'
+# ^1.2.3 would be the same as '>=1.2.3 <2.0.0'
+# if not use caret sign , force download/use that version.
