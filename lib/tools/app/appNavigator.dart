@@ -1,63 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
-/*
-    - [FocusScope/_FocusScopeState] extends [Focus] extends StatefulWidget
-    - [ExcludeFocus] extends StatelessWidget
-    - [_FocusMarker] extends InheritedNotifier
-
-    - [FocusScopeNode] extends [FocusNode] with ChangeNotifier
-
-    * children VS descendants:
-      children : contains first child of object.
-      descendants : contains first child of object and children of them.
-
-    - Navigator is widget Included ModalRoute.
-    - ModalRoute is a (page or dialog) that hold a tree of widgets
-
-* -------------------------------------------------------------------------------------------------------------
-    * Navigator:
-
-    - Navigator.of()    =>    return current Navigator
-    - Navigator.of(ctx, rootNavigator: false);    ==    ModalRoute.of(ctx).navigator;
-    - Navigator.of().focusScopeNode.context  OR  Navigator.of().context  ==> return First element of scope of active page.
-
-    - children of Navigator:
-      * HeroControllerScope
-          Listener
-            AbsorbPointer
-              FocusScope
-                Semantics
-                  _FocusMarker
-                    UnmanagedRestorationScope
-                      Overlay
-                        _Theatre
-                          _OverlayEntryWidget       <<-- root page
-                            TickerMode
-                              _EffectiveTickerMode
-                                Semantics
-                                  _ModalScope
-                                    _ModalScopeStatus
-                                      Offstage
-                          _OverlayEntryWidget       <<-- page 1
-                            TickerMode
-                              _EffectiveTickerMode
-                                Semantics
-                                  _ModalScope
-                                    _ModalScopeStatus
-                                      Offstage
-* -----------------------------------------------------------------------------------------------------------------
-    * ModalRoute:
-
-    - ModalRoute.of()   =>    return current page
-    - ModalRoute.of().subtreeContext  ==> return First widget of current page.
-
-    - children of Module:
-        Builder < Semantics < [ManagerRootScreen] < WillPopScope < Scaffold ...
-*----------------------------------------------------------------------------------------------------------------
-    * any Push() rebuild widgets
-   */
-
 class AppNavigator {
   AppNavigator._();
 
@@ -909,6 +852,63 @@ class AppNavigator {
 
 
 //============================================================================================
+/*
+    - [FocusScope/_FocusScopeState] extends [Focus] extends StatefulWidget
+    - [ExcludeFocus] extends StatelessWidget
+    - [_FocusMarker] extends InheritedNotifier
+
+    - [FocusScopeNode] extends [FocusNode] with ChangeNotifier
+
+    * children VS descendants:
+      children : contains first child of object.
+      descendants : contains first child of object and children of them.
+
+    - Navigator is widget Included ModalRoute.
+    - ModalRoute is a (page or dialog) that hold a tree of widgets
+
+* -------------------------------------------------------------------------------------------------------------
+    * Navigator:
+
+    - Navigator.of()    =>    return current Navigator
+    - Navigator.of(ctx, rootNavigator: false);    ==    ModalRoute.of(ctx).navigator;
+    - Navigator.of().focusScopeNode.context  OR  Navigator.of().context  ==> return First element of scope of active page.
+
+    - children of Navigator:
+      * HeroControllerScope
+          Listener
+            AbsorbPointer
+              FocusScope
+                Semantics
+                  _FocusMarker
+                    UnmanagedRestorationScope
+                      Overlay
+                        _Theatre
+                          _OverlayEntryWidget       <<-- root page
+                            TickerMode
+                              _EffectiveTickerMode
+                                Semantics
+                                  _ModalScope
+                                    _ModalScopeStatus
+                                      Offstage
+                          _OverlayEntryWidget       <<-- page 1
+                            TickerMode
+                              _EffectiveTickerMode
+                                Semantics
+                                  _ModalScope
+                                    _ModalScopeStatus
+                                      Offstage
+* -----------------------------------------------------------------------------------------------------------------
+    * ModalRoute:
+
+    - ModalRoute.of()   =>    return current page
+    - ModalRoute.of().subtreeContext  ==> return First widget of current page.
+
+    - children of Module:
+        Builder < Semantics < [ManagerRootScreen] < WillPopScope < Scaffold ...
+*----------------------------------------------------------------------------------------------------------------
+    * any Push() rebuild widgets
+ */
+//============================================================================================
   /*
   transitionsBuilder: (context, animation, secondaryAnimation, child) {
       var begin = Offset(0.1, 0.0);
@@ -952,49 +952,4 @@ Widget buildPage(BuildContext context, Animation<double> animation, Animation<do
    */
 
 //============================================================================================
-
-/*
-   Old & mistake findLastContext:
-
-static BuildContext findLastContextA(BuildContext base) {
-    BuildContext res = base;
-    var lastHash = base.hashCode;
-    BuildContext temp = base.owner.focusManager.primaryFocus?.context;
-
-    while(lastHash != temp.hashCode){
-      lastHash = temp.hashCode;
-      temp = temp.owner.focusManager.primaryFocus?.context;
-
-      if(temp != null)
-        res = temp;
-    }
-
-    return res;
-  }
-
-  static BuildContext findLastContextB(BuildContext base) {
-    BuildContext res = base;
-    var lastHash = base.hashCode;
-
-    base.visitChildElements((element) {
-      while(lastHash != element.hashCode){
-        lastHash = element.hashCode;
-        res = element.owner.focusManager.primaryFocus?.context;
-
-        element.visitChildElements((el2) { element = el2;});
-      }
-    });
-
-    return res;
-  }
-  ------------------------------------------------------------------
-  ModalRoute m = ModalRoute.of(f.context);
-  Settings.logger.logToScreen('isCurrent : ${m.isCurrent}');
-  Settings.logger.logToScreen('active : ${m.isActive}');
-  Settings.logger.logToScreen('isFirst : ${m.isFirst}');
-  Settings.logger.logToScreen('barrierDismissible : ${m.barrierDismissible}');
-  Settings.logger.logToScreen('finishedWhenPopped : ${m.finishedWhenPopped}');
-  Settings.logger.logToScreen('opaque : ${m.opaque}\n\n');
-
-*/
 }

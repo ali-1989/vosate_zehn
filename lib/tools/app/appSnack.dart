@@ -21,15 +21,7 @@ class AppSnack {
     return getScaffoldMessengerByKey().showMaterialBanner(banner);
   }
 
-  static SnackBar genSnackBar(String message){
-    return SnackBar(
-      content: Text(message),
-      behavior: SnackBarBehavior.floating,
-      duration: const Duration(milliseconds: 3000),
-    );
-  }
-  ///===================================================================================================
-  static ScaffoldFeatureController showSnack(
+  static ScaffoldFeatureController showCustomSnack(
       BuildContext context,
       String message, {
         Duration dur = const Duration(milliseconds: 3500),
@@ -37,6 +29,8 @@ class AppSnack {
         SnackBarBehavior? behavior,
         Color? backColor,
         EdgeInsetsGeometry? padding,
+        ShapeBorder? shape,
+        VoidCallback? onVisible,
       }){
     final snackBar = SnackBar(
         content: Text(message),
@@ -46,13 +40,39 @@ class AppSnack {
       action: action,
       padding: padding,
       backgroundColor: backColor,
+      shape: shape,
+      onVisible: onVisible,
     );
 
     return getScaffoldMessenger(context).showSnackBar(snackBar);
   }
 
-  static void showSnackNotice(BuildContext context, String message){
-    final snack = genSnackBar(message);
+  static SnackBar genSnackBar(String message, {SnackBarAction? action}){
+    return SnackBar(
+      content: Text(message),
+      behavior: SnackBarBehavior.floating,
+      duration: const Duration(milliseconds: 3000),
+      action: action,
+    );
+  }
+  ///---------------------------------------------------------------------------------------------------------
+  static void showError(BuildContext context, String message){
+    final snack = genSnackBar(AppMessages.operationCanceled);
+    showFlutterSnackBar(snack);
+  }
+
+  static void showSuccess(BuildContext context, String message){
+    final snack = genSnackBar(AppMessages.operationCanceled);
+    showFlutterSnackBar(snack);
+  }
+
+  static void showInfo(BuildContext context, String message){
+    final snack = genSnackBar(AppMessages.operationCanceled);
+    showFlutterSnackBar(snack);
+  }
+
+  static void showAction(BuildContext context, String message, SnackBarAction action){
+    final snack = genSnackBar(AppMessages.operationCanceled, action: action);
     showFlutterSnackBar(snack);
   }
   ///--------------------------------------------------------------------------------

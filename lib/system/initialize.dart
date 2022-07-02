@@ -55,7 +55,7 @@ class InitialApplication {
 
 
 		if(!kIsWeb) {
-			await AppNotification.initial();
+			//await AppNotification.initial();
 		}
 
 		isInitialOk = true;

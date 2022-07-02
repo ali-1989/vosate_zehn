@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:vosate_zehn/constants.dart';
 import 'package:vosate_zehn/models/holders/versionUpdateHolder.dart';
 import 'package:vosate_zehn/models/versionModel.dart';
 import 'package:vosate_zehn/system/requester.dart';
@@ -11,12 +12,14 @@ class VersionManager {
   VersionManager._();
 
   static Future<void> onFirstInstall() async {
-    // ignore: unawaited_futures
-    SettingsManager.saveSettings();
+    SettingsManager.settingsModel.currentVersion = Constants.appVersionCode;
+
     await AppDB.firstDatabasePrepare();
+    SettingsManager.saveSettings();
   }
 
-  static Future<void> onUpdateVersion() async {
+  static Future<void> onUpdateInstall() async {
+    SettingsManager.settingsModel.currentVersion = Constants.appVersionCode;
     // ignore: unawaited_futures
     SettingsManager.saveSettings();
   }

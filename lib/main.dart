@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
 import 'package:vosate_zehn/pages/splash_page.dart';
 import 'package:vosate_zehn/tools/app/appManager.dart';
 import 'package:vosate_zehn/tools/app/appRoute.dart';
@@ -52,10 +51,10 @@ class MyApp extends StatelessWidget {
 
     _isInit = true;
 
-    SystemChrome.setPreferredOrientations([
+    /*SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
-    ]);
+    ]);*/
   }
 
   Future<void> testCodes(BuildContext context) async {

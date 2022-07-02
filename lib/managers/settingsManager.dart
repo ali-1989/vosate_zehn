@@ -20,7 +20,6 @@ class SettingsManager {
 	static SettingsModel get settingsModel {
 		if(!_isInit){
 			loadSettings();
-			_isInit = true;
 		}
 
 		return _settingsModel;
@@ -51,11 +50,15 @@ class SettingsManager {
 	static bool loadSettings() {
 		final res = AppDB.fetchKv(Keys.setting$appSettings);
 
-		if(res == null) {
-			_settingsModel = SettingsModel();
-		}
-		else {
-			_settingsModel = SettingsModel.fromMap(res);
+		if(!_isInit) {
+			if (res == null) {
+				_settingsModel = SettingsModel();
+			}
+			else {
+				_settingsModel = SettingsModel.fromMap(res);
+			}
+
+			_isInit = true;
 		}
 
 		saveSettings();
@@ -67,7 +70,7 @@ class SettingsManager {
 			await Future.delayed(const Duration(seconds: 1));
 		}
 
-		final res = await AppDB.setReplaceKv(Keys.setting$appSettings, settingsModel.toMap());
+		final res = await AppDB.setReplaceKv(Keys.setting$appSettings, _settingsModel.toMap());
 
 		notify(context: context);
 

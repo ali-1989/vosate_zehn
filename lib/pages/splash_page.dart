@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:vosate_zehn/constants.dart';
 import 'package:vosate_zehn/managers/settingsManager.dart';
 import 'package:vosate_zehn/managers/versionManager.dart';
-import 'package:vosate_zehn/system/lifeCycleApplication.dart';
+import 'package:vosate_zehn/models/holders/versionUpdateHolder.dart';
+import 'package:vosate_zehn/pages/home_page.dart';
 import 'package:vosate_zehn/system/session.dart';
 import 'package:vosate_zehn/tools/app/appImages.dart';
 import 'package:vosate_zehn/tools/app/appManager.dart';
@@ -69,11 +70,11 @@ class SplashScreenState extends State<SplashPage> {
                 )
             ),
           ),
-          Container(
+          /*Container(
             height: 25.0,
             width: 200.0,
             decoration: BoxDecoration(image: DecorationImage(image: AssetImage(AppImages.splashLoading), fit: BoxFit.cover)),
-          ),
+          ),*/
         ],
       ),
     );
@@ -88,10 +89,10 @@ class SplashScreenState extends State<SplashPage> {
       //scrollBehavior: MyCustomScrollBehavior(),
       //onGenerateTitle: (ctx) => ,
       title: Constants.appTitle,
-      theme: AppThemes.themeData,
+      theme: AppThemes.instance.themeData,
       //or: ThemeData.light(),
       //darkTheme: ThemeData.dark(),
-      themeMode: AppThemes.currentThemeMode,
+      themeMode: AppThemes.instance.currentThemeMode,
       scaffoldMessengerKey: AppBroadcast.rootScaffoldMessengerKey,
       navigatorKey: AppBroadcast.rootNavigatorStateKey,
       //localizationsDelegates: AppLocale.getLocaleDelegates(),
@@ -100,7 +101,7 @@ class SplashScreenState extends State<SplashPage> {
       /*localeResolutionCallback: (deviceLocale, supportedLocales) {
         return SettingsManager.settingsModel.appLocale;
       },*/
-      home: RoutePage(),
+      home: HomePage(),
       builder: (context, home) {
         AppRoute.materialContext = context;
         InitialApplication.oncePreparing(context);
@@ -167,12 +168,13 @@ class SplashScreenState extends State<SplashPage> {
   }
 
   Future<void> checkAppVersion() async {
-    final oldVersion = SettingsManager.settingsModel.appVersion;
+    final oldVersion = SettingsManager.settingsModel.currentVersion;
 
     if (oldVersion == null) {
       VersionManager.onFirstInstall();
-    } else if (oldVersion < Constants.appVersionCode) {
-      VersionManager.onUpdateVersion();
+    }
+    else if (oldVersion < Constants.appVersionCode) {
+      VersionManager.onUpdateInstall();
     }
   }
 
@@ -182,39 +184,28 @@ class SplashScreenState extends State<SplashPage> {
 }
 ///=============================================================================================================
 void callOnBuild() {
-  if (!SettingsManager.calledBootUp) {
+  if (!InitialApplication.isLaunchOk) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Timer.periodic(const Duration(milliseconds: 50), (Timer timer) {
         if (InitialApplication.isInitialOk) {
           timer.cancel();
-          LifeCycleApplication.callOnLaunchUp();
+          InitialApplication.callOnLaunchUp();
         }
       });
     });
   }
 
-  if (SettingsManager.settingsModel.currentRouteScreen == RoutesName.homePage) {
+  if (false) {
     AppDirectories.generateNoMediaFile();
   }
 }
 
 void checkAppNewVersion(BuildContext context) async {
-  PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
   final holder = VersionUpdateHolder();
-  holder.version = int.parse(packageInfo.buildNumber);
-  holder.pkgName = packageInfo.packageName;
+  holder.version = 0;
+  holder.pkgName = '';
   holder.os = 1;
 
   final version = await VersionManager.checkVersion(holder);
-
-  if (version != null && (version.hasUpdate ?? false)) {
-    final page = WebPageViewer(version.webPageUrl!, "آپدیت برنامه", update: true, force: version.isForce!,);
-
-    AppNavigator.pushNextPage(
-        context,
-        page,
-        name: 'FunPlaces'
-    );
-  }
 }

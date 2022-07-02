@@ -5,12 +5,21 @@ import 'package:flutter/material.dart';
 import 'package:iris_tools/api/generator.dart';
 import 'package:iris_tools/api/helpers/colorHelper.dart';
 import 'package:iris_tools/api/helpers/focusHelper.dart';
+import 'package:material_dialogs/material_dialogs.dart';
+import 'package:vosate_zehn/tools/app/appIcons.dart';
+import 'package:vosate_zehn/tools/app/appMessages.dart';
+import 'package:vosate_zehn/tools/app/appThemes.dart';
 
 
 import '/system/extensions.dart';
-import 'appIcons.dart';
 import '/tools/app/appNavigator.dart';
-import '/tools/app/appThemes.dart';
+
+/*
+>> showModalSheet()
+>> showBottomSheet()
+>> showModalBottomSheet()
+>> showCupertinoModalPopup()
+ */
 
 class AppSheet {
   AppSheet._();
@@ -25,8 +34,7 @@ class AppSheet {
   ///=======================================================================================================
   static PersistentBottomSheetController<T> showBottomSheetInScaffold<T>(
       BuildContext ctx,
-      Widget Function(BuildContext context) builder,
-      {
+      Widget Function(BuildContext context) builder, {
         Color? backgroundColor,
         double elevation = 0.0,
         ShapeBorder? shape,
@@ -102,10 +110,10 @@ class AppSheet {
         String? routeName,
       }){
 
-    buttonText ??= context.tC('ok');
-    final contentColor = AppThemes.currentTheme.primaryColor;
-    final buttonbarColor = AppThemes.currentTheme.primaryColor;
-    final barrierColor = ColorHelper.isNearColors(AppThemes.currentTheme.primaryColor, [Colors.black,])
+    buttonText ??= AppMessages.ok;
+    final contentColor = AppThemes.instance.currentTheme.primaryColor;
+    final buttonbarColor = AppThemes.instance.currentTheme.primaryColor;
+    final barrierColor = ColorHelper.isNearColors(AppThemes.instance.currentTheme.primaryColor, [Colors.black,])
         ? Colors.white.withAlpha(80) : Colors.black.withAlpha(120);
 
     void close(){
@@ -115,7 +123,7 @@ class AppSheet {
 
     final posBtn = TextButton(
         onPressed: dismissOnAction? close : fn,
-        child: Text(buttonText!, style: AppThemes.relativeSheetTextStyle(),)
+        child: Text(buttonText, style: AppThemes.relativeSheetTextStyle(),)
     );
     //TextButton.icon(onPressed: fn, label: Text(btnText,), icon: Icon(icon, color: textColor,),);
 
@@ -133,7 +141,7 @@ class AppSheet {
       posButton: posBtn,
       title: titleView,
       buttonBarColor: buttonbarColor,
-      padding: EdgeInsets.symmetric(horizontal: 18.0, vertical: 18.0),
+      padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 18.0),
     );
 
     return showModalSheet<T>(
@@ -151,7 +159,7 @@ class AppSheet {
   }
 
   static Future<T?> showSheetNotice<T>(BuildContext context, String msg, {bool isDismissible = true}){
-    return showSheetOneAction(context, msg, null, title: context.tC('notice')!, isDismissible: isDismissible);
+    return showSheetOneAction(context, msg, null, title: AppMessages.notice, isDismissible: isDismissible);
   }
   ///=======================================================================================================
   static Future<T?> showSheetYesNo<T>(
@@ -168,9 +176,9 @@ class AppSheet {
         String? routeName,
       }){
 
-    final contentColor = AppThemes.currentTheme.primaryColor;
-    final btnBarColor = AppThemes.currentTheme.primaryColor;
-    final barrierColor = ColorHelper.isNearColors(AppThemes.currentTheme.primaryColor,
+    final contentColor = AppThemes.instance.currentTheme.primaryColor;
+    final btnBarColor = AppThemes.instance.currentTheme.primaryColor;
+    final barrierColor = ColorHelper.isNearColors(AppThemes.instance.currentTheme.primaryColor,
         [Colors.black])? Colors.white.withAlpha(80) : Colors.black.withAlpha(120);
 
     void posClose(){
@@ -183,18 +191,18 @@ class AppSheet {
       negFn?.call();
     }
 
-    posBtnText ??= context.t('yes');
-    negBtnText ??= context.t('no');
+    posBtnText ??= AppMessages.yes;
+    negBtnText ??= AppMessages.no;
 
     final ts = AppThemes.baseTextStyle().copyWith(
-      color: ColorHelper.getUnNearColor(Colors.white, AppThemes.currentTheme.primaryColor, Colors.black),
+      color: ColorHelper.getUnNearColor(Colors.white, AppThemes.instance.currentTheme.primaryColor, Colors.black),
     );
 
     final posBtn = TextButton(onPressed: dismissOnAction? posClose: posFn,
-        child: Text(posBtnText!, style: ts)
+        child: Text(posBtnText, style: ts)
     );
     final negBtn = TextButton(onPressed: dismissOnAction? negClose: negFn,
-        child: Text(negBtnText!, style: ts)
+        child: Text(negBtnText, style: ts)
     );
 
     final body = _getBody(
@@ -203,7 +211,7 @@ class AppSheet {
       negButton: negBtn,
       title: title,
       buttonBarColor: btnBarColor,
-      padding: EdgeInsets.fromLTRB(16, 22, 16, 12),
+      padding: const EdgeInsets.fromLTRB(16, 22, 16, 12),
     );
 
     return showModalSheet<T>(
@@ -235,8 +243,8 @@ class AppSheet {
       }){
 
     backgroundColor ??= Colors.transparent;
-    contentColor ??= AppThemes.currentTheme.primaryColor;
-    barrierColor ??= ColorHelper.isNearColors(AppThemes.currentTheme.primaryColor, [Colors.black])
+    contentColor ??= AppThemes.instance.currentTheme.primaryColor;
+    barrierColor ??= ColorHelper.isNearColors(AppThemes.instance.currentTheme.primaryColor, [Colors.black])
         ? Colors.white.withAlpha(80) : Colors.black.withAlpha(120);
 
     Widget body;
@@ -329,8 +337,8 @@ class AppSheet {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    posButton?? SizedBox(),
-                    negButton?? SizedBox(),
+                    posButton?? const SizedBox(),
+                    negButton?? const SizedBox(),
                   ],
                 ),
               ),
@@ -375,7 +383,7 @@ class AppSheet {
                       textAlign: TextAlign.start,
                       child: title),
                 if (title != null)
-                  SizedBox(height: 10,),
+                  const SizedBox(height: 10,),
 
                 DefaultTextStyle(
                   style: theme.textTheme.headline6!.copyWith(fontSize: 14, fontWeight: FontWeight.normal),
@@ -394,8 +402,8 @@ class AppSheet {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    posButton ?? SizedBox(),
-                    negButton ?? SizedBox(),
+                    posButton ?? const SizedBox(),
+                    negButton ?? const SizedBox(),
                   ],
                 ),
               ),
@@ -412,13 +420,13 @@ class AppSheet {
     }){
     final view = BottomSheet(
       onClosing: () {},
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
           side: BorderSide(style: BorderStyle.none),
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20),
               topRight: Radius.circular(20))
       ),
-      constraints: BoxConstraints.tightFor(),
+      constraints: const BoxConstraints.tightFor(),
       builder: (BuildContext context) {
         return Column(
           mainAxisSize: MainAxisSize.min,
@@ -446,7 +454,7 @@ class AppSheet {
         TextDirection? textDirection,
       }) {
     backColor ??= Colors.white;
-    padding ??= EdgeInsets.symmetric(horizontal: 10, vertical: 5);
+    padding ??= const EdgeInsets.symmetric(horizontal: 10, vertical: 5);
     textDirection ??= Directionality.of(context);
 
     return ColoredBox(
@@ -463,11 +471,11 @@ class AppSheet {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   if(!Platform.isAndroid)
-                  Icon(
+                  const Icon(
                     AppIcons.close,
                   ).wrapMaterial(
-                      materialColor: AppThemes.currentTheme.primaryColor.withAlpha(70),
-                      padding: EdgeInsets.all(4),
+                      materialColor: AppThemes.instance.currentTheme.primaryColor.withAlpha(70),
+                      padding: const EdgeInsets.all(4),
                       onTapDelay: (){AppNavigator.pop(context);}
                   ),
                 ],
@@ -482,56 +490,78 @@ class AppSheet {
   }
   ///=======================================================================================================
   static Future<T?> showSheet$NetDisconnected<T>(BuildContext context){
-    return showSheetOneAction<T>(context, context.tC('netConnectionIsDisconnect')!, null);
+    return showSheetOneAction<T>(context, AppMessages.netConnectionIsDisconnect, null);
   }
 
   static Future<T?> showSheet$ErrorCommunicatingServer<T>(BuildContext context){
-    return showSheetOneAction<T>(context,context.tC('errorCommunicatingServer')!, null);
+    return showSheetOneAction<T>(context, AppMessages.errorCommunicatingServer, null);
   }
 
   static Future<T?> showSheet$ServerNotRespondProperly<T>(BuildContext context){
-    return showSheetOneAction<T>(context, context.tC('serverNotRespondProperly')!, null);
-  }
-
-  static Future<T?> showSheet$ErrorInServerSide<T>(BuildContext context){
-    return showSheetOneAction<T>(context, context.tC('errorInServerSide')!, null);
+    return showSheetOneAction<T>(context, AppMessages.serverNotRespondProperly, null);
   }
 
   static Future<T?> showSheet$OperationCannotBePerformed<T>(BuildContext context){
-    return showSheetOneAction<T>(context, context.tC('operationCannotBePerformed')!, null);
+    return showSheetOneAction<T>(context, AppMessages.operationCannotBePerformed, null);
   }
 
   static Future<T?> showSheet$SuccessOperation<T>(BuildContext context){
-    return showSheetOneAction<T>(context, context.tC('successOperation')!, null);
+    return showSheetOneAction<T>(context, AppMessages.successOperation, null);
   }
 
   static Future<T?> showSheet$OperationFailed<T>(BuildContext context){
-    return showSheetOneAction<T>(context, context.tC('operationFailed')!, null);
+    return showSheetOneAction<T>(context, AppMessages.operationFailed, null);
   }
 
   static Future<T?> showSheet$OperationFailedTryAgain<T>(BuildContext context){
-    return showSheetOneAction<T>(context, context.tC('operationFailedTryAgain')!, null);
+    return showSheetOneAction<T>(context, AppMessages.operationFailedTryAgain, null);
   }
 
   static Future<T?> showSheet$OperationCanceled<T>(BuildContext context){
-    return showSheetOneAction<T>(context, context.tC('operationCanceled')!, null);
+    return showSheetOneAction<T>(context, AppMessages.operationCanceled, null);
   }
 
   static Future<T?> showSheet$YouDoNotHaveAccess<T>(BuildContext context){
-    return showSheetOneAction<T>(context, context.tC('sorryYouDoNotHaveAccess')!, null);
-  }
-
-  static Future<T?> showSheet$YouNotHaveRequiredPermissions<T>(BuildContext context){
-    return showSheetOneAction<T>(context, context.tC('youNotHaveRequiredPermissions')!, null);
+    return showSheetOneAction<T>(context, AppMessages.sorryYouDoNotHaveAccess, null);
   }
 
   static Future<T?> showSheet$AccountIsBlock<T>(BuildContext context){
-    return showSheetOneAction<T>(context, context.tC('accountIsBlock')!, null);
+    return showSheetOneAction<T>(context, AppMessages.accountIsBlock, null);
   }
 
   static Future<T?> showSheet$ThereAreNoResults<T>(BuildContext context){
-    return showSheetOneAction<T>(context, context.tC('thereAreNoResults')!, null);
+    return showSheetOneAction<T>(context, AppMessages.thereAreNoResults, null);
   }
+  ///=====================================================================================================
+  static void showSheet(BuildContext context, {
+   String? title,
+   String? message,
+   List<Widget>? actions,
+  }){
+    return Dialogs.bottomMaterialDialog(
+        msg: message,
+        title: title,
+        context: context,
+        actions: [
+          ...?actions
+        ]);
+  }
+
+  /*IconsOutlineButton(
+            onPressed: () {},
+            text: 'Cancel',
+            iconData: Icons.cancel_outlined,
+            textStyle: TextStyle(color: Colors.grey),
+            iconColor: Colors.grey,
+          ),
+          IconsButton(
+            onPressed: () {},
+            text: 'Delete',
+            iconData: Icons.delete,
+            color: Colors.red,
+            textStyle: TextStyle(color: Colors.white),
+            iconColor: Colors.white,
+          ),*/
 }
 
 /*

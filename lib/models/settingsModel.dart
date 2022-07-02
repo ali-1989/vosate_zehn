@@ -18,7 +18,8 @@ class SettingsModel {
   String httpAddress = defaultHttpAddress;
   String wsAddress = defaultWsAddress;
   String proxyAddress = defaultProxyAddress;
-  static Orientation? appRotationState; // null: free
+  Orientation? appRotationState; // null: free
+  int? currentVersion;
   static int webSocketPeriodicHeart = 3;
   static int drawerMenuTimeMill = 350;
   static int maxCoverWidth = 180;

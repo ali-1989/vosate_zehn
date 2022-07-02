@@ -1,8 +1,8 @@
+import 'package:vosate_zehn/tools/app/appMessages.dart';
 import 'package:vosate_zehn/tools/app/appSheet.dart';
 import 'package:vosate_zehn/tools/app/appSnack.dart';
 import 'package:flutter/material.dart';
 
-import '/system/extensions.dart';
 import '/system/httpCodes.dart';
 import '/system/keys.dart';
 
@@ -19,47 +19,43 @@ class HttpProcess {
 
   static bool processCommonRequestErrors(BuildContext context, int causeCode, String? cause, Map json){
     if(causeCode == HttpCodes.error_requestKeyNotFound){
-      AppSnack.showFlashBarError(context, "'request' key not exist");
+      AppSnack.showError(context, AppMessages.requestKeyNotExist);
       return true;
     }
     else if(causeCode == HttpCodes.error_tokenNotCorrect){
-      AppSnack.showFlashBarError(context, context.tInMap('httpCodes', 'tokenIsIncorrect')!);
+      AppSnack.showError(context, AppMessages.tokenIsIncorrectOrExpire);
       return true;
     }
     else if(causeCode == HttpCodes.error_databaseError){
-      AppSnack.showFlashBarError(context, context.tInMap('httpCodes', 'databaseError')!);
+      AppSnack.showError(context, AppMessages.databaseError);
       return true;
     }
     else if(causeCode == HttpCodes.error_userIsBlocked){
-      AppSnack.showFlashBarInfo(context, context.tInMap('httpCodes', 'accountIsBlock')!);
+      AppSnack.showInfo(context, AppMessages.accountIsBlock);
       return true;
     }
     else if(causeCode == HttpCodes.error_userNotFound){
-      AppSnack.showFlashBarInfo(context, context.tInMap('httpCodes', 'userNameOrPasswordIncorrect')!);
+      AppSnack.showInfo(context, AppMessages.userNameOrPasswordIncorrect);
       return true;
     }
     else if(causeCode == HttpCodes.error_userNamePassIncorrect){
-      AppSnack.showFlashBarInfo(context, context.tInMap('httpCodes', 'userNameOrPasswordIncorrect')!);
+      AppSnack.showInfo(context, AppMessages.userNameOrPasswordIncorrect);
       return true;
     }
     else if(causeCode == HttpCodes.error_isNotJson){
-      AppSnack.showFlashBarError(context,  'request data is not a json');
+      AppSnack.showError(context,  AppMessages.requestDataIsNotJson);
       return true;
     }
     else if(causeCode == HttpCodes.error_parametersNotCorrect){
-      AppSnack.showFlashBarError(context, context.tInMap('httpCodes', 'errorOccurredInSubmittedParameters')!);
+      AppSnack.showError(context, AppMessages.errorOccurredInSubmittedParameters);
       return true;
     }
     else if(causeCode == HttpCodes.error_notUpload){
-      AppSnack.showFlashBarError(context, context.tInMap('httpCodes', 'errorUploadingData')!);
-      return true;
-    }
-    else if(causeCode == HttpCodes.error_internalError){
-      AppSnack.showFlashBarError(context, context.tInMap('httpCodes', 'errorInServerSide')!);
+      AppSnack.showError(context, AppMessages.errorUploadingData);
       return true;
     }
     else if(causeCode == HttpCodes.error_dataNotExist){
-      AppSnack.showFlashBarInfo(context, context.tInMap('httpCodes', 'dataNotFound')!);
+      AppSnack.showInfo(context, AppMessages.dataNotFound);
       return true;
     }
     else if(causeCode == HttpCodes.error_canNotAccess){
@@ -71,16 +67,15 @@ class HttpProcess {
       return true;
     }
     else if(causeCode == HttpCodes.error_requestNotDefined){
-      AppSnack.showFlashBarInfo(context, context.tInMap('httpCodes', 'thisRequestNotDefined')!);
+      AppSnack.showInfo(context, AppMessages.thisRequestNotDefined);
       return true;
     }
     else if(causeCode == HttpCodes.error_toUserMessage){
-      AppSnack.showFlashBarAction(context, cause!, TextButton(
-          onPressed: (){AppSheet.closeSheet(context);},
-          child: Text('${context.tC('ok')}')
-      ),
-        autoDismiss: false,
+      final action = SnackBarAction(
+        label: AppMessages.ok,
+        onPressed: (){AppSheet.closeSheet(context);},
       );
+      AppSnack.showAction(context, cause!, action, /*autoDismiss: false*/);
 
       return true;
     }

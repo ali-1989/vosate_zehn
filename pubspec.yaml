@@ -1,5 +1,5 @@
 # Flutter: 3.0.1     old: -
-# Dart: 2.17.0        old: -
+# Dart: 2.17.1        old: -
 # Java: 17
 
 name: vosate_zehn
@@ -8,7 +8,7 @@ homepage: https://iris.ir
 
 publish_to: 'none'
 
-version: 1.0.0+1
+version: 0.0.1
 
 environment:
   sdk: ">=2.17.1 <3.0.0"
