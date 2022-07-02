@@ -19,6 +19,7 @@ class AppDB {
     return true;
   }
   ///------------------------------------------------------------------------------------------
+  /// 1 is ok and 0 is fail
   static Future<int> setReplaceKv(String key, dynamic data){
     final con = Conditions();
     con.add(Condition()..key = Keys.name..value = key);

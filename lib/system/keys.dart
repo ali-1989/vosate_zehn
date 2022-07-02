@@ -60,13 +60,14 @@ class Keys {
   static const toast = 'toast';
   //----- settings key -----------------------------------------------------------------
   static const setting$lastLoginDate = 'last_login_date';
-  static const setting$appSettings = 'AppSettings';
-  static const setting$fontThemeData = 'FontThemeData';
-  static const setting$colorThemeName = 'ColorThemeName';
-  static const setting$patternKey = 'lockPattern';
-  static const setting$ColorThemeName = 'ColorThemeName';
-  static const setting$lastForegroundTs = 'lastForegroundTs';
-  static const setting$confirmOnExit = 'ConfirmOnExit';
+  static const setting$lastRouteName = 'Last_route_name';
+  static const setting$appSettings = 'app_settings';
+  static const setting$fontThemeData = 'font_theme_data';
+  static const setting$colorThemeName = 'color_theme_name';
+  static const setting$patternKey = 'lock_pattern';
+  static const setting$ColorThemeName = 'colorT_theme_name';
+  static const setting$lastForegroundTs = 'last_foreground_ts';
+  static const setting$confirmOnExit = 'confirm_on_exit';
 
   static String genDownloadKey_userAvatar(int userId) {
     return 'downloadUserAvatar_$userId';

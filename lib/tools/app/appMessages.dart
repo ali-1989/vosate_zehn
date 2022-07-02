@@ -29,6 +29,10 @@ class AppMessages {
     return AppRoute.getContext().tC('wantToLeave')?? _noText;
   }
 
+  static String get e404 {
+    return AppRoute.getContext().tC('thisPageNotFound')?? _noText;
+  }
+
   static String get requestKeyNotExist {
     return "'request' key not exist";
   }

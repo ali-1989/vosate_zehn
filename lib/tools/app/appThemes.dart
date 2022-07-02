@@ -76,26 +76,26 @@ class AppThemes {
 
 			blueTheme.themeName = 'Blue';
 
-			_instance.themeList[blueTheme.themeName] = blueTheme;
-			_instance.defaultTheme = blueTheme;
+			AppThemes._instance.themeList[blueTheme.themeName] = blueTheme;
+			AppThemes._instance.defaultTheme = blueTheme;
 		}
 	}
 
 	static void applyDefaultTheme() {
-		applyTheme(_instance.defaultTheme);
+		applyTheme(AppThemes._instance.defaultTheme);
 	}
 
 	static void applyTheme(ColorTheme theme) {
-		_instance.currentTheme = theme;
-		_instance.themeData = createThemeData(theme);
+		AppThemes._instance.currentTheme = theme;
+		AppThemes._instance.themeData = createThemeData(theme);
 
 		_onThemeChange();
 	}
 
 	static void prepareDefaultFontFor(String lang){
-		_instance.baseFont = FontManager.instance.defaultFontFor(lang, FontUsage.normal);
-		_instance.subFont = FontManager.instance.defaultFontFor(lang, FontUsage.sub);
-		_instance.boldFont = FontManager.instance.defaultFontFor(lang, FontUsage.bold);
+		AppThemes._instance.baseFont = FontManager.instance.defaultFontFor(lang, FontUsage.normal);
+		AppThemes._instance.subFont = FontManager.instance.defaultFontFor(lang, FontUsage.sub);
+		AppThemes._instance.boldFont = FontManager.instance.defaultFontFor(lang, FontUsage.bold);
 	}
 
 	static void _onThemeChange() {
@@ -212,7 +212,7 @@ class AppThemes {
 		final chipTextColor = ColorHelper.getUnNearColor(Colors.white, chipBack, Colors.black);
 
 		final chipThemeData = raw.chipTheme.copyWith(//ThemeData();
-			brightness: _instance.currentBrightness,
+			brightness: AppThemes._instance.currentBrightness,
 			backgroundColor: chipBack,
 			checkmarkColor: chipTextColor,
 			deleteIconColor: chipTextColor,
@@ -238,7 +238,7 @@ class AppThemes {
 			toolbarTextStyle: primaryTextTheme.headline6,
 			iconTheme: iconTheme.copyWith(color: th.appBarItemColor),
 			actionsIconTheme: iconTheme.copyWith(color: th.appBarItemColor),
-			systemOverlayStyle: _instance.currentBrightness == Brightness.light? SystemUiOverlayStyle.light: SystemUiOverlayStyle.dark,
+			systemOverlayStyle: AppThemes._instance.currentBrightness == Brightness.light? SystemUiOverlayStyle.light: SystemUiOverlayStyle.dark,
 			centerTitle: true,
 			elevation: 1.0,
 			color: th.appBarBackColor,
@@ -287,7 +287,7 @@ class AppThemes {
 		backgroundColor: th.backgroundColor,
 		errorColor: th.errorColor,
 		cardColor: th.cardColor,
-		brightness: _instance.currentBrightness,
+		brightness: AppThemes._instance.currentBrightness,
 		);
 
 		final cardTheme = CardTheme(
@@ -415,7 +415,7 @@ class AppThemes {
 			applyElevationOverlayColor: true,
 			platform: System.getTargetPlatform(),
 			pageTransitionsTheme: pageTransition,
-			brightness: _instance.currentBrightness,
+			brightness: AppThemes._instance.currentBrightness,
 			appBarTheme: appAppBarTheme,
 			primaryTextTheme: primaryTextTheme,
 			textTheme: primaryTextTheme,
@@ -475,51 +475,51 @@ class AppThemes {
 	}
 	///================================================================================================
 	static TextTheme textTheme() {
-		return _instance.themeData.textTheme;
+		return AppThemes._instance.themeData.textTheme;
 	}
 
 	static TextStyle appBarTextStyle() {
-		final app = _instance.themeData.appBarTheme.toolbarTextStyle!;
+		final app = AppThemes._instance.themeData.appBarTheme.toolbarTextStyle!;
 		return app;//.copyWith(fontSize: app.fontSize! - 3);
 	}
 
 	static TextStyle baseTextStyle() {
-		return _instance.currentTheme.baseTextStyle;
+		return AppThemes._instance.currentTheme.baseTextStyle;
 	}
 
 	static TextStyle boldTextStyle() {
-		return _instance.currentTheme.boldTextStyle;
+		return AppThemes._instance.currentTheme.boldTextStyle;
 	}
 
 	static TextStyle subTextStyle() {
-		return _instance.currentTheme.subTextStyle;
+		return AppThemes._instance.currentTheme.subTextStyle;
 	}
 
 	static TextStyle? body2TextStyle() {
-		return _instance.themeData.textTheme.bodyText2;
+		return AppThemes._instance.themeData.textTheme.bodyText2;
 	}
 
 	static TextStyle infoHeadLineTextStyle() {
-		return _instance.themeData.textTheme.headline5!.copyWith(
-			color: _instance.themeData.textTheme.headline5!.color!.withAlpha(150),
+		return AppThemes._instance.themeData.textTheme.headline5!.copyWith(
+			color: AppThemes._instance.themeData.textTheme.headline5!.color!.withAlpha(150),
 		);
 	}
 
 	static TextStyle infoTextStyle() {
-		return _instance.themeData.textTheme.headline5!.copyWith(
-			color: _instance.themeData.textTheme.headline5!.color!.withAlpha(150),
-			fontSize: _instance.themeData.textTheme.headline5!.fontSize! -2,
+		return AppThemes._instance.themeData.textTheme.headline5!.copyWith(
+			color: AppThemes._instance.themeData.textTheme.headline5!.color!.withAlpha(150),
+			fontSize: AppThemes._instance.themeData.textTheme.headline5!.fontSize! -2,
 			height: 1.5,
 		);
 		//return currentTheme.baseTextStyle.copyWith(color: currentTheme.infoTextColor);
 	}
 
 	static ButtonThemeData buttonTheme() {
-		return _instance.themeData.buttonTheme;
+		return AppThemes._instance.themeData.buttonTheme;
 	}
 
 	static TextStyle? buttonTextStyle() {
-		return _instance.themeData.textTheme.button;
+		return AppThemes._instance.themeData.textTheme.button;
 		//return themeData.elevatedButtonTheme.style!.textStyle!.resolve({MaterialState.focused});
 	}
 
@@ -528,40 +528,40 @@ class AppThemes {
 	}
 
 	static Color? textButtonColor() {
-		return _instance.themeData.textButtonTheme.style!.foregroundColor!.resolve({MaterialState.selected});
+		return AppThemes._instance.themeData.textButtonTheme.style!.foregroundColor!.resolve({MaterialState.selected});
 	}
 
 	static Color buttonBackgroundColor() {
-		return _instance.themeData.elevatedButtonTheme.style!.backgroundColor!.resolve({MaterialState.focused})!;
+		return AppThemes._instance.themeData.elevatedButtonTheme.style!.backgroundColor!.resolve({MaterialState.focused})!;
 	}
 
 	static ThemeData dropdownTheme(BuildContext context, {Color? color}) {
-		return _instance.themeData.copyWith(
-			canvasColor: color?? ColorHelper.changeHue(_instance.currentTheme.accentColor),
+		return AppThemes._instance.themeData.copyWith(
+			canvasColor: color?? ColorHelper.changeHue(AppThemes._instance.currentTheme.accentColor),
 		);
 	}
 
 	static BoxDecoration dropdownDecoration({Color? color, double radius = 5}) {
 		return BoxDecoration(
-				color: color?? ColorHelper.changeHue(_instance.currentTheme.accentColor),
+				color: color?? ColorHelper.changeHue(AppThemes._instance.currentTheme.accentColor),
 				borderRadius: BorderRadius.circular(radius),
 		);
 	}
 
 	static Color cardColorOnCard() {
-		return ColorHelper.changeHSLByRelativeDarkLight(_instance.currentTheme.cardColor, 2, 0.0, 0.04);
+		return ColorHelper.changeHSLByRelativeDarkLight(AppThemes._instance.currentTheme.cardColor, 2, 0.0, 0.04);
 	}
 	///--- Relative ---------------------------------------------------------------------------------------------------
 	static bool isDarkPrimary(){
-		return ColorHelper.isNearColor(_instance.currentTheme.primaryColor, Colors.grey[900]!);
+		return ColorHelper.isNearColor(AppThemes._instance.currentTheme.primaryColor, Colors.grey[900]!);
 	}
 
 	static bool isLightPrimary(){
-		return ColorHelper.isNearColor(_instance.currentTheme.primaryColor, Colors.grey[200]!);
+		return ColorHelper.isNearColor(AppThemes._instance.currentTheme.primaryColor, Colors.grey[200]!);
 	}
 
 	static Color checkPrimaryByWB(Color ifNotNear, Color ifNear){
-		return ColorHelper.ifNearColors(_instance.currentTheme.primaryColor, [Colors.grey[900]!, Colors.grey[600]!, Colors.white],
+		return ColorHelper.ifNearColors(AppThemes._instance.currentTheme.primaryColor, [Colors.grey[900]!, Colors.grey[600]!, Colors.white],
 				()=> ifNear, ()=> ifNotNear);
 	}
 
@@ -571,8 +571,8 @@ class AppThemes {
 	}
 
 	static TextStyle relativeSheetTextStyle() {
-		final app = _instance.themeData.appBarTheme.toolbarTextStyle!;
-		final color = ColorHelper.getUnNearColor(app.color!, _instance.currentTheme.primaryColor, Colors.black);
+		final app = AppThemes._instance.themeData.appBarTheme.toolbarTextStyle!;
+		final color = ColorHelper.getUnNearColor(app.color!, AppThemes._instance.currentTheme.primaryColor, Colors.black);
 
 		return app.copyWith(color: color, fontSize: 14);//currentTheme.appBarItemColor
 	}
@@ -585,9 +585,9 @@ class AppThemes {
 	}
 
 	static TextStyle relativeFabTextStyle() {
-		final app = _instance.themeData.appBarTheme.toolbarTextStyle!;
+		final app = AppThemes._instance.themeData.appBarTheme.toolbarTextStyle!;
 
-		return app.copyWith(fontSize: app.fontSize! - 3, color: _instance.currentTheme.fabItemColor);
+		return app.copyWith(fontSize: app.fontSize! - 3, color: AppThemes._instance.currentTheme.fabItemColor);
 	}
 
 	static Color relativeBorderColor$outButton({bool onColored = false}) {
@@ -617,7 +617,7 @@ class AppThemes {
 	}
 	///------------------------------------------------------------------------------------------------------
 	static TextDirection getOppositeDirection() {
-		if (_instance.textDirection == TextDirection.rtl) {
+		if (AppThemes._instance.textDirection == TextDirection.rtl) {
 		  return TextDirection.ltr;
 		}
 
@@ -625,7 +625,7 @@ class AppThemes {
 	}
 
 	static bool isLtrDirection() {
-		if (_instance.textDirection == TextDirection.ltr) {
+		if (AppThemes._instance.textDirection == TextDirection.ltr) {
 		  return true;
 		}
 
@@ -633,7 +633,7 @@ class AppThemes {
 	}
 
 	static bool isRtlDirection() {
-		if (_instance.textDirection == TextDirection.rtl) {
+		if (AppThemes._instance.textDirection == TextDirection.rtl) {
 		  return true;
 		}
 

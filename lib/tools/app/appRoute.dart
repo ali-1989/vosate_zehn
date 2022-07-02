@@ -1,6 +1,10 @@
+import 'package:go_router/go_router.dart';
+import 'package:vosate_zehn/pages/e404_page.dart';
+import 'package:vosate_zehn/pages/home_page.dart';
+import 'package:vosate_zehn/pages/splash_page.dart';
 import 'package:vosate_zehn/tools/app/appDb.dart';
 import 'package:flutter/material.dart';
-import 'package:iris_db/iris_db.dart';
+import 'package:vosate_zehn/tools/app/appDirectories.dart';
 
 import '/system/keys.dart';
 import '/tools/app/appManager.dart';
@@ -23,32 +27,31 @@ class AppRoute {
     return materialContext;
   }
 
-  static Future<bool> saveRouteName(String name) async {
-    final val = <dynamic, dynamic>{};
-    val[Keys.name] = 'LastScreenName';
-    val[Keys.value] = name;
+  static Future<bool> saveRouteName(String routeName) async {
+    final int res = await AppDB.setReplaceKv(Keys.setting$lastRouteName, routeName);
 
-    final dynamic res = await AppDB.db.insertOrReplace(AppDB.tbKv, val,
-        Conditions()..add(Condition()..key = Keys.name..value = 'LastScreenName'));
-
-    return res != null;
+    return res > 0;
   }
 
   static String? fetchRouteScreenName() {
-    final res = AppDB.db.query(AppDB.tbKv,
-        Conditions()..add(Condition()..key = Keys.name..value = 'LastScreenName'));
-
-    if(res.isEmpty) {
-      return null;
-    }
-
-    final Map m = res.firstWhere((map) => map.containsValue('LastScreenName'));
-    return m[Keys.value];
+    return AppDB.fetchKv(Keys.setting$lastRouteName);
   }
 
   static void backRoute() {
     final mustLastCtx = AppNavigator.getLastRouteContext(getContext());
     AppNavigator.backRoute(mustLastCtx);
+  }
+
+  static void pop(BuildContext context) {
+    GoRouter.of(context).pop();
+  }
+
+  static void push(BuildContext context, String location) {
+    GoRouter.of(context).go(location);
+  }
+
+  static void pushNamed(BuildContext context, String name) {
+    GoRouter.of(context).goNamed(name);
   }
 
   static void reCallPage(BuildContext ctx, Widget page, {required String name, dynamic arguments}) {
@@ -58,6 +61,32 @@ class AppRoute {
     AppNavigator.replaceCurrentRoute(ctx, page, name: name, data: arguments);
   }
 }
+///============================================================================================
+final routers = GoRouter(
+    routes: <GoRoute>[
+      GoRoute(
+        path: '/',
+        name: (HomePage).toString(),
+        builder: (BuildContext context, GoRouterState state) => const HomePage(),
+      ),
+      GoRoute(
+          path: '/splash',
+          name: (SplashPage).toString(),
+          builder: (BuildContext context, GoRouterState state) => const SplashPage(),
+      ),
+    ],
+    initialLocation: '/',
+    errorBuilder: (BuildContext context, GoRouterState state) => const E404Page(),
+    //refreshListenable: loginInfo, //GoRouterRefreshStream(streamController.stream),
+    redirect: (GoRouterState state){
+      if(state.location == '/'){ //state.subloc
+        AppDirectories.generateNoMediaFile();
+      }
+
+      print('--redirect---> ${state.subloc}, ${state.subloc}');
+      return null;
+    }
+);
 ///============================================================================================
 class MyPageRoute extends PageRouteBuilder {
   final Widget widget;

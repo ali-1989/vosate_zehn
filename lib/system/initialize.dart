@@ -1,6 +1,7 @@
 import 'package:iris_tools/api/appEventListener.dart';
 import 'package:iris_tools/net/netManager.dart';
 import 'package:vosate_zehn/system/lifeCycleApplication.dart';
+import 'package:vosate_zehn/system/session.dart';
 import 'package:vosate_zehn/tools/app/appCache.dart';
 import 'package:vosate_zehn/tools/app/appDirectories.dart';
 import 'package:vosate_zehn/tools/app/appImages.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:iris_tools/api/helpers/storageHelper.dart';
 import 'package:iris_tools/api/logger/logger.dart';
 import 'package:vosate_zehn/tools/netListenerTools.dart';
+import 'package:vosate_zehn/tools/userLoginTools.dart';
 
 import '/constants.dart';
 import '/tools/app/appManager.dart';
@@ -80,9 +82,8 @@ class InitialApplication {
 
 		NetManager.addChangeListener(NetListenerTools.onNetListener);
 
-		/*todo Session.addLoginListener(UserLoginTools.onLogin);
+		Session.addLoginListener(UserLoginTools.onLogin);
     Session.addLogoffListener(UserLoginTools.onLogoff);
-    Session.addProfileChangeListener(UserLoginTools.onProfileChange);*/
+    Session.addProfileChangeListener(UserLoginTools.onProfileChange);
 	}
-
 }

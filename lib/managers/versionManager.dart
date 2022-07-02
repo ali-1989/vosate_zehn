@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:vosate_zehn/constants.dart';
-import 'package:vosate_zehn/models/holders/versionUpdateHolder.dart';
 import 'package:vosate_zehn/models/versionModel.dart';
 import 'package:vosate_zehn/system/requester.dart';
 import 'package:vosate_zehn/tools/app/appDb.dart';
@@ -24,7 +23,7 @@ class VersionManager {
     SettingsManager.saveSettings();
   }
 
-  static Future<VersionModel?> checkVersion(VersionUpdateHolder holder) async {
+  static Future<VersionModel?> checkVersion(Map data) async {
     final res = Completer<VersionModel?>();
 
     final requester = Requester();

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:go_router/go_router.dart';
 import 'package:vosate_zehn/pages/splash_page.dart';
 import 'package:vosate_zehn/tools/app/appManager.dart';
 import 'package:vosate_zehn/tools/app/appRoute.dart';
@@ -17,6 +18,8 @@ Future<void> main() async {
     AppManager.widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
     SchedulerBinding.instance.ensureVisualUpdate();
     SchedulerBinding.instance.window.scheduleFrame();
+
+    GoRouter.setUrlPathStrategy(UrlPathStrategy.path);
   }
 
   if(kIsWeb){
@@ -39,7 +42,7 @@ class MyApp extends StatelessWidget {
     init();
     testCodes(context);
 
-    return Material(
+    return const Material(
       child: SplashPage(),
     );
   }

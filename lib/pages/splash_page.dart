@@ -3,8 +3,6 @@ import 'dart:async';
 import 'package:vosate_zehn/constants.dart';
 import 'package:vosate_zehn/managers/settingsManager.dart';
 import 'package:vosate_zehn/managers/versionManager.dart';
-import 'package:vosate_zehn/models/holders/versionUpdateHolder.dart';
-import 'package:vosate_zehn/pages/home_page.dart';
 import 'package:vosate_zehn/system/session.dart';
 import 'package:vosate_zehn/tools/app/appImages.dart';
 import 'package:vosate_zehn/tools/app/appManager.dart';
@@ -19,6 +17,7 @@ import 'package:vosate_zehn/tools/app/appSizes.dart';
 import 'package:iris_tools/dataBase/databaseHelper.dart';
 import 'package:iris_tools/dataBase/reporter.dart';
 import 'package:iris_tools/net/httpTools.dart';
+import 'package:vosate_zehn/tools/deviceInfoTools.dart';
 
 bool _isInit = false;
 bool _loadAppSettings = false;
@@ -41,13 +40,15 @@ class SplashScreenState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
+    callOnBuild(context);
+
     /// ReBuild First Widgets tree, not call on Navigator pages
     return StreamBuilder<bool>(
         initialData: false,
         stream: AppBroadcast.materialUpdaterStream.stream,
         builder: (context, snapshot) {
           if (!_loadAppSettings) {
-            return getSplash();
+            return getSplashView();
           }
           else {
             return getMaterialApp();
@@ -55,9 +56,8 @@ class SplashScreenState extends State<SplashPage> {
         }
         );
   }
-
   ///==================================================================================================
-  Widget getSplash() {
+  Widget getSplashView() {
     return Padding(
       padding: const EdgeInsets.only(top: 40.0),
       child: Column(
@@ -65,7 +65,7 @@ class SplashScreenState extends State<SplashPage> {
         children: <Widget>[
           Container(
             height: 100.0,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 image: DecorationImage(image: AssetImage(AppImages.logoSplash)
                 )
             ),
@@ -82,26 +82,27 @@ class SplashScreenState extends State<SplashPage> {
 
   // MaterialApp/ CupertinoApp/ WidgetsApp
   Widget getMaterialApp() {
-    return MaterialApp(
+    return MaterialApp.router(
       key: AppBroadcast.materialAppKey,
       debugShowCheckedModeBanner: false,
+      routeInformationProvider: routers.routeInformationProvider,
+      routeInformationParser: routers.routeInformationParser,
+      routerDelegate: routers.routerDelegate,
       //navigatorObservers: [ClearFocusOnPush()],
       //scrollBehavior: MyCustomScrollBehavior(),
-      //onGenerateTitle: (ctx) => ,
       title: Constants.appTitle,
-      theme: AppThemes.instance.themeData,
-      //or: ThemeData.light(),
+      theme: AppThemes.instance.themeData, // ThemeData.light()
       //darkTheme: ThemeData.dark(),
       themeMode: AppThemes.instance.currentThemeMode,
       scaffoldMessengerKey: AppBroadcast.rootScaffoldMessengerKey,
-      navigatorKey: AppBroadcast.rootNavigatorStateKey,
+      //navigatorKey: AppBroadcast.rootNavigatorStateKey,
       //localizationsDelegates: AppLocale.getLocaleDelegates(),
       //supportedLocales: AppLocale.getAssetSupportedLocales(),
       //locale: SettingsManager.settingsModel.appLocale,
       /*localeResolutionCallback: (deviceLocale, supportedLocales) {
         return SettingsManager.settingsModel.appLocale;
       },*/
-      home: HomePage(),
+      //home: const HomePage(),
       builder: (context, home) {
         AppRoute.materialContext = context;
         InitialApplication.oncePreparing(context);
@@ -111,8 +112,7 @@ class SplashScreenState extends State<SplashPage> {
         return MediaQuery(
           data: mediaQueryData.copyWith(textScaleFactor: 1.0),
           child: OrientationBuilder(builder: (context, orientation) {
-            //detectLocaleDirection(Localizations.localeOf(context));
-            //AppLocale.detectLocaleDirection(SettingsManager.settingsModel.appLocale);
+            //AppLocale.detectLocaleDirection(SettingsManager.settingsModel.appLocale); //Localizations.localeOf(context)
             testCodes(context);
 
             return Directionality(
@@ -142,7 +142,7 @@ class SplashScreenState extends State<SplashPage> {
     _loadAppSettings = SettingsManager.loadSettings();
 
     if (_loadAppSettings) {
-      await checkAppVersion();
+      await checkInstallVersion();
       await Session.fetchLoginUsers();
 
       AppBroadcast.reBuildMaterialBySetTheme();
@@ -167,7 +167,7 @@ class SplashScreenState extends State<SplashPage> {
     return AppDB.db;
   }
 
-  Future<void> checkAppVersion() async {
+  Future<void> checkInstallVersion() async {
     final oldVersion = SettingsManager.settingsModel.currentVersion;
 
     if (oldVersion == null) {
@@ -178,34 +178,29 @@ class SplashScreenState extends State<SplashPage> {
     }
   }
 
+  void callOnBuild(BuildContext context) {
+    if (!InitialApplication.isLaunchOk) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        Timer.periodic(const Duration(milliseconds: 50), (Timer timer) {
+          if (InitialApplication.isInitialOk) {
+            timer.cancel();
+
+            checkAppNewVersion(context);
+            InitialApplication.callOnLaunchUp();
+          }
+        });
+      });
+    }
+  }
+
+  void checkAppNewVersion(BuildContext context) async {
+    final holder = DeviceInfoTools.getDeviceInfo();
+
+    final version = await VersionManager.checkVersion(holder);
+  }
+
   Future<void> testCodes(BuildContext context) async {
     //await DbCenter.db.clearTable(DbCenter.tbKv);
   }
 }
-///=============================================================================================================
-void callOnBuild() {
-  if (!InitialApplication.isLaunchOk) {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Timer.periodic(const Duration(milliseconds: 50), (Timer timer) {
-        if (InitialApplication.isInitialOk) {
-          timer.cancel();
-          InitialApplication.callOnLaunchUp();
-        }
-      });
-    });
-  }
 
-  if (false) {
-    AppDirectories.generateNoMediaFile();
-  }
-}
-
-void checkAppNewVersion(BuildContext context) async {
-
-  final holder = VersionUpdateHolder();
-  holder.version = 0;
-  holder.pkgName = '';
-  holder.os = 1;
-
-  final version = await VersionManager.checkVersion(holder);
-}
