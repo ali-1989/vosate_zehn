@@ -1,5 +1,8 @@
+import 'package:iris_download_manager/downloadManager/downloadManager.dart';
+import 'package:iris_download_manager/uploadManager/uploadManager.dart';
 import 'package:iris_tools/api/appEventListener.dart';
 import 'package:iris_tools/net/netManager.dart';
+import 'package:vosate_zehn/managers/settingsManager.dart';
 import 'package:vosate_zehn/system/lifeCycleApplication.dart';
 import 'package:vosate_zehn/system/session.dart';
 import 'package:vosate_zehn/tools/app/appCache.dart';
@@ -10,6 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:iris_tools/api/helpers/storageHelper.dart';
 import 'package:iris_tools/api/logger/logger.dart';
 import 'package:vosate_zehn/tools/app/appLocale.dart';
+import 'package:vosate_zehn/tools/app/appWebsocket.dart';
+import 'package:vosate_zehn/tools/app/downloadUpload.dart';
 import 'package:vosate_zehn/tools/netListenerTools.dart';
 import 'package:vosate_zehn/tools/userLoginTools.dart';
 
@@ -45,19 +50,22 @@ class InitialApplication {
 		  AppManager.logger = Logger('${AppDirectories.getTempDir$ex()}/events.txt');
 		}
 
+		//PlayerTools.init();
 		await AppLocale.localeDelegate().getLocalization().setFallbackByLocale(const Locale('en', 'EE'));
 
-		//await WsCenter.prepareWebSocket(SettingsManager.settingsModel.wsAddress!);
-		/*PlayerTools.init();
+		await AppWebsocket.prepareWebSocket(SettingsManager.settingsModel.wsAddress);
+
 		DownloadUpload.downloadManager = DownloadManager('${Constants.appName}DownloadManager');
-		DownloadUpload.uploadManager = UploadManager('${Constants.appName}UploadManager');*/
+		DownloadUpload.uploadManager = UploadManager('${Constants.appName}UploadManager');
+
 		AppCache.screenBack = const AssetImage(AppImages.background);
 		await precacheImage(AppCache.screenBack!, context);
 		// ignore: unawaited_futures
 		//CountryTools.fetchCountries();
 
 		if(!kIsWeb) {
-			//await AppNotification.initial();
+			await AppNotification.initial();
+			AppNotification.startListenTap();
 		}
 
 		isInitialOk = true;
@@ -77,8 +85,8 @@ class InitialApplication {
 		eventListener.addDetachListener(LifeCycleApplication.onDetach);
 		WidgetsBinding.instance.addObserver(eventListener);
 
-		//DownloadUpload.downloadManager.addListener(DownloadUpload.commonDownloadListener);
-		//DownloadUpload.uploadManager.addListener(DownloadUpload.commonUploadListener);
+		DownloadUpload.downloadManager.addListener(DownloadUpload.commonDownloadListener);
+		DownloadUpload.uploadManager.addListener(DownloadUpload.commonUploadListener);
 
 		NetManager.addChangeListener(NetListenerTools.onNetListener);
 

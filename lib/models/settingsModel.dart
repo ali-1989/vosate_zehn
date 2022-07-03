@@ -29,8 +29,8 @@ class SettingsModel {
   static int maxViewHeightL = 200;
   static int maxViewHeightP = 460;
 
-  static const defaultHttpAddress = 'http://appapi.kavoshfile.com/';
-  static const defaultWsAddress = 'http://webview.kavoshfile.com/';
+  static const defaultHttpAddress = 'http://192.168.10.10:4554/';
+  static const defaultWsAddress = 'ws://192.168.10.10:4554/';
   static const defaultProxyAddress = '95.174.67.50:18080';
   static const Locale defaultAppLocale = Locale('fa', 'IR');
   static final CalendarType defaultCalendarType = CalendarType.byType(TypeOfCalendar.solarHijri);
@@ -55,6 +55,7 @@ class SettingsModel {
     httpAddress = map['http_address']?? defaultHttpAddress;
     wsAddress = map['ws_address']?? defaultWsAddress;
     proxyAddress = map['proxy_address']?? defaultProxyAddress;
+    currentVersion = map[Keys.setting$currentVersion];
 
     _prepareSettings();
   }
@@ -70,6 +71,7 @@ class SettingsModel {
     map[Keys.setting$patternKey] = appPatternKey;
     map[Keys.setting$lastForegroundTs] = lastForegroundTs;
     map[Keys.setting$confirmOnExit] = confirmOnExit;
+    map[Keys.setting$currentVersion] = currentVersion;
     map['http_address'] = httpAddress;
     map['ws_address'] = wsAddress;
     map['proxy_address'] = proxyAddress;

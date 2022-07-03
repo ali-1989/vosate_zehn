@@ -1,4 +1,5 @@
 import 'package:iris_db/iris_db.dart';
+import 'package:iris_tools/api/generator.dart';
 import 'package:iris_tools/dataBase/databaseHelper.dart';
 
 import '/system/keys.dart';
@@ -15,8 +16,16 @@ class AppDB {
 
   static Future<bool> firstDatabasePrepare() async {
     //await insertLanguages();
+    await insertNotificationIds();
 
     return true;
+  }
+
+  static Future<void> insertNotificationIds() async {
+    await setReplaceKv(Keys.setting$notificationChanelKey, 'C${Generator.generateName(8)}');
+    await setReplaceKv(Keys.setting$notificationChanelGroup, 'G${Generator.generateName(8)}');
+
+    return;
   }
   ///------------------------------------------------------------------------------------------
   /// 1 is ok and 0 is fail

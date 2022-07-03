@@ -43,6 +43,7 @@ dependencies:
   photo_view: ^0.14.0                 # image view gallery
   flutter_easyloading: ^3.0.5
   material_dialogs: ^1.1.3
+  awesome_notifications: ^0.6.21
 
   iris_tools:
     git: https://github.com/ali-1989/IrisTools.git
