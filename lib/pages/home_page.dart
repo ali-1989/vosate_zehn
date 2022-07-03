@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:vosate_zehn/tools/app/appMessages.dart';
+import 'package:iris_tools/widgets/stateManagers/assist.dart';
+import 'package:vosate_zehn/system/stateBase.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -7,33 +8,44 @@ class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
 }
+///=================================================================================================
+class _HomePageState extends StateBase<HomePage> {
 
-class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Column(
-        children: [
-          Text(AppMessages.operationCanceled),
-          Text(AppMessages.sorryYouDoNotHaveAccess),
-          Text(AppMessages.accountIsBlock),
-          Text(AppMessages.thereAreNoResults),
-          Text(AppMessages.errorOccur),
-          Text(AppMessages.pleaseWait),
-
-          Builder(
-            builder: (ccc) {
-              return ElevatedButton(
-                  onPressed: (){
-
-                  },
-                  child: Text('dialog'),
-              );
-            }
+    return Assist(
+      controller: assistCtr,
+      builder: (context, ctr, data) {
+        return Scaffold(
+          appBar: AppBar(),
+          body: SafeArea(
+              child: buildBody()
           ),
-        ],
-      ),
+        );
+      }
+    );
+  }
+
+  Widget buildBody(){
+    return Builder(
+        builder: (ctx){
+          if(assistCtr.hasState(AssistController.state$normal)){
+            return ElevatedButton(
+                onPressed: (){
+                  assistCtr.removeState(AssistController.state$normal);
+                  assistCtr.updateMain();
+                  },
+                child: Text('hi')
+            );
+          }
+
+          return ElevatedButton(
+              onPressed: (){
+                assistCtr.addStateAndUpdate(AssistController.state$normal);
+                },
+              child: Text('bay')
+          );
+        }
     );
   }
 }
