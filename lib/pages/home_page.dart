@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vosate_zehn/tools/app/appLoading.dart';
 import 'package:vosate_zehn/tools/app/appMessages.dart';
-import 'package:vosate_zehn/tools/app/appNotification.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -28,7 +26,7 @@ class _HomePageState extends State<HomePage> {
             builder: (ccc) {
               return ElevatedButton(
                   onPressed: (){
-                    AppNotification.sendNormalNotification('سلام', 'سلام چطوری');
+
                   },
                   child: Text('dialog'),
               );

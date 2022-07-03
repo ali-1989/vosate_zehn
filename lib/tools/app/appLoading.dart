@@ -13,7 +13,7 @@ class AppLoading {
   static late AppLoading _instance;
   static bool _isInit = false;
 
-  static get instance {
+  static AppLoading get instance {
     if(!_isInit){
       _isInit = true;
       _init();
@@ -93,8 +93,8 @@ class AppLoading {
     );
   }
 
-  Future<void> dismiss({bool dismiss = false}){
-    return EasyLoading.dismiss();
+  Future<void> dismiss({bool byAnimation = true}){
+    return EasyLoading.dismiss(animation: byAnimation);
   }
 
   Widget _getLoadingView(){

@@ -8,6 +8,7 @@ import '/constants.dart';
 import '/models/notificationModel.dart' as nm;
 import 'package:awesome_notifications/awesome_notifications.dart';
 
+// https://github.com/rafaelsetragni/awesome_notifications/blob/master/example/lib/utils/notification_util.dart
 
 class AppNotification {
 	AppNotification._();
@@ -93,7 +94,7 @@ class AppNotification {
 
 	static void startListenTap() {
 		AwesomeNotifications().actionStream.listen((ReceivedNotification receivedNotification){
-			//receivedNotification.id
+			//receivedNotification.id , payload
 				}
 		);
 	}
@@ -114,7 +115,7 @@ class AppNotification {
 		AwesomeNotifications().showNotificationConfigPage();
 	}
 
-	static void sendNormalNotification(String? title, String text, {int? id}) {
+	static void sendNotification(String? title, String text, {int? id}) {
 		AwesomeNotifications().createNotification(
 				content: NotificationContent(
 						id: id ?? Generator.generateIntId(5),
@@ -123,7 +124,34 @@ class AppNotification {
 						body: text,
 					autoDismissible: true,
 					category: NotificationCategory.Message,
+					notificationLayout: NotificationLayout.Default,
 				),
+		);
+	}
+
+	static void sendMessagesNotification(String? title, String user, String message, {int? id}) {
+		AwesomeNotifications().createNotification(
+			content: NotificationContent(
+				id: id ?? Generator.generateIntId(5),
+				channelKey: getChannelKey(),
+				title: title,
+				summary: user,
+				autoDismissible: true,
+				category: NotificationCategory.Email,
+				notificationLayout: NotificationLayout.Inbox,
+				body: '<b> 10.000 visitor! Congratz!</b> You just won our prize'
+						'\n'
+						'<b>Want to loose weight?</b> Are you tired from false advertisements? '
+						'\n'
+						'<b>READ MY MESSAGE</b> Stop to ignore me!'
+						'\n'
+						'<b>READ MY MESSAGE</b> Stop to ignore me!'
+						'\n'
+						'<b>READ MY MESSAGE</b> Stop to ignore me!'
+						'<b>READ MY MESSAGE</b> Stop to ignore me!',
+				//largeIcon: largeIcon,
+				//customSound: 'resource://raw/res_morph_power_rangers'
+			),
 		);
 	}
 }
