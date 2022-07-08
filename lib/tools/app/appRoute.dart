@@ -1,7 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:vosate_zehn/pages/e404_page.dart';
 import 'package:vosate_zehn/pages/home_page.dart';
-import 'package:vosate_zehn/pages/splash_page.dart';
+import 'package:vosate_zehn/pages/login/login_page.dart';
 import 'package:vosate_zehn/tools/app/appDb.dart';
 import 'package:flutter/material.dart';
 import 'package:vosate_zehn/tools/app/appDirectories.dart';
@@ -65,14 +65,19 @@ class AppRoute {
 final routers = GoRouter(
     routes: <GoRoute>[
       GoRoute(
+        path: '/e404page',
+        name: (E404Page).toString().toLowerCase(),
+        builder: (BuildContext context, GoRouterState state) => const E404Page(),
+      ),
+      GoRoute(
         path: '/',
-        name: (HomePage).toString(),
+        name: (HomePage).toString().toLowerCase(),
         builder: (BuildContext context, GoRouterState state) => const HomePage(),
       ),
       GoRoute(
-          path: '/splash',
-          name: (SplashPage).toString(),
-          builder: (BuildContext context, GoRouterState state) => const SplashPage(),
+        path: '/Login',
+        name: (LoginPage).toString().toLowerCase(),
+        builder: (BuildContext context, GoRouterState state) => const LoginPage(),
       ),
     ],
     initialLocation: '/',
@@ -106,6 +111,7 @@ class MyPageRoute extends PageRouteBuilder {
           Animation<double> animation,
           Animation<double> secondaryAnimation,
           Widget child) {
+        //ScaleTransition, RotationTransition, SizeTransition, FadeTransition
         return SlideTransition(
           textDirection: TextDirection.rtl,
           position: Tween<Offset>(begin: const Offset(1.0, 0.0), end: Offset.zero,).animate(animation),

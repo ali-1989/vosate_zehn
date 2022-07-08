@@ -4,14 +4,14 @@ import 'package:vosate_zehn/pages/e404_page.dart';
 import 'package:vosate_zehn/system/stateBase.dart';
 import 'package:vosate_zehn/tools/app/appRoute.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 ///=================================================================================================
-class _HomePageState extends StateBase<HomePage> {
+class _LoginPageState extends StateBase<LoginPage> {
 
   @override
   Widget build(BuildContext context) {

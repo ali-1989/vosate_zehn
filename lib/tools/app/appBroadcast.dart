@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:iris_tools/widgets/stateManagers/refresh.dart';
+import 'package:vosate_zehn/pages/splash_page.dart';
 
 import '/tools/app/appThemes.dart';
 
@@ -23,10 +24,16 @@ class AppBroadcast {
   /// this is effect on First Widgets tree, not rebuild Pushed pages
   static void reBuildMaterialBySetTheme() {
     AppThemes.applyTheme(AppThemes.instance.currentTheme);
-    materialUpdaterStream.sink.add(true);
+    reBuildMaterial();
   }
 
   static void reBuildMaterial() {
     materialUpdaterStream.sink.add(true);
+  }
+
+  static void gotoSplash(int waitingInSplash) {
+    mustShowSplash = true;
+    splashWaitingMil = waitingInSplash;
+    reBuildMaterial();
   }
 }

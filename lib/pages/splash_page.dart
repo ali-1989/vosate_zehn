@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:lottie/lottie.dart';
 import 'package:vosate_zehn/constants.dart';
 import 'package:vosate_zehn/managers/settingsManager.dart';
 import 'package:vosate_zehn/managers/versionManager.dart';
@@ -20,9 +21,12 @@ import 'package:iris_tools/dataBase/databaseHelper.dart';
 import 'package:iris_tools/dataBase/reporter.dart';
 import 'package:iris_tools/net/httpTools.dart';
 import 'package:vosate_zehn/tools/deviceInfoTools.dart';
+import 'package:spring/spring.dart';
 
 bool _isInit = false;
-bool _loadAppSettings = false;
+bool _isLoadingSettings = true;
+bool mustShowSplash = false;
+int splashWaitingMil = 5000;
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -32,11 +36,10 @@ class SplashPage extends StatefulWidget {
 }
 ///======================================================================================================
 class SplashScreenState extends State<SplashPage> {
+
   @override
   void initState() {
     super.initState();
-
-    init();
   }
 
   @override
@@ -46,7 +49,10 @@ class SplashScreenState extends State<SplashPage> {
         initialData: false,
         stream: AppBroadcast.materialUpdaterStream.stream,
         builder: (context, snapshot) {
-          if (!_loadAppSettings) {
+          _checkTimer();
+          init();
+
+          if (_isLoadingSettings || mustShowSplash) {
             return getSplashView();
           }
           else {
@@ -57,20 +63,31 @@ class SplashScreenState extends State<SplashPage> {
 
   ///==================================================================================================
   Widget getSplashView() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 40.0),
+    return DecoratedBox(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage(AppImages.logoSplash),
+        )
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Container(
-            height: 100.0,
-            decoration: const BoxDecoration(image: DecorationImage(image: AssetImage(AppImages.logoSplash))),
+          Lottie.asset(
+            AppImages.loadingLottie,
+            width: 300,
+            height: 300,
+            reverse: false,
+            animate: true,
+            fit: BoxFit.fill,
           ),
-          /*Container(
-            height: 25.0,
-            width: 200.0,
-            decoration: BoxDecoration(image: DecorationImage(image: AssetImage(AppImages.splashLoading), fit: BoxFit.cover)),
-          ),*/
+
+          Spring.fadeIn(
+            animDuration: const Duration(milliseconds: 700),
+            child: Image.asset(AppImages.appIcon,
+            width: 100,
+            height: 100,
+            ),
+          ),
         ],
       ),
     );
@@ -120,6 +137,18 @@ class SplashScreenState extends State<SplashPage> {
     );
   }
 
+  void _checkTimer() async {
+    if(splashWaitingMil > 0 && mustShowSplash){
+      Timer(Duration(milliseconds: splashWaitingMil), (){
+        mustShowSplash = false;
+
+        AppBroadcast.reBuildMaterial();
+      });
+
+      splashWaitingMil = 0;
+    }
+  }
+
   void init() async {
     if (_isInit) {
       return;
@@ -134,9 +163,9 @@ class SplashScreenState extends State<SplashPage> {
     AppSizes.initial();
     AppThemes.initial();
     HttpTools.ignoreSslBadHandshake();
-    _loadAppSettings = SettingsManager.loadSettings();
+    _isLoadingSettings = !SettingsManager.loadSettings();
 
-    if (_loadAppSettings) {
+    if (!_isLoadingSettings) {
       await checkInstallVersion();
       await Session.fetchLoginUsers();
 

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:iris_tools/api/helpers/colorHelper.dart';
 import 'package:lottie/lottie.dart';
+import 'package:vosate_zehn/tools/app/appImages.dart';
 import 'package:vosate_zehn/tools/app/appMessages.dart';
 import 'package:vosate_zehn/tools/app/appThemes.dart';
 
@@ -124,7 +125,7 @@ class AppLoading {
             ),
             child: Center(
               child: Lottie.asset(
-                'assets/raw/lottie1.json',
+                AppImages.loadingLottie,
                 width: 200,
                 height: 200,
                 reverse: false,
