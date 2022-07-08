@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:iris_tools/widgets/stateManagers/refresh.dart';
+import 'package:iris_tools/modules/stateManagers/refresh.dart';
 import 'package:vosate_zehn/pages/splash_page.dart';
 
 import '/tools/app/appThemes.dart';

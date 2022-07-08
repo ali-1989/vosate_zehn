@@ -1,6 +1,6 @@
 import 'package:iris_db/iris_db.dart';
 import 'package:iris_tools/api/generator.dart';
-import 'package:iris_tools/dataBase/databaseHelper.dart';
+import 'package:iris_tools/api/helpers/databaseHelper.dart';
 
 import '/system/keys.dart';
 

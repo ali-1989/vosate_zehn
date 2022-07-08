@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:iris_tools/net/trustSsl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:vosate_zehn/constants.dart';
 import 'package:vosate_zehn/managers/settingsManager.dart';
@@ -17,9 +18,8 @@ import 'package:vosate_zehn/tools/app/appBroadcast.dart';
 import 'package:vosate_zehn/tools/app/appDb.dart';
 import 'package:vosate_zehn/tools/app/appDirectories.dart';
 import 'package:vosate_zehn/tools/app/appSizes.dart';
-import 'package:iris_tools/dataBase/databaseHelper.dart';
-import 'package:iris_tools/dataBase/reporter.dart';
-import 'package:iris_tools/net/httpTools.dart';
+import 'package:iris_tools/api/helpers/databaseHelper.dart';
+import 'package:iris_tools/api/logger/reporter.dart';
 import 'package:vosate_zehn/tools/deviceInfoTools.dart';
 import 'package:spring/spring.dart';
 
@@ -162,7 +162,7 @@ class SplashScreenState extends State<SplashPage> {
 
     AppSizes.initial();
     AppThemes.initial();
-    HttpTools.ignoreSslBadHandshake();
+    TrustAllCertificates.acceptBadCertificate();
     _isLoadingSettings = !SettingsManager.loadSettings();
 
     if (!_isLoadingSettings) {
@@ -223,7 +223,7 @@ class SplashScreenState extends State<SplashPage> {
   void checkAppNewVersion(BuildContext context) async {
     final holder = DeviceInfoTools.getDeviceInfo();
 
-    final version = await VersionManager.checkVersion(holder);
+    //final version = await VersionManager.checkVersion(holder);
   }
 
   Future<void> testCodes(BuildContext context) async {

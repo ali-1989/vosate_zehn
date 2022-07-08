@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:vosate_zehn/pages/e404_page.dart';
 import 'package:vosate_zehn/pages/home_page.dart';
 import 'package:vosate_zehn/pages/login/login_page.dart';
+import 'package:vosate_zehn/system/session.dart';
 import 'package:vosate_zehn/tools/app/appDb.dart';
 import 'package:flutter/material.dart';
 import 'package:vosate_zehn/tools/app/appDirectories.dart';
@@ -75,7 +76,7 @@ final routers = GoRouter(
         builder: (BuildContext context, GoRouterState state) => const HomePage(),
       ),
       GoRoute(
-        path: '/Login',
+        path: '/login',
         name: (LoginPage).toString().toLowerCase(),
         builder: (BuildContext context, GoRouterState state) => const LoginPage(),
       ),
@@ -83,15 +84,26 @@ final routers = GoRouter(
     initialLocation: '/',
     errorBuilder: (BuildContext context, GoRouterState state) => const E404Page(),
     //refreshListenable: loginInfo, //GoRouterRefreshStream(streamController.stream),
-    redirect: (GoRouterState state){
-      if(state.location == '/'){ //state.subloc
-        AppDirectories.generateNoMediaFile();
-      }
-
-      print('--redirect---> ${state.subloc}, ${state.subloc}');
-      return null;
-    }
+    redirect: _redirect,
 );
+
+String? _redirect(GoRouterState state){
+  print('--redirect---> ${state.location}, ${state.subloc},name: ${state.name}');
+
+  if(state.location == '/'){ //state.subloc
+    AppDirectories.generateNoMediaFile();
+  }
+
+  if(!Session.hasAnyLogin()){
+    final loginRoutes = [(LoginPage).toString().toLowerCase()];
+
+    if(!loginRoutes.contains(state.name)){
+      return '/login';
+    }
+  }
+
+  return null;
+}
 ///============================================================================================
 class MyPageRoute extends PageRouteBuilder {
   final Widget widget;

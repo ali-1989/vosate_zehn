@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/managers/orientationManager.dart';
-import 'package:iris_tools/widgets/stateManagers/assist.dart';
+import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:vosate_zehn/system/localizations.dart';
 import 'package:vosate_zehn/tools/app/appLoading.dart';
 import 'package:vosate_zehn/tools/app/appLocale.dart';
