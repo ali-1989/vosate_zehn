@@ -65,21 +65,9 @@ class AppRoute {
 ///============================================================================================
 final routers = GoRouter(
     routes: <GoRoute>[
-      GoRoute(
-        path: '/e404page',
-        name: (E404Page).toString().toLowerCase(),
-        builder: (BuildContext context, GoRouterState state) => const E404Page(),
-      ),
-      GoRoute(
-        path: '/',
-        name: (HomePage).toString().toLowerCase(),
-        builder: (BuildContext context, GoRouterState state) => const HomePage(),
-      ),
-      GoRoute(
-        path: '/login',
-        name: (LoginPage).toString().toLowerCase(),
-        builder: (BuildContext context, GoRouterState state) => const LoginPage(),
-      ),
+      E404Page.route,
+      HomePage.route,
+      LoginPage.route,
     ],
     initialLocation: '/',
     errorBuilder: (BuildContext context, GoRouterState state) => const E404Page(),
@@ -88,21 +76,22 @@ final routers = GoRouter(
 );
 
 String? _redirect(GoRouterState state){
-  print('--redirect---> ${state.location}, ${state.subloc},name: ${state.name}');
+  print('--redirect---> ${state.location}');
 
-  if(state.location == '/'){ //state.subloc
+  if(state.location == '/'){
     AppDirectories.generateNoMediaFile();
   }
 
   if(!Session.hasAnyLogin()){
-    final loginRoutes = [(LoginPage).toString().toLowerCase()];
+    final loginRoutes = [LoginPage.route.path];
 
-    if(!loginRoutes.contains(state.name)){
-      return '/login';
+    if(!loginRoutes.contains(state.location)){
+      final from = state.subloc == '/' ? '' : '?from_page=${state.subloc}';
+      return '${LoginPage.route.path}$from';
     }
   }
 
-  return null;
+  return state.queryParams['from_page'];
 }
 ///============================================================================================
 class MyPageRoute extends PageRouteBuilder {

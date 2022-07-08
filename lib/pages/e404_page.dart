@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 import 'package:vosate_zehn/tools/app/appImages.dart';
 import 'package:vosate_zehn/tools/app/appMessages.dart';
+import 'package:vosate_zehn/tools/app/appThemes.dart';
 
 class E404Page extends StatefulWidget {
+  static final route = GoRoute(
+  path: '/e404page',
+  name: (E404Page).toString().toLowerCase(),
+  builder: (BuildContext context, GoRouterState state) => const E404Page(),
+  );
+
   const E404Page({Key? key}) : super(key: key);
 
   @override
@@ -30,11 +38,12 @@ class _E404PageState extends State<E404Page> {
                     values: [
                       ValueDelegate.colorFilter(
                         ['Cactus.ai'],
-                        value: ColorFilter.mode(Colors.amber.withAlpha(100), BlendMode.srcATop),
+                        //Colors.amber
+                        value: ColorFilter.mode(AppThemes.instance.currentTheme.primaryColor.withAlpha(100), BlendMode.srcATop),
                       ),
                       ValueDelegate.color(
                         ['4  4', '**'],
-                        value: Colors.amber,
+                        value: AppThemes.instance.currentTheme.primaryColor,
                       ),
                       ValueDelegate.transformOpacity(
                         ['4  4'],

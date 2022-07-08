@@ -71,10 +71,11 @@ class AppThemes {
 
 	static void prepareThemes() {
 		{
-			final blueTheme = ColorTheme(const Color(0xFF005ACC), const Color(0xFF00AACC), const Color(0xFFFF006E), Colors.black);
+			final blueTheme = ColorTheme(Colors.amber, Colors.orange, const Color(0xFFFF006E), Colors.black);
 			//primary: ^1976D2, 1060A0 | dif: (FF006E|d81b60), ^F77F00
 
-			blueTheme.themeName = 'Blue';
+			blueTheme.themeName = 'Amber';
+			blueTheme.appBarItemColor = Colors.black.withAlpha(180);
 
 			AppThemes._instance.themeList[blueTheme.themeName] = blueTheme;
 			AppThemes._instance.defaultTheme = blueTheme;
@@ -237,6 +238,7 @@ class AppThemes {
 		final appAppBarTheme = AppBarTheme(
 			toolbarTextStyle: primaryTextTheme.headline6,
 			iconTheme: iconTheme.copyWith(color: th.appBarItemColor),
+			foregroundColor: th.appBarItemColor,
 			actionsIconTheme: iconTheme.copyWith(color: th.appBarItemColor),
 			systemOverlayStyle: AppThemes._instance.currentBrightness == Brightness.light? SystemUiOverlayStyle.light: SystemUiOverlayStyle.dark,
 			centerTitle: true,

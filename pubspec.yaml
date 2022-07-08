@@ -1,6 +1,7 @@
 # Flutter: 3.0.1     old: -
 # Dart: 2.17.1        old: -
 # Java: 17
+# ws://127.0.0.1:3722/IW5P0mfDDsY=/ws
 
 name: vosate_zehn
 description: Fitness
@@ -45,6 +46,8 @@ dependencies:
   flutter_easyloading: ^3.0.5
   material_dialogs: ^1.1.3
   awesome_notifications: ^0.6.21
+  google_sign_in: ^5.4.0
+  #sign_in_with_apple: ^4.0.0
 
   iris_tools:
     git: https://github.com/ali-1989/IrisTools.git

@@ -25,8 +25,8 @@ import 'package:spring/spring.dart';
 
 bool _isInit = false;
 bool _isLoadingSettings = true;
-bool mustShowSplash = false;
-int splashWaitingMil = 5000;
+bool mustShowSplash = true;
+int splashWaitingMil = 4000;
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});

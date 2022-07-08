@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
-import 'package:vosate_zehn/pages/e404_page.dart';
+import 'package:vosate_zehn/services/google.dart';
 import 'package:vosate_zehn/system/stateBase.dart';
-import 'package:vosate_zehn/tools/app/appRoute.dart';
+import 'package:vosate_zehn/tools/app/appMessages.dart';
+import 'package:vosate_zehn/views/genAppBar.dart';
 
 class LoginPage extends StatefulWidget {
+  static final route = GoRoute(
+    path: '/login',
+    name: (LoginPage).toString().toLowerCase(),
+    builder: (BuildContext context, GoRouterState state) => const LoginPage(),
+  );
+
   const LoginPage({super.key});
 
   @override
@@ -12,6 +20,8 @@ class LoginPage extends StatefulWidget {
 }
 ///=================================================================================================
 class _LoginPageState extends StateBase<LoginPage> {
+  String? res1;
+  String? res2;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +29,9 @@ class _LoginPageState extends StateBase<LoginPage> {
       controller: assistCtr,
       builder: (context, ctr, data) {
         return Scaffold(
-          appBar: AppBar(),
+          appBar: GenAppBar(
+            title: Text(AppMessages.loginTitle),
+          ),
           body: SafeArea(
               child: buildBody()
           ),
@@ -29,36 +41,23 @@ class _LoginPageState extends StateBase<LoginPage> {
   }
 
   Widget buildBody(){
-    return Builder(
-        builder: (ctx){
-          if(assistCtr.hasState(AssistController.state$normal)){
-            return Column(
-              children: [
-                ElevatedButton(
-                    onPressed: (){
-                      assistCtr.removeState(AssistController.state$normal);
-                      assistCtr.updateMain();
-                      },
-                    child: Text('hi')
-                ),
+    return Column(
+      children: [
+        Text('t1: $res1'),
+        Text('t2: $res2'),
 
-                ElevatedButton(
-                    onPressed: (){
-                      AppRoute.pushNamed(context, (E404Page).toString().toLowerCase());
-                    },
-                    child: Text('hi')
-                ),
-              ],
-            );
-          }
+        ElevatedButton(
+            onPressed: () async {
+              //AppRoute.pushNamed(context, (E404Page).toString().toLowerCase());
+              final res = await Google.handleSignIn();
+              res1 = res?.displayName;
+              res2 = res?.email;
 
-          return ElevatedButton(
-              onPressed: (){
-                assistCtr.addStateAndUpdate(AssistController.state$normal);
-                },
-              child: Text('bay')
-          );
-        }
+              setState(() {});
+            },
+            child: Text('go')
+        ),
+      ],
     );
   }
 }

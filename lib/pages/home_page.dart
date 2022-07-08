@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:vosate_zehn/pages/e404_page.dart';
 import 'package:vosate_zehn/system/stateBase.dart';
 import 'package:vosate_zehn/tools/app/appRoute.dart';
 
 class HomePage extends StatefulWidget {
+  static final route = GoRoute(
+    path: '/',
+    name: (HomePage).toString().toLowerCase(),
+    builder: (BuildContext context, GoRouterState state) => const HomePage(),
+  );
+
   const HomePage({super.key});
 
   @override

@@ -122,4 +122,8 @@ class AppMessages {
   static String get thereAreNoResults {
     return AppRoute.getContext().tC('thereAreNoResults')?? _noText;
   }
+
+  static String get loginTitle {
+    return 'ورود';
+  }
 }
