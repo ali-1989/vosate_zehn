@@ -23,8 +23,18 @@ class AppOverlay {
     );
   }
 
-  static Future showOverlay(BuildContext context, OverlayScreenView view){
+  static Future showScreen(BuildContext context, OverlayScreenView view){
     return OverlayDialog().show(context, view);
   }
 
+  static Offset findParent(BuildContext context) {
+    final renderBox = context.findRenderObject() as RenderBox;
+    return renderBox.localToGlobal(Offset.zero);
+  }
+
+  static void showOverlay(BuildContext context, OverlayEntry view){
+    Overlay.of(context)?.insert(view);
+  }
+
+  // LayerLink()
 }
