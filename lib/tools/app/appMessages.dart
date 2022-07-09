@@ -23,8 +23,16 @@ class AppMessages {
     return AppRoute.getContext().t('notice')?? _noText;
   }
 
+  static String get send {
+    return AppRoute.getContext().t('send')?? _noText;
+  }
+
   static String get pleaseWait {
     return AppRoute.getContext().t('pleaseWait')?? _noText;
+  }
+
+  static String get loginWithGoogle {
+    return 'ورود با گوگل';
   }
 
   static String get errorOccur {

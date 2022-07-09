@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iris_tools/api/helpers/mathHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:vosate_zehn/services/google.dart';
 import 'package:vosate_zehn/system/stateBase.dart';
+import 'package:vosate_zehn/tools/app/appImages.dart';
 import 'package:vosate_zehn/tools/app/appMessages.dart';
+import 'package:vosate_zehn/tools/app/appSheet.dart';
+import 'package:vosate_zehn/tools/app/appThemes.dart';
 import 'package:vosate_zehn/views/genAppBar.dart';
+import 'package:vosate_zehn/views/phoneNumberInput.dart';
 
 class LoginPage extends StatefulWidget {
   static final route = GoRoute(
@@ -20,8 +25,6 @@ class LoginPage extends StatefulWidget {
 }
 ///=================================================================================================
 class _LoginPageState extends StateBase<LoginPage> {
-  String? res1;
-  String? res2;
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +32,10 @@ class _LoginPageState extends StateBase<LoginPage> {
       controller: assistCtr,
       builder: (context, ctr, data) {
         return Scaffold(
-          appBar: GenAppBar(
+          /*appBar: GenAppBar(
             title: Text(AppMessages.loginTitle),
-          ),
+          ),*/
+          backgroundColor: AppThemes.instance.currentTheme.primaryColor,
           body: SafeArea(
               child: buildBody()
           ),
@@ -43,21 +47,70 @@ class _LoginPageState extends StateBase<LoginPage> {
   Widget buildBody(){
     return Column(
       children: [
-        Text('t1: $res1'),
-        Text('t2: $res2'),
+        SizedBox(
+          height: MathHelper.percent(MediaQuery.of(context).size.height, 30),
+          child: Center(
+            child: Image.asset(AppImages.appIcon, width: 100, height: 100,),
+          ),
+        ),
 
-        ElevatedButton(
-            onPressed: () async {
-              //AppRoute.pushNamed(context, (E404Page).toString().toLowerCase());
-              final res = await Google.handleSignIn();
-              res1 = res?.displayName;
-              res2 = res?.email;
+        Expanded(
+          child: DecoratedBox(
+            decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
+                )
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25.0),
+              child: Column(
+                children: [
+                  PhoneNumberInput(),
 
-              setState(() {});
-            },
-            child: Text('go')
+                  const SizedBox(height: 30,),
+                  Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                            shape: const StadiumBorder(),
+                          primary: AppThemes.instance.currentTheme.differentColor,
+                        ),
+                        onPressed: (){
+                          signWithGoogleCall();
+                        },
+                        icon: Image.asset(AppImages.googleIco, width: 20, height: 20,),
+                        label: Text(AppMessages.loginWithGoogle)
+                    ),
+                  ),
+
+                  const SizedBox(height: 30,),
+
+                  SizedBox(
+                    width: double.maxFinite,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(shape: const StadiumBorder()),
+                        onPressed: (){},
+                        child: Text(AppMessages.send)
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
         ),
       ],
     );
+  }
+
+  void signWithGoogleCall() async {
+    final google = Google();
+    final result = await google.signIn();
+
+    if(result == null){
+      AppSheet.showSheet$OperationFailed(context);
+      return;
+    }
   }
 }

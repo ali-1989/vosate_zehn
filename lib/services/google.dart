@@ -1,24 +1,47 @@
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class Google {
-  Google._();
+  late GoogleSignIn obj;
 
-  static Future<GoogleSignInAccount?> handleSignIn() async {
+  Google(){
+    obj = GoogleSignIn(
+      scopes: [
+        'https://www.googleapis.com/auth/userinfo.email',
+        //'https://www.googleapis.com/auth/cloud-platform.read-only',
+        //'https://www.googleapis.com/auth/contacts.readonly',
+        //'https://accounts.google.com/o/oauth2/auth',
+      ],
+    );
+  }
+
+  Future<GoogleSignInAccount?> signIn() async {
     try {
-      final signIn = GoogleSignIn(
-        scopes: [
-          'https://www.googleapis.com/auth/userinfo.email',
-          //'https://www.googleapis.com/auth/cloud-platform.read-only',
-          //'https://www.googleapis.com/auth/contacts.readonly',
-          //'https://accounts.google.com/o/oauth2/auth',
-        ],
-      );
+      return await obj.signIn();
+    }
+    on PlatformException catch (e){
+      return null;
+    }
+    catch (e) {
+      return null;
+    }
+  }
 
-      return signIn.signIn();
+  Future<GoogleSignInAccount?> signOut() async {
+    try {
+      return await obj.signOut();
     }
     catch (error) {
-      print(error);
       return null;
+    }
+  }
+
+  Future<bool> isSignIn() async {
+    try {
+      return await obj.isSignedIn();
+    }
+    catch (error) {
+      return false;
     }
   }
 }

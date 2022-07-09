@@ -7,6 +7,7 @@ class AppImages {
   static const appIcon = 'assets/images/app_icon.png';
   static const loadingLottie = 'assets/raw/loading.json';
   static const e404Lottie = 'assets/raw/e404.json';
+  static const googleIco = 'assets/images/google.png';
 }
 
 
