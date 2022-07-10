@@ -1,10 +1,10 @@
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-class Google {
+class GoogleService {
   late GoogleSignIn obj;
 
-  Google(){
+  GoogleService(){
     obj = GoogleSignIn(
       scopes: [
         'https://www.googleapis.com/auth/userinfo.email',

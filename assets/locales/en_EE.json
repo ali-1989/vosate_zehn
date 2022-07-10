@@ -234,9 +234,10 @@
     "noUserLoginYet": "هیچ کاربری لاگین نشده، لطفا وارد شوید",
     "doYouWantLogoutYourAccount": "آیا می خواهید از حساب خود خارج شوید؟",
     "youHaveAnAccount": "حساب کاربری دارید؟",
-    "verifyCodeResend": "کد اعتبار سنجی دوباره ارسال شد",
+    "otpCodeIsResend": "کد اعتبار سنجی دوباره ارسال شد",
+    "otpCodeIsInvalid": "کد وارد شده صحیح نیست",
     "validation": "اعتبار سنجی",
-    "resendCode": "ارسال مجدد کد",
+    "resendOtpCode": "ارسال مجدد کد",
     "sendVerifyCode": "ثبت کد تایید"
   },
 

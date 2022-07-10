@@ -4,7 +4,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 class AppToast {
   AppToast._();
 
-  Future<void> showToast(String msg, {bool dismiss = true, Duration duration = const Duration(milliseconds: 3500)}){
+  static Future<void> showToast(String msg, {bool dismiss = true, Duration duration = const Duration(milliseconds: 3500)}){
     return EasyLoading.showToast(
       msg,
       duration: duration,

@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:vosate_zehn/pages/e404_page.dart';
 import 'package:vosate_zehn/pages/home_page.dart';
 import 'package:vosate_zehn/pages/login/login_page.dart';
+import 'package:vosate_zehn/pages/login/register_page.dart';
 import 'package:vosate_zehn/system/session.dart';
 import 'package:vosate_zehn/tools/app/appDb.dart';
 import 'package:flutter/material.dart';
@@ -24,10 +25,6 @@ class AppRoute {
     return res?? materialContext;
   }
 
-  static BuildContext getFirstContext() {
-    return materialContext;
-  }
-
   static Future<bool> saveRouteName(String routeName) async {
     final int res = await AppDB.setReplaceKv(Keys.setting$lastRouteName, routeName);
 
@@ -47,12 +44,12 @@ class AppRoute {
     GoRouter.of(context).pop();
   }
 
-  static void push(BuildContext context, String location) {
-    GoRouter.of(context).go(location);
+  static void push(BuildContext context, String address) {
+    GoRouter.of(context).go(address);
   }
 
   static void pushNamed(BuildContext context, String name) {
-    GoRouter.of(context).goNamed(name);
+    GoRouter.of(context).goNamed(name, params: {});
   }
 
   static void reCallPage(BuildContext ctx, Widget page, {required String name, dynamic arguments}) {
@@ -68,6 +65,7 @@ final routers = GoRouter(
       E404Page.route,
       HomePage.route,
       LoginPage.route,
+      RegisterPage.route,
     ],
     initialLocation: '/',
     errorBuilder: (BuildContext context, GoRouterState state) => const E404Page(),

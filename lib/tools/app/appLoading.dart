@@ -6,6 +6,7 @@ import 'package:iris_tools/api/helpers/colorHelper.dart';
 import 'package:lottie/lottie.dart';
 import 'package:vosate_zehn/tools/app/appImages.dart';
 import 'package:vosate_zehn/tools/app/appMessages.dart';
+import 'package:vosate_zehn/tools/app/appOverlay.dart';
 import 'package:vosate_zehn/tools/app/appThemes.dart';
 
 class AppLoading {
@@ -75,20 +76,38 @@ class AppLoading {
     );
   }
 
-  Future<void> showLoading({bool dismiss = false}){
-    return EasyLoading.show(
+  Future<void> cancel({bool byAnimation = true}){
+    return EasyLoading.dismiss(animation: byAnimation);
+  }
+  ///-----------------------------------------------------------------------------------
+  Future<void> showLoading(BuildContext context, {bool dismiss = false}) async {
+     EasyLoading.show(
       status: AppMessages.pleaseWait,
       dismissOnTap: dismiss,
       indicator: _getLoadingView(),
       maskType: EasyLoadingMaskType.custom,
     );
+
+    AppOverlay.showIgnoreScreen(context/*AppRoute.getContext()*/);
   }
 
-  Future<void> dismiss({bool byAnimation = true}){
+  Future<void> hideLoading(BuildContext context, {bool byAnimation = true}){
+    AppOverlay.hideIgnoreScreen(context);
     return EasyLoading.dismiss(animation: byAnimation);
   }
 
-  Future<void> hide({bool byAnimation = true}){
+  Future<void> showWaitingIgnore(BuildContext context, {bool dismiss = false}) async {
+    EasyLoading.show(
+      status: AppMessages.pleaseWait,
+      dismissOnTap: dismiss,
+      maskType: EasyLoadingMaskType.custom,
+    );
+
+    AppOverlay.showIgnoreScreen(context);
+  }
+
+  Future<void> hideWaitingIgnore(BuildContext context, {bool byAnimation = true}){
+    AppOverlay.hideIgnoreScreen(context);
     return EasyLoading.dismiss(animation: byAnimation);
   }
 

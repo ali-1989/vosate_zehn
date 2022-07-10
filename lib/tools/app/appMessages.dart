@@ -31,8 +31,16 @@ class AppMessages {
     return AppRoute.getContext().tInMap('loginSection', 'validation')?? _noText;
   }
 
-  static String get resendCode {
-    return AppRoute.getContext().tInMap('loginSection', 'resendCode')?? _noText;
+  static String get resendOtpCode {
+    return AppRoute.getContext().tInMap('loginSection', 'resendOtpCode')?? _noText;
+  }
+
+  static String get otpCodeIsResend {
+    return AppRoute.getContext().tInMap('loginSection', 'otpCodeIsResend')?? _noText;
+  }
+
+  static String get otpCodeIsInvalid {
+    return AppRoute.getContext().tInMap('loginSection', 'otpCodeIsInvalid')?? _noText;
   }
 
   static String get pleaseWait {
@@ -165,6 +173,10 @@ class AppMessages {
 
   static String get loginTitle {
     return 'ورود';
+  }
+
+  static String get registerTitle {
+    return 'ثبت نام';
   }
 
   static String get termTitle {

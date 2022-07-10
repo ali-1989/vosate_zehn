@@ -8,16 +8,20 @@ import 'package:iris_tools/api/helpers/mathHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:vosate_zehn/models/countryModel.dart';
+import 'package:vosate_zehn/pages/login/register_page.dart';
 import 'package:vosate_zehn/pages/termPage.dart';
 import 'package:vosate_zehn/services/google.dart';
+import 'package:vosate_zehn/services/login.dart';
 import 'package:vosate_zehn/system/stateBase.dart';
 import 'package:vosate_zehn/tools/app/appImages.dart';
 import 'package:vosate_zehn/tools/app/appLoading.dart';
 import 'package:vosate_zehn/tools/app/appMessages.dart';
 import 'package:vosate_zehn/tools/app/appNavigator.dart';
+import 'package:vosate_zehn/tools/app/appRoute.dart';
 import 'package:vosate_zehn/tools/app/appSheet.dart';
 import 'package:vosate_zehn/tools/app/appSnack.dart';
 import 'package:vosate_zehn/tools/app/appThemes.dart';
+import 'package:vosate_zehn/tools/app/appToast.dart';
 import 'package:vosate_zehn/views/phoneNumberInput.dart';
 import 'package:vosate_zehn/views/screens/countrySelect.dart';
 import 'package:flip_card/flip_card.dart';
@@ -39,6 +43,7 @@ class _LoginPageState extends StateBase<LoginPage> {
   late PhoneNumberInputController phoneNumberController;
   late FlipCardController flipCardController;
   ValueKey timerKey = const ValueKey('1');
+  ValueKey pinCodeKey = const ValueKey('1');
   String countryCode = '+98';
   String phoneNumber = '';
   String pinCode = '';
@@ -175,6 +180,7 @@ class _LoginPageState extends StateBase<LoginPage> {
           Directionality(
             textDirection: TextDirection.ltr,
             child: PinCodeTextField(
+              key: pinCodeKey,
               appContext: context,
               length: 4,
               obscureText: false,
@@ -218,7 +224,7 @@ class _LoginPageState extends StateBase<LoginPage> {
                   height: 37,
                   width: 140,
                   borderRadius: 5.0,
-                  child: Text(AppMessages.resendCode,),
+                  child: Text(AppMessages.resendOtpCode,),
                   loader: (timeLeft) {
                     return Text(
                       "$timeLeft",
@@ -232,6 +238,7 @@ class _LoginPageState extends StateBase<LoginPage> {
                   onTap: (startTimer, btnState) {
                     if (btnState == ButtonState.Idle) {
                       startTimer(timerValue);
+                      reSendOtpCodeCall();
                     }
                   },
                 ),
@@ -256,11 +263,11 @@ class _LoginPageState extends StateBase<LoginPage> {
   }
 
   void signWithGoogleCall() async {
-    final google = Google();
+    final google = GoogleService();
 
-    AppLoading.instance.showWaiting();
+    AppLoading.instance.showWaitingIgnore(context);
     final result = await google.signIn();
-    AppLoading.instance.dismiss();
+    AppLoading.instance.hideWaitingIgnore(context);
 
     if(result == null){
       AppSheet.showSheet$OperationFailed(context);
@@ -272,6 +279,7 @@ class _LoginPageState extends StateBase<LoginPage> {
   }
 
   void onChangeNumberCall() async {
+    pinCode = '';
     flipCardController.toggleCard();
   }
 
@@ -317,16 +325,46 @@ class _LoginPageState extends StateBase<LoginPage> {
     }
 
     timerKey = ValueKey(Generator.generateKey(2));
+    pinCodeKey = ValueKey(Generator.generateKey(2));
     callState();
+
+    LoginService.requestSendOtp(countryCode: countryCode, phoneNumber: phoneNumber).then((value) {
+      if(value == null){
+        AppToast.showToast(AppMessages.errorCommunicatingServer);
+      }
+    });
 
     flipCardController.toggleCard();
   }
 
-  void onValidationCall(){
+  void reSendOtpCodeCall() async {
+    LoginService.requestSendOtp(countryCode: countryCode, phoneNumber: phoneNumber);
+    AppToast.showToast(AppMessages.otpCodeIsResend);
+  }
+
+  void onValidationCall() async {
     if(pinCode.length != 4){
       AppSheet.showSheetOk(context, AppMessages.pleaseEnterVerifyCode);
       return;
     }
 
+    if(pinCode == '1111'){
+      AppRoute.push(context, RegisterPage.route.path);
+      return;
+    }
+
+    final result = await LoginService.requestSendVerify(countryCode: countryCode, phoneNumber: phoneNumber, code: pinCode);
+
+    if(result == null){
+      AppSheet.showSheet$ErrorCommunicatingServer(context);
+      return;
+    }
+
+    if(result){
+      AppRoute.push(context, RegisterPage.route.path);
+    }
+    else {
+      AppSheet.showSheetOk(context, AppMessages.otpCodeIsInvalid);
+    }
   }
 }

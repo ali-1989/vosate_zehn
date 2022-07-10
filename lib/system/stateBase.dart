@@ -105,11 +105,11 @@ abstract class StateBase<W extends StatefulWidget> extends State<W> {
 	}
 
 	void showLoading({bool canBack = false, Duration? startDelay}){
-		AppLoading.instance.showLoading(dismiss: canBack);
+		AppLoading.instance.showLoading(context, dismiss: canBack);
 	}
 
 	Future hideLoading(){
-		return AppLoading.instance.dismiss();
+		return AppLoading.instance.hideLoading(context);
 	}
 
 	// Btn back
@@ -121,10 +121,10 @@ abstract class StateBase<W extends StatefulWidget> extends State<W> {
 
 	// before close (mayPop), keyboard backKey, onBackButton
 	Future<bool> onWillBack<s extends StateBase>(s state) {
-		if (false) {
+		/*if (false) {
 			Navigator.of(state.context).pop();
 			return Future<bool>.value(false);
-		}
+		}*/
 
 		// if true: popPage,  false: not close page
 		return Future<bool>.value(true);

@@ -26,7 +26,7 @@ class Public {
           UserLoginTools.forceLogoff(Session.getLastLoginUser()?.userId?? '');
 
           AppDialog.instance.showInfoDialog(
-              AppRoute.getFirstContext(),
+              AppRoute.materialContext,
               null,
               AppMessages.tokenIsIncorrectOrExpire
           );
