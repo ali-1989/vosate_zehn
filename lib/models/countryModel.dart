@@ -1,6 +1,7 @@
 
 class CountryModel {
   String? countryName;
+  String? nativeName;
   String? countryPhoneCode;
   String? countryIso;
 
@@ -9,6 +10,7 @@ class CountryModel {
   CountryModel.fromMap(Map? map){
     if(map != null) {
       countryName = map['country_name'];
+      nativeName = map['native_name'];
       countryIso = map['country_iso'];
       countryPhoneCode = map['phone_code'];
     }
@@ -17,6 +19,7 @@ class CountryModel {
   Map<String, dynamic> toMap(){
     return {
       'country_name': countryName,
+      'native_name': nativeName,
       'country_iso': countryIso,
       'phone_code': countryPhoneCode,
     };

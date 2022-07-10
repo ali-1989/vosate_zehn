@@ -2,14 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iris_tools/api/helpers/mathHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
+import 'package:vosate_zehn/models/countryModel.dart';
 import 'package:vosate_zehn/services/google.dart';
 import 'package:vosate_zehn/system/stateBase.dart';
 import 'package:vosate_zehn/tools/app/appImages.dart';
 import 'package:vosate_zehn/tools/app/appMessages.dart';
+import 'package:vosate_zehn/tools/app/appNavigator.dart';
+import 'package:vosate_zehn/tools/app/appRoute.dart';
 import 'package:vosate_zehn/tools/app/appSheet.dart';
 import 'package:vosate_zehn/tools/app/appThemes.dart';
 import 'package:vosate_zehn/views/genAppBar.dart';
 import 'package:vosate_zehn/views/phoneNumberInput.dart';
+import 'package:vosate_zehn/views/screens/countrySelect.dart';
 
 class LoginPage extends StatefulWidget {
   static final route = GoRoute(
@@ -25,6 +29,16 @@ class LoginPage extends StatefulWidget {
 }
 ///=================================================================================================
 class _LoginPageState extends StateBase<LoginPage> {
+  late PhoneNumberInputController phoneNumberController;
+
+
+  @override
+  void initState(){
+    super.initState();
+
+    phoneNumberController = PhoneNumberInputController();
+    phoneNumberController.setOnTapCountryArrow(onTapCountryArrow);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +81,10 @@ class _LoginPageState extends StateBase<LoginPage> {
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: Column(
                 children: [
-                  PhoneNumberInput(),
+                  PhoneNumberInput(
+                      controller: phoneNumberController,
+                    countryCode: '+98',
+                  ),
 
                   const SizedBox(height: 30,),
                   Align(
@@ -112,5 +129,17 @@ class _LoginPageState extends StateBase<LoginPage> {
       AppSheet.showSheet$OperationFailed(context);
       return;
     }
+  }
+
+  void onTapCountryArrow(){
+    print('click');
+    AppNavigator.pushNextPage(
+        context,
+        const CountrySelectScreen(),
+        name: 'CountrySelect').then((value) {
+          if(value is CountryModel){
+            phoneNumberController.getCountryController()?.text = '${value.countryPhoneCode}';
+          }
+    });
   }
 }
