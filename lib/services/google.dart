@@ -17,9 +17,9 @@ class Google {
 
   Future<GoogleSignInAccount?> signIn() async {
     try {
-      return await obj.signIn();
+      return (await obj.signIn().timeout(const Duration(seconds: 30)));
     }
-    on PlatformException catch (e){
+    on PlatformException /*catch (e)*/{
       return null;
     }
     catch (e) {

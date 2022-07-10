@@ -58,16 +58,6 @@ class AppLoading {
     );
   }
 
-  Future<void> showToast(String msg, {bool dismiss = true, Duration duration = const Duration(milliseconds: 3500)}){
-    return EasyLoading.showToast(
-      msg,
-      duration: duration,
-      dismissOnTap: dismiss,
-      toastPosition: EasyLoadingToastPosition.bottom,
-      maskType: EasyLoadingMaskType.none,
-    );
-  }
-
   Future<void> showSuccess(String msg, {bool dismiss = true, Duration duration = const Duration(milliseconds: 3500)}){
     return EasyLoading.showSuccess(
       msg,
@@ -95,6 +85,10 @@ class AppLoading {
   }
 
   Future<void> dismiss({bool byAnimation = true}){
+    return EasyLoading.dismiss(animation: byAnimation);
+  }
+
+  Future<void> hide({bool byAnimation = true}){
     return EasyLoading.dismiss(animation: byAnimation);
   }
 

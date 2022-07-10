@@ -27,12 +27,44 @@ class AppMessages {
     return AppRoute.getContext().t('send')?? _noText;
   }
 
+  static String get validation {
+    return AppRoute.getContext().tInMap('loginSection', 'validation')?? _noText;
+  }
+
+  static String get resendCode {
+    return AppRoute.getContext().tInMap('loginSection', 'resendCode')?? _noText;
+  }
+
   static String get pleaseWait {
     return AppRoute.getContext().t('pleaseWait')?? _noText;
   }
 
+  static String get countrySelection {
+    return AppRoute.getContext().tInMap('countrySection', 'countrySelection')?? _noText;
+  }
+
+  static String get terms {
+    return 'سیاست حفظ حریم خصوصی';
+  }
+
+  static String get mobileNumber {
+    return AppRoute.getContext().t('mobileNumber')?? _noText;
+  }
+
   static String get loginWithGoogle {
     return 'ورود با گوگل';
+  }
+
+  static String get changeNumber {
+    return 'شماره ی دیکر';
+  }
+
+  static String get enterVerifyCode {
+    return 'کد ارسال شده به شماره ی # را وارد کنید';
+  }
+
+  static String get pleaseEnterMobileToSendCode {
+    return 'لطفا شماره موبایل خود را جهت ارسال کد وارد کنید';
   }
 
   static String get errorOccur {
@@ -133,5 +165,21 @@ class AppMessages {
 
   static String get loginTitle {
     return 'ورود';
+  }
+
+  static String get termTitle {
+    return 'سیاست حریم خصوصی';
+  }
+
+  static String get enterCountryCode {
+    return 'کد کشور را وارد کنید';
+  }
+
+  static String get enterPhoneNumber {
+    return 'شماره موبایل خود را وارد کنید';
+  }
+
+  static String get pleaseEnterVerifyCode {
+    return 'لطفا کد ارسال شده را وارد کنید';
   }
 }

@@ -49,6 +49,9 @@ dependencies:
   popover: ^0.2.6+3
   google_sign_in: ^5.4.0
   #sign_in_with_apple: ^4.0.0
+  flip_card: ^0.6.0
+  pin_code_fields: ^7.4.0
+  argon_buttons_flutter: ^1.1.0
 
   iris_tools:
     git: https://github.com/ali-1989/IrisTools.git

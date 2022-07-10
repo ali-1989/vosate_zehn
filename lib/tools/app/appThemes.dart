@@ -304,7 +304,7 @@ class AppThemes {
 
 		final elevatedButtonTheme = ElevatedButtonThemeData(
 			style: ButtonStyle(
-					tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+					tapTargetSize: MaterialTapTargetSize.padded,
 				//backgroundColor: MaterialStateProperty.all(th.buttonBackColor),
 				foregroundColor: MaterialStateProperty.all(th.buttonTextColor),
 				backgroundColor: MaterialStateProperty.resolveWith<Color>(
@@ -330,6 +330,8 @@ class AppThemes {
 			style: ButtonStyle(
 				//foregroundColor: MaterialStateProperty.all(AppThemes.checkPrimaryByWB(th.primaryColor, th.differentColor)),
 				//foregroundColor: MaterialStateProperty.all(Colors.lightBlue),
+				visualDensity: VisualDensity.comfortable,
+				tapTargetSize: MaterialTapTargetSize.padded,
 				foregroundColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
 							if (states.contains(MaterialState.disabled)) {
 								return th.inactiveBackColor;
@@ -348,8 +350,6 @@ class AppThemes {
 				overlayColor: MaterialStateProperty.all(
 						AppThemes.checkPrimaryByWB(th.primaryColor, th.differentColor).withAlpha(100)
 				),
-					visualDensity: VisualDensity.compact,
-					tapTargetSize: MaterialTapTargetSize.shrinkWrap,
 			),
 		);
 

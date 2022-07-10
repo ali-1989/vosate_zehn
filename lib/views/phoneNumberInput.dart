@@ -4,14 +4,20 @@ import 'package:vosate_zehn/tools/app/appIcons.dart';
 class PhoneNumberInput extends StatefulWidget {
   final PhoneNumberInputController controller;
   final String? countryCode;
-  final BoxDecoration? boxDecoration;
+  final String? numberHint;
+  final BoxDecoration? widgetDecoration;
+  final BoxDecoration? countryDecoration;
+  final BoxDecoration? numberDecoration;
   final EdgeInsets? padding;
 
   const PhoneNumberInput({
     Key? key,
     required this.controller,
     this.countryCode,
-    this.boxDecoration,
+    this.numberHint,
+    this.widgetDecoration,
+    this.countryDecoration,
+    this.numberDecoration,
     this.padding,
   }) : super(key: key);
 
@@ -22,7 +28,9 @@ class PhoneNumberInput extends StatefulWidget {
 class PhoneNumberInputState extends State<PhoneNumberInput> {
   late PhoneNumberInputController controller;
   late ThemeData theme;
-  late BoxDecoration decoration;
+  late BoxDecoration wholeDecoration;
+  late BoxDecoration countryDecoration;
+  late BoxDecoration numberDecoration;
   late InputDecoration inputDecoration;
   TextEditingController countryCtr = TextEditingController();
   TextEditingController phoneNumberCtr = TextEditingController();
@@ -32,6 +40,7 @@ class PhoneNumberInputState extends State<PhoneNumberInput> {
   void initState() {
     super.initState();
 
+    countryCtr.text = widget.countryCode?? '';
     onInit();
   }
 
@@ -47,6 +56,10 @@ class PhoneNumberInputState extends State<PhoneNumberInput> {
   void didUpdateWidget(PhoneNumberInput oldWidget) {
     super.didUpdateWidget(oldWidget);
 
+    if(oldWidget.countryCode != widget.countryCode){
+      countryCtr.text = widget.countryCode?? '';
+    }
+
     //if(oldWidget.controller != widget.controller){
     onInit();
   }
@@ -58,42 +71,59 @@ class PhoneNumberInputState extends State<PhoneNumberInput> {
     return Directionality(
       textDirection: TextDirection.ltr,
       child: DecoratedBox(
-        decoration: decoration,
+        decoration: wholeDecoration,
         child: Padding(
           padding: widget.padding?? const EdgeInsets.all(0),
           child: Row(
             children: [
-              SizedBox(
-                width: 40,
-                child: TextField(
-                  controller: countryCtr,
-                  onChanged: controller.onCountryTyping,
-                  decoration: inputDecoration,
-                ),
-              ),
-
-              const SizedBox(width: 8,),
-              GestureDetector(
-                onTap: controller.onTapCountryArrow,
-                child: Baseline(
-                  baselineType: TextBaseline.alphabetic,
-                  baseline: 20,
-                  child: RotatedBox(
-                    quarterTurns: 3,
-                      child: Icon(AppIcons.arrowLeftIos,
-                        size: 14,
-                        color: theme.textTheme.bodyText1!.color!.withAlpha(180),
-                      )
+              DecoratedBox(
+                  decoration: countryDecoration,
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 35,
+                    child: TextField(
+                      controller: countryCtr,
+                      keyboardType: TextInputType.phone,
+                      onChanged: controller.onCountryTyping,
+                      decoration: inputDecoration,
+                    ),
                   ),
-                ),
-              ),
-              const SizedBox(width: 8,),
 
+                  GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: controller.onTapCountryArrow,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 12, top: 10, bottom: 10),
+                      child: Baseline(
+                        baselineType: TextBaseline.ideographic,
+                        baseline: 5,
+                        child: RotatedBox(
+                            quarterTurns: 3,
+                            child: Icon(AppIcons.arrowLeftIos,
+                              size: 14,
+                              color: theme.textTheme.bodyText1!.color!.withAlpha(180),
+                            )
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              ),
+
+              const SizedBox(width: 10,),
               Expanded(
-                child: TextField(
-                  controller: phoneNumberCtr,
-                  onChanged: controller.onNumberTyping,
-                  decoration: inputDecoration,
+                child: DecoratedBox(
+                  decoration: numberDecoration,
+                  child: TextField(
+                    controller: phoneNumberCtr,
+                    keyboardType: TextInputType.phone,
+                    onChanged: controller.onNumberTyping,
+                    decoration: inputDecoration.copyWith(
+                      hintText: widget.numberHint,
+                    ),
+                  ),
                 ),
               )
             ],
@@ -107,16 +137,21 @@ class PhoneNumberInputState extends State<PhoneNumberInput> {
     controller = widget.controller;
     controller._setState(this);
 
-    countryCtr.text = widget.countryCode?? '';
-    decoration = widget.boxDecoration ?? const BoxDecoration(
+    wholeDecoration = widget.widgetDecoration ?? const BoxDecoration();
+
+    countryDecoration = widget.countryDecoration ?? const BoxDecoration(
       //borderRadius: BorderRadius.vertical(bottom: Radius.circular(5)),
       border: Border(bottom: BorderSide(color: Colors.black54)),
     );
+
+    numberDecoration = widget.numberDecoration ?? countryDecoration;
 
     inputDecoration = const InputDecoration(
       border: InputBorder.none,
       enabledBorder: InputBorder.none,
       focusedBorder: InputBorder.none,
+      contentPadding: EdgeInsets.symmetric(vertical: 8),
+      isDense: true,
     );
   }
 }
@@ -145,7 +180,7 @@ class PhoneNumberInputController {
     onTapCountryArrow = call;
   }
 
-  String? getCountry(){
+  String? getCountryCode(){
     return _state?.countryCtr.text;
   }
 

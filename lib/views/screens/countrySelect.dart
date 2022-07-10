@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:iris_tools/widgets/searchBar.dart';
 import 'package:vosate_zehn/models/countryModel.dart';
 import 'package:vosate_zehn/system/stateBase.dart';
+import 'package:vosate_zehn/tools/app/appMessages.dart';
 import 'package:vosate_zehn/tools/countryTools.dart';
 
 import '/tools/app/appNavigator.dart';
@@ -64,7 +65,10 @@ class CountrySelectScreenState extends StateBase<CountrySelectScreen> {
       update();
     });*/
 
-    countries = CountryTools.countriesMap!;
+    CountryTools.countriesMapAsync.then((value) {
+      countries = value!;
+      callState();
+    });
   }
 
   Widget getScaffold() {
@@ -79,7 +83,7 @@ class CountrySelectScreenState extends StateBase<CountrySelectScreen> {
 
   PreferredSizeWidget getAppbar() {
     return AppBar(
-      title: Text(t('countrySelection')!),
+      title: Text(AppMessages.countrySelection),
     );
   }
 
@@ -128,7 +132,11 @@ class CountrySelectScreenState extends StateBase<CountrySelectScreen> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 22),
                       child: Text('${m.key}${m.value['nativeName'] != null? ' (${m.value['nativeName']})': ''}',
-                        style: AppThemes.baseTextStyle().copyWith(fontWeight: FontWeight.bold),),
+                        style: AppThemes.baseTextStyle().copyWith(
+                            fontWeight: FontWeight.bold,
+                          fontFamily: 'roboto'
+                        ),
+                      ),
                     ),
                   );
                 },
