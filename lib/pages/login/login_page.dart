@@ -227,7 +227,7 @@ class _LoginPageState extends StateBase<LoginPage> {
                   child: Text(AppMessages.resendOtpCode,),
                   loader: (timeLeft) {
                     return Text(
-                      "$timeLeft",
+                      '$timeLeft',
                       style: const TextStyle(
                           color: Colors.black,
                           fontSize: 15,

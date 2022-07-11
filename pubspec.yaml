@@ -57,10 +57,11 @@ dependencies:
     git: https://github.com/ali-1989/IrisTools.git
   iris_db:
     git: https://github.com/ali-1989/IrisDB.git
-  getsocket:
-    git: https://github.com/ali-1989/GetSocket.git
   iris_download_manager:
     git: https://github.com/ali-1989/IrisDownloadManager.git
+  getsocket:
+    git: https://github.com/ali-1989/GetSocket.git
+  
 
 dependency_overrides:
   simple_animations: ^4.2.0

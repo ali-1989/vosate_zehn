@@ -5,7 +5,7 @@ import 'package:vosate_zehn/tools/app/appRoute.dart';
 class AppMessages {
   AppMessages._();
 
-  static const _noText = "n_n";
+  static const _noText = 'n_n';
 
   static String get ok {
     return AppRoute.getContext().tC('ok')?? _noText;

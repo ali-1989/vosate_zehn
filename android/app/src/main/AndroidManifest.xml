@@ -112,11 +112,12 @@
 
            android:appCategory="productivity"
            -->
-   <application
+
+    <application
         android:label="وسعت ذهن"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-	    android:roundIcon="@mipmap/ic_launcher"
+	android:roundIcon="@mipmap/ic_launcher"
         android:hardwareAccelerated="false"
         android:allowBackup="true"
         android:allowClearUserData="false"

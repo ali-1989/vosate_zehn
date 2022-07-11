@@ -46,7 +46,7 @@ class AppHttp {
       itemRes._responseFuture = itemRes.client.post(
         Uri.parse(uri),
         headers: item.headers,
-        encoding: Encoding.getByName("utf-8"),
+        encoding: Encoding.getByName('utf-8'),
         body: item.body,
       )
           .timeout(Duration(milliseconds: connectTimeout + 2000), onTimeout: () async {
@@ -70,7 +70,7 @@ class AppHttp {
 			ByteStream stream = ByteStream(file.openRead())..cast();
 			final length = await file.length();
 			final uri = Uri.parse(http.fullUri!);
-			final request = MultipartRequest("POST", uri);
+			final request = MultipartRequest('POST', uri);
 			final multiPartFile = MultipartFile('file', stream, length, filename: basename(file.path));
 			request.files.add(multiPartFile);
 
