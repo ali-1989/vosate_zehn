@@ -65,6 +65,7 @@ dependencies:
 
 dependency_overrides:
   simple_animations: ^4.2.0
+  path: ^1.8.2
 
 
 dev_dependencies:

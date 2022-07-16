@@ -10,9 +10,9 @@ import 'package:vosate_zehn/tools/app/appDirectories.dart';
 import 'package:vosate_zehn/tools/app/appImages.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:iris_tools/api/helpers/storageHelper.dart';
 import 'package:iris_tools/api/logger/logger.dart';
 import 'package:vosate_zehn/tools/app/appLocale.dart';
+import 'package:vosate_zehn/tools/app/appRoute.dart';
 import 'package:vosate_zehn/tools/app/appWebsocket.dart';
 import 'package:vosate_zehn/tools/app/downloadUpload.dart';
 import 'package:vosate_zehn/tools/netListenerTools.dart';
@@ -31,7 +31,13 @@ class InitialApplication {
 	static bool isLaunchOk = false;
 
 	static Future<bool> importantInit() async {
-		await AppDirectories.prepareStoragePaths(Constants.appName);
+		if(kIsWeb){
+			AppDirectories.prepareStoragePathsWeb(Constants.appName);
+		}
+		else {
+			await AppDirectories.prepareStoragePathsOs(Constants.appName);
+		}
+
 		await DeviceInfoTools.prepareDeviceInfo();
 		await DeviceInfoTools.prepareDeviceId();
 
@@ -44,24 +50,16 @@ class InitialApplication {
 		}
 
 		isCallInit = true;
-		if(kIsWeb) {
-		  AppManager.logger = Logger('${StorageHelper.getMemoryFileSystem().path.current}/events.txt');
-		} else {
-		  AppManager.logger = Logger('${AppDirectories.getTempDir$ex()}/events.txt');
+		if(!kIsWeb) {
+			AppManager.logger = Logger('${AppDirectories.getTempDir$ex()}/events.txt');
 		}
 
-		//PlayerTools.init();
+		AppRoute.init();
 		await AppLocale.localeDelegate().getLocalization().setFallbackByLocale(const Locale('en', 'EE'));
-
-		await AppWebsocket.prepareWebSocket(SettingsManager.settingsModel.wsAddress);
-
-		DownloadUpload.downloadManager = DownloadManager('${Constants.appName}DownloadManager');
-		DownloadUpload.uploadManager = UploadManager('${Constants.appName}UploadManager');
 
 		AppCache.screenBack = const AssetImage(AppImages.background);
 		await precacheImage(AppCache.screenBack!, context);
-		// ignore: unawaited_futures
-		//CountryTools.fetchCountries();
+		//PlayerTools.init();
 
 		if(!kIsWeb) {
 			await AppNotification.initial();
@@ -85,10 +83,17 @@ class InitialApplication {
 		eventListener.addDetachListener(LifeCycleApplication.onDetach);
 		WidgetsBinding.instance.addObserver(eventListener);
 
+		AppWebsocket.prepareWebSocket(SettingsManager.settingsModel.wsAddress);
+		NetManager.addChangeListener(NetListenerTools.onNetListener);
+
+		DownloadUpload.downloadManager = DownloadManager('${Constants.appName}DownloadManager');
+		DownloadUpload.uploadManager = UploadManager('${Constants.appName}UploadManager');
+
 		DownloadUpload.downloadManager.addListener(DownloadUpload.commonDownloadListener);
 		DownloadUpload.uploadManager.addListener(DownloadUpload.commonUploadListener);
 
-		NetManager.addChangeListener(NetListenerTools.onNetListener);
+		// ignore: unawaited_futures
+		//CountryTools.fetchCountries();
 
 		Session.addLoginListener(UserLoginTools.onLogin);
     Session.addLogoffListener(UserLoginTools.onLogoff);

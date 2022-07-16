@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:iris_tools/net/trustSsl.dart';
 import 'package:lottie/lottie.dart';
@@ -17,7 +18,6 @@ import 'package:vosate_zehn/system/initialize.dart';
 import 'package:vosate_zehn/tools/app/appBroadcast.dart';
 import 'package:vosate_zehn/tools/app/appDb.dart';
 import 'package:vosate_zehn/tools/app/appDirectories.dart';
-import 'package:vosate_zehn/tools/app/appSizes.dart';
 import 'package:iris_tools/api/helpers/databaseHelper.dart';
 import 'package:iris_tools/api/logger/reporter.dart';
 import 'package:vosate_zehn/tools/deviceInfoTools.dart';
@@ -52,7 +52,7 @@ class SplashScreenState extends State<SplashPage> {
           _checkTimer();
           init();
 
-          if (_isLoadingSettings || mustShowSplash) {
+          if (_isLoadingSettings || _canShowSplash()) {
             return getSplashView();
           }
           else {
@@ -63,6 +63,12 @@ class SplashScreenState extends State<SplashPage> {
 
   ///==================================================================================================
   Widget getSplashView() {
+    if(kIsWeb){
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
     return DecoratedBox(
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -137,8 +143,12 @@ class SplashScreenState extends State<SplashPage> {
     );
   }
 
+  bool _canShowSplash(){
+    return mustShowSplash && !kIsWeb;
+  }
+
   void _checkTimer() async {
-    if(splashWaitingMil > 0 && mustShowSplash){
+    if(splashWaitingMil > 0 && _canShowSplash()){
       Timer(Duration(milliseconds: splashWaitingMil), (){
         mustShowSplash = false;
 
@@ -157,16 +167,17 @@ class SplashScreenState extends State<SplashPage> {
     _isInit = true;
 
     await InitialApplication.importantInit();
-    await prepareReporter();
+
+    if(!kIsWeb) {
+      await prepareReporter();
+    }
+
     await prepareDatabase();
 
-    AppSizes.initial();
     AppThemes.initial();
-    TrustAllCertificates.acceptBadCertificate();
     _isLoadingSettings = !SettingsManager.loadSettings();
 
     if (!_isLoadingSettings) {
-      await checkInstallVersion();
       await Session.fetchLoginUsers();
 
       await InitialApplication.onceInit(context);
@@ -174,6 +185,8 @@ class SplashScreenState extends State<SplashPage> {
       AppBroadcast.reBuildMaterialBySetTheme();
       asyncInitial(context);
     }
+
+    await checkInstallVersion();
   }
 
   Future<bool> prepareReporter() async {
@@ -212,6 +225,7 @@ class SplashScreenState extends State<SplashPage> {
           if (InitialApplication.isInitialOk) {
             timer.cancel();
 
+            TrustSsl.acceptBadCertificate();
             checkAppNewVersion(context);
             InitialApplication.callOnLaunchUp();
           }
@@ -227,6 +241,6 @@ class SplashScreenState extends State<SplashPage> {
   }
 
   Future<void> testCodes(BuildContext context) async {
-    //await DbCenter.db.clearTable(DbCenter.tbKv);
+    //await AppDB.db.clearTable(DbCenter.tbKv);
   }
 }

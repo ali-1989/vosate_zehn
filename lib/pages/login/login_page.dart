@@ -10,7 +10,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:vosate_zehn/models/countryModel.dart';
 import 'package:vosate_zehn/pages/login/register_page.dart';
 import 'package:vosate_zehn/pages/termPage.dart';
-import 'package:vosate_zehn/services/google.dart';
+import 'package:vosate_zehn/services/google_service.dart';
 import 'package:vosate_zehn/services/login.dart';
 import 'package:vosate_zehn/system/stateBase.dart';
 import 'package:vosate_zehn/tools/app/appImages.dart';
@@ -274,7 +274,10 @@ class _LoginPageState extends StateBase<LoginPage> {
       return;
     }
     else {
-      AppSnack.showInfo(context, result.email);
+      final injectData = RegisterPageInjectData();
+      injectData.email = result.email;
+
+      AppRoute.push(context, RegisterPage.route.path, extra: injectData);
     }
   }
 
@@ -296,10 +299,11 @@ class _LoginPageState extends StateBase<LoginPage> {
   }
 
   void gotoTermPage(){
-    AppNavigator.pushNextPage(
+    AppRoute.pushNamed(context, TermPage.route.name!);
+    /*AppNavigator.pushNextPage(
         context,
         const TermPage(),
-        name: 'TermPage');
+        name: 'TermPage');*/
   }
 
   void onSendCall(){
@@ -348,8 +352,12 @@ class _LoginPageState extends StateBase<LoginPage> {
       return;
     }
 
+    final injectData = RegisterPageInjectData();
+    injectData.countryCode = countryCode;
+    injectData.mobileNumber = phoneNumber;
+
     if(pinCode == '1111'){
-      AppRoute.push(context, RegisterPage.route.path);
+      AppRoute.push(context, RegisterPage.route.path, extra: injectData);
       return;
     }
 
@@ -361,7 +369,7 @@ class _LoginPageState extends StateBase<LoginPage> {
     }
 
     if(result){
-      AppRoute.push(context, RegisterPage.route.path);
+      AppRoute.push(context, RegisterPage.route.path, extra: injectData);
     }
     else {
       AppSheet.showSheetOk(context, AppMessages.otpCodeIsInvalid);

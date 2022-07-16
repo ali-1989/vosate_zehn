@@ -13,6 +13,13 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 class AppNotification {
 	AppNotification._();
 
+	static Future<void> insertNotificationIds() async {
+		await AppDB.setReplaceKv(Keys.setting$notificationChanelKey, 'C${Generator.generateName(8)}');
+		await AppDB.setReplaceKv(Keys.setting$notificationChanelGroup, 'G${Generator.generateName(8)}');
+
+		return;
+	}
+
 	static String getChannelKey(){
 		return AppDB.fetchKv(Keys.setting$notificationChanelKey);
 	}

@@ -11,22 +11,25 @@ import 'package:vosate_zehn/tools/app/appSheet.dart';
 import 'package:vosate_zehn/tools/app/appThemes.dart';
 import 'package:vosate_zehn/views/genAppBar.dart';
 
+
+class RegisterPageInjectData {
+  String? email;
+  String? countryCode;
+  String? mobileNumber;
+}
+///=================================================================================
 class RegisterPage extends StatefulWidget {
   static final route = GoRoute(
     path: '/register',
     name: (RegisterPage).toString().toLowerCase(),
-    builder: (BuildContext context, GoRouterState state) => const RegisterPage(),
+    builder: (BuildContext context, GoRouterState state) => RegisterPage(data: state.extra! as RegisterPageInjectData,),
   );
 
-  final String? email;
-  final String? countryCode;
-  final String? mobileNumber;
+  final RegisterPageInjectData data;
 
   const RegisterPage({
   super.key,
-  this.email,
-  this.countryCode,
-  this.mobileNumber,
+  required this.data,
   });
 
   @override
@@ -63,7 +66,7 @@ class _RegisterPageState extends StateBase<RegisterPage> {
           appBar: GenAppBar(
             title: Text(AppMessages.registerTitle),
           ),
-          backgroundColor: AppThemes.instance.currentTheme.primaryColor,
+          //backgroundColor: AppThemes.instance.currentTheme.primaryColor,
           body: SafeArea(
               child: buildBody()
           ),
@@ -83,10 +86,23 @@ class _RegisterPageState extends StateBase<RegisterPage> {
         ),
 
         Expanded(
-          child: Padding(
+          child: ListView(
             padding: const EdgeInsets.symmetric(horizontal: 25.0),
-            child: Center(),
-            ),
+            children: [
+              TextField(
+                controller: nameCtr,
+              ),
+
+              TextField(
+                controller: familyCtr,
+              ),
+
+              ElevatedButton(
+                  onPressed: (){},
+                  child: Text(AppMessages.registerTitle),
+              ),
+            ],
+          ),
         ),
       ],
     );

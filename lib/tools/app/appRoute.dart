@@ -1,8 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vosate_zehn/pages/e404_page.dart';
 import 'package:vosate_zehn/pages/home_page.dart';
 import 'package:vosate_zehn/pages/login/login_page.dart';
 import 'package:vosate_zehn/pages/login/register_page.dart';
+import 'package:vosate_zehn/pages/termPage.dart';
 import 'package:vosate_zehn/system/session.dart';
 import 'package:vosate_zehn/tools/app/appDb.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +16,8 @@ import '/tools/app/appNavigator.dart';
 
 
 class AppRoute {
+  static final List<GoRoute> freeRoutes = [];
+
   AppRoute._();
 
   static late BuildContext materialContext;
@@ -44,12 +48,22 @@ class AppRoute {
     GoRouter.of(context).pop();
   }
 
-  static void push(BuildContext context, String address) {
-    GoRouter.of(context).go(address);
+  static void push(BuildContext context, String address, {dynamic extra}) {
+    if(kIsWeb){
+      GoRouter.of(context).go(address, extra: extra);
+    }
+    else {
+      GoRouter.of(context).push(address, extra: extra);
+    }
   }
 
-  static void pushNamed(BuildContext context, String name) {
-    GoRouter.of(context).goNamed(name, params: {});
+  static void pushNamed(BuildContext context, String name, {dynamic extra}) {
+    if(kIsWeb){
+      GoRouter.of(context).goNamed(name, params: {}, extra: extra);
+    }
+    else {
+      GoRouter.of(context).pushNamed(name, params: {}, extra: extra);
+    }
   }
 
   static void reCallPage(BuildContext ctx, Widget page, {required String name, dynamic arguments}) {
@@ -57,6 +71,12 @@ class AppRoute {
     final current = AppNavigator.getModalRouteOf(ctx);
     AppNavigator.popRoutesUntil(ctx, current);
     AppNavigator.replaceCurrentRoute(ctx, page, name: name, data: arguments);
+  }
+
+  static void init(){
+    freeRoutes.add(LoginPage.route);
+    freeRoutes.add(RegisterPage.route);
+    freeRoutes.add(TermPage.route);
   }
 }
 ///============================================================================================
@@ -66,6 +86,7 @@ final routers = GoRouter(
       HomePage.route,
       LoginPage.route,
       RegisterPage.route,
+      TermPage.route,
     ],
     initialLocation: '/',
     errorBuilder: (BuildContext context, GoRouterState state) => const E404Page(),
@@ -74,16 +95,17 @@ final routers = GoRouter(
 );
 
 String? _redirect(GoRouterState state){
-  print('--redirect---> ${state.location}');
+  debugPrint('--redirect---> ${state.location}|p:${state.params}, p:${state.queryParams}');
 
   if(state.location == '/'){
     AppDirectories.generateNoMediaFile();
   }
 
   if(!Session.hasAnyLogin()){
-    final loginRoutes = [LoginPage.route.path];
-
-    if(!loginRoutes.contains(state.location)){
+    if(AppRoute.freeRoutes.any((r) => r.path == state.location)){
+      return state.queryParams['from_page'];
+    }
+    else {
       final from = state.subloc == '/' ? '' : '?from_page=${state.subloc}';
       return '${LoginPage.route.path}$from';
     }

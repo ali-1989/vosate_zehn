@@ -20,9 +20,11 @@ class DeviceInfoTools {
 
     if(System.isWeb()) {
       webDeviceInfo = await deviceInfoPlugin.webBrowserInfo;
-    } else if (Platform.isAndroid) {
+    }
+    else if (Platform.isAndroid) {
       androidDeviceInfo = await deviceInfoPlugin.androidInfo;
-    } else if (Platform.isIOS) {
+    }
+    else if (Platform.isIOS) {
       iosDeviceInfo = await deviceInfoPlugin.iosInfo;
     }
   }
@@ -49,6 +51,15 @@ class DeviceInfoTools {
   static Map<String, dynamic> getDeviceInfo() {
     final js = <String, dynamic>{};
 
+    if(kIsWeb){
+      js['device_type'] = 'Web';
+      js['model'] = webDeviceInfo?.appName;
+      js['brand'] = webDeviceInfo?.userAgent;
+      js['api'] = webDeviceInfo?.appVersion;
+
+      return js;
+    }
+
     if (System.isAndroid()) {
       js['device_type'] = 'Android';
       js['model'] = androidDeviceInfo?.model;
@@ -62,10 +73,7 @@ class DeviceInfoTools {
       js['api'] = iosDeviceInfo?.utsname.version.toString();
     }
     else {
-      js['device_type'] = 'Web';
-      js['model'] = webDeviceInfo?.appName;
-      js['brand'] = webDeviceInfo?.userAgent;
-      js['api'] = webDeviceInfo?.appVersion;
+      js['device_type'] = 'unKnow';
     }
 
     return js;

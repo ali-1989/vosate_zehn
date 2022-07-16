@@ -332,7 +332,7 @@ packages:
       name: flutter_plugin_android_lifecycle
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.6"
+    version: "2.0.7"
   flutter_spinkit:
     dependency: transitive
     description:
@@ -456,7 +456,7 @@ packages:
       name: image_size_getter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.0"
+    version: "2.1.2"
   import_sorter:
     dependency: "direct main"
     description:
@@ -476,10 +476,10 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "890682f3b9f9a5de72c42a7336350849100453ba"
+      resolved-ref: "6aafe2c02114db58ffaaea8f1f6ed2c9bf5438ab"
       url: "https://github.com/ali-1989/IrisDB.git"
     source: git
-    version: "0.0.1"
+    version: "0.0.4"
   iris_download_manager:
     dependency: "direct main"
     description:
@@ -494,7 +494,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: d7ed1be45941d8ad8266090fea7bcbc146c9a658
+      resolved-ref: "800e940ca8a01f684f35cc741a1e7e11887754da"
       url: "https://github.com/ali-1989/IrisTools.git"
     source: git
     version: "0.0.2"
@@ -504,7 +504,7 @@ packages:
       name: jiffy
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.1.0"
+    version: "5.0.0"
   js:
     dependency: transitive
     description:
@@ -611,12 +611,12 @@ packages:
     source: hosted
     version: "3.2.1"
   path:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
       name: path
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.8.1"
+    version: "1.8.2"
   path_provider:
     dependency: transitive
     description:
@@ -915,7 +915,7 @@ packages:
       name: url_launcher
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.1.4"
+    version: "6.1.5"
   url_launcher_android:
     dependency: transitive
     description:
@@ -999,7 +999,7 @@ packages:
       name: video_player_android
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.3.6"
+    version: "2.3.7"
   video_player_avfoundation:
     dependency: transitive
     description:

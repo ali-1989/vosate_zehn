@@ -9,30 +9,31 @@ import 'package:flutter/material.dart';
 class AppSizes {
   AppSizes._();
 
+  static final _instance = AppSizes._();
   static bool _initialState = false;
-  static double? realPixelWidth;
-  static double? realPixelHeight;
-  static double? pixelRatio;
-  static double? appWidth;    //Tecno: 360.0  Web: 1200
-  static double? appHeight;  //Tecno: 640.0  Web: 620
-  static double textMultiplier = 6; // Tecno: ~6.4
-  static double imageMultiplier = 1;
-  static double heightMultiplier = 1;
-  static ui.WindowPadding? rootPadding;
-  static List<Function> onMetricListeners = [];
-  static Function? _systemMetricFunc;
 
-
-  static void initial(){
-    if(_initialState) {
-      return;
+  static AppSizes get instance {
+    if(!_initialState){
+      _initialState = true;
+      _instance._initial();
     }
 
-    _initial();
-    _initialState = true;
+    return _instance;
   }
 
-  static void _prepareSizes() {
+  double? realPixelWidth;
+  double? realPixelHeight;
+  double? pixelRatio;
+  double? appWidth;    //Tecno: 360.0  Web: 1200
+  double? appHeight;  //Tecno: 640.0  Web: 620
+  double textMultiplier = 6; // Tecno: ~6.4
+  double imageMultiplier = 1;
+  double heightMultiplier = 1;
+  ui.WindowPadding? rootPadding;
+  List<Function> onMetricListeners = [];
+  Function? _systemMetricFunc;
+
+  void _prepareSizes() {
     realPixelWidth = ui.window.physicalSize.width;
     realPixelHeight = ui.window.physicalSize.height;
     pixelRatio = ui.window.devicePixelRatio;
@@ -55,7 +56,7 @@ class AppSizes {
     }
   }
 
-  static void _initial() {
+  void _initial() {
     _prepareSizes();
     onMetricListeners = [];
     _systemMetricFunc = ui.window.onMetricsChanged;
@@ -104,11 +105,11 @@ class AppSizes {
     heightMultiplier = appHeight / 100;
   }*/
 
-  static void addMetricListener(Function(double oldW, double oldH, double newW, double newH) lis){
+  void addMetricListener(Function(double oldW, double oldH, double newW, double newH) lis){
     onMetricListeners.add(lis);
   }
 
-  static void removeMetricListener(Function lis){
+  void removeMetricListener(Function lis){
     onMetricListeners.remove(lis);
   }
   ///●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●
@@ -120,19 +121,19 @@ class AppSizes {
     return ui.window.physicalSize;
   }
 
-  static double mTextSize(double tSize){
+  double mTextSize(double tSize){
     return tSize * textMultiplier;
   }
 
-  static double mImageSize(double iSize){
+  double mImageSize(double iSize){
     return iSize * imageMultiplier;
   }
 
-  static double mSize(double size){
+  double mSize(double size){
     return size * heightMultiplier; // ~6.4
   }
 
-  static double fwSize(double s){
+  double fwSize(double s){
     if(kIsWeb) {
       return s * 1.3;
     }
@@ -153,7 +154,7 @@ class AppSizes {
     return size;
   }
 
-  static double? getPixelRatio(){
+  double? getPixelRatio(){
     return pixelRatio;
   }
 
