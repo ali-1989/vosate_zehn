@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iris_tools/api/helpers/mathHelper.dart';
+import 'package:iris_tools/dateSection/ADateStructure.dart';
+import 'package:iris_tools/dateSection/dateHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
-import 'package:vosate_zehn/pages/termPage.dart';
+import 'package:vosate_zehn/system/keys.dart';
+import 'package:vosate_zehn/system/requester.dart';
 import 'package:vosate_zehn/system/stateBase.dart';
 import 'package:vosate_zehn/tools/app/appImages.dart';
 import 'package:vosate_zehn/tools/app/appMessages.dart';
-import 'package:vosate_zehn/tools/app/appNavigator.dart';
 import 'package:vosate_zehn/tools/app/appSheet.dart';
-import 'package:vosate_zehn/tools/app/appThemes.dart';
+import 'package:vosate_zehn/views/dateViews/selectDateCalendarView.dart';
 import 'package:vosate_zehn/views/genAppBar.dart';
-
+import 'package:toggle_switch/toggle_switch.dart';
 
 class RegisterPageInjectData {
   String? email;
@@ -22,14 +24,14 @@ class RegisterPage extends StatefulWidget {
   static final route = GoRoute(
     path: '/register',
     name: (RegisterPage).toString().toLowerCase(),
-    builder: (BuildContext context, GoRouterState state) => RegisterPage(data: state.extra! as RegisterPageInjectData,),
+    builder: (BuildContext context, GoRouterState state) => RegisterPage(injectData: state.extra! as RegisterPageInjectData,),
   );
 
-  final RegisterPageInjectData data;
+  final RegisterPageInjectData injectData;
 
   const RegisterPage({
   super.key,
-  required this.data,
+  required this.injectData,
   });
 
   @override
@@ -39,7 +41,10 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends StateBase<RegisterPage> {
   late TextEditingController nameCtr;
   late TextEditingController familyCtr;
-
+  DateTime? birthDate;
+  late Requester requester;
+  late InputDecoration inputDecor;
+  int gender = 1;
 
   @override
   void initState(){
@@ -47,12 +52,21 @@ class _RegisterPageState extends StateBase<RegisterPage> {
 
     nameCtr = TextEditingController();
     familyCtr = TextEditingController();
+    requester = Requester();
+
+    inputDecor = InputDecoration(
+      isDense: true,
+      border: OutlineInputBorder(),
+      enabledBorder: OutlineInputBorder(),
+      focusedBorder: OutlineInputBorder(),
+    );
   }
 
   @override
   void dispose(){
     super.dispose();
 
+    requester.dispose();
     nameCtr.dispose();
     familyCtr.dispose();
   }
@@ -78,27 +92,80 @@ class _RegisterPageState extends StateBase<RegisterPage> {
   Widget buildBody(){
     return Column(
       children: [
-        SizedBox(
-          height: MathHelper.percent(MediaQuery.of(context).size.height, 30),
-          child: Center(
-            child: Image.asset(AppImages.appIcon, width: 100, height: 100,),
-          ),
-        ),
+
 
         Expanded(
           child: ListView(
             padding: const EdgeInsets.symmetric(horizontal: 25.0),
             children: [
+              SizedBox(
+                height: MathHelper.percent(MediaQuery.of(context).size.height, 30),
+                child: Center(
+                  child: Image.asset(AppImages.appIcon, width: 100, height: 100,),
+                ),
+              ),
+              //Text('${AppMessages.name}:'),
+
               TextField(
                 controller: nameCtr,
+                textInputAction: TextInputAction.next,
+                decoration: inputDecor.copyWith(
+                  hintText: AppMessages.name,
+                  label: Text(AppMessages.name),
+                ),
               ),
+
+              SizedBox(height: 20),
 
               TextField(
                 controller: familyCtr,
+                decoration: inputDecor.copyWith(
+                  hintText: AppMessages.family,
+                  alignLabelWithHint: true,
+                  label: Text(AppMessages.family),
+                ),
               ),
 
+              SizedBox(height: 20),
+              Text('${AppMessages.gender}:'),
+
+              SizedBox(height: 10),
+              Row(
+                children: [
+                  ToggleSwitch(
+                    initialLabelIndex: gender-1,
+                    totalSwitches: 2,
+                    animate: true,
+                    textDirectionRTL: true,
+                    animationDuration: 400,
+                    labels: [AppMessages.man, AppMessages.woman],
+                    onToggle: (index) {
+                      if(index != null){
+                        gender = index+1;
+                      }
+                    },
+                  ),
+                ],
+              ),
+
+              SizedBox(height: 10),
+              Row(
+                children: [
+                  Text('${AppMessages.age}:'),
+
+                  SizedBox(width: 15),
+                  TextButton(
+                    onPressed: (){
+                      onSelectDateCall();
+                    },
+                    child: Text(genBirthDateText()),
+                  ),
+                ],
+              ),
+
+              SizedBox(height: 20),
               ElevatedButton(
-                  onPressed: (){},
+                  onPressed: onRegisterCall,
                   child: Text(AppMessages.registerTitle),
               ),
             ],
@@ -108,28 +175,86 @@ class _RegisterPageState extends StateBase<RegisterPage> {
     );
   }
 
-  void gotoTermPage(){
-    AppNavigator.pushNextPage(
-        context,
-        const TermPage(),
-        name: 'TermPage');
-  }
+  void onRegisterCall() async {
+    final name = nameCtr.text.trim();
+    final family = familyCtr.text.trim();
 
-  void onValidationCall() async {
-
-
-    final result = true;
-
-    if(result == null){
-      AppSheet.showSheet$ErrorCommunicatingServer(context);
+    if(name.isEmpty || family.isEmpty){
+      AppSheet.showSheetOk(context, AppMessages.pleaseEnterNameFamily);
       return;
     }
 
-    if(result){
+    if(birthDate == null){
+      AppSheet.showSheetOk(context, AppMessages.pleaseSelectAge);
+      return;
+    }
 
+    requestRegister();
+  }
+
+  String genBirthDateText() {
+    if(birthDate == null){
+      return AppMessages.select;
     }
-    else {
-      AppSheet.showSheetOk(context, AppMessages.otpCodeIsInvalid);
-    }
+
+    return '${DateHelper.calculateAge(birthDate)}';
+  }
+
+  void onSelectDateCall() {
+    AppSheet.showModalSheet(
+        context,
+        builder: (context){
+          return SelectDateCalendarView(
+            onSelect: (dt){
+              birthDate = dt;
+              assistCtr.updateMain();
+              AppSheet.closeSheet(context);
+            },
+            //title: 'تاریخ تولد',
+            onChange: (dt){
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal:10.0),
+                child: Text('${AppMessages.age}: ${DateHelper.calculateAge(dt)}',
+                  style: TextStyle(fontWeight: FontWeight.w400),
+                ),
+              );
+            },
+            currentDate: birthDate,
+            minYear: 1922,
+            maxYear: GregorianDate().getYear(),
+          );
+        }
+    );
+  }
+
+  void requestRegister(){
+    final name = nameCtr.text.trim();
+    final family = familyCtr.text.trim();
+
+    final js = <String, dynamic>{};
+    js[Keys.requestZone] = 'register_user';
+    js[Keys.name] = name;
+    js[Keys.family] = family;
+    js[Keys.birthdate] = DateHelper.toTimestampDate(birthDate!);
+    js[Keys.sex] = gender;
+
+
+    requester.prepareUrl();
+    requester.bodyJson = js;
+
+    requester.httpRequestEvents.onAnyState = (req) async {
+      hideLoading();
+    };
+
+    requester.httpRequestEvents.onFailState = (req) async {
+      print('err');
+    };
+
+    requester.httpRequestEvents.onStatusOk = (req, data) async {
+      print('ok');
+    };
+
+    showLoading();
+    requester.request(context);
   }
 }

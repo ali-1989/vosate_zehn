@@ -19,6 +19,34 @@ class AppMessages {
     return AppRoute.getContext().tC('no')?? _noText;
   }
 
+  static String get select {
+    return AppRoute.getContext().tC('select')?? _noText;
+  }
+
+  static String get name {
+    return AppRoute.getContext().tC('name')?? _noText;
+  }
+
+  static String get family {
+    return AppRoute.getContext().tC('family')?? _noText;
+  }
+
+  static String get age {
+    return AppRoute.getContext().tC('age')?? _noText;
+  }
+
+  static String get gender {
+    return AppRoute.getContext().tC('gender')?? _noText;
+  }
+
+  static String get man {
+    return AppRoute.getContext().tC('man')?? _noText;
+  }
+
+  static String get woman {
+    return AppRoute.getContext().tC('woman')?? _noText;
+  }
+
   static String get notice {
     return AppRoute.getContext().t('notice')?? _noText;
   }
@@ -193,5 +221,13 @@ class AppMessages {
 
   static String get pleaseEnterVerifyCode {
     return 'لطفا کد ارسال شده را وارد کنید';
+  }
+
+  static String get pleaseEnterNameFamily {
+    return 'لطفا نام و نام خانوادگی خود را کامل وارد کنید';
+  }
+
+  static String get pleaseSelectAge {
+    return 'لطفا سن خود را انتخاب کنید';
   }
 }

@@ -18,7 +18,6 @@ class UserModel {
   CountryModel countryModel = CountryModel();
   String? email;
   int? userType;
-  String? bio;
   //---------------- locale
   DateTime? loginDate;
 
@@ -42,7 +41,6 @@ class UserModel {
     countryModel = CountryModel.fromMap(map['country_js']);
     email = map['email'];
     userType = map['user_type'];
-    bio = map['bio'];
 
     if(brDate is int) {
       birthDate = DateHelper.milToDateTime(brDate);
@@ -82,7 +80,6 @@ class UserModel {
     map[Keys.profileImageUrl] = profileImageUrl;
     map['email'] = email;
     map['user_type'] = userType;
-    map['bio'] = bio;
 
     if (token != null) {
       map['token'] = token!.toJson();
@@ -111,7 +108,6 @@ class UserModel {
     email = other.email;
     userType = other.userType;
     countryModel = other.countryModel;
-    bio = other.bio;
     token = other.token;
 
     //--------------------------------- local

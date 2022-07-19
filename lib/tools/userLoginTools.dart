@@ -36,7 +36,7 @@ class UserLoginTools {
   static void sendLogoffState(UserModel user){
     if(AppBroadcast.isNetConnected){
       final reqJs = <String, dynamic>{};
-      reqJs[Keys.request] = 'LogoffUserReport';
+      reqJs[Keys.requestZone] = 'LogoffUserReport';
       reqJs[Keys.id] = user.userId;
 
       AppManager.addAppInfo(reqJs, curUser: user);
@@ -66,7 +66,7 @@ class UserLoginTools {
 
   static Future<bool> requestProfileInfo(String userId) async{
     final reqJs = <String, dynamic>{};
-    reqJs[Keys.request] = 'GetProfileInfo';
+    reqJs[Keys.requestZone] = 'GetProfileInfo';
     reqJs[Keys.id] = userId;
 
     AppManager.addAppInfo(reqJs);

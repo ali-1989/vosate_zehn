@@ -27,7 +27,7 @@ class AppManager {
     return src;
   }
 
-  static Map<String, dynamic> addAppInfo(Map<String, dynamic> src, {UserModel? curUser}) {
+  static Map addAppInfo(Map src, {UserModel? curUser}) {
     final token = curUser?.token ?? Session.getLastLoginUser()?.token;
 
     src.addAll(getAppInfo(token?.token));

@@ -179,14 +179,12 @@ class SplashScreenState extends State<SplashPage> {
 
     if (!_isLoadingSettings) {
       await Session.fetchLoginUsers();
-
+      await checkInstallVersion();
       await InitialApplication.onceInit(context);
 
       AppBroadcast.reBuildMaterialBySetTheme();
       asyncInitial(context);
     }
-
-    await checkInstallVersion();
   }
 
   Future<bool> prepareReporter() async {

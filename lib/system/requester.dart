@@ -57,6 +57,10 @@ class Requester {
     _http.fullUrl = SettingsManager.settingsModel.httpAddress;
   }
 
+  void prepareUrl(){
+    _http.fullUrl += '/graph-v1';
+  }
+
   void request([BuildContext? context]){
     _http.debugMode = debug;
     _http.method = methodType == MethodType.get ? 'GET': 'POST';
@@ -142,6 +146,10 @@ class Requester {
 
       return null;
     });
+  }
+
+  void dispose(){
+    AppHttpDio.cancelAndClose(_httpRequester);
   }
 }
 ///================================================================================================

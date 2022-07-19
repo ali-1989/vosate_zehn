@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
+import 'package:shaped_bottom_bar/models/shaped_item_object.dart';
+import 'package:shaped_bottom_bar/shaped_bottom_bar.dart';
+import 'package:shaped_bottom_bar/utils/arrays.dart';
 import 'package:vosate_zehn/pages/e404_page.dart';
 import 'package:vosate_zehn/system/stateBase.dart';
 import 'package:vosate_zehn/tools/app/appRoute.dart';
@@ -19,6 +22,8 @@ class HomePage extends StatefulWidget {
 }
 ///=================================================================================================
 class _HomePageState extends StateBase<HomePage> {
+  int selectedItem = 0;
+
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +35,7 @@ class _HomePageState extends StateBase<HomePage> {
           body: SafeArea(
               child: buildBody()
           ),
+          bottomNavigationBar: genNavBar(),
         );
       }
     );
@@ -66,6 +72,28 @@ class _HomePageState extends StateBase<HomePage> {
               child: Text('bay')
           );
         }
+    );
+  }
+
+  Widget genNavBar(){
+    return ShapedBottomBar(
+        backgroundColor:  Colors.grey,
+        iconsColor:  Colors.white,
+        listItems: [
+          ShapedItemObject(iconData: Icons.settings, title: 'Settings'),
+          ShapedItemObject(iconData: Icons.account_balance_outlined, title: 'Account'),
+          ShapedItemObject(iconData: Icons.verified_user_rounded, title: 'User'),
+          ShapedItemObject(iconData: Icons.login, title: 'Logout'),
+        ],
+        onItemChanged: (position) {
+          setState(() {
+            selectedItem = position;
+          });
+        },
+        shapeColor: Colors.pink,
+        selectedIconColor: Colors.white,
+        shape: ShapeType.HEXAGONE,
+        animationType: ANIMATION_TYPE.ROTATE,
     );
   }
 }

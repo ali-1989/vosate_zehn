@@ -69,9 +69,9 @@ class AppSheet {
     return res;
   }
 
-  static Future<T?> showModalSheet<T>(BuildContext ctx,
-      Widget Function(BuildContext context) builder, {
-        Color? backgroundColor,
+  static Future<T?> showModalSheet<T>(BuildContext ctx, {
+        required Widget Function(BuildContext context) builder,
+    Color? backgroundColor,
         Color? barrierColor,
         double elevation = 1.0,
         ShapeBorder? shape,
@@ -143,7 +143,7 @@ class AppSheet {
 
     return showModalSheet<T>(
       context,
-          (ctx) => body,
+      builder: (ctx) => body,
       isDismissible: isDismissible,
       isScrollControlled: false,
       routeName: routeName ?? Generator.generateKey(5),
@@ -209,7 +209,7 @@ class AppSheet {
 
     return showModalSheet<T>(
       context,
-          (ctx) => body,
+      builder: (ctx) => body,
       isDismissible: isDismissible,
       isScrollControlled: true,
       routeName: routeName ?? Generator.generateKey(5),
@@ -261,7 +261,7 @@ class AppSheet {
     }
 
     return showModalSheet<T>(context,
-          (ctx) => body,
+      builder: (ctx) => body,
       backgroundColor: backgroundColor,
       isDismissible: isDismissible,
       isScrollControlled: isScrollControlled,
@@ -433,7 +433,7 @@ class AppSheet {
     ).wrapListTileTheme();
 
     showModalSheet(ctx,
-          (context) => view,
+      builder: (context) => view,
       routeName: routeName,
       backgroundColor: backgroundColor ?? Colors.transparent,
       elevation: 0,

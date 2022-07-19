@@ -275,7 +275,7 @@
 
   "calendarOptions": {
     "gregorian": "میلادی",
-    "solar-hijri": "هجری-شمسی"
+    "solarHijri": "هجری-شمسی"
   },
 
   "dateSection" : {

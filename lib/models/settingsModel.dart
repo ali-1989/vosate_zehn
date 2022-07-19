@@ -29,11 +29,11 @@ class SettingsModel {
   static int maxViewHeightL = 200;
   static int maxViewHeightP = 460;
 
-  static const defaultHttpAddress = 'http://192.168.10.10:4554/';
-  static const defaultWsAddress = 'ws://192.168.10.10:4554/';
+  static const defaultHttpAddress = 'http://192.168.1.105:7436/';
+  static const defaultWsAddress = 'ws://192.168.1.105:7445/';
   static const defaultProxyAddress = '95.174.67.50:18080';
   static const Locale defaultAppLocale = Locale('fa', 'IR');
-  static final CalendarType defaultCalendarType = CalendarType.byType(TypeOfCalendar.solarHijri);
+  static final CalendarType defaultCalendarType = CalendarType.solarHijri;
   static final defaultDateFormat = DateFormat.yyyyMmDd.format();
 
   SettingsModel();
@@ -46,7 +46,7 @@ class SettingsModel {
     }
 
     lastUserId = map['last_user_id'];
-    calendarType = CalendarType.byName(map['calendar_type_name']);
+    calendarType = CalendarTypeHelper.calendarTypeFrom(map['calendar_type_name']);
     dateFormat = map['date_format']?? defaultDateFormat;
     colorTheme = map[Keys.setting$ColorThemeName];
     appPatternKey = map[Keys.setting$patternKey];

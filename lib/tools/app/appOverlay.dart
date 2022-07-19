@@ -21,7 +21,7 @@ class AppOverlay {
   }
 
   static Future showIgnoreScreen(BuildContext context){
-    return OverlayDialog().show(context, _ignoreScreen);
+    return OverlayDialog().show(context, _ignoreScreen, canBack: false);
   }
 
   static void hideIgnoreScreen(BuildContext context){

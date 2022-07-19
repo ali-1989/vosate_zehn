@@ -88,7 +88,9 @@ class AppLoading {
       maskType: EasyLoadingMaskType.custom,
     );
 
-    AppOverlay.showIgnoreScreen(context/*AppRoute.getContext()*/);
+     if(!dismiss) {
+       AppOverlay.showIgnoreScreen(context /*AppRoute.getContext()*/);
+     }
   }
 
   Future<void> hideLoading(BuildContext context, {bool byAnimation = true}){
@@ -96,10 +98,10 @@ class AppLoading {
     return EasyLoading.dismiss(animation: byAnimation);
   }
 
-  Future<void> showWaitingIgnore(BuildContext context, {bool dismiss = false}) async {
+  Future<void> showWaitingIgnore(BuildContext context) async {
     EasyLoading.show(
       status: AppMessages.pleaseWait,
-      dismissOnTap: dismiss,
+      dismissOnTap: false,
       maskType: EasyLoadingMaskType.custom,
     );
 

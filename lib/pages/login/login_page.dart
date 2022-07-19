@@ -8,10 +8,11 @@ import 'package:iris_tools/api/helpers/mathHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:vosate_zehn/models/countryModel.dart';
+import 'package:vosate_zehn/pages/home_page.dart';
 import 'package:vosate_zehn/pages/login/register_page.dart';
 import 'package:vosate_zehn/pages/termPage.dart';
 import 'package:vosate_zehn/services/google_service.dart';
-import 'package:vosate_zehn/services/login.dart';
+import 'package:vosate_zehn/services/login_service.dart';
 import 'package:vosate_zehn/system/stateBase.dart';
 import 'package:vosate_zehn/tools/app/appImages.dart';
 import 'package:vosate_zehn/tools/app/appLoading.dart';
@@ -356,23 +357,35 @@ class _LoginPageState extends StateBase<LoginPage> {
     injectData.countryCode = countryCode;
     injectData.mobileNumber = phoneNumber;
 
-    if(pinCode == '1111'){
+    /*if(pinCode == '1111'){
       AppRoute.push(context, RegisterPage.route.path, extra: injectData);
       return;
-    }
+    }*/
 
     final result = await LoginService.requestSendVerify(countryCode: countryCode, phoneNumber: phoneNumber, code: pinCode);
 
-    if(result == null){
+    if(result.connectionError){
       AppSheet.showSheet$ErrorCommunicatingServer(context);
       return;
     }
 
-    if(result){
-      AppRoute.push(context, RegisterPage.route.path, extra: injectData);
+    if(result.isBlock){
+      AppSheet.showSheet$AccountIsBlock(context);
+      return;
     }
-    else {
+
+    if(!result.isVerify){
       AppSheet.showSheetOk(context, AppMessages.otpCodeIsInvalid);
+      return;
+    }
+
+    if(result.isVerify) {
+      if (result.userModel == null) {
+        AppRoute.push(context, RegisterPage.route.path, extra: injectData);
+      }
+      else {
+        AppRoute.push(context, HomePage.route.path);
+      }
     }
   }
 }
