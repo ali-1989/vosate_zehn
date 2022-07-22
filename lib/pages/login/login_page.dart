@@ -23,6 +23,7 @@ import 'package:vosate_zehn/tools/app/appSheet.dart';
 import 'package:vosate_zehn/tools/app/appSnack.dart';
 import 'package:vosate_zehn/tools/app/appThemes.dart';
 import 'package:vosate_zehn/tools/app/appToast.dart';
+import 'package:vosate_zehn/tools/countryTools.dart';
 import 'package:vosate_zehn/views/phoneNumberInput.dart';
 import 'package:vosate_zehn/views/screens/countrySelect.dart';
 import 'package:flip_card/flip_card.dart';
@@ -45,7 +46,7 @@ class _LoginPageState extends StateBase<LoginPage> {
   late FlipCardController flipCardController;
   ValueKey timerKey = const ValueKey('1');
   ValueKey pinCodeKey = const ValueKey('1');
-  String countryCode = '+98';
+  CountryModel countryModel = CountryModel();
   String phoneNumber = '';
   String pinCode = '';
   int timerValue = 60;
@@ -58,6 +59,11 @@ class _LoginPageState extends StateBase<LoginPage> {
     flipCardController = FlipCardController();
     phoneNumberController = PhoneNumberInputController();
     phoneNumberController.setOnTapCountryArrow(onTapCountryArrow);
+
+    CountryTools.fetchCountries().then((value) {
+      countryModel = CountryTools.countryModelByCountryIso('IR');
+      assistCtr.updateMain();
+    });
   }
 
   @override
@@ -122,7 +128,7 @@ class _LoginPageState extends StateBase<LoginPage> {
 
           PhoneNumberInput(
             controller: phoneNumberController,
-            countryCode: countryCode,
+            countryCode: countryModel.countryPhoneCode,
             numberHint: AppMessages.mobileNumber,
           ),
 
@@ -173,7 +179,7 @@ class _LoginPageState extends StateBase<LoginPage> {
         padding: const EdgeInsets.symmetric(horizontal: 20),
         children: [
           const SizedBox(height: 30),
-          Text(AppMessages.enterVerifyCode.replaceFirst('#', LocaleHelper.embedLtr('$countryCode $phoneNumber')),
+          Text(AppMessages.enterVerifyCode.replaceFirst('#', LocaleHelper.embedLtr('${countryModel.countryPhoneCode} $phoneNumber')),
             style: const TextStyle(fontWeight: FontWeight.bold),),
 
           const SizedBox(height: 10,),
@@ -267,18 +273,40 @@ class _LoginPageState extends StateBase<LoginPage> {
     final google = GoogleService();
 
     AppLoading.instance.showWaitingIgnore(context);
-    final result = await google.signIn();
-    AppLoading.instance.hideWaitingIgnore(context);
+    final googleResult = await google.signIn();
 
-    if(result == null){
+    if(googleResult == null){
+      AppLoading.instance.hideWaitingIgnore(context);
+
       AppSheet.showSheet$OperationFailed(context);
       return;
     }
     else {
       final injectData = RegisterPageInjectData();
-      injectData.email = result.email;
+      injectData.email = googleResult.email;
 
-      AppRoute.push(context, RegisterPage.route.path, extra: injectData);
+      final result = await LoginService.requestVerifyEmail(email: googleResult.email);
+      AppLoading.instance.hideWaitingIgnore(context);
+
+      if(result.connectionError){
+        AppSheet.showSheet$ErrorCommunicatingServer(context);
+        return;
+      }
+
+      if(result.isBlock){
+        AppSheet.showSheet$AccountIsBlock(context);
+        return;
+      }
+
+      if(result.isVerify) {
+        if (result.userModel == null) {
+          AppRoute.push(context, RegisterPage.route.path, extra: injectData);
+        }
+        else {
+          //todo: save user data
+          AppRoute.push(context, HomePage.route.path);
+        }
+      }
     }
   }
 
@@ -293,8 +321,8 @@ class _LoginPageState extends StateBase<LoginPage> {
         const CountrySelectScreen(),
         name: 'CountrySelect').then((value) {
           if(value is CountryModel){
-            countryCode = '${value.countryPhoneCode}';
-            phoneNumberController.getCountryController()?.text = countryCode;
+            countryModel = value;
+            phoneNumberController.getCountryController()?.text = countryModel.countryPhoneCode!;
           }
     });
   }
@@ -308,10 +336,10 @@ class _LoginPageState extends StateBase<LoginPage> {
   }
 
   void onSendCall(){
-    countryCode = phoneNumberController.getCountryCode()!;
+    countryModel.countryPhoneCode = phoneNumberController.getCountryCode()!;
     phoneNumber = phoneNumberController.getPhoneNumber()!;
 
-    if(countryCode.isEmpty){
+    if(countryModel.countryPhoneCode!.isEmpty){
       AppSnack.showInfo(context, AppMessages.enterCountryCode);
       return;
     }
@@ -321,8 +349,8 @@ class _LoginPageState extends StateBase<LoginPage> {
       return;
     }
 
-    if(!countryCode.startsWith('+')){
-      countryCode = '+$countryCode';
+    if(!countryModel.countryPhoneCode!.startsWith('+')){
+      countryModel.countryPhoneCode = '+${countryModel.countryPhoneCode}';
     }
 
     if(phoneNumber.startsWith('0')){
@@ -333,7 +361,7 @@ class _LoginPageState extends StateBase<LoginPage> {
     pinCodeKey = ValueKey(Generator.generateKey(2));
     callState();
 
-    LoginService.requestSendOtp(countryCode: countryCode, phoneNumber: phoneNumber).then((value) {
+    LoginService.requestSendOtp(countryModel: countryModel, phoneNumber: phoneNumber).then((value) {
       if(value == null){
         AppToast.showToast(AppMessages.errorCommunicatingServer);
       }
@@ -343,7 +371,7 @@ class _LoginPageState extends StateBase<LoginPage> {
   }
 
   void reSendOtpCodeCall() async {
-    LoginService.requestSendOtp(countryCode: countryCode, phoneNumber: phoneNumber);
+    LoginService.requestSendOtp(countryModel: countryModel, phoneNumber: phoneNumber);
     AppToast.showToast(AppMessages.otpCodeIsResend);
   }
 
@@ -354,7 +382,7 @@ class _LoginPageState extends StateBase<LoginPage> {
     }
 
     final injectData = RegisterPageInjectData();
-    injectData.countryCode = countryCode;
+    injectData.countryModel = countryModel;
     injectData.mobileNumber = phoneNumber;
 
     /*if(pinCode == '1111'){
@@ -362,7 +390,7 @@ class _LoginPageState extends StateBase<LoginPage> {
       return;
     }*/
 
-    final result = await LoginService.requestSendVerify(countryCode: countryCode, phoneNumber: phoneNumber, code: pinCode);
+    final result = await LoginService.requestVerifyOtp(countryModel: countryModel, phoneNumber: phoneNumber, code: pinCode);
 
     if(result.connectionError){
       AppSheet.showSheet$ErrorCommunicatingServer(context);
@@ -384,6 +412,7 @@ class _LoginPageState extends StateBase<LoginPage> {
         AppRoute.push(context, RegisterPage.route.path, extra: injectData);
       }
       else {
+        //todo: save user
         AppRoute.push(context, HomePage.route.path);
       }
     }

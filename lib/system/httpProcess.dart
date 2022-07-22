@@ -11,7 +11,7 @@ import '/system/keys.dart';
 class HttpProcess {
   HttpProcess._();
 
-  static String graphApi = '${SettingsManager.settingsModel.httpAddress}/graph_v1';
+  static String graphApi = '${SettingsManager.settingsModel.httpAddress}/graph-v1';
 
   static bool processCommonRequestError(BuildContext context, Map json) {
     final int causeCode = json[Keys.causeCode] ?? 0;

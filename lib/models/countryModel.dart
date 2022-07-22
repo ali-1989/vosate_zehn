@@ -1,4 +1,6 @@
 
+import 'package:vosate_zehn/system/keys.dart';
+
 class CountryModel {
   String? countryName;
   String? nativeName;
@@ -11,8 +13,8 @@ class CountryModel {
     if(map != null) {
       countryName = map['country_name'];
       nativeName = map['native_name'];
-      countryIso = map['country_iso'];
-      countryPhoneCode = map['phone_code'];
+      countryIso = map[Keys.countryIso];
+      countryPhoneCode = map[Keys.phoneCode];
     }
   }
 
@@ -20,8 +22,8 @@ class CountryModel {
     return {
       'country_name': countryName,
       'native_name': nativeName,
-      'country_iso': countryIso,
-      'phone_code': countryPhoneCode,
+      Keys.countryIso: countryIso,
+      Keys.phoneCode: countryPhoneCode,
     };
   }
 }

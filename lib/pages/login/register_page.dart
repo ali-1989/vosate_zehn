@@ -4,6 +4,7 @@ import 'package:iris_tools/api/helpers/mathHelper.dart';
 import 'package:iris_tools/dateSection/ADateStructure.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
+import 'package:vosate_zehn/models/countryModel.dart';
 import 'package:vosate_zehn/system/keys.dart';
 import 'package:vosate_zehn/system/requester.dart';
 import 'package:vosate_zehn/system/stateBase.dart';
@@ -16,7 +17,7 @@ import 'package:toggle_switch/toggle_switch.dart';
 
 class RegisterPageInjectData {
   String? email;
-  String? countryCode;
+  CountryModel? countryModel;
   String? mobileNumber;
 }
 ///=================================================================================
@@ -92,8 +93,6 @@ class _RegisterPageState extends StateBase<RegisterPage> {
   Widget buildBody(){
     return Column(
       children: [
-
-
         Expanded(
           child: ListView(
             padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -238,6 +237,12 @@ class _RegisterPageState extends StateBase<RegisterPage> {
     js[Keys.birthdate] = DateHelper.toTimestampDate(birthDate!);
     js[Keys.sex] = gender;
 
+    if(widget.injectData.countryModel != null) {
+      js.addAll(widget.injectData.countryModel!.toMap());
+    }
+    else {
+      js['email'] = widget.injectData.email;
+    }
 
     requester.prepareUrl();
     requester.bodyJson = js;
