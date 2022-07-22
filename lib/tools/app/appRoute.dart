@@ -88,25 +88,25 @@ final routers = GoRouter(
       RegisterPage.route,
       TermPage.route,
     ],
-    initialLocation: '/',
+    initialLocation: HomePage.route.path,
     errorBuilder: (BuildContext context, GoRouterState state) => const E404Page(),
     //refreshListenable: loginInfo, //GoRouterRefreshStream(streamController.stream),
     redirect: _redirect,
 );
 
 String? _redirect(GoRouterState state){
-  debugPrint('--redirect---> ${state.location}|p:${state.params}, p:${state.queryParams}');
+  debugPrint('--redirect---> ${state.subloc}         |  qp:${state.queryParams}');
 
-  if(state.location == '/'){
+  if(state.subloc == HomePage.route.path){
     AppDirectories.generateNoMediaFile();
   }
 
   if(!Session.hasAnyLogin()){
-    if(AppRoute.freeRoutes.any((r) => r.path == state.location)){
+    if(AppRoute.freeRoutes.any((r) => r.path == state.subloc)){
       return state.queryParams['from_page'];
     }
     else {
-      final from = state.subloc == '/' ? '' : '?from_page=${state.subloc}';
+      final from = state.subloc == '/' ? '' : '?from_page=${state.location}';
       return '${LoginPage.route.path}$from';
     }
   }

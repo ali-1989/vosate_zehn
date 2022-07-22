@@ -2,12 +2,11 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:vosate_zehn/models/countryModel.dart';
-import 'package:vosate_zehn/models/userModel.dart';
 import 'package:vosate_zehn/system/httpCodes.dart';
-import 'package:vosate_zehn/system/httpProcess.dart';
 import 'package:vosate_zehn/system/keys.dart';
 import 'package:vosate_zehn/tools/app/appHttpDio.dart';
 import 'package:vosate_zehn/tools/app/appManager.dart';
+import 'package:vosate_zehn/tools/publicAccess.dart';
 
 class LoginService {
   LoginService._();
@@ -22,7 +21,7 @@ class LoginService {
     js.addAll(countryModel.toMap());
     AppManager.addAppInfo(js);
 
-    http.fullUrl = HttpProcess.graphApi;
+    http.fullUrl = PublicAccess.graphApi;
     http.method = 'POST';
     http.setBodyJson(js);
 
@@ -55,7 +54,7 @@ class LoginService {
     js.addAll(countryModel.toMap());
     AppManager.addAppInfo(js);
 
-    http.fullUrl = HttpProcess.graphApi;
+    http.fullUrl = PublicAccess.graphApi;
     http.method = 'POST';
     http.setBodyJson(js);
 
@@ -76,6 +75,7 @@ class LoginService {
       final resJs = request.getBodyAsJson()!;
       final status = resJs[Keys.status];
       loginWrapper.causeCode = resJs[Keys.causeCode]?? 0;
+      loginWrapper.jsResult = resJs;
 
       if(status == Keys.error){
         loginWrapper.hasError = true;
@@ -89,12 +89,6 @@ class LoginService {
       }
       else {
         loginWrapper.isVerify = true;
-      }
-
-      final userId = resJs[Keys.userId];
-
-      if(userId != null){
-        loginWrapper.userModel = UserModel.fromMap(resJs);
       }
 
       result.complete(loginWrapper);
@@ -113,7 +107,7 @@ class LoginService {
     js['email'] = email;
     AppManager.addAppInfo(js);
 
-    http.fullUrl = HttpProcess.graphApi;
+    http.fullUrl = PublicAccess.graphApi;
     http.method = 'POST';
     http.setBodyJson(js);
 
@@ -135,6 +129,7 @@ class LoginService {
       final resJs = request.getBodyAsJson()!;
       final status = resJs[Keys.status];
       loginWrapper.causeCode = resJs[Keys.causeCode]?? 0;
+      loginWrapper.jsResult = resJs;
 
       if(status == Keys.error){
         loginWrapper.hasError = true;
@@ -150,12 +145,6 @@ class LoginService {
         loginWrapper.isVerify = true;
       }
 
-      final userId = resJs[Keys.userId];
-
-      if(userId != null){
-        loginWrapper.userModel = UserModel.fromMap(resJs);
-      }
-
       result.complete(loginWrapper);
       return null;
     });
@@ -165,7 +154,7 @@ class LoginService {
 }
 ///============================================================================
 class LoginResultWrapper {
-  UserModel? userModel;
+  Map? jsResult;
   bool isVerify = false;
   bool isBlock = false;
   bool hasError = false;

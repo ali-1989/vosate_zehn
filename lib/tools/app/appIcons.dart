@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:community_material_icon/community_material_icon.dart';
 
 class AppIcons {
   AppIcons._();
@@ -19,6 +20,7 @@ class AppIcons {
   static const IconData arrowDown = Icons.arrow_downward;
   static const IconData arrowLeft = Icons.arrow_back;
   static const IconData arrowLeftIos = Icons.arrow_back_ios;
+  static const IconData playArrow = Icons.play_arrow;
   static const IconData arrowCircleDown = Icons.arrow_circle_down;
   static const IconData arrowDropDown = Icons.arrow_drop_down;
   static const IconData wifi = Icons.wifi;
@@ -39,6 +41,9 @@ class AppIcons {
   static const IconData copy = Icons.copy;
   static const IconData calendar = Icons.calendar_today_outlined;
   static const IconData message = Icons.message;
+  static const IconData email = Icons.email;
+  static const IconData sendMessage = Icons.send;
+  static const IconData whatsapp = Icons.whatsapp;
   static const IconData search = Icons.search;
   static const IconData fileUpload = Icons.upload_file;
   static const IconData file = Icons.insert_drive_file_sharp;
@@ -48,7 +53,7 @@ class AppIcons {
   static const IconData photoCamera = Icons.photo_camera;
   static const IconData videoCamera = Icons.videocam;
   static const IconData camera = Icons.camera;
-  static const IconData call = Icons.call;
+  static const IconData callPhone = Icons.phone;
   static const IconData mic = Icons.mic;
   static const IconData headset = Icons.headset;
   static const IconData pause = Icons.pause;
@@ -70,4 +75,19 @@ class AppIcons {
   static const IconData report2 = Icons.wysiwyg;
   static const IconData report3 = Icons.view_sidebar_rounded;
   static const IconData food = Icons.wine_bar;
+  static const IconData code = Icons.code;
+  static const IconData route = Icons.route;
+  static const IconData motion = Icons.accessibility;
+  static const IconData infinity = Icons.all_inclusive;
+  static const IconData allOut = Icons.all_out_outlined;
+  static const IconData zoomIn = Icons.zoom_in_map;
+  static const IconData share = Icons.share;
+  static const IconData history = Icons.history;
+  static const IconData lastSeenClock = CommunityMaterialIcons.history;
+  static const IconData heart = CommunityMaterialIcons.heart;
+  static const IconData infoCircle = CommunityMaterialIcons.alert_circle_outline;
+  static const IconData meditation = CommunityMaterialIcons.meditation;
+  static const IconData cashMultiple = CommunityMaterialIcons.cash_multiple;
+  static const IconData medicalBag = CommunityMaterialIcons.medical_bag;
+  static const IconData focus = CommunityMaterialIcons.image_filter_center_focus;
 }

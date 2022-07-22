@@ -7,6 +7,7 @@ import 'package:iris_tools/api/helpers/jsonHelper.dart';
 import 'package:iris_tools/api/system.dart';
 import 'package:vosate_zehn/models/settingsModel.dart';
 import 'package:vosate_zehn/tools/app/appBroadcast.dart';
+import 'package:vosate_zehn/tools/publicAccess.dart';
 
 import '/system/httpCodes.dart';
 import '/system/keys.dart';
@@ -132,7 +133,7 @@ class AppWebsocket {
 	static void _onConnected() async {
 		_isConnected = true;
 		reconnectInterval = const Duration(seconds: 6);
-		sendData(JsonHelper.mapToJson(UserLoginTools.getHowIsMap()));
+		sendData(JsonHelper.mapToJson(PublicAccess.getHowIsMap()));
 
 		NetListenerTools.onWsConnectedListener();
 
@@ -143,7 +144,7 @@ class AppWebsocket {
 	}
 	///------------ heart every 4 min ---------------------------------------------------
 	static void sendHeartAndUsers() {
-		final heart = UserLoginTools.getHeartMap();
+		final heart = PublicAccess.getHeartMap();
 
 		try {
 			sendData(JsonHelper.mapToJson(heart));
@@ -187,7 +188,7 @@ class AppWebsocket {
 						UserLoginTools.forceLogoffAll();
 						break;
 					case HttpCodes.com_talkMeWho:
-						sendData(JsonHelper.mapToJson(UserLoginTools.getHowIsMap()));
+						sendData(JsonHelper.mapToJson(PublicAccess.getHowIsMap()));
 						break;
 					case HttpCodes.com_sendDeviceInfo:
 						sendData(JsonHelper.mapToJson(DeviceInfoTools.getDeviceInfo()));

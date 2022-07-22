@@ -133,6 +133,7 @@
   "image": "تصویر",
   "images": "تصاویر",
   "aboutUs": "درباره ما",
+  "contactUs": "ارتباط با ما",
   "default": "پیشفرض",
   "defaultSettings": "تنظیمات پیشفرض",
   "format": "قالب",
@@ -313,7 +314,6 @@
     "login" : "ورود",
     "register" : "ثبت نام",
     "aboutUs": "درباره ما",
-    "contactUs": "ارتباط با ما",
     "settings" : "تنظیمات",
     "term" : "شرایط و قوانین"
   },

@@ -1,10 +1,9 @@
 # Flutter: 3.0.1     old: -
 # Dart: 2.17.1       old: -
 # Java: 17
-# ws://127.0.0.1:3722/IW5P0mfDDsY=/ws
 
 name: vosate_zehn
-description: Fitness
+description: meditation app
 homepage: https://iris.ir
 
 publish_to: 'none'
@@ -19,7 +18,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-  #flutter_rename_app: ^1.0.0
   import_sorter: ^4.6.0
   flutter_launcher_icons: ^0.9.3
 
@@ -27,12 +25,13 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.5
+  community_material_icon: ^5.9.55      # https://materialdesignicons.com/
   device_info_plus: ^4.0.0
   platform_device_id: ^1.0.1
-  permission_handler: ^9.2.0          # NoWeb
+  permission_handler: ^9.2.0            # NoWeb
   connectivity_plus: ^2.3.5
   go_router: ^4.1.0
-  #animate_do: ^2.1.0                  # https://animate.style/
+  #animate_do: ^2.1.0                   # https://animate.style/
   simple_animations: ^4.2.0
   spring: ^2.0.2
   lottie: ^1.3.0
@@ -42,7 +41,7 @@ dependencies:
   http: ^0.13.4
   dio: ^4.0.6
   badges: ^2.0.3
-  photo_view: ^0.14.0                 # image view gallery
+  photo_view: ^0.14.0                   # image view gallery
   flutter_easyloading: ^3.0.5
   material_dialogs: ^1.1.3
   awesome_notifications: ^0.6.21
@@ -55,6 +54,8 @@ dependencies:
   toggle_switch: ^2.0.1
   numberpicker: ^2.1.1
   shaped_bottom_bar: ^1.1.0
+  share_extend: ^2.0.0
+  flutter_html: ^2.2.1
 
   iris_tools:
     git: https://github.com/ali-1989/IrisTools.git
@@ -69,6 +70,7 @@ dependencies:
 dependency_overrides:
   simple_animations: ^4.2.0
   path: ^1.8.2
+  xml: ^6.0.0
 
 
 dev_dependencies:
@@ -106,8 +108,6 @@ flutter:
         - asset: assets/fonts/icomoon.ttf
 
 
-
-
 flutter_icons:
   image_path: "dep/app_icon.png"
   android: true
@@ -122,15 +122,8 @@ import_sorter:
 
 ## flutter pub run import_sorter:main
 ## flutter pub run flutter_launcher_icons:main
-## flutter pub run flutter_rename_app_plus
-# import '[^pd/]
 
-#  flutter_rename_app_plus: ^1.1.0:
-#    application_name: ARE
-#    dart_package_name: are
-#    application_id: ir.iris.are
-#    bundle_id: ir.iris.are
-#    android_package_name: ir.iris.are
+# import '[^pd/]
 
 
 # caret sign:

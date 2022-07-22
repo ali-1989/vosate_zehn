@@ -4,9 +4,12 @@ import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:shaped_bottom_bar/models/shaped_item_object.dart';
 import 'package:shaped_bottom_bar/shaped_bottom_bar.dart';
 import 'package:shaped_bottom_bar/utils/arrays.dart';
-import 'package:vosate_zehn/pages/e404_page.dart';
 import 'package:vosate_zehn/system/stateBase.dart';
-import 'package:vosate_zehn/tools/app/appRoute.dart';
+import 'package:vosate_zehn/tools/app/appIcons.dart';
+import 'package:vosate_zehn/tools/app/appMessages.dart';
+import 'package:vosate_zehn/tools/app/appThemes.dart';
+import 'package:vosate_zehn/views/genAppBar.dart';
+import 'package:vosate_zehn/views/genDrawerMenu.dart';
 
 class HomePage extends StatefulWidget {
   static final route = GoRoute(
@@ -31,10 +34,11 @@ class _HomePageState extends StateBase<HomePage> {
       controller: assistCtr,
       builder: (context, ctr, data) {
         return Scaffold(
-          appBar: AppBar(),
+          appBar: genAppBar(),
           body: SafeArea(
               child: buildBody()
           ),
+          drawer: DrawerMenuBuilder.getDrawer(),
           bottomNavigationBar: genNavBar(),
         );
       }
@@ -44,56 +48,72 @@ class _HomePageState extends StateBase<HomePage> {
   Widget buildBody(){
     return Builder(
         builder: (ctx){
-          if(assistCtr.hasState(AssistController.state$normal)){
-            return Column(
-              children: [
-                ElevatedButton(
-                    onPressed: (){
-                      assistCtr.removeState(AssistController.state$normal);
-                      assistCtr.updateMain();
-                      },
-                    child: Text('hi')
-                ),
+          /*if(assistCtr.hasState(AssistController.state$normal)){
 
-                ElevatedButton(
-                    onPressed: (){
-                      AppRoute.pushNamed(context, (E404Page).toString().toLowerCase());
-                    },
-                    child: Text('hi')
-                ),
-              ],
-            );
-          }
+          }*/
 
-          return ElevatedButton(
-              onPressed: (){
-                assistCtr.addStateAndUpdate(AssistController.state$normal);
-                },
-              child: Text('bay')
+          return PageView(
+            children: [
+              Text('p1'),
+              Text('p2'),
+            ],
           );
         }
     );
   }
 
+  AppBar genAppBar(){
+    return GenAppBar(
+      title: Text(AppMessages.appName),
+      /*leading: IconButton(
+          onPressed: (){
+          },
+          icon: Icon(AppIcons.list)
+      ),*/
+
+      actions: [
+        IconButton(
+            onPressed: (){},
+            icon: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(AppIcons.cashMultiple, size: 20,),
+                Text(AppMessages.hematat, style: TextStyle(fontSize: 11),),
+              ],
+            )
+        ),
+
+        IconButton(
+            onPressed: (){},
+            icon: Icon(AppIcons.search)
+        ),
+      ],
+    );
+  }
+
   Widget genNavBar(){
     return ShapedBottomBar(
-        backgroundColor:  Colors.grey,
-        iconsColor:  Colors.white,
+        backgroundColor: AppThemes.instance.currentTheme.primaryColor,
+        iconsColor: Colors.black,
+        bottomBarTopColor: Colors.transparent,
+        shapeColor: AppThemes.instance.currentTheme.differentColor,
+        selectedIconColor: Colors.white,
+        shape: ShapeType.PENTAGON,
+        animationType: ANIMATION_TYPE.FADE,
+        selectedItemIndex: selectedItem,
+        //textStyle: AppThemes.instance.currentTheme.baseTextStyle,
         listItems: [
-          ShapedItemObject(iconData: Icons.settings, title: 'Settings'),
-          ShapedItemObject(iconData: Icons.account_balance_outlined, title: 'Account'),
-          ShapedItemObject(iconData: Icons.verified_user_rounded, title: 'User'),
-          ShapedItemObject(iconData: Icons.login, title: 'Logout'),
+          ShapedItemObject(iconData: AppIcons.home, title: AppMessages.home),
+          ShapedItemObject(iconData: AppIcons.meditation, title: AppMessages.meditation),
+          ShapedItemObject(iconData: AppIcons.zoomIn, title: AppMessages.tamarkoz),
+          ShapedItemObject(iconData: AppIcons.motion, title: AppMessages.motion),
+          ShapedItemObject(iconData: AppIcons.playArrow, title: AppMessages.video),
         ],
         onItemChanged: (position) {
-          setState(() {
-            selectedItem = position;
-          });
+          selectedItem = position;
+          //setState(() {});
         },
-        shapeColor: Colors.pink,
-        selectedIconColor: Colors.white,
-        shape: ShapeType.HEXAGONE,
-        animationType: ANIMATION_TYPE.ROTATE,
     );
   }
 }

@@ -30,20 +30,20 @@ import 'package:vosate_zehn/views/phoneNumberInput.dart';
 import 'package:vosate_zehn/views/screens/countrySelect.dart';
 import 'package:flip_card/flip_card.dart';
 
-class LoginPage extends StatefulWidget {
+class AboutUsPage extends StatefulWidget {
   static final route = GoRoute(
-    path: '/login',
-    name: (LoginPage).toString().toLowerCase(),
-    builder: (BuildContext context, GoRouterState state) => const LoginPage(),
+    path: '/about',
+    name: (AboutUsPage).toString().toLowerCase(),
+    builder: (BuildContext context, GoRouterState state) => const AboutUsPage(),
   );
 
-  const LoginPage({super.key});
+  const AboutUsPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<AboutUsPage> createState() => _AboutUsPageState();
 }
 ///=================================================================================================
-class _LoginPageState extends StateBase<LoginPage> {
+class _AboutUsPageState extends StateBase<AboutUsPage> {
   late PhoneNumberInputController phoneNumberController;
   late FlipCardController flipCardController;
   ValueKey timerKey = const ValueKey('1');

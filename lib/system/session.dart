@@ -24,8 +24,8 @@ class Session {
 				Conditions().add(Condition(ConditionType.DefinedNotNull)..key = Keys.setting$lastLoginDate));
 
 		if(list.isNotEmpty){
-			for (var row in list) {
-				final isCur = getExistLoginUserById(row[Keys.id]);
+			for (final row in list) {
+				final isCur = getExistLoginUserById(row[Keys.userId]);
 
 				if(isCur == null) {
 					final n = (row as Map).map<String, dynamic>((k, v){

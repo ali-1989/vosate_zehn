@@ -63,6 +63,18 @@ class AppMessages {
     return AppRoute.getContext().t('send')?? _noText;
   }
 
+  static String get home {
+    return AppRoute.getContext().t('home')?? _noText;
+  }
+
+  static String get contactUs {
+    return AppRoute.getContext().t('contactUs')?? _noText;
+  }
+
+  static String get aboutUs {
+    return AppRoute.getContext().t('aboutUs')?? _noText;
+  }
+
   static String get validation {
     return AppRoute.getContext().tInMap('loginSection', 'validation')?? _noText;
   }
@@ -207,6 +219,10 @@ class AppMessages {
     return AppRoute.getContext().tC('thereAreNoResults')?? _noText;
   }
 
+  static String get appName {
+    return 'وسعت ذهن';
+  }
+
   static String get loginTitle {
     return 'ورود';
   }
@@ -237,5 +253,41 @@ class AppMessages {
 
   static String get pleaseSelectAge {
     return 'لطفا سن خود را انتخاب کنید';
+  }
+
+  static String get meditation {
+    return 'مدیتیشن';
+  }
+
+  static String get tamarkoz {
+    return 'تمرکز';
+  }
+
+  static String get motion {
+    return 'حرکت';
+  }
+
+  static String get video {
+    return 'فیلم';
+  }
+
+  static String get hematat {
+    return 'حمایت';
+  }
+
+  static String get hematatUs {
+    return 'حمایت از ما';
+  }
+
+  static String get favorites {
+    return 'منتخب ها';
+  }
+
+  static String get lastSeenItem {
+    return 'آخرین بازدیدها';
+  }
+
+  static String get shareApp {
+    return 'اشتراک اپلیکیشن';
   }
 }

@@ -5,7 +5,6 @@ import 'package:iris_tools/dateSection/ADateStructure.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:vosate_zehn/models/countryModel.dart';
-import 'package:vosate_zehn/models/userModel.dart';
 import 'package:vosate_zehn/pages/home_page.dart';
 import 'package:vosate_zehn/system/keys.dart';
 import 'package:vosate_zehn/system/requester.dart';
@@ -258,10 +257,10 @@ class _RegisterPageState extends StateBase<RegisterPage> {
     };
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
-      print(data);
       final userModel = await Session.login$newProfileData(data);
 
       if(userModel != null) {
+        AppRoute.pop(context);
         AppRoute.push(context, HomePage.route.path);
       }
       else {
