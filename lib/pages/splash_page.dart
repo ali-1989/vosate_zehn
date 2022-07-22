@@ -104,9 +104,9 @@ class SplashScreenState extends State<SplashPage> {
     return MaterialApp.router(
         key: AppBroadcast.materialAppKey,
         debugShowCheckedModeBanner: false,
-        routeInformationProvider: routers.routeInformationProvider,
-        routeInformationParser: routers.routeInformationParser,
-        routerDelegate: routers.routerDelegate,
+        routeInformationProvider: mainRouter.routeInformationProvider,
+        routeInformationParser: mainRouter.routeInformationParser,
+        routerDelegate: mainRouter.routerDelegate,
         //navigatorObservers: [ClearFocusOnPush()],
         //scrollBehavior: MyCustomScrollBehavior(),
         title: Constants.appTitle,

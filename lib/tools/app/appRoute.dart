@@ -80,7 +80,7 @@ class AppRoute {
   }
 }
 ///============================================================================================
-final routers = GoRouter(
+final mainRouter = GoRouter(
     routes: <GoRoute>[
       E404Page.route,
       HomePage.route,
@@ -91,10 +91,10 @@ final routers = GoRouter(
     initialLocation: HomePage.route.path,
     errorBuilder: (BuildContext context, GoRouterState state) => const E404Page(),
     //refreshListenable: loginInfo, //GoRouterRefreshStream(streamController.stream),
-    redirect: _redirect,
+    redirect: _mainRedirect,
 );
 
-String? _redirect(GoRouterState state){
+String? _mainRedirect(GoRouterState state){
   debugPrint('--redirect---> ${state.subloc}         |  qp:${state.queryParams}');
 
   if(state.subloc == HomePage.route.path){

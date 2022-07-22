@@ -37,8 +37,8 @@ class AppManager {
 
   static Map<String, dynamic> getAppInfo(String? token) {
     final res = <String, dynamic>{};
-    res['device_id'] = DeviceInfoTools.deviceId;
-    res['app_name'] = Constants.appName;
+    res[Keys.deviceId] = DeviceInfoTools.deviceId;
+    res[Keys.appName] = Constants.appName;
     res['app_version_code'] = Constants.appVersionCode;
     res['app_version_name'] = Constants.appVersionName;
 
