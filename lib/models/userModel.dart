@@ -28,15 +28,14 @@ class UserModel {
     final brDate = map[Keys.birthdate];
     final regDate = map[Keys.registerDate];
 
-    userId = map[Keys.userId];
+    userId = map[Keys.userId].toString();
     userName = map[Keys.userName];
     name = map[Keys.name];
     family = map[Keys.family];
-    birthDate = map[Keys.birthdate];
     mobile = map[Keys.mobileNumber]?.toString();
     sex = map[Keys.sex];
-    token = map[Keys.token] != null ? Token.fromJson(map[Keys.token]) : null;
-    profileImageId = map['profile_image_id'];
+    token = map[Keys.token] != null ? Token.fromMap(map[Keys.token]) : null;
+    profileImageId = map[Keys.profileImageId];
     profileImageUrl = map[Keys.profileImageUrl];
     countryModel = CountryModel.fromMap(map['country_js']);
     email = map['email'];
@@ -82,7 +81,7 @@ class UserModel {
     map['user_type'] = userType;
 
     if (token != null) {
-      map['token'] = token!.toJson();
+      map[Keys.token] = token!.toMap();
     }
 
     if(countryModel.countryIso != null) {
@@ -143,12 +142,12 @@ class Token {
 
   Token();
 
-  Token.fromJson(Map json) {
+  Token.fromMap(Map json) {
     token = json[Keys.token];
     expireTs = json[Keys.expire];
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toMap() {
     final data = <String, dynamic>{};
     data[Keys.token] = token;
     data[Keys.expire] = expireTs;

@@ -7,6 +7,14 @@ class AppMessages {
 
   static const _noText = 'n_n';
 
+  static String httpMessage(String? cause) {
+    if(cause == null){
+      return errorOccur;
+    }
+
+    return AppRoute.getContext().tInMap('httpCodes', cause)?? errorOccur;
+  }
+
   static String get ok {
     return AppRoute.getContext().tC('ok')?? _noText;
   }

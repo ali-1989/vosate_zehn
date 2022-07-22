@@ -45,6 +45,7 @@ class Keys {
   static const phoneCode = 'phone_code';
   static const languageIso = 'language_iso';
   static const countryIso = 'country_iso';
+  static const profileImageId = 'profile_image_id';
   static const profileImageUrl = 'profile_image_url';
   static const profileImagePath = 'profile_image_path';
   static const imageUri = 'image_uri';

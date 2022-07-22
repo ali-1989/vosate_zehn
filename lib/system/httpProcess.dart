@@ -57,6 +57,10 @@ class HttpProcess {
       AppSnack.showError(context, AppMessages.errorUploadingData);
       return true;
     }
+    else if(causeCode == HttpCodes.error_spacialError){ //90
+      AppSnack.showError(context, AppMessages.httpMessage(cause));
+      return true;
+    }
     else if(causeCode == HttpCodes.error_dataNotExist){
       AppSnack.showInfo(context, AppMessages.dataNotFound);
       return true;

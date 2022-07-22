@@ -68,13 +68,14 @@ class Session {
 	}
 
 	static Future<UserModel?> login$newProfileData(Map json) async {
-		final userId = json[Keys.id];
+		final userId = json[Keys.userId]?.toString();
 
 		if(userId == null) {
 		  return null;
 		}
 
 		final newUser = UserModel.fromMap(json);
+
 		newUser.loginDate = DateHelper.getNow().toUtc();
 
 		final wasLoginUser = getExistLoginUserById(userId);
@@ -96,7 +97,7 @@ class Session {
 
 		/// insert to db
 		final updateDb = await AppDB.db.insertOrUpdate(AppDB.tbUserModel, newUser.toMap(),
-				Conditions().add(Condition()..key = Keys.id..value = newUser.userId));
+				Conditions().add(Condition()..key = Keys.userId..value = newUser.userId));
 
 		if(updateDb > 0) {
 			if(wasLoginUser != null) {
@@ -123,7 +124,7 @@ class Session {
 	}
 
 	static Future<void> newProfileData(Map<String, dynamic> json) async {
-		final userId = json[Keys.id];
+		final userId = json[Keys.userId]?.toString();
 
 		if(userId == null) {
 		  return;
@@ -152,7 +153,7 @@ class Session {
 
 		/// insert to db
 		final updateDb = await AppDB.db.insertOrUpdate(AppDB.tbUserModel, newUser.toMap(),
-				Conditions().add(Condition()..key = Keys.id..value = newUser.userId));
+				Conditions().add(Condition()..key = Keys.userId..value = newUser.userId));
 
 		if(updateDb > 0) {
 			if(wasLoginUser != null) {
@@ -182,7 +183,7 @@ class Session {
 
 	static Future<UserModel?> fetchUserById(String userId) async {
 		final cas = AppDB.db.query(AppDB.tbUserModel,
-				Conditions().add(Condition()..key = Keys.id..value = userId));
+				Conditions().add(Condition()..key = Keys.userId..value = userId));
 
 		if(cas.isEmpty) {
 		  return null;
@@ -206,7 +207,7 @@ class Session {
 		final old = (await fetchUserById(user.userId))?.toMap();
 
 		final res = await AppDB.db.update(AppDB.tbUserModel, user.toMap(),
-				Conditions().add(Condition()..key = Keys.id..value = user.userId));
+				Conditions().add(Condition()..key = Keys.userId..value = user.userId));
 
 		if(res > 0) {
 			notifyChangeProfileInfo(user, old);
@@ -227,7 +228,7 @@ class Session {
 		val[Keys.setting$lastLoginDate] = null;
 
 		await AppDB.db.update(AppDB.tbUserModel, val,
-				Conditions().add(Condition()..key = Keys.id..value = userId));
+				Conditions().add(Condition()..key = Keys.userId..value = userId));
 
 		currentLoginList.removeWhere((element) => element.userId == userId);
 
@@ -268,7 +269,7 @@ class Session {
 
 	static Future<bool> deleteUserInfo(String userId) async{
 		final res = await AppDB.db.delete(AppDB.tbUserModel,
-				Conditions().add(Condition()..key = Keys.id..value = userId));
+				Conditions().add(Condition()..key = Keys.userId..value = userId));
 
 		return res > 0;
 	}

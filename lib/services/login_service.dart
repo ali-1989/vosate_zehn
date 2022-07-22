@@ -73,7 +73,6 @@ class LoginService {
         result.complete(loginWrapper);
       }
 
-
       final resJs = request.getBodyAsJson()!;
       final status = resJs[Keys.status];
       loginWrapper.causeCode = resJs[Keys.causeCode]?? 0;

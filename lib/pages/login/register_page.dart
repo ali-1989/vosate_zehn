@@ -5,11 +5,15 @@ import 'package:iris_tools/dateSection/ADateStructure.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:vosate_zehn/models/countryModel.dart';
+import 'package:vosate_zehn/models/userModel.dart';
+import 'package:vosate_zehn/pages/home_page.dart';
 import 'package:vosate_zehn/system/keys.dart';
 import 'package:vosate_zehn/system/requester.dart';
+import 'package:vosate_zehn/system/session.dart';
 import 'package:vosate_zehn/system/stateBase.dart';
 import 'package:vosate_zehn/tools/app/appImages.dart';
 import 'package:vosate_zehn/tools/app/appMessages.dart';
+import 'package:vosate_zehn/tools/app/appRoute.dart';
 import 'package:vosate_zehn/tools/app/appSheet.dart';
 import 'package:vosate_zehn/views/dateViews/selectDateCalendarView.dart';
 import 'package:vosate_zehn/views/genAppBar.dart';
@@ -238,6 +242,7 @@ class _RegisterPageState extends StateBase<RegisterPage> {
     js[Keys.sex] = gender;
 
     if(widget.injectData.countryModel != null) {
+      js[Keys.mobileNumber] = widget.injectData.mobileNumber;
       js.addAll(widget.injectData.countryModel!.toMap());
     }
     else {
@@ -246,17 +251,22 @@ class _RegisterPageState extends StateBase<RegisterPage> {
 
     requester.prepareUrl();
     requester.bodyJson = js;
+    requester.debug = false;
 
     requester.httpRequestEvents.onAnyState = (req) async {
       hideLoading();
     };
 
-    requester.httpRequestEvents.onFailState = (req) async {
-      print('err');
-    };
-
     requester.httpRequestEvents.onStatusOk = (req, data) async {
-      print('ok');
+      print(data);
+      final userModel = await Session.login$newProfileData(data);
+
+      if(userModel != null) {
+        AppRoute.push(context, HomePage.route.path);
+      }
+      else {
+        AppSheet.showSheet$OperationFailed(context);
+      }
     };
 
     showLoading();

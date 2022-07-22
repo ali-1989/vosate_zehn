@@ -58,7 +58,9 @@ class Requester {
   }
 
   void prepareUrl(){
-    _http.fullUrl += '/graph-v1';
+    if(!_http.fullUrl.contains('graph-v1')) {
+      _http.fullUrl += '/graph-v1';
+    }
   }
 
   void request([BuildContext? context]){
@@ -79,7 +81,7 @@ class Requester {
 
     var f = _httpRequester.response.catchError((e){
       if(debug){
-        Logger.L.logToScreen(e);
+        Logger.L.logToScreen(' catchError --> $e');
       }
 
       if (_httpRequester.isDioCancelError){
@@ -117,7 +119,7 @@ class Requester {
       }
 
       if(debug){
-        Logger.L.logToScreen('>> result : $js');
+        Logger.L.logToScreen('status is 200 >> result : $js');
       }
 
       if(httpRequestEvents.manageResponse != null){
@@ -125,9 +127,9 @@ class Requester {
         return;
       }
 
-      final result = js[Keys.status]?? false;
+      final result = js[Keys.status]?? Keys.error;
 
-      if(result == true) {
+      if(result == Keys.ok) {
         await httpRequestEvents.onStatusOk?.call(_httpRequester, js);
       }
       else {

@@ -30,7 +30,7 @@ class SettingsModel {
   static int maxViewHeightP = 460;
 
   static const defaultHttpAddress = 'http://192.168.43.140:7436'; //192.168.1.105
-  static const defaultWsAddress = 'ws://192.168.43.140:7445';
+  static const defaultWsAddress = 'ws://192.168.43.140:7438/ws';
   static const defaultProxyAddress = '95.174.67.50:18080';
   static const Locale defaultAppLocale = Locale('fa', 'IR');
   static final CalendarType defaultCalendarType = CalendarType.solarHijri;
