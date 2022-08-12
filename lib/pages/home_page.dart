@@ -5,6 +5,7 @@ import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:shaped_bottom_bar/models/shaped_item_object.dart';
 import 'package:shaped_bottom_bar/shaped_bottom_bar.dart';
 import 'package:shaped_bottom_bar/utils/arrays.dart';
+import 'package:vosate_zehn/pages/meditation/meditation_page.dart';
 import 'package:vosate_zehn/services/aidService.dart';
 
 import 'package:vosate_zehn/system/stateBase.dart';
@@ -30,13 +31,16 @@ class HomePage extends StatefulWidget {
 ///=================================================================================================
 class HomePageState extends StateBase<HomePage> {
   late GlobalKey<ScaffoldState> scaffoldState;
-  int selectedItem = 0;
+  int selectedPage = 0;
+  late PageController pageController;
 
 
   @override
   initState(){
     super.initState();
+
     scaffoldState = GlobalKey<ScaffoldState>();
+    pageController = PageController();
   }
 
   @override
@@ -51,6 +55,7 @@ class HomePageState extends StateBase<HomePage> {
               child: buildBody()
           ),
           drawer: DrawerMenuBuilder.getDrawer(),
+          extendBody: true,
           bottomNavigationBar: buildNavBar(),
         );
       }
@@ -58,19 +63,23 @@ class HomePageState extends StateBase<HomePage> {
   }
 
   Widget buildBody(){
-    return Builder(
-        builder: (ctx){
-          /*if(assistCtr.hasState(AssistController.state$normal)){
+    return Padding(
+      padding: EdgeInsets.only(bottom: 20),
+      child: PageView(
+          physics: NeverScrollableScrollPhysics(),
+        allowImplicitScrolling: false,
+        controller: pageController,
+        children: [
+          ColoredBox(
+            color: Colors.red,
+              child: SizedBox.expand(child: Text('p1'))
+          ),
 
-          }*/
+          MeditationPage(),
 
-          return PageView(
-            children: [
-              Text('p1'),
-              Text('p2'),
-            ],
-          );
-        }
+          Text('p2'),
+        ],
+      ),
     );
   }
 
@@ -113,7 +122,7 @@ class HomePageState extends StateBase<HomePage> {
         selectedIconColor: Colors.white,
         shape: ShapeType.PENTAGON,
         animationType: ANIMATION_TYPE.FADE,
-        selectedItemIndex: selectedItem,
+        selectedItemIndex: selectedPage,
         //textStyle: AppThemes.instance.currentTheme.baseTextStyle,
         listItems: [
           ShapedItemObject(iconData: AppIcons.home, title: AppMessages.home),
@@ -123,7 +132,7 @@ class HomePageState extends StateBase<HomePage> {
           ShapedItemObject(iconData: AppIcons.playArrow, title: AppMessages.video),
         ],
         onItemChanged: (position) {
-          selectedItem = position;
+          selectedPage = position;
           //setState(() {});
         },
     );
