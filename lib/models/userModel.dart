@@ -35,10 +35,19 @@ class UserModel {
     family = map[Keys.family];
     mobile = map[Keys.mobileNumber]?.toString();
     sex = map[Keys.sex];
-    token = map[Keys.token] != null ? Token.fromMap(map[Keys.token]) : null;
     countryModel = CountryModel.fromMap(map['country_js']);
     email = map['email'];
     userType = map['user_type'];
+
+    token = map[Keys.token] != null ? Token.fromMap(map[Keys.token]) : null;
+
+    if(map[Keys.token] is Map) {
+      token = Token.fromMap(map[Keys.token]);
+    }
+
+    else if(map[Keys.token] is String) {
+      token = Token()..token = map[Keys.token];
+    }
 
     if(map['profile_image_model'] != null) {
       profileModel = MediaModel.fromMap(map['profile_image_model']);

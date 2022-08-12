@@ -3,6 +3,7 @@ import 'package:flutter_html/flutter_html.dart';
 
 import 'package:go_router/go_router.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
+import 'package:iris_tools/widgets/maxWidth.dart';
 import 'package:vosate_zehn/pages/zarinpal_page.dart';
 import 'package:vosate_zehn/system/keys.dart';
 import 'package:vosate_zehn/system/requester.dart';
@@ -87,15 +88,21 @@ class _AidPageState extends StateBase<AidPage> {
             ),
           ),
 
-          SizedBox(height: 40,),
+          SizedBox(height: 100,),
 
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                minimumSize: Size(180, 46),
-              primary: AppThemes.instance.currentTheme.successColor,
+          MaxWidth(
+            maxWidth: 300,
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    //minimumSize: Size(180, 46),
+                  primary: AppThemes.instance.currentTheme.successColor,
+                ),
+                  onPressed: onPayCall,
+                  child: Text(AppMessages.pay)
+              ),
             ),
-              onPressed: onPayCall,
-              child: Text(AppMessages.pay)
           ),
 
           SizedBox(height: 10,),

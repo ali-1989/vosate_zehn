@@ -337,4 +337,12 @@ class AppMessages {
   static String get contactUsEmptyPrompt {
     return 'لطفا متن خود را بنویسید';
   }
+
+  static String get email {
+    return 'ایمیل';
+  }
+
+  static String get mobile {
+    return 'موبایل';
+  }
 }

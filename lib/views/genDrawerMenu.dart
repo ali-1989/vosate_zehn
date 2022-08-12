@@ -119,7 +119,7 @@ class DrawerMenuBuilder {
                       final path = AppDirectories.getSavePathUri(user.profileModel!.url?? '', SavePathType.userProfile, user.avatarFileName);
                       final img = FileHelper.getFile(path);
 
-                      if(img.existsSync() && img.lengthSync() == user.profileModel!.volume!){
+                      if(img.existsSync() && img.lengthSync() == (user.profileModel!.volume?? 0)){
                         return CircleAvatar(
                           backgroundColor: ColorHelper.textToColor(user.nameFamily,),
                           radius: 30,
