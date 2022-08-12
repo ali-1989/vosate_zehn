@@ -54,33 +54,34 @@ class _ZarinpalPageState extends StateBase<ZarinpalPage> {
   }
 
   Widget buildBody(){
-    if(isInPreparing) {
-      return WaitToLoad();
-    }
+    return Stack(
+      children: [
+        Opacity(
+          opacity: isInPreparing? 0.01 : 1,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: WebViewX(
+              height: double.infinity,
+              width: double.infinity,
+              initialContent: 'https://zarinp.al/vosatezehn.ir',
+              initialSourceType: SourceType.url,
+              onWebViewCreated: (ctr){
+                if(webController == null) {
+                  webController = ctr;
+                  assistCtr.updateMain();
+                }
+              },
+              onPageFinished: (str){
+                isInPreparing = false;
+                assistCtr.updateMain();
+              },
+            ),
+          ),
+        ),
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: WebViewX(
-        height: double.infinity,
-        width: double.infinity,
-        initialContent: 'https://zarinp.al/vosatezehn.ir',
-        initialSourceType: SourceType.url,
-        onWebViewCreated: (ctr){
-          isInPreparing = false;
-
-          if(webController == null) {
-            print('========= webController');
-            webController = ctr;
-            assistCtr.updateMain();
-          }
-        },
-        onPageFinished: (str){
-          print('========= onPageFinished  $str');
-        },
-        onPageStarted: (str){
-          print('========= onPageStarted  $str');
-        },
-      ),
+      if(isInPreparing)
+        WaitToLoad(),
+      ],
     );
   }
 }

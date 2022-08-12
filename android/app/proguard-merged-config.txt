@@ -238,7 +238,7 @@
 
 
 # End of content from K:\Programming\.gradle\caches\transforms-3\62f13f4ed1145114a603ae6594652e02\transformed\webkit-1.0.0\proguard.txt
-# The proguard configuration file for the following section is K:\Programming\.gradle\caches\transforms-3\dcb2fb9d321347062149d05b1a6574e8\transformed\jetified-exoplayer-core-2.17.1\proguard.txt
+# The proguard configuration file for the following section is K:\Programming\.gradle\caches\transforms-3\d018824aeb5d29fe58ad20811742b468\transformed\jetified-exoplayer-core-2.18.0\proguard.txt
 # Proguard rules specific to the core module.
 
 # Constructors accessed via reflection in DefaultRenderersFactory
@@ -295,7 +295,7 @@
   <init>();
 }
 
-# End of content from K:\Programming\.gradle\caches\transforms-3\dcb2fb9d321347062149d05b1a6574e8\transformed\jetified-exoplayer-core-2.17.1\proguard.txt
+# End of content from K:\Programming\.gradle\caches\transforms-3\d018824aeb5d29fe58ad20811742b468\transformed\jetified-exoplayer-core-2.18.0\proguard.txt
 # The proguard configuration file for the following section is K:\Programming\.gradle\caches\transforms-3\acbed7d481c2b99e9b41b58875afe33a\transformed\jetified-play-services-auth-base-18.0.1\proguard.txt
 # We keep all fields for every generated proto file as the runtime uses
 # reflection over them that ProGuard cannot detect. Without this keep
@@ -553,7 +553,7 @@
 }
 
 # End of content from K:\Programming\.gradle\caches\transforms-3\f28fbf2b5cc15d00b9e189721d0a19db\transformed\jetified-savedstate-1.0.0\proguard.txt
-# The proguard configuration file for the following section is K:\Programming\.gradle\caches\transforms-3\97c4d0831236a5e5e9383d9931517062\transformed\jetified-exoplayer-datasource-2.17.1\proguard.txt
+# The proguard configuration file for the following section is K:\Programming\.gradle\caches\transforms-3\4d50321df615b54215585c7aa7764c1f\transformed\jetified-exoplayer-datasource-2.18.0\proguard.txt
 # Proguard rules specific to the DataSource module.
 
 # Constant folding for resource integers may mean that a resource passed to this method appears to be unused. Keep the method to prevent this from happening.
@@ -567,8 +567,8 @@
   <init>();
 }
 
-# End of content from K:\Programming\.gradle\caches\transforms-3\97c4d0831236a5e5e9383d9931517062\transformed\jetified-exoplayer-datasource-2.17.1\proguard.txt
-# The proguard configuration file for the following section is K:\Programming\.gradle\caches\transforms-3\a78b2305f38ec7871b8026b8ccc407be\transformed\jetified-exoplayer-extractor-2.17.1\proguard.txt
+# End of content from K:\Programming\.gradle\caches\transforms-3\4d50321df615b54215585c7aa7764c1f\transformed\jetified-exoplayer-datasource-2.18.0\proguard.txt
+# The proguard configuration file for the following section is K:\Programming\.gradle\caches\transforms-3\2d5bb984ee725786b301354bb5122a09\transformed\jetified-exoplayer-extractor-2.18.0\proguard.txt
 # Proguard rules specific to the extractor module.
 
 # Methods accessed via reflection in DefaultExtractorsFactory
@@ -586,8 +586,8 @@
 -dontwarn kotlin.annotations.jvm.**
 -dontwarn javax.annotation.**
 
-# End of content from K:\Programming\.gradle\caches\transforms-3\a78b2305f38ec7871b8026b8ccc407be\transformed\jetified-exoplayer-extractor-2.17.1\proguard.txt
-# The proguard configuration file for the following section is K:\Programming\.gradle\caches\transforms-3\f2e95d9f63c41f07952e1b591bf539bf\transformed\jetified-exoplayer-common-2.17.1\proguard.txt
+# End of content from K:\Programming\.gradle\caches\transforms-3\2d5bb984ee725786b301354bb5122a09\transformed\jetified-exoplayer-extractor-2.18.0\proguard.txt
+# The proguard configuration file for the following section is K:\Programming\.gradle\caches\transforms-3\859e5d16756fa6a7f76eb0834e23f2c6\transformed\jetified-exoplayer-common-2.18.0\proguard.txt
 # Proguard rules specific to the common module.
 
 # Don't warn about checkerframework and Kotlin annotations
@@ -611,7 +611,7 @@
 # This is needed for ProGuard but not R8.
 -keepclassmembernames class com.google.common.base.Function { *; }
 
-# End of content from K:\Programming\.gradle\caches\transforms-3\f2e95d9f63c41f07952e1b591bf539bf\transformed\jetified-exoplayer-common-2.17.1\proguard.txt
+# End of content from K:\Programming\.gradle\caches\transforms-3\859e5d16756fa6a7f76eb0834e23f2c6\transformed\jetified-exoplayer-common-2.18.0\proguard.txt
 # The proguard configuration file for the following section is K:\Programming\.gradle\caches\transforms-3\6177f268e213b14de8126836e971779f\transformed\rules\lib\META-INF\proguard\androidx-annotations.pro
 -keep,allowobfuscation @interface androidx.annotation.Keep
 -keep @androidx.annotation.Keep class * {*;}

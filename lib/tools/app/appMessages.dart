@@ -329,4 +329,12 @@ class AppMessages {
   static String get shareApp {
     return 'اشتراک اپلیکیشن';
   }
+
+  static String get contactUsDescription {
+    return 'سوال ، انتقاد و یا پیشنهاد خود را برای ما بنویسید';
+  }
+
+  static String get contactUsEmptyPrompt {
+    return 'لطفا متن خود را بنویسید';
+  }
 }

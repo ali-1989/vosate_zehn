@@ -40,7 +40,7 @@ class _FavoritesPageState extends StateBase<FavoritesPage> {
         builder: (context, ctr, data) {
           return Scaffold(
             appBar: AppBarCustom(
-              title: Text(AppMessages.lastSeenItem),
+              title: Text(AppMessages.favorites),
             ),
             body: SafeArea(
                 child: buildBody()

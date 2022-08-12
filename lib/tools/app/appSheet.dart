@@ -525,8 +525,8 @@ class AppSheet {
     return showSheetOneAction<T>(context, AppMessages.operationCannotBePerformed, null);
   }
 
-  static Future<T?> showSheet$SuccessOperation<T>(BuildContext context) {
-    return showSheetOneAction<T>(context, AppMessages.operationSuccess, null);
+  static Future<T?> showSheet$SuccessOperation<T>(BuildContext context, {VoidCallback? onBtn}) {
+    return showSheetOneAction<T>(context, AppMessages.operationSuccess, onBtn);
   }
 
   static Future<T?> showSheet$OperationFailed<T>(BuildContext context) {

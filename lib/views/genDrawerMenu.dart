@@ -5,13 +5,13 @@ import 'package:iris_tools/api/helpers/fileHelper.dart';
 import 'package:iris_tools/api/helpers/mathHelper.dart';
 import 'package:iris_tools/modules/stateManagers/notifyRefresh.dart';
 import 'package:iris_tools/modules/stateManagers/refresh.dart';
-import 'package:iris_tools/widgets/avatarChip.dart';
 import 'package:share_extend/share_extend.dart';
 import 'package:vosate_zehn/models/userModel.dart';
 import 'package:vosate_zehn/pages/about_us_page.dart';
 import 'package:vosate_zehn/pages/contact_us_page.dart';
 import 'package:vosate_zehn/pages/favorites_page.dart';
 import 'package:vosate_zehn/pages/last_seen_page.dart';
+import 'package:vosate_zehn/pages/profile/profile_page.dart';
 import 'package:vosate_zehn/services/aidService.dart';
 import 'package:vosate_zehn/system/enums.dart';
 import 'package:vosate_zehn/system/session.dart';
@@ -47,7 +47,6 @@ class DrawerMenuBuilder {
       width: MathHelper.minDouble(400, MathHelper.percent(AppSizes.instance.appWidth, 60)),
       child: Drawer(
         child: ListView(
-          //crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 32),
 
@@ -114,22 +113,28 @@ class DrawerMenuBuilder {
             NotifyRefresh(
               notifier: AppBroadcast.avatarNotifier,
               builder: (ctx, data) {
-                return AvatarChip(
-                  label: Text(''),
-                backgroundColor: ColorHelper.textToColor(user.nameFamily,),
-                  avatar: Builder(
-                    builder: (ctx){
-                      final path = AppDirectories.getSavePathUri(user.profileModel!.url!, SavePathType.userProfile, user.avatarFileName);
+                return Builder(
+                  builder: (ctx){
+                    if(user.profileModel != null){
+                      final path = AppDirectories.getSavePathUri(user.profileModel!.url?? '', SavePathType.userProfile, user.avatarFileName);
                       final img = FileHelper.getFile(path);
 
                       if(img.existsSync() && img.lengthSync() == user.profileModel!.volume!){
-                        return Image.file(img, height: 50, width: 50,);
+                        return CircleAvatar(
+                          backgroundColor: ColorHelper.textToColor(user.nameFamily,),
+                          radius: 30,
+                          child: Image.file(img),
+                        );
                       }
+                    }
 
-                      checkAvatar(user);
-                      return Image.asset(AppImages.appIcon, height: 50, width: 50,);
-                    },
-                  ),
+                    checkAvatar(user);
+                    return CircleAvatar(
+                      backgroundColor: ColorHelper.textToColor(user.nameFamily,),
+                      radius: 30,
+                      child: Image.asset(AppImages.appIcon, ),
+                    );
+                  },
                 );
               },
             ),
@@ -167,6 +172,7 @@ class DrawerMenuBuilder {
   }
 
   static void shareAppCall() {
+    AppBroadcast.homeScreenKey.currentState?.scaffoldState.currentState?.closeDrawer();
     ShareExtend.share('https://cafebazaar.ir/app/ir.vosatezehn.com', 'text');
   }
 
@@ -196,7 +202,7 @@ class DrawerMenuBuilder {
 
   static void gotoProfilePage(){
     AppBroadcast.homeScreenKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    AppRoute.pushNamed(AppRoute.getContext(), AboutUsPage.route.name!);
+    AppRoute.pushNamed(AppRoute.getContext(), ProfilePage.route.name!);
   }
 
   static void onLogoffCall(){
