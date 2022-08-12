@@ -1,16 +1,79 @@
 // ignore_for_file: file_names
-import 'package:flutter_easyloading/flutter_easyloading.dart';
+
+import 'package:flutter/material.dart';
+
+import 'package:vosate_zehn/tools/app/appSizes.dart';
 
 class AppToast {
   AppToast._();
 
-  static Future<void> showToast(String msg, {bool dismiss = true, Duration duration = const Duration(milliseconds: 3500)}){
-    return EasyLoading.showToast(
-      msg,
-      duration: duration,
-      dismissOnTap: dismiss,
-      toastPosition: EasyLoadingToastPosition.bottom,
-      maskType: EasyLoadingMaskType.none,
+  static void showToast(BuildContext context, String msg, {Duration duration = const Duration(milliseconds: 3500)}){
+    Widget toast = Material(
+      color: Colors.transparent,
+      child: Card(
+        color: Color(0xff303030),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal:12.0, vertical: 20),
+          child: Text(msg, style: TextStyle(color: Colors.white)),
+        ),
+      )
     );
+
+    if(AppSizes.isBigWidth()){
+      toast = Padding(
+        padding: EdgeInsets.symmetric(horizontal: AppSizes.getWebPadding()),
+        child: toast,
+      );
+    }
+
+    Toaster.showToast(toast);
+    Future.delayed(duration, () => Toaster.showToast(null));
+  }
+}
+
+class Toaster extends StatefulWidget {
+  final Widget child;
+  static late ToasterState _state;
+
+  Toaster({
+    required this.child,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() {
+    return _state = ToasterState();
+  }
+
+  static void showToast(Widget? toast){
+    _state.showToast(toast);
+  }
+}
+
+class ToasterState extends State<Toaster> {
+  Widget? toast;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.bottomCenter,
+      children: [
+        widget.child,
+
+        Padding(
+          padding: const EdgeInsets.only(bottom: 30),
+          child: Visibility(
+            visible: toast != null,
+              child: toast?? SizedBox()
+          ),
+        ),
+      ],
+    );
+  }
+
+  void showToast(Widget? toastWidget){
+    toast = toastWidget;
+
+    setState(() {});
   }
 }

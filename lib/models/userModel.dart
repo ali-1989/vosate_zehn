@@ -1,6 +1,8 @@
+import 'package:iris_tools/dateSection/dateHelper.dart';
+import 'package:iris_tools/models/dataModels/mediaModel.dart';
+
 import 'package:vosate_zehn/models/countryModel.dart';
 import 'package:vosate_zehn/system/keys.dart';
-import 'package:iris_tools/dateSection/dateHelper.dart';
 import 'package:vosate_zehn/tools/uriTools.dart';
 
 class UserModel {
@@ -13,8 +15,7 @@ class UserModel {
   DateTime? registerDate;
   int? sex;
   Token? token;
-  String? profileImageId;
-  String? profileImageUrl;
+  MediaModel? profileModel;
   CountryModel countryModel = CountryModel();
   String? email;
   int? userType;
@@ -35,11 +36,13 @@ class UserModel {
     mobile = map[Keys.mobileNumber]?.toString();
     sex = map[Keys.sex];
     token = map[Keys.token] != null ? Token.fromMap(map[Keys.token]) : null;
-    profileImageId = map[Keys.profileImageId];
-    profileImageUrl = map[Keys.profileImageUrl];
     countryModel = CountryModel.fromMap(map['country_js']);
     email = map['email'];
     userType = map['user_type'];
+
+    if(map['profile_image_model'] != null) {
+      profileModel = MediaModel.fromMap(map['profile_image_model']);
+    }
 
     if(brDate is int) {
       birthDate = DateHelper.milToDateTime(brDate);
@@ -55,7 +58,7 @@ class UserModel {
       registerDate = DateHelper.tsToSystemDate(regDate);
     }
 
-    profileImageUrl = UriTools.correctAppUrl(profileImageUrl, domain: domain);
+    profileModel?.url = UriTools.correctAppUrl(profileModel?.url, domain: domain);
     //----------------------- local
     if (tLoginDate is int) {
       loginDate = DateHelper.milToDateTime(tLoginDate);
@@ -75,8 +78,7 @@ class UserModel {
     map[Keys.registerDate] = registerDate == null? null: DateHelper.toTimestamp(registerDate!);
     map[Keys.mobileNumber] = mobile;
     map[Keys.sex] = sex;
-    map['profile_image_id'] = profileImageId;
-    map[Keys.profileImageUrl] = profileImageUrl;
+    map['profile_image_model'] = profileModel?.toMap();
     map['email'] = email;
     map['user_type'] = userType;
 
@@ -102,8 +104,7 @@ class UserModel {
     mobile = other.mobile;
     registerDate = other.registerDate;
     sex = other.sex;
-    profileImageId = other.profileImageId;
-    profileImageUrl = other.profileImageUrl;
+    profileModel = other.profileModel;
     email = other.email;
     userType = other.userType;
     countryModel = other.countryModel;
@@ -129,6 +130,14 @@ class UserModel {
   /*String get countryName {
     return CountryTools.countryShowNameByCountryIso(countryModel.countryIso?? 'US');
   }*/
+
+  String? get avatarFileName {
+    if(profileModel == null || profileModel?.id == null){
+      return null;
+    }
+
+    return '${userId}_${profileModel!.id}.jpg';
+  }
 
   @override
   String toString(){

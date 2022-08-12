@@ -1,13 +1,14 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/managers/orientationManager.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
+
 import 'package:vosate_zehn/system/localizations.dart';
 import 'package:vosate_zehn/tools/app/appLoading.dart';
 import 'package:vosate_zehn/tools/app/appLocale.dart';
-
+import 'package:vosate_zehn/tools/app/appSizes.dart';
 import '/managers/settingsManager.dart';
-
 
 /// with SingleTickerProviderStateMixin
 /// with TickerProviderStateMixin
@@ -23,6 +24,10 @@ abstract class StateBase<W extends StatefulWidget> extends State<W> {
   @override
 	void initState() {
 		super.initState();
+
+		if(kIsWeb){
+			AppSizes.instance.addMetricListener(onResize);
+		}
 	}
 
 	@override
@@ -32,6 +37,10 @@ abstract class StateBase<W extends StatefulWidget> extends State<W> {
 
 	@override
 	void dispose() {
+		if(kIsWeb){
+			AppSizes.instance.removeMetricListener(onResize);
+		}
+
 		super.dispose();
 	}
 
@@ -128,6 +137,10 @@ abstract class StateBase<W extends StatefulWidget> extends State<W> {
 
 		// if true: popPage,  false: not close page
 		return Future<bool>.value(true);
+	}
+
+	void onResize(oldW, oldH, newW, newH){
+		// must override if need
 	}
 }
 

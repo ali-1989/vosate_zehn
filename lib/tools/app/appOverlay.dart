@@ -1,8 +1,14 @@
 import 'package:flutter/widgets.dart';
+
 import 'package:iris_tools/features/overlayDialog.dart';
 import 'package:popover/popover.dart';
 
+import 'package:vosate_zehn/tools/app/appSizes.dart';
+
 class AppOverlay {
+
+  AppOverlay._();
+
   static final _ignoreScreen = OverlayScreenView(
     content: const IgnorePointer(
       ignoring: true,
@@ -10,24 +16,40 @@ class AppOverlay {
     ),
   );
 
-  AppOverlay._();
+  static Future showScreen(BuildContext context, OverlayScreenView view, {bool canBack = false}){
+    OverlayScreenView v = view;
 
-  static Future showScreen(BuildContext context, OverlayScreenView view){
-    return OverlayDialog().show(context, view);
+    if(AppSizes.isBigWidth()){
+      v = OverlayScreenView(
+        content: Padding(
+          padding: EdgeInsets.symmetric(horizontal: AppSizes.getWebPadding()),
+          child: view.content,
+        ),
+        backgroundColor: view.backgroundColor,
+        routingName: view.routeName,
+        scrollable: view.scrollable,
+      );
+    }
+
+    return OverlayDialog().show(context, v, canBack: canBack);
   }
 
   static void hideScreen(BuildContext context){
     OverlayDialog().hide(context);
   }
 
+  static void hideScreenByOverlay(BuildContext context, OverlayScreenView overlay){
+    OverlayDialog().hideByOverlay(context, overlay);
+  }
+  ///-------------------------------------------------------------------
   static Future showIgnoreScreen(BuildContext context){
-    return OverlayDialog().show(context, _ignoreScreen, canBack: false);
+    return showScreen(context, _ignoreScreen, canBack: false);
   }
 
   static void hideIgnoreScreen(BuildContext context){
-    OverlayDialog().hideByOverlay(context, _ignoreScreen);
+    hideScreenByOverlay(context, _ignoreScreen);
   }
-
+  ///-------------------------------------------------------------------
   static Offset findPosition(BuildContext context) {
     final renderBox = context.findRenderObject() as RenderBox;
     return renderBox.localToGlobal(Offset.zero);

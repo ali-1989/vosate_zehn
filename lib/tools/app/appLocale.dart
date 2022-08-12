@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:iris_tools/api/helpers/localeHelper.dart';
-import 'package:vosate_zehn/system/localizations.dart';
 
+import 'package:vosate_zehn/system/localizations.dart';
 import '/managers/settingsManager.dart';
 import '/tools/app/appThemes.dart';
 

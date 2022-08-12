@@ -15,6 +15,7 @@ class Keys {
   static const userId = 'user_id';
   static const forUserId = 'for_user_id';
   static const userName = 'user_name';
+  static const password = 'password';
   static const userType = 'user_type';
   static const fileName = 'file_name';
   static const partName = 'part_name';
@@ -45,14 +46,10 @@ class Keys {
   static const phoneCode = 'phone_code';
   static const languageIso = 'language_iso';
   static const countryIso = 'country_iso';
-  static const profileImageId = 'profile_image_id';
-  static const profileImageUrl = 'profile_image_url';
-  static const profileImagePath = 'profile_image_path';
-  static const imageUri = 'image_uri';
-  static const imagePath = 'image_path';
+  static const mediaPath = 'media_path';
   static const path = 'path';
-  static const fileUri = 'file_uri';
   static const uri = 'uri';
+  static const url = 'url';
   static const id = 'id';
   static const description = 'description';
   static const orderNum = 'order_num';

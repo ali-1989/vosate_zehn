@@ -1,17 +1,17 @@
 import 'dart:io';
 
-import 'package:vosate_zehn/tools/permissionTools.dart';
 import 'package:flutter/foundation.dart';
+
 import 'package:iris_tools/api/generator.dart';
 import 'package:iris_tools/api/helpers/fileHelper.dart';
 import 'package:iris_tools/api/helpers/pathHelper.dart';
 import 'package:iris_tools/api/helpers/storageHelper.dart';
 import 'package:iris_tools/api/system.dart';
-
+import 'package:iris_tools/models/dataModels/mediaModel.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import 'package:vosate_zehn/tools/permissionTools.dart';
 import '/system/enums.dart';
-
 
 class AppDirectories {
   AppDirectories._();
@@ -20,38 +20,66 @@ class AppDirectories {
   static String _documentDir = '/';
   static String _appName = 'app';
 
-  static String? getSavePathUri(String? uri, SavePathType type){
-    if(uri == null){
-      return null;
-    }
-
+  static String? getPathForType(SavePathType type){
     if(type == SavePathType.userProfile){
-      final pat = AppDirectories.getAvatarDir$ex();
-      final serverName = PathHelper.getFileName(uri);
-      return PathHelper.resolvePath(pat + PathHelper.getSeparator() + serverName);
+      return AppDirectories.getAvatarDir$ex();
     }
 
     return null;
   }
 
-  static String? getSavePathByPath(SavePathType type, String? filepath){
-
-    if(type == SavePathType.userProfile){
-      final pat = AppDirectories.getAvatarDir$ex();
-      var fName = Generator.generateDateMillWithKey(14);
-
-      if(filepath != null){
-        final ext = FileHelper.getDotExtensionForce(filepath, '.jpg');
-        fName += ext;
-      }
-      else {
-        fName += '.jpg';
-      }
-
-      return pat + PathHelper.getSeparator() + fName;
+  static String? getSavePathUri(String? uri, SavePathType type, String? newName){
+    if(uri == null){
+      return null;
     }
 
-    return null;
+    final pat = getPathForType(type);
+
+    if(pat == null) {
+      return null;
+    }
+
+    final fName = newName?? PathHelper.getFileName(uri);
+    return PathHelper.resolvePath(pat + PathHelper.getSeparator() + fName);
+  }
+
+  static String? getSavePathMedia(MediaModel? media, SavePathType type, String? newName){
+    if(media == null){
+      return null;
+    }
+
+    final pat = getPathForType(type);
+
+    if(pat == null) {
+      return null;
+    }
+
+    var fName = newName;
+
+    if(fName == null) {
+      if (media.id != null) {
+        fName = media.id;
+      }
+      else {
+        fName = PathHelper.getFileName(media.url!);
+      }
+    }
+
+    return PathHelper.resolvePath(pat + PathHelper.getSeparator() + fName!);
+  }
+
+  static String? getSavePathByPath(SavePathType type, String? filepath){
+    final pat = getPathForType(type);
+
+    if(pat == null) {
+      return null;
+    }
+
+    var fName = Generator.generateDateMillWithKey(14);
+    final ext = FileHelper.getDotExtension(filepath?? '');
+    fName += ext;
+
+    return pat + PathHelper.getSeparator() + fName;
   }
 
   // status == PermissionStatus.granted
@@ -97,6 +125,10 @@ class AppDirectories {
   }
 
   static String getAppFolderInExternalStorage() {
+    if(System.isWeb()) {
+      return '/$_appName';
+    }
+
     return _externalStorage + PathHelper.getSeparator() + _appName;
   }
 

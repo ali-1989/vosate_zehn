@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+
 import 'package:go_router/go_router.dart';
 import 'package:iris_tools/api/helpers/mathHelper.dart';
 import 'package:iris_tools/dateSection/ADateStructure.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
+import 'package:toggle_switch/toggle_switch.dart';
+
 import 'package:vosate_zehn/models/countryModel.dart';
 import 'package:vosate_zehn/pages/home_page.dart';
 import 'package:vosate_zehn/system/keys.dart';
@@ -14,9 +17,8 @@ import 'package:vosate_zehn/tools/app/appImages.dart';
 import 'package:vosate_zehn/tools/app/appMessages.dart';
 import 'package:vosate_zehn/tools/app/appRoute.dart';
 import 'package:vosate_zehn/tools/app/appSheet.dart';
+import 'package:vosate_zehn/views/AppBarCustom.dart';
 import 'package:vosate_zehn/views/dateViews/selectDateCalendarView.dart';
-import 'package:vosate_zehn/views/genAppBar.dart';
-import 'package:toggle_switch/toggle_switch.dart';
 
 class RegisterPageInjectData {
   String? email;
@@ -81,7 +83,7 @@ class _RegisterPageState extends StateBase<RegisterPage> {
       controller: assistCtr,
       builder: (context, ctr, data) {
         return Scaffold(
-          appBar: GenAppBar(
+          appBar: AppBarCustom(
             title: Text(AppMessages.registerTitle),
           ),
           //backgroundColor: AppThemes.instance.currentTheme.primaryColor,
@@ -203,7 +205,7 @@ class _RegisterPageState extends StateBase<RegisterPage> {
   }
 
   void onSelectDateCall() {
-    AppSheet.showModalSheet(
+    AppSheet.showModalBottomSheet$(
         context,
         builder: (context){
           return SelectDateCalendarView(
@@ -250,7 +252,6 @@ class _RegisterPageState extends StateBase<RegisterPage> {
 
     requester.prepareUrl();
     requester.bodyJson = js;
-    requester.debug = false;
 
     requester.httpRequestEvents.onAnyState = (req) async {
       hideLoading();

@@ -1,11 +1,13 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+
 import 'package:vosate_zehn/models/countryModel.dart';
 import 'package:vosate_zehn/system/httpCodes.dart';
 import 'package:vosate_zehn/system/keys.dart';
 import 'package:vosate_zehn/tools/app/appHttpDio.dart';
 import 'package:vosate_zehn/tools/app/appManager.dart';
+import 'package:vosate_zehn/tools/deviceInfoTools.dart';
 import 'package:vosate_zehn/tools/publicAccess.dart';
 
 class LoginService {
@@ -52,6 +54,7 @@ class LoginService {
     js[Keys.mobileNumber] = phoneNumber;
     js['code'] = code;
     js.addAll(countryModel.toMap());
+    js.addAll(DeviceInfoTools.getDeviceInfo());
     AppManager.addAppInfo(js);
 
     http.fullUrl = PublicAccess.graphApi;
@@ -105,6 +108,7 @@ class LoginService {
     final js = {};
     js[Keys.requestZone] = 'verify_email';
     js['email'] = email;
+    js.addAll(DeviceInfoTools.getDeviceInfo());
     AppManager.addAppInfo(js);
 
     http.fullUrl = PublicAccess.graphApi;

@@ -1,27 +1,31 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+
 import 'package:iris_download_manager/downloadManager/downloadManager.dart';
 import 'package:iris_download_manager/uploadManager/uploadManager.dart';
 import 'package:iris_tools/api/appEventListener.dart';
+import 'package:iris_tools/api/logger/logger.dart';
+import 'package:iris_tools/api/system.dart';
 import 'package:iris_tools/net/netManager.dart';
+
+import 'package:vosate_zehn/constants.dart';
 import 'package:vosate_zehn/managers/settingsManager.dart';
 import 'package:vosate_zehn/system/lifeCycleApplication.dart';
 import 'package:vosate_zehn/system/session.dart';
 import 'package:vosate_zehn/tools/app/appCache.dart';
+import 'package:vosate_zehn/tools/app/appDialogIris.dart';
 import 'package:vosate_zehn/tools/app/appDirectories.dart';
 import 'package:vosate_zehn/tools/app/appImages.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:iris_tools/api/logger/logger.dart';
 import 'package:vosate_zehn/tools/app/appLocale.dart';
+import 'package:vosate_zehn/tools/app/appManager.dart';
+import 'package:vosate_zehn/tools/app/appNotification.dart';
 import 'package:vosate_zehn/tools/app/appRoute.dart';
+import 'package:vosate_zehn/tools/app/appSizes.dart';
 import 'package:vosate_zehn/tools/app/appWebsocket.dart';
 import 'package:vosate_zehn/tools/app/downloadUpload.dart';
+import 'package:vosate_zehn/tools/deviceInfoTools.dart';
 import 'package:vosate_zehn/tools/netListenerTools.dart';
 import 'package:vosate_zehn/tools/userLoginTools.dart';
-
-import '/constants.dart';
-import '/tools/app/appManager.dart';
-import '/tools/app/appNotification.dart';
-import '/tools/deviceInfoTools.dart';
 
 class InitialApplication {
 	InitialApplication._();
@@ -50,9 +54,7 @@ class InitialApplication {
 		}
 
 		isCallInit = true;
-		if(!kIsWeb) {
-			AppManager.logger = Logger('${AppDirectories.getTempDir$ex()}/events.txt');
-		}
+		AppManager.logger = Logger('${AppDirectories.getTempDir$ex()}/events.txt');
 
 		AppRoute.init();
 		await AppLocale.localeDelegate().getLocalization().setFallbackByLocale(const Locale('en', 'EE'));
@@ -92,11 +94,19 @@ class InitialApplication {
 		DownloadUpload.downloadManager.addListener(DownloadUpload.commonDownloadListener);
 		DownloadUpload.uploadManager.addListener(DownloadUpload.commonUploadListener);
 
+		if(System.isWeb()){
+			void onSizeCheng(oldW, oldH, newW, newH){
+				AppDialogIris.prepareDialogDecoration();
+			}
+
+			AppSizes.instance.addMetricListener(onSizeCheng);
+		}
+		
 		// ignore: unawaited_futures
 		//CountryTools.fetchCountries();
 
 		Session.addLoginListener(UserLoginTools.onLogin);
-    Session.addLogoffListener(UserLoginTools.onLogoff);
-    Session.addProfileChangeListener(UserLoginTools.onProfileChange);
+    		Session.addLogoffListener(UserLoginTools.onLogoff);
+    		Session.addProfileChangeListener(UserLoginTools.onProfileChange);
 	}
 }

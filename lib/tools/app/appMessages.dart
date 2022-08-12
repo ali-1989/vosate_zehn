@@ -1,6 +1,5 @@
-import '/system/extensions.dart';
-
 import 'package:vosate_zehn/tools/app/appRoute.dart';
+import '/system/extensions.dart';
 
 class AppMessages {
   AppMessages._();
@@ -75,6 +74,22 @@ class AppMessages {
     return AppRoute.getContext().t('aboutUs')?? _noText;
   }
 
+  static String get userName {
+    return AppRoute.getContext().t('userName')?? _noText;
+  }
+
+  static String get password {
+    return AppRoute.getContext().t('password')?? _noText;
+  }
+
+  static String get pay {
+    return AppRoute.getContext().t('pay')?? _noText;
+  }
+
+  static String get logout {
+    return AppRoute.getContext().t('logout')?? _noText;
+  }
+
   static String get validation {
     return AppRoute.getContext().tInMap('loginSection', 'validation')?? _noText;
   }
@@ -99,6 +114,10 @@ class AppMessages {
     return AppRoute.getContext().tInMap('countrySection', 'countrySelection')?? _noText;
   }
 
+  static String get doYouWantLogoutYourAccount {
+    return AppRoute.getContext().tInMap('loginSection', 'doYouWantLogoutYourAccount')?? _noText;
+  }
+
   static String get terms {
     return 'سیاست حفظ حریم خصوصی';
   }
@@ -107,8 +126,16 @@ class AppMessages {
     return AppRoute.getContext().t('mobileNumber')?? _noText;
   }
 
+  static String get loginBtn {
+    return AppRoute.getContext().t('login')?? _noText;
+  }
+
   static String get loginWithGoogle {
     return 'ورود با گوگل';
+  }
+
+  static String get adminPageTitle {
+    return 'صفحه ی مدیریت وسعت ذهن';
   }
 
   static String get changeNumber {
@@ -133,6 +160,10 @@ class AppMessages {
 
   static String get e404 {
     return AppRoute.getContext().tC('thisPageNotFound')?? _noText;
+  }
+
+  static String get tryAgain {
+    return AppRoute.getContext().t('tryAgain')?? _noText;
   }
 
   static String get requestKeyNotExist {
@@ -223,12 +254,20 @@ class AppMessages {
     return 'وسعت ذهن';
   }
 
+  static String get profileTitle {
+    return AppRoute.getContext().tC('profile')?? _noText;
+  }
+
   static String get loginTitle {
     return 'ورود';
   }
 
   static String get registerTitle {
     return 'ثبت نام';
+  }
+
+  static String get aboutUsTitle {
+    return 'درباره ما';
   }
 
   static String get termTitle {
@@ -271,11 +310,11 @@ class AppMessages {
     return 'فیلم';
   }
 
-  static String get hematat {
+  static String get aid {
     return 'حمایت';
   }
 
-  static String get hematatUs {
+  static String get aidUs {
     return 'حمایت از ما';
   }
 

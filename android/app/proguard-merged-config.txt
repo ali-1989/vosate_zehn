@@ -84,6 +84,7 @@
 -keep class com.google.android.gms.auth.api.signin.RevocationBoundService { <init>(); }
 -keep class com.google.android.gms.auth.api.signin.internal.SignInHubActivity { <init>(); }
 -keep class com.google.android.gms.common.api.GoogleApiActivity { <init>(); }
+-keep class com.zt.shareextend.ShareExtendProvider { <init>(); }
 -keep class io.flutter.plugins.urllauncher.WebViewActivity { <init>(); }
 -keep class ir.iris.vosate_zehn.vosate_zehn.MainActivity { <init>(); }
 -keep class me.carda.awesome_notifications.notifications.broadcastReceivers.DismissedNotificationReceiver { <init>(); }
@@ -207,6 +208,36 @@
 -dontwarn sun.misc.Signal
 
 # End of content from K:\Programming\.gradle\caches\transforms-3\5cafba0ec714bc11790f886e3b0d471e\transformed\rules\lib\META-INF\proguard\coroutines.pro
+# The proguard configuration file for the following section is K:\Programming\.gradle\caches\transforms-3\62f13f4ed1145114a603ae6594652e02\transformed\webkit-1.0.0\proguard.txt
+# Copyright 2018 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+# We need to avoid obfuscating the support library boundary interface because
+# this API is shared with the Android Support Library.
+# Note that we only 'keep' the package org.chromium.support_lib_boundary itself,
+# any sub-packages of that package can still be obfuscated.
+-keep public class org.chromium.support_lib_boundary.* { public *; }
+
+# Copyright (C) 2018 The Android Open Source Project
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Prevent WebViewClientCompat from being renamed, since chromium depends on this name.
+-keepnames public class androidx.webkit.WebViewClientCompat
+
+
+# End of content from K:\Programming\.gradle\caches\transforms-3\62f13f4ed1145114a603ae6594652e02\transformed\webkit-1.0.0\proguard.txt
 # The proguard configuration file for the following section is K:\Programming\.gradle\caches\transforms-3\dcb2fb9d321347062149d05b1a6574e8\transformed\jetified-exoplayer-core-2.17.1\proguard.txt
 # Proguard rules specific to the core module.
 
@@ -581,7 +612,7 @@
 -keepclassmembernames class com.google.common.base.Function { *; }
 
 # End of content from K:\Programming\.gradle\caches\transforms-3\f2e95d9f63c41f07952e1b591bf539bf\transformed\jetified-exoplayer-common-2.17.1\proguard.txt
-# The proguard configuration file for the following section is K:\Programming\.gradle\caches\transforms-3\a52ba731080118b245e428e7c0aad4f3\transformed\rules\lib\META-INF\proguard\androidx-annotations.pro
+# The proguard configuration file for the following section is K:\Programming\.gradle\caches\transforms-3\6177f268e213b14de8126836e971779f\transformed\rules\lib\META-INF\proguard\androidx-annotations.pro
 -keep,allowobfuscation @interface androidx.annotation.Keep
 -keep @androidx.annotation.Keep class * {*;}
 
@@ -601,7 +632,7 @@
   @androidx.annotation.DoNotInline <methods>;
 }
 
-# End of content from K:\Programming\.gradle\caches\transforms-3\a52ba731080118b245e428e7c0aad4f3\transformed\rules\lib\META-INF\proguard\androidx-annotations.pro
+# End of content from K:\Programming\.gradle\caches\transforms-3\6177f268e213b14de8126836e971779f\transformed\rules\lib\META-INF\proguard\androidx-annotations.pro
 # The proguard configuration file for the following section is K:\Programming\.gradle\caches\transforms-3\dcfc1b60822a97b4fea0ddc86cbfb0a1\transformed\jetified-ShortcutBadger-1.1.22\proguard.txt
 #https://github.com/leolin310148/ShortcutBadger/issues/46
 -keep class me.leolin.shortcutbadger.impl.AdwHomeBadger { <init>(...); }

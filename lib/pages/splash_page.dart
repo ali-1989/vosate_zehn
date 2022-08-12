@@ -1,30 +1,33 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:iris_tools/api/helpers/databaseHelper.dart';
+import 'package:iris_tools/api/logger/reporter.dart';
 import 'package:iris_tools/net/trustSsl.dart';
 import 'package:lottie/lottie.dart';
+import 'package:spring/spring.dart';
+
 import 'package:vosate_zehn/constants.dart';
 import 'package:vosate_zehn/managers/settingsManager.dart';
 import 'package:vosate_zehn/managers/versionManager.dart';
+import 'package:vosate_zehn/system/initialize.dart';
 import 'package:vosate_zehn/system/session.dart';
+import 'package:vosate_zehn/tools/app/appBroadcast.dart';
+import 'package:vosate_zehn/tools/app/appDb.dart';
+import 'package:vosate_zehn/tools/app/appDirectories.dart';
 import 'package:vosate_zehn/tools/app/appImages.dart';
 import 'package:vosate_zehn/tools/app/appLocale.dart';
 import 'package:vosate_zehn/tools/app/appManager.dart';
 import 'package:vosate_zehn/tools/app/appRoute.dart';
 import 'package:vosate_zehn/tools/app/appThemes.dart';
-import 'package:flutter/material.dart';
-import 'package:vosate_zehn/system/initialize.dart';
-import 'package:vosate_zehn/tools/app/appBroadcast.dart';
-import 'package:vosate_zehn/tools/app/appDb.dart';
-import 'package:vosate_zehn/tools/app/appDirectories.dart';
-import 'package:iris_tools/api/helpers/databaseHelper.dart';
-import 'package:iris_tools/api/logger/reporter.dart';
+import 'package:vosate_zehn/tools/app/appToast.dart';
 import 'package:vosate_zehn/tools/deviceInfoTools.dart';
-import 'package:spring/spring.dart';
 
 bool _isInit = false;
-bool _isLoadingSettings = true;
+bool _isInLoadingSettings = true;
 bool mustShowSplash = true;
 int splashWaitingMil = 4000;
 
@@ -52,7 +55,7 @@ class SplashScreenState extends State<SplashPage> {
           _checkTimer();
           init();
 
-          if (_isLoadingSettings || _canShowSplash()) {
+          if (_isInLoadingSettings || _canShowSplash()) {
             return getSplashView();
           }
           else {
@@ -64,7 +67,7 @@ class SplashScreenState extends State<SplashPage> {
   ///==================================================================================================
   Widget getSplashView() {
     if(kIsWeb){
-      return Center(
+      return const Center(
         child: CircularProgressIndicator(),
       );
     }
@@ -135,7 +138,10 @@ class SplashScreenState extends State<SplashPage> {
                 //AppLocale.detectLocaleDirection(SettingsManager.settingsModel.appLocale); //Localizations.localeOf(context)
                 testCodes(context);
 
-                return Directionality(textDirection: AppThemes.instance.textDirection, child: home!);
+                return Directionality(
+                    textDirection: AppThemes.instance.textDirection,
+                    child: Toaster(child: home!)
+                );
               }),
             );
           },
@@ -175,15 +181,31 @@ class SplashScreenState extends State<SplashPage> {
     await prepareDatabase();
 
     AppThemes.initial();
-    _isLoadingSettings = !SettingsManager.loadSettings();
+    _isInLoadingSettings = !SettingsManager.loadSettings();
 
-    if (!_isLoadingSettings) {
+    if (!_isInLoadingSettings) {
       await Session.fetchLoginUsers();
       await checkInstallVersion();
       await InitialApplication.onceInit(context);
 
       AppBroadcast.reBuildMaterialBySetTheme();
       asyncInitial(context);
+    }
+  }
+
+  void asyncInitial(BuildContext context) {
+    if (!InitialApplication.isLaunchOk) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        Timer.periodic(const Duration(milliseconds: 50), (Timer timer) {
+          if (InitialApplication.isInitialOk) {
+            timer.cancel();
+
+            TrustSsl.acceptBadCertificate();
+            checkAppNewVersion(context);
+            InitialApplication.callOnLaunchUp();
+          }
+        });
+      });
     }
   }
 
@@ -213,22 +235,6 @@ class SplashScreenState extends State<SplashPage> {
     }
     else if (oldVersion < Constants.appVersionCode) {
       VersionManager.onUpdateInstall();
-    }
-  }
-
-  void asyncInitial(BuildContext context) {
-    if (!InitialApplication.isLaunchOk) {
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        Timer.periodic(const Duration(milliseconds: 50), (Timer timer) {
-          if (InitialApplication.isInitialOk) {
-            timer.cancel();
-
-            TrustSsl.acceptBadCertificate();
-            checkAppNewVersion(context);
-            InitialApplication.callOnLaunchUp();
-          }
-        });
-      });
     }
   }
 

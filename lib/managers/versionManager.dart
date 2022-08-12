@@ -4,7 +4,6 @@ import 'package:vosate_zehn/constants.dart';
 import 'package:vosate_zehn/models/versionModel.dart';
 import 'package:vosate_zehn/system/requester.dart';
 import 'package:vosate_zehn/tools/app/appDb.dart';
-
 import '/managers/settingsManager.dart';
 
 class VersionManager {

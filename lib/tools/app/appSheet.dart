@@ -2,23 +2,26 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'package:iris_tools/api/generator.dart';
 import 'package:iris_tools/api/helpers/colorHelper.dart';
 import 'package:iris_tools/api/helpers/focusHelper.dart';
-import 'package:material_dialogs/material_dialogs.dart';
+import 'package:material_dialogs/widgets/dialogs/dialog_widget.dart';
+
 import 'package:vosate_zehn/tools/app/appIcons.dart';
 import 'package:vosate_zehn/tools/app/appMessages.dart';
+import 'package:vosate_zehn/tools/app/appSizes.dart';
 import 'package:vosate_zehn/tools/app/appThemes.dart';
-
-
 import '/system/extensions.dart';
 import '/tools/app/appNavigator.dart';
 
-/*
+/* flutter:
 >> showModalSheet()
 >> showBottomSheet()
 >> showModalBottomSheet()
 >> showCupertinoModalPopup()
+
+-- BottomSheet()
  */
 
 class AppSheet {
@@ -32,20 +35,21 @@ class AppSheet {
     AppNavigator.popByRouteName(context, routeName, result: result);
   }
 
-  ///=======================================================================================================
   static _SheetTheme _genTheme() {
     return _SheetTheme();
   }
-
-  static PersistentBottomSheetController<T> showBottomSheetInScaffold<T>(BuildContext ctx,
+  ///======= flutter api ==========================================================================================
+  static PersistentBottomSheetController<T> showBottomSheetInScaffold<T>(
+      BuildContext ctx,
       Widget Function(BuildContext context) builder, {
-        Color? backgroundColor,
-        double elevation = 0.0,
-        ShapeBorder? shape,
+      Color? backgroundColor,
+      double elevation = 0.0,
+      ShapeBorder? shape,
       }) {
     return showBottomSheet<T>(
       context: ctx,
       shape: shape,
+      constraints: AppSizes.isBigWidth()? BoxConstraints.tightFor(width: AppSizes.webMaxDialogSize) : null,
       clipBehavior: shape != null ? Clip.antiAlias : Clip.none,
       elevation: elevation,
       backgroundColor: backgroundColor ?? Colors.transparent,
@@ -53,33 +57,46 @@ class AppSheet {
     );
   }
 
-  static Future<T?> showCupertinoSheet<T>(BuildContext context, Widget view, {
-    Color? dimColor,
-    bool dismissible = true,
-    RouteSettings? routeSettings,
-  }) {
+  static Future<T?> showCupertinoModalPopup$<T>(
+      BuildContext context,
+      Widget view, {
+      Color? dimColor,
+      bool dismissible = true,
+      RouteSettings? routeSettings,
+      }) {
     final res = showCupertinoModalPopup<T>(
       context: context,
-      builder: (BuildContext context) => view,
       barrierColor: dimColor ?? Colors.black12,
       barrierDismissible: dismissible,
       routeSettings: routeSettings,
+      builder: (BuildContext context){
+        if(AppSizes.isBigWidth()){
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: AppSizes.getWebPadding(), vertical: 0),
+            child: view,
+          );
+        }
+
+        return view;
+      },
     );
 
     return res;
   }
 
-  static Future<T?> showModalSheet<T>(BuildContext ctx, {
-        required Widget Function(BuildContext context) builder,
-    Color? backgroundColor,
-        Color? barrierColor,
-        double elevation = 1.0,
-        ShapeBorder? shape,
-        bool isDismissible = true,
-        //[isScrollControlled] if false: on small sheet show elevation to center page
-        // if true can have full screen
-        bool isScrollControlled = true,
-        String routeName = 'ModalBottomSheet',
+  static Future<T?> showModalBottomSheet$<T>(
+      BuildContext ctx, {
+      required Widget Function(BuildContext context) builder,
+      Color? backgroundColor,
+      Color? barrierColor,
+      double elevation = 1.0,
+      ShapeBorder? shape,
+      bool isDismissible = true,
+      /** isScrollControlled:
+        if false: on small sheet show elevation to center page
+       if true can have full screen **/
+      bool isScrollControlled = true,
+      String routeName = 'ModalBottomSheet',
       }) {
     FocusHelper.hideKeyboardByUnFocus(ctx);
 
@@ -87,18 +104,18 @@ class AppSheet {
         context: ctx,
         elevation: elevation,
         shape: shape,
+        constraints: AppSizes.isBigWidth()? BoxConstraints.tightFor(width: AppSizes.webMaxDialogSize) : null,
         isDismissible: isDismissible,
         clipBehavior: shape != null ? Clip.antiAlias : Clip.none,
         backgroundColor: backgroundColor ?? Colors.transparent,
         barrierColor: barrierColor,
         routeSettings: RouteSettings(name: routeName),
-        //constraints: BoxConstraints.tightFor(),
         isScrollControlled: isScrollControlled,
         builder: builder
     );
   }
 
-  ///=======================================================================================================
+  ///======== flutter api | =====================================================================================
   /// T: is returned value from Navigator.Pop()
   static Future<T?> showSheetOneAction<T>(BuildContext context,
       String message,
@@ -131,7 +148,7 @@ class AppSheet {
       titleView = Text(title, style: AppThemes.relativeSheetTextStyle(),);
     }
 
-    final body = _getBody(
+    var body = _buildBody(
       context,
       theme.contentColor,
       content,
@@ -141,7 +158,7 @@ class AppSheet {
       padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 18.0),
     );
 
-    return showModalSheet<T>(
+    return showModalBottomSheet$<T>(
       context,
       builder: (ctx) => body,
       isDismissible: isDismissible,
@@ -159,7 +176,8 @@ class AppSheet {
     return showSheetOneAction(context, msg, null, title: AppMessages.notice, isDismissible: isDismissible);
   }
 
-  static Future<T?> showSheetYesNo<T>(BuildContext context,
+  static Future<T?> showSheetYesNo<T>(
+      BuildContext context,
       Text msg,
       VoidCallback? posFn,
       VoidCallback? negFn, {
@@ -197,7 +215,7 @@ class AppSheet {
         child: Text(negBtnText, style: ts)
     );
 
-    final body = _getBody(
+    final body = _buildBody(
       context, theme.contentColor,
       msg,
       posButton: posBtn,
@@ -207,7 +225,7 @@ class AppSheet {
       padding: const EdgeInsets.fromLTRB(16, 22, 16, 12),
     );
 
-    return showModalSheet<T>(
+    return showModalBottomSheet$<T>(
       context,
       builder: (ctx) => body,
       isDismissible: isDismissible,
@@ -217,7 +235,8 @@ class AppSheet {
     );
   }
 
-  static Future<T?> showSheetCustom<T>(BuildContext context,
+  static Future<T?> showSheetCustom<T>(
+      BuildContext context,
       Widget content, {
         required String routeName,
         Widget? positiveButton,
@@ -242,7 +261,7 @@ class AppSheet {
     Widget body;
 
     if (useExpanded) {
-      body = _getBodyForList(
+      body = _buildBodyForList(
           context, contentColor, content,
           posButton: positiveButton,
           title: title,
@@ -251,7 +270,7 @@ class AppSheet {
       );
     }
     else {
-      body = _getBody(
+      body = _buildBody(
           context, contentColor, content,
           posButton: positiveButton,
           title: title,
@@ -260,7 +279,7 @@ class AppSheet {
       );
     }
 
-    return showModalSheet<T>(context,
+    return showModalBottomSheet$<T>(context,
       builder: (ctx) => body,
       backgroundColor: backgroundColor,
       isDismissible: isDismissible,
@@ -271,9 +290,9 @@ class AppSheet {
       routeName: routeName,
     );
   }
-
   ///=======================================================================================================
-  static Widget _getBodyForList(BuildContext ctx,
+  static Widget _buildBodyForList(
+      BuildContext ctx,
       Color contentColor,
       Widget description, {
         Widget? title,
@@ -339,7 +358,8 @@ class AppSheet {
     );
   }
 
-  static Widget _getBody(BuildContext ctx,
+  static Widget _buildBody(
+      BuildContext ctx,
       Color contentColor,
       Widget description, {
         Widget? title,
@@ -404,7 +424,8 @@ class AppSheet {
   }
 
   ///=======================================================================================================
-  static void showSheetMenu(BuildContext ctx,
+  static void showSheetMenu(
+      BuildContext ctx,
       List<Widget> widgets,
       String routeName, {
         Color? backgroundColor,
@@ -432,7 +453,8 @@ class AppSheet {
       },
     ).wrapListTileTheme();
 
-    showModalSheet(ctx,
+    showModalBottomSheet$(
+      ctx,
       builder: (context) => view,
       routeName: routeName,
       backgroundColor: backgroundColor ?? Colors.transparent,
@@ -441,10 +463,9 @@ class AppSheet {
     );
   }
 
-  ///===================================================================================================
-  static Widget generateSheetMenu(BuildContext context,
-      List<Widget> items,
-      {
+  static Widget generateSheetMenu(
+      BuildContext context,
+      List<Widget> items, {
         Color? backColor,
         EdgeInsets? padding,
         TextDirection? textDirection,
@@ -532,26 +553,35 @@ class AppSheet {
     return showSheetOneAction<T>(context, AppMessages.thereAreNoResults, null);
   }
 
-  ///=====================================================================================================
-  static void showSheetDialog(BuildContext context, {
-    String? title,
-    String? message,
-    bool dismissible = true,
-    List<Widget>? actions,
+  ///======== third party package ===============================================================================
+  static void showSheetDialog(
+      BuildContext context, {
+      String? title,
+      String? message,
+      bool dismissible = true,
+      List<Widget>? actions,
   }) {
 
     final theme = _genTheme();
 
-    return Dialogs.bottomMaterialDialog(
-        msg: message,
-        title: title,
-        barrierDismissible: dismissible,
-        isDismissible: dismissible,
-        color: theme.backgroundColor,
-        context: context,
-        actions: [
-          ...?actions
-        ]);
+    showModalBottomSheet$(
+        context,
+        backgroundColor: Colors.white,
+        builder: (ctx){
+          return DialogWidget(
+            actions: [...?actions],
+            msg: message,
+            title: title,
+            color: theme.backgroundColor,
+          );
+        },
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(16),
+              topRight: Radius.circular(16)
+          )
+      )
+    );
   }
 }
 ///======================================================================================================

@@ -35,9 +35,9 @@ import 'package:flutter/material.dart';
   }
 }*/
 
-class GenAppBar extends AppBar {
+class AppBarCustom extends AppBar {
 
-  GenAppBar({
+  AppBarCustom({
     super.key,
     super.leading,
     super.automaticallyImplyLeading = true,

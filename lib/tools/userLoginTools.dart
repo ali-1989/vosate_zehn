@@ -1,15 +1,15 @@
+import 'package:iris_tools/api/helpers/boolHelper.dart';
+import 'package:iris_tools/api/helpers/jsonHelper.dart';
+
 import 'package:vosate_zehn/models/userModel.dart';
+import 'package:vosate_zehn/pages/login/login_page.dart';
 import 'package:vosate_zehn/system/session.dart';
 import 'package:vosate_zehn/tools/app/appBroadcast.dart';
 import 'package:vosate_zehn/tools/app/appCache.dart';
 import 'package:vosate_zehn/tools/app/appHttpDio.dart';
 import 'package:vosate_zehn/tools/app/appRoute.dart';
-import 'package:iris_tools/api/helpers/boolHelper.dart';
-import 'package:iris_tools/api/helpers/jsonHelper.dart';
-
 import '/system/httpCodes.dart';
 import '/system/keys.dart';
-
 import '/tools/app/appManager.dart';
 import '/tools/app/appNavigator.dart';
 
@@ -21,7 +21,6 @@ class UserLoginTools {
   }
 
   static void onLogoff(UserModel user){
-    user.profileImageUrl = null;
     sendLogoffState(user);
   }
 
@@ -117,8 +116,16 @@ class UserLoginTools {
     final isCurrent = Session.getLastLoginUser()?.userId == userId;
     await Session.logoff(userId);
 
+    AppBroadcast.drawerMenuRefresher.update();
+    AppBroadcast.homeScreenKey.currentState?.scaffoldState.currentState?.closeDrawer();
+
     if (isCurrent) {
-      AppNavigator.popRoutesUntilRoot(AppRoute.getContext());
+      AppRoute.backToRoot(AppRoute.getContext());
+
+      Future.delayed(Duration(seconds: 1), (){
+        AppRoute.pushNamed(AppRoute.getContext(), LoginPage.route.name!);
+      });
+
     }
   }
 

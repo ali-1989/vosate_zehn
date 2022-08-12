@@ -1,12 +1,12 @@
 import 'dart:typed_data';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:iris_tools/api/generator.dart';
+
 import 'package:vosate_zehn/system/keys.dart';
 import 'package:vosate_zehn/tools/app/appDb.dart';
-
 import '/constants.dart';
 import '/models/notificationModel.dart' as nm;
-import 'package:awesome_notifications/awesome_notifications.dart';
 
 // https://github.com/rafaelsetragni/awesome_notifications/blob/master/example/lib/utils/notification_util.dart
 

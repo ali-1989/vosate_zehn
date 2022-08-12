@@ -9,6 +9,7 @@ import 'package:http_parser/http_parser.dart';
 import 'package:iris_tools/api/converter.dart';
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
 import 'package:iris_tools/api/helpers/listHelper.dart';
+
 import 'package:vosate_zehn/tools/app/appManager.dart';
 
 class AppHttpDio {
@@ -22,7 +23,7 @@ class AppHttpDio {
 
 	static HttpRequester send(HttpItem item, {BaseOptions? options}){
 		if(item.debugMode) {
-			AppManager.logger.logToAll(StackTrace.current.toString());
+			AppManager.logger.logToAll('==== Stack Trace : ${StackTrace.current.toString()}');
 		}
 
 		item.prepareMultiParts();
@@ -119,7 +120,7 @@ class AppHttpDio {
 
 	static HttpRequester download(HttpItem item, String savePath, {BaseOptions? options}){
 		if(item.debugMode) {
-			AppManager.logger.logToAll(StackTrace.current.toString());
+			AppManager.logger.logToAll('==== Stack Trace : ${StackTrace.current.toString()}');
 		}
 
 		final itemRes = HttpRequester();

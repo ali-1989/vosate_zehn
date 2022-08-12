@@ -1,7 +1,9 @@
-import 'package:iris_tools/api/helpers/colorHelper.dart';
-import 'package:vosate_zehn/tools/app/appIcons.dart';
 import 'package:flutter/material.dart';
+
+import 'package:iris_tools/api/helpers/colorHelper.dart';
 import 'package:material_dialogs/material_dialogs.dart';
+
+import 'package:vosate_zehn/tools/app/appIcons.dart';
 import 'package:vosate_zehn/tools/app/appMessages.dart';
 import 'package:vosate_zehn/tools/app/appNavigator.dart';
 import 'package:vosate_zehn/tools/app/appThemes.dart';

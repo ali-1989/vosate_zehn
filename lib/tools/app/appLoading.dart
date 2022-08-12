@@ -1,19 +1,24 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
+
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:iris_tools/api/helpers/colorHelper.dart';
+import 'package:iris_tools/features/overlayDialog.dart';
 import 'package:lottie/lottie.dart';
+
 import 'package:vosate_zehn/tools/app/appImages.dart';
 import 'package:vosate_zehn/tools/app/appMessages.dart';
 import 'package:vosate_zehn/tools/app/appOverlay.dart';
 import 'package:vosate_zehn/tools/app/appThemes.dart';
+import 'package:vosate_zehn/views/overlay/overlayContainer.dart';
 
 class AppLoading {
   AppLoading._();
 
   static late AppLoading _instance;
   static bool _isInit = false;
+  static late OverlayTheme _overlayTheme;
 
   static AppLoading get instance {
     if(!_isInit){
@@ -27,90 +32,88 @@ class AppLoading {
   }
 
   static void _init(){
-    EasyLoading.instance
-      ..displayDuration = const Duration(milliseconds: 3500)
-      ..indicatorType = EasyLoadingIndicatorType.fadingCircle
-      ..loadingStyle = EasyLoadingStyle.dark
-      ..indicatorSize = 45.0
-      ..radius = 10.0
-      ..progressColor = Colors.white
-      ..backgroundColor = Colors.grey
-      ..indicatorColor = Colors.white
-      ..textColor = Colors.white
-      ..maskColor = Colors.black.withOpacity(0.3)
-      ..userInteractions = true
-      ..dismissOnTap = false;
+    _overlayTheme = OverlayTheme();
+    _overlayTheme.defaultDisplayDuration = const Duration(milliseconds: 3500);
+    _overlayTheme.defaultMaskColor = Colors.transparent;
   }
 
-  Future<void> showWaiting({bool dismiss = false}){
-    return EasyLoading.show(
-        status: AppMessages.pleaseWait,
-        dismissOnTap: dismiss,
-      maskType: EasyLoadingMaskType.custom,
+  Future<void> showWaiting(BuildContext context, {bool dismiss = false}){
+    final easyView = OverlayContainer(
+      overlayTheme: _overlayTheme,
+      message: AppMessages.pleaseWait,
+      maskType: OverlayMaskType.custom,
+      indicator: SpinKitFadingCircle(
+        color: _overlayTheme.defaultIndicatorColor,
+        size: _overlayTheme.indicatorSize,
+      ),
     );
-  }
 
-  Future<void> showError(String msg, {bool dismiss = true, Duration duration = const Duration(milliseconds: 3500)}){
-    return EasyLoading.showError(
-      msg,
-      duration: duration,
-      dismissOnTap: dismiss,
-      maskType: EasyLoadingMaskType.none,
+    final over = OverlayScreenView(
+      content: easyView,
+      backgroundColor: Colors.black.withOpacity(0.3),
     );
+
+    return AppOverlay.showScreen(context, over, canBack: dismiss);
   }
 
-  Future<void> showSuccess(String msg, {bool dismiss = true, Duration duration = const Duration(milliseconds: 3500)}){
-    return EasyLoading.showSuccess(
-      msg,
-      duration: duration,
-      dismissOnTap: dismiss,
-      maskType: EasyLoadingMaskType.none,
+  Future<void> showError(BuildContext context, String msg, {bool dismiss = true, Duration? duration}){
+    final easyView = OverlayContainer(
+      overlayTheme: _overlayTheme,
+      message: msg,
+      maskType: OverlayMaskType.none,
+      indicator: _overlayTheme.defaultErrorWidget,
     );
-  }
 
-  Future<void> showProgress(String msg, double progress){
-    return EasyLoading.showProgress(
-      progress,
-      status: msg,
-      maskType: EasyLoadingMaskType.custom,
+    final over = OverlayScreenView(
+      content: easyView,
     );
+
+    Future.delayed(duration?? _overlayTheme.displayDuration, () => cancel(context));
+    return AppOverlay.showScreen(context, over, canBack: dismiss);
   }
 
-  Future<void> cancel({bool byAnimation = true}){
-    return EasyLoading.dismiss(animation: byAnimation);
+  Future<void> showSuccess(BuildContext context, String msg, {bool dismiss = true, Duration? duration}){
+    final easyView = OverlayContainer(
+      overlayTheme: _overlayTheme,
+      message: msg,
+      maskType: OverlayMaskType.none,
+      indicator: _overlayTheme.defaultSuccessWidget,
+    );
+
+    final over = OverlayScreenView(
+      content: easyView,
+    );
+
+    Future.delayed(duration?? _overlayTheme.displayDuration, () => cancel(context));
+    return AppOverlay.showScreen(context, over, canBack: dismiss);
+  }
+
+  void cancel(BuildContext context){
+    AppOverlay.hideScreen(context);
   }
   ///-----------------------------------------------------------------------------------
   Future<void> showLoading(BuildContext context, {bool dismiss = false}) async {
-     EasyLoading.show(
-      status: AppMessages.pleaseWait,
-      dismissOnTap: dismiss,
+    final easyView = OverlayContainer(
+      overlayTheme: _overlayTheme,
+      message: AppMessages.pleaseWait,
+      maskType: OverlayMaskType.custom,
       indicator: _getLoadingView(),
-      maskType: EasyLoadingMaskType.custom,
     );
 
-     if(!dismiss) {
-       AppOverlay.showIgnoreScreen(context /*AppRoute.getContext()*/);
-     }
-  }
-
-  Future<void> hideLoading(BuildContext context, {bool byAnimation = true}){
-    AppOverlay.hideIgnoreScreen(context);
-    return EasyLoading.dismiss(animation: byAnimation);
-  }
-
-  Future<void> showWaitingIgnore(BuildContext context) async {
-    EasyLoading.show(
-      status: AppMessages.pleaseWait,
-      dismissOnTap: false,
-      maskType: EasyLoadingMaskType.custom,
+    final over = OverlayScreenView(
+      content: easyView,
     );
 
-    AppOverlay.showIgnoreScreen(context);
+    return AppOverlay.showScreen(context, over, canBack: dismiss);
+
+     /*if(!dismiss) {
+       AppOverlay.showIgnoreScreen(context *//*AppRoute.getContext()*//*);
+     }*/
   }
 
-  Future<void> hideWaitingIgnore(BuildContext context, {bool byAnimation = true}){
-    AppOverlay.hideIgnoreScreen(context);
-    return EasyLoading.dismiss(animation: byAnimation);
+  Future<void> hideLoading(BuildContext context) async {
+    //AppOverlay.hideIgnoreScreen(context);
+    AppOverlay.hideScreen(context);
   }
 
   Widget _getLoadingView(){

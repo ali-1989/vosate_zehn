@@ -1,16 +1,19 @@
-import 'package:argon_buttons_flutter/argon_buttons_flutter.dart';
-import 'package:flip_card/flip_card_controller.dart';
 import 'package:flutter/material.dart';
+
+import 'package:argon_buttons_flutter/argon_buttons_flutter.dart';
+import 'package:flip_card/flip_card.dart';
+import 'package:flip_card/flip_card_controller.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iris_tools/api/generator.dart';
 import 'package:iris_tools/api/helpers/localeHelper.dart';
 import 'package:iris_tools/api/helpers/mathHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+
 import 'package:vosate_zehn/models/countryModel.dart';
 import 'package:vosate_zehn/pages/home_page.dart';
 import 'package:vosate_zehn/pages/login/register_page.dart';
-import 'package:vosate_zehn/pages/termPage.dart';
+import 'package:vosate_zehn/pages/term_page.dart';
 import 'package:vosate_zehn/services/google_service.dart';
 import 'package:vosate_zehn/services/login_service.dart';
 import 'package:vosate_zehn/system/keys.dart';
@@ -28,7 +31,6 @@ import 'package:vosate_zehn/tools/app/appToast.dart';
 import 'package:vosate_zehn/tools/countryTools.dart';
 import 'package:vosate_zehn/views/phoneNumberInput.dart';
 import 'package:vosate_zehn/views/screens/countrySelect.dart';
-import 'package:flip_card/flip_card.dart';
 
 class LoginPage extends StatefulWidget {
   static final route = GoRoute(
@@ -274,11 +276,11 @@ class _LoginPageState extends StateBase<LoginPage> {
   void signWithGoogleCall() async {
     final google = GoogleService();
 
-    AppLoading.instance.showWaitingIgnore(context);
+    AppLoading.instance.showWaiting(context);
     final googleResult = await google.signIn();
 
     if(googleResult == null){
-      AppLoading.instance.hideWaitingIgnore(context);
+      AppLoading.instance.hideLoading(context);
 
       AppSheet.showSheet$OperationFailed(context);
       return;
@@ -288,7 +290,7 @@ class _LoginPageState extends StateBase<LoginPage> {
       injectData.email = googleResult.email;
 
       final result = await LoginService.requestVerifyEmail(email: googleResult.email);
-      AppLoading.instance.hideWaitingIgnore(context);
+      AppLoading.instance.cancel(context);
 
       if(result.connectionError){
         AppSheet.showSheet$ErrorCommunicatingServer(context);
@@ -373,7 +375,7 @@ class _LoginPageState extends StateBase<LoginPage> {
 
     LoginService.requestSendOtp(countryModel: countryModel, phoneNumber: phoneNumber).then((value) {
       if(value == null){
-        AppToast.showToast(AppMessages.errorCommunicatingServer);
+        AppToast.showToast(context, AppMessages.errorCommunicatingServer);
       }
     });
 
@@ -382,7 +384,7 @@ class _LoginPageState extends StateBase<LoginPage> {
 
   void reSendOtpCodeCall() async {
     LoginService.requestSendOtp(countryModel: countryModel, phoneNumber: phoneNumber);
-    AppToast.showToast(AppMessages.otpCodeIsResend);
+    AppToast.showToast(context, AppMessages.otpCodeIsResend);
   }
 
   void onValidationCall() async {
@@ -394,11 +396,6 @@ class _LoginPageState extends StateBase<LoginPage> {
     final injectData = RegisterPageInjectData();
     injectData.countryModel = countryModel;
     injectData.mobileNumber = phoneNumber;
-
-    /*if(pinCode == '1111'){
-      AppRoute.push(context, RegisterPage.route.path, extra: injectData);
-      return;
-    }*/
 
     final result = await LoginService.requestVerifyOtp(countryModel: countryModel, phoneNumber: phoneNumber, code: pinCode);
 

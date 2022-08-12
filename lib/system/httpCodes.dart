@@ -39,12 +39,12 @@ class HttpCodes {
     return res;
   }
   ///=======================================================================================================
-  static int error_requestKeyNotFound = 10;
+  static int error_zoneKeyNotFound = 10;
   static int error_requestNotDefined = 15;
   static int error_userIsBlocked = 20;
   static int error_userNotFound = 25;
-  static int error_userNamePassIncorrect = 27;
   static int error_parametersNotCorrect = 30;
+  static int error_mustSendRequesterUserId = 33;
   static int error_databaseError = 35;
   static int error_internalError = 40;
   static int error_isNotJson = 45;
@@ -54,7 +54,9 @@ class HttpCodes {
   static int error_canNotAccess = 65;
   static int error_operationCannotBePerformed = 70;
   static int error_notUpload = 75;
-  static int error_toUserMessage = 85;
+  static int error_userNamePassIncorrect = 80;
+  static int error_userMessage = 85;
+  static int error_translateMessage = 86;
   static int error_spacialError = 90;
 
   //static int error_userNotManager = 777;

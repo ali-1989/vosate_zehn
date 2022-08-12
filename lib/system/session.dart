@@ -1,14 +1,13 @@
-import 'package:vosate_zehn/models/userModel.dart';
-import 'package:vosate_zehn/tools/app/appDb.dart';
-import 'package:vosate_zehn/tools/app/appLocale.dart';
 import 'package:iris_db/iris_db.dart';
 import 'package:iris_tools/api/checker.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
 
+import 'package:vosate_zehn/models/userModel.dart';
+import 'package:vosate_zehn/tools/app/appDb.dart';
+import 'package:vosate_zehn/tools/app/appLocale.dart';
 import '/managers/settingsManager.dart';
 import '/system/extensions.dart';
 import '/system/keys.dart';
-
 
 class Session {
 	Session._();
@@ -84,11 +83,6 @@ class Session {
 		oldDbUser ??= await fetchUserById(userId);
 
 		if(oldDbUser != null) {
-			/// copy current path to new data if user avatar not changed
-			/*if (oldDbUser.profileUri == json[Keys.profileImageUri]) {
-			  newUser.profilePath = oldDbUser.profilePath;
-			}*/
-
 			/// copy current Token to new data if not exist
 			if(Checker.isNullOrEmpty(newUser.token)) {
 				newUser.token = oldDbUser.token;
@@ -139,11 +133,6 @@ class Session {
 
 		if(oldDbUser != null) {
 			newUser.loginDate = oldDbUser.loginDate;
-
-			/// copy current path to new data if user avatar not changed
-			/*if (oldDbUser.profileUri == json[Keys.profileImageUri]) {
-			  newUser.profilePath = oldDbUser.profilePath;
-			}*/
 
 			/// copy current Token to new data if not exist
 			if(Checker.isNullOrEmpty(json[Keys.token])) {

@@ -1,45 +1,57 @@
 import 'package:flutter/material.dart';
+
 import 'package:go_router/go_router.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:shaped_bottom_bar/models/shaped_item_object.dart';
 import 'package:shaped_bottom_bar/shaped_bottom_bar.dart';
 import 'package:shaped_bottom_bar/utils/arrays.dart';
+import 'package:vosate_zehn/services/aidService.dart';
+
 import 'package:vosate_zehn/system/stateBase.dart';
+import 'package:vosate_zehn/tools/app/appBroadcast.dart';
 import 'package:vosate_zehn/tools/app/appIcons.dart';
 import 'package:vosate_zehn/tools/app/appMessages.dart';
 import 'package:vosate_zehn/tools/app/appThemes.dart';
-import 'package:vosate_zehn/views/genAppBar.dart';
+import 'package:vosate_zehn/views/AppBarCustom.dart';
 import 'package:vosate_zehn/views/genDrawerMenu.dart';
 
 class HomePage extends StatefulWidget {
   static final route = GoRoute(
     path: '/',
     name: (HomePage).toString().toLowerCase(),
-    builder: (BuildContext context, GoRouterState state) => const HomePage(),
+    builder: (BuildContext context, GoRouterState state) => HomePage(key: AppBroadcast.homeScreenKey,),
   );
 
   const HomePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomePage> createState() => HomePageState();
 }
 ///=================================================================================================
-class _HomePageState extends StateBase<HomePage> {
+class HomePageState extends StateBase<HomePage> {
+  late GlobalKey<ScaffoldState> scaffoldState;
   int selectedItem = 0;
 
+
+  @override
+  initState(){
+    super.initState();
+    scaffoldState = GlobalKey<ScaffoldState>();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Assist(
       controller: assistCtr,
-      builder: (context, ctr, data) {
+        builder: (context, ctr, data) {
         return Scaffold(
-          appBar: genAppBar(),
+          key: scaffoldState,
+          appBar: buildAppBar(),
           body: SafeArea(
               child: buildBody()
           ),
           drawer: DrawerMenuBuilder.getDrawer(),
-          bottomNavigationBar: genNavBar(),
+          bottomNavigationBar: buildNavBar(),
         );
       }
     );
@@ -62,8 +74,8 @@ class _HomePageState extends StateBase<HomePage> {
     );
   }
 
-  AppBar genAppBar(){
-    return GenAppBar(
+  AppBar buildAppBar(){
+    return AppBarCustom(
       title: Text(AppMessages.appName),
       /*leading: IconButton(
           onPressed: (){
@@ -73,13 +85,13 @@ class _HomePageState extends StateBase<HomePage> {
 
       actions: [
         IconButton(
-            onPressed: (){},
+            onPressed: gotoAidPage,
             icon: Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(AppIcons.cashMultiple, size: 20,),
-                Text(AppMessages.hematat, style: TextStyle(fontSize: 11),),
+                Text(AppMessages.aid, style: TextStyle(fontSize: 11),),
               ],
             )
         ),
@@ -92,7 +104,7 @@ class _HomePageState extends StateBase<HomePage> {
     );
   }
 
-  Widget genNavBar(){
+  Widget buildNavBar(){
     return ShapedBottomBar(
         backgroundColor: AppThemes.instance.currentTheme.primaryColor,
         iconsColor: Colors.black,
@@ -115,5 +127,9 @@ class _HomePageState extends StateBase<HomePage> {
           //setState(() {});
         },
     );
+  }
+
+  static void gotoAidPage(){
+    AidService.gotoAidPage();
   }
 }

@@ -1,5 +1,4 @@
 import 'package:vosate_zehn/tools/app/appLocale.dart';
-
 import '/managers/settingsManager.dart';
 
 class LanguageTools {

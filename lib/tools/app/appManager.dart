@@ -1,16 +1,15 @@
+import 'package:flutter/material.dart';
+
+import 'package:iris_tools/api/logger/logger.dart';
+import 'package:iris_tools/api/logger/reporter.dart';
+import 'package:iris_tools/api/system.dart';
+
+import 'package:vosate_zehn/constants.dart';
 import 'package:vosate_zehn/models/userModel.dart';
+import 'package:vosate_zehn/system/keys.dart';
 import 'package:vosate_zehn/system/session.dart';
 import 'package:vosate_zehn/tools/app/appRoute.dart';
-import 'package:flutter/material.dart';
-import 'package:iris_tools/api/logger/logger.dart';
-import 'package:iris_tools/api/system.dart';
-import 'package:iris_tools/api/logger/reporter.dart';
-
-import '/constants.dart';
-
-import '/system/keys.dart';
-
-import '/tools/deviceInfoTools.dart';
+import 'package:vosate_zehn/tools/deviceInfoTools.dart';
 
 class AppManager {
   AppManager._();

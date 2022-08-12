@@ -1,32 +1,32 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_html/flutter_html.dart';
+
 import 'package:go_router/go_router.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
-
 import 'package:vosate_zehn/system/keys.dart';
 import 'package:vosate_zehn/system/requester.dart';
 import 'package:vosate_zehn/system/session.dart';
+
 import 'package:vosate_zehn/system/stateBase.dart';
 import 'package:vosate_zehn/tools/app/appMessages.dart';
 import 'package:vosate_zehn/views/AppBarCustom.dart';
 import 'package:vosate_zehn/views/notFetchData.dart';
 import 'package:vosate_zehn/views/waitToLoad.dart';
 
-class AboutUsPage extends StatefulWidget {
+class TermPage extends StatefulWidget {
   static final route = GoRoute(
-    path: '/about_us',
-    name: (AboutUsPage).toString().toLowerCase(),
-    builder: (BuildContext context, GoRouterState state) => const AboutUsPage(),
+    path: '/term',
+    name: (TermPage).toString().toLowerCase(),
+    builder: (BuildContext context, GoRouterState state) => TermPage(),
   );
 
-  const AboutUsPage({super.key});
+  const TermPage({Key? key}) : super(key: key);
 
   @override
-  State<AboutUsPage> createState() => _AboutUsPageState();
+  State<TermPage> createState() => _TermPageState();
 }
-///=================================================================================================
-class _AboutUsPageState extends StateBase<AboutUsPage> {
+///==================================================================================
+class _TermPageState extends StateBase<TermPage> {
   Requester requester = Requester();
   bool isInFetchData = true;
   String? htmlData;
@@ -36,7 +36,7 @@ class _AboutUsPageState extends StateBase<AboutUsPage> {
   void initState(){
     super.initState();
 
-    requestAboutUs();
+    requestTerm();
   }
 
   @override
@@ -49,17 +49,17 @@ class _AboutUsPageState extends StateBase<AboutUsPage> {
   @override
   Widget build(BuildContext context) {
     return Assist(
-      controller: assistCtr,
-      builder: (context, ctr, data) {
-        return Scaffold(
-          appBar: AppBarCustom(
-            title: Text(AppMessages.aboutUsTitle),
-          ),
-          body: SafeArea(
-              child: buildBody()
-          ),
-        );
-      }
+        controller: assistCtr,
+        builder: (context, ctr, data) {
+          return Scaffold(
+            appBar: AppBarCustom(
+              title: Text(AppMessages.termTitle),
+            ),
+            body: SafeArea(
+                child: buildBody()
+            ),
+          );
+        }
     );
   }
 
@@ -76,7 +76,7 @@ class _AboutUsPageState extends StateBase<AboutUsPage> {
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: SingleChildScrollView(
         child: Html(
-            data: htmlData,
+          data: htmlData,
         ),
       ),
     );
@@ -86,12 +86,12 @@ class _AboutUsPageState extends StateBase<AboutUsPage> {
     isInFetchData = true;
     assistCtr.updateMain();
 
-    requestAboutUs();
+    requestTerm();
   }
 
-  void requestAboutUs() async {
+  void requestTerm() async {
     final js = <String, dynamic>{};
-    js[Keys.requestZone] = 'get_about_us_data';
+    js[Keys.requestZone] = 'get_term_data';
     js[Keys.requesterId] = Session.getLastLoginUser()?.userId;
 
     requester.bodyJson = js;
@@ -103,7 +103,7 @@ class _AboutUsPageState extends StateBase<AboutUsPage> {
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
       isInFetchData = false;
-      htmlData = data[Keys.data];
+      htmlData = data[Keys.data]?? '_';
       assistCtr.addStateAndUpdate(state$fetchData);
     };
 

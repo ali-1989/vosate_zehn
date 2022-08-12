@@ -1,11 +1,10 @@
+import 'package:flutter/material.dart';
+
 import 'package:vosate_zehn/tools/app/appMessages.dart';
 import 'package:vosate_zehn/tools/app/appSheet.dart';
 import 'package:vosate_zehn/tools/app/appSnack.dart';
-import 'package:flutter/material.dart';
-
 import '/system/httpCodes.dart';
 import '/system/keys.dart';
-
 
 class HttpProcess {
   HttpProcess._();
@@ -18,7 +17,7 @@ class HttpProcess {
   }
 
   static bool processCommonRequestErrors(BuildContext context, int causeCode, String? cause, Map json){
-    if(causeCode == HttpCodes.error_requestKeyNotFound){
+    if(causeCode == HttpCodes.error_zoneKeyNotFound){
       AppSnack.showError(context, AppMessages.requestKeyNotExist);
       return true;
     }
@@ -74,7 +73,7 @@ class HttpProcess {
       AppSnack.showInfo(context, AppMessages.thisRequestNotDefined);
       return true;
     }
-    else if(causeCode == HttpCodes.error_toUserMessage){
+    else if(causeCode == HttpCodes.error_userMessage){
       final action = SnackBarAction(
         label: AppMessages.ok,
         onPressed: (){AppSheet.closeSheet(context);},

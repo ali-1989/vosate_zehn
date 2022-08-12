@@ -12,26 +12,33 @@ class AppSizes {
   static final _instance = AppSizes._();
   static bool _initialState = false;
 
-  static AppSizes get instance {
-    if(!_initialState){
-      _initialState = true;
-      _instance._initial();
-    }
-
-    return _instance;
-  }
+  static double sizeOfBigScreen = 700;
+  static double webMaxDialogSize = 700;
 
   double? realPixelWidth;
   double? realPixelHeight;
   double? pixelRatio;
-  double? appWidth;    //Tecno: 360.0  Web: 1200
-  double? appHeight;  //Tecno: 640.0  Web: 620
+  double appWidth = 0;    //Tecno: 360.0  Web: 1200
+  double appHeight = 0;  //Tecno: 640.0  Web: 620
   double textMultiplier = 6; // Tecno: ~6.4
   double imageMultiplier = 1;
   double heightMultiplier = 1;
   ui.WindowPadding? rootPadding;
   List<Function> onMetricListeners = [];
   Function? _systemMetricFunc;
+
+  static AppSizes get instance {
+    if(!_initialState){
+      _initialState = true;
+      _instance._systemMetricFunc = ui.window.onMetricsChanged;
+
+      _instance._initial();
+    }
+
+    return _instance;
+  }
+
+
 
   void _prepareSizes() {
     realPixelWidth = ui.window.physicalSize.width;
@@ -50,16 +57,14 @@ class AppSizes {
     else {
       appWidth = (isLandscape ? realPixelHeight : realPixelWidth)! / pixelRatio!;
       appHeight = (isLandscape ? realPixelWidth : realPixelHeight)! / pixelRatio!;
-      imageMultiplier = appWidth! / 100;
-      textMultiplier = appHeight! / 100; // ~6.3
-      heightMultiplier = appHeight! / 100;
+      imageMultiplier = appWidth / 100;
+      textMultiplier = appHeight / 100; // ~6.3
+      heightMultiplier = appHeight / 100;
     }
   }
 
   void _initial() {
     _prepareSizes();
-    onMetricListeners = [];
-    _systemMetricFunc = ui.window.onMetricsChanged;
 
     //----------------- onMetricsChanged -----------------
     void onMetricsChanged(){
@@ -72,7 +77,7 @@ class AppSizes {
         return;
       }*/
 
-      for(var f in onMetricListeners){
+      for(final f in onMetricListeners){
         try{
           f.call(oldW, oldH, realPixelWidth, realPixelHeight);
         }
@@ -82,7 +87,6 @@ class AppSizes {
 
     //----------------- onLocalChanged -----------------
     void onLocalChanged(){
-      //non
     }
 
     ui.window.onLocaleChanged = onLocalChanged;
@@ -119,6 +123,20 @@ class AppSizes {
 
   static Size getWindowSize(){
     return ui.window.physicalSize;
+  }
+
+  static bool isBigWidth(){
+    return instance.appWidth > sizeOfBigScreen;
+  }
+
+  static double getWebPadding(){
+    final over = instance.appWidth - webMaxDialogSize;
+
+    if(over < 1){
+      return 0;
+    }
+
+    return over / 2;
   }
 
   double mTextSize(double tSize){

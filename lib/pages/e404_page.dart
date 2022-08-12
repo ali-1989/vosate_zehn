@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
+
 import 'package:vosate_zehn/tools/app/appImages.dart';
 import 'package:vosate_zehn/tools/app/appMessages.dart';
 import 'package:vosate_zehn/tools/app/appThemes.dart';
 
 class E404Page extends StatefulWidget {
   static final route = GoRoute(
-  path: '/e404page',
+  path: '/404page',
   name: (E404Page).toString().toLowerCase(),
   builder: (BuildContext context, GoRouterState state) => const E404Page(),
   );

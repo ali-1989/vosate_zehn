@@ -1,19 +1,26 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+
 import 'package:go_router/go_router.dart';
+import 'package:vosate_zehn/pages/about_us_page.dart';
+import 'package:vosate_zehn/pages/aid_page.dart';
+import 'package:vosate_zehn/pages/contact_us_page.dart';
+
 import 'package:vosate_zehn/pages/e404_page.dart';
+import 'package:vosate_zehn/pages/favorites_page.dart';
 import 'package:vosate_zehn/pages/home_page.dart';
+import 'package:vosate_zehn/pages/last_seen_page.dart';
 import 'package:vosate_zehn/pages/login/login_page.dart';
 import 'package:vosate_zehn/pages/login/register_page.dart';
-import 'package:vosate_zehn/pages/termPage.dart';
+import 'package:vosate_zehn/pages/profile/profile_page.dart';
+import 'package:vosate_zehn/pages/term_page.dart';
+import 'package:vosate_zehn/pages/zarinpal_page.dart';
 import 'package:vosate_zehn/system/session.dart';
 import 'package:vosate_zehn/tools/app/appDb.dart';
-import 'package:flutter/material.dart';
 import 'package:vosate_zehn/tools/app/appDirectories.dart';
-
 import '/system/keys.dart';
 import '/tools/app/appManager.dart';
 import '/tools/app/appNavigator.dart';
-
 
 class AppRoute {
   static final List<GoRoute> freeRoutes = [];
@@ -44,6 +51,18 @@ class AppRoute {
     AppNavigator.backRoute(mustLastCtx);
   }
 
+  static void backToRoot(BuildContext context) {
+    //AppNavigator.popRoutesUntilRoot(AppRoute.getContext());
+
+    while(canPop(context)){
+      pop(context);
+    }
+  }
+
+  static bool canPop(BuildContext context) {
+    return GoRouter.of(context).canPop();
+  }
+
   static void pop(BuildContext context) {
     GoRouter.of(context).pop();
   }
@@ -66,17 +85,15 @@ class AppRoute {
     }
   }
 
-  static void reCallPage(BuildContext ctx, Widget page, {required String name, dynamic arguments}) {
-    //ModalRoute before = AppNavigator.getPreviousPage(ctx);
-    final current = AppNavigator.getModalRouteOf(ctx);
-    AppNavigator.popRoutesUntil(ctx, current);
-    AppNavigator.replaceCurrentRoute(ctx, page, name: name, data: arguments);
+  static void replaceNamed(BuildContext context, String name, {dynamic extra}) {
+    GoRouter.of(context).replaceNamed(name, params: {}, extra: extra);
   }
 
   static void init(){
     freeRoutes.add(LoginPage.route);
     freeRoutes.add(RegisterPage.route);
     freeRoutes.add(TermPage.route);
+    freeRoutes.add(AboutUsPage.route);
   }
 }
 ///============================================================================================
@@ -87,31 +104,55 @@ final mainRouter = GoRouter(
       LoginPage.route,
       RegisterPage.route,
       TermPage.route,
+      AboutUsPage.route,
+      AidPage.route,
+      LastSeenPage.route,
+      FavoritesPage.route,
+      ContactUsPage.route,
+      ZarinpalPage.route,
+      ProfilePage.route,
     ],
     initialLocation: HomePage.route.path,
+    routerNeglect: true,//In browser 'back' button not work
     errorBuilder: (BuildContext context, GoRouterState state) => const E404Page(),
     //refreshListenable: loginInfo, //GoRouterRefreshStream(streamController.stream),
     redirect: _mainRedirect,
 );
 
+bool checkFreeRoute(GoRoute route, GoRouterState state){
+  final routeIsTop = route.path.startsWith('/');
+  final stateIsTop = state.subloc.startsWith('/');
+
+  if((routeIsTop && stateIsTop) || (!routeIsTop && !stateIsTop)){
+    return route.path == state.subloc;
+  }
+
+  if(!routeIsTop){
+    //return '${HomePage.route.path}/${route.path}' == state.subloc;  if homePage has name, like:/admin
+    return route.path == state.subloc;
+  }
+
+  return false;
+}
+
 String? _mainRedirect(GoRouterState state){
-  debugPrint('--redirect---> ${state.subloc}         |  qp:${state.queryParams}');
+  debugPrint('-- redirect---> ${state.subloc}         |  qp:${state.queryParams}');
 
   if(state.subloc == HomePage.route.path){
     AppDirectories.generateNoMediaFile();
   }
 
   if(!Session.hasAnyLogin()){
-    if(AppRoute.freeRoutes.any((r) => r.path == state.subloc)){
-      return state.queryParams['from_page'];
+    if(AppRoute.freeRoutes.any((r) => checkFreeRoute(r, state))){
+      return null;
     }
     else {
-      final from = state.subloc == '/' ? '' : '?from_page=${state.location}';
-      return '${LoginPage.route.path}$from';
+      final from = state.subloc == '/' ? '' : '?gt=${state.location}';
+      return '/${LoginPage.route.path}$from'.replaceFirst('//', '/');
     }
   }
 
-  return state.queryParams['from_page'];
+  return state.queryParams['gt'];
 }
 ///============================================================================================
 class MyPageRoute extends PageRouteBuilder {

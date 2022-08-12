@@ -1,5 +1,7 @@
 import 'dart:math';
+
 import 'package:flutter/material.dart';
+
 import 'package:iris_tools/api/helpers/colorHelper.dart';
 
 class ColorTheme {

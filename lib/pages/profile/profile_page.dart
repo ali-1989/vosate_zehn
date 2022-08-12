@@ -1,42 +1,40 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_html/flutter_html.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
-
 import 'package:vosate_zehn/system/keys.dart';
 import 'package:vosate_zehn/system/requester.dart';
 import 'package:vosate_zehn/system/session.dart';
+
 import 'package:vosate_zehn/system/stateBase.dart';
 import 'package:vosate_zehn/tools/app/appMessages.dart';
 import 'package:vosate_zehn/views/AppBarCustom.dart';
 import 'package:vosate_zehn/views/notFetchData.dart';
 import 'package:vosate_zehn/views/waitToLoad.dart';
 
-class AboutUsPage extends StatefulWidget {
+class ProfilePage extends StatefulWidget {
   static final route = GoRoute(
-    path: '/about_us',
-    name: (AboutUsPage).toString().toLowerCase(),
-    builder: (BuildContext context, GoRouterState state) => const AboutUsPage(),
+    path: '/profile',
+    name: (ProfilePage).toString().toLowerCase(),
+    builder: (BuildContext context, GoRouterState state) => ProfilePage(),
   );
 
-  const AboutUsPage({super.key});
+  const ProfilePage({Key? key}) : super(key: key);
 
   @override
-  State<AboutUsPage> createState() => _AboutUsPageState();
+  State<ProfilePage> createState() => _ProfilePageState();
 }
-///=================================================================================================
-class _AboutUsPageState extends StateBase<AboutUsPage> {
+///==================================================================================
+class _ProfilePageState extends StateBase<ProfilePage> {
   Requester requester = Requester();
   bool isInFetchData = true;
-  String? htmlData;
   String state$fetchData = 'state_fetchData';
 
   @override
   void initState(){
     super.initState();
 
-    requestAboutUs();
+    requestProfileData();
   }
 
   @override
@@ -49,17 +47,17 @@ class _AboutUsPageState extends StateBase<AboutUsPage> {
   @override
   Widget build(BuildContext context) {
     return Assist(
-      controller: assistCtr,
-      builder: (context, ctr, data) {
-        return Scaffold(
-          appBar: AppBarCustom(
-            title: Text(AppMessages.aboutUsTitle),
-          ),
-          body: SafeArea(
-              child: buildBody()
-          ),
-        );
-      }
+        controller: assistCtr,
+        builder: (context, ctr, data) {
+          return Scaffold(
+            appBar: AppBarCustom(
+              title: Text(AppMessages.profileTitle),
+            ),
+            body: SafeArea(
+                child: buildBody()
+            ),
+          );
+        }
     );
   }
 
@@ -74,10 +72,10 @@ class _AboutUsPageState extends StateBase<AboutUsPage> {
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: SingleChildScrollView(
-        child: Html(
-            data: htmlData,
-        ),
+      child: Column(
+        children: [
+
+        ],
       ),
     );
   }
@@ -86,12 +84,12 @@ class _AboutUsPageState extends StateBase<AboutUsPage> {
     isInFetchData = true;
     assistCtr.updateMain();
 
-    requestAboutUs();
+    requestProfileData();
   }
 
-  void requestAboutUs() async {
+  void requestProfileData() async {
     final js = <String, dynamic>{};
-    js[Keys.requestZone] = 'get_about_us_data';
+    js[Keys.requestZone] = 'get_profile_data';
     js[Keys.requesterId] = Session.getLastLoginUser()?.userId;
 
     requester.bodyJson = js;
@@ -103,7 +101,7 @@ class _AboutUsPageState extends StateBase<AboutUsPage> {
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
       isInFetchData = false;
-      htmlData = data[Keys.data];
+      //htmlData = data[Keys.data]?? '_';
       assistCtr.addStateAndUpdate(state$fetchData);
     };
 

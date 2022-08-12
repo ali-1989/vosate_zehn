@@ -43,7 +43,7 @@
   "edit": "ویرایش",
   "apply": "اعمال",
   "login": "ورود",
-  "logout": "خروج",
+  "logout": "خروج از حساب",
   "block": "مسدود کردن",
   "unblocking": "رفع انسداد",
   "blocked": "مسدود شده",
@@ -102,7 +102,7 @@
   "calendar": "تقویم",
   "announcements": "اعلانات",
   "tryAgain": "تلاش دوباره",
-  "profile": "نمایه",
+  "profile": "پروفایل",
   "userName": "نام کاربری",
   "password": "کلمه عبور",
   "security": "امنیت",
@@ -159,6 +159,7 @@
   "doNotShow" : "نشان نده",
   "value": "مقدار",
   "buy": "خرید",
+  "pay": "پرداخت",
   "search": "جستجو",
   "information": "اطلاعات",
   "dataUpdating" : "درحال بروزرسانی",
@@ -197,7 +198,7 @@
   "selectionOfDevice" : "انتخاب از دستگاه",
   "enterMediaLink" : "آدرس رسانه را وارد کنید",
   "thisAddressIsInvalid" : "این آدرس نامعتبر است",
-  "yourProfileIsIncomplete": "نمایه شما کامل نیست، لطفا آن را کامل کنید.",
+  "yourProfileIsIncomplete": "پروفایل شما کامل نیست، لطفا آن را کامل کنید.",
 
 
   "httpCodes" : {
