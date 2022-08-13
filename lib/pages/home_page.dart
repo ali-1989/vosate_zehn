@@ -5,7 +5,7 @@ import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:shaped_bottom_bar/models/shaped_item_object.dart';
 import 'package:shaped_bottom_bar/shaped_bottom_bar.dart';
 import 'package:shaped_bottom_bar/utils/arrays.dart';
-import 'package:vosate_zehn/pages/meditation/meditation_page.dart';
+import 'package:vosate_zehn/pages/levels/level1_page.dart';
 import 'package:vosate_zehn/services/aidService.dart';
 
 import 'package:vosate_zehn/system/stateBase.dart';
@@ -52,6 +52,7 @@ class HomePageState extends StateBase<HomePage> {
           key: scaffoldState,
           appBar: buildAppBar(),
           body: SafeArea(
+            bottom: false,
               child: buildBody()
           ),
           drawer: DrawerMenuBuilder.getDrawer(),
@@ -64,7 +65,7 @@ class HomePageState extends StateBase<HomePage> {
 
   Widget buildBody(){
     return Padding(
-      padding: EdgeInsets.only(bottom: 20),
+      padding: EdgeInsets.only(bottom: 50),
       child: PageView(
           physics: NeverScrollableScrollPhysics(),
         allowImplicitScrolling: false,
@@ -75,9 +76,10 @@ class HomePageState extends StateBase<HomePage> {
               child: SizedBox.expand(child: Text('p1'))
           ),
 
-          MeditationPage(),
-
-          Text('p2'),
+          Level1Page(injectData: Level1PageInjectData()..requestKey = 'meditation',),
+          Level1Page(injectData: Level1PageInjectData()..requestKey = 'focus',),
+          Level1Page(injectData: Level1PageInjectData()..requestKey = 'motion',),
+          Level1Page(injectData: Level1PageInjectData()..requestKey = 'video',),
         ],
       ),
     );
@@ -133,6 +135,8 @@ class HomePageState extends StateBase<HomePage> {
         ],
         onItemChanged: (position) {
           selectedPage = position;
+
+          pageController.jumpToPage(selectedPage);
           //setState(() {});
         },
     );

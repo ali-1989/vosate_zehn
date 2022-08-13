@@ -1,0 +1,4 @@
+
+mixin DateFieldMixin {
+  DateTime? date;
+}

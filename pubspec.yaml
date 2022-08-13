@@ -60,6 +60,7 @@ dependencies:
   webviewx: ^0.2.1
   flutter_custom_clippers: ^2.0.0
   glowstone: ^0.0.2
+  pull_to_refresh: ^2.0.0
 
   iris_tools:
     git: https://github.com/ali-1989/IrisTools.git
