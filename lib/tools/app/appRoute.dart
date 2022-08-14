@@ -9,7 +9,12 @@ import 'package:vosate_zehn/pages/contact_us_page.dart';
 import 'package:vosate_zehn/pages/e404_page.dart';
 import 'package:vosate_zehn/pages/favorites_page.dart';
 import 'package:vosate_zehn/pages/home_page.dart';
+import 'package:vosate_zehn/pages/imageFullScreen.dart';
 import 'package:vosate_zehn/pages/last_seen_page.dart';
+import 'package:vosate_zehn/pages/levels/audio_player_page.dart';
+import 'package:vosate_zehn/pages/levels/content_view_page.dart';
+import 'package:vosate_zehn/pages/levels/level2_page.dart';
+import 'package:vosate_zehn/pages/levels/video_player_page.dart';
 import 'package:vosate_zehn/pages/login/login_page.dart';
 import 'package:vosate_zehn/pages/login/register_page.dart';
 import 'package:vosate_zehn/pages/profile/profile_page.dart';
@@ -111,6 +116,11 @@ final mainRouter = GoRouter(
       ContactUsPage.route,
       ZarinpalPage.route,
       ProfilePage.route,
+      Level2Page.route,
+      ContentViewPage.route,
+      ImageFullScreen.route,
+      VideoPlayerPage.route,
+      AudioPlayerPage.route,
     ],
     initialLocation: HomePage.route.path,
     routerNeglect: true,//In browser 'back' button not work

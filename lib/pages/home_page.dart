@@ -129,7 +129,7 @@ class HomePageState extends StateBase<HomePage> {
         listItems: [
           ShapedItemObject(iconData: AppIcons.home, title: AppMessages.home),
           ShapedItemObject(iconData: AppIcons.meditation, title: AppMessages.meditation),
-          ShapedItemObject(iconData: AppIcons.zoomIn, title: AppMessages.tamarkoz),
+          ShapedItemObject(iconData: AppIcons.zoomIn, title: AppMessages.focus),
           ShapedItemObject(iconData: AppIcons.motion, title: AppMessages.motion),
           ShapedItemObject(iconData: AppIcons.playArrow, title: AppMessages.video),
         ],

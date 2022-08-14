@@ -298,7 +298,7 @@ class AppMessages {
     return 'مدیتیشن';
   }
 
-  static String get tamarkoz {
+  static String get focus {
     return 'تمرکز';
   }
 

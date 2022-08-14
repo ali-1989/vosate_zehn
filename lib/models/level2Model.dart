@@ -8,6 +8,7 @@ class Level2Model  with DateFieldMixin {
   int? id;
   String? title;
   String? description;
+  String? url;
   MediaModel? imageModel;
   int? duration;
   int? type;
@@ -24,9 +25,10 @@ class Level2Model  with DateFieldMixin {
     id = map[Keys.id];
     title = map[Keys.title];
     description = map[Keys.description];
-    isFavorite = map['is_favorite'];
+    isFavorite = map['is_favorite']?? false;
     duration = map['duration'];
     type = map[Keys.type];
+    url = map[Keys.url];
     contentType = map['content_type'];
     date = DateHelper.tsToSystemDate(map[Keys.date]);
 
@@ -42,7 +44,8 @@ class Level2Model  with DateFieldMixin {
     map[Keys.description] = description;
     map[Keys.media] = imageModel?.toMap();
     map[Keys.type] = type;
-    map[Keys.type] = type;
+    map[Keys.url] = url;
+    map['duration'] = duration;
     map[Keys.date] = DateHelper.toTimestampNullable(date);
     map['content_type'] = contentType;
     map['is_favorite'] = isFavorite;

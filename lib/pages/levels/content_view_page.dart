@@ -4,48 +4,42 @@ import 'package:iris_tools/dateSection/dateHelper.dart';
 
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:vosate_zehn/models/enums.dart';
 import 'package:vosate_zehn/models/level1Model.dart';
 import 'package:vosate_zehn/models/level2Model.dart';
-import 'package:vosate_zehn/pages/levels/audio_player_page.dart';
-import 'package:vosate_zehn/pages/levels/content_view_page.dart';
-import 'package:vosate_zehn/pages/levels/video_player_page.dart';
 import 'package:vosate_zehn/system/keys.dart';
 import 'package:vosate_zehn/system/requester.dart';
 import 'package:vosate_zehn/system/session.dart';
 
 import 'package:vosate_zehn/system/stateBase.dart';
 import 'package:vosate_zehn/system/extensions.dart';
-import 'package:vosate_zehn/tools/app/appIcons.dart';
-import 'package:vosate_zehn/tools/app/appRoute.dart';
 import 'package:vosate_zehn/tools/publicAccess.dart';
 import 'package:vosate_zehn/views/AppBarCustom.dart';
 import 'package:vosate_zehn/views/notFetchData.dart';
 import 'package:vosate_zehn/views/waitToLoad.dart';
 
-class Level2PageInjectData {
+class ContentViewPageInjectData {
   Level1Model? level1model;
 }
 ///---------------------------------------------------------------------------------
-class Level2Page extends StatefulWidget {
+class ContentViewPage extends StatefulWidget {
   static final route = GoRoute(
-    path: '/Level2',
-    name: (Level2Page).toString().toLowerCase(),
-    builder: (BuildContext context, GoRouterState state) => Level2Page(injectData: state.extra as Level2PageInjectData),
+    path: '/content_view',
+    name: (ContentViewPage).toString().toLowerCase(),
+    builder: (BuildContext context, GoRouterState state) => ContentViewPage(),
   );
 
-  final Level2PageInjectData injectData;
+  //final Level2PageInjectData injectData;
 
-  Level2Page({
-    required this.injectData,
+  ContentViewPage({
+    //required this.injectData,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<Level2Page> createState() => _Level2PageState();
+  State<ContentViewPage> createState() => _LevelPageState();
 }
-///==================================================================================
-class _Level2PageState extends StateBase<Level2Page> {
+///=================================================================================================
+class _LevelPageState extends StateBase<ContentViewPage> {
   Requester requester = Requester();
   bool isInFetchData = true;
   String state$fetchData = 'state_fetchData';
@@ -75,7 +69,7 @@ class _Level2PageState extends StateBase<Level2Page> {
         builder: (context, ctr, data) {
           return Scaffold(
             appBar: AppBarCustom(
-              title: Text(widget.injectData.level1model?.title?? ''),
+              title: Text('hh'),
             ),
             body: buildBody(),
           );
@@ -110,12 +104,11 @@ class _Level2PageState extends StateBase<Level2Page> {
         controller: refreshController,
         onRefresh: (){},
         onLoading: onLoadingMoreCall,
-        child: GridView.builder(
+        child: ListView.builder(
             itemCount: listItems.length,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisExtent: 220),
             itemBuilder: (ctx, idx){
               return buildListItem(idx);
-            },
+            }
         ),
       ),
     );
@@ -124,51 +117,31 @@ class _Level2PageState extends StateBase<Level2Page> {
   Widget buildListItem(int idx){
     final itm = listItems[idx];
 
-    return InkWell(
-      onTap: (){
-        onItemClick(itm);
-      },
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black26),
-              borderRadius: BorderRadius.circular(10),
-            ),
+    return SizedBox(
+      height: 100,
+      child: InkWell(
+        onTap: (){
+          onItemClick(itm);
+        },
+        child: Card(
+          margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+          child: Row(
+            children: [
+              Image.network(itm.imageModel?.url?? '', width: 100, height: 100, fit: BoxFit.cover),
 
-            child: Column(
-              children: [
-                Image.network(itm.imageModel?.url?? '', height: 100, width: double.infinity, fit: BoxFit.fill),
+              SizedBox(width: 8,),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('${itm.title}', maxLines: 1,).bold().fsR(1),
 
-                SizedBox(height: 12),
-
-                Text('${itm.title}', maxLines: 1).bold().fsR(1),
-
-                SizedBox(height: 12,),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 7.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('12:45 دقیقه').alpha().subFont(),
-
-                      IconButton(
-                        constraints: BoxConstraints.tightFor(),
-                          padding: EdgeInsets.all(4),
-                          splashRadius: 20,
-                          visualDensity: VisualDensity.compact,
-                          iconSize: 20,
-                          onPressed: (){},
-                          icon: Icon(AppIcons.heart, size: 20, color: Colors.red,)
-                      )
-                    ],
-                  ),
-                )
-              ],
-            ),
+                    SizedBox(height: 8,),
+                    Text('${itm.description}').alpha().subFont(),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -187,28 +160,7 @@ class _Level2PageState extends StateBase<Level2Page> {
   }
 
   void onItemClick(Level2Model itm) {
-    if(itm.type == Level2Types.video.type()){
-      final inject = VideoPlayerPageInjectData();
-      inject.srcAddress = itm.url!;
-      inject.videoSourceType = VideoSourceType.network;
-
-      AppRoute.pushNamed(context, VideoPlayerPage.route.name!, extra: inject);
-      return;
-    }
-
-    if(itm.type == Level2Types.audio.type()){
-      final inject = AudioPlayerPageInjectData();
-      inject.srcAddress = itm.url!;
-      inject.audioSourceType = AudioSourceType.network;
-
-      AppRoute.pushNamed(context, AudioPlayerPage.route.name!, extra: inject);
-      return;
-    }
-
-    if(itm.type == Level2Types.list.type()){
-      AppRoute.pushNamed(context, ContentViewPage.route.name!, extra: null);
-      return;
-    }
+    //AppRoute.pushNamed(context, LevelPage.route.name!, );
   }
 
   void requestData() async {
@@ -217,8 +169,7 @@ class _Level2PageState extends StateBase<Level2Page> {
     final js = <String, dynamic>{};
     js[Keys.requestZone] = 'get_level2_data';
     js[Keys.requesterId] = Session.getLastLoginUser()?.userId;
-    js[Keys.id] = widget.injectData.level1model!.id?? 1;
-    js[Keys.count] = fetchCount;
+    //js[Keys.id] = widget.injectData.level1model!.id;
 
     if(ul.isNotEmpty) {
       js[Keys.lower] = DateHelper.toTimestamp(ul.elementAt(0));

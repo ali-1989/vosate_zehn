@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
-import 'package:iris_tools/models/dataModels/mediaModel.dart';
 
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:vosate_zehn/models/dateFieldMixin.dart';
 import 'package:vosate_zehn/models/level1Model.dart';
+import 'package:vosate_zehn/pages/levels/level2_page.dart';
 import 'package:vosate_zehn/system/keys.dart';
 import 'package:vosate_zehn/system/requester.dart';
 import 'package:vosate_zehn/system/session.dart';
 
 import 'package:vosate_zehn/system/stateBase.dart';
 import 'package:vosate_zehn/system/extensions.dart';
+import 'package:vosate_zehn/tools/app/appRoute.dart';
+import 'package:vosate_zehn/tools/publicAccess.dart';
 import 'package:vosate_zehn/views/notFetchData.dart';
 import 'package:vosate_zehn/views/waitToLoad.dart';
 
@@ -77,15 +78,16 @@ class _Level1PageState extends StateBase<Level1Page> {
 
     return RefreshConfiguration(
       headerBuilder: () => MaterialClassicHeader(),
-      footerBuilder:  () => ClassicFooter(),
+      footerBuilder:  () => PublicAccess.classicFooter,
       //headerTriggerDistance: 80.0,
       //maxOverScrollExtent :100,
       //maxUnderScrollExtent:0,
       //springDescription: SpringDescription(stiffness: 170, damping: 16, mass: 1.9),
       enableScrollWhenRefreshCompleted: true,
       enableLoadingWhenFailed : true,
-      hideFooterWhenNotFull: false,
+      hideFooterWhenNotFull: true,
       enableBallisticLoad: true,
+      enableLoadingWhenNoData: false,
       child: SmartRefresher(
         enablePullDown: false,
         enablePullUp: true,
@@ -108,7 +110,9 @@ class _Level1PageState extends StateBase<Level1Page> {
     return SizedBox(
       height: 100,
       child: InkWell(
-        onTap: (){},
+        onTap: (){
+          onItemClick(itm);
+        },
         child: Card(
           margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
           child: Row(
@@ -145,33 +149,47 @@ class _Level1PageState extends StateBase<Level1Page> {
     requestData();
   }
 
+  void onItemClick(Level1Model itm) {
+    AppRoute.pushNamed(context, Level2Page.route.name!, extra: Level2PageInjectData()..level1model = itm);
+  }
+
   void requestData() async {
-    final ul = findUpperLower(listItems);
+    final ul = PublicAccess.findUpperLower(listItems, isAscOrder);
 
     final js = <String, dynamic>{};
     js[Keys.requestZone] = 'get_level1_data';
     js[Keys.requesterId] = Session.getLastLoginUser()?.userId;
     js[Keys.key] = widget.injectData.requestKey;
-    js[Keys.lower] = ul[0];
-    js[Keys.upper] = ul[1];
+    js[Keys.count] = fetchCount;
+
+    if(ul.isNotEmpty) {
+      js[Keys.lower] = DateHelper.toTimestamp(ul.elementAt(0));
+    }
+
+    if(ul.length > 1) {
+      js[Keys.upper] = DateHelper.toTimestamp(ul.elementAt(1));
+    }
 
     requester.bodyJson = js;
 
     requester.httpRequestEvents.onFailState = (req) async {
       isInFetchData = false;
-      //assistCtr.removeStateAndUpdate(state$fetchData);
-      addTempData();
-      assistCtr.addStateAndUpdate(state$fetchData);
+      assistCtr.removeStateAndUpdate(state$fetchData);
     };
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
       isInFetchData = false;
 
       final List list = data[Keys.dataList]?? [];
-      isAscOrder = data[Keys.isAsc];
+      isAscOrder = data[Keys.isAsc]?? true;
 
       if(list.length < fetchCount){
         refreshController.loadNoData();
+      }
+      else {
+        if(refreshController.isLoading) {
+          refreshController.loadComplete();
+        }
       }
 
       for(final m in list){
@@ -186,36 +204,7 @@ class _Level1PageState extends StateBase<Level1Page> {
     requester.request(context);
   }
 
-  List<DateTime> findUpperLower(List<DateFieldMixin> list){
-    final res = <DateTime>[];
-
-    if(list.isEmpty){
-      return res;
-    }
-
-    DateTime lower = list[0].date!;
-    DateTime upper = list[0].date!;
-
-    for(final x in list){
-      var c = DateHelper.compareDates(x.date, lower, asc: isAscOrder);
-
-      if(c < 0){
-        lower = x.date!;
-      }
-
-      c = DateHelper.compareDates(x.date, upper, asc: isAscOrder);
-
-      if(c > 0){
-        upper = x.date!;
-      }
-    }
-
-    res.add(lower);
-    res.add(upper);
-    return res;
-  }
-
-  void addTempData(){
+  /*void addTempData(){
     final v1 = Level1Model();
     final v2 = Level1Model();
 
@@ -230,5 +219,5 @@ class _Level1PageState extends StateBase<Level1Page> {
 
     listItems.add(v1);
     listItems.add(v2);
-  }
+  }*/
 }
