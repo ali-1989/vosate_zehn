@@ -5,6 +5,7 @@ import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:shaped_bottom_bar/models/shaped_item_object.dart';
 import 'package:shaped_bottom_bar/shaped_bottom_bar.dart';
 import 'package:shaped_bottom_bar/utils/arrays.dart';
+import 'package:vosate_zehn/pages/home_to_home_page.dart';
 import 'package:vosate_zehn/pages/levels/level1_page.dart';
 import 'package:vosate_zehn/services/aidService.dart';
 
@@ -71,11 +72,7 @@ class HomePageState extends StateBase<HomePage> {
         allowImplicitScrolling: false,
         controller: pageController,
         children: [
-          ColoredBox(
-            color: Colors.red,
-              child: SizedBox.expand(child: Text('p1'))
-          ),
-
+          HomeToHomePage(),
           Level1Page(injectData: Level1PageInjectData()..requestKey = 'meditation',),
           Level1Page(injectData: Level1PageInjectData()..requestKey = 'focus',),
           Level1Page(injectData: Level1PageInjectData()..requestKey = 'motion',),

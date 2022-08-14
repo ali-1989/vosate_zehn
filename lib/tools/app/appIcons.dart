@@ -86,7 +86,8 @@ class AppIcons {
   static const IconData share = Icons.share;
   static const IconData history = Icons.history;
   static const IconData lastSeenClock = CommunityMaterialIcons.history;
-  static const IconData heart = CommunityMaterialIcons.heart;
+  static const IconData heartSolid = CommunityMaterialIcons.heart;
+  static const IconData heart = CommunityMaterialIcons.heart_outline;
   static const IconData infoCircle = CommunityMaterialIcons.alert_circle_outline;
   static const IconData meditation = CommunityMaterialIcons.meditation;
   static const IconData cashMultiple = CommunityMaterialIcons.cash_multiple;

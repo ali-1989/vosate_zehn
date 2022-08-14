@@ -13,6 +13,7 @@ import 'package:vosate_zehn/pages/contact_us_page.dart';
 import 'package:vosate_zehn/pages/favorites_page.dart';
 import 'package:vosate_zehn/pages/last_seen_page.dart';
 import 'package:vosate_zehn/pages/profile/profile_page.dart';
+import 'package:vosate_zehn/pages/sentences_page.dart';
 import 'package:vosate_zehn/services/aidService.dart';
 import 'package:vosate_zehn/system/session.dart';
 import 'package:vosate_zehn/system/extensions.dart';
@@ -77,6 +78,12 @@ class DrawerMenuBuilder {
               title: Text(AppMessages.shareApp),
               leading: Icon(AppIcons.share),
               onTap: shareAppCall,
+            ),
+
+            ListTile(
+              title: Text(AppMessages.sentencesTitle),
+              leading: Icon(AppIcons.message),
+              onTap: gotoSentencePage,
             ),
 
             ListTile(
@@ -193,6 +200,11 @@ class DrawerMenuBuilder {
   static void gotoContactUsPage(){
     AppBroadcast.homeScreenKey.currentState?.scaffoldState.currentState?.closeDrawer();
     AppRoute.pushNamed(AppRoute.getContext(), ContactUsPage.route.name!);
+  }
+
+  static void gotoSentencePage(){
+    AppBroadcast.homeScreenKey.currentState?.scaffoldState.currentState?.closeDrawer();
+    AppRoute.pushNamed(AppRoute.getContext(), SentencesPage.route.name!);
   }
 
   static void gotoAboutUsPage(){

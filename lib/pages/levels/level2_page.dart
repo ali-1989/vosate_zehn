@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iris_tools/api/duration/durationFormater.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
 
 import 'package:iris_tools/modules/stateManagers/assist.dart';
@@ -10,6 +11,7 @@ import 'package:vosate_zehn/models/level2Model.dart';
 import 'package:vosate_zehn/pages/levels/audio_player_page.dart';
 import 'package:vosate_zehn/pages/levels/content_view_page.dart';
 import 'package:vosate_zehn/pages/levels/video_player_page.dart';
+import 'package:vosate_zehn/services/favoriteService.dart';
 import 'package:vosate_zehn/system/keys.dart';
 import 'package:vosate_zehn/system/requester.dart';
 import 'package:vosate_zehn/system/session.dart';
@@ -17,7 +19,9 @@ import 'package:vosate_zehn/system/session.dart';
 import 'package:vosate_zehn/system/stateBase.dart';
 import 'package:vosate_zehn/system/extensions.dart';
 import 'package:vosate_zehn/tools/app/appIcons.dart';
+import 'package:vosate_zehn/tools/app/appMessages.dart';
 import 'package:vosate_zehn/tools/app/appRoute.dart';
+import 'package:vosate_zehn/tools/app/appToast.dart';
 import 'package:vosate_zehn/tools/publicAccess.dart';
 import 'package:vosate_zehn/views/AppBarCustom.dart';
 import 'package:vosate_zehn/views/notFetchData.dart';
@@ -140,7 +144,41 @@ class _Level2PageState extends StateBase<Level2Page> {
 
             child: Column(
               children: [
-                Image.network(itm.imageModel?.url?? '', height: 100, width: double.infinity, fit: BoxFit.fill),
+                Stack(
+                  children: [
+                    Image.network(itm.imageModel?.url?? '', height: 100, width: double.infinity, fit: BoxFit.fill),
+
+                    Positioned(
+                      top: 0,
+                        left: 0,
+                        child: Builder(
+                            builder: (context) {
+                              if(itm.type == Level2Types.video.type()){
+                                return Chip(//todo: chip transparent
+                                  backgroundColor: Colors.black.withAlpha(200),
+                                  shadowColor: Colors.transparent,
+                                  visualDensity: VisualDensity.compact,
+                                  elevation: 0,
+                                  label: Icon(AppIcons.videoCamera, size: 15, color: Colors.white),
+                                );
+                              }
+
+                              if(itm.type == Level2Types.audio.type()){
+                                return Chip(
+                                  backgroundColor: Colors.black.withAlpha(200),
+                                  shadowColor: Colors.transparent,
+                                  visualDensity: VisualDensity.compact,
+                                  elevation: 0,
+                                  label: Icon(AppIcons.headset, size: 15, color: Colors.white),
+                                );
+                              }
+
+                              return SizedBox();
+                            }
+                        )
+                    ),
+                  ],
+                ),
 
                 SizedBox(height: 12),
 
@@ -153,7 +191,16 @@ class _Level2PageState extends StateBase<Level2Page> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('12:45 دقیقه').alpha().subFont(),
+                      Builder(
+                        builder: (ctx){
+                          if(itm.duration != null && itm.duration! > 0){
+                            final dur = Duration(milliseconds: itm.duration!);
+                            return Text('${DurationFormatter.duration(dur, showSuffix: false)} ثانیه').alpha().subFont();
+                        }
+
+                          return SizedBox();
+                        },
+                      ),
 
                       IconButton(
                         constraints: BoxConstraints.tightFor(),
@@ -161,8 +208,13 @@ class _Level2PageState extends StateBase<Level2Page> {
                           splashRadius: 20,
                           visualDensity: VisualDensity.compact,
                           iconSize: 20,
-                          onPressed: (){},
-                          icon: Icon(AppIcons.heart, size: 20, color: Colors.red,)
+                          onPressed: (){
+                            setFavorite(itm);
+                          },
+                          icon: Icon(itm.isFavorite ? AppIcons.heartSolid: AppIcons.heart,
+                            size: 20,
+                            color: itm.isFavorite ? Colors.red: Colors.black,
+                          )
                       )
                     ],
                   ),
@@ -186,6 +238,29 @@ class _Level2PageState extends StateBase<Level2Page> {
     requestData();
   }
 
+  void setFavorite(Level2Model itm) async {
+    itm.isFavorite = !itm.isFavorite;
+    bool res;
+
+    if(itm.isFavorite){
+      res = await FavoriteService.addFavorite(itm);
+    }
+    else {
+      res = await FavoriteService.removeFavorite(itm.id!);
+    }
+
+    if(res){
+      if(itm.isFavorite){
+        AppToast.showToast(context, AppMessages.isAddToFavorite);
+      }
+    }
+    else {
+      AppToast.showToast(context, AppMessages.operationFailed);
+    }
+
+    assistCtr.updateMain();
+  }
+
   void onItemClick(Level2Model itm) {
     if(itm.type == Level2Types.video.type()){
       final inject = VideoPlayerPageInjectData();
@@ -200,13 +275,18 @@ class _Level2PageState extends StateBase<Level2Page> {
       final inject = AudioPlayerPageInjectData();
       inject.srcAddress = itm.url!;
       inject.audioSourceType = AudioSourceType.network;
+      inject.title = widget.injectData.level1model?.title;
+      inject.subTitle = itm.title;
 
       AppRoute.pushNamed(context, AudioPlayerPage.route.name!, extra: inject);
       return;
     }
 
     if(itm.type == Level2Types.list.type()){
-      AppRoute.pushNamed(context, ContentViewPage.route.name!, extra: null);
+      final inject = ContentViewPageInjectData();
+      inject.level2model = itm;
+
+      AppRoute.pushNamed(context, ContentViewPage.route.name!, extra: inject);
       return;
     }
   }
@@ -252,6 +332,8 @@ class _Level2PageState extends StateBase<Level2Page> {
 
       for(final m in list){
         final itm = Level2Model.fromMap(m);
+        itm.isFavorite = FavoriteService.isFavorite(itm.id!);
+
         listItems.add(itm);
       }
 
@@ -261,5 +343,4 @@ class _Level2PageState extends StateBase<Level2Page> {
     requester.prepareUrl();
     requester.request(context);
   }
-
 }

@@ -326,6 +326,10 @@ class AppMessages {
     return 'آخرین بازدیدها';
   }
 
+  static String get sentencesTitle {
+    return 'جملات روز';
+  }
+
   static String get shareApp {
     return 'اشتراک اپلیکیشن';
   }
@@ -336,6 +340,10 @@ class AppMessages {
 
   static String get contactUsEmptyPrompt {
     return 'لطفا متن خود را بنویسید';
+  }
+
+  static String get isAddToFavorite {
+    return 'به منتخب ها اضافه شد';
   }
 
   static String get email {

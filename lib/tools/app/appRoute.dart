@@ -18,6 +18,7 @@ import 'package:vosate_zehn/pages/levels/video_player_page.dart';
 import 'package:vosate_zehn/pages/login/login_page.dart';
 import 'package:vosate_zehn/pages/login/register_page.dart';
 import 'package:vosate_zehn/pages/profile/profile_page.dart';
+import 'package:vosate_zehn/pages/sentences_page.dart';
 import 'package:vosate_zehn/pages/term_page.dart';
 import 'package:vosate_zehn/pages/zarinpal_page.dart';
 import 'package:vosate_zehn/system/session.dart';
@@ -121,6 +122,7 @@ final mainRouter = GoRouter(
       ImageFullScreen.route,
       VideoPlayerPage.route,
       AudioPlayerPage.route,
+      SentencesPage.route,
     ],
     initialLocation: HomePage.route.path,
     routerNeglect: true,//In browser 'back' button not work

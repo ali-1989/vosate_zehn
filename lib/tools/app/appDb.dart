@@ -11,6 +11,7 @@ class AppDB {
   ///-------- tables -------------------------------------------------------------------------------------
   static String tbKv = 'KvTable';
   static String tbUserModel = 'UserModel';
+  static String tbFavorites = 'Favorites';
   static String tbLanguages = 'Languages';
 
 
