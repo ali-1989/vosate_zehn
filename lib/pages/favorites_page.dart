@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iris_tools/api/duration/durationFormater.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
+
 import 'package:vosate_zehn/models/enums.dart';
 import 'package:vosate_zehn/models/level2Model.dart';
 import 'package:vosate_zehn/pages/levels/audio_player_page.dart';
 import 'package:vosate_zehn/pages/levels/content_view_page.dart';
 import 'package:vosate_zehn/pages/levels/video_player_page.dart';
 import 'package:vosate_zehn/services/favoriteService.dart';
-
-import 'package:vosate_zehn/system/stateBase.dart';
 import 'package:vosate_zehn/system/extensions.dart';
+import 'package:vosate_zehn/system/stateBase.dart';
 import 'package:vosate_zehn/tools/app/appIcons.dart';
 import 'package:vosate_zehn/tools/app/appMessages.dart';
 import 'package:vosate_zehn/tools/app/appRoute.dart';

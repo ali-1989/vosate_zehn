@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -9,10 +8,11 @@ import 'package:iris_tools/api/generator.dart';
 import 'package:iris_tools/api/helpers/mathHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:just_audio/just_audio.dart';
+
 import 'package:vosate_zehn/pages/levels/playback_disposition.dart';
 import 'package:vosate_zehn/pages/levels/slider.dart';
-import 'package:vosate_zehn/system/stateBase.dart';
 import 'package:vosate_zehn/system/extensions.dart';
+import 'package:vosate_zehn/system/stateBase.dart';
 import 'package:vosate_zehn/tools/app/appIcons.dart';
 import 'package:vosate_zehn/tools/app/appImages.dart';
 import 'package:vosate_zehn/tools/app/appSizes.dart';

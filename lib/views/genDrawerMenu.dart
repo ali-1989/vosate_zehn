@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+
 import 'package:iris_tools/api/helpers/colorHelper.dart';
 import 'package:iris_tools/api/helpers/fileHelper.dart';
-
 import 'package:iris_tools/api/helpers/mathHelper.dart';
 import 'package:iris_tools/modules/stateManagers/notifyRefresh.dart';
 import 'package:iris_tools/modules/stateManagers/refresh.dart';
 import 'package:share_extend/share_extend.dart';
+
 import 'package:vosate_zehn/models/enums.dart';
 import 'package:vosate_zehn/models/userModel.dart';
 import 'package:vosate_zehn/pages/about_us_page.dart';
@@ -15,12 +16,11 @@ import 'package:vosate_zehn/pages/last_seen_page.dart';
 import 'package:vosate_zehn/pages/profile/profile_page.dart';
 import 'package:vosate_zehn/pages/sentences_page.dart';
 import 'package:vosate_zehn/services/aidService.dart';
-import 'package:vosate_zehn/system/session.dart';
 import 'package:vosate_zehn/system/extensions.dart';
+import 'package:vosate_zehn/system/session.dart';
 import 'package:vosate_zehn/tools/app/appBroadcast.dart';
 import 'package:vosate_zehn/tools/app/appDialogIris.dart';
 import 'package:vosate_zehn/tools/app/appDirectories.dart';
-
 import 'package:vosate_zehn/tools/app/appIcons.dart';
 import 'package:vosate_zehn/tools/app/appImages.dart';
 import 'package:vosate_zehn/tools/app/appMessages.dart';

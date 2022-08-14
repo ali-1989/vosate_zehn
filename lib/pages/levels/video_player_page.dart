@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:chewie/chewie.dart';
 import 'package:go_router/go_router.dart';
 import 'package:video_player/video_player.dart';
+
 import 'package:vosate_zehn/system/stateBase.dart';
 import 'package:vosate_zehn/tools/app/appThemes.dart';
 import 'package:vosate_zehn/views/AppBarCustom.dart';
-
 
 enum VideoSourceType {
   file,

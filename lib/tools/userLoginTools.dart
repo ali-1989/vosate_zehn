@@ -1,6 +1,6 @@
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
-import 'package:vosate_zehn/managers/settingsManager.dart';
 
+import 'package:vosate_zehn/managers/settingsManager.dart';
 import 'package:vosate_zehn/models/userModel.dart';
 import 'package:vosate_zehn/pages/login/login_page.dart';
 import 'package:vosate_zehn/system/session.dart';

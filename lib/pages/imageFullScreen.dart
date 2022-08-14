@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+
 import 'package:go_router/go_router.dart';
-
 import 'package:photo_view/photo_view.dart';
-import 'package:vosate_zehn/models/enums.dart';
 
+import 'package:vosate_zehn/models/enums.dart';
 
 /// Usage:
 /// final view = ImageFullScreen(heroTag: '');
