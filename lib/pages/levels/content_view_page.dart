@@ -1,3 +1,6 @@
+import 'package:app/models/contentModel.dart';
+import 'package:app/models/enums.dart';
+import 'package:app/models/subBuketModel.dart';
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
@@ -5,23 +8,20 @@ import 'package:iris_tools/models/dataModels/mediaModel.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:iris_tools/widgets/avatarChip.dart';
 
-import 'package:vosate_zehn/models/enums.dart';
-import 'package:vosate_zehn/models/level2ContentModel.dart';
-import 'package:vosate_zehn/models/level2Model.dart';
-import 'package:vosate_zehn/pages/levels/audio_player_page.dart';
-import 'package:vosate_zehn/pages/levels/video_player_page.dart';
-import 'package:vosate_zehn/system/extensions.dart';
-import 'package:vosate_zehn/system/keys.dart';
-import 'package:vosate_zehn/system/requester.dart';
-import 'package:vosate_zehn/system/session.dart';
-import 'package:vosate_zehn/system/stateBase.dart';
-import 'package:vosate_zehn/tools/app/appRoute.dart';
-import 'package:vosate_zehn/views/AppBarCustom.dart';
-import 'package:vosate_zehn/views/notFetchData.dart';
-import 'package:vosate_zehn/views/waitToLoad.dart';
+import 'package:app/pages/levels/audio_player_page.dart';
+import 'package:app/pages/levels/video_player_page.dart';
+import 'package:app/system/extensions.dart';
+import 'package:app/system/keys.dart';
+import 'package:app/system/requester.dart';
+import 'package:app/system/session.dart';
+import 'package:app/system/stateBase.dart';
+import 'package:app/tools/app/appRoute.dart';
+import 'package:app/views/AppBarCustom.dart';
+import 'package:app/views/notFetchData.dart';
+import 'package:app/views/waitToLoad.dart';
 
 class ContentViewPageInjectData {
-  late Level2Model level2model;
+  late SubBucketModel subBucket;
 }
 ///---------------------------------------------------------------------------------
 class ContentViewPage extends StatefulWidget {
@@ -46,7 +46,7 @@ class _LevelPageState extends StateBase<ContentViewPage> {
   Requester requester = Requester();
   bool isInFetchData = true;
   String state$fetchData = 'state_fetchData';
-  Level2ContentModel? contentModel;
+  ContentModel? contentModel;
 
   @override
   void initState(){
@@ -69,7 +69,7 @@ class _LevelPageState extends StateBase<ContentViewPage> {
         builder: (context, ctr, data) {
           return Scaffold(
             appBar: AppBarCustom(
-              title: Text(widget.injectData.level2model.title?? ''),
+              title: Text(widget.injectData.subBucket.title?? ''),
             ),
             body: buildBody(),
           );
@@ -86,13 +86,13 @@ class _LevelPageState extends StateBase<ContentViewPage> {
             padding: EdgeInsets.symmetric(horizontal: 50, vertical: 8),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
-              child: Image.network(widget.injectData.level2model.imageModel?.url?? '', height: 160,)
+              child: Image.network(widget.injectData.subBucket.imageModel?.url?? '', height: 160,)
           ),
         ),
 
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-          child: Text(widget.injectData.level2model.description?? '').bold().fsR(1),
+          child: Text(widget.injectData.subBucket.description?? '').bold().fsR(1),
         ),
 
         SizedBox(height: 20,),
@@ -111,11 +111,11 @@ class _LevelPageState extends StateBase<ContentViewPage> {
                 return Column(
                   children: [
                     AvatarChip(
-                        label: Text(contentModel!.speakerModel.name?? ''),
+                        label: Text(contentModel!.speakerModel?.name?? ''),
 
-                      avatar: contentModel!.speakerModel.imageModel != null?
+                      avatar: contentModel!.speakerModel?.profileModel != null?
                       ClipOval(
-                          child: Image.network(contentModel!.speakerModel.imageModel!.url!,
+                          child: Image.network(contentModel!.speakerModel!.profileModel!.url!,
                             width: 60, height: 60, fit: BoxFit.fill,)
                       )
                       : null,
@@ -143,7 +143,7 @@ class _LevelPageState extends StateBase<ContentViewPage> {
   List<Widget> buildWrapItems(){
     final List<Widget> res = [];
 
-    for(final i in contentModel!.mediaList){
+    /*for(final i in contentModel!.mediaList){
       final w = ActionChip(
         label: Text(i.name?? '-'),
         onPressed: () {
@@ -152,7 +152,7 @@ class _LevelPageState extends StateBase<ContentViewPage> {
       );
 
       res.add(w);
-    }
+    }*/
 
     return res;
   }
@@ -165,9 +165,9 @@ class _LevelPageState extends StateBase<ContentViewPage> {
   }
 
   void onItemClick(MediaModel media) {
-    Level2Types? type;
+    SubBucketTypes? type;
 
-    if(contentModel!.type != null){
+    /*if(contentModel!. != null){
       if(contentModel!.type == Level2Types.video.type()){
         type = Level2Types.video;
       }
@@ -200,14 +200,14 @@ class _LevelPageState extends StateBase<ContentViewPage> {
       inject.title = media.name;
 
       AppRoute.pushNamed(context, AudioPlayerPage.route.name!, extra: inject);
-    }
+    }*/
   }
 
   void requestData() async {
     final js = <String, dynamic>{};
     js[Keys.requestZone] = 'get_level2_content_data';
     js[Keys.requesterId] = Session.getLastLoginUser()?.userId;
-    js[Keys.id] = widget.injectData.level2model.id;
+    js[Keys.id] = widget.injectData.subBucket.id;
 
     requester.bodyJson = js;
 
@@ -220,7 +220,7 @@ class _LevelPageState extends StateBase<ContentViewPage> {
       isInFetchData = false;
 
       final content = data[Keys.data];
-      contentModel = Level2ContentModel.fromMap(content);
+      contentModel = ContentModel.fromMap(content);
 
       assistCtr.addStateAndUpdate(state$fetchData);
     };

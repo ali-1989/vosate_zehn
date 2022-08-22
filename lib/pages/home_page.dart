@@ -6,16 +6,16 @@ import 'package:shaped_bottom_bar/models/shaped_item_object.dart';
 import 'package:shaped_bottom_bar/shaped_bottom_bar.dart';
 import 'package:shaped_bottom_bar/utils/arrays.dart';
 
-import 'package:vosate_zehn/pages/home_to_home_page.dart';
-import 'package:vosate_zehn/pages/levels/level1_page.dart';
-import 'package:vosate_zehn/services/aidService.dart';
-import 'package:vosate_zehn/system/stateBase.dart';
-import 'package:vosate_zehn/tools/app/appBroadcast.dart';
-import 'package:vosate_zehn/tools/app/appIcons.dart';
-import 'package:vosate_zehn/tools/app/appMessages.dart';
-import 'package:vosate_zehn/tools/app/appThemes.dart';
-import 'package:vosate_zehn/views/AppBarCustom.dart';
-import 'package:vosate_zehn/views/genDrawerMenu.dart';
+import 'package:app/pages/home_to_home_page.dart';
+import 'package:app/pages/levels/level1_page.dart';
+import 'package:app/services/aidService.dart';
+import 'package:app/system/stateBase.dart';
+import 'package:app/tools/app/appBroadcast.dart';
+import 'package:app/tools/app/appIcons.dart';
+import 'package:app/tools/app/appMessages.dart';
+import 'package:app/tools/app/appThemes.dart';
+import 'package:app/views/AppBarCustom.dart';
+import 'package:app/views/genDrawerMenu.dart';
 
 class HomePage extends StatefulWidget {
   static final route = GoRoute(

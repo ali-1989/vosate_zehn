@@ -6,9 +6,9 @@ import 'package:flutter/scheduler.dart';
 
 import 'package:go_router/go_router.dart';
 
-import 'package:vosate_zehn/pages/splash_page.dart';
-import 'package:vosate_zehn/tools/app/appManager.dart';
-import 'package:vosate_zehn/tools/app/appRoute.dart';
+import 'package:app/pages/splash_page.dart';
+import 'package:app/tools/app/appManager.dart';
+import 'package:app/tools/app/appRoute.dart';
 
 bool _isInit = false;
 

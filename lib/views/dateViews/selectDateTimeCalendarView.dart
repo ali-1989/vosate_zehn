@@ -5,7 +5,7 @@ import 'package:iris_tools/dateSection/ADateStructure.dart';
 import 'package:iris_tools/dateSection/calendarTools.dart';
 import 'package:numberpicker/numberpicker.dart';
 
-import 'package:vosate_zehn/tools/app/appSnack.dart';
+import 'package:app/tools/app/appSnack.dart';
 import '/managers/settingsManager.dart';
 import '/system/extensions.dart';
 import '/tools/app/appNavigator.dart';

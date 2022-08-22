@@ -1,20 +1,19 @@
+import 'package:app/models/bucketModel.dart';
 import 'package:flutter/material.dart';
 
-import 'package:iris_tools/dateSection/dateHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import 'package:vosate_zehn/models/level1Model.dart';
-import 'package:vosate_zehn/pages/levels/level2_page.dart';
-import 'package:vosate_zehn/system/extensions.dart';
-import 'package:vosate_zehn/system/keys.dart';
-import 'package:vosate_zehn/system/requester.dart';
-import 'package:vosate_zehn/system/session.dart';
-import 'package:vosate_zehn/system/stateBase.dart';
-import 'package:vosate_zehn/tools/app/appRoute.dart';
-import 'package:vosate_zehn/tools/publicAccess.dart';
-import 'package:vosate_zehn/views/notFetchData.dart';
-import 'package:vosate_zehn/views/waitToLoad.dart';
+import 'package:app/pages/levels/level2_page.dart';
+import 'package:app/system/extensions.dart';
+import 'package:app/system/keys.dart';
+import 'package:app/system/requester.dart';
+import 'package:app/system/session.dart';
+import 'package:app/system/stateBase.dart';
+import 'package:app/tools/app/appRoute.dart';
+import 'package:app/tools/publicAccess.dart';
+import 'package:app/views/notFetchData.dart';
+import 'package:app/views/waitToLoad.dart';
 
 class HomeToHomePage extends StatefulWidget {
 
@@ -30,7 +29,7 @@ class _HomeToHomePageState extends StateBase<HomeToHomePage> {
   Requester requester = Requester();
   bool isInFetchData = true;
   String state$fetchData = 'state_fetchData';
-  List<Level1Model> listItems = [];
+  List<BucketModel> listItems = [];
   RefreshController refreshController = RefreshController(initialRefresh: false);
   bool isAscOrder = true;
   int fetchCount = 20;
@@ -123,8 +122,8 @@ class _HomeToHomePageState extends StateBase<HomeToHomePage> {
     requestData();
   }
 
-  void onItemClick(Level1Model itm) {
-    AppRoute.pushNamed(context, Level2Page.route.name!, extra: Level2PageInjectData()..level1model = itm);
+  void onItemClick(BucketModel itm) {
+    AppRoute.pushNamed(context, Level2Page.route.name!, extra: SubBucketPageInjectData()..bucketModel = itm);
   }
 
   void requestData() async {
@@ -134,14 +133,6 @@ class _HomeToHomePageState extends StateBase<HomeToHomePage> {
     js[Keys.requestZone] = 'get_level1_data';
     js[Keys.requesterId] = Session.getLastLoginUser()?.userId;
     js[Keys.count] = fetchCount;
-
-    if(ul.isNotEmpty) {
-      js[Keys.lower] = DateHelper.toTimestamp(ul.elementAt(0));
-    }
-
-    if(ul.length > 1) {
-      js[Keys.upper] = DateHelper.toTimestamp(ul.elementAt(1));
-    }
 
     requester.bodyJson = js;
 
@@ -166,7 +157,7 @@ class _HomeToHomePageState extends StateBase<HomeToHomePage> {
       }
 
       for(final m in list){
-        final itm = Level1Model.fromMap(m);
+        final itm = BucketModel.fromMap(m);
         listItems.add(itm);
       }
 

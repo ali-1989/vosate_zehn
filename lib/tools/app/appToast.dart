@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-import 'package:vosate_zehn/tools/app/appSizes.dart';
+import 'package:app/tools/app/appSizes.dart';
 
 class AppToast {
   AppToast._();

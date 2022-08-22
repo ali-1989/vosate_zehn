@@ -41,7 +41,7 @@ class Keys {
   static const state = 'state';
   static const options = 'options';
   static const filtering = 'filtering';
-  static const jsonHttpPart = 'json';
+  static const jsonPart = 'json_part';
   static const mobileNumber = 'mobile_number';
   static const phoneCode = 'phone_code';
   static const languageIso = 'language_iso';
@@ -55,12 +55,11 @@ class Keys {
   static const url = 'url';
   static const id = 'id';
   static const description = 'description';
-  static const lower = 'lower';
-  static const upper = 'upper';
+  static const searchFilter = 'search_filter';
   static const nodeName = 'node_name';
   static const extraJs = 'extra_js';
   static const toast = 'toast';
-  //----- settings key -----------------------------------------------------------------
+  //----- common settings key -----------------------------------------------------------------
   static const setting$lastLoginDate = 'last_login_date';
   static const setting$lastRouteName = 'Last_route_name';
   static const setting$appSettings = 'app_settings';
@@ -74,6 +73,8 @@ class Keys {
   static const setting$notificationModel = 'notification_model';
   static const setting$notificationChanelGroup = 'notification_chanel_group';
   static const setting$currentVersion = 'current_version';
+  //----- app settings key -----------------------------------------------------------------
+  static const setting$bucketType = 'bucket_type';
 
   static String genDownloadKey_userAvatar(int userId) {
     return 'downloadUserAvatar_$userId';

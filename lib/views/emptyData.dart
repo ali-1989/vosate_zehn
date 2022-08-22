@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:app/tools/app/appMessages.dart';
 
-class NotFetchData extends StatelessWidget {
-  final VoidCallback? tryClick;
+class EmptyData extends StatelessWidget {
 
-  const NotFetchData({
-    this.tryClick,
+  const EmptyData({
     Key? key,
     }) : super(key: key);
 
@@ -18,18 +16,10 @@ class NotFetchData extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(AppMessages.serverNotRespondProperly,
+          Text(AppMessages.thereAreNoResults,
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 15,),
-
-          if(tryClick != null)
-            TextButton(
-                onPressed: (){
-                  tryClick?.call();
-                },
-                child: Text(AppMessages.tryAgain)
-            ),
+          SizedBox(height: 5),
         ],
       ),
     );

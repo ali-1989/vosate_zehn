@@ -3,8 +3,8 @@ import 'dart:typed_data';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:iris_tools/api/generator.dart';
 
-import 'package:vosate_zehn/system/keys.dart';
-import 'package:vosate_zehn/tools/app/appDb.dart';
+import 'package:app/system/keys.dart';
+import 'package:app/tools/app/appDb.dart';
 import '/constants.dart';
 import '/models/notificationModel.dart' as nm;
 

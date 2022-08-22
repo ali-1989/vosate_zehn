@@ -10,7 +10,7 @@ import 'package:iris_tools/api/converter.dart';
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
 import 'package:iris_tools/api/helpers/listHelper.dart';
 
-import 'package:vosate_zehn/tools/app/appManager.dart';
+import 'package:app/tools/app/appManager.dart';
 
 class AppHttpDio {
 	AppHttpDio._();
@@ -532,6 +532,20 @@ class HttpItem {
 		formDataItems.add(itm);
 	}
 
+	void addBodyStream(String partName, String dataName, Stream<List<int>> stream, int size){
+		if(body is! FormData) {
+			body = FormData();
+		}
+
+		final itm = FormDataItem();
+		itm.partName = partName;
+		itm.fileName = dataName;
+		itm.stream = stream;
+		itm.streamSize = size;
+
+		formDataItems.add(itm);
+	}
+
 	void prepareMultiParts(){
 		if(body is! FormData) {
 			return;
@@ -549,8 +563,12 @@ class HttpItem {
 				final m = MultipartFile.fromFileSync(fd.filePath!, filename: fd.fileName, contentType: fd.contentType);
 				newBody.files.add(MapEntry(fd.partName, m));
 			}
-			else {
+			else if(fd.bytes != null){
 				final m = MultipartFile.fromBytes(fd.bytes!, filename: fd.fileName, contentType: fd.contentType);
+				newBody.files.add(MapEntry(fd.partName, m));
+			}
+			else {
+				final m = MultipartFile(fd.stream!, fd.streamSize!, filename: fd.fileName, contentType: fd.contentType);
 				newBody.files.add(MapEntry(fd.partName, m));
 			}
 		}
@@ -563,7 +581,9 @@ class FormDataItem {
 	late String partName;
 	late String fileName;
 	String? filePath;
+	int? streamSize;
 	List<int>? bytes;
+	Stream<List<int>>? stream;
 	MediaType contentType = MediaType.parse('application/octet-stream');
 
 	FormDataItem();

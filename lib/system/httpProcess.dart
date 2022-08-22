@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:vosate_zehn/tools/app/appMessages.dart';
-import 'package:vosate_zehn/tools/app/appSheet.dart';
-import 'package:vosate_zehn/tools/app/appSnack.dart';
+import 'package:app/tools/app/appMessages.dart';
+import 'package:app/tools/app/appSheet.dart';
+import 'package:app/tools/app/appSnack.dart';
 import '/system/httpCodes.dart';
 import '/system/keys.dart';
 

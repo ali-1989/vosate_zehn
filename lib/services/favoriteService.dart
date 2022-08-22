@@ -1,13 +1,13 @@
+import 'package:app/models/subBuketModel.dart';
 import 'package:iris_db/iris_db.dart';
 
-import 'package:vosate_zehn/models/level2Model.dart';
-import 'package:vosate_zehn/system/keys.dart';
-import 'package:vosate_zehn/tools/app/appDb.dart';
+import 'package:app/system/keys.dart';
+import 'package:app/tools/app/appDb.dart';
 
 class FavoriteService {
   FavoriteService._();
 
-  static Future<bool> addFavorite(Level2Model model) async {
+  static Future<bool> addFavorite(SubBucketModel model) async {
     final con = Conditions();
     con.add(Condition()..key = Keys.id..value = model.id!);
 
@@ -36,16 +36,16 @@ class FavoriteService {
     return AppDB.db.exist(AppDB.tbFavorites, con);
   }
 
-  static List<Level2Model> getAllFavorites() {
+  static List<SubBucketModel> getAllFavorites() {
     final con = Conditions();
     //con.add(Condition()..key = Keys.id..value = id);
 
     final rawList = AppDB.db.query(AppDB.tbFavorites, con);
 
-    List<Level2Model> res = [];
+    List<SubBucketModel> res = [];
 
     for(final i in rawList){
-      res.add(Level2Model.fromMap(i[Keys.value]));
+      res.add(SubBucketModel.fromMap(i[Keys.value]));
     }
 
     return res;

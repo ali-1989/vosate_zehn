@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:app/views/progressBarPrompt.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -7,11 +8,11 @@ import 'package:iris_tools/api/helpers/colorHelper.dart';
 import 'package:iris_tools/features/overlayDialog.dart';
 import 'package:lottie/lottie.dart';
 
-import 'package:vosate_zehn/tools/app/appImages.dart';
-import 'package:vosate_zehn/tools/app/appMessages.dart';
-import 'package:vosate_zehn/tools/app/appOverlay.dart';
-import 'package:vosate_zehn/tools/app/appThemes.dart';
-import 'package:vosate_zehn/views/overlay/overlayContainer.dart';
+import 'package:app/tools/app/appImages.dart';
+import 'package:app/tools/app/appMessages.dart';
+import 'package:app/tools/app/appOverlay.dart';
+import 'package:app/tools/app/appThemes.dart';
+import 'package:app/views/overlay/overlayContainer.dart';
 
 class AppLoading {
   AppLoading._();
@@ -114,6 +115,28 @@ class AppLoading {
   Future<void> hideLoading(BuildContext context) async {
     //AppOverlay.hideIgnoreScreen(context);
     AppOverlay.hideScreen(context);
+  }
+  //---------------------------------------------------------------------------------
+  Future<void> showProgress(BuildContext context, Stream<double> stream, {
+    String? message,
+    String? buttonText,
+    VoidCallback? buttonEvent,
+  }){
+    final over = OverlayScreenView(
+      content: SizedBox.expand(
+        child: Center(
+          child: ProgressBarPrompt(
+            stream: stream,
+            message: message,
+            buttonEvent: buttonEvent,
+            buttonText: buttonText,
+          ),
+        ),
+      ),
+      backgroundColor: Colors.black26,
+    );
+
+    return AppOverlay.showScreen(context, over, canBack: false);
   }
 
   Widget _getLoadingView(){

@@ -1,20 +1,14 @@
-import 'package:dio/dio.dart';
-import 'package:iris_tools/api/helpers/jsonHelper.dart';
 import 'package:iris_tools/api/system.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import 'package:vosate_zehn/constants.dart';
-import 'package:vosate_zehn/managers/settingsManager.dart';
-import 'package:vosate_zehn/models/dateFieldMixin.dart';
-import 'package:vosate_zehn/system/httpCodes.dart';
-import 'package:vosate_zehn/system/keys.dart';
-import 'package:vosate_zehn/system/session.dart';
-import 'package:vosate_zehn/tools/app/appDialog.dart';
-import 'package:vosate_zehn/tools/app/appMessages.dart';
-import 'package:vosate_zehn/tools/app/appRoute.dart';
-import 'package:vosate_zehn/tools/deviceInfoTools.dart';
-import 'package:vosate_zehn/tools/userLoginTools.dart';
+import 'package:app/constants.dart';
+import 'package:app/managers/settingsManager.dart';
+import 'package:app/models/dateFieldMixin.dart';
+import 'package:app/system/keys.dart';
+import 'package:app/system/session.dart';
+import 'package:app/tools/app/appRoute.dart';
+import 'package:app/tools/deviceInfoTools.dart';
 
 class PublicAccess {
   PublicAccess._();
@@ -28,8 +22,8 @@ class PublicAccess {
     loadStyle: LoadStyle.ShowWhenLoading,
   );
 
-  static List<DateTime> findUpperLower(List<DateFieldMixin> list, bool isAsc){
-    final res = <DateTime>[];
+  static UpperLower findUpperLower(List<DateFieldMixin> list, bool isAsc){
+    final res = UpperLower();
 
     if(list.isEmpty){
       return res;
@@ -42,19 +36,17 @@ class PublicAccess {
       var c = DateHelper.compareDates(x.date, lower, asc: isAsc);
 
       if(c < 0){
-        lower = x.date!;
+        upper = x.date!;
       }
 
       c = DateHelper.compareDates(x.date, upper, asc: isAsc);
 
       if(c > 0){
-        upper = x.date!;
+        lower = x.date!;
       }
     }
 
-    res.add(lower);
-    res.add(upper);
-    return res;
+    return UpperLower()..lower = lower..upper = upper;
   }
 
   ///----------- HowIs ----------------------------------------------------
@@ -99,29 +91,13 @@ class PublicAccess {
 
     return heart;
   }
+}
 
-  static bool onResponse(Response response){
-    final statusCode = response.statusCode?? 0;
+///===================================================================================
+class UpperLower {
+  DateTime? upper;
+  DateTime? lower;
 
-    if(statusCode == 200){
-      final isString = response.data is String;
-      final json = isString? JsonHelper.jsonToMap(response.data): null;
-
-      if(json != null){
-        final causeCode = json[Keys.causeCode]?? 0;
-
-        if(causeCode == HttpCodes.error_tokenNotCorrect){
-          UserLoginTools.forceLogoff(Session.getLastLoginUser()?.userId?? '');
-
-          AppDialog.instance.showInfoDialog(
-              AppRoute.materialContext,
-              null,
-              AppMessages.tokenIsIncorrectOrExpire
-          );
-        }
-      }
-    }
-
-    return true;
-  }
+  String? get upperAsTS => DateHelper.toTimestampNullable(upper);
+  String? get lowerAsTS => DateHelper.toTimestampNullable(lower);
 }

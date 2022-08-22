@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
-import 'package:vosate_zehn/views/overlay/overlayAnimations.dart';
+import 'package:app/views/overlay/overlayAnimations.dart';
 
 ///=================================================================================================
 enum OverlayIndicatorType {

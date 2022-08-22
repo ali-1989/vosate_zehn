@@ -4,8 +4,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import 'package:vosate_zehn/models/settingsModel.dart';
-import 'package:vosate_zehn/tools/app/appDb.dart';
+import 'package:app/models/settingsModel.dart';
+import 'package:app/tools/app/appDb.dart';
 import '/system/keys.dart';
 
 class SettingsManager {

@@ -1,4 +1,4 @@
-import 'package:vosate_zehn/system/keys.dart';
+import 'package:app/system/keys.dart';
 
 class CountryModel {
   String? countryName;

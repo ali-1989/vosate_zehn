@@ -1,6 +1,6 @@
-import 'package:vosate_zehn/pages/aid_page.dart';
-import 'package:vosate_zehn/tools/app/appBroadcast.dart';
-import 'package:vosate_zehn/tools/app/appRoute.dart';
+import 'package:app/pages/aid_page.dart';
+import 'package:app/tools/app/appBroadcast.dart';
+import 'package:app/tools/app/appRoute.dart';
 
 class AidService {
   AidService._();

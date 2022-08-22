@@ -9,14 +9,14 @@ import 'package:iris_tools/api/helpers/mathHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:just_audio/just_audio.dart';
 
-import 'package:vosate_zehn/pages/levels/playback_disposition.dart';
-import 'package:vosate_zehn/pages/levels/slider.dart';
-import 'package:vosate_zehn/system/extensions.dart';
-import 'package:vosate_zehn/system/stateBase.dart';
-import 'package:vosate_zehn/tools/app/appIcons.dart';
-import 'package:vosate_zehn/tools/app/appImages.dart';
-import 'package:vosate_zehn/tools/app/appSizes.dart';
-import 'package:vosate_zehn/views/AppBarCustom.dart';
+import 'package:app/pages/levels/playback_disposition.dart';
+import 'package:app/pages/levels/slider.dart';
+import 'package:app/system/extensions.dart';
+import 'package:app/system/stateBase.dart';
+import 'package:app/tools/app/appIcons.dart';
+import 'package:app/tools/app/appImages.dart';
+import 'package:app/tools/app/appSizes.dart';
+import 'package:app/views/AppBarCustom.dart';
 
 /// foi iOS: must visit page and add code to Info.plist
 

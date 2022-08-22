@@ -1,44 +1,43 @@
+import 'package:app/models/bucketModel.dart';
+import 'package:app/models/subBuketModel.dart';
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
 import 'package:iris_tools/api/duration/durationFormater.dart';
-import 'package:iris_tools/dateSection/dateHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import 'package:vosate_zehn/models/enums.dart';
-import 'package:vosate_zehn/models/level1Model.dart';
-import 'package:vosate_zehn/models/level2Model.dart';
-import 'package:vosate_zehn/pages/levels/audio_player_page.dart';
-import 'package:vosate_zehn/pages/levels/content_view_page.dart';
-import 'package:vosate_zehn/pages/levels/video_player_page.dart';
-import 'package:vosate_zehn/services/favoriteService.dart';
-import 'package:vosate_zehn/system/extensions.dart';
-import 'package:vosate_zehn/system/keys.dart';
-import 'package:vosate_zehn/system/requester.dart';
-import 'package:vosate_zehn/system/session.dart';
-import 'package:vosate_zehn/system/stateBase.dart';
-import 'package:vosate_zehn/tools/app/appIcons.dart';
-import 'package:vosate_zehn/tools/app/appMessages.dart';
-import 'package:vosate_zehn/tools/app/appRoute.dart';
-import 'package:vosate_zehn/tools/app/appToast.dart';
-import 'package:vosate_zehn/tools/publicAccess.dart';
-import 'package:vosate_zehn/views/AppBarCustom.dart';
-import 'package:vosate_zehn/views/notFetchData.dart';
-import 'package:vosate_zehn/views/waitToLoad.dart';
+import 'package:app/models/enums.dart';
+import 'package:app/pages/levels/audio_player_page.dart';
+import 'package:app/pages/levels/content_view_page.dart';
+import 'package:app/pages/levels/video_player_page.dart';
+import 'package:app/services/favoriteService.dart';
+import 'package:app/system/extensions.dart';
+import 'package:app/system/keys.dart';
+import 'package:app/system/requester.dart';
+import 'package:app/system/session.dart';
+import 'package:app/system/stateBase.dart';
+import 'package:app/tools/app/appIcons.dart';
+import 'package:app/tools/app/appMessages.dart';
+import 'package:app/tools/app/appRoute.dart';
+import 'package:app/tools/app/appToast.dart';
+import 'package:app/tools/publicAccess.dart';
+import 'package:app/views/AppBarCustom.dart';
+import 'package:app/views/notFetchData.dart';
+import 'package:app/views/waitToLoad.dart';
 
-class Level2PageInjectData {
-  Level1Model? level1model;
+class SubBucketPageInjectData {
+  BucketModel? bucketModel;
 }
 ///---------------------------------------------------------------------------------
 class Level2Page extends StatefulWidget {
   static final route = GoRoute(
     path: '/Level2',
     name: (Level2Page).toString().toLowerCase(),
-    builder: (BuildContext context, GoRouterState state) => Level2Page(injectData: state.extra as Level2PageInjectData),
+    builder: (BuildContext context, GoRouterState state) => Level2Page(injectData: state.extra as SubBucketPageInjectData),
   );
 
-  final Level2PageInjectData injectData;
+  final SubBucketPageInjectData injectData;
 
   Level2Page({
     required this.injectData,
@@ -53,7 +52,7 @@ class _Level2PageState extends StateBase<Level2Page> {
   Requester requester = Requester();
   bool isInFetchData = true;
   String state$fetchData = 'state_fetchData';
-  List<Level2Model> listItems = [];
+  List<SubBucketModel> listItems = [];
   RefreshController refreshController = RefreshController(initialRefresh: false);
   bool isAscOrder = true;
   int fetchCount = 20;
@@ -79,7 +78,7 @@ class _Level2PageState extends StateBase<Level2Page> {
         builder: (context, ctr, data) {
           return Scaffold(
             appBar: AppBarCustom(
-              title: Text(widget.injectData.level1model?.title?? ''),
+              title: Text(widget.injectData.bucketModel?.title?? ''),
             ),
             body: buildBody(),
           );
@@ -153,7 +152,7 @@ class _Level2PageState extends StateBase<Level2Page> {
                         left: 0,
                         child: Builder(
                             builder: (context) {
-                              if(itm.type == Level2Types.video.type()){
+                              if(itm.type == SubBucketTypes.video.id()){
                                 return Chip(//todo: chip transparent
                                   backgroundColor: Colors.black.withAlpha(200),
                                   shadowColor: Colors.transparent,
@@ -163,7 +162,7 @@ class _Level2PageState extends StateBase<Level2Page> {
                                 );
                               }
 
-                              if(itm.type == Level2Types.audio.type()){
+                              if(itm.type == SubBucketTypes.audio.id()){
                                 return Chip(
                                   backgroundColor: Colors.black.withAlpha(200),
                                   shadowColor: Colors.transparent,
@@ -193,8 +192,8 @@ class _Level2PageState extends StateBase<Level2Page> {
                     children: [
                       Builder(
                         builder: (ctx){
-                          if(itm.duration != null && itm.duration! > 0){
-                            final dur = Duration(milliseconds: itm.duration!);
+                          if(itm.duration > 0){
+                            final dur = Duration(milliseconds: itm.duration);
                             return Text('${DurationFormatter.duration(dur, showSuffix: false)} ثانیه').alpha().subFont();
                         }
 
@@ -238,7 +237,7 @@ class _Level2PageState extends StateBase<Level2Page> {
     requestData();
   }
 
-  void setFavorite(Level2Model itm) async {
+  void setFavorite(SubBucketModel itm) async {
     itm.isFavorite = !itm.isFavorite;
     bool res;
 
@@ -261,30 +260,30 @@ class _Level2PageState extends StateBase<Level2Page> {
     assistCtr.updateMain();
   }
 
-  void onItemClick(Level2Model itm) {
-    if(itm.type == Level2Types.video.type()){
+  void onItemClick(SubBucketModel itm) {
+    if(itm.type == SubBucketTypes.video.id()){
       final inject = VideoPlayerPageInjectData();
-      inject.srcAddress = itm.url!;
+      inject.srcAddress = itm.mediaModel!.url!;
       inject.videoSourceType = VideoSourceType.network;
 
       AppRoute.pushNamed(context, VideoPlayerPage.route.name!, extra: inject);
       return;
     }
 
-    if(itm.type == Level2Types.audio.type()){
+    if(itm.type == SubBucketTypes.audio.id()){
       final inject = AudioPlayerPageInjectData();
-      inject.srcAddress = itm.url!;
+      inject.srcAddress = itm.mediaModel!.url!;
       inject.audioSourceType = AudioSourceType.network;
-      inject.title = widget.injectData.level1model?.title;
+      inject.title = widget.injectData.bucketModel?.title;
       inject.subTitle = itm.title;
 
       AppRoute.pushNamed(context, AudioPlayerPage.route.name!, extra: inject);
       return;
     }
 
-    if(itm.type == Level2Types.list.type()){
+    if(itm.type == SubBucketTypes.list.id()){
       final inject = ContentViewPageInjectData();
-      inject.level2model = itm;
+      inject.subBucket = itm;
 
       AppRoute.pushNamed(context, ContentViewPage.route.name!, extra: inject);
       return;
@@ -297,16 +296,8 @@ class _Level2PageState extends StateBase<Level2Page> {
     final js = <String, dynamic>{};
     js[Keys.requestZone] = 'get_level2_data';
     js[Keys.requesterId] = Session.getLastLoginUser()?.userId;
-    js[Keys.id] = widget.injectData.level1model!.id?? 1;
+    js[Keys.id] = widget.injectData.bucketModel!.id?? 1;
     js[Keys.count] = fetchCount;
-
-    if(ul.isNotEmpty) {
-      js[Keys.lower] = DateHelper.toTimestamp(ul.elementAt(0));
-    }
-
-    if(ul.length > 1) {
-      js[Keys.upper] = DateHelper.toTimestamp(ul.elementAt(1));
-    }
 
     requester.bodyJson = js;
 
@@ -331,7 +322,7 @@ class _Level2PageState extends StateBase<Level2Page> {
       }
 
       for(final m in list){
-        final itm = Level2Model.fromMap(m);
+        final itm = SubBucketModel.fromMap(m);
         itm.isFavorite = FavoriteService.isFavorite(itm.id!);
 
         listItems.add(itm);

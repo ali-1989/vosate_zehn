@@ -1,23 +1,23 @@
+import 'package:app/models/subBuketModel.dart';
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
 import 'package:iris_tools/api/duration/durationFormater.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 
-import 'package:vosate_zehn/models/enums.dart';
-import 'package:vosate_zehn/models/level2Model.dart';
-import 'package:vosate_zehn/pages/levels/audio_player_page.dart';
-import 'package:vosate_zehn/pages/levels/content_view_page.dart';
-import 'package:vosate_zehn/pages/levels/video_player_page.dart';
-import 'package:vosate_zehn/services/favoriteService.dart';
-import 'package:vosate_zehn/system/extensions.dart';
-import 'package:vosate_zehn/system/stateBase.dart';
-import 'package:vosate_zehn/tools/app/appIcons.dart';
-import 'package:vosate_zehn/tools/app/appMessages.dart';
-import 'package:vosate_zehn/tools/app/appRoute.dart';
-import 'package:vosate_zehn/tools/app/appToast.dart';
-import 'package:vosate_zehn/views/AppBarCustom.dart';
-import 'package:vosate_zehn/views/waitToLoad.dart';
+import 'package:app/models/enums.dart';
+import 'package:app/pages/levels/audio_player_page.dart';
+import 'package:app/pages/levels/content_view_page.dart';
+import 'package:app/pages/levels/video_player_page.dart';
+import 'package:app/services/favoriteService.dart';
+import 'package:app/system/extensions.dart';
+import 'package:app/system/stateBase.dart';
+import 'package:app/tools/app/appIcons.dart';
+import 'package:app/tools/app/appMessages.dart';
+import 'package:app/tools/app/appRoute.dart';
+import 'package:app/tools/app/appToast.dart';
+import 'package:app/views/AppBarCustom.dart';
+import 'package:app/views/waitToLoad.dart';
 
 class FavoritesPage extends StatefulWidget {
   static final route = GoRoute(
@@ -34,7 +34,7 @@ class FavoritesPage extends StatefulWidget {
 ///==================================================================================
 class _FavoritesPageState extends StateBase<FavoritesPage> {
   bool isInFetchData = true;
-  List<Level2Model> listItems = [];
+  List<SubBucketModel> listItems = [];
 
   @override
   void initState(){
@@ -105,7 +105,7 @@ class _FavoritesPageState extends StateBase<FavoritesPage> {
                         left: 0,
                         child: Builder(
                             builder: (context) {
-                              if(itm.type == Level2Types.video.type()){
+                              if(itm.type == SubBucketTypes.video.id()){
                                 return Chip(//todo: chip transparent
                                   backgroundColor: Colors.black.withAlpha(200),
                                   shadowColor: Colors.transparent,
@@ -115,7 +115,7 @@ class _FavoritesPageState extends StateBase<FavoritesPage> {
                                 );
                               }
 
-                              if(itm.type == Level2Types.audio.type()){
+                              if(itm.type == SubBucketTypes.audio.id()){
                                 return Chip(
                                   backgroundColor: Colors.black.withAlpha(200),
                                   shadowColor: Colors.transparent,
@@ -176,7 +176,7 @@ class _FavoritesPageState extends StateBase<FavoritesPage> {
     );
   }
 
-  void deleteFavorite(Level2Model itm) async {
+  void deleteFavorite(SubBucketModel itm) async {
     itm.isFavorite = !itm.isFavorite;
     bool res = await FavoriteService.removeFavorite(itm.id!);
 
@@ -190,19 +190,19 @@ class _FavoritesPageState extends StateBase<FavoritesPage> {
     assistCtr.updateMain();
   }
 
-  void onItemClick(Level2Model itm) {
-    if(itm.type == Level2Types.video.type()){
+  void onItemClick(SubBucketModel itm) {
+    if(itm.type == SubBucketTypes.video.id()){
       final inject = VideoPlayerPageInjectData();
-      inject.srcAddress = itm.url!;
+      inject.srcAddress = itm.mediaModel!.url!;
       inject.videoSourceType = VideoSourceType.network;
 
       AppRoute.pushNamed(context, VideoPlayerPage.route.name!, extra: inject);
       return;
     }
 
-    if(itm.type == Level2Types.audio.type()){
+    if(itm.type == SubBucketTypes.audio.id()){
       final inject = AudioPlayerPageInjectData();
-      inject.srcAddress = itm.url!;
+      inject.srcAddress = itm.mediaModel!.url!;
       inject.audioSourceType = AudioSourceType.network;
       inject.title = '';//widget.injectData.level1model?.title;
       inject.subTitle = itm.title;
@@ -211,9 +211,9 @@ class _FavoritesPageState extends StateBase<FavoritesPage> {
       return;
     }
 
-    if(itm.type == Level2Types.list.type()){
+    if(itm.type == SubBucketTypes.list.id()){
       final inject = ContentViewPageInjectData();
-      inject.level2model = itm;
+      inject.subBucket = itm;
 
       AppRoute.pushNamed(context, ContentViewPage.route.name!, extra: inject);
       return;

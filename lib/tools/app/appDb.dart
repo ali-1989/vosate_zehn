@@ -1,7 +1,7 @@
 import 'package:iris_db/iris_db.dart';
 import 'package:iris_tools/api/helpers/databaseHelper.dart';
 
-import 'package:vosate_zehn/tools/app/appNotification.dart';
+import 'package:app/tools/app/appNotification.dart';
 import '/system/keys.dart';
 
 class AppDB {

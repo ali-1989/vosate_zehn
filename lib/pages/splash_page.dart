@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/helpers/databaseHelper.dart';
@@ -9,21 +10,21 @@ import 'package:iris_tools/net/trustSsl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:spring/spring.dart';
 
-import 'package:vosate_zehn/constants.dart';
-import 'package:vosate_zehn/managers/settingsManager.dart';
-import 'package:vosate_zehn/managers/versionManager.dart';
-import 'package:vosate_zehn/system/initialize.dart';
-import 'package:vosate_zehn/system/session.dart';
-import 'package:vosate_zehn/tools/app/appBroadcast.dart';
-import 'package:vosate_zehn/tools/app/appDb.dart';
-import 'package:vosate_zehn/tools/app/appDirectories.dart';
-import 'package:vosate_zehn/tools/app/appImages.dart';
-import 'package:vosate_zehn/tools/app/appLocale.dart';
-import 'package:vosate_zehn/tools/app/appManager.dart';
-import 'package:vosate_zehn/tools/app/appRoute.dart';
-import 'package:vosate_zehn/tools/app/appThemes.dart';
-import 'package:vosate_zehn/tools/app/appToast.dart';
-import 'package:vosate_zehn/tools/deviceInfoTools.dart';
+import 'package:app/constants.dart';
+import 'package:app/managers/settingsManager.dart';
+import 'package:app/managers/versionManager.dart';
+import 'package:app/system/initialize.dart';
+import 'package:app/system/session.dart';
+import 'package:app/tools/app/appBroadcast.dart';
+import 'package:app/tools/app/appDb.dart';
+import 'package:app/tools/app/appDirectories.dart';
+import 'package:app/tools/app/appImages.dart';
+import 'package:app/tools/app/appLocale.dart';
+import 'package:app/tools/app/appManager.dart';
+import 'package:app/tools/app/appRoute.dart';
+import 'package:app/tools/app/appThemes.dart';
+import 'package:app/tools/app/appToast.dart';
+import 'package:app/tools/deviceInfoTools.dart';
 
 bool _isInit = false;
 bool _isInLoadingSettings = true;
@@ -125,6 +126,12 @@ class SplashScreenState extends State<SplashPage> {
         return SettingsManager.settingsModel.appLocale;
       },*/
         //home: const HomePage(),
+      scrollBehavior: ScrollConfiguration.of(context).copyWith(
+        dragDevices: {
+          PointerDeviceKind.mouse,
+          PointerDeviceKind.touch,
+        },
+      ),
         builder: (context, home) {
           AppRoute.materialContext = context;
           final mediaQueryData = MediaQuery.of(context);

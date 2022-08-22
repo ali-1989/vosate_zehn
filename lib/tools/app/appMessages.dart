@@ -1,4 +1,4 @@
-import 'package:vosate_zehn/tools/app/appRoute.dart';
+import 'package:app/tools/app/appRoute.dart';
 import '/system/extensions.dart';
 
 class AppMessages {

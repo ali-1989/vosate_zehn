@@ -7,7 +7,7 @@ import 'package:iris_tools/dateSection/ADateStructure.dart';
 import 'package:iris_tools/dateSection/calendarTools.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
 
-import 'package:vosate_zehn/system/extensions.dart';
+import 'package:app/system/extensions.dart';
 import '/managers/settingsManager.dart';
 
 enum DateFormat {

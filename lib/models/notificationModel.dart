@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:vosate_zehn/constants.dart';
-import 'package:vosate_zehn/tools/app/appThemes.dart';
+import 'package:app/constants.dart';
+import 'package:app/tools/app/appThemes.dart';
 
 class NotificationModel {
   String name = '${Constants.appName}_channel';

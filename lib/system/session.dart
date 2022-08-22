@@ -2,9 +2,9 @@ import 'package:iris_db/iris_db.dart';
 import 'package:iris_tools/api/checker.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
 
-import 'package:vosate_zehn/models/userModel.dart';
-import 'package:vosate_zehn/tools/app/appDb.dart';
-import 'package:vosate_zehn/tools/app/appLocale.dart';
+import 'package:app/models/userModel.dart';
+import 'package:app/tools/app/appDb.dart';
+import 'package:app/tools/app/appLocale.dart';
 import '/managers/settingsManager.dart';
 import '/system/extensions.dart';
 import '/system/keys.dart';

@@ -1,9 +1,9 @@
 import 'package:iris_tools/dateSection/dateHelper.dart';
 import 'package:iris_tools/models/dataModels/mediaModel.dart';
 
-import 'package:vosate_zehn/models/countryModel.dart';
-import 'package:vosate_zehn/system/keys.dart';
-import 'package:vosate_zehn/tools/uriTools.dart';
+import 'package:app/models/countryModel.dart';
+import 'package:app/system/keys.dart';
+import 'package:app/tools/uriTools.dart';
 
 class UserModel {
   late String userId;

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:iris_tools/dateSection/calendarTools.dart';
 
-import 'package:vosate_zehn/managers/fontManager.dart';
-import 'package:vosate_zehn/system/keys.dart';
-import 'package:vosate_zehn/tools/app/appThemes.dart';
-import 'package:vosate_zehn/tools/dateTools.dart';
+import 'package:app/managers/fontManager.dart';
+import 'package:app/system/keys.dart';
+import 'package:app/tools/app/appThemes.dart';
+import 'package:app/tools/dateTools.dart';
 
 class SettingsModel {
   String? lastUserId;
@@ -31,8 +31,10 @@ class SettingsModel {
   static int maxViewHeightL = 200;
   static int maxViewHeightP = 460;
 
-  static const defaultHttpAddress = 'http://192.168.43.140:7436'; //192.168.1.105
-  static const defaultWsAddress = 'ws://192.168.43.140:7438/ws';
+  static const defaultHttpAddress = 'http://193.111.234.117:7436';
+  //static const defaultHttpAddress = 'http://192.168.1.103:7436';
+  //static const defaultWsAddress = 'ws://192.168.1.103:7438/ws';
+  static const defaultWsAddress = 'ws://193.111.234.117:7438/ws';
   static const defaultProxyAddress = '95.174.67.50:18080';
   static const Locale defaultAppLocale = Locale('fa', 'IR');
   static final CalendarType defaultCalendarType = CalendarType.solarHijri;

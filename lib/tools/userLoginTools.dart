@@ -1,12 +1,12 @@
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
 
-import 'package:vosate_zehn/managers/settingsManager.dart';
-import 'package:vosate_zehn/models/userModel.dart';
-import 'package:vosate_zehn/pages/login/login_page.dart';
-import 'package:vosate_zehn/system/session.dart';
-import 'package:vosate_zehn/tools/app/appBroadcast.dart';
-import 'package:vosate_zehn/tools/app/appHttpDio.dart';
-import 'package:vosate_zehn/tools/app/appRoute.dart';
+import 'package:app/managers/settingsManager.dart';
+import 'package:app/models/userModel.dart';
+import 'package:app/pages/login/login_page.dart';
+import 'package:app/system/session.dart';
+import 'package:app/tools/app/appBroadcast.dart';
+import 'package:app/tools/app/appHttpDio.dart';
+import 'package:app/tools/app/appRoute.dart';
 import '/system/keys.dart';
 import '/tools/app/appManager.dart';
 

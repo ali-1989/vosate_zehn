@@ -8,8 +8,8 @@ import 'package:iris_tools/api/helpers/localeHelper.dart';
 import 'package:iris_tools/api/helpers/mathHelper.dart';
 import 'package:iris_tools/widgets/border/dottedBorder.dart';
 
-import 'package:vosate_zehn/tools/app/appLocale.dart';
-import 'package:vosate_zehn/tools/app/appThemes.dart';
+import 'package:app/tools/app/appLocale.dart';
+import 'package:app/tools/app/appThemes.dart';
 import '/managers/fontManager.dart';
 import '/managers/settingsManager.dart';
 import '/tools/app/appSizes.dart';

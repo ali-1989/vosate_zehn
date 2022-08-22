@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:iris_tools/modules/stateManagers/notifyRefresh.dart';
 import 'package:iris_tools/modules/stateManagers/refresh.dart';
 
-import 'package:vosate_zehn/pages/home_page.dart';
-import 'package:vosate_zehn/pages/splash_page.dart';
-import 'package:vosate_zehn/tools/app/appThemes.dart';
+import 'package:app/pages/home_page.dart';
+import 'package:app/pages/splash_page.dart';
+import 'package:app/tools/app/appThemes.dart';
 
 class AppBroadcast {
   AppBroadcast._();

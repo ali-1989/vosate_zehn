@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:iris_tools/widgets/searchBar.dart';
 
-import 'package:vosate_zehn/models/countryModel.dart';
-import 'package:vosate_zehn/system/stateBase.dart';
-import 'package:vosate_zehn/tools/app/appMessages.dart';
-import 'package:vosate_zehn/tools/countryTools.dart';
+import 'package:app/models/countryModel.dart';
+import 'package:app/system/stateBase.dart';
+import 'package:app/tools/app/appMessages.dart';
+import 'package:app/tools/countryTools.dart';
 import '/tools/app/appNavigator.dart';
 import '/tools/app/appSizes.dart';
 import '/tools/app/appThemes.dart';

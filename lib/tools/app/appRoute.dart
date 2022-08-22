@@ -3,27 +3,27 @@ import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
 
-import 'package:vosate_zehn/pages/about_us_page.dart';
-import 'package:vosate_zehn/pages/aid_page.dart';
-import 'package:vosate_zehn/pages/contact_us_page.dart';
-import 'package:vosate_zehn/pages/e404_page.dart';
-import 'package:vosate_zehn/pages/favorites_page.dart';
-import 'package:vosate_zehn/pages/home_page.dart';
-import 'package:vosate_zehn/pages/imageFullScreen.dart';
-import 'package:vosate_zehn/pages/last_seen_page.dart';
-import 'package:vosate_zehn/pages/levels/audio_player_page.dart';
-import 'package:vosate_zehn/pages/levels/content_view_page.dart';
-import 'package:vosate_zehn/pages/levels/level2_page.dart';
-import 'package:vosate_zehn/pages/levels/video_player_page.dart';
-import 'package:vosate_zehn/pages/login/login_page.dart';
-import 'package:vosate_zehn/pages/login/register_page.dart';
-import 'package:vosate_zehn/pages/profile/profile_page.dart';
-import 'package:vosate_zehn/pages/sentences_page.dart';
-import 'package:vosate_zehn/pages/term_page.dart';
-import 'package:vosate_zehn/pages/zarinpal_page.dart';
-import 'package:vosate_zehn/system/session.dart';
-import 'package:vosate_zehn/tools/app/appDb.dart';
-import 'package:vosate_zehn/tools/app/appDirectories.dart';
+import 'package:app/pages/about_us_page.dart';
+import 'package:app/pages/aid_page.dart';
+import 'package:app/pages/contact_us_page.dart';
+import 'package:app/pages/e404_page.dart';
+import 'package:app/pages/favorites_page.dart';
+import 'package:app/pages/home_page.dart';
+import 'package:app/pages/imageFullScreen.dart';
+import 'package:app/pages/last_seen_page.dart';
+import 'package:app/pages/levels/audio_player_page.dart';
+import 'package:app/pages/levels/content_view_page.dart';
+import 'package:app/pages/levels/level2_page.dart';
+import 'package:app/pages/levels/video_player_page.dart';
+import 'package:app/pages/login/login_page.dart';
+import 'package:app/pages/login/register_page.dart';
+import 'package:app/pages/profile/profile_page.dart';
+import 'package:app/pages/sentences_page.dart';
+import 'package:app/pages/term_page.dart';
+import 'package:app/pages/zarinpal_page.dart';
+import 'package:app/system/session.dart';
+import 'package:app/tools/app/appDb.dart';
+import 'package:app/tools/app/appDirectories.dart';
 import '/system/keys.dart';
 import '/tools/app/appManager.dart';
 import '/tools/app/appNavigator.dart';
@@ -126,8 +126,7 @@ final mainRouter = GoRouter(
     ],
     initialLocation: HomePage.route.path,
     routerNeglect: true,//In browser 'back' button not work
-    errorBuilder: (BuildContext context, GoRouterState state) => const E404Page(),
-    //refreshListenable: loginInfo, //GoRouterRefreshStream(streamController.stream),
+    errorBuilder: routeErrorHandler,
     redirect: _mainRedirect,
 );
 
@@ -140,7 +139,7 @@ bool checkFreeRoute(GoRoute route, GoRouterState state){
   }
 
   if(!routeIsTop){
-    //return '${HomePage.route.path}/${route.path}' == state.subloc;  if homePage has name, like:/admin
+    //return '${HomePage.route.path}/${route.path}' == state.subloc;  if homePage is not backSlash, like:/admin
     return route.path == state.subloc;
   }
 
@@ -165,6 +164,18 @@ String? _mainRedirect(GoRouterState state){
   }
 
   return state.queryParams['gt'];
+}
+
+Widget routeErrorHandler(BuildContext context, GoRouterState state) {
+  /*final split = state.subloc.split('/');
+  final count = state.subloc.startsWith('/')? 1 : 0;
+
+  if(split.length > count){
+    AppRoute.pushNamed(AppRoute.getContext(), state.subloc.substring(0, state.subloc.lastIndexOf('/')));
+    return SizedBox();
+  }*/
+
+ return const E404Page();
 }
 ///============================================================================================
 class MyPageRoute extends PageRouteBuilder {

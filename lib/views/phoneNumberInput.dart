@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:vosate_zehn/tools/app/appIcons.dart';
+import 'package:app/tools/app/appIcons.dart';
 
 class PhoneNumberInput extends StatefulWidget {
   final PhoneNumberInputController controller;

@@ -1,25 +1,28 @@
 import 'package:iris_tools/models/dataModels/mediaModel.dart';
+import 'package:app/models/dateFieldMixin.dart';
 
-import 'package:vosate_zehn/system/keys.dart';
+import 'package:app/system/keys.dart';
 
-class SpeakerModel {
+class SpeakerModel with DateFieldMixin {
   int? id;
-  String? name;
+  late String name;
   String? description;
-  MediaModel? imageModel;
+  int? mediaId;
+  //----------- local
+  MediaModel? profileModel;
 
   SpeakerModel();
 
   SpeakerModel.fromMap(Map? map){
-    if(map != null) {
-      id = map[Keys.id];
-      name = map[Keys.name];
-      description = map[Keys.description];
-
-      if(map[Keys.media] is Map){
-        imageModel = MediaModel.fromMap(map[Keys.media]);
-      }
+    if(map == null) {
+      return;
     }
+
+    id = map[Keys.id];
+    name = map[Keys.name]?? '-';
+    description = map[Keys.description];
+    mediaId = map['media_id'];
+
   }
 
   Map<String, dynamic> toMap(){
@@ -27,7 +30,7 @@ class SpeakerModel {
     map[Keys.id] = id;
     map[Keys.name] = name;
     map[Keys.description] = description;
-    map[Keys.media] = imageModel?.toMap();
+    map['media_id'] = mediaId;
 
     return map;
   }

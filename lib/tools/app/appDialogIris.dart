@@ -4,9 +4,9 @@ import 'package:iris_tools/api/helpers/colorHelper.dart';
 import 'package:iris_tools/modules/irisDialog/irisDialog.dart';
 import 'package:iris_tools/widgets/text/autoDirection.dart';
 
-import 'package:vosate_zehn/tools/app/appIcons.dart';
-import 'package:vosate_zehn/tools/app/appMessages.dart';
-import 'package:vosate_zehn/tools/app/appSizes.dart';
+import 'package:app/tools/app/appIcons.dart';
+import 'package:app/tools/app/appMessages.dart';
+import 'package:app/tools/app/appSizes.dart';
 import '/tools/app/appThemes.dart';
 
 class AppDialogIris {

@@ -7,18 +7,18 @@ import 'package:iris_tools/dateSection/dateHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
-import 'package:vosate_zehn/models/countryModel.dart';
-import 'package:vosate_zehn/pages/home_page.dart';
-import 'package:vosate_zehn/system/keys.dart';
-import 'package:vosate_zehn/system/requester.dart';
-import 'package:vosate_zehn/system/session.dart';
-import 'package:vosate_zehn/system/stateBase.dart';
-import 'package:vosate_zehn/tools/app/appImages.dart';
-import 'package:vosate_zehn/tools/app/appMessages.dart';
-import 'package:vosate_zehn/tools/app/appRoute.dart';
-import 'package:vosate_zehn/tools/app/appSheet.dart';
-import 'package:vosate_zehn/views/AppBarCustom.dart';
-import 'package:vosate_zehn/views/dateViews/selectDateCalendarView.dart';
+import 'package:app/models/countryModel.dart';
+import 'package:app/pages/home_page.dart';
+import 'package:app/system/keys.dart';
+import 'package:app/system/requester.dart';
+import 'package:app/system/session.dart';
+import 'package:app/system/stateBase.dart';
+import 'package:app/tools/app/appImages.dart';
+import 'package:app/tools/app/appMessages.dart';
+import 'package:app/tools/app/appRoute.dart';
+import 'package:app/tools/app/appSheet.dart';
+import 'package:app/views/AppBarCustom.dart';
+import 'package:app/views/dateViews/selectDateCalendarView.dart';
 
 class RegisterPageInjectData {
   String? email;

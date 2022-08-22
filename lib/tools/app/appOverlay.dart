@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:iris_tools/features/overlayDialog.dart';
 import 'package:popover/popover.dart';
 
-import 'package:vosate_zehn/tools/app/appSizes.dart';
+import 'package:app/tools/app/appSizes.dart';
 
 class AppOverlay {
 

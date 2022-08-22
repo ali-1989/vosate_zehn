@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 
-import 'package:vosate_zehn/system/stateBase.dart';
-import 'package:vosate_zehn/tools/app/appMessages.dart';
-import 'package:vosate_zehn/views/AppBarCustom.dart';
-import 'package:vosate_zehn/views/waitToLoad.dart';
+import 'package:app/system/stateBase.dart';
+import 'package:app/tools/app/appMessages.dart';
+import 'package:app/views/AppBarCustom.dart';
+import 'package:app/views/waitToLoad.dart';
 
 class SentencesPage extends StatefulWidget {
   static final route = GoRoute(

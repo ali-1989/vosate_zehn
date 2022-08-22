@@ -10,27 +10,27 @@ import 'package:iris_tools/api/helpers/mathHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-import 'package:vosate_zehn/models/countryModel.dart';
-import 'package:vosate_zehn/pages/home_page.dart';
-import 'package:vosate_zehn/pages/login/register_page.dart';
-import 'package:vosate_zehn/pages/term_page.dart';
-import 'package:vosate_zehn/services/google_service.dart';
-import 'package:vosate_zehn/services/login_service.dart';
-import 'package:vosate_zehn/system/keys.dart';
-import 'package:vosate_zehn/system/session.dart';
-import 'package:vosate_zehn/system/stateBase.dart';
-import 'package:vosate_zehn/tools/app/appImages.dart';
-import 'package:vosate_zehn/tools/app/appLoading.dart';
-import 'package:vosate_zehn/tools/app/appMessages.dart';
-import 'package:vosate_zehn/tools/app/appNavigator.dart';
-import 'package:vosate_zehn/tools/app/appRoute.dart';
-import 'package:vosate_zehn/tools/app/appSheet.dart';
-import 'package:vosate_zehn/tools/app/appSnack.dart';
-import 'package:vosate_zehn/tools/app/appThemes.dart';
-import 'package:vosate_zehn/tools/app/appToast.dart';
-import 'package:vosate_zehn/tools/countryTools.dart';
-import 'package:vosate_zehn/views/phoneNumberInput.dart';
-import 'package:vosate_zehn/views/screens/countrySelect.dart';
+import 'package:app/models/countryModel.dart';
+import 'package:app/pages/home_page.dart';
+import 'package:app/pages/login/register_page.dart';
+import 'package:app/pages/term_page.dart';
+import 'package:app/services/google_service.dart';
+import 'package:app/services/login_service.dart';
+import 'package:app/system/keys.dart';
+import 'package:app/system/session.dart';
+import 'package:app/system/stateBase.dart';
+import 'package:app/tools/app/appImages.dart';
+import 'package:app/tools/app/appLoading.dart';
+import 'package:app/tools/app/appMessages.dart';
+import 'package:app/tools/app/appNavigator.dart';
+import 'package:app/tools/app/appRoute.dart';
+import 'package:app/tools/app/appSheet.dart';
+import 'package:app/tools/app/appSnack.dart';
+import 'package:app/tools/app/appThemes.dart';
+import 'package:app/tools/app/appToast.dart';
+import 'package:app/tools/countryTools.dart';
+import 'package:app/views/phoneNumberInput.dart';
+import 'package:app/views/screens/countrySelect.dart';
 
 class LoginPage extends StatefulWidget {
   static final route = GoRoute(

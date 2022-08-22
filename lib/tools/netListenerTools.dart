@@ -1,9 +1,9 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:iris_tools/net/netManager.dart';
 
-import 'package:vosate_zehn/system/session.dart';
-import 'package:vosate_zehn/tools/app/appBroadcast.dart';
-import 'package:vosate_zehn/tools/app/appCache.dart';
+import 'package:app/system/session.dart';
+import 'package:app/tools/app/appBroadcast.dart';
+import 'package:app/tools/app/appCache.dart';
 
 /// this listener not work on start app, work on new event
 

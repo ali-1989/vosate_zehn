@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:vosate_zehn/constants.dart';
-import 'package:vosate_zehn/models/versionModel.dart';
-import 'package:vosate_zehn/system/requester.dart';
-import 'package:vosate_zehn/tools/app/appDb.dart';
+import 'package:app/constants.dart';
+import 'package:app/models/versionModel.dart';
+import 'package:app/system/requester.dart';
+import 'package:app/tools/app/appDb.dart';
 import '/managers/settingsManager.dart';
 
 class VersionManager {
