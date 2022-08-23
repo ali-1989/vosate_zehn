@@ -7,7 +7,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:app/pages/splash_page.dart';
-import 'package:app/tools/app/appManager.dart';
 import 'package:app/tools/app/appRoute.dart';
 
 bool _isInit = false;
@@ -16,7 +15,7 @@ bool _isInit = false;
 Future<void> main() async {
 
   Future<void> flutterBindingInitialize() async {
-    AppManager.widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+    WidgetsFlutterBinding.ensureInitialized();
     SchedulerBinding.instance.ensureVisualUpdate();
     SchedulerBinding.instance.window.scheduleFrame();
 

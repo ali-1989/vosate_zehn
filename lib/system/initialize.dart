@@ -22,7 +22,7 @@ import 'package:app/tools/app/appNotification.dart';
 import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/app/appSizes.dart';
 import 'package:app/tools/app/appWebsocket.dart';
-import 'package:app/tools/app/downloadUpload.dart';
+import 'package:app/services/downloadUpload.dart';
 import 'package:app/tools/deviceInfoTools.dart';
 import 'package:app/tools/netListenerTools.dart';
 import 'package:app/tools/userLoginTools.dart';
@@ -88,11 +88,11 @@ class InitialApplication {
 		AppWebsocket.prepareWebSocket(SettingsManager.settingsModel.wsAddress);
 		NetManager.addChangeListener(NetListenerTools.onNetListener);
 
-		DownloadUpload.downloadManager = DownloadManager('${Constants.appName}DownloadManager');
-		DownloadUpload.uploadManager = UploadManager('${Constants.appName}UploadManager');
+		DownloadUploadService.downloadManager = DownloadManager('${Constants.appName}DownloadManager');
+		DownloadUploadService.uploadManager = UploadManager('${Constants.appName}UploadManager');
 
-		DownloadUpload.downloadManager.addListener(DownloadUpload.commonDownloadListener);
-		DownloadUpload.uploadManager.addListener(DownloadUpload.commonUploadListener);
+		DownloadUploadService.downloadManager.addListener(DownloadUploadService.commonDownloadListener);
+		DownloadUploadService.uploadManager.addListener(DownloadUploadService.commonUploadListener);
 
 		if(System.isWeb()){
 			void onSizeCheng(oldW, oldH, newW, newH){

@@ -1,5 +1,5 @@
 import 'package:iris_tools/api/converter.dart';
-import 'package:app/models/dateFieldMixin.dart';
+import 'package:app/tools/searchFilterTool.dart';
 import 'package:app/models/speakerModel.dart';
 import 'package:app/system/keys.dart';
 
@@ -9,7 +9,6 @@ class ContentModel with DateFieldMixin {
   int? speakerId;
   List<int> mediaIds = [];
   //------------- local
-  bool isSee = false;
   SpeakerModel? speakerModel;
 
   ContentModel();

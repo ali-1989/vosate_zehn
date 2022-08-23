@@ -1,8 +1,8 @@
+import 'package:app/tools/searchFilterTool.dart';
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
 import 'package:iris_tools/models/dataModels/mediaModel.dart';
 
-import 'package:app/models/dateFieldMixin.dart';
 import 'package:app/system/keys.dart';
 
 class BucketModel with DateFieldMixin {

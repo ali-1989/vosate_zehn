@@ -20,7 +20,7 @@ class AppNotification {
 		return;
 	}
 
-	static String getChannelKey(){
+	static String? getChannelKey(){
 		return AppDB.fetchKv(Keys.setting$notificationChanelKey);
 	}
 
@@ -33,7 +33,14 @@ class AppNotification {
 	}
 
 	static Future<bool> initial() async {
-		AwesomeNotifications().removeChannel(getChannelKey());
+		var ch = getChannelKey();
+
+		if(ch == null){
+			await AppNotification.insertNotificationIds();
+			ch = getChannelKey();
+		}
+
+		AwesomeNotifications().removeChannel(ch!);
 		final highModel = getNotificationModel();
 
 		AwesomeNotifications().initialize(
@@ -42,7 +49,7 @@ class AppNotification {
 				[
 					NotificationChannel(
           channelGroupKey: AppDB.fetchKv(Keys.setting$notificationChanelGroup),
-          channelKey: getChannelKey(),
+          channelKey: getChannelKey()?? '',
           channelName: highModel.name,
           channelDescription: Constants.appName,
           defaultColor: highModel.defaultColor,
@@ -126,7 +133,7 @@ class AppNotification {
 		AwesomeNotifications().createNotification(
 				content: NotificationContent(
 						id: id ?? Generator.generateIntId(5),
-						channelKey: getChannelKey(),
+						channelKey: getChannelKey()?? '',
 						title: title,
 						body: text,
 					autoDismissible: true,
@@ -140,7 +147,7 @@ class AppNotification {
 		AwesomeNotifications().createNotification(
 			content: NotificationContent(
 				id: id ?? Generator.generateIntId(5),
-				channelKey: getChannelKey(),
+				channelKey: getChannelKey()?? '',
 				title: title,
 				summary: user,
 				autoDismissible: true,

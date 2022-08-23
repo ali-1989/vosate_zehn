@@ -36,8 +36,8 @@ class AppRoute {
   static late BuildContext materialContext;
 
   static BuildContext getContext() {
-    var res = AppManager.widgetsBinding.focusManager.rootScope.focusedChild?.context;//deep: 50
-    res ??= AppManager.widgetsBinding.focusManager.primaryFocus?.context; //deep: 71
+    var res = AppManager.getAppWidgetsBinding().focusManager.rootScope.focusedChild?.context;//deep: 50
+    res ??= AppManager.getAppWidgetsBinding().focusManager.primaryFocus?.context; //deep: 71
 
     return res?? materialContext;
   }
@@ -147,8 +147,6 @@ bool checkFreeRoute(GoRoute route, GoRouterState state){
 }
 
 String? _mainRedirect(GoRouterState state){
-  debugPrint('-- redirect---> ${state.subloc}         |  qp:${state.queryParams}');
-
   if(state.subloc == HomePage.route.path){
     AppDirectories.generateNoMediaFile();
   }

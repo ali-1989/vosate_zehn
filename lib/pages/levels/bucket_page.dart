@@ -1,6 +1,7 @@
 import 'package:app/managers/mediaManager.dart';
 import 'package:app/models/bucketModel.dart';
 import 'package:app/models/enums.dart';
+import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/searchFilterTool.dart';
 import 'package:app/views/emptyData.dart';
 import 'package:flutter/material.dart';
@@ -126,7 +127,15 @@ class _BucketPageState extends StateBase<BucketPage> {
           margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
           child: Row(
             children: [
-              Image.network(itm.imageModel?.url?? '', width: 100, height: 100, fit: BoxFit.cover),
+              Builder(
+                builder: (ctx){
+                  if(itm.imageModel?.url != null){
+                    return Image.network(itm.imageModel!.url!, width: 100, height: 100, fit: BoxFit.contain);
+                  }
+
+                  return Image.asset(AppImages.appIcon, width: 100, height: 100, fit: BoxFit.contain);
+                },
+              ),
 
               SizedBox(width: 8,),
               Expanded(
@@ -163,7 +172,7 @@ class _BucketPageState extends StateBase<BucketPage> {
   }
 
   void requestData() async {
-    final ul = PublicAccess.findUpperLower(listItems, searchFilter.ascOrder);
+    final ul = SearchFilterTool.findUpperLower(listItems, searchFilter.ascOrder);
     searchFilter.upper = ul.upperAsTS;
     searchFilter.lower = ul.lowerAsTS;
 
@@ -188,7 +197,7 @@ class _BucketPageState extends StateBase<BucketPage> {
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
       isInFetchData = false;
-print(data);
+
       final List bList = data['bucket_list']?? [];
       final List mList = data['media_list']?? [];
       //final List count = data['all_count'];

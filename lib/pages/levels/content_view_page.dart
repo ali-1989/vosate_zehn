@@ -1,21 +1,25 @@
+import 'package:app/managers/mediaManager.dart';
 import 'package:app/models/contentModel.dart';
 import 'package:app/models/enums.dart';
+import 'package:app/models/mediaModelWrapForContent.dart';
+import 'package:app/models/speakerModel.dart';
 import 'package:app/models/subBuketModel.dart';
+import 'package:app/pages/levels/audio_player_page.dart';
+import 'package:app/pages/levels/video_player_page.dart';
+import 'package:app/tools/app/appImages.dart';
+import 'package:app/tools/app/appRoute.dart';
+import 'package:app/tools/app/appThemes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
-import 'package:iris_tools/models/dataModels/mediaModel.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:iris_tools/widgets/avatarChip.dart';
 
-import 'package:app/pages/levels/audio_player_page.dart';
-import 'package:app/pages/levels/video_player_page.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/requester.dart';
 import 'package:app/system/session.dart';
 import 'package:app/system/stateBase.dart';
-import 'package:app/tools/app/appRoute.dart';
 import 'package:app/views/AppBarCustom.dart';
 import 'package:app/views/notFetchData.dart';
 import 'package:app/views/waitToLoad.dart';
@@ -47,6 +51,7 @@ class _LevelPageState extends StateBase<ContentViewPage> {
   bool isInFetchData = true;
   String state$fetchData = 'state_fetchData';
   ContentModel? contentModel;
+  List<MediaModelWrapForContent> mediaList = [];
 
   @override
   void initState(){
@@ -86,16 +91,24 @@ class _LevelPageState extends StateBase<ContentViewPage> {
             padding: EdgeInsets.symmetric(horizontal: 50, vertical: 8),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
-              child: Image.network(widget.injectData.subBucket.imageModel?.url?? '', height: 160,)
+              child: Builder(
+                builder: (ctx){
+                  if(widget.injectData.subBucket.imageModel?.url != null){
+                    return Image.network(widget.injectData.subBucket.imageModel!.url!, width: double.infinity, height: 160, fit: BoxFit.contain);
+                  }
+
+                  return Image.asset(AppImages.appIcon, width: double.infinity, height: 100, fit: BoxFit.contain);
+                },
+              ),
           ),
         ),
 
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-          child: Text(widget.injectData.subBucket.description?? '').bold().fsR(1),
+          child: Text(widget.injectData.subBucket.description?? '').bold().fsR(2),
         ),
 
-        SizedBox(height: 20,),
+        SizedBox(height: 50),
 
         Expanded(
             child: Builder(
@@ -109,26 +122,35 @@ class _LevelPageState extends StateBase<ContentViewPage> {
                 }
 
                 return Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    AvatarChip(
-                        label: Text(contentModel!.speakerModel?.name?? ''),
-
-                      avatar: contentModel!.speakerModel?.profileModel != null?
-                      ClipOval(
-                          child: Image.network(contentModel!.speakerModel!.profileModel!.url!,
-                            width: 60, height: 60, fit: BoxFit.fill,)
-                      )
-                      : null,
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: AvatarChip(
+                            label: Text(contentModel!.speakerModel?.name?? ''),
+                          avatar: contentModel!.speakerModel?.profileModel != null?
+                          ClipOval(
+                              child: Image.network(contentModel!.speakerModel!.profileModel!.url!,
+                                width: 60, height: 60, fit: BoxFit.fill,)
+                          )
+                          : null,
+                        ),
+                      ),
                     ),
 
                     SizedBox(height: 20,),
 
                     Expanded(
-                      child: Wrap(
-                        textDirection: TextDirection.ltr,
-                        spacing: 8,
-                        runSpacing: 4,
-                        children: buildWrapItems(),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Wrap(
+                          textDirection: TextDirection.ltr,
+                          spacing: 8,
+                          runSpacing: 4,
+                          children: buildWrapItems(),
+                        ),
                       ),
                     ),
                   ],
@@ -143,16 +165,27 @@ class _LevelPageState extends StateBase<ContentViewPage> {
   List<Widget> buildWrapItems(){
     final List<Widget> res = [];
 
-    /*for(final i in contentModel!.mediaList){
-      final w = ActionChip(
-        label: Text(i.name?? '-'),
-        onPressed: () {
-          onItemClick(i);
+    for(var i = 1; i <= mediaList.length; i++){
+      final itm = mediaList[i-1];
+
+      final w = GestureDetector(
+        onTap: (){
+          onItemClick(itm);
         },
+        child: ClipOval(
+          child: ColoredBox(
+            color: AppThemes.instance.currentTheme.successColor,
+            child: SizedBox(width: 50, height: 50,
+                child: Center(
+                    child: Text('$i').color(Colors.white)
+                )
+            ),
+          ),
+        ),
       );
 
       res.add(w);
-    }*/
+    }
 
     return res;
   }
@@ -164,48 +197,48 @@ class _LevelPageState extends StateBase<ContentViewPage> {
     requestData();
   }
 
-  void onItemClick(MediaModel media) {
+  void onItemClick(MediaModelWrapForContent media) {
     SubBucketTypes? type;
 
-    /*if(contentModel!. != null){
-      if(contentModel!.type == Level2Types.video.type()){
-        type = Level2Types.video;
+    if(widget.injectData.subBucket.contentType > 0){
+      if(widget.injectData.subBucket.contentType == SubBucketTypes.video.id()){
+        type = SubBucketTypes.video;
       }
 
-      else if(contentModel!.type == Level2Types.audio.type()){
-        type = Level2Types.audio;
+      else if(widget.injectData.subBucket.contentType == SubBucketTypes.audio.id()){
+        type = SubBucketTypes.audio;
       }
     }
     else {
-      if(media.extension == 'mp4'){
-        type = Level2Types.video;
+      if(media.extension?.contains('mp4')?? false){
+        type = SubBucketTypes.video;
       }
-      else if(media.extension == 'mp3'){
-        type = Level2Types.audio;
+      else if(media.extension?.contains('mp3')?? false){
+        type = SubBucketTypes.audio;
       }
     }
 
 
-    if(type == Level2Types.video){
+    if(type == SubBucketTypes.video){
       final inject = VideoPlayerPageInjectData();
       inject.srcAddress = media.url!;
       inject.videoSourceType = VideoSourceType.network;
 
       AppRoute.pushNamed(context, VideoPlayerPage.route.name!, extra: inject);
     }
-    else if(type == Level2Types.audio){
+    else if(type == SubBucketTypes.audio){
       final inject = AudioPlayerPageInjectData();
       inject.srcAddress = media.url!;
       inject.audioSourceType = AudioSourceType.network;
-      inject.title = media.name;
+      inject.title = media.title;
 
       AppRoute.pushNamed(context, AudioPlayerPage.route.name!, extra: inject);
-    }*/
+    }
   }
 
   void requestData() async {
     final js = <String, dynamic>{};
-    js[Keys.requestZone] = 'get_level2_content_data';
+    js[Keys.requestZone] = 'get_bucket_content_data';
     js[Keys.requesterId] = Session.getLastLoginUser()?.userId;
     js[Keys.id] = widget.injectData.subBucket.id;
 
@@ -219,8 +252,27 @@ class _LevelPageState extends StateBase<ContentViewPage> {
     requester.httpRequestEvents.onStatusOk = (req, data) async {
       isInFetchData = false;
 
-      final content = data[Keys.data];
+      final content = data['content'];
+      final List mList = data['media_list']?? [];
+      final speaker = data['speaker'];
+
+      MediaManager.addItemsFromMap(mList);
+
       contentModel = ContentModel.fromMap(content);
+
+      if(speaker != null){
+        contentModel?.speakerModel = SpeakerModel.fromMap(speaker);
+        contentModel?.speakerModel?.profileModel = MediaManager.getById(contentModel?.speakerModel?.mediaId);
+      }
+
+      for(final id in contentModel!.mediaIds){
+        final m = MediaManager.getById(id);
+
+        if(m!= null) {
+          final mw = MediaModelWrapForContent.fromMap(m.toMap());
+          mediaList.add(mw);
+        }
+      }
 
       assistCtr.addStateAndUpdate(state$fetchData);
     };

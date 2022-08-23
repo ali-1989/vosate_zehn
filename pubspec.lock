@@ -196,7 +196,7 @@ packages:
       name: dbus
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.7.7"
+    version: "0.7.8"
   device_info:
     dependency: transitive
     description:
@@ -550,10 +550,10 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: bc9e4a3905b5815da32fa358a09bbbe868c45f83
+      resolved-ref: "088e241b76d1f837aac70163fc2079885c3637ba"
       url: "https://github.com/ali-1989/IrisTools.git"
     source: git
-    version: "0.0.8"
+    version: "0.0.9"
   jiffy:
     dependency: transitive
     description:
@@ -1118,7 +1118,7 @@ packages:
       name: video_player
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.4.6"
+    version: "2.4.7"
   video_player_android:
     dependency: transitive
     description:

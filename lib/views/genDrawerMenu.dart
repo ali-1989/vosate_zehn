@@ -26,7 +26,7 @@ import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/app/appSizes.dart';
-import 'package:app/tools/app/downloadUpload.dart';
+import 'package:app/services/downloadUpload.dart';
 import 'package:app/tools/userLoginTools.dart';
 
 class DrawerMenuBuilder {
@@ -245,10 +245,10 @@ class DrawerMenuBuilder {
       return;
     }
 
-    final dItm = DownloadUpload.downloadManager.createDownloadItem(user.profileModel!.url!, tag: '${user.profileModel!.id!}');
+    final dItm = DownloadUploadService.downloadManager.createDownloadItem(user.profileModel!.url!, tag: '${user.profileModel!.id!}');
     dItm.savePath = path;
     dItm.category = DownloadCategory.userProfile;
 
-    DownloadUpload.downloadManager.enqueue(dItm);
+    DownloadUploadService.downloadManager.enqueue(dItm);
   }
 }

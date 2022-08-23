@@ -1,6 +1,7 @@
 import 'package:app/managers/mediaManager.dart';
 import 'package:app/models/bucketModel.dart';
 import 'package:app/models/subBuketModel.dart';
+import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/searchFilterTool.dart';
 import 'package:app/views/emptyData.dart';
 import 'package:flutter/material.dart';
@@ -154,7 +155,15 @@ class _SubBucketPageState extends StateBase<SubBucketPage> {
               children: [
                 Stack(
                   children: [
-                    Image.network(itm.imageModel?.url?? '', height: 100, width: double.infinity, fit: BoxFit.fill),
+                    Builder(
+                      builder: (ctx){
+                        if(itm.imageModel?.url != null){
+                          return Image.network(itm.imageModel!.url!, width: double.infinity, height: 100, fit: BoxFit.contain);
+                        }
+
+                        return Image.asset(AppImages.appIcon, width: double.infinity, height: 100, fit: BoxFit.contain);
+                      },
+                    ),
 
                     Positioned(
                       top: 0,
@@ -300,7 +309,7 @@ class _SubBucketPageState extends StateBase<SubBucketPage> {
   }
 
   void requestData() async {
-    final ul = PublicAccess.findUpperLower(listItems, searchFilter.ascOrder);
+    final ul = SearchFilterTool.findUpperLower(listItems, searchFilter.ascOrder);
     searchFilter.upper = ul.upperAsTS;
     searchFilter.lower = ul.lowerAsTS;
 
@@ -324,7 +333,7 @@ class _SubBucketPageState extends StateBase<SubBucketPage> {
     requester.httpRequestEvents.onStatusOk = (req, data) async {
       isInFetchData = false;
 
-      final List bList = data['bucket_list']?? [];
+      final List bList = data['sub_bucket_list']?? [];
       final List mList = data['media_list']?? [];
 
       searchFilter.ascOrder = data[Keys.isAsc]?? true;
@@ -343,7 +352,7 @@ class _SubBucketPageState extends StateBase<SubBucketPage> {
       for(final m in bList){
         final itm = SubBucketModel.fromMap(m);
         itm.isFavorite = FavoriteService.isFavorite(itm.id!);
-        itm.imageModel = MediaManager.getById(itm.mediaId);
+        itm.imageModel = MediaManager.getById(itm.coverId);
         itm.mediaModel = MediaManager.getById(itm.mediaId);
 
         listItems.add(itm);

@@ -1,5 +1,6 @@
 import 'package:app/models/bucketModel.dart';
 import 'package:app/tools/searchFilterTool.dart';
+import 'package:app/views/emptyData.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/modules/stateManagers/assist.dart';
@@ -12,7 +13,6 @@ import 'package:app/system/requester.dart';
 import 'package:app/system/session.dart';
 import 'package:app/system/stateBase.dart';
 import 'package:app/tools/app/appRoute.dart';
-import 'package:app/tools/publicAccess.dart';
 import 'package:app/views/notFetchData.dart';
 import 'package:app/views/waitToLoad.dart';
 
@@ -40,7 +40,7 @@ class _HomeToHomePageState extends StateBase<HomeToHomePage> {
 
     searchFilter.limit = 20;
     searchFilter.ascOrder = true;
-    requestData();
+    //requestData();
   }
 
   @override
@@ -63,6 +63,8 @@ class _HomeToHomePageState extends StateBase<HomeToHomePage> {
   }
 
   Widget buildBody(){
+    return EmptyData();
+
     if(isInFetchData) {
       return WaitToLoad();
     }
@@ -99,7 +101,7 @@ class _HomeToHomePageState extends StateBase<HomeToHomePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('${itm.title}', maxLines: 1,).bold().fsR(1),
+                    Text(itm.title, maxLines: 1,).bold().fsR(1),
 
                     SizedBox(height: 8,),
                     Text('${itm.description}').alpha().subFont(),
@@ -129,7 +131,7 @@ class _HomeToHomePageState extends StateBase<HomeToHomePage> {
   }
 
   void requestData() async {
-    final ul = PublicAccess.findUpperLower(listItems, searchFilter.ascOrder);
+    final ul = SearchFilterTool.findUpperLower(listItems, searchFilter.ascOrder);
     searchFilter.upper = ul.upperAsTS;
     searchFilter.lower = ul.lowerAsTS;
 

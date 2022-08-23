@@ -17,9 +17,6 @@ class AppManager {
   static late Logger logger;
   static late Reporter reporter;
 
-  // postCallback work only inside build()
-  static late WidgetsBinding widgetsBinding;
-
   static Map addLanguageIso(Map src, [BuildContext? ctx]) {
     src[Keys.languageIso] = System.getLocalizationsLanguageCode(ctx ?? AppRoute.getContext());
 
@@ -49,6 +46,6 @@ class AppManager {
   }
 
   static WidgetsBinding getAppWidgetsBinding() {
-    return widgetsBinding;
+    return WidgetsBinding.instance;
   }
 }

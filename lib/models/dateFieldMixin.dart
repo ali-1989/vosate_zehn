@@ -1,4 +1,0 @@
-
-mixin DateFieldMixin {
-  DateTime? date;
-}

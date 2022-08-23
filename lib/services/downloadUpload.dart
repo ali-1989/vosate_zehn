@@ -4,8 +4,8 @@ import 'package:iris_tools/api/helpers/jsonHelper.dart';
 
 import 'package:app/tools/app/appBroadcast.dart';
 
-class DownloadUpload {
-  DownloadUpload._();
+class DownloadUploadService {
+  DownloadUploadService._();
 
   static late DownloadManager downloadManager;
   static late UploadManager uploadManager;
