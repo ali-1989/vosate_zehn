@@ -1,11 +1,14 @@
+import 'package:app/managers/mediaManager.dart';
 import 'package:app/models/bucketModel.dart';
+import 'package:app/models/enums.dart';
+import 'package:app/tools/searchFilterTool.dart';
+import 'package:app/views/emptyData.dart';
 import 'package:flutter/material.dart';
 
-import 'package:iris_tools/dateSection/dateHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import 'package:app/pages/levels/level2_page.dart';
+import 'package:app/pages/levels/sub_bucket_page.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/requester.dart';
@@ -16,35 +19,37 @@ import 'package:app/tools/publicAccess.dart';
 import 'package:app/views/notFetchData.dart';
 import 'package:app/views/waitToLoad.dart';
 
-class Level1PageInjectData {
-  String? requestKey;
+class BucketPageInjectData {
+  late BucketTypes bucketTypes;
 }
 ///---------------------------------------------------------------------------------
-class Level1Page extends StatefulWidget {
-  final Level1PageInjectData injectData;
+class BucketPage extends StatefulWidget {
+  final BucketPageInjectData injectData;
 
-  Level1Page({
+  BucketPage({
     required this.injectData,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<Level1Page> createState() => _Level1PageState();
+  State<BucketPage> createState() => _BucketPageState();
 }
 ///==================================================================================
-class _Level1PageState extends StateBase<Level1Page> {
+class _BucketPageState extends StateBase<BucketPage> {
   Requester requester = Requester();
   bool isInFetchData = true;
   String state$fetchData = 'state_fetchData';
   List<BucketModel> listItems = [];
   RefreshController refreshController = RefreshController(initialRefresh: false);
-  bool isAscOrder = true;
-  int fetchCount = 20;
+  SearchFilterTool searchFilter = SearchFilterTool();
+
 
   @override
   void initState(){
     super.initState();
 
+    searchFilter.limit = 20;
+    searchFilter.ascOrder = true;
     requestData();
   }
 
@@ -74,6 +79,10 @@ class _Level1PageState extends StateBase<Level1Page> {
 
     if(!assistCtr.hasState(state$fetchData)){
       return NotFetchData(tryClick: tryLoadClick,);
+    }
+
+    if(listItems.isEmpty){
+      return EmptyData();
     }
 
     return RefreshConfiguration(
@@ -124,7 +133,7 @@ class _Level1PageState extends StateBase<Level1Page> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('${itm.title}', maxLines: 1,).bold().fsR(1),
+                    Text(itm.title, maxLines: 1,).bold().fsR(1),
 
                     SizedBox(height: 8,),
                     Text('${itm.description}').alpha().subFont(),
@@ -150,17 +159,20 @@ class _Level1PageState extends StateBase<Level1Page> {
   }
 
   void onItemClick(BucketModel itm) {
-    AppRoute.pushNamed(context, Level2Page.route.name!, extra: SubBucketPageInjectData()..bucketModel = itm);
+    AppRoute.pushNamed(context, SubBucketPage.route.name!, extra: SubBucketPageInjectData()..bucketModel = itm);
   }
 
   void requestData() async {
-    final ul = PublicAccess.findUpperLower(listItems, isAscOrder);
+    final ul = PublicAccess.findUpperLower(listItems, searchFilter.ascOrder);
+    searchFilter.upper = ul.upperAsTS;
+    searchFilter.lower = ul.lowerAsTS;
+
 
     final js = <String, dynamic>{};
-    js[Keys.requestZone] = 'get_level1_data';
+    js[Keys.requestZone] = 'get_bucket_data';
     js[Keys.requesterId] = Session.getLastLoginUser()?.userId;
-    js[Keys.key] = widget.injectData.requestKey;
-    js[Keys.count] = fetchCount;
+    js[Keys.key] = widget.injectData.bucketTypes.id();
+    js[Keys.searchFilter] = searchFilter.toMap();
 
 
     requester.bodyJson = js;
@@ -170,13 +182,19 @@ class _Level1PageState extends StateBase<Level1Page> {
       assistCtr.removeStateAndUpdate(state$fetchData);
     };
 
+    requester.httpRequestEvents.onResponseError = (req, data) async {
+      return true;
+    };
+
     requester.httpRequestEvents.onStatusOk = (req, data) async {
       isInFetchData = false;
+print(data);
+      final List bList = data['bucket_list']?? [];
+      final List mList = data['media_list']?? [];
+      //final List count = data['all_count'];
+      searchFilter.ascOrder = data[Keys.isAsc]?? true;
 
-      final List list = data[Keys.dataList]?? [];
-      isAscOrder = data[Keys.isAsc]?? true;
-
-      if(list.length < fetchCount){
+      if(bList.length < searchFilter.limit){
         refreshController.loadNoData();
       }
       else {
@@ -185,8 +203,12 @@ class _Level1PageState extends StateBase<Level1Page> {
         }
       }
 
-      for(final m in list){
+      MediaManager.addItemsFromMap(mList);
+
+      for(final m in bList){
         final itm = BucketModel.fromMap(m);
+        itm.imageModel = MediaManager.getById(itm.mediaId);
+
         listItems.add(itm);
       }
 

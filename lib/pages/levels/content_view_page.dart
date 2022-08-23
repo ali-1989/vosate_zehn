@@ -69,7 +69,7 @@ class _LevelPageState extends StateBase<ContentViewPage> {
         builder: (context, ctr, data) {
           return Scaffold(
             appBar: AppBarCustom(
-              title: Text(widget.injectData.subBucket.title?? ''),
+              title: Text(widget.injectData.subBucket.title),
             ),
             body: buildBody(),
           );

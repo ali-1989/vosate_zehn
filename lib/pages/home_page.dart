@@ -1,3 +1,4 @@
+import 'package:app/models/enums.dart';
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
@@ -7,7 +8,7 @@ import 'package:shaped_bottom_bar/shaped_bottom_bar.dart';
 import 'package:shaped_bottom_bar/utils/arrays.dart';
 
 import 'package:app/pages/home_to_home_page.dart';
-import 'package:app/pages/levels/level1_page.dart';
+import 'package:app/pages/levels/bucket_page.dart';
 import 'package:app/services/aidService.dart';
 import 'package:app/system/stateBase.dart';
 import 'package:app/tools/app/appBroadcast.dart';
@@ -73,10 +74,10 @@ class HomePageState extends StateBase<HomePage> {
         controller: pageController,
         children: [
           HomeToHomePage(),
-          Level1Page(injectData: Level1PageInjectData()..requestKey = 'meditation',),
-          Level1Page(injectData: Level1PageInjectData()..requestKey = 'focus',),
-          Level1Page(injectData: Level1PageInjectData()..requestKey = 'motion',),
-          Level1Page(injectData: Level1PageInjectData()..requestKey = 'video',),
+          BucketPage(injectData: BucketPageInjectData()..bucketTypes = BucketTypes.meditation),
+          BucketPage(injectData: BucketPageInjectData()..bucketTypes = BucketTypes.focus),
+          BucketPage(injectData: BucketPageInjectData()..bucketTypes = BucketTypes.motion),
+          BucketPage(injectData: BucketPageInjectData()..bucketTypes = BucketTypes.video),
         ],
       ),
     );

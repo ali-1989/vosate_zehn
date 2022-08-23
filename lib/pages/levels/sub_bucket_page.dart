@@ -1,5 +1,8 @@
+import 'package:app/managers/mediaManager.dart';
 import 'package:app/models/bucketModel.dart';
 import 'package:app/models/subBuketModel.dart';
+import 'package:app/tools/searchFilterTool.dart';
+import 'package:app/views/emptyData.dart';
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
@@ -30,37 +33,39 @@ class SubBucketPageInjectData {
   BucketModel? bucketModel;
 }
 ///---------------------------------------------------------------------------------
-class Level2Page extends StatefulWidget {
+class SubBucketPage extends StatefulWidget {
   static final route = GoRoute(
-    path: '/Level2',
-    name: (Level2Page).toString().toLowerCase(),
-    builder: (BuildContext context, GoRouterState state) => Level2Page(injectData: state.extra as SubBucketPageInjectData),
+    path: '/sub_bucket',
+    name: (SubBucketPage).toString().toLowerCase(),
+    builder: (BuildContext context, GoRouterState state) => SubBucketPage(injectData: state.extra as SubBucketPageInjectData),
   );
 
   final SubBucketPageInjectData injectData;
 
-  Level2Page({
+  SubBucketPage({
     required this.injectData,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<Level2Page> createState() => _Level2PageState();
+  State<SubBucketPage> createState() => _SubBucketPageState();
 }
 ///==================================================================================
-class _Level2PageState extends StateBase<Level2Page> {
+class _SubBucketPageState extends StateBase<SubBucketPage> {
   Requester requester = Requester();
   bool isInFetchData = true;
   String state$fetchData = 'state_fetchData';
   List<SubBucketModel> listItems = [];
   RefreshController refreshController = RefreshController(initialRefresh: false);
-  bool isAscOrder = true;
-  int fetchCount = 20;
+  SearchFilterTool searchFilter = SearchFilterTool();
+
 
   @override
   void initState(){
     super.initState();
 
+    searchFilter.limit = 20;
+    searchFilter.ascOrder = true;
     requestData();
   }
 
@@ -93,6 +98,10 @@ class _Level2PageState extends StateBase<Level2Page> {
 
     if(!assistCtr.hasState(state$fetchData)){
       return NotFetchData(tryClick: tryLoadClick,);
+    }
+
+    if(listItems.isEmpty){
+      return EmptyData();
     }
 
     return RefreshConfiguration(
@@ -181,7 +190,7 @@ class _Level2PageState extends StateBase<Level2Page> {
 
                 SizedBox(height: 12),
 
-                Text('${itm.title}', maxLines: 1).bold().fsR(1),
+                Text(itm.title, maxLines: 1).bold().fsR(1),
 
                 SizedBox(height: 12,),
 
@@ -291,13 +300,15 @@ class _Level2PageState extends StateBase<Level2Page> {
   }
 
   void requestData() async {
-    final ul = PublicAccess.findUpperLower(listItems, isAscOrder);
+    final ul = PublicAccess.findUpperLower(listItems, searchFilter.ascOrder);
+    searchFilter.upper = ul.upperAsTS;
+    searchFilter.lower = ul.lowerAsTS;
 
     final js = <String, dynamic>{};
-    js[Keys.requestZone] = 'get_level2_data';
+    js[Keys.requestZone] = 'get_sub_bucket_data';
     js[Keys.requesterId] = Session.getLastLoginUser()?.userId;
     js[Keys.id] = widget.injectData.bucketModel!.id?? 1;
-    js[Keys.count] = fetchCount;
+    js[Keys.searchFilter] = searchFilter.toMap();
 
     requester.bodyJson = js;
 
@@ -306,13 +317,19 @@ class _Level2PageState extends StateBase<Level2Page> {
       assistCtr.removeStateAndUpdate(state$fetchData);
     };
 
+    requester.httpRequestEvents.onResponseError = (req, data) async {
+      return true;
+    };
+
     requester.httpRequestEvents.onStatusOk = (req, data) async {
       isInFetchData = false;
 
-      final List list = data[Keys.dataList]?? [];
-      isAscOrder = data[Keys.isAsc]?? true;
+      final List bList = data['bucket_list']?? [];
+      final List mList = data['media_list']?? [];
 
-      if(list.length < fetchCount){
+      searchFilter.ascOrder = data[Keys.isAsc]?? true;
+
+      if(bList.length < searchFilter.limit){
         refreshController.loadNoData();
       }
       else {
@@ -321,9 +338,13 @@ class _Level2PageState extends StateBase<Level2Page> {
         }
       }
 
-      for(final m in list){
+      MediaManager.addItemsFromMap(mList);
+
+      for(final m in bList){
         final itm = SubBucketModel.fromMap(m);
         itm.isFavorite = FavoriteService.isFavorite(itm.id!);
+        itm.imageModel = MediaManager.getById(itm.mediaId);
+        itm.mediaModel = MediaManager.getById(itm.mediaId);
 
         listItems.add(itm);
       }

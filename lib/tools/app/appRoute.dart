@@ -13,7 +13,7 @@ import 'package:app/pages/imageFullScreen.dart';
 import 'package:app/pages/last_seen_page.dart';
 import 'package:app/pages/levels/audio_player_page.dart';
 import 'package:app/pages/levels/content_view_page.dart';
-import 'package:app/pages/levels/level2_page.dart';
+import 'package:app/pages/levels/sub_bucket_page.dart';
 import 'package:app/pages/levels/video_player_page.dart';
 import 'package:app/pages/login/login_page.dart';
 import 'package:app/pages/login/register_page.dart';
@@ -117,7 +117,7 @@ final mainRouter = GoRouter(
       ContactUsPage.route,
       ZarinpalPage.route,
       ProfilePage.route,
-      Level2Page.route,
+      SubBucketPage.route,
       ContentViewPage.route,
       ImageFullScreen.route,
       VideoPlayerPage.route,

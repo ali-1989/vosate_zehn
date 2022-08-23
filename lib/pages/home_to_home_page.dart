@@ -1,10 +1,11 @@
 import 'package:app/models/bucketModel.dart';
+import 'package:app/tools/searchFilterTool.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import 'package:app/pages/levels/level2_page.dart';
+import 'package:app/pages/levels/sub_bucket_page.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/requester.dart';
@@ -30,14 +31,15 @@ class _HomeToHomePageState extends StateBase<HomeToHomePage> {
   bool isInFetchData = true;
   String state$fetchData = 'state_fetchData';
   List<BucketModel> listItems = [];
+  SearchFilterTool searchFilter = SearchFilterTool();
   RefreshController refreshController = RefreshController(initialRefresh: false);
-  bool isAscOrder = true;
-  int fetchCount = 20;
 
   @override
   void initState(){
     super.initState();
 
+    searchFilter.limit = 20;
+    searchFilter.ascOrder = true;
     requestData();
   }
 
@@ -123,16 +125,18 @@ class _HomeToHomePageState extends StateBase<HomeToHomePage> {
   }
 
   void onItemClick(BucketModel itm) {
-    AppRoute.pushNamed(context, Level2Page.route.name!, extra: SubBucketPageInjectData()..bucketModel = itm);
+    AppRoute.pushNamed(context, SubBucketPage.route.name!, extra: SubBucketPageInjectData()..bucketModel = itm);
   }
 
   void requestData() async {
-    final ul = PublicAccess.findUpperLower(listItems, isAscOrder);
+    final ul = PublicAccess.findUpperLower(listItems, searchFilter.ascOrder);
+    searchFilter.upper = ul.upperAsTS;
+    searchFilter.lower = ul.lowerAsTS;
 
     final js = <String, dynamic>{};
-    js[Keys.requestZone] = 'get_level1_data';
+    js[Keys.requestZone] = 'get_bucket_data';
     js[Keys.requesterId] = Session.getLastLoginUser()?.userId;
-    js[Keys.count] = fetchCount;
+    js[Keys.searchFilter] = searchFilter.toMap();
 
     requester.bodyJson = js;
 
@@ -145,9 +149,9 @@ class _HomeToHomePageState extends StateBase<HomeToHomePage> {
       isInFetchData = false;
 
       final List list = data[Keys.dataList]?? [];
-      isAscOrder = data[Keys.isAsc]?? true;
+      searchFilter.ascOrder = data[Keys.isAsc]?? true;
 
-      if(list.length < fetchCount){
+      if(list.length < searchFilter.limit){
         refreshController.loadNoData();
       }
       else {

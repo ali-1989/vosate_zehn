@@ -145,8 +145,8 @@ class _FavoritesPageState extends StateBase<FavoritesPage> {
                     children: [
                       Builder(
                         builder: (ctx){
-                          if(itm.duration != null && itm.duration! > 0){
-                            final dur = Duration(milliseconds: itm.duration!);
+                          if(itm.duration > 0){
+                            final dur = Duration(milliseconds: itm.duration);
                             return Text('${DurationFormatter.duration(dur, showSuffix: false)} ثانیه').alpha().subFont();
                           }
 
