@@ -9,6 +9,9 @@ import 'package:iris_tools/api/generator.dart';
 import 'package:iris_tools/api/system.dart';
 import 'package:platform_device_id/platform_device_id.dart';
 
+import 'package:app/system/keys.dart';
+import 'package:app/tools/app/appDb.dart';
+
 class DeviceInfoTools {
   DeviceInfoTools._();
 
@@ -42,7 +45,14 @@ class DeviceInfoTools {
 
     try {
       if(kIsWeb){
-        deviceId = 'web_${Generator.hashMd5(webDeviceInfo?.vendor?? '')}';
+        deviceId = AppDB.fetchKv(Keys.setting$webDeviceId);
+
+        if(deviceId == null) {
+          final vendor = webDeviceInfo?.vendor ?? '';
+          deviceId = 'web_${Generator.hashMd5('$vendor ${Generator.generateKey(10)}')}';
+
+          AppDB.setReplaceKv(Keys.setting$webDeviceId, deviceId);
+        }
       }
       /*else if() {
         deviceId = '${androidDeviceInfo?.brand}:${androidDeviceInfo?.id}';
@@ -67,7 +77,7 @@ class DeviceInfoTools {
       js['device_type'] = 'Web';
       js['model'] = webDeviceInfo?.appName;
       js['brand'] = br?.substring(0, min(50, br.length));
-      js['api'] = webDeviceInfo?.appVersion;
+      js['api'] = webDeviceInfo?.platform;
 
       return js;
     }

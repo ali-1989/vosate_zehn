@@ -1,5 +1,3 @@
-import 'package:iris_tools/dateSection/dateHelper.dart';
-
 class SearchFilterTool {
   int limit = 50;
   int? offset;
@@ -49,44 +47,4 @@ class SearchFilterTool {
 
     return res;
   }
-
-  static UpperLower findUpperLower(List<DateFieldMixin> list, bool isAsc){
-    final res = UpperLower();
-
-    if(list.isEmpty){
-      return res;
-    }
-
-    DateTime lower = list[0].date!;
-    DateTime upper = list[0].date!;
-
-    for(final x in list){
-      var c = DateHelper.compareDates(x.date, lower, asc: isAsc);
-
-      if(c < 0){
-        upper = x.date!;
-      }
-
-      c = DateHelper.compareDates(x.date, upper, asc: isAsc);
-
-      if(c > 0){
-        lower = x.date!;
-      }
-    }
-
-    return UpperLower()..lower = lower..upper = upper;
-  }
-}
-///=================================================================================
-mixin DateFieldMixin {
-  DateTime? date;
-}
-
-///===================================================================================
-class UpperLower {
-  DateTime? upper;
-  DateTime? lower;
-
-  String? get upperAsTS => DateHelper.toTimestampNullable(upper);
-  String? get lowerAsTS => DateHelper.toTimestampNullable(lower);
 }

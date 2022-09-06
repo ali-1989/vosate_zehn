@@ -1,22 +1,22 @@
-import 'package:app/managers/mediaManager.dart';
-import 'package:app/models/bucketModel.dart';
-import 'package:app/models/enums.dart';
-import 'package:app/tools/app/appImages.dart';
-import 'package:app/tools/searchFilterTool.dart';
-import 'package:app/views/emptyData.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import 'package:app/managers/mediaManager.dart';
+import 'package:app/models/abstract/stateBase.dart';
+import 'package:app/models/bucketModel.dart';
 import 'package:app/pages/levels/sub_bucket_page.dart';
+import 'package:app/system/enums.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
+import 'package:app/system/publicAccess.dart';
 import 'package:app/system/requester.dart';
 import 'package:app/system/session.dart';
-import 'package:app/system/stateBase.dart';
+import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appRoute.dart';
-import 'package:app/tools/publicAccess.dart';
+import 'package:app/tools/searchFilterTool.dart';
+import 'package:app/views/emptyData.dart';
 import 'package:app/views/notFetchData.dart';
 import 'package:app/views/waitToLoad.dart';
 
@@ -197,7 +197,7 @@ class _BucketPageState extends StateBase<BucketPage> {
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
       isInFetchData = false;
-
+print(data);
       final List bList = data['bucket_list']?? [];
       final List mList = data['media_list']?? [];
       //final List count = data['all_count'];

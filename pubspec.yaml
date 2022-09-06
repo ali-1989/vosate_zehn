@@ -8,7 +8,7 @@ homepage: https://iris.ir
 
 publish_to: 'none'
 
-version: 0.0.2
+version: 0.0.2+2
 
 environment:
   sdk: ">=2.17.1"             # null Safety : 2.12.0

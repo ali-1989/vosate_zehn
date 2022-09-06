@@ -4,11 +4,11 @@ import 'package:iris_tools/api/helpers/jsonHelper.dart';
 import 'package:iris_tools/api/logger/logger.dart';
 
 import 'package:app/managers/settingsManager.dart';
+import 'package:app/system/httpProcess.dart';
+import 'package:app/system/keys.dart';
+import 'package:app/system/publicAccess.dart';
 import 'package:app/tools/app/appHttpDio.dart';
 import 'package:app/tools/app/appSheet.dart';
-import '/system/httpProcess.dart';
-import '/system/keys.dart';
-import '/tools/app/appManager.dart';
 
 ///=============================================================================================
 enum MethodType {
@@ -47,7 +47,7 @@ class Requester {
     _bodyJs = js;
 
     if(js != null) {
-      AppManager.addAppInfo(_bodyJs!);
+      PublicAccess.addAppInfo(_bodyJs!);
     }
   }
 
@@ -98,7 +98,7 @@ class Requester {
 
       if(!_httpRequester.isOk){
         if(debug){
-          Logger.L.logToScreen('>> Response is not ok | $val');
+          Logger.L.logToScreen('>> Response receive, but is not ok | $val');
         }
 
         await httpRequestEvents.onFailState?.call(_httpRequester);
@@ -110,7 +110,7 @@ class Requester {
 
       if (js == null) {
         if(debug){
-          Logger.L.logToScreen('>> Response is not json | $val');
+          Logger.L.logToScreen('>> Response receive, but is not json | $val');
         }
 
         await httpRequestEvents.onFailState?.call(_httpRequester);

@@ -1,9 +1,3 @@
-import 'package:app/managers/mediaManager.dart';
-import 'package:app/models/bucketModel.dart';
-import 'package:app/models/subBuketModel.dart';
-import 'package:app/tools/app/appImages.dart';
-import 'package:app/tools/searchFilterTool.dart';
-import 'package:app/views/emptyData.dart';
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
@@ -11,22 +5,28 @@ import 'package:iris_tools/api/duration/durationFormater.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import 'package:app/models/enums.dart';
+import 'package:app/managers/mediaManager.dart';
+import 'package:app/models/abstract/stateBase.dart';
+import 'package:app/models/bucketModel.dart';
+import 'package:app/models/subBuketModel.dart';
 import 'package:app/pages/levels/audio_player_page.dart';
 import 'package:app/pages/levels/content_view_page.dart';
 import 'package:app/pages/levels/video_player_page.dart';
 import 'package:app/services/favoriteService.dart';
+import 'package:app/system/enums.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
+import 'package:app/system/publicAccess.dart';
 import 'package:app/system/requester.dart';
 import 'package:app/system/session.dart';
-import 'package:app/system/stateBase.dart';
 import 'package:app/tools/app/appIcons.dart';
+import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/app/appToast.dart';
-import 'package:app/tools/publicAccess.dart';
+import 'package:app/tools/searchFilterTool.dart';
 import 'package:app/views/AppBarCustom.dart';
+import 'package:app/views/emptyData.dart';
 import 'package:app/views/notFetchData.dart';
 import 'package:app/views/waitToLoad.dart';
 
@@ -166,7 +166,7 @@ class _SubBucketPageState extends StateBase<SubBucketPage> {
                     ),
 
                     Positioned(
-                      top: 0,
+                        top: 0,
                         left: 0,
                         child: Builder(
                             builder: (context) {
@@ -213,14 +213,14 @@ class _SubBucketPageState extends StateBase<SubBucketPage> {
                           if(itm.duration > 0){
                             final dur = Duration(milliseconds: itm.duration);
                             return Text('${DurationFormatter.duration(dur, showSuffix: false)} ثانیه').alpha().subFont();
-                        }
+                          }
 
                           return SizedBox();
                         },
                       ),
 
                       IconButton(
-                        constraints: BoxConstraints.tightFor(),
+                          constraints: BoxConstraints.tightFor(),
                           padding: EdgeInsets.all(4),
                           splashRadius: 20,
                           visualDensity: VisualDensity.compact,

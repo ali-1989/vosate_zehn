@@ -1,3 +1,13 @@
+# The proguard configuration file for the following section is E:\PROGING\Tools\+Flutter\Sdk\Stable3\packages\flutter_tools\gradle\flutter_proguard_rules.pro
+# Build the ephemeral app in a module project.
+# Prevents: Warning: library class <plugin-package> depends on program class io.flutter.plugin.**
+# This is due to plugins (libraries) depending on the embedding (the program jar)
+-dontwarn io.flutter.plugin.**
+
+# The android.** package is provided by the OS at runtime.
+-dontwarn android.**
+
+# End of content from E:\PROGING\Tools\+Flutter\Sdk\Stable3\packages\flutter_tools\gradle\flutter_proguard_rules.pro
 # The proguard configuration file for the following section is K:\Programming\FlutterProjects\VosateZehn\android\app\proguard-rules.pro
 ## Flutter wrapper
 -keep class io.flutter.app.** { *; }
@@ -76,7 +86,7 @@
 -keep class com.dexterous.** { *; }
 
 # End of content from K:\Programming\FlutterProjects\VosateZehn\android\app\proguard-rules.pro
-# The proguard configuration file for the following section is K:\Programming\FlutterProjects\VosateZehn\android\app\build\intermediates\aapt_proguard_file\debug\aapt_rules.txt
+# The proguard configuration file for the following section is K:\Programming\FlutterProjects\VosateZehn\android\app\build\intermediates\aapt_proguard_file\release\aapt_rules.txt
 -keep class android.app.Application { <init>(); }
 -keep class androidx.core.app.CoreComponentFactory { <init>(); }
 -keep class androidx.lifecycle.ProcessLifecycleOwnerInitializer { <init>(); }
@@ -92,8 +102,8 @@
 -keep class me.carda.awesome_notifications.notifications.broadcastReceivers.RefreshSchedulesReceiver { <init>(); }
 -keep class me.carda.awesome_notifications.notifications.broadcastReceivers.ScheduledNotificationReceiver { <init>(); }
 
-# End of content from K:\Programming\FlutterProjects\VosateZehn\android\app\build\intermediates\aapt_proguard_file\debug\aapt_rules.txt
-# The proguard configuration file for the following section is K:\Programming\FlutterProjects\VosateZehn\build\flutter_plugin_android_lifecycle\intermediates\consumer_proguard_dir\debug\lib0\proguard.txt
+# End of content from K:\Programming\FlutterProjects\VosateZehn\android\app\build\intermediates\aapt_proguard_file\release\aapt_rules.txt
+# The proguard configuration file for the following section is K:\Programming\FlutterProjects\VosateZehn\build\flutter_plugin_android_lifecycle\intermediates\consumer_proguard_dir\release\lib0\proguard.txt
 # The point of this package is to specify that a dependent plugin intends to
 # use the AndroidX lifecycle classes. Make sure no R8 heuristics shrink classes
 # brought in by the embedding's pom.
@@ -104,7 +114,7 @@
 # https://issuetracker.google.com/issues/142778206.
 -keep class androidx.lifecycle.DefaultLifecycleObserver
 
-# End of content from K:\Programming\FlutterProjects\VosateZehn\build\flutter_plugin_android_lifecycle\intermediates\consumer_proguard_dir\debug\lib0\proguard.txt
+# End of content from K:\Programming\FlutterProjects\VosateZehn\build\flutter_plugin_android_lifecycle\intermediates\consumer_proguard_dir\release\lib0\proguard.txt
 # The proguard configuration file for the following section is K:\Programming\.gradle\caches\transforms-3\b072d6719733b98bfcd6141ce73a0ab0\transformed\jetified-egloo-0.6.1\proguard.txt
 # Add project specific ProGuard rules here.
 # By default, the flags in this file are appended to flags specified

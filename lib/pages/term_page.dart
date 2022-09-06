@@ -4,10 +4,10 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 
+import 'package:app/models/abstract/stateBase.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/requester.dart';
 import 'package:app/system/session.dart';
-import 'package:app/system/stateBase.dart';
 import 'package:app/tools/app/appMessages.dart';
 import 'package:app/views/AppBarCustom.dart';
 import 'package:app/views/notFetchData.dart';

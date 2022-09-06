@@ -2,6 +2,8 @@ import 'dart:convert' as system_convert;
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart';
+
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
@@ -10,7 +12,7 @@ import 'package:iris_tools/api/converter.dart';
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
 import 'package:iris_tools/api/helpers/listHelper.dart';
 
-import 'package:app/tools/app/appManager.dart';
+import 'package:app/system/publicAccess.dart';
 
 class AppHttpDio {
 	AppHttpDio._();
@@ -22,8 +24,8 @@ class AppHttpDio {
 	}
 
 	static HttpRequester send(HttpItem item, {BaseOptions? options}){
-		if(item.debugMode) {
-			AppManager.logger.logToAll('==== Stack Trace : ${StackTrace.current.toString()}');
+		if(item.debugMode && !kIsWeb) {
+			PublicAccess.logger.logToAll('==== Stack Trace : ${StackTrace.current.toString()}');
 		}
 
 		item.prepareMultiParts();
@@ -52,7 +54,9 @@ class AppHttpDio {
 			dio.interceptors.add(
 					InterceptorsWrapper(
 							onRequest: (RequestOptions options, RequestInterceptorHandler handler) {
-								options.headers['Connection'] = 'close';
+								if(!kIsWeb) {
+									options.headers['Connection'] = 'close';
+								}
 
 								if(item.headers.isNotEmpty){
 									options.headers.addAll(item.headers);
@@ -77,8 +81,10 @@ class AppHttpDio {
 							},
 							onError: (DioError err, ErrorInterceptorHandler handler) async{
 								final ro = RequestOptions(path: uri);
-								final res = Response<DioError>(requestOptions: ro,
-										data: DioError(requestOptions: ro, error: err.error, type: DioErrorType.response));
+								final res = Response<DioError>(
+										requestOptions: ro,
+										data: DioError(requestOptions: ro, error: err.error, type: DioErrorType.response)
+								);
 
 								itemRes._response = res;
 								err.response = res;
@@ -93,7 +99,7 @@ class AppHttpDio {
 			itemRes.dio = dio;
 			itemRes.canceller = cancelToken;
 
-			itemRes._responseFuture = dio.request<dynamic>(
+			itemRes._responseAsync = dio.request<dynamic>(
 				uri,
 				cancelToken: cancelToken,
 				options: item.options,
@@ -101,26 +107,18 @@ class AppHttpDio {
 				data: item.body,
 				onReceiveProgress: item.onReceiveProgress,
 				onSendProgress: item.onSendProgress,
-			)
-					.timeout(Duration(milliseconds: dio.options.connectTimeout + 2000), onTimeout: () async{
-						final ro = RequestOptions(path: uri);
-						final res = Response<DioError>(requestOptions: ro, data: DioError(requestOptions: ro));
-						itemRes._response = res;
-						return res;
-						//bad: throw DioError(requestOptions: RequestOptions(path: uri));
-						//return Future.error(DioError(requestOptions: RequestOptions(path: uri)));
-			});
+			);
 		}
 		catch (e) {
-			itemRes._responseFuture = Future.error(e);
+			itemRes._responseAsync = Future.error(e);
 		}
 
 		return itemRes;
 	}
 
 	static HttpRequester download(HttpItem item, String savePath, {BaseOptions? options}){
-		if(item.debugMode) {
-			AppManager.logger.logToAll('==== Stack Trace : ${StackTrace.current.toString()}');
+		if(item.debugMode && !kIsWeb) {
+			PublicAccess.logger.logToAll('==== Stack Trace : ${StackTrace.current.toString()}');
 		}
 
 		final itemRes = HttpRequester();
@@ -146,7 +144,10 @@ class AppHttpDio {
 			dio.interceptors.add(
 					InterceptorsWrapper(
 							onRequest: (RequestOptions options, RequestInterceptorHandler handler) {
-								options.headers['Connection'] = 'close';
+								if(!kIsWeb) {
+									options.headers['Connection'] = 'close';
+								}
+
 								itemRes.requestOptions = options;
 
 								handler.next(options);
@@ -182,7 +183,7 @@ class AppHttpDio {
 			itemRes.dio = dio;
 			itemRes.canceller = cancelToken;
 
-			itemRes._responseFuture = dio.download(
+			itemRes._responseAsync = dio.download(
 					uri,
 					savePath,
 				cancelToken: cancelToken,
@@ -193,7 +194,7 @@ class AppHttpDio {
 			);
 		}
 		catch (e) {
-			itemRes._responseFuture = Future.error(e);
+			itemRes._responseAsync = Future.error(e);
 		}
 
 		return itemRes;
@@ -223,7 +224,7 @@ class AppHttpDio {
 						//client.close();
 					});
 
-			itemRes._responseFuture = send.then((http.StreamedResponse? response) {
+			itemRes._responseAsync = send.then((http.StreamedResponse? response) {
 				if(response == null || response is Error) {
 					return null;//Response<http.StreamedResponse>(data: null, requestOptions: RequestOptions(path: uri));
 				}
@@ -259,7 +260,7 @@ class AppHttpDio {
 			});
 		}
 		catch (e) {
-			itemRes._responseFuture = Future.error(e);
+			itemRes._responseAsync = Future.error(e);
 		}
 
 		return itemRes;
@@ -286,7 +287,7 @@ class AppHttpDio {
 }
 ///========================================================================================================
 class HttpRequester {
-	late Future<Response?> _responseFuture;
+	late Future<Response?> _responseAsync;
 	Response? _response;
 	RequestOptions? requestOptions;
 	CancelToken? canceller;
@@ -295,11 +296,11 @@ class HttpRequester {
 	Map<String, dynamic>? parts;
 
 	HttpRequester(){
-		_responseFuture = Future((){return null;});
+		_responseAsync = Future((){return null;});
 	}
 
 	// maybe: Future<dynamic> vs Future<Response?>
-	Future<Response?> get response => _responseFuture;
+	Future<Response?> get response => _responseAsync;
 
 	Response? get responseData => _response;
 

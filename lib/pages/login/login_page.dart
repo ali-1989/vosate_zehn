@@ -10,6 +10,7 @@ import 'package:iris_tools/api/helpers/mathHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
+import 'package:app/models/abstract/stateBase.dart';
 import 'package:app/models/countryModel.dart';
 import 'package:app/pages/home_page.dart';
 import 'package:app/pages/login/register_page.dart';
@@ -18,7 +19,6 @@ import 'package:app/services/google_service.dart';
 import 'package:app/services/login_service.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/session.dart';
-import 'package:app/system/stateBase.dart';
 import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appLoading.dart';
 import 'package:app/tools/app/appMessages.dart';

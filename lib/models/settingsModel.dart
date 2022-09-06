@@ -31,8 +31,8 @@ class SettingsModel {
   static int maxViewHeightL = 200;
   static int maxViewHeightP = 460;
 
-  static const defaultHttpAddress = 'http://162.223.90.121:7436';
-  static const defaultWsAddress = 'ws://162.223.90.121:7438/ws';
+  static const defaultHttpAddress = 'http://vosatezehn.com:7436';
+  static const defaultWsAddress = 'ws://vosatezehn.com:7438/ws';
   //static const defaultHttpAddress = 'http://192.168.43.140:7436'; // 43.140,   1.103
   //static const defaultWsAddress = 'ws://192.168.43.140:7438/ws';
   static const defaultProxyAddress = '95.174.67.50:18080';

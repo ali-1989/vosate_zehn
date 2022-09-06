@@ -7,12 +7,12 @@ import 'package:iris_tools/dateSection/dateHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
+import 'package:app/models/abstract/stateBase.dart';
 import 'package:app/models/countryModel.dart';
 import 'package:app/pages/home_page.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/requester.dart';
 import 'package:app/system/session.dart';
-import 'package:app/system/stateBase.dart';
 import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appRoute.dart';

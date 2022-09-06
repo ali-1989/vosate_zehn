@@ -5,24 +5,25 @@ import 'package:iris_download_manager/downloadManager/downloadManager.dart';
 import 'package:iris_download_manager/uploadManager/uploadManager.dart';
 import 'package:iris_tools/api/appEventListener.dart';
 import 'package:iris_tools/api/logger/logger.dart';
+import 'package:iris_tools/api/logger/reporter.dart';
 import 'package:iris_tools/api/system.dart';
 import 'package:iris_tools/net/netManager.dart';
 
 import 'package:app/constants.dart';
 import 'package:app/managers/settingsManager.dart';
+import 'package:app/services/downloadUpload.dart';
 import 'package:app/system/lifeCycleApplication.dart';
+import 'package:app/system/publicAccess.dart';
 import 'package:app/system/session.dart';
 import 'package:app/tools/app/appCache.dart';
 import 'package:app/tools/app/appDialogIris.dart';
 import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appLocale.dart';
-import 'package:app/tools/app/appManager.dart';
 import 'package:app/tools/app/appNotification.dart';
 import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/app/appSizes.dart';
 import 'package:app/tools/app/appWebsocket.dart';
-import 'package:app/services/downloadUpload.dart';
 import 'package:app/tools/deviceInfoTools.dart';
 import 'package:app/tools/netListenerTools.dart';
 import 'package:app/tools/userLoginTools.dart';
@@ -42,6 +43,10 @@ class InitialApplication {
 			await AppDirectories.prepareStoragePathsOs(Constants.appName);
 		}
 
+		if(!kIsWeb) {
+			PublicAccess.reporter = Reporter(AppDirectories.getAppFolderInExternalStorage(), 'report');
+		}
+		
 		await DeviceInfoTools.prepareDeviceInfo();
 		await DeviceInfoTools.prepareDeviceId();
 
@@ -54,7 +59,7 @@ class InitialApplication {
 		}
 
 		isCallInit = true;
-		AppManager.logger = Logger('${AppDirectories.getTempDir$ex()}/events.txt');
+		PublicAccess.logger = Logger('${AppDirectories.getTempDir$ex()}/events.txt');
 
 		AppRoute.init();
 		await AppLocale.localeDelegate().getLocalization().setFallbackByLocale(const Locale('en', 'EE'));

@@ -1,18 +1,19 @@
-import 'package:app/models/subBuketModel.dart';
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
 import 'package:iris_tools/api/duration/durationFormater.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 
-import 'package:app/models/enums.dart';
+import 'package:app/models/abstract/stateBase.dart';
+import 'package:app/models/subBuketModel.dart';
 import 'package:app/pages/levels/audio_player_page.dart';
 import 'package:app/pages/levels/content_view_page.dart';
 import 'package:app/pages/levels/video_player_page.dart';
 import 'package:app/services/favoriteService.dart';
+import 'package:app/system/enums.dart';
 import 'package:app/system/extensions.dart';
-import 'package:app/system/stateBase.dart';
 import 'package:app/tools/app/appIcons.dart';
+import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/app/appToast.dart';
@@ -98,7 +99,15 @@ class _FavoritesPageState extends StateBase<FavoritesPage> {
               children: [
                 Stack(
                   children: [
-                    Image.network(itm.imageModel?.url?? '', height: 100, width: double.infinity, fit: BoxFit.fill),
+                    Builder(
+                      builder: (ctx){
+                        if(itm.imageModel?.url != null){
+                          return Image.network(itm.imageModel!.url!, width: double.infinity, height: 100, fit: BoxFit.contain);
+                        }
+
+                        return Image.asset(AppImages.appIcon, width: double.infinity, height: 100, fit: BoxFit.contain);
+                      },
+                    ),
 
                     Positioned(
                         top: 0,
@@ -134,7 +143,7 @@ class _FavoritesPageState extends StateBase<FavoritesPage> {
 
                 SizedBox(height: 12),
 
-                Text('${itm.title}', maxLines: 1).bold().fsR(1),
+                Text(itm.title, maxLines: 1).bold().fsR(1),
 
                 SizedBox(height: 12,),
 

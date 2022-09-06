@@ -59,7 +59,6 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
 
-        // https://google.github.io/android-gradle-dsl/3.2/com.android.build.gradle.internal.dsl.DexOptions.html
         multiDexEnabled false
         dexOptions {
             javaMaxHeapSize "2g"
@@ -72,11 +71,9 @@ android {
         }
 
         def documentsAuthorityValue = applicationId + ".documentsProvider"
-        def fileAuthorityValue = applicationId + ".fileProvider"
-        def shareAuthorityValue = applicationId + ".shareContentProvider"
         manifestPlaceholders.documentsAuthority = documentsAuthorityValue
-        manifestPlaceholders.fileAuthority = fileAuthorityValue
-        manifestPlaceholders.shareAuthority = shareAuthorityValue
+        manifestPlaceholders.fileAuthority = applicationId + ".fileProvider"
+        manifestPlaceholders.shareAuthority = applicationId + ".shareContentProvider"
         buildConfigField "String", "fileAuthority", "\"${documentsAuthorityValue}\""
     }
 

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:iris_tools/widgets/searchBar.dart';
 
+import 'package:app/models/abstract/stateBase.dart';
 import 'package:app/models/countryModel.dart';
-import 'package:app/system/stateBase.dart';
 import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/countryTools.dart';
 import '/tools/app/appNavigator.dart';

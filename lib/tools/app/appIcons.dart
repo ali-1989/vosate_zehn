@@ -39,6 +39,7 @@ class AppIcons {
   static const IconData menu = Icons.view_list_rounded;
   static const IconData list = Icons.view_headline;
   static const IconData grid = Icons.view_module;
+  static const IconData sort = Icons.sort;
   static const IconData flag = Icons.assistant_photo;
   static const IconData copy = Icons.copy;
   static const IconData calendar = Icons.calendar_today_outlined;

@@ -3,12 +3,12 @@ import 'package:iris_tools/api/helpers/jsonHelper.dart';
 import 'package:app/managers/settingsManager.dart';
 import 'package:app/models/userModel.dart';
 import 'package:app/pages/login/login_page.dart';
+import 'package:app/system/keys.dart';
+import 'package:app/system/publicAccess.dart';
 import 'package:app/system/session.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appHttpDio.dart';
 import 'package:app/tools/app/appRoute.dart';
-import '/system/keys.dart';
-import '/tools/app/appManager.dart';
 
 class UserLoginTools {
   UserLoginTools._();
@@ -31,7 +31,7 @@ class UserLoginTools {
       reqJs[Keys.requesterId] = user.userId;
       reqJs[Keys.forUserId] = user.userId;
 
-      AppManager.addAppInfo(reqJs, curUser: user);
+      PublicAccess.addAppInfo(reqJs, curUser: user);
 
       final info = HttpItem();
       info.fullUrl = '${SettingsManager.settingsModel.httpAddress}/graph-v1';

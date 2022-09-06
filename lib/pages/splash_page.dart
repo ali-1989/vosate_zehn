@@ -5,7 +5,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/helpers/databaseHelper.dart';
-import 'package:iris_tools/api/logger/reporter.dart';
 import 'package:iris_tools/net/trustSsl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:spring/spring.dart';
@@ -20,7 +19,6 @@ import 'package:app/tools/app/appDb.dart';
 import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appLocale.dart';
-import 'package:app/tools/app/appManager.dart';
 import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/app/appToast.dart';
@@ -177,11 +175,6 @@ class SplashScreenState extends State<SplashPage> {
     _isInit = true;
 
     await InitialApplication.importantInit();
-
-    if(!kIsWeb) {
-      await prepareReporter();
-    }
-
     await prepareDatabase();
 
     AppThemes.initial();
@@ -211,12 +204,6 @@ class SplashScreenState extends State<SplashPage> {
         });
       });
     }
-  }
-
-  Future<bool> prepareReporter() async {
-    AppManager.reporter = Reporter(AppDirectories.getAppFolderInExternalStorage(), 'report');
-
-    return true;
   }
 
   Future<DatabaseHelper> prepareDatabase() async {

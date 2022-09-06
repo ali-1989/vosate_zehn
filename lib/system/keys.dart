@@ -73,6 +73,7 @@ class Keys {
   static const setting$notificationModel = 'notification_model';
   static const setting$notificationChanelGroup = 'notification_chanel_group';
   static const setting$currentVersion = 'current_version';
+  static const setting$webDeviceId = 'web_device_id';
   //----- app settings key -----------------------------------------------------------------
   static const setting$bucketType = 'bucket_type';
 

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:photo_view/photo_view.dart';
 
-import 'package:app/models/enums.dart';
+import 'package:app/system/enums.dart';
 
 /// Usage:
 /// final view = ImageFullScreen(heroTag: '');

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+
 import 'package:iris_tools/dateSection/dateHelper.dart';
 import 'package:iris_tools/models/dataModels/mediaModel.dart';
 
 import 'package:app/models/contentModel.dart';
-import 'package:app/tools/searchFilterTool.dart';
-
-import 'package:app/models/enums.dart';
+import 'package:app/models/mixin/dateFieldMixin.dart';
+import 'package:app/system/enums.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/appIcons.dart';
 

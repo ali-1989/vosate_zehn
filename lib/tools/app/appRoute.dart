@@ -21,12 +21,11 @@ import 'package:app/pages/profile/profile_page.dart';
 import 'package:app/pages/sentences_page.dart';
 import 'package:app/pages/term_page.dart';
 import 'package:app/pages/zarinpal_page.dart';
+import 'package:app/system/keys.dart';
 import 'package:app/system/session.dart';
 import 'package:app/tools/app/appDb.dart';
 import 'package:app/tools/app/appDirectories.dart';
-import '/system/keys.dart';
-import '/tools/app/appManager.dart';
-import '/tools/app/appNavigator.dart';
+import 'package:app/tools/app/appNavigator.dart';
 
 class AppRoute {
   static final List<GoRoute> freeRoutes = [];
@@ -36,8 +35,8 @@ class AppRoute {
   static late BuildContext materialContext;
 
   static BuildContext getContext() {
-    var res = AppManager.getAppWidgetsBinding().focusManager.rootScope.focusedChild?.context;//deep: 50
-    res ??= AppManager.getAppWidgetsBinding().focusManager.primaryFocus?.context; //deep: 71
+    var res = WidgetsBinding.instance.focusManager.rootScope.focusedChild?.context;//deep: 50
+    res ??= WidgetsBinding.instance.focusManager.primaryFocus?.context; //deep: 71
 
     return res?? materialContext;
   }

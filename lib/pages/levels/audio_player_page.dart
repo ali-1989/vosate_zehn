@@ -9,10 +9,10 @@ import 'package:iris_tools/api/helpers/mathHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:just_audio/just_audio.dart';
 
+import 'package:app/models/abstract/stateBase.dart';
 import 'package:app/pages/levels/playback_disposition.dart';
 import 'package:app/pages/levels/slider.dart';
 import 'package:app/system/extensions.dart';
-import 'package:app/system/stateBase.dart';
 import 'package:app/tools/app/appIcons.dart';
 import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appSizes.dart';

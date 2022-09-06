@@ -35,7 +35,8 @@ class AppOverlay {
   }
 
   static void hideScreen(BuildContext context){
-    OverlayDialog().hide(context);
+    //OverlayDialog().hide(context);
+    Navigator.of(context).pop();
   }
 
   static void hideScreenByOverlay(BuildContext context, OverlayScreenView overlay){

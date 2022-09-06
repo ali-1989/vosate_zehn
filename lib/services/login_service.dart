@@ -5,10 +5,9 @@ import 'package:dio/dio.dart';
 import 'package:app/models/countryModel.dart';
 import 'package:app/system/httpCodes.dart';
 import 'package:app/system/keys.dart';
+import 'package:app/system/publicAccess.dart';
 import 'package:app/tools/app/appHttpDio.dart';
-import 'package:app/tools/app/appManager.dart';
 import 'package:app/tools/deviceInfoTools.dart';
-import 'package:app/tools/publicAccess.dart';
 
 class LoginService {
   LoginService._();
@@ -21,7 +20,7 @@ class LoginService {
     js[Keys.requestZone] = 'send_otp';
     js[Keys.mobileNumber] = phoneNumber;
     js.addAll(countryModel.toMap());
-    AppManager.addAppInfo(js);
+    PublicAccess.addAppInfo(js);
 
     http.fullUrl = PublicAccess.graphApi;
     http.method = 'POST';
@@ -55,7 +54,7 @@ class LoginService {
     js['code'] = code;
     js.addAll(countryModel.toMap());
     js.addAll(DeviceInfoTools.getDeviceInfo());
-    AppManager.addAppInfo(js);
+    PublicAccess.addAppInfo(js);
 
     http.fullUrl = PublicAccess.graphApi;
     http.method = 'POST';
@@ -109,7 +108,7 @@ class LoginService {
     js[Keys.requestZone] = 'verify_email';
     js['email'] = email;
     js.addAll(DeviceInfoTools.getDeviceInfo());
-    AppManager.addAppInfo(js);
+    PublicAccess.addAppInfo(js);
 
     http.fullUrl = PublicAccess.graphApi;
     http.method = 'POST';
