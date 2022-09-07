@@ -1,3 +1,4 @@
+import 'package:app/system/publicAccess.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/modules/stateManagers/assist.dart';
@@ -131,7 +132,7 @@ class _HomeToHomePageState extends StateBase<HomeToHomePage> {
   }
 
   void requestData() async {
-    final ul = SearchFilterTool.findUpperLower(listItems, searchFilter.ascOrder);
+    final ul = PublicAccess.findUpperLower(listItems, searchFilter.ascOrder);
     searchFilter.upper = ul.upperAsTS;
     searchFilter.lower = ul.lowerAsTS;
 

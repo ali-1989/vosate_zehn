@@ -1,13 +1,12 @@
 import 'dart:async';
 
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-import 'package:iris_tools/api/helpers/databaseHelper.dart';
 import 'package:iris_tools/net/trustSsl.dart';
 import 'package:lottie/lottie.dart';
-import 'package:spring/spring.dart';
 
 import 'package:app/constants.dart';
 import 'package:app/managers/settingsManager.dart';
@@ -16,7 +15,6 @@ import 'package:app/system/initialize.dart';
 import 'package:app/system/session.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appDb.dart';
-import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appLocale.dart';
 import 'package:app/tools/app/appRoute.dart';
@@ -88,8 +86,8 @@ class SplashScreenState extends State<SplashPage> {
             fit: BoxFit.fill,
           ),
 
-          Spring.fadeIn(
-            animDuration: const Duration(milliseconds: 700),
+          FadeIn(
+            duration: const Duration(milliseconds: 700),
             child: Image.asset(AppImages.appIcon,
             width: 100,
             height: 100,
@@ -175,7 +173,7 @@ class SplashScreenState extends State<SplashPage> {
     _isInit = true;
 
     await InitialApplication.importantInit();
-    await prepareDatabase();
+    await AppDB.init();
 
     AppThemes.initial();
     _isInLoadingSettings = !SettingsManager.loadSettings();
@@ -204,19 +202,6 @@ class SplashScreenState extends State<SplashPage> {
         });
       });
     }
-  }
-
-  Future<DatabaseHelper> prepareDatabase() async {
-    AppDB.db = DatabaseHelper();
-    AppDB.db.setDatabasePath(await AppDirectories.getDatabasesDir());
-    AppDB.db.setDebug(false);
-
-    await AppDB.db.openTable(AppDB.tbKv);
-    await AppDB.db.openTable(AppDB.tbLanguages);
-    await AppDB.db.openTable(AppDB.tbFavorites);
-    await AppDB.db.openTable(AppDB.tbUserModel);
-
-    return AppDB.db;
   }
 
   Future<void> checkInstallVersion() async {

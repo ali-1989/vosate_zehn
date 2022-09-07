@@ -172,7 +172,7 @@ class _BucketPageState extends StateBase<BucketPage> {
   }
 
   void requestData() async {
-    final ul = SearchFilterTool.findUpperLower(listItems, searchFilter.ascOrder);
+    final ul = PublicAccess.findUpperLower(listItems, searchFilter.ascOrder);
     searchFilter.upper = ul.upperAsTS;
     searchFilter.lower = ul.lowerAsTS;
 

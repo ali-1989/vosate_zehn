@@ -17,8 +17,24 @@ if (flutterVersionCode == null) {
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
-    flutterVersionName = '1.0'
+    flutterVersionName = '0.0.1'
 }
+
+def minSdkVersionVal = localProperties.getProperty('flutter.minSdkVersion')
+if (minSdkVersionVal == null) {
+    minSdkVersionVal = '20'
+}
+
+def compileSdkVersionVal = localProperties.getProperty('flutter.compileSdkVersion')
+if (compileSdkVersionVal == null) {
+    compileSdkVersionVal = '33'
+}
+
+def targetSdkVersionVal = localProperties.getProperty('flutter.targetSdkVersion')
+if (targetSdkVersionVal == null) {
+    targetSdkVersionVal = '33'
+}
+
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
@@ -26,7 +42,7 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 apply plugin: 'com.google.gms.google-services'
 
 android {
-    compileSdkVersion 33 //flutter.compileSdkVersion
+    compileSdkVersion compileSdkVersionVal.toInteger()
     //ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -54,8 +70,8 @@ android {
 
     defaultConfig {
         applicationId "ir.iris.vosate_zehn.vosate_zehn"
-        minSdkVersion   21 // flutter.minSdkVersion, base:16
-        targetSdkVersion 33 // flutter.targetSdkVersion
+        minSdkVersion minSdkVersionVal.toInteger()      //base:16
+        targetSdkVersion targetSdkVersionVal.toInteger()
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
 
