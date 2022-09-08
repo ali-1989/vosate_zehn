@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:animate_do/animate_do.dart';
+import 'package:app/views/progressView.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -48,10 +49,10 @@ class SplashScreenState extends State<SplashPage> {
         initialData: false,
         stream: AppBroadcast.materialUpdaterStream.stream,
         builder: (context, snapshot) {
-          _checkTimer();
+          splashTimer();
           init();
 
-          if (_isInLoadingSettings || _canShowSplash()) {
+          if (_isInLoadingSettings || canShowSplash()) {
             return getSplashView();
           }
           else {
@@ -63,9 +64,7 @@ class SplashScreenState extends State<SplashPage> {
   ///==================================================================================================
   Widget getSplashView() {
     if(kIsWeb){
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const ProgressView();
     }
 
     return DecoratedBox(
@@ -148,13 +147,13 @@ class SplashScreenState extends State<SplashPage> {
         },
     );
   }
-
-  bool _canShowSplash(){
+  ///==================================================================================================
+  bool canShowSplash(){
     return mustShowSplash && !kIsWeb;
   }
 
-  void _checkTimer() async {
-    if(splashWaitingMil > 0 && _canShowSplash()){
+  void splashTimer() async {
+    if(splashWaitingMil > 0 && canShowSplash()){
       Timer(Duration(milliseconds: splashWaitingMil), (){
         mustShowSplash = false;
 

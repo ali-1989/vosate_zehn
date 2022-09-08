@@ -109,6 +109,8 @@ flutter:
     - family: Icomoon # any
       fonts:
         - asset: assets/fonts/icomoon.ttf
+          #style: normal  # normal, italic
+          #weight: 500
 
 
 flutter_icons:

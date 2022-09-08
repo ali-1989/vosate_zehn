@@ -15,6 +15,8 @@ import '/managers/settingsManager.dart';
 
 abstract class StateBase<W extends StatefulWidget> extends State<W> {
 	final AssistController assistCtr = AssistController();
+	late double sw;
+	late double sh;
 
 	@override
   void didUpdateWidget(W oldWidget) {
@@ -28,6 +30,9 @@ abstract class StateBase<W extends StatefulWidget> extends State<W> {
 		if(kIsWeb){
 			AppSizes.instance.addMetricListener(onResize);
 		}
+
+		sw = AppSizes.instance.appWidth;
+		sh = AppSizes.instance.appHeight;
 	}
 
 	@override

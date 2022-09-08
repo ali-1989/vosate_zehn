@@ -44,9 +44,9 @@ class AppNotification {
 		final highModel = getNotificationModel();
 
 		AwesomeNotifications().initialize(
-			/// android\app\src\main\res\drawable\app_icon.png   or   ic_launcher.png
-				null,// 'resource://drawable/res_app_icon',
-				[
+			/// drawable/app_icon.png   or   mipmap-hdpi/ic_launcher.png       resource://drawable/app_icon
+			null, //'resource://drawable/app_icon.png'
+			[
 					NotificationChannel(
           channelGroupKey: AppDB.fetchKv(Keys.setting$notificationChanelGroup),
           channelKey: getChannelKey()?? '',

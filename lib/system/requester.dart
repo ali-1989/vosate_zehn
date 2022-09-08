@@ -63,7 +63,7 @@ class Requester {
     }
   }
 
-  void request([BuildContext? context]){
+  void request([BuildContext? context, bool promptErrors = true]){
     _http.debugMode = debug;
     _http.method = methodType == MethodType.get ? 'GET': 'POST';
 
@@ -140,7 +140,7 @@ class Requester {
         final managedByUser = await httpRequestEvents.onStatusError?.call(_httpRequester, js, causeCode, cause)?? false;
 
         if(context != null) {
-          if (!managedByUser && !HttpProcess.processCommonRequestError(context, js)) {
+          if (!managedByUser && promptErrors && !HttpProcess.processCommonRequestError(context, js)) {
             await AppSheet.showSheet$ServerNotRespondProperly(context);
           }
         }
