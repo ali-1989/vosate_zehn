@@ -1,3 +1,4 @@
+import 'package:app/services/lastSeenService.dart';
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
@@ -279,6 +280,8 @@ class _SubBucketPageState extends StateBase<SubBucketPage> {
   }
 
   void onItemClick(SubBucketModel itm) {
+    LastSeenService.addItem(itm);
+
     if(itm.type == SubBucketTypes.video.id()){
       final inject = VideoPlayerPageInjectData();
       inject.srcAddress = itm.mediaModel!.url!;
@@ -326,10 +329,6 @@ class _SubBucketPageState extends StateBase<SubBucketPage> {
       assistCtr.removeStateAndUpdate(state$fetchData);
     };
 
-    requester.httpRequestEvents.onResponseError = (req, data) async {
-      return true;
-    };
-
     requester.httpRequestEvents.onStatusOk = (req, data) async {
       isInFetchData = false;
 
@@ -362,6 +361,6 @@ class _SubBucketPageState extends StateBase<SubBucketPage> {
     };
 
     requester.prepareUrl();
-    requester.request(context);
+    requester.request(context, false);
   }
 }

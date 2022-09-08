@@ -58,6 +58,7 @@ class Keys {
   static const searchFilter = 'search_filter';
   static const nodeName = 'node_name';
   static const extraJs = 'extra_js';
+  static const sortOrder = 'sort_order';
   static const toast = 'toast';
   //----- common settings key -----------------------------------------------------------------
   static const setting$lastLoginDate = 'last_login_date';

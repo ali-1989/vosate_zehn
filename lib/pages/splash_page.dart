@@ -221,6 +221,6 @@ class SplashScreenState extends State<SplashPage> {
   }
 
   Future<void> testCodes(BuildContext context) async {
-    //await AppDB.db.clearTable(AppDB.tbKv);
+    //await AppDB.db.clearTable(AppDB.tbFavorites);
   }
 }

@@ -19,6 +19,7 @@ class AppDB {
     await AppDB.db.openTable(AppDB.tbLanguages);
     await AppDB.db.openTable(AppDB.tbUserModel);
     await AppDB.db.openTable(AppDB.tbFavorites);
+    await AppDB.db.openTable(AppDB.tbLastSeen);
 
     return AppDB.db;
   }
@@ -26,6 +27,7 @@ class AppDB {
   static String tbKv = 'KvTable';
   static String tbUserModel = 'UserModel';
   static String tbFavorites = 'Favorites';
+  static String tbLastSeen = 'LastSeen';
   static String tbLanguages = 'Languages';
 
 
