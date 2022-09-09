@@ -5,7 +5,6 @@ import 'package:app/views/progressView.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:iris_tools/dateSection/dateHelper.dart';
 
 import 'package:lottie/lottie.dart';
 
@@ -223,13 +222,5 @@ class SplashScreenState extends State<SplashPage> {
     //await AppDB.db.clearTable(AppDB.tbFavorites);
     SettingsManager.settingsModel.httpAddress = 'http://192.168.43.140:7436'; //1.103, 43.140
     //SettingsManager.settingsModel.httpAddress = 'http://vosatezehn.com:7436';
-
-    var x = DateTime.now();
-    var d = DateHelper.isPastOf(x, Duration(minutes: 1));
-
-    x = x.subtract(Duration(minutes: 2));
-    var d2 = DateHelper.isPastOf(x, Duration(minutes: 1));
-
-    print('past >>>>>>>>>>> $d   $d2');
   }
 }

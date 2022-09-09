@@ -32,7 +32,9 @@ class _HomeToHomePageState extends StateBase<HomeToHomePage> {
   Requester requester = Requester();
   bool isInFetchData = true;
   String state$fetchData = 'state_fetchData';
-  List<BucketModel> listItems = [];
+  List<BucketModel> newItems = [];
+  List<BucketModel> meditationItems = [];
+  List<BucketModel> videoItems = [];
   SearchFilterTool searchFilter = SearchFilterTool();
   RefreshController refreshController = RefreshController(initialRefresh: false);
 
@@ -43,7 +45,7 @@ class _HomeToHomePageState extends StateBase<HomeToHomePage> {
     searchFilter.limit = 20;
     searchFilter.ascOrder = true;
     AppBroadcast.newAdvNotifier.addListener(onNewAdv);
-    //requestData();
+    requestData();
   }
 
   @override
@@ -86,7 +88,7 @@ class _HomeToHomePageState extends StateBase<HomeToHomePage> {
   }
 
   Widget buildListItem(int idx){
-    final itm = listItems[idx];
+    final itm = newItems[idx];
 
     return SizedBox(
       height: 100,
@@ -140,15 +142,9 @@ class _HomeToHomePageState extends StateBase<HomeToHomePage> {
   }
 
   void requestData() async {
-    final ul = PublicAccess.findUpperLower(listItems, searchFilter.ascOrder);
-    searchFilter.upper = ul.upperAsTS;
-    searchFilter.lower = ul.lowerAsTS;
-
     final js = <String, dynamic>{};
-    js[Keys.requestZone] = 'get_bucket_data';
+    js[Keys.requestZone] = 'get_home_page_data';
     js[Keys.requesterId] = Session.getLastLoginUser()?.userId;
-    js[Keys.searchFilter] = searchFilter.toMap();
-
 
     requester.httpRequestEvents.onFailState = (req) async {
       isInFetchData = false;
@@ -157,22 +153,24 @@ class _HomeToHomePageState extends StateBase<HomeToHomePage> {
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
       isInFetchData = false;
-
-      final List list = data[Keys.dataList]?? [];
-      searchFilter.ascOrder = data[Keys.isAsc]?? true;
-
-      if(list.length < searchFilter.limit){
-        refreshController.loadNoData();
-      }
-      else {
-        if(refreshController.isLoading) {
-          refreshController.loadComplete();
-        }
-      }
+print(data);
+      final List list = data['new_list']?? [];
+      final List mList = data['new_meditation_list']?? [];
+      final List vList = data['new_video_list']?? [];
 
       for(final m in list){
         final itm = BucketModel.fromMap(m);
-        listItems.add(itm);
+        newItems.add(itm);
+      }
+
+      for(final m in mList){
+        final itm = BucketModel.fromMap(m);
+        meditationItems.add(itm);
+      }
+
+      for(final m in vList){
+        final itm = BucketModel.fromMap(m);
+        videoItems.add(itm);
       }
 
       assistCtr.addStateAndUpdate(state$fetchData);
