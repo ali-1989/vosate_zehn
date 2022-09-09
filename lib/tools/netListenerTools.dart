@@ -1,3 +1,5 @@
+import 'package:app/managers/advertisingManager.dart';
+import 'package:app/managers/appParameterManager.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:iris_tools/net/netManager.dart';
 
@@ -37,7 +39,8 @@ class NetListenerTools {
       AppBroadcast.isNetConnected = true;
 
       //await ServerTimeTools.requestUtcTimeOfServer();
-      //Settings.prepareRequestAppLanguages();
+      AppParameterManager.requestParameters();
+      AdvertisingManager.check();
 
       if (Session.hasAnyLogin()) {
         //final user = Session.getLastLoginUser()!;

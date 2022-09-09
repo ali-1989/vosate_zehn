@@ -8,6 +8,7 @@ import 'package:iris_tools/modules/stateManagers/refresh.dart';
 import 'package:app/pages/home_page.dart';
 import 'package:app/pages/splash_page.dart';
 import 'package:app/tools/app/appThemes.dart';
+import 'package:iris_tools/api/extendValueNotifier.dart';
 
 class AppBroadcast {
   AppBroadcast._();
@@ -15,6 +16,8 @@ class AppBroadcast {
   static final StreamController<bool> materialUpdaterStream = StreamController<bool>();
   static final RefreshController drawerMenuRefresher = RefreshController();
   static final NotifyBroadcast avatarNotifier = NotifyBroadcast();
+  static final ExtendValueNotifier<int> newAdvNotifier = ExtendValueNotifier<int>(0);
+  //---------------------- keys
   static final LocalKey materialAppKey = UniqueKey();
   static final rootScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
   static final rootNavigatorStateKey = GlobalKey<NavigatorState>();

@@ -1,4 +1,5 @@
 import 'package:app/system/publicAccess.dart';
+import 'package:app/tools/app/appBroadcast.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/modules/stateManagers/assist.dart';
@@ -41,12 +42,14 @@ class _HomeToHomePageState extends StateBase<HomeToHomePage> {
 
     searchFilter.limit = 20;
     searchFilter.ascOrder = true;
+    AppBroadcast.newAdvNotifier.addListener(onNewAdv);
     //requestData();
   }
 
   @override
   void dispose(){
     requester.dispose();
+    AppBroadcast.newAdvNotifier.removeListener(onNewAdv);
 
     super.dispose();
   }
@@ -116,6 +119,11 @@ class _HomeToHomePageState extends StateBase<HomeToHomePage> {
     );
   }
 
+  void onNewAdv(){
+    print('@@@@@@@@@@ onNewAdv');
+    assistCtr.updateMain();
+  }
+
   void tryLoadClick() async {
     isInFetchData = true;
     assistCtr.updateMain();
@@ -141,7 +149,6 @@ class _HomeToHomePageState extends StateBase<HomeToHomePage> {
     js[Keys.requesterId] = Session.getLastLoginUser()?.userId;
     js[Keys.searchFilter] = searchFilter.toMap();
 
-    requester.bodyJson = js;
 
     requester.httpRequestEvents.onFailState = (req) async {
       isInFetchData = false;
@@ -171,24 +178,8 @@ class _HomeToHomePageState extends StateBase<HomeToHomePage> {
       assistCtr.addStateAndUpdate(state$fetchData);
     };
 
+    requester.bodyJson = js;
     requester.prepareUrl();
     requester.request(context);
   }
-
-  /*void addTempData(){
-    final v1 = Level1Model();
-    final v2 = Level1Model();
-
-    v1.title = 'انیمیشن';
-    v2.title = 'علمی';
-
-    v1.description = 'کلیپ های کوتاه و کاربردی یرای درک';
-    v2.description = 'درک رسیدن به آرامش با تماشای کلیپ های علمی و کاربردی یرای درک';
-
-    v1.imageModel = MediaModel.fromMap({})..url = 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/800px-Image_created_with_a_mobile_phone.png';
-    v2.imageModel = MediaModel.fromMap({})..url = 'https://overlay.imageonline.co/overlay-image.jpg';
-
-    listItems.add(v1);
-    listItems.add(v2);
-  }*/
 }

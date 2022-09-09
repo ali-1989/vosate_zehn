@@ -8,7 +8,7 @@ class MediaManager {
   MediaManager._();
   
   static final List<MediaModel> _list = [];
-  static List<MediaModel> get materialList => _list;
+  static List<MediaModel> get mediaList => _list;
   ///-----------------------------------------------------------------------------------------
   static MediaModel? getById(int? id){
     try {

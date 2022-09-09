@@ -18,6 +18,7 @@ class AppDB {
     await AppDB.db.openTable(AppDB.tbUserModel);
     await AppDB.db.openTable(AppDB.tbFavorites);
     await AppDB.db.openTable(AppDB.tbLastSeen);
+    await AppDB.db.openTable(AppDB.tbAdvertising);
 
     return AppDB.db;
   }
@@ -27,6 +28,7 @@ class AppDB {
   static String tbFavorites = 'Favorites';
   static String tbLastSeen = 'LastSeen';
   static String tbLanguages = 'Languages';
+  static String tbAdvertising = 'Advertising';
 
 
   static Future<bool> firstDatabasePrepare() async {
