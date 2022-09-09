@@ -9,7 +9,7 @@ import 'package:app/pages/contact_us_page.dart';
 import 'package:app/pages/e404_page.dart';
 import 'package:app/pages/favorites_page.dart';
 import 'package:app/pages/home_page.dart';
-import 'package:app/pages/imageFullScreen.dart';
+import 'package:app/pages/image_full_screen.dart';
 import 'package:app/pages/last_seen_page.dart';
 import 'package:app/pages/levels/audio_player_page.dart';
 import 'package:app/pages/levels/content_view_page.dart';

@@ -18,7 +18,7 @@ import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/searchFilterTool.dart';
 import 'package:app/views/emptyData.dart';
 import 'package:app/views/notFetchData.dart';
-import 'package:app/views/waitToLoad.dart';
+import 'package:app/views/progressView.dart';
 
 class BucketPageInjectData {
   late BucketTypes bucketTypes;
@@ -75,7 +75,7 @@ class _BucketPageState extends StateBase<BucketPage> {
 
   Widget buildBody(){
     if(isInFetchData) {
-      return WaitToLoad();
+      return ProgressView();
     }
 
     if(!assistCtr.hasState(state$fetchData)){

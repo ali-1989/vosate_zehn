@@ -424,7 +424,7 @@ class _LoginPageState extends StateBase<LoginPage> {
         final userModel = await Session.login$newProfileData(result.jsResult!);
 
         if(userModel != null) {
-          AppRoute.push(context, HomePage.route.path);
+          AppRoute.replaceNamed(context, HomePage.route.name!);
         }
         else {
           AppSheet.showSheet$OperationFailed(context);

@@ -1,8 +1,6 @@
 import 'package:app/tools/app/appDirectories.dart';
 import 'package:iris_db/iris_db.dart';
 import 'package:iris_tools/api/helpers/databaseHelper.dart';
-
-import 'package:app/tools/app/appNotification.dart';
 import '/system/keys.dart';
 
 class AppDB {
@@ -33,7 +31,6 @@ class AppDB {
 
   static Future<bool> firstDatabasePrepare() async {
     //await insertLanguages();
-    await AppNotification.insertNotificationIds();
 
     return true;
   }

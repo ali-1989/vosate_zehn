@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:app/tools/app/appMessages.dart';
 
 class EmptyData extends StatelessWidget {
+  final TextStyle? textStyle;
 
   const EmptyData({
+    this.textStyle,
     Key? key,
     }) : super(key: key);
 
@@ -17,7 +19,7 @@ class EmptyData extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(AppMessages.thereAreNoResults,
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: textStyle?? TextStyle(fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 5),
         ],

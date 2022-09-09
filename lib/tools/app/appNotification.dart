@@ -13,18 +13,18 @@ import '/models/notificationModel.dart' as nm;
 class AppNotification {
 	AppNotification._();
 
-	static Future<void> insertNotificationIds() async {
-		await AppDB.setReplaceKv(Keys.setting$notificationChanelKey, 'C${Generator.generateName(8)}');
-		await AppDB.setReplaceKv(Keys.setting$notificationChanelGroup, 'G${Generator.generateName(8)}');
+	static Future<void> sinkNotificationIds() async {
+		await AppDB.setReplaceKv(Keys.setting$notificationChanelKey, 'C_${Generator.generateName(8)}');
+		await AppDB.setReplaceKv(Keys.setting$notificationChanelGroup, 'CG_${Generator.generateName(8)}');
 
 		return;
 	}
 
-	static String? getChannelKey(){
+	static String? fetchChannelKey(){
 		return AppDB.fetchKv(Keys.setting$notificationChanelKey);
 	}
 
-	static nm.NotificationModel getNotificationModel(){
+	static nm.NotificationModel fetchNotificationModel(){
 		return nm.NotificationModel.fromMap(AppDB.fetchKv(Keys.setting$notificationModel));
 	}
 
@@ -33,15 +33,17 @@ class AppNotification {
 	}
 
 	static Future<bool> initial() async {
-		var ch = getChannelKey();
+		var ch = fetchChannelKey();
 
 		if(ch == null){
-			await AppNotification.insertNotificationIds();
-			ch = getChannelKey();
+			await AppNotification.sinkNotificationIds();
+			ch = fetchChannelKey();
+		}
+		else {
+			AwesomeNotifications().removeChannel(ch);
 		}
 
-		AwesomeNotifications().removeChannel(ch!);
-		final highModel = getNotificationModel();
+		final lastNotifyModel = fetchNotificationModel();
 
 		AwesomeNotifications().initialize(
 			/// drawable/app_icon.png   or   mipmap-hdpi/ic_launcher.png       resource://drawable/app_icon
@@ -49,16 +51,16 @@ class AppNotification {
 			[
 					NotificationChannel(
           channelGroupKey: AppDB.fetchKv(Keys.setting$notificationChanelGroup),
-          channelKey: getChannelKey()?? '',
-          channelName: highModel.name,
+          channelKey: ch?? '',
+          channelName: lastNotifyModel.name,
           channelDescription: Constants.appName,
-          defaultColor: highModel.defaultColor,
-          ledColor: highModel.ledColor,
-          defaultPrivacy: highModel.isPublic? NotificationPrivacy.Public : NotificationPrivacy.Private,
-          importance: highModel.importanceIsHigh? NotificationImportance.High : NotificationImportance.Default,
-          enableLights: highModel.enableLights,
-          enableVibration: highModel.enableVibration,
-          playSound: highModel.playSound,
+          defaultColor: lastNotifyModel.defaultColor,
+          ledColor: lastNotifyModel.ledColor,
+          defaultPrivacy: lastNotifyModel.isPublic? NotificationPrivacy.Public : NotificationPrivacy.Private,
+          importance: lastNotifyModel.importanceIsHigh? NotificationImportance.High : NotificationImportance.Default,
+          enableLights: lastNotifyModel.enableLights,
+          enableVibration: lastNotifyModel.enableVibration,
+          playSound: lastNotifyModel.playSound,
 					//soundSource: ,
           vibrationPattern: getVibration(),
           ledOnMs: 500,
@@ -70,7 +72,7 @@ class AppNotification {
 							channelGroupkey: 'basic_channel_group',
 							channelGroupName: 'Basic group')
 				],*/
-				debug: true,
+				debug: false,
 		);
 
 		requestPermission();
@@ -91,7 +93,7 @@ class AppNotification {
 		AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
 			if (!isAllowed) {
 				AwesomeNotifications().requestPermissionToSendNotifications(
-					channelKey: getChannelKey(),
+					channelKey: fetchChannelKey(),
 					permissions: [
 						NotificationPermission.Alert,
 						NotificationPermission.Sound,
@@ -133,7 +135,7 @@ class AppNotification {
 		AwesomeNotifications().createNotification(
 				content: NotificationContent(
 						id: id ?? Generator.generateIntId(5),
-						channelKey: getChannelKey()?? '',
+						channelKey: fetchChannelKey()?? '',
 						title: title,
 						body: text,
 					autoDismissible: true,
@@ -147,7 +149,7 @@ class AppNotification {
 		AwesomeNotifications().createNotification(
 			content: NotificationContent(
 				id: id ?? Generator.generateIntId(5),
-				channelKey: getChannelKey()?? '',
+				channelKey: fetchChannelKey()?? '',
 				title: title,
 				summary: user,
 				autoDismissible: true,

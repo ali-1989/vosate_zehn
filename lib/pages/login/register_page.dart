@@ -262,7 +262,7 @@ class _RegisterPageState extends StateBase<RegisterPage> {
 
       if(userModel != null) {
         AppRoute.pop(context);
-        AppRoute.push(context, HomePage.route.path);
+        AppRoute.replaceNamed(context, HomePage.route.name!);
       }
       else {
         AppSheet.showSheet$OperationFailed(context);

@@ -88,6 +88,18 @@ class PublicAccess {
     return UpperLower()..lower = lower..upper = upper;
   }
 
+  static void sortList(List<DateFieldMixin> list, bool isAsc){
+    if(list.isEmpty){
+      return;
+    }
+
+    int sorter(DateFieldMixin d1, DateFieldMixin d2){
+      return DateHelper.compareDates(d1.date, d2.date, asc: isAsc);
+    }
+
+    list.sort(sorter);
+  }
+
   ///----------- HowIs ----------------------------------------------------
   static Map<String, dynamic> getHowIsMap() {
     final howIs = <String, dynamic>{

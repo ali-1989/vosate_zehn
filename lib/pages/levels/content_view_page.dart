@@ -22,7 +22,7 @@ import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/views/AppBarCustom.dart';
 import 'package:app/views/notFetchData.dart';
-import 'package:app/views/waitToLoad.dart';
+import 'package:app/views/progressView.dart';
 
 class ContentViewPageInjectData {
   late SubBucketModel subBucket;
@@ -114,7 +114,7 @@ class _LevelPageState extends StateBase<ContentViewPage> {
             child: Builder(
               builder: (ctx){
                 if(isInFetchData) {
-                  return WaitToLoad();
+                  return ProgressView();
                 }
 
                 if(!assistCtr.hasState(state$fetchData)){

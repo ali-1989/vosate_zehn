@@ -75,6 +75,7 @@ class Keys {
   static const setting$notificationChanelGroup = 'notification_chanel_group';
   static const setting$currentVersion = 'current_version';
   static const setting$webDeviceId = 'web_device_id';
+  static const setting$textOfDayGetPreMonth = 'text_of_day_get_pre_month';
   //----- app settings key -----------------------------------------------------------------
   static const setting$bucketType = 'bucket_type';
 

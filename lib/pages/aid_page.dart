@@ -1,3 +1,4 @@
+import 'package:app/views/progressView.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_html/flutter_html.dart';
@@ -15,7 +16,6 @@ import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/views/AppBarCustom.dart';
 import 'package:app/views/notFetchData.dart';
-import 'package:app/views/waitToLoad.dart';
 
 class AidPage extends StatefulWidget {
   static final route = GoRoute(
@@ -69,7 +69,7 @@ class _AidPageState extends StateBase<AidPage> {
 
   Widget buildBody(){
     if(isInFetchData) {
-      return WaitToLoad();
+      return ProgressView();
     }
 
     if(!assistCtr.hasState(state$fetchData)){

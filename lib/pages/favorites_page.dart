@@ -18,7 +18,7 @@ import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/app/appToast.dart';
 import 'package:app/views/AppBarCustom.dart';
-import 'package:app/views/waitToLoad.dart';
+import 'package:app/views/progressView.dart';
 
 class FavoritesPage extends StatefulWidget {
   static final route = GoRoute(
@@ -66,7 +66,7 @@ class _FavoritesPageState extends StateBase<FavoritesPage> {
 
   Widget buildBody(){
     if(isInFetchData) {
-      return WaitToLoad();
+      return ProgressView();
     }
 
     return GridView.builder(

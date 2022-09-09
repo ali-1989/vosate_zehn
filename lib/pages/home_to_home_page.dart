@@ -15,7 +15,7 @@ import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/searchFilterTool.dart';
 import 'package:app/views/emptyData.dart';
 import 'package:app/views/notFetchData.dart';
-import 'package:app/views/waitToLoad.dart';
+import 'package:app/views/progressView.dart';
 
 class HomeToHomePage extends StatefulWidget {
 
@@ -67,7 +67,7 @@ class _HomeToHomePageState extends StateBase<HomeToHomePage> {
     return EmptyData();
 
     if(isInFetchData) {
-      return WaitToLoad();
+      return ProgressView();
     }
 
     if(!assistCtr.hasState(state$fetchData)){

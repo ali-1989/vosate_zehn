@@ -11,7 +11,7 @@ import 'package:app/system/session.dart';
 import 'package:app/tools/app/appMessages.dart';
 import 'package:app/views/AppBarCustom.dart';
 import 'package:app/views/notFetchData.dart';
-import 'package:app/views/waitToLoad.dart';
+import 'package:app/views/progressView.dart';
 
 class TermPage extends StatefulWidget {
   static final route = GoRoute(
@@ -65,7 +65,7 @@ class _TermPageState extends StateBase<TermPage> {
 
   Widget buildBody(){
     if(isInFetchData) {
-      return WaitToLoad();
+      return ProgressView();
     }
 
     if(!assistCtr.hasState(state$fetchData)){

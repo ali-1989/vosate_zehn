@@ -7,7 +7,7 @@ import 'package:webviewx/webviewx.dart';
 import 'package:app/models/abstract/stateBase.dart';
 import 'package:app/tools/app/appMessages.dart';
 import 'package:app/views/AppBarCustom.dart';
-import 'package:app/views/waitToLoad.dart';
+import 'package:app/views/progressView.dart';
 
 class ZarinpalPage extends StatefulWidget {
   static final route = GoRoute(
@@ -80,7 +80,7 @@ class _ZarinpalPageState extends StateBase<ZarinpalPage> {
         ),
 
       if(isInPreparing)
-        WaitToLoad(),
+        ProgressView(),
       ],
     );
   }
