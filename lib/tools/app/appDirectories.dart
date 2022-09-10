@@ -17,12 +17,17 @@ class AppDirectories {
   AppDirectories._();
 
   static String _externalStorage = '/';
+  static String _internalStorage = '/';
   static String _documentDir = '/';
   static String _appName = 'app';
 
   static String? getPathForType(SavePathType type){
     if(type == SavePathType.userProfile){
-      return AppDirectories.getAvatarDir$ex();
+      return getAvatarDir$ex();
+    }
+
+    if(type == SavePathType.anyOnInternal){
+      return '${getAppFolderInInternalStorage()}${PathHelper.getSeparator()}myFiles';
     }
 
     return null;
@@ -87,35 +92,40 @@ class AppDirectories {
     return PermissionTools.requestStoragePermission();
   }
   ///-----------------------------------------------------------------------------------------
-  static String prepareStoragePathsWeb(String appName) {
+  static Future<String> prepareStoragePaths(String appName) async {
     _appName = appName;
 
-    _externalStorage = StorageHelper.getWebExternalStorage();
-    _documentDir = PathHelper.resolvePath('$_externalStorage/Documents/$_appName')!;
+    if (kIsWeb) {
+      _externalStorage = StorageHelper.getWebExternalStorage();
+      _internalStorage = _externalStorage;
+      _documentDir = PathHelper.resolvePath('$_externalStorage/Documents/$_appName')!;
 
-    return _externalStorage;
-  }
+    } else {
+      _externalStorage = '/';
 
-  static Future<String> prepareStoragePathsOs(String appName) async {
-    _appName = appName;
-    _externalStorage = '/';
-
-    if(!kIsWeb){
       if (Platform.isAndroid) {
         _externalStorage = (await StorageHelper.getAndroidExternalStorage())!;
-      } else if (Platform.isIOS) {
-        _externalStorage = (await StorageHelper.getIosApplicationSupportDir()).path;
+        _internalStorage = (await StorageHelper.getAndroidFilesDir$internal()).path;
       }
-    }
+      else if (Platform.isIOS) {
+        _externalStorage = (await StorageHelper.getIosApplicationSupportDir()).path;
+        _internalStorage = _externalStorage;
+      }
 
-    final p = await StorageHelper.getDocumentsDirectory$external();
-    _documentDir = p + PathHelper.getSeparator() + _appName;
+      final p = await StorageHelper.getDocumentsDirectory$external();
+      _documentDir = p + PathHelper.getSeparator() + _appName;
+  }
+
 
     return _externalStorage;
   }
 
   static String getExternalStorage() {
     return _externalStorage;
+  }
+
+  static String getInternalAppStorage() {
+    return _internalStorage;
   }
 
   // android: /storage/emulated/0/Documents/appName
@@ -130,6 +140,14 @@ class AppDirectories {
     }
 
     return _externalStorage + PathHelper.getSeparator() + _appName;
+  }
+
+  static String getAppFolderInInternalStorage() {
+    if(System.isWeb()) {
+      return '/$_appName';
+    }
+
+    return _internalStorage;
   }
 
   static Future<String> getDatabasesDir() async {

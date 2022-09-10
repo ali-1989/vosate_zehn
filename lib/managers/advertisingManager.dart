@@ -30,20 +30,21 @@ class AdvertisingManager {
   static void init() async {
     timer ??= Timer(Duration(minutes: 30), _onTimer);
 
-    _fetch();
+    //_fetch();
 
     if(lastRequest == null){
       requestAdvertising();
     }
   }
 
-  static void check(){
+  static void check() async {
+    await Future.delayed(Duration(seconds: 5), (){}); // for avoid call fast after init
     if(lastRequest == null || DateHelper.isPastOf(lastRequest, Duration(minutes: 29))){
       requestAdvertising();
     }
   }
 
-  static void _fetch(){
+  /*static void _fetch(){
     final con = Conditions();
 
     final result = AppDB.db.query(AppDB.tbAdvertising, con);
@@ -51,7 +52,7 @@ class AdvertisingManager {
     for(final k in result){
       AdvertisingManager.addItem(AdvModel.fromMap(k));
     }
-  }
+  }*/
 
   static AdvModel? getById(int? id){
     try {
@@ -67,6 +68,7 @@ class AdvertisingManager {
 
     if(existItem == null) {
       item.mediaModel ??= MediaManager.getById(item.mediaId);
+
       _list.add(item);
       return item;
     }
@@ -131,7 +133,6 @@ class AdvertisingManager {
   static Future requestAdvertising() async {
     final requester = Requester();
 
-
     requester.httpRequestEvents.onAnyState = (req) async {
       requester.dispose();
     };
@@ -146,7 +147,7 @@ class AdvertisingManager {
       AdvertisingManager.addItemsFromMap(advList);
 
       AppBroadcast.newAdvNotifier.value++;
-      sinkAdv();
+      //sinkAdv();
     };
 
     final js = <String, dynamic>{};
@@ -155,5 +156,44 @@ class AdvertisingManager {
     requester.bodyJson = js;
     requester.prepareUrl();
     requester.request(null, false);
+  }
+
+  static bool hasAdv1(){
+    return _list.indexWhere((element) => element.tag == 'avd1') > -1;
+  }
+
+  static AdvModel? getAdv1(){
+    try {
+      return AdvertisingManager.advList.firstWhere((element) => element.tag == 'avd1');
+    }
+    catch (e){
+      return null;
+    }
+  }
+
+  static bool hasAdv2(){
+    return _list.indexWhere((element) => element.tag == 'avd2') > -1;
+  }
+
+  static AdvModel? getAdv2(){
+    try {
+      return AdvertisingManager.advList.firstWhere((element) => element.tag == 'avd2');
+    }
+    catch (e){
+      return null;
+    }
+  }
+
+  static bool hasAdv3(){
+    return _list.indexWhere((element) => element.tag == 'avd3') > -1;
+  }
+
+  static AdvModel? getAdv3(){
+    try {
+      return AdvertisingManager.advList.firstWhere((element) => element.tag == 'avd3');
+    }
+    catch (e){
+      return null;
+    }
   }
 }

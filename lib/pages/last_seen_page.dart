@@ -70,9 +70,8 @@ class _LastSeenPageState extends StateBase<LastSeenPage> {
       return ProgressView();
     }
 
-    return GridView.builder(
+    return ListView.builder(
       itemCount: listItems.length,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisExtent: 220),
       itemBuilder: (ctx, idx){
         return buildListItem(idx);
       },
@@ -82,103 +81,107 @@ class _LastSeenPageState extends StateBase<LastSeenPage> {
   Widget buildListItem(int idx){
     final itm = listItems[idx];
 
-    return InkWell(
-      onTap: (){
-        onItemClick(itm);
-      },
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black26),
-              borderRadius: BorderRadius.circular(10),
-            ),
+    return SizedBox(
+      height: 160,
+      child: InkWell(
+        onTap: (){
+          onItemClick(itm);
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.black26),
+                borderRadius: BorderRadius.circular(10),
+              ),
 
-            child: Column(
-              children: [
-                Stack(
-                  children: [
-                    Builder(
-                      builder: (ctx){
-                        if(itm.imageModel?.url != null){
-                          return Image.network(itm.imageModel!.url!, width: double.infinity, height: 100, fit: BoxFit.contain);
-                        }
-
-                        return Image.asset(AppImages.appIcon, width: double.infinity, height: 100, fit: BoxFit.contain);
-                      },
-                    ),
-
-                    Positioned(
-                        top: 0,
-                        left: 0,
-                        child: Builder(
-                            builder: (context) {
-                              if(itm.type == SubBucketTypes.video.id()){
-                                return Chip(//todo: chip transparent
-                                  backgroundColor: Colors.black.withAlpha(200),
-                                  shadowColor: Colors.transparent,
-                                  visualDensity: VisualDensity.compact,
-                                  elevation: 0,
-                                  label: Icon(AppIcons.videoCamera, size: 15, color: Colors.white),
-                                );
-                              }
-
-                              if(itm.type == SubBucketTypes.audio.id()){
-                                return Chip(
-                                  backgroundColor: Colors.black.withAlpha(200),
-                                  shadowColor: Colors.transparent,
-                                  visualDensity: VisualDensity.compact,
-                                  elevation: 0,
-                                  label: Icon(AppIcons.headset, size: 15, color: Colors.white),
-                                );
-                              }
-
-                              return SizedBox();
+              child: Row(
+                children: [
+                  Flexible(
+                    child: Stack(
+                      children: [
+                        Builder(
+                          builder: (ctx){
+                            if(itm.imageModel?.url != null){
+                              return Image.network(itm.imageModel!.url!, width: double.infinity, height: 100, fit: BoxFit.contain);
                             }
-                        )
-                    ),
-                  ],
-                ),
 
-                SizedBox(height: 12),
-
-                Text(itm.title, maxLines: 1).bold().fsR(1),
-
-                SizedBox(height: 12,),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 7.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Builder(
-                        builder: (ctx){
-                          if(itm.duration > 0){
-                            final dur = Duration(milliseconds: itm.duration);
-                            return Text('${DurationFormatter.duration(dur, showSuffix: false)} ثانیه').alpha().subFont();
-                          }
-
-                          return SizedBox();
-                        },
-                      ),
-
-                      IconButton(
-                          constraints: BoxConstraints.tightFor(),
-                          padding: EdgeInsets.all(4),
-                          splashRadius: 20,
-                          visualDensity: VisualDensity.compact,
-                          iconSize: 20,
-                          onPressed: (){
-                            deleteFavorite(itm);
+                            return Image.asset(AppImages.appIcon, width: double.infinity, height: 100, fit: BoxFit.contain);
                           },
-                          icon: Icon(AppIcons.delete, size: 20, color: Colors.red,)
-                      )
-                    ],
+                        ),
+
+                        Positioned(
+                            top: 0,
+                            right: 0,
+                            child: Builder(
+                                builder: (context) {
+                                  if(itm.type == SubBucketTypes.video.id()){
+                                    return Chip(//todo: chip transparent
+                                      backgroundColor: Colors.black.withAlpha(200),
+                                      shadowColor: Colors.transparent,
+                                      visualDensity: VisualDensity.compact,
+                                      elevation: 0,
+                                      label: Icon(AppIcons.videoCamera, size: 15, color: Colors.white),
+                                    );
+                                  }
+
+                                  if(itm.type == SubBucketTypes.audio.id()){
+                                    return Chip(
+                                      backgroundColor: Colors.black.withAlpha(200),
+                                      shadowColor: Colors.transparent,
+                                      visualDensity: VisualDensity.compact,
+                                      elevation: 0,
+                                      label: Icon(AppIcons.headset, size: 15, color: Colors.white),
+                                    );
+                                  }
+
+                                  return SizedBox();
+                                }
+                            )
+                        ),
+                      ],
+                    ),
                   ),
-                )
-              ],
+
+                  SizedBox(width: 12),
+
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical:8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(itm.title, maxLines: 1).bold().fsR(1),
+
+                          SizedBox(height: 25,),
+
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 7.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Builder(
+                                  builder: (ctx){
+                                    if(itm.duration > 0){
+                                      final dur = Duration(milliseconds: itm.duration);
+                                      return Text('${DurationFormatter.duration(dur, showSuffix: false)} ثانیه').alpha().subFont();
+                                    }
+
+                                    return SizedBox();
+                                  },
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  )
+
+                ],
+              ),
             ),
           ),
         ),

@@ -170,7 +170,7 @@ class _SentencesPageState extends StateBase<SentencesPage> {
       if(AppDB.fetchKv(Keys.setting$textOfDayGetPreMonth) == null){
         var now = GregorianDate();
         now.changeTime(0, 0, 0, 0);
-        final pre = now.addMonth(1);
+        final pre = now.addMonth(-1);
 
         AppDB.setReplaceKv(Keys.setting$textOfDayGetPreMonth, true);
         requestData(pre.getFirstOfMonth().convertToSystemDate());

@@ -1,9 +1,11 @@
 import 'package:app/services/lastSeenService.dart';
+import 'package:app/tools/app/appDirectories.dart';
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
 import 'package:iris_tools/api/duration/durationFormater.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
+import 'package:iris_tools/widgets/irisImageView.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:app/managers/mediaManager.dart';
@@ -159,7 +161,13 @@ class _SubBucketPageState extends StateBase<SubBucketPage> {
                     Builder(
                       builder: (ctx){
                         if(itm.imageModel?.url != null){
-                          return Image.network(itm.imageModel!.url!, width: double.infinity, height: 100, fit: BoxFit.contain);
+                          return IrisImageView(
+                            width: double.infinity,
+                            height: 100,
+                            fit: BoxFit.contain,
+                            url: itm.imageModel!.url!,
+                            imagePath: AppDirectories.getSavePathMedia(itm.imageModel, SavePathType.anyOnInternal, null),
+                          );
                         }
 
                         return Image.asset(AppImages.appIcon, width: double.infinity, height: 100, fit: BoxFit.contain);

@@ -23,8 +23,6 @@ class AppParameterManager {
     };
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
-      print('@@@@@@@@@@@@@@@@@@@@');
-      print(data);
       parameterModel = AppParameterModel.fromMap(data);
 
       res.complete(parameterModel);

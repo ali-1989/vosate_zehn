@@ -1,5 +1,4 @@
 import 'package:app/managers/advertisingManager.dart';
-import 'package:app/managers/appParameterManager.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -39,11 +38,7 @@ class InitialApplication {
   static bool isLaunchOk = false;
 
   static Future<bool> importantInit() async {
-    if (kIsWeb) {
-      AppDirectories.prepareStoragePathsWeb(Constants.appName);
-    } else {
-      await AppDirectories.prepareStoragePathsOs(Constants.appName);
-    }
+    AppDirectories.prepareStoragePaths(Constants.appName);
 
     if (!kIsWeb) {
       PublicAccess.reporter = Reporter(AppDirectories.getAppFolderInExternalStorage(), 'report');
@@ -116,7 +111,6 @@ class InitialApplication {
     Session.addLogoffListener(UserLoginTools.onLogoff);
     Session.addProfileChangeListener(UserLoginTools.onProfileChange);
 
-    AppParameterManager.requestParameters();
     AdvertisingManager.init();
   }
 }

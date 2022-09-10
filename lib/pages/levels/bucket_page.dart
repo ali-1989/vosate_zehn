@@ -1,6 +1,8 @@
+import 'package:app/tools/app/appDirectories.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/modules/stateManagers/assist.dart';
+import 'package:iris_tools/widgets/irisImageView.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:app/managers/mediaManager.dart';
@@ -130,7 +132,14 @@ class _BucketPageState extends StateBase<BucketPage> {
               Builder(
                 builder: (ctx){
                   if(itm.imageModel?.url != null){
-                    return Image.network(itm.imageModel!.url!, width: 100, height: 100, fit: BoxFit.contain);
+                    //return Image.network(itm.imageModel!.url!, width: 100, height: 100, fit: BoxFit.contain);
+                    return IrisImageView(
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.contain,
+                      url: itm.imageModel!.url!,
+                      imagePath: AppDirectories.getSavePathMedia(itm.imageModel, SavePathType.anyOnInternal, null),
+                    );
                   }
 
                   return Image.asset(AppImages.appIcon, width: 100, height: 100, fit: BoxFit.contain);
@@ -197,7 +206,7 @@ class _BucketPageState extends StateBase<BucketPage> {
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
       isInFetchData = false;
-print(data);
+
       final List bList = data['bucket_list']?? [];
       final List mList = data['media_list']?? [];
       //final List count = data['all_count'];

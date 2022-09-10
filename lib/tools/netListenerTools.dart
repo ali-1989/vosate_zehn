@@ -32,7 +32,7 @@ class NetListenerTools {
     _wsConnectListeners.remove(fn);
   }
 
-  // this call if (wifi/cell data) is connected(is on), else not call
+  /// this fn call on app launch: if (wifi/cell data) is on.
   static void onNetListener(ConnectivityResult connectivityResult) async {
 
     if(connectivityResult != ConnectivityResult.none) {
