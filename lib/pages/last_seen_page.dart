@@ -1,4 +1,5 @@
 import 'package:app/services/lastSeenService.dart';
+import 'package:app/tools/app/appDirectories.dart';
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
@@ -20,6 +21,7 @@ import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/app/appToast.dart';
 import 'package:app/views/AppBarCustom.dart';
 import 'package:app/views/progressView.dart';
+import 'package:iris_tools/widgets/irisImageView.dart';
 
 class LastSeenPage extends StatefulWidget {
   static final route = GoRoute(
@@ -105,7 +107,13 @@ class _LastSeenPageState extends StateBase<LastSeenPage> {
                         Builder(
                           builder: (ctx){
                             if(itm.imageModel?.url != null){
-                              return Image.network(itm.imageModel!.url!, width: double.infinity, height: 100, fit: BoxFit.contain);
+                              return IrisImageView(
+                                width: double.infinity,
+                                height: 100,
+                                fit: BoxFit.contain,
+                                url: itm.imageModel!.url!,
+                                imagePath: AppDirectories.getSavePathMedia(itm.imageModel, SavePathType.anyOnInternal, null),
+                              );
                             }
 
                             return Image.asset(AppImages.appIcon, width: double.infinity, height: 100, fit: BoxFit.contain);

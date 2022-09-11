@@ -22,7 +22,7 @@ class HomePage extends StatefulWidget {
   static final route = GoRoute(
     path: '/',
     name: (HomePage).toString().toLowerCase(),
-    builder: (BuildContext context, GoRouterState state) => HomePage(key: AppBroadcast.homeScreenKey,),
+    builder: (BuildContext context, GoRouterState state) => HomePage(key: AppBroadcast.homeScreenKey),
   );
 
   const HomePage({super.key});
@@ -32,7 +32,7 @@ class HomePage extends StatefulWidget {
 }
 ///=================================================================================================
 class HomePageState extends StateBase<HomePage> {
-  late GlobalKey<ScaffoldState> scaffoldState;
+  GlobalKey<ScaffoldState> scaffoldState = GlobalKey<ScaffoldState>();
   int selectedPage = 0;
   late PageController pageController;
 
@@ -41,7 +41,6 @@ class HomePageState extends StateBase<HomePage> {
   initState(){
     super.initState();
 
-    scaffoldState = GlobalKey<ScaffoldState>();
     pageController = PageController();
   }
 
@@ -140,7 +139,14 @@ class HomePageState extends StateBase<HomePage> {
     );
   }
 
-  static void gotoAidPage(){
+  void gotoPage(idx){
+    selectedPage = idx;
+    pageController.jumpToPage(idx);
+
+    //setState(() {});
+  }
+
+  void gotoAidPage(){
     AidService.gotoAidPage();
   }
 }

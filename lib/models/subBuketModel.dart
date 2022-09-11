@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
 import 'package:iris_tools/models/dataModels/mediaModel.dart';
 
-import 'package:app/models/contentModel.dart';
 import 'package:app/models/mixin/dateFieldMixin.dart';
 import 'package:app/system/enums.dart';
 import 'package:app/system/keys.dart';
@@ -25,7 +24,6 @@ class SubBucketModel with DateFieldMixin {
   bool isFavorite = false;
   MediaModel? imageModel;
   MediaModel? mediaModel;
-  ContentModel? contentModel;
 
   SubBucketModel();
 

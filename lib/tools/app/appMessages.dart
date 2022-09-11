@@ -342,6 +342,10 @@ class AppMessages {
     return 'لطفا متن خود را بنویسید';
   }
 
+  static String get pleaseKeepOrder {
+    return 'لطفا ترتیب موارد را رعایت کنید';
+  }
+
   static String get isAddToFavorite {
     return 'به منتخب ها اضافه شد';
   }

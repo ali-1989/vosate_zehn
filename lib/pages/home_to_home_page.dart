@@ -214,7 +214,7 @@ class _HomeToHomePageState extends StateBase<HomeToHomePage> {
                   child: Text('مدیتیشن').bold(),
                 ),
                 TextButton(
-                  onPressed: (){},
+                  onPressed: moreMeditation,
                   child: Text('بیشتر'),
                 ),
               ],
@@ -256,7 +256,7 @@ class _HomeToHomePageState extends StateBase<HomeToHomePage> {
                   child: Text('ویدئو').bold(),
                 ),
                 TextButton(
-                  onPressed: (){},
+                  onPressed: moreVideo,
                   child: Text('بیشتر'),
                 ),
               ],
@@ -399,6 +399,14 @@ class _HomeToHomePageState extends StateBase<HomeToHomePage> {
 
   void onNewAdv(){
     assistCtr.updateMain();
+  }
+
+  void moreMeditation(){
+    AppBroadcast.homeScreenKey.currentState?.gotoPage(1);
+  }
+
+  void moreVideo(){
+    AppBroadcast.homeScreenKey.currentState?.gotoPage(4);
   }
 
   void tryLoadClick() async {

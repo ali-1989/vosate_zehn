@@ -1,3 +1,6 @@
+import 'package:app/tools/app/appDirectories.dart';
+import 'package:app/tools/app/appMessages.dart';
+import 'package:app/tools/app/appToast.dart';
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
@@ -23,6 +26,7 @@ import 'package:app/tools/app/appThemes.dart';
 import 'package:app/views/AppBarCustom.dart';
 import 'package:app/views/notFetchData.dart';
 import 'package:app/views/progressView.dart';
+import 'package:iris_tools/widgets/irisImageView.dart';
 
 class ContentViewPageInjectData {
   late SubBucketModel subBucket;
@@ -94,7 +98,13 @@ class _LevelPageState extends StateBase<ContentViewPage> {
               child: Builder(
                 builder: (ctx){
                   if(widget.injectData.subBucket.imageModel?.url != null){
-                    return Image.network(widget.injectData.subBucket.imageModel!.url!, width: double.infinity, height: 160, fit: BoxFit.contain);
+                    return IrisImageView(
+                      width: double.infinity,
+                      height: 160,
+                      fit: BoxFit.contain,
+                      url: widget.injectData.subBucket.imageModel!.url!,
+                      imagePath: AppDirectories.getSavePathMedia(widget.injectData.subBucket.imageModel, SavePathType.anyOnInternal, null),
+                    );
                   }
 
                   return Image.asset(AppImages.appIcon, width: double.infinity, height: 100, fit: BoxFit.contain);
@@ -132,8 +142,13 @@ class _LevelPageState extends StateBase<ContentViewPage> {
                             label: Text(contentModel!.speakerModel?.name?? ''),
                           avatar: contentModel!.speakerModel?.profileModel != null?
                           ClipOval(
-                              child: Image.network(contentModel!.speakerModel!.profileModel!.url!,
-                                width: 60, height: 60, fit: BoxFit.fill,)
+                              child: IrisImageView(
+                                width: 60,
+                                height: 60,
+                                fit: BoxFit.fill,
+                                url: contentModel!.speakerModel!.profileModel!.url!,
+                                imagePath: AppDirectories.getSavePathMedia(contentModel!.speakerModel!.profileModel, SavePathType.anyOnInternal, null),
+                              )
                           )
                           : null,
                         ),
@@ -198,6 +213,21 @@ class _LevelPageState extends StateBase<ContentViewPage> {
   }
 
   void onItemClick(MediaModelWrapForContent media) {
+    if(!media.isSee){
+      //final contentModel = widget.injectData.subBucket.contentModel;
+      final curIdx = contentModel!.mediaIds.indexWhere((element) => element == media.id);
+
+      if(curIdx > 0){
+        final preModelId = contentModel!.mediaIds.elementAt(curIdx-1);
+        final preModel = mediaList.firstWhere((itm) => itm.id == preModelId);
+
+        if(!preModel.isSee){
+          AppToast.showToast(context, AppMessages.pleaseKeepOrder);
+          return;
+        }
+      }
+    }
+
     SubBucketTypes? type;
 
     if(widget.injectData.subBucket.contentType > 0){
@@ -225,6 +255,7 @@ class _LevelPageState extends StateBase<ContentViewPage> {
       inject.videoSourceType = VideoSourceType.network;
 
       AppRoute.pushNamed(context, VideoPlayerPage.route.name!, extra: inject);
+      requestRegisterSeenContent(media);
     }
     else if(type == SubBucketTypes.audio){
       final inject = AudioPlayerPageInjectData();
@@ -233,6 +264,7 @@ class _LevelPageState extends StateBase<ContentViewPage> {
       inject.title = media.title;
 
       AppRoute.pushNamed(context, AudioPlayerPage.route.name!, extra: inject);
+      requestRegisterSeenContent(media);
     }
   }
 
@@ -254,6 +286,7 @@ class _LevelPageState extends StateBase<ContentViewPage> {
 
       final content = data['content'];
       final List mList = data['media_list']?? [];
+      final List seenList = data['seen_list']?? [];
       final speaker = data['speaker'];
 
       MediaManager.addItemsFromMap(mList);
@@ -270,6 +303,11 @@ class _LevelPageState extends StateBase<ContentViewPage> {
 
         if(m!= null) {
           final mw = MediaModelWrapForContent.fromMap(m.toMap());
+
+          if(seenList.contains(mw.id)){
+            mw.isSee = true;
+          }
+
           mediaList.add(mw);
         }
       }
@@ -279,6 +317,23 @@ class _LevelPageState extends StateBase<ContentViewPage> {
 
     requester.prepareUrl();
     requester.request(context);
+  }
+
+  void requestRegisterSeenContent(MediaModelWrapForContent media) async {
+    final js = <String, dynamic>{};
+    js[Keys.requestZone] = 'set_content_seen';
+    js[Keys.requesterId] = Session.getLastLoginUser()?.userId;
+    js[Keys.id] = widget.injectData.subBucket.id;
+    js['content_id'] = contentModel!.id;
+    js['media_id'] = media.id;
+
+    requester.httpRequestEvents.onStatusOk = (req, data) async {
+      media.isSee = true;
+    };
+
+    requester.bodyJson = js;
+    requester.prepareUrl();
+    requester.request(context, false);
   }
 
 }
