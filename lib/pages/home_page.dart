@@ -35,6 +35,7 @@ class HomePageState extends StateBase<HomePage> {
   GlobalKey<ScaffoldState> scaffoldState = GlobalKey<ScaffoldState>();
   int selectedPage = 0;
   late PageController pageController;
+  ValueKey<int> bottomBarKey = ValueKey<int>(1);
 
 
   @override
@@ -114,6 +115,7 @@ class HomePageState extends StateBase<HomePage> {
 
   Widget buildNavBar(){
     return ShapedBottomBar(
+      key: bottomBarKey,
         backgroundColor: AppThemes.instance.currentTheme.primaryColor,
         iconsColor: Colors.black,
         bottomBarTopColor: Colors.transparent,
@@ -143,7 +145,8 @@ class HomePageState extends StateBase<HomePage> {
     selectedPage = idx;
     pageController.jumpToPage(idx);
 
-    //setState(() {});
+    bottomBarKey = ValueKey(bottomBarKey.value +1);
+    setState(() {});
   }
 
   void gotoAidPage(){
