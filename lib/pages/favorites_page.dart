@@ -1,4 +1,5 @@
 import 'package:app/tools/app/appDirectories.dart';
+import 'package:app/tools/app/appThemes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
@@ -73,7 +74,7 @@ class _FavoritesPageState extends StateBase<FavoritesPage> {
 
     return GridView.builder(
       itemCount: listItems.length,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisExtent: 220),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisExtent: 200),
       itemBuilder: (ctx, idx){
         return buildListItem(idx);
       },
@@ -107,7 +108,7 @@ class _FavoritesPageState extends StateBase<FavoritesPage> {
                           return IrisImageView(
                             width: double.infinity,
                             height: 100,
-                            fit: BoxFit.contain,
+                            fit: BoxFit.fill,
                             url: itm.imageModel!.url!,
                             imagePath: AppDirectories.getSavePathMedia(itm.imageModel, SavePathType.anyOnInternal, null),
                           );
@@ -123,12 +124,15 @@ class _FavoritesPageState extends StateBase<FavoritesPage> {
                         child: Builder(
                             builder: (context) {
                               if(itm.type == SubBucketTypes.video.id()){
-                                return Chip(//todo: chip transparent
-                                  backgroundColor: Colors.black.withAlpha(200),
-                                  shadowColor: Colors.transparent,
-                                  visualDensity: VisualDensity.compact,
-                                  elevation: 0,
-                                  label: Icon(AppIcons.videoCamera, size: 15, color: Colors.white),
+                                return Theme(
+                                  data: AppThemes.instance.themeData.copyWith(canvasColor: Colors.transparent),
+                                  child: Chip(
+                                    backgroundColor: Colors.grey.withAlpha(160),
+                                    shadowColor: Colors.transparent,
+                                    visualDensity: VisualDensity.compact,
+                                    elevation: 0,
+                                    label: Icon(AppIcons.videoCamera, size: 15, color: Colors.white),
+                                  ),
                                 );
                               }
 
@@ -151,9 +155,12 @@ class _FavoritesPageState extends StateBase<FavoritesPage> {
 
                 SizedBox(height: 12),
 
-                Text(itm.title, maxLines: 1).bold().fsR(1),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Text(itm.title, maxLines: 1).bold().fsR(1),
+                ),
 
-                SizedBox(height: 12,),
+                SizedBox(height: 8),
 
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 7.0),

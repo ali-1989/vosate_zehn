@@ -1,3 +1,4 @@
+import 'package:app/managers/mediaManager.dart';
 import 'package:iris_db/iris_db.dart';
 
 import 'package:app/models/subBuketModel.dart';
@@ -76,7 +77,11 @@ class LastSeenService {
     List<SubBucketModel> res = [];
 
     for(final i in rawList){
-      res.add(SubBucketModel.fromMap(i[Keys.value]));
+      final itm = SubBucketModel.fromMap(i[Keys.value]);
+      itm.imageModel = MediaManager.getById(itm.coverId);
+      itm.mediaModel = MediaManager.getById(itm.mediaId);
+
+      res.add(itm);
     }
 
     return res;

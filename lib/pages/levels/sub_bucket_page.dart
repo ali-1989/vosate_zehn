@@ -1,5 +1,6 @@
 import 'package:app/services/lastSeenService.dart';
 import 'package:app/tools/app/appDirectories.dart';
+import 'package:app/tools/app/appThemes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
@@ -164,7 +165,7 @@ class _SubBucketPageState extends StateBase<SubBucketPage> {
                           return IrisImageView(
                             width: double.infinity,
                             height: 100,
-                            fit: BoxFit.contain,
+                            fit: BoxFit.fill,
                             url: itm.imageModel!.url!,
                             imagePath: AppDirectories.getSavePathMedia(itm.imageModel, SavePathType.anyOnInternal, null),
                           );
@@ -180,12 +181,15 @@ class _SubBucketPageState extends StateBase<SubBucketPage> {
                         child: Builder(
                             builder: (context) {
                               if(itm.type == SubBucketTypes.video.id()){
-                                return Chip(//todo: chip transparent
-                                  backgroundColor: Colors.black.withAlpha(200),
-                                  shadowColor: Colors.transparent,
-                                  visualDensity: VisualDensity.compact,
-                                  elevation: 0,
-                                  label: Icon(AppIcons.videoCamera, size: 15, color: Colors.white),
+                                return Theme(
+                                  data: AppThemes.instance.themeData.copyWith(canvasColor: Colors.transparent),
+                                  child: Chip(
+                                    backgroundColor: Colors.grey.withAlpha(160),
+                                    shadowColor: Colors.transparent,
+                                    visualDensity: VisualDensity.compact,
+                                    elevation: 0,
+                                    label: Icon(AppIcons.videoCamera, size: 15, color: Colors.white),
+                                  ),
                                 );
                               }
 
@@ -355,6 +359,7 @@ class _SubBucketPageState extends StateBase<SubBucketPage> {
       }
 
       MediaManager.addItemsFromMap(mList);
+      MediaManager.sinkItems(MediaManager.mediaList);
 
       for(final m in bList){
         final itm = SubBucketModel.fromMap(m);

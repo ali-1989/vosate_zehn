@@ -56,11 +56,13 @@ class _LevelPageState extends StateBase<ContentViewPage> {
   String state$fetchData = 'state_fetchData';
   ContentModel? contentModel;
   List<MediaModelWrapForContent> mediaList = [];
+  late ThemeData chipTheme;
 
   @override
   void initState(){
     super.initState();
 
+    chipTheme = AppThemes.instance.themeData.copyWith(canvasColor: Colors.transparent);
     requestData();
   }
 
@@ -101,7 +103,7 @@ class _LevelPageState extends StateBase<ContentViewPage> {
                     return IrisImageView(
                       width: double.infinity,
                       height: 160,
-                      fit: BoxFit.contain,
+                      fit: BoxFit.fill,
                       url: widget.injectData.subBucket.imageModel!.url!,
                       imagePath: AppDirectories.getSavePathMedia(widget.injectData.subBucket.imageModel, SavePathType.anyOnInternal, null),
                     );
@@ -159,12 +161,20 @@ class _LevelPageState extends StateBase<ContentViewPage> {
 
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Wrap(
-                          textDirection: TextDirection.ltr,
-                          spacing: 8,
-                          runSpacing: 4,
-                          children: buildWrapItems(),
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                        child: SingleChildScrollView(
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: Wrap(
+                              textDirection: TextDirection.rtl,
+                              alignment: WrapAlignment.start,
+                              runAlignment: WrapAlignment.start,
+                              crossAxisAlignment: WrapCrossAlignment.start,
+                              spacing: 8,
+                              runSpacing: 4,
+                              children: buildWrapItems(),
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -187,9 +197,74 @@ class _LevelPageState extends StateBase<ContentViewPage> {
         onTap: (){
           onItemClick(itm);
         },
+        child: Theme(
+          data: chipTheme,
+          child: Chip(
+            backgroundColor: itm.isSee?
+            AppThemes.instance.currentTheme.successColor
+                : AppThemes.instance.currentTheme.successColor.withAlpha(140),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            label: SizedBox(
+                height: 40,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ConstrainedBox(
+                      constraints: BoxConstraints.tightFor(width: 20),
+                        child: Center(child: Text('$i').color(Colors.white))
+                    ),
+
+                    Builder(
+                      builder: (ctx){
+                        if(itm.title == null){
+                          return SizedBox();
+                        }
+
+                        return Row(
+                          children: [
+                            //SizedBox(width: 8),
+
+                            SizedBox(
+                              width: 2, height: 16,
+                              child: ColoredBox(
+                                  color: Colors.white
+                              ),
+                            ),
+
+                            SizedBox(width: 8),
+                            Text('${itm.title}').color(Colors.white),
+                          ],
+                        );
+                      },
+                    ),
+                  ],
+                )
+            ),
+          ),
+        ),
+      );
+
+      res.add(w);
+    }
+
+    return res;
+  }
+
+  List<Widget> buildWrapItemsOld(){
+    final List<Widget> res = [];
+
+    for(var i = 1; i <= mediaList.length; i++){
+      final itm = mediaList[i-1];
+
+      final w = GestureDetector(
+        onTap: (){
+          onItemClick(itm);
+        },
         child: ClipOval(
           child: ColoredBox(
-            color: AppThemes.instance.currentTheme.successColor,
+            color: itm.isSee?
+            AppThemes.instance.currentTheme.successColor
+                : AppThemes.instance.currentTheme.successColor.withAlpha(160),
             child: SizedBox(width: 50, height: 50,
                 child: Center(
                     child: Text('$i').color(Colors.white)

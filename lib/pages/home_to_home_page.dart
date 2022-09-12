@@ -12,7 +12,9 @@ import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/app/appIcons.dart';
 import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appMessages.dart';
+import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/app/appToast.dart';
+import 'package:app/views/keepAliveWrap.dart';
 import 'package:flutter/material.dart';
 import 'package:iris_tools/api/duration/durationFormater.dart';
 
@@ -45,6 +47,7 @@ class _HomeToHomePageState extends StateBase<HomeToHomePage> {
   Requester requester = Requester();
   bool isInFetchData = true;
   String state$fetchData = 'state_fetchData';
+  late ThemeData chipTheme;
   List<SubBucketModel> newItems = [];
   List<SubBucketModel> meditationItems = [];
   List<SubBucketModel> videoItems = [];
@@ -57,6 +60,7 @@ class _HomeToHomePageState extends StateBase<HomeToHomePage> {
 
     searchFilter.limit = 20;
     searchFilter.ascOrder = true;
+    chipTheme = AppThemes.instance.themeData.copyWith(canvasColor: Colors.transparent);
     AppBroadcast.newAdvNotifier.addListener(onNewAdv);
     requestData();
   }
@@ -95,49 +99,56 @@ class _HomeToHomePageState extends StateBase<HomeToHomePage> {
     }
 
     return ListView(
+      addAutomaticKeepAlives: true,
      children: [
         buildAdv1(),
         buildNews(),
         buildAdv2(),
-       buildMeditation(),
-       buildVideo(),
+        buildMeditation(),
+        buildVideo(),
         buildAdv3(),
      ],
     );
   }
 
   Widget buildAdv1(){
-    return Builder(
-      builder: (ctx){
-        final adv = AdvertisingManager.getAdv1();
+    return KeepAliveWrap(
+      child: Builder(
+        builder: (ctx){
+          final adv = AdvertisingManager.getAdv1();
 
-        if(adv == null || adv.mediaModel == null){
-          return SizedBox();
-        }
+          if(adv == null || adv.mediaModel == null){
+            return SizedBox();
+          }
 
-        return IrisImageView(
-          height: 170,
-          url: adv.mediaModel!.url,
-          imagePath: AppDirectories.getSavePathMedia(adv.mediaModel, SavePathType.anyOnInternal, null),
-        );
-      },
+          return IrisImageView(
+            height: 170,
+            url: adv.mediaModel!.url,
+            fit: BoxFit.fill,
+            imagePath: AppDirectories.getSavePathMedia(adv.mediaModel, SavePathType.anyOnInternal, null),
+          );
+        },
+      ),
     );
   }
 
   Widget buildAdv2(){
-    return Builder(
-      builder: (ctx){
-        final adv = AdvertisingManager.getAdv2();
+    return KeepAliveWrap(
+      child: Builder(
+        builder: (ctx){
+          final adv = AdvertisingManager.getAdv2();
 
-        if(adv == null || adv.mediaModel == null){
-          return SizedBox();
-        }
-        return IrisImageView(
-          height: 170,
-          url: adv.mediaModel!.url,
-          imagePath: AppDirectories.getSavePathMedia(adv.mediaModel, SavePathType.anyOnInternal, null),
-        );
-      },
+          if(adv == null || adv.mediaModel == null){
+            return SizedBox();
+          }
+          return IrisImageView(
+            height: 170,
+            url: adv.mediaModel!.url,
+            fit: BoxFit.fill,
+            imagePath: AppDirectories.getSavePathMedia(adv.mediaModel, SavePathType.anyOnInternal, null),
+          );
+        },
+      ),
     );
   }
 
@@ -152,6 +163,7 @@ class _HomeToHomePageState extends StateBase<HomeToHomePage> {
         return IrisImageView(
           height: 170,
           url: adv.mediaModel!.url,
+          fit: BoxFit.fill,
           imagePath: AppDirectories.getSavePathMedia(adv.mediaModel, SavePathType.anyOnInternal, null),
         );
       },
@@ -167,21 +179,27 @@ class _HomeToHomePageState extends StateBase<HomeToHomePage> {
 
         return Column(
           children: [
+            SizedBox(height: 10),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal:10.0),
-                  child: Text('جدیدترین ها').bold(),
+                  child: Chip(
+                    backgroundColor: AppThemes.instance.currentTheme.differentColor,
+                      label: Text('جدیدترین ها').bold().boldFont().color(Colors.white)
+                  ),
                 ),
               ],
             ),
 
             SizedBox(
-              height: 200,
+              height: 172,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                   itemCount: newItems.length,
+                  addAutomaticKeepAlives: true,
                   itemBuilder: (ctx, idx){
                     final itm = newItems[idx];
 
@@ -211,20 +229,24 @@ class _HomeToHomePageState extends StateBase<HomeToHomePage> {
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal:10.0),
-                  child: Text('مدیتیشن').bold(),
+                  child: Chip(
+                      backgroundColor: AppThemes.instance.currentTheme.differentColor,
+                      label: Text('مدیتیشن').bold().boldFont().color(Colors.white)
+                  ),
                 ),
                 TextButton(
                   onPressed: moreMeditation,
-                  child: Text('بیشتر'),
+                  child: Text('بیشتر').fsR(1).color(Colors.lightBlue),
                 ),
               ],
             ),
 
             SizedBox(
-              height: 200,
+              height: 172,
               child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: meditationItems.length,
+                  addAutomaticKeepAlives: true,
                   itemBuilder: (ctx, idx){
                     final itm = meditationItems[idx];
 
@@ -253,20 +275,24 @@ class _HomeToHomePageState extends StateBase<HomeToHomePage> {
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal:10.0),
-                  child: Text('ویدئو').bold(),
+                  child: Chip(
+                      backgroundColor: AppThemes.instance.currentTheme.differentColor,
+                      label: Text('ویدئو').bold().boldFont().color(Colors.white)
+                  ),
                 ),
                 TextButton(
                   onPressed: moreVideo,
-                  child: Text('بیشتر'),
+                  child: Text('بیشتر').fsR(1).color(Colors.lightBlue),
                 ),
               ],
             ),
 
             SizedBox(
-              height: 200,
+              height: 172,
               child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: videoItems.length,
+                  addAutomaticKeepAlives: true,
                   itemBuilder: (ctx, idx){
                     final itm = videoItems[idx];
 
@@ -281,114 +307,122 @@ class _HomeToHomePageState extends StateBase<HomeToHomePage> {
   }
 
   Widget buildListItem(SubBucketModel itm){
-    return SizedBox(
-      width: 160,
-      child: InkWell(
-        onTap: (){
-          onItemClick(itm);
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.black26),
-                borderRadius: BorderRadius.circular(10),
-              ),
+    return KeepAliveWrap(
+      child: SizedBox(
+        width: 160,
+        child: InkWell(
+          onTap: (){
+            onItemClick(itm);
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black26),
+                  borderRadius: BorderRadius.circular(10),
+                ),
 
-              child: Column(
-                children: [
-                  Stack(
-                    children: [
-                      Builder(
-                        builder: (ctx){
-                          if(itm.imageModel?.url != null){
-                            return IrisImageView(
-                              width: double.infinity,
-                              height: 100,
-                              fit: BoxFit.contain,
-                              url: itm.imageModel!.url!,
-                              imagePath: AppDirectories.getSavePathMedia(itm.imageModel, SavePathType.anyOnInternal, null),
-                            );
-                          }
-
-                          return Image.asset(AppImages.appIcon, width: double.infinity, height: 100, fit: BoxFit.contain);
-                        },
-                      ),
-
-                      Positioned(
-                          top: 0,
-                          left: 0,
-                          child: Builder(
-                              builder: (context) {
-                                if(itm.type == SubBucketTypes.video.id()){
-                                  return Chip(//todo: chip transparent
-                                    backgroundColor: Colors.black.withAlpha(200),
-                                    shadowColor: Colors.transparent,
-                                    visualDensity: VisualDensity.compact,
-                                    elevation: 0,
-                                    label: Icon(AppIcons.videoCamera, size: 15, color: Colors.white),
-                                  );
-                                }
-
-                                if(itm.type == SubBucketTypes.audio.id()){
-                                  return Chip(
-                                    backgroundColor: Colors.black.withAlpha(200),
-                                    shadowColor: Colors.transparent,
-                                    visualDensity: VisualDensity.compact,
-                                    elevation: 0,
-                                    label: Icon(AppIcons.headset, size: 15, color: Colors.white),
-                                  );
-                                }
-
-                                return SizedBox();
-                              }
-                          )
-                      ),
-                    ],
-                  ),
-
-                  SizedBox(height: 12),
-
-                  Text(itm.title, maxLines: 1).bold().fsR(1),
-
-                  SizedBox(height: 12,),
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 7.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Column(
+                  children: [
+                    Stack(
                       children: [
                         Builder(
                           builder: (ctx){
-                            if(itm.duration > 0){
-                              final dur = Duration(milliseconds: itm.duration);
-                              return Text('${DurationFormatter.duration(dur, showSuffix: false)} ثانیه').alpha().subFont();
+                            if(itm.imageModel?.url != null){
+                              return IrisImageView(
+                                width: double.infinity,
+                                height: 100,
+                                fit: BoxFit.fill,
+                                url: itm.imageModel!.url!,
+                                imagePath: AppDirectories.getSavePathMedia(itm.imageModel, SavePathType.anyOnInternal, null),
+                              );
                             }
 
-                            return SizedBox();
+                            return Image.asset(AppImages.appIcon, width: double.infinity, height: 100, fit: BoxFit.contain);
                           },
                         ),
 
-                        IconButton(
-                            constraints: BoxConstraints.tightFor(),
-                            padding: EdgeInsets.all(4),
-                            splashRadius: 20,
-                            visualDensity: VisualDensity.compact,
-                            iconSize: 20,
-                            onPressed: (){
-                              setFavorite(itm);
-                            },
-                            icon: Icon(itm.isFavorite ? AppIcons.heartSolid: AppIcons.heart,
-                              size: 20,
-                              color: itm.isFavorite ? Colors.red: Colors.black,
+                        Positioned(
+                            top: 0,
+                            left: 0,
+                            child: Builder(
+                                builder: (context) {
+                                  if(itm.type == SubBucketTypes.video.id()){
+                                    return Theme(
+                                      data: chipTheme,
+                                      child: Chip(
+                                        backgroundColor: Colors.grey.withAlpha(160),
+                                        shadowColor: Colors.transparent,
+                                        visualDensity: VisualDensity.compact,
+                                        elevation: 0,
+                                        label: Icon(AppIcons.videoCamera, size: 15, color: Colors.white),
+                                      ),
+                                    );
+                                  }
+
+                                  if(itm.type == SubBucketTypes.audio.id()){
+                                    return Chip(
+                                      backgroundColor: Colors.black.withAlpha(200),
+                                      shadowColor: Colors.transparent,
+                                      visualDensity: VisualDensity.compact,
+                                      elevation: 0,
+                                      label: Icon(AppIcons.headset, size: 15, color: Colors.white),
+                                    );
+                                  }
+
+                                  return SizedBox();
+                                }
                             )
-                        )
+                        ),
                       ],
                     ),
-                  )
-                ],
+
+                    SizedBox(height: 8),
+
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(itm.title, maxLines: 1).bold().fsR(1),
+                    ),
+
+                    SizedBox(height: 8),
+
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 7.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Builder(
+                            builder: (ctx){
+                              if(itm.duration > 0){
+                                final dur = Duration(milliseconds: itm.duration);
+                                return Text('${DurationFormatter.duration(dur, showSuffix: false)} ثانیه').alpha().subFont();
+                              }
+
+                              return SizedBox();
+                            },
+                          ),
+
+                          IconButton(
+                              constraints: BoxConstraints.tightFor(),
+                              padding: EdgeInsets.all(4),
+                              splashRadius: 20,
+                              visualDensity: VisualDensity.compact,
+                              iconSize: 20,
+                              onPressed: (){
+                                setFavorite(itm);
+                              },
+                              icon: Icon(itm.isFavorite ? AppIcons.heartSolid: AppIcons.heart,
+                                size: 20,
+                                color: itm.isFavorite ? Colors.red: Colors.black,
+                              )
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
@@ -494,6 +528,8 @@ class _HomeToHomePageState extends StateBase<HomeToHomePage> {
       final List vList = data['new_video_list']?? [];
 
       MediaManager.addItemsFromMap(mediaList);
+      MediaManager.sinkItems(MediaManager.mediaList);
+
       for(final m in list){
         final itm = SubBucketModel.fromMap(m);
         itm.isFavorite = FavoriteService.isFavorite(itm.id!);

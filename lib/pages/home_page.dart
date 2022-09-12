@@ -1,3 +1,5 @@
+import 'package:app/pages/search_page.dart';
+import 'package:app/tools/app/appRoute.dart';
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
@@ -106,7 +108,9 @@ class HomePageState extends StateBase<HomePage> {
         ),
 
         IconButton(
-            onPressed: (){},
+            onPressed: (){
+              AppRoute.pushNamed(context, SearchPage.route.name!);
+            },
             icon: Icon(AppIcons.search)
         ),
       ],

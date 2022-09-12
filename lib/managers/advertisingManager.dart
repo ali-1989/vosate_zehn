@@ -144,6 +144,7 @@ class AdvertisingManager {
       final mediaList = data['media_list'];
 
       MediaManager.addItemsFromMap(mediaList);
+      MediaManager.sinkItems(MediaManager.mediaList);
       AdvertisingManager.addItemsFromMap(advList);
 
       AppBroadcast.newAdvNotifier.value++;

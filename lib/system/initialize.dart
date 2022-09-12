@@ -1,4 +1,5 @@
 import 'package:app/managers/advertisingManager.dart';
+import 'package:app/managers/mediaManager.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -104,13 +105,11 @@ class InitialApplication {
       AppSizes.instance.addMetricListener(onSizeCheng);
     }
 
-    // ignore: unawaited_futures
-    //CountryTools.fetchCountries();
-
     Session.addLoginListener(UserLoginTools.onLogin);
     Session.addLogoffListener(UserLoginTools.onLogoff);
     Session.addProfileChangeListener(UserLoginTools.onProfileChange);
 
+    MediaManager.loadAllRecords();
     AdvertisingManager.init();
   }
 }

@@ -136,7 +136,7 @@ class _BucketPageState extends StateBase<BucketPage> {
                     return IrisImageView(
                         width: 100,
                         height: 100,
-                        fit: BoxFit.contain,
+                        fit: BoxFit.fill,
                       url: itm.imageModel!.url!,
                       imagePath: AppDirectories.getSavePathMedia(itm.imageModel, SavePathType.anyOnInternal, null),
                     );
@@ -222,6 +222,7 @@ class _BucketPageState extends StateBase<BucketPage> {
       }
 
       MediaManager.addItemsFromMap(mList);
+      MediaManager.sinkItems(MediaManager.mediaList);
 
       for(final m in bList){
         final itm = BucketModel.fromMap(m);

@@ -1,5 +1,6 @@
 import 'package:app/services/lastSeenService.dart';
 import 'package:app/tools/app/appDirectories.dart';
+import 'package:app/tools/app/appThemes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
@@ -84,7 +85,7 @@ class _LastSeenPageState extends StateBase<LastSeenPage> {
     final itm = listItems[idx];
 
     return SizedBox(
-      height: 160,
+      height: 130,
       child: InkWell(
         onTap: (){
           onItemClick(itm);
@@ -109,8 +110,8 @@ class _LastSeenPageState extends StateBase<LastSeenPage> {
                             if(itm.imageModel?.url != null){
                               return IrisImageView(
                                 width: double.infinity,
-                                height: 100,
-                                fit: BoxFit.contain,
+                                height: 130,
+                                fit: BoxFit.fill,
                                 url: itm.imageModel!.url!,
                                 imagePath: AppDirectories.getSavePathMedia(itm.imageModel, SavePathType.anyOnInternal, null),
                               );
@@ -125,23 +126,26 @@ class _LastSeenPageState extends StateBase<LastSeenPage> {
                             right: 0,
                             child: Builder(
                                 builder: (context) {
+                                  var icon;
+
                                   if(itm.type == SubBucketTypes.video.id()){
-                                    return Chip(//todo: chip transparent
-                                      backgroundColor: Colors.black.withAlpha(200),
-                                      shadowColor: Colors.transparent,
-                                      visualDensity: VisualDensity.compact,
-                                      elevation: 0,
-                                      label: Icon(AppIcons.videoCamera, size: 15, color: Colors.white),
-                                    );
+                                    icon = AppIcons.videoCamera;
                                   }
 
                                   if(itm.type == SubBucketTypes.audio.id()){
-                                    return Chip(
-                                      backgroundColor: Colors.black.withAlpha(200),
-                                      shadowColor: Colors.transparent,
-                                      visualDensity: VisualDensity.compact,
-                                      elevation: 0,
-                                      label: Icon(AppIcons.headset, size: 15, color: Colors.white),
+                                    icon = AppIcons.headset;
+                                  }
+
+                                  if(icon != null){
+                                    return Theme(
+                                      data: AppThemes.instance.themeData.copyWith(canvasColor: Colors.transparent),
+                                      child: Chip(
+                                        backgroundColor: Colors.grey.withAlpha(160),
+                                        shadowColor: Colors.transparent,
+                                        visualDensity: VisualDensity.compact,
+                                        elevation: 0,
+                                        label: Icon(icon, size: 15, color: Colors.white),
+                                      ),
                                     );
                                   }
 
@@ -160,28 +164,25 @@ class _LastSeenPageState extends StateBase<LastSeenPage> {
                       padding: const EdgeInsets.symmetric(vertical:8.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(itm.title, maxLines: 1).bold().fsR(1),
 
-                          SizedBox(height: 25,),
 
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 7.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Builder(
-                                  builder: (ctx){
-                                    if(itm.duration > 0){
-                                      final dur = Duration(milliseconds: itm.duration);
-                                      return Text('${DurationFormatter.duration(dur, showSuffix: false)} ثانیه').alpha().subFont();
-                                    }
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Builder(
+                                builder: (ctx){
+                                  if(itm.duration > 0){
+                                    final dur = Duration(milliseconds: itm.duration);
+                                    return Text('${DurationFormatter.duration(dur, showSuffix: false)} ثانیه').alpha().subFont();
+                                  }
 
-                                    return SizedBox();
-                                  },
-                                ),
-                              ],
-                            ),
+                                  return SizedBox();
+                                },
+                              ),
+                            ],
                           )
                         ],
                       ),

@@ -1,3 +1,4 @@
+import 'package:app/pages/search_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -122,6 +123,7 @@ final mainRouter = GoRouter(
       VideoPlayerPage.route,
       AudioPlayerPage.route,
       SentencesPage.route,
+      SearchPage.route,
     ],
     initialLocation: HomePage.route.path,
     routerNeglect: true,//In browser 'back' button not work
