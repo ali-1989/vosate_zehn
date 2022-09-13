@@ -46,7 +46,7 @@ class _SearchPageState extends StateBase<SearchPage> {
   List<SubBucketModel> searchList = [];
   late ThemeData chipTheme;
   Requester requester = Requester();
-  bool isInFetchData = true;
+  bool isInFetchData = false;
   String state$fetchData = 'state_fetchData';
   SearchFilterTool searchFilter = SearchFilterTool();
   RefreshController refreshController = RefreshController(initialRefresh: false);
@@ -83,65 +83,72 @@ class _SearchPageState extends StateBase<SearchPage> {
   }
 
   Widget buildBody(){
-    if(isInFetchData) {
-      return ProgressView();
-    }
-
-    if(!assistCtr.hasState(state$fetchData)){
-      return NotFetchData(tryClick: tryLoadClick);
-    }
-
-    if(searchList.isEmpty){
-      return EmptyData();
-    }
-
     return Column(
       children: [
         SizedBox(height: 30),
-        SearchBar(
-          onChangeEvent: (txt){
-            searchFilter.searchText = txt;
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 14.0),
+          child: SearchBar(
+            onChangeEvent: (txt){
+              searchFilter.searchText = txt;
 
-            if(txt.length > 2){
-              resetSearch();
-            }
-          },
-          searchEvent: (txt){
-            searchFilter.searchText = txt;
+              if(txt.length > 2){
+                resetSearch();
+              }
+            },
+            searchEvent: (txt){
+              searchFilter.searchText = txt;
 
-            if(txt.length > 2){
-              resetSearch();
-            }
-          },
-          onClearEvent: (){
-            searchList.clear();
-            assistCtr.updateMain();
-          },
+              if(txt.length > 2){
+                resetSearch();
+              }
+            },
+            onClearEvent: (){
+              searchList.clear();
+              assistCtr.updateMain();
+            },
+          ),
         ),
 
         SizedBox(height: 30),
         Expanded(
-            child: RefreshConfiguration(
-              headerBuilder: () => MaterialClassicHeader(),
-              footerBuilder:  () => PublicAccess.classicFooter,
-              enableScrollWhenRefreshCompleted: true,
-              enableLoadingWhenFailed : true,
-              hideFooterWhenNotFull: true,
-              enableBallisticLoad: true,
-              enableLoadingWhenNoData: false,
-              child: SmartRefresher(
-                enablePullDown: false,
-                enablePullUp: true,
-                controller: refreshController,
-                onRefresh: (){},
-                onLoading: onLoadingMoreCall,
-                child: ListView.builder(
-                  itemCount: searchList.length,
-                    itemBuilder: (ctx, idx){
-                      return buildListItem(idx);
-                    }
-                ),
-              ),
+            child: Builder(
+              builder: (context) {
+                if(isInFetchData) {
+                  return ProgressView();
+                }
+
+                if(!assistCtr.hasState(state$fetchData)){
+                  return NotFetchData(tryClick: tryLoadClick);
+                }
+
+                if(searchList.isEmpty){
+                  return EmptyData();
+                }
+
+                return RefreshConfiguration(
+                  headerBuilder: () => MaterialClassicHeader(),
+                  footerBuilder:  () => PublicAccess.classicFooter,
+                  enableScrollWhenRefreshCompleted: true,
+                  enableLoadingWhenFailed : true,
+                  hideFooterWhenNotFull: true,
+                  enableBallisticLoad: true,
+                  enableLoadingWhenNoData: false,
+                  child: SmartRefresher(
+                    enablePullDown: false,
+                    enablePullUp: true,
+                    controller: refreshController,
+                    onRefresh: (){},
+                    onLoading: onLoadingMoreCall,
+                    child: ListView.builder(
+                      itemCount: searchList.length,
+                        itemBuilder: (ctx, idx){
+                          return buildListItem(idx);
+                        }
+                    ),
+                  ),
+                );
+              }
             )
         ),
       ],

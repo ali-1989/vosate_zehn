@@ -25,6 +25,7 @@ class FavoriteService {
     value[Keys.value] = val;
 
     final res = await AppDB.db.insertOrUpdate(AppDB.tbFavorites, value, con);
+    model.isFavorite = true;
     AppBroadcast.changeFavoriteNotifier.value++;
 
     return res > 0;

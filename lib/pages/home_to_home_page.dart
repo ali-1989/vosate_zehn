@@ -428,6 +428,18 @@ class _HomeToHomePageState extends StateBase<HomeToHomePage> {
   }
 
   void updateOnListening(){
+    for(final k in newItems){
+      k.isFavorite = FavoriteService.isFavorite(k.id!);
+    }
+
+    for(final k in meditationItems){
+      k.isFavorite = FavoriteService.isFavorite(k.id!);
+    }
+
+    for(final k in videoItems){
+      k.isFavorite = FavoriteService.isFavorite(k.id!);
+    }
+
     assistCtr.updateMain();
   }
 
