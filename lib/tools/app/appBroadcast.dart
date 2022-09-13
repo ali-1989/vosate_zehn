@@ -17,6 +17,7 @@ class AppBroadcast {
   static final RefreshController drawerMenuRefresher = RefreshController();
   static final NotifyBroadcast avatarNotifier = NotifyBroadcast();
   static final ExtendValueNotifier<int> newAdvNotifier = ExtendValueNotifier<int>(0);
+  static final ExtendValueNotifier<int> changeFavoriteNotifier = ExtendValueNotifier<int>(0);
   //---------------------- keys
   static final LocalKey materialAppKey = UniqueKey();
   static final rootScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();

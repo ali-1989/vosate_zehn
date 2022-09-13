@@ -126,7 +126,7 @@ class _LastSeenPageState extends StateBase<LastSeenPage> {
                             right: 0,
                             child: Builder(
                                 builder: (context) {
-                                  var icon;
+                                  IconData? icon;
 
                                   if(itm.type == SubBucketTypes.video.id()){
                                     icon = AppIcons.videoCamera;
@@ -182,6 +182,22 @@ class _LastSeenPageState extends StateBase<LastSeenPage> {
                                   return SizedBox();
                                 },
                               ),
+
+
+                              IconButton(
+                                  constraints: BoxConstraints.tightFor(),
+                                  padding: EdgeInsets.all(4),
+                                  splashRadius: 20,
+                                  visualDensity: VisualDensity.compact,
+                                  iconSize: 20,
+                                  onPressed: (){
+                                    //setFavorite(itm);
+                                  },
+                                  icon: Icon(itm.isFavorite ? AppIcons.heartSolid: AppIcons.heart,
+                                    size: 20,
+                                    color: itm.isFavorite ? Colors.red: Colors.black,
+                                  )
+                              )
                             ],
                           )
                         ],

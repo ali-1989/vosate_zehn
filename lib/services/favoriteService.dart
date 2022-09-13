@@ -1,4 +1,5 @@
 import 'package:app/managers/mediaManager.dart';
+import 'package:app/tools/app/appBroadcast.dart';
 import 'package:iris_db/iris_db.dart';
 
 import 'package:app/models/subBuketModel.dart';
@@ -24,6 +25,7 @@ class FavoriteService {
     value[Keys.value] = val;
 
     final res = await AppDB.db.insertOrUpdate(AppDB.tbFavorites, value, con);
+    AppBroadcast.changeFavoriteNotifier.value++;
 
     return res > 0;
   }
@@ -33,6 +35,7 @@ class FavoriteService {
     con.add(Condition()..key = Keys.id..value = id);
 
     final res = await AppDB.db.delete(AppDB.tbFavorites, con);
+    AppBroadcast.changeFavoriteNotifier.value++;
 
     return res > 0;
   }

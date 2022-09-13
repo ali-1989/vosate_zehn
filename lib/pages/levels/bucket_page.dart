@@ -81,7 +81,7 @@ class _BucketPageState extends StateBase<BucketPage> {
     }
 
     if(!assistCtr.hasState(state$fetchData)){
-      return NotFetchData(tryClick: tryLoadClick,);
+      return NotFetchData(tryClick: tryLoadClick);
     }
 
     if(listItems.isEmpty){
@@ -237,21 +237,4 @@ class _BucketPageState extends StateBase<BucketPage> {
     requester.prepareUrl();
     requester.request(context);
   }
-
-  /*void addTempData(){
-    final v1 = BucketModel();
-    final v2 = BucketModel();
-
-    v1.title = 'انیمیشن';
-    v2.title = 'علمی';
-
-    v1.description = 'کلیپ های کوتاه و کاربردی یرای درک';
-    v2.description = 'درک رسیدن به آرامش با تماشای کلیپ های علمی و کاربردی یرای درک';
-
-    v1.imageModel = MediaModel.fromMap({})..url = 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/800px-Image_created_with_a_mobile_phone.png';
-    v2.imageModel = MediaModel.fromMap({})..url = 'https://overlay.imageonline.co/overlay-image.jpg';
-
-    listItems.add(v1);
-    listItems.add(v2);
-  }*/
 }

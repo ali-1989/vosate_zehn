@@ -20,7 +20,6 @@ import 'package:iris_tools/api/duration/durationFormater.dart';
 
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:iris_tools/widgets/irisImageView.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:app/models/abstract/stateBase.dart';
 import 'package:app/system/extensions.dart';
@@ -28,7 +27,6 @@ import 'package:app/system/keys.dart';
 import 'package:app/system/requester.dart';
 import 'package:app/system/session.dart';
 import 'package:app/tools/app/appRoute.dart';
-import 'package:app/tools/searchFilterTool.dart';
 import 'package:app/views/emptyData.dart';
 import 'package:app/views/notFetchData.dart';
 import 'package:app/views/progressView.dart';
@@ -51,24 +49,22 @@ class _HomeToHomePageState extends StateBase<HomeToHomePage> {
   List<SubBucketModel> newItems = [];
   List<SubBucketModel> meditationItems = [];
   List<SubBucketModel> videoItems = [];
-  SearchFilterTool searchFilter = SearchFilterTool();
-  RefreshController refreshController = RefreshController(initialRefresh: false);
 
   @override
   void initState(){
     super.initState();
 
-    searchFilter.limit = 20;
-    searchFilter.ascOrder = true;
     chipTheme = AppThemes.instance.themeData.copyWith(canvasColor: Colors.transparent);
-    AppBroadcast.newAdvNotifier.addListener(onNewAdv);
+    AppBroadcast.newAdvNotifier.addListener(updateOnListening);
+    AppBroadcast.changeFavoriteNotifier.addListener(updateOnListening);
     requestData();
   }
 
   @override
   void dispose(){
     requester.dispose();
-    AppBroadcast.newAdvNotifier.removeListener(onNewAdv);
+    AppBroadcast.newAdvNotifier.removeListener(updateOnListening);
+    AppBroadcast.changeFavoriteNotifier.removeListener(updateOnListening);
 
     super.dispose();
   }
@@ -431,7 +427,7 @@ class _HomeToHomePageState extends StateBase<HomeToHomePage> {
     );
   }
 
-  void onNewAdv(){
+  void updateOnListening(){
     assistCtr.updateMain();
   }
 
@@ -474,7 +470,7 @@ class _HomeToHomePageState extends StateBase<HomeToHomePage> {
       AppToast.showToast(context, AppMessages.operationFailed);
     }
 
-    assistCtr.updateMain();
+    //this is will call by broadcast : assistCtr.updateMain();
   }
 
   void onItemClick(SubBucketModel itm) {
