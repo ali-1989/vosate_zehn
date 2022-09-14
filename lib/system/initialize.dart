@@ -1,5 +1,7 @@
 import 'package:app/managers/advertisingManager.dart';
 import 'package:app/managers/mediaManager.dart';
+import 'package:app/services/aidService.dart';
+import 'package:app/services/dailyTextService.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -111,5 +113,7 @@ class InitialApplication {
 
     MediaManager.loadAllRecords();
     AdvertisingManager.init();
+    AidService.checkShowDialog();
+    DailyTextService.checkShowDialog();
   }
 }

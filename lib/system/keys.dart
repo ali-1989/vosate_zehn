@@ -67,17 +67,18 @@ class Keys {
   static const setting$fontThemeData = 'font_theme_data';
   static const setting$colorThemeName = 'color_theme_name';
   static const setting$patternKey = 'lock_pattern';
-  static const setting$ColorThemeName = 'color_theme_name';
   static const setting$lastForegroundTs = 'last_foreground_ts';
   static const setting$confirmOnExit = 'confirm_on_exit';
   static const setting$notificationChanelKey = 'notification_chanel_key';
-  static const setting$notificationModel = 'notification_model';
   static const setting$notificationChanelGroup = 'notification_chanel_group';
+  static const setting$notificationModel = 'notification_model';
   static const setting$currentVersion = 'current_version';
   static const setting$webDeviceId = 'web_device_id';
-  static const setting$textOfDayGetPreMonth = 'text_of_day_get_pre_month';
   //----- app settings key -----------------------------------------------------------------
   static const setting$bucketType = 'bucket_type';
+  static const setting$textOfDayGetPreMonth = 'text_of_day_get_pre_month';
+  static const setting$lastAidDialogShowTime = 'last_aid_dialog_show_time';
+  static const setting$dailyIdsList = 'daily_ids_show';
 
   static String genDownloadKey_userAvatar(int userId) {
     return 'downloadUserAvatar_$userId';

@@ -52,7 +52,7 @@ class SettingsModel {
     lastUserId = map['last_user_id'];
     calendarType = CalendarTypeHelper.calendarTypeFrom(map['calendar_type_name']);
     dateFormat = map['date_format']?? defaultDateFormat;
-    colorTheme = map[Keys.setting$ColorThemeName];
+    colorTheme = map[Keys.setting$colorThemeName];
     appPatternKey = map[Keys.setting$patternKey];
     lastForegroundTs = map[Keys.setting$lastForegroundTs];
     confirmOnExit = map[Keys.setting$confirmOnExit]?? true;
@@ -71,7 +71,7 @@ class SettingsModel {
     map['app_locale'] = {Keys.languageIso: appLocale.languageCode, Keys.countryIso: appLocale.countryCode};
     map['calendar_type_name'] = calendarType.name;
     map['date_format'] = dateFormat;
-    map[Keys.setting$ColorThemeName] = colorTheme;
+    map[Keys.setting$colorThemeName] = colorTheme;
     map[Keys.setting$patternKey] = appPatternKey;
     map[Keys.setting$lastForegroundTs] = lastForegroundTs;
     map[Keys.setting$confirmOnExit] = confirmOnExit;

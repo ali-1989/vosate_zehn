@@ -4,6 +4,7 @@ import 'package:app/models/subBuketModel.dart';
 import 'package:app/pages/levels/audio_player_page.dart';
 import 'package:app/pages/levels/content_view_page.dart';
 import 'package:app/pages/levels/video_player_page.dart';
+import 'package:app/services/favoriteService.dart';
 import 'package:app/system/enums.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
@@ -91,12 +92,13 @@ class _SearchPageState extends StateBase<SearchPage> {
           child: SearchBar(
             onChangeEvent: (txt){
               searchFilter.searchText = txt;
-
+              print('@@@@@@@@@@@ onChangeEvent');
               if(txt.length > 2){
                 resetSearch();
               }
             },
             searchEvent: (txt){
+              print('%%%%%%%%%%%%%%% searchEvent');
               searchFilter.searchText = txt;
 
               if(txt.length > 2){
@@ -379,7 +381,9 @@ class _SearchPageState extends StateBase<SearchPage> {
 
       for(final m in bList){
         final itm = SubBucketModel.fromMap(m);
-        itm.imageModel = MediaManager.getById(itm.mediaId);
+        itm.imageModel = MediaManager.getById(itm.coverId);
+        itm.mediaModel = MediaManager.getById(itm.mediaId);
+        itm.isFavorite = FavoriteService.isFavorite(itm.id!);
 
         searchList.add(itm);
       }

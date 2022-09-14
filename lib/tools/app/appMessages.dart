@@ -94,6 +94,10 @@ class AppMessages {
     return AppRoute.getContext().t('search')?? _noText;
   }
 
+  static String get later {
+    return AppRoute.getContext().t('later')?? _noText;
+  }
+
   static String get validation {
     return AppRoute.getContext().tInMap('loginSection', 'validation')?? _noText;
   }
