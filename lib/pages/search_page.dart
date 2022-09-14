@@ -48,6 +48,7 @@ class _SearchPageState extends StateBase<SearchPage> {
   late ThemeData chipTheme;
   Requester requester = Requester();
   bool isInFetchData = false;
+  String state$noRequestYet = 'state_noRequestYet';
   String state$fetchData = 'state_fetchData';
   SearchFilterTool searchFilter = SearchFilterTool();
   RefreshController refreshController = RefreshController(initialRefresh: false);
@@ -59,6 +60,7 @@ class _SearchPageState extends StateBase<SearchPage> {
     searchFilter.limit = 20;
     searchFilter.ascOrder = true;
     chipTheme = AppThemes.instance.themeData.copyWith(canvasColor: Colors.transparent);
+    assistCtr.addState(state$noRequestYet);
   }
 
   @override
@@ -91,17 +93,14 @@ class _SearchPageState extends StateBase<SearchPage> {
           padding: const EdgeInsets.symmetric(horizontal: 14.0),
           child: SearchBar(
             onChangeEvent: (txt){
-              searchFilter.searchText = txt;
-              print('@@@@@@@@@@@ onChangeEvent');
-              if(txt.length > 2){
+              if(txt.length > 2 && searchFilter.searchText != txt){
+                searchFilter.searchText = txt;
                 resetSearch();
               }
             },
             searchEvent: (txt){
-              print('%%%%%%%%%%%%%%% searchEvent');
-              searchFilter.searchText = txt;
-
-              if(txt.length > 2){
+              if(txt.length > 2 && searchFilter.searchText != txt){
+                searchFilter.searchText = txt;
                 resetSearch();
               }
             },
@@ -120,7 +119,7 @@ class _SearchPageState extends StateBase<SearchPage> {
                   return ProgressView();
                 }
 
-                if(!assistCtr.hasState(state$fetchData)){
+                if(!assistCtr.hasState(state$fetchData) && !assistCtr.hasState(state$noRequestYet)){
                   return NotFetchData(tryClick: tryLoadClick);
                 }
 
@@ -349,6 +348,10 @@ class _SearchPageState extends StateBase<SearchPage> {
     js[Keys.requesterId] = Session.getLastLoginUser()?.userId;
     js[Keys.searchFilter] = searchFilter.toMap();
 
+
+    requester.httpRequestEvents.onAnyState = (req) async {
+      assistCtr.removeState(state$noRequestYet);
+    };
 
     requester.httpRequestEvents.onFailState = (req) async {
       isInFetchData = false;
