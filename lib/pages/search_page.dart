@@ -25,6 +25,7 @@ import 'package:app/views/progressView.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iris_tools/api/duration/durationFormater.dart';
+import 'package:iris_tools/api/helpers/focusHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:iris_tools/widgets/irisImageView.dart';
 import 'package:iris_tools/widgets/searchBar.dart';
@@ -160,13 +161,13 @@ class _SearchPageState extends StateBase<SearchPage> {
     final itm = searchList[idx];
 
     return SizedBox(
-      height: 130,
+      height: 120,
       child: InkWell(
         onTap: (){
           onItemClick(itm);
         },
         child: Padding(
-          padding: const EdgeInsets.all(12.0),
+          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: DecoratedBox(
@@ -176,60 +177,59 @@ class _SearchPageState extends StateBase<SearchPage> {
               ),
 
               child: Row(
+                mainAxisSize: MainAxisSize.max,
                 children: [
-                  Flexible(
-                    child: Stack(
-                      children: [
-                        Builder(
-                          builder: (ctx){
-                            if(itm.imageModel?.url != null){
-                              return IrisImageView(
-                                width: double.infinity,
-                                height: 130,
-                                fit: BoxFit.fill,
-                                url: itm.imageModel!.url!,
-                                imagePath: AppDirectories.getSavePathMedia(itm.imageModel, SavePathType.anyOnInternal, null),
-                              );
-                            }
+                  Stack(
+                    children: [
+                      Builder(
+                        builder: (ctx){
+                          if(itm.imageModel?.url != null){
+                            return IrisImageView(
+                              width: 120,
+                              height: 120,
+                              fit: BoxFit.fill,
+                              url: itm.imageModel!.url!,
+                              imagePath: AppDirectories.getSavePathMedia(itm.imageModel, SavePathType.anyOnInternal, null),
+                            );
+                          }
 
-                            return Image.asset(AppImages.appIcon, width: double.infinity, height: 100, fit: BoxFit.contain);
-                          },
-                        ),
+                          return Image.asset(AppImages.appIcon, width: 120, height: 120, fit: BoxFit.contain);
+                        },
+                      ),
 
-                        Positioned(
-                            top: 0,
-                            right: 0,
-                            child: Builder(
-                                builder: (context) {
-                                  IconData? icon;
+                      Positioned(
+                          top: 0,
+                          right: 0,
+                          child: Builder(
+                              builder: (context) {
+                                IconData? icon;
 
-                                  if(itm.type == SubBucketTypes.video.id()){
-                                    icon = AppIcons.videoCamera;
-                                  }
-
-                                  if(itm.type == SubBucketTypes.audio.id()){
-                                    icon = AppIcons.headset;
-                                  }
-
-                                  if(icon != null){
-                                    return Theme(
-                                      data: chipTheme,
-                                      child: Chip(
-                                        backgroundColor: Colors.grey.withAlpha(160),
-                                        shadowColor: Colors.transparent,
-                                        visualDensity: VisualDensity.compact,
-                                        elevation: 0,
-                                        label: Icon(icon, size: 15, color: Colors.white),
-                                      ),
-                                    );
-                                  }
-
-                                  return SizedBox();
+                                if(itm.type == SubBucketTypes.video.id()){
+                                  icon = AppIcons.videoCamera;
                                 }
-                            )
-                        ),
-                      ],
-                    ),
+
+                                if(itm.type == SubBucketTypes.audio.id()){
+                                  icon = AppIcons.headset;
+                                }
+
+                                if(icon != null){
+                                  return Theme(
+                                    data: chipTheme,
+                                    child: Chip(
+                                      backgroundColor: Colors.grey.withAlpha(160),
+                                      shadowColor: Colors.transparent,
+                                      visualDensity: VisualDensity.compact,
+                                      elevation: 0,
+                                      label: Icon(icon, size: 15, color: Colors.white),
+                                    ),
+                                  );
+                                }
+
+                                return SizedBox();
+                              }
+                          )
+                      ),
+                    ],
                   ),
 
                   SizedBox(width: 12),
@@ -241,10 +241,10 @@ class _SearchPageState extends StateBase<SearchPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(itm.title, maxLines: 1).bold().fsR(1),
-
+                          Text(itm.title, maxLines: 2).bold().fsR(1),
 
                           Row(
+                            mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Builder(
@@ -279,7 +279,6 @@ class _SearchPageState extends StateBase<SearchPage> {
                       ),
                     ),
                   )
-
                 ],
               ),
             ),
@@ -297,6 +296,8 @@ class _SearchPageState extends StateBase<SearchPage> {
   }
 
   void onItemClick(SubBucketModel itm) {
+    FocusHelper.hideKeyboardByUnFocus(context);
+
     if(itm.type == SubBucketTypes.video.id()){
       final inject = VideoPlayerPageInjectData();
       inject.srcAddress = itm.mediaModel!.url!;

@@ -13,15 +13,14 @@ class DailyTextService {
   DailyTextService._();
 
   static void showDailyDialog(String msg){
-    AppDialogIris.instance.showInfoDialog(
-        AppRoute.materialContext,
-       null,
-       msg,
+    AppDialogIris.instance.showIrisDialog(
+        AppRoute.getContext(),
+       desc: msg,
     );
   }
 
   static void checkShowDialog() async {
-    await Future.delayed(Duration(seconds: 20), (){});
+    await Future.delayed(Duration(seconds: 10), (){});
 
     if(!Session.hasAnyLogin()){
       return;
@@ -36,8 +35,7 @@ class DailyTextService {
     final ids = AppDB.fetchAsList<int>(Keys.setting$dailyIdsList);
 
     for(final k in list){
-      if(k.date != null && DateHelper.isToday(k.date!)){
-
+     if(k.date != null && DateHelper.isToday(k.date!)){
         if(!ids.contains(k.id)){
           showDailyDialog(k.text);
           AppDB.addToList(Keys.setting$dailyIdsList, k.id);
