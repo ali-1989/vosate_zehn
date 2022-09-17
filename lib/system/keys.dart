@@ -74,6 +74,7 @@ class Keys {
   static const setting$notificationModel = 'notification_model';
   static const setting$currentVersion = 'current_version';
   static const setting$webDeviceId = 'web_device_id';
+  static const setting$userMessageIds = 'user_messages_ids';
   //----- app settings key -----------------------------------------------------------------
   static const setting$bucketType = 'bucket_type';
   static const setting$textOfDayGetPreMonth = 'text_of_day_get_pre_month';

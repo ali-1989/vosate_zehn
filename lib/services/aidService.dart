@@ -8,6 +8,7 @@ import 'package:app/tools/app/appDb.dart';
 import 'package:app/tools/app/appDialogIris.dart';
 import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appRoute.dart';
+import 'package:app/tools/app/appThemes.dart';
 import 'package:flutter/material.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
 
@@ -30,25 +31,50 @@ class AidService {
       return;
     }
 
-    final dec = AppDialogIris.instance.dialogDecoration.copy();
-    dec.positiveButtonBackColor = Colors.green;
-    dec.negativeButtonBackColor = Colors.grey;
+    final body = Column(
+      children: [
+        Text(msg, style: AppThemes.body2TextStyle()!.copyWith(fontSize: 14, fontWeight: FontWeight.bold)),
 
-    AppDialogIris.instance.showYesNoDialog(
+        SizedBox(height: 20),
+        Row(
+          children: [
+            SizedBox(
+              width: 100,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(primary: Colors.green),
+                  onPressed: (){
+                    Navigator.of(AppRoute.getContext()).pop();
+                    gotoZarinpalPage();
+                  },
+                  child: Text(AppMessages.aid)
+              ),
+            ),
+
+            SizedBox(width: 30),
+            TextButton(
+                onPressed: (){
+                  Navigator.of(AppRoute.getContext()).pop();
+                },
+                child: Text(AppMessages.later)
+            )
+          ],
+        )
+      ],
+    );
+
+    AppDialogIris.instance.showIrisDialog(
         AppRoute.getContext(),
        title: AppMessages.aidUs,
-      yesText: AppMessages.aid,
-      noText: AppMessages.later,
       yesFn: gotoZarinpalPage,
-      desc: msg,
-      decoration: dec
+      //desc: msg,
+      descView: body,
     );
 
     AppDB.setReplaceKv(Keys.setting$lastAidDialogShowTime, DateHelper.getNowTimestampToUtc());
   }
 
   static void checkShowDialog() async {
-    await Future.delayed(Duration(seconds: 25), (){});
+    await Future.delayed(Duration(seconds: 20), (){});
 
     if(!Session.hasAnyLogin()){
       return;
@@ -65,7 +91,8 @@ class AidService {
       return;
     }
 
-    if(lastTime == null || DateHelper.isPastOf(lastTimeDt, Duration(days: 3))){
+    if(lastTime == null
+        || DateHelper.isPastOf(lastTimeDt, Duration(days: AppParameterManager.parameterModel?.aidRepeatDays?? 10))){
       showAidDialog();
     }
   }

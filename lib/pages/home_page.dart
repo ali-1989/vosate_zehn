@@ -1,159 +1,573 @@
-import 'package:app/pages/search_page.dart';
-import 'package:app/tools/app/appRoute.dart';
-import 'package:flutter/material.dart';
-
-import 'package:go_router/go_router.dart';
-import 'package:iris_tools/modules/stateManagers/assist.dart';
-import 'package:shaped_bottom_bar/models/shaped_item_object.dart';
-import 'package:shaped_bottom_bar/shaped_bottom_bar.dart';
-import 'package:shaped_bottom_bar/utils/arrays.dart';
-
-import 'package:app/models/abstract/stateBase.dart';
-import 'package:app/pages/home_to_home_page.dart';
-import 'package:app/pages/levels/bucket_page.dart';
-import 'package:app/services/aidService.dart';
+import 'package:app/managers/advertisingManager.dart';
+import 'package:app/managers/mediaManager.dart';
+import 'package:app/models/subBuketModel.dart';
+import 'package:app/pages/levels/audio_player_page.dart';
+import 'package:app/pages/levels/content_view_page.dart';
+import 'package:app/pages/levels/video_player_page.dart';
+import 'package:app/services/favoriteService.dart';
+import 'package:app/services/lastSeenService.dart';
 import 'package:app/system/enums.dart';
 import 'package:app/tools/app/appBroadcast.dart';
+import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/app/appIcons.dart';
+import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appThemes.dart';
-import 'package:app/views/AppBarCustom.dart';
-import 'package:app/views/genDrawerMenu.dart';
+import 'package:app/tools/app/appToast.dart';
+import 'package:flutter/material.dart';
+import 'package:iris_tools/api/duration/durationFormater.dart';
+
+import 'package:iris_tools/modules/stateManagers/assist.dart';
+import 'package:iris_tools/widgets/irisImageView.dart';
+
+import 'package:app/models/abstract/stateBase.dart';
+import 'package:app/system/extensions.dart';
+import 'package:app/system/keys.dart';
+import 'package:app/system/requester.dart';
+import 'package:app/system/session.dart';
+import 'package:app/tools/app/appRoute.dart';
+import 'package:app/views/emptyData.dart';
+import 'package:app/views/notFetchData.dart';
+import 'package:app/views/progressView.dart';
+import 'package:iris_tools/widgets/keepAliveWrap.dart';
 
 class HomePage extends StatefulWidget {
-  static final route = GoRoute(
-    path: '/',
-    name: (HomePage).toString().toLowerCase(),
-    builder: (BuildContext context, GoRouterState state) => HomePage(key: AppBroadcast.homeScreenKey),
-  );
 
-  const HomePage({super.key});
+  HomePage({
+    Key? key,
+  }) : super(key: key);
 
   @override
-  State<HomePage> createState() => HomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
-///=================================================================================================
-class HomePageState extends StateBase<HomePage> {
-  GlobalKey<ScaffoldState> scaffoldState = GlobalKey<ScaffoldState>();
-  int selectedPage = 0;
-  late PageController pageController;
-  ValueKey<int> bottomBarKey = ValueKey<int>(1);
-
+///==================================================================================
+class _HomePageState extends StateBase<HomePage> {
+  Requester requester = Requester();
+  bool isInFetchData = true;
+  String state$fetchData = 'state_fetchData';
+  late ThemeData chipTheme;
+  List<SubBucketModel> newItems = [];
+  List<SubBucketModel> meditationItems = [];
+  List<SubBucketModel> videoItems = [];
 
   @override
-  initState(){
+  void initState(){
     super.initState();
 
-    pageController = PageController();
+    chipTheme = AppThemes.instance.themeData.copyWith(canvasColor: Colors.transparent);
+    AppBroadcast.newAdvNotifier.addListener(updateOnListening);
+    AppBroadcast.changeFavoriteNotifier.addListener(updateOnListening);
+    requestData();
+  }
+
+  @override
+  void dispose(){
+    requester.dispose();
+    AppBroadcast.newAdvNotifier.removeListener(updateOnListening);
+    AppBroadcast.changeFavoriteNotifier.removeListener(updateOnListening);
+
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Assist(
-      controller: assistCtr,
+        controller: assistCtr,
         builder: (context, ctr, data) {
-        return Scaffold(
-          key: scaffoldState,
-          appBar: buildAppBar(),
-          body: SafeArea(
-            bottom: false,
-              child: buildBody()
-          ),
-          drawer: DrawerMenuBuilder.getDrawer(),
-          extendBody: true,
-          bottomNavigationBar: buildNavBar(),
-        );
-      }
+          return Scaffold(
+            body: buildBody(),
+          );
+        }
     );
   }
 
   Widget buildBody(){
-    return Padding(
-      padding: EdgeInsets.only(bottom: 50),
-      child: PageView(
-          physics: NeverScrollableScrollPhysics(),
-        allowImplicitScrolling: false,
-        controller: pageController,
-        children: [
-          HomeToHomePage(),
-          BucketPage(injectData: BucketPageInjectData()..bucketTypes = BucketTypes.meditation),
-          BucketPage(injectData: BucketPageInjectData()..bucketTypes = BucketTypes.focus),
-          BucketPage(injectData: BucketPageInjectData()..bucketTypes = BucketTypes.motion),
-          BucketPage(injectData: BucketPageInjectData()..bucketTypes = BucketTypes.video),
-        ],
+    if(isInFetchData) {
+      return ProgressView();
+    }
+
+    if(!assistCtr.hasState(state$fetchData)){
+      return NotFetchData(tryClick: tryLoadClick,);
+    }
+
+    if(newItems.isEmpty || meditationItems.isEmpty){
+      return EmptyData();
+    }
+
+    return ListView(
+      addAutomaticKeepAlives: true,
+     children: [
+        buildAdv1(),
+        buildNews(),
+        buildAdv2(),
+        buildMeditation(),
+        buildVideo(),
+        buildAdv3(),
+     ],
+    );
+  }
+
+  Widget buildAdv1(){
+    return KeepAliveWrap(
+      child: Builder(
+        builder: (ctx){
+          final adv = AdvertisingManager.getAdv1();
+
+          if(adv == null || adv.mediaModel == null){
+            return SizedBox();
+          }
+
+          return IrisImageView(
+            height: 170,
+            url: adv.mediaModel!.url,
+            fit: BoxFit.fill,
+            imagePath: AppDirectories.getSavePathMedia(adv.mediaModel, SavePathType.anyOnInternal, null),
+          );
+        },
       ),
     );
   }
 
-  AppBar buildAppBar(){
-    return AppBarCustom(
-      title: Text(AppMessages.appName),
-      /*leading: IconButton(
-          onPressed: (){
-          },
-          icon: Icon(AppIcons.list)
-      ),*/
+  Widget buildAdv2(){
+    return KeepAliveWrap(
+      child: Builder(
+        builder: (ctx){
+          final adv = AdvertisingManager.getAdv2();
 
-      actions: [
-        IconButton(
-            onPressed: gotoAidPage,
-            icon: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(AppIcons.cashMultiple, size: 20,),
-                Text(AppMessages.aid, style: TextStyle(fontSize: 11),),
-              ],
-            )
-        ),
-
-        IconButton(
-            onPressed: (){
-              AppRoute.pushNamed(context, SearchPage.route.name!);
-            },
-            icon: Icon(AppIcons.search)
-        ),
-      ],
-    );
-  }
-
-  Widget buildNavBar(){
-    return ShapedBottomBar(
-      key: bottomBarKey,
-        backgroundColor: AppThemes.instance.currentTheme.primaryColor,
-        iconsColor: Colors.black,
-        bottomBarTopColor: Colors.transparent,
-        shapeColor: AppThemes.instance.currentTheme.differentColor,
-        selectedIconColor: Colors.white,
-        shape: ShapeType.PENTAGON,
-        animationType: ANIMATION_TYPE.FADE,
-        selectedItemIndex: selectedPage,
-        //textStyle: AppThemes.instance.currentTheme.baseTextStyle,
-        listItems: [
-          ShapedItemObject(iconData: AppIcons.home, title: AppMessages.home),
-          ShapedItemObject(iconData: AppIcons.meditation, title: AppMessages.meditation),
-          ShapedItemObject(iconData: AppIcons.zoomIn, title: AppMessages.focus),
-          ShapedItemObject(iconData: AppIcons.motion, title: AppMessages.motion),
-          ShapedItemObject(iconData: AppIcons.playArrow, title: AppMessages.video),
-        ],
-        onItemChanged: (position) {
-          selectedPage = position;
-
-          pageController.jumpToPage(selectedPage);
-          //setState(() {});
+          if(adv == null || adv.mediaModel == null){
+            return SizedBox();
+          }
+          return IrisImageView(
+            height: 170,
+            url: adv.mediaModel!.url,
+            fit: BoxFit.fill,
+            imagePath: AppDirectories.getSavePathMedia(adv.mediaModel, SavePathType.anyOnInternal, null),
+          );
         },
+      ),
     );
   }
 
-  void gotoPage(idx){
-    selectedPage = idx;
-    pageController.jumpToPage(idx);
+  Widget buildAdv3(){
+    return Builder(
+      builder: (ctx){
+        final adv = AdvertisingManager.getAdv3();
 
-    bottomBarKey = ValueKey(bottomBarKey.value +1);
-    setState(() {});
+        if(adv == null || adv.mediaModel == null){
+          return SizedBox();
+        }
+        return IrisImageView(
+          height: 170,
+          url: adv.mediaModel!.url,
+          fit: BoxFit.fill,
+          imagePath: AppDirectories.getSavePathMedia(adv.mediaModel, SavePathType.anyOnInternal, null),
+        );
+      },
+    );
   }
 
-  void gotoAidPage(){
-    AidService.gotoAidPage();
+  Widget buildNews(){
+    return Builder(
+      builder: (ctx){
+        if(newItems.isEmpty){
+          return SizedBox();
+        }
+
+        return Column(
+          children: [
+            SizedBox(height: 10),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal:10.0),
+                  child: Chip(
+                    backgroundColor: AppThemes.instance.currentTheme.differentColor,
+                      label: Text('جدیدترین ها').bold().boldFont().color(Colors.white)
+                  ),
+                ),
+              ],
+            ),
+
+            SizedBox(
+              height: 172,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                  itemCount: newItems.length,
+                  addAutomaticKeepAlives: true,
+                  itemBuilder: (ctx, idx){
+                    final itm = newItems[idx];
+
+                    return buildListItem(itm);
+                  }
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget buildMeditation(){
+    return Builder(
+      builder: (ctx){
+        if(meditationItems.isEmpty){
+          return SizedBox();
+        }
+
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal:10.0),
+                  child: Chip(
+                      backgroundColor: AppThemes.instance.currentTheme.differentColor,
+                      label: Text('مدیتیشن').bold().boldFont().color(Colors.white)
+                  ),
+                ),
+                TextButton(
+                  onPressed: moreMeditation,
+                  child: Text('بیشتر').fsR(1).color(Colors.lightBlue),
+                ),
+              ],
+            ),
+
+            SizedBox(
+              height: 172,
+              child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: meditationItems.length,
+                  addAutomaticKeepAlives: true,
+                  itemBuilder: (ctx, idx){
+                    final itm = meditationItems[idx];
+
+                    return buildListItem(itm);
+                  }
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget buildVideo(){
+    return Builder(
+      builder: (ctx){
+        if(videoItems.isEmpty){
+          return SizedBox();
+        }
+
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal:10.0),
+                  child: Chip(
+                      backgroundColor: AppThemes.instance.currentTheme.differentColor,
+                      label: Text('ویدئو').bold().boldFont().color(Colors.white)
+                  ),
+                ),
+                TextButton(
+                  onPressed: moreVideo,
+                  child: Text('بیشتر').fsR(1).color(Colors.lightBlue),
+                ),
+              ],
+            ),
+
+            SizedBox(
+              height: 172,
+              child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: videoItems.length,
+                  addAutomaticKeepAlives: true,
+                  itemBuilder: (ctx, idx){
+                    final itm = videoItems[idx];
+
+                    return buildListItem(itm);
+                  }
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget buildListItem(SubBucketModel itm){
+    return KeepAliveWrap(
+      child: SizedBox(
+        width: 160,
+        child: InkWell(
+          onTap: (){
+            onItemClick(itm);
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black26),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+
+                child: Column(
+                  children: [
+                    Stack(
+                      children: [
+                        Builder(
+                          builder: (ctx){
+                            if(itm.imageModel?.url != null){
+                              return IrisImageView(
+                                width: double.infinity,
+                                height: 100,
+                                fit: BoxFit.fill,
+                                url: itm.imageModel!.url!,
+                                imagePath: AppDirectories.getSavePathMedia(itm.imageModel, SavePathType.anyOnInternal, null),
+                              );
+                            }
+
+                            return Image.asset(AppImages.appIcon, width: double.infinity, height: 100, fit: BoxFit.contain);
+                          },
+                        ),
+
+                        Positioned(
+                            top: 0,
+                            left: 0,
+                            child: Builder(
+                                builder: (context) {
+                                  if(itm.type == SubBucketTypes.video.id()){
+                                    return Theme(
+                                      data: chipTheme,
+                                      child: Chip(
+                                        backgroundColor: Colors.grey.withAlpha(160),
+                                        shadowColor: Colors.transparent,
+                                        visualDensity: VisualDensity.compact,
+                                        elevation: 0,
+                                        label: Icon(AppIcons.videoCamera, size: 15, color: Colors.white),
+                                      ),
+                                    );
+                                  }
+
+                                  if(itm.type == SubBucketTypes.audio.id()){
+                                    return Chip(
+                                      backgroundColor: Colors.black.withAlpha(200),
+                                      shadowColor: Colors.transparent,
+                                      visualDensity: VisualDensity.compact,
+                                      elevation: 0,
+                                      label: Icon(AppIcons.headset, size: 15, color: Colors.white),
+                                    );
+                                  }
+
+                                  return SizedBox();
+                                }
+                            )
+                        ),
+                      ],
+                    ),
+
+                    SizedBox(height: 8),
+
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(itm.title, maxLines: 1).bold().fsR(1),
+                    ),
+
+                    SizedBox(height: 8),
+
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 7.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Builder(
+                            builder: (ctx){
+                              if(itm.duration > 0){
+                                final dur = Duration(milliseconds: itm.duration);
+                                return Text('${DurationFormatter.duration(dur, showSuffix: false)} ثانیه').alpha().subFont();
+                              }
+
+                              return SizedBox();
+                            },
+                          ),
+
+                          IconButton(
+                              constraints: BoxConstraints.tightFor(),
+                              padding: EdgeInsets.all(4),
+                              splashRadius: 20,
+                              visualDensity: VisualDensity.compact,
+                              iconSize: 20,
+                              onPressed: (){
+                                setFavorite(itm);
+                              },
+                              icon: Icon(itm.isFavorite ? AppIcons.heartSolid: AppIcons.heart,
+                                size: 20,
+                                color: itm.isFavorite ? Colors.red: Colors.black,
+                              )
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void updateOnListening(){
+    for(final k in newItems){
+      k.isFavorite = FavoriteService.isFavorite(k.id!);
+    }
+
+    for(final k in meditationItems){
+      k.isFavorite = FavoriteService.isFavorite(k.id!);
+    }
+
+    for(final k in videoItems){
+      k.isFavorite = FavoriteService.isFavorite(k.id!);
+    }
+
+    assistCtr.updateMain();
+  }
+
+  void moreMeditation(){
+    AppBroadcast.homeScreenKey.currentState?.gotoPage(1);
+  }
+
+  void moreVideo(){
+    AppBroadcast.homeScreenKey.currentState?.gotoPage(4);
+  }
+
+  void tryLoadClick() async {
+    isInFetchData = true;
+    assistCtr.updateMain();
+
+    requestData();
+  }
+
+  void onLoadingMoreCall(){
+    requestData();
+  }
+
+  void setFavorite(SubBucketModel itm) async {
+    itm.isFavorite = !itm.isFavorite;
+    bool res;
+
+    if(itm.isFavorite){
+      res = await FavoriteService.addFavorite(itm);
+    }
+    else {
+      res = await FavoriteService.removeFavorite(itm.id!);
+    }
+
+    if(res){
+      if(itm.isFavorite){
+        AppToast.showToast(context, AppMessages.isAddToFavorite);
+      }
+    }
+    else {
+      AppToast.showToast(context, AppMessages.operationFailed);
+    }
+
+    //this is will call by broadcast : assistCtr.updateMain();
+  }
+
+  void onItemClick(SubBucketModel itm) {
+    LastSeenService.addItem(itm);
+
+    if(itm.type == SubBucketTypes.video.id()){
+      final inject = VideoPlayerPageInjectData();
+      inject.srcAddress = itm.mediaModel!.url!;
+      inject.videoSourceType = VideoSourceType.network;
+
+      AppRoute.pushNamed(context, VideoPlayerPage.route.name!, extra: inject);
+      return;
+    }
+
+    if(itm.type == SubBucketTypes.audio.id()){
+      final inject = AudioPlayerPageInjectData();
+      inject.srcAddress = itm.mediaModel!.url!;
+      inject.audioSourceType = AudioSourceType.network;
+      inject.title = '';
+      inject.subTitle = itm.title;
+
+      AppRoute.pushNamed(context, AudioPlayerPage.route.name!, extra: inject);
+      return;
+    }
+
+    if(itm.type == SubBucketTypes.list.id()){
+      final inject = ContentViewPageInjectData();
+      inject.subBucket = itm;
+
+      AppRoute.pushNamed(context, ContentViewPage.route.name!, extra: inject);
+      return;
+    }
+  }
+
+  void requestData() async {
+    final js = <String, dynamic>{};
+    js[Keys.requestZone] = 'get_home_page_data';
+    js[Keys.requesterId] = Session.getLastLoginUser()?.userId;
+
+    requester.httpRequestEvents.onFailState = (req) async {
+      isInFetchData = false;
+      assistCtr.removeStateAndUpdate(state$fetchData);
+    };
+
+    requester.httpRequestEvents.onStatusOk = (req, data) async {
+      isInFetchData = false;
+
+      final List mediaList = data['media_list']?? [];
+      final List list = data['new_list']?? [];
+      final List mList = data['new_meditation_list']?? [];
+      final List vList = data['new_video_list']?? [];
+
+      MediaManager.addItemsFromMap(mediaList);
+      MediaManager.sinkItems(MediaManager.mediaList);
+
+      for(final m in list){
+        final itm = SubBucketModel.fromMap(m);
+        itm.isFavorite = FavoriteService.isFavorite(itm.id!);
+        itm.imageModel = MediaManager.getById(itm.coverId);
+        itm.mediaModel = MediaManager.getById(itm.mediaId);
+        newItems.add(itm);
+      }
+
+      for(final m in mList){
+        final itm = SubBucketModel.fromMap(m);
+        itm.isFavorite = FavoriteService.isFavorite(itm.id!);
+        itm.imageModel = MediaManager.getById(itm.coverId);
+        itm.mediaModel = MediaManager.getById(itm.mediaId);
+
+        meditationItems.add(itm);
+      }
+
+      for(final m in vList){
+        final itm = SubBucketModel.fromMap(m);
+        itm.isFavorite = FavoriteService.isFavorite(itm.id!);
+        itm.imageModel = MediaManager.getById(itm.coverId);
+        itm.mediaModel = MediaManager.getById(itm.mediaId);
+        videoItems.add(itm);
+      }
+
+      assistCtr.addStateAndUpdate(state$fetchData);
+    };
+
+    requester.bodyJson = js;
+    requester.prepareUrl();
+    requester.request(context);
   }
 }

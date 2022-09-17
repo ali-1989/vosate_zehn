@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:iris_tools/modules/stateManagers/notifyRefresh.dart';
 import 'package:iris_tools/modules/stateManagers/refresh.dart';
 
-import 'package:app/pages/home_page.dart';
+import 'package:app/pages/layout_page.dart';
 import 'package:app/pages/splash_page.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:iris_tools/api/extendValueNotifier.dart';
@@ -22,7 +22,7 @@ class AppBroadcast {
   static final LocalKey materialAppKey = UniqueKey();
   static final rootScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
   static final rootNavigatorStateKey = GlobalKey<NavigatorState>();
-  static final homeScreenKey = GlobalKey<HomePageState>();
+  static final homeScreenKey = GlobalKey<LayoutPageState>();
 
   //static final homePageBadges = <int, int>{};
   static bool isNetConnected = true;

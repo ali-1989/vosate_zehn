@@ -12,7 +12,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 
 import 'package:app/models/abstract/stateBase.dart';
 import 'package:app/models/countryModel.dart';
-import 'package:app/pages/home_page.dart';
+import 'package:app/pages/layout_page.dart';
 import 'package:app/pages/login/register_page.dart';
 import 'package:app/pages/term_page.dart';
 import 'package:app/services/google_service.dart';
@@ -312,7 +312,7 @@ class _LoginPageState extends StateBase<LoginPage> {
           final userModel = await Session.login$newProfileData(result.jsResult!);
 
           if(userModel != null) {
-            AppRoute.push(context, HomePage.route.path);
+            AppRoute.push(context, LayoutPage.route.path);
           }
           else {
             AppSheet.showSheet$OperationFailed(context);
@@ -424,7 +424,7 @@ class _LoginPageState extends StateBase<LoginPage> {
         final userModel = await Session.login$newProfileData(result.jsResult!);
 
         if(userModel != null) {
-          AppRoute.replaceNamed(context, HomePage.route.name!);
+          AppRoute.replaceNamed(context, LayoutPage.route.name!);
         }
         else {
           AppSheet.showSheet$OperationFailed(context);

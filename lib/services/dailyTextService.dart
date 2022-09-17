@@ -6,16 +6,45 @@ import 'package:app/system/requester.dart';
 import 'package:app/system/session.dart';
 import 'package:app/tools/app/appDb.dart';
 import 'package:app/tools/app/appDialogIris.dart';
+import 'package:app/tools/app/appIcons.dart';
 import 'package:app/tools/app/appRoute.dart';
+import 'package:app/tools/app/appThemes.dart';
+import 'package:flutter/material.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
 
 class DailyTextService {
   DailyTextService._();
 
   static void showDailyDialog(String msg){
+    final body = Column(
+      children: [
+        Align(
+          alignment: Alignment.topLeft,
+          child: IconButton(
+              onPressed: (){
+                Navigator.of(AppRoute.getContext()).pop();
+              },
+              icon: Icon(AppIcons.close)
+          ),
+        ),
+
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical:8.0),
+          child: Text(msg, style: AppThemes.body2TextStyle()!.copyWith(fontSize: 14, fontWeight: FontWeight.bold)),
+        ),
+
+        SizedBox(height: 10),
+      ],
+    );
+
+    final decoration = AppDialogIris.instance.dialogDecoration.copy();
+    decoration.padding = EdgeInsets.zero;
+    decoration.titlePadding = EdgeInsets.zero;
+
     AppDialogIris.instance.showIrisDialog(
         AppRoute.getContext(),
-       desc: msg,
+       descView: body,
+      decoration: decoration,
     );
   }
 

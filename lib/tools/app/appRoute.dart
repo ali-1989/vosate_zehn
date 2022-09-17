@@ -9,7 +9,7 @@ import 'package:app/pages/aid_page.dart';
 import 'package:app/pages/contact_us_page.dart';
 import 'package:app/pages/e404_page.dart';
 import 'package:app/pages/favorites_page.dart';
-import 'package:app/pages/home_page.dart';
+import 'package:app/pages/layout_page.dart';
 import 'package:app/pages/image_full_screen.dart';
 import 'package:app/pages/last_seen_page.dart';
 import 'package:app/pages/levels/audio_player_page.dart';
@@ -106,7 +106,7 @@ class AppRoute {
 final mainRouter = GoRouter(
     routes: <GoRoute>[
       E404Page.route,
-      HomePage.route,
+      LayoutPage.route,
       LoginPage.route,
       RegisterPage.route,
       TermPage.route,
@@ -125,7 +125,7 @@ final mainRouter = GoRouter(
       SentencesPage.route,
       SearchPage.route,
     ],
-    initialLocation: HomePage.route.path,
+    initialLocation: LayoutPage.route.path,
     routerNeglect: true,//In browser 'back' button not work
     errorBuilder: routeErrorHandler,
     redirect: _mainRedirect,
@@ -148,7 +148,7 @@ bool checkFreeRoute(GoRoute route, GoRouterState state){
 }
 
 String? _mainRedirect(GoRouterState state){
-  if(state.subloc == HomePage.route.path){
+  if(state.subloc == LayoutPage.route.path){
     AppDirectories.generateNoMediaFile();
   }
 

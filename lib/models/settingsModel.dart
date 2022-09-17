@@ -22,7 +22,7 @@ class SettingsModel {
   String proxyAddress = defaultProxyAddress;
   Orientation? appRotationState; // null: free
   int? currentVersion;
-  static int webSocketPeriodicHeart = 3;
+  static int webSocketPeriodicHeartMinutes = 3;
   static int drawerMenuTimeMill = 350;
   static int maxCoverWidth = 180;
   static int maxCoverHeightL = 120;

@@ -27,7 +27,7 @@ import 'package:app/tools/app/appLocale.dart';
 import 'package:app/tools/app/appNotification.dart';
 import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/app/appSizes.dart';
-import 'package:app/tools/app/appWebsocket.dart';
+import 'package:app/services/websocketService.dart';
 import 'package:app/tools/deviceInfoTools.dart';
 import 'package:app/tools/netListenerTools.dart';
 import 'package:app/tools/userLoginTools.dart';
@@ -90,7 +90,7 @@ class InitialApplication {
     eventListener.addDetachListener(LifeCycleApplication.onDetach);
     WidgetsBinding.instance.addObserver(eventListener);
 
-    AppWebsocket.prepareWebSocket(SettingsManager.settingsModel.wsAddress);
+    WebsocketService.prepareWebSocket(SettingsManager.settingsModel.wsAddress);
     NetManager.addChangeListener(NetListenerTools.onNetListener);
 
     DownloadUploadService.downloadManager = DownloadManager('${Constants.appName}DownloadManager');

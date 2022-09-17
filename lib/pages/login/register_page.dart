@@ -9,7 +9,7 @@ import 'package:toggle_switch/toggle_switch.dart';
 
 import 'package:app/models/abstract/stateBase.dart';
 import 'package:app/models/countryModel.dart';
-import 'package:app/pages/home_page.dart';
+import 'package:app/pages/layout_page.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/requester.dart';
 import 'package:app/system/session.dart';
@@ -262,7 +262,7 @@ class _RegisterPageState extends StateBase<RegisterPage> {
 
       if(userModel != null) {
         AppRoute.pop(context);
-        AppRoute.replaceNamed(context, HomePage.route.name!);
+        AppRoute.replaceNamed(context, LayoutPage.route.name!);
       }
       else {
         AppSheet.showSheet$OperationFailed(context);

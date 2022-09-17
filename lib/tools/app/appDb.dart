@@ -1,5 +1,6 @@
 import 'package:app/tools/app/appDirectories.dart';
 import 'package:iris_db/iris_db.dart';
+import 'package:iris_tools/api/converter.dart';
 import 'package:iris_tools/api/helpers/databaseHelper.dart';
 import '/system/keys.dart';
 
@@ -147,7 +148,7 @@ class AppDB {
       return [];
     }
 
-    return res[0][Keys.value] as List<T>;
+    return Converter.correctList<T>(res[0][Keys.value])!;
   }
   ///------------------------------------------------------------------------------------------
 }

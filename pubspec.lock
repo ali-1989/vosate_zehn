@@ -21,7 +21,7 @@ packages:
       name: appinio_swiper
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.3"
+    version: "1.1.0"
   archive:
     dependency: transitive
     description:
@@ -98,7 +98,7 @@ packages:
       name: chewie
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.3.4"
+    version: "1.3.5"
   chewie_audio:
     dependency: transitive
     description:
@@ -133,7 +133,7 @@ packages:
       name: connectivity_plus
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.3.6+1"
+    version: "2.3.7"
   connectivity_plus_linux:
     dependency: transitive
     description:
@@ -301,7 +301,7 @@ packages:
       name: file_picker
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.0.1"
+    version: "5.1.0"
   flip_card:
     dependency: "direct main"
     description:
@@ -449,7 +449,7 @@ packages:
       name: google_sign_in_android
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.1.0"
+    version: "6.1.1"
   google_sign_in_ios:
     dependency: transitive
     description:
@@ -555,12 +555,10 @@ packages:
   iris_tools:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: d5cb47afe8cbba660069a306080d326874c10b81
-      url: "https://github.com/ali-1989/IrisTools.git"
-    source: git
-    version: "0.0.13"
+      path: "../#FlutterPackages/IrisTools"
+      relative: true
+    source: path
+    version: "0.0.15"
   jiffy:
     dependency: transitive
     description:
@@ -581,7 +579,7 @@ packages:
       name: just_audio
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.9.28"
+    version: "0.9.29"
   just_audio_platform_interface:
     dependency: transitive
     description:
@@ -868,7 +866,7 @@ packages:
       name: plugin_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.2"
+    version: "2.1.3"
   pointer_interceptor:
     dependency: transitive
     description:
@@ -1027,7 +1025,7 @@ packages:
       name: url_launcher_android
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.0.18"
+    version: "6.0.19"
   url_launcher_ios:
     dependency: transitive
     description:
@@ -1160,7 +1158,7 @@ packages:
       name: wakelock_windows
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.0"
+    version: "0.2.1"
   webview_flutter:
     dependency: transitive
     description:
@@ -1174,7 +1172,7 @@ packages:
       name: webview_flutter_android
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.10.0"
+    version: "2.10.1"
   webview_flutter_platform_interface:
     dependency: transitive
     description:
@@ -1188,7 +1186,7 @@ packages:
       name: webview_flutter_wkwebview
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.9.3"
+    version: "2.9.4"
   webviewx:
     dependency: "direct main"
     description:
@@ -1202,7 +1200,7 @@ packages:
       name: win32
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.7.0"
+    version: "3.0.0"
   xdg_directories:
     dependency: transitive
     description:
