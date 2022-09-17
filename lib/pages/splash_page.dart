@@ -20,7 +20,6 @@ import 'package:app/tools/app/appLocale.dart';
 import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/app/appToast.dart';
-import 'package:app/tools/deviceInfoTools.dart';
 
 bool _isInit = false;
 bool _isInLoadingSettings = true;
@@ -178,7 +177,7 @@ class SplashScreenState extends State<SplashPage> {
 
     if (!_isInLoadingSettings) {
       await Session.fetchLoginUsers();
-      await checkInstallVersion();
+      await VersionManager.checkInstallVersion();
       await InitialApplication.onceInit(context);
 
       AppBroadcast.reBuildMaterialBySetTheme();
@@ -193,29 +192,12 @@ class SplashScreenState extends State<SplashPage> {
           if (InitialApplication.isInitialOk) {
             timer.cancel();
 
-            checkAppNewVersion(context);
+            VersionManager.checkAppHasNewVersion(context);
             InitialApplication.callOnLaunchUp();
           }
         });
       });
     }
-  }
-
-  Future<void> checkInstallVersion() async {
-    final oldVersion = SettingsManager.settingsModel.currentVersion;
-
-    if (oldVersion == null) {
-      VersionManager.onFirstInstall();
-    }
-    else if (oldVersion < Constants.appVersionCode) {
-      VersionManager.onUpdateInstall();
-    }
-  }
-
-  void checkAppNewVersion(BuildContext context) async {
-    final holder = DeviceInfoTools.getDeviceInfo();
-
-    //final version = await VersionManager.checkVersion(holder);
   }
 
   Future<void> testCodes(BuildContext context) async {

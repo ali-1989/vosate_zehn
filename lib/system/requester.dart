@@ -57,9 +57,16 @@ class Requester {
     _http.fullUrl = SettingsManager.settingsModel.httpAddress;
   }
 
-  void prepareUrl(){
-    if(!_http.fullUrl.contains('graph-v1')) {
-      _http.fullUrl += '/graph-v1';
+  void prepareUrl({String? fullUrl, String? pathUrl}){
+    if(fullUrl != null){
+      _http.fullUrl = fullUrl;
+      return;
+    }
+
+    pathUrl ??= '/graph-v1';
+
+    if(!_http.fullUrl.contains(pathUrl)) {
+      _http.fullUrl += pathUrl;
     }
   }
 

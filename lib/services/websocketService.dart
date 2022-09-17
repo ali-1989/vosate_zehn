@@ -156,7 +156,9 @@ class WebsocketService {
 	static void _handlerNewMessage(dynamic dataAsJs) async{
 		try {
 			final receiveData = dataAsJs.toString();
-
+print('@@@@@@@@@@@@@@@@@@');
+print('$receiveData');
+print('@@@@@@@@@@@@@@@@@@');
 			if(!Checker.isJson(receiveData)) {
 				return;
 			}

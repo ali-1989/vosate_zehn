@@ -90,12 +90,20 @@ class AppMessages {
     return AppRoute.getContext().t('logout')?? _noText;
   }
 
+  static String get exit {
+    return AppRoute.getContext().t('exit')?? _noText;
+  }
+
   static String get search {
     return AppRoute.getContext().t('search')?? _noText;
   }
 
   static String get later {
     return AppRoute.getContext().t('later')?? _noText;
+  }
+
+  static String get update {
+    return AppRoute.getContext().t('update')?? _noText;
   }
 
   static String get validation {
@@ -124,6 +132,10 @@ class AppMessages {
 
   static String get doYouWantLogoutYourAccount {
     return AppRoute.getContext().tInMap('loginSection', 'doYouWantLogoutYourAccount')?? _noText;
+  }
+
+  static String get newAppVersionIsOk {
+    return AppRoute.getContext().t('newAppVersionIsOk')?? _noText;
   }
 
   static String get terms {
