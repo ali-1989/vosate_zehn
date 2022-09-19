@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app/services/firebase_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -24,6 +25,7 @@ Future<void> main() async {
       debugPrint('@@ FlutterError stack: ${errorDetails.stack}');
     };
 
+    FireBaseService.init();
     GoRouter.setUrlPathStrategy(UrlPathStrategy.path);
   }
 

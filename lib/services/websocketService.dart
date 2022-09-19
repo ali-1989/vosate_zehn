@@ -156,9 +156,7 @@ class WebsocketService {
 	static void _handlerNewMessage(dynamic dataAsJs) async{
 		try {
 			final receiveData = dataAsJs.toString();
-print('@@@@@@@@@@@@@@@@@@');
-print('$receiveData');
-print('@@@@@@@@@@@@@@@@@@');
+
 			if(!Checker.isJson(receiveData)) {
 				return;
 			}
@@ -207,7 +205,7 @@ print('@@@@@@@@@@@@@@@@@@');
 	}
 
 	static void messageForUser(Map js) async {
-		final userId = js[Keys.userId]?? 0;
+		final userId = js[Keys.userId];
 		final data = js[Keys.data];
 		final message = data['message'];
 		final messageId = data['message_id'];
@@ -217,7 +215,6 @@ print('@@@@@@@@@@@@@@@@@@');
 		}
 
 		final ids = AppDB.fetchAsList(Keys.setting$userMessageIds);
-
 		if(!ids.contains(messageId)) {
 			_prompt(message);
 			AppDB.addToList(Keys.setting$userMessageIds, messageId);
