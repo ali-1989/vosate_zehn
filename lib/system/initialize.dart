@@ -1,7 +1,6 @@
 import 'package:app/managers/advertisingManager.dart';
 import 'package:app/managers/mediaManager.dart';
 import 'package:app/services/aidService.dart';
-import 'package:app/services/dailyTextService.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -44,6 +43,7 @@ class InitialApplication {
     AppDirectories.prepareStoragePaths(Constants.appName);
 
     if (!kIsWeb) {
+      print('getAppFolderInExternalStorage() ${AppDirectories.getAppFolderInExternalStorage()}');
       PublicAccess.reporter = Reporter(AppDirectories.getAppFolderInExternalStorage(), 'report');
     }
 
@@ -57,7 +57,7 @@ class InitialApplication {
 
     isCallInit = true;
     TrustSsl.acceptBadCertificate();
-    PublicAccess.logger = Logger('${AppDirectories.getTempDir$ex()}/events.txt');
+    PublicAccess.logger = Logger('${AppDirectories.getTempDir$ex()}/logs');
     await DeviceInfoTools.prepareDeviceInfo();
     await DeviceInfoTools.prepareDeviceId();
 
