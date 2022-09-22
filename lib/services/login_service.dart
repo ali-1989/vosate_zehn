@@ -35,6 +35,7 @@ class LoginService {
     f = f.then((Response? response){
       if(response == null || !request.isOk) {
         result.complete(null);
+        return;
       }
 
       result.complete(request.getBodyAsJson());
@@ -72,6 +73,7 @@ class LoginService {
       if(response == null || !request.isOk) {
         loginWrapper.connectionError = true;
         result.complete(loginWrapper);
+        return;
       }
 
       final resJs = request.getBodyAsJson()!;
@@ -126,6 +128,7 @@ class LoginService {
       if(response == null || !request.isOk) {
         loginWrapper.connectionError = true;
         result.complete(loginWrapper);
+        return;
       }
 
 

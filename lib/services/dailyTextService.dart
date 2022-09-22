@@ -15,6 +15,31 @@ import 'package:iris_tools/dateSection/dateHelper.dart';
 class DailyTextService {
   DailyTextService._();
 
+  static void checkShowDialog() async {
+    await Future.delayed(Duration(seconds: 10), (){});
+
+    if(!Session.hasAnyLogin()){
+      return;
+    }
+
+    final list = await _requestData();
+
+    if(list == null){
+      return;
+    }
+
+    final ids = AppDB.fetchAsList<int>(Keys.setting$dailyIdsList);
+
+    for(final k in list){
+     if(k.date != null && DateHelper.isToday(k.date!)){
+        if(!ids.contains(k.id)){
+          showDailyDialog(k.text);
+          AppDB.addToList(Keys.setting$dailyIdsList, k.id);
+        }
+      }
+    }
+  }
+
   static void showDailyDialog(String msg){
     final body = Column(
       children: [
@@ -39,38 +64,12 @@ class DailyTextService {
 
     final decoration = AppDialogIris.instance.dialogDecoration.copy();
     decoration.padding = EdgeInsets.zero;
-    decoration.titlePadding = EdgeInsets.zero;
 
     AppDialogIris.instance.showIrisDialog(
-        AppRoute.getContext(),
-       descView: body,
+      AppRoute.getContext(),
+      descView: body,
       decoration: decoration,
     );
-  }
-
-  static void checkShowDialog() async {
-    await Future.delayed(Duration(seconds: 10), (){});
-
-    if(!Session.hasAnyLogin()){
-      return;
-    }
-
-    final list = await _requestData();
-
-    if(list == null){
-      return;
-    }
-
-    final ids = AppDB.fetchAsList<int>(Keys.setting$dailyIdsList);
-
-    for(final k in list){
-     if(k.date != null && DateHelper.isToday(k.date!)){
-        if(!ids.contains(k.id)){
-          showDailyDialog(k.text);
-          AppDB.addToList(Keys.setting$dailyIdsList, k.id);
-        }
-      }
-    }
   }
 
   static Future<List<DailyTextModel>?> _requestData() async {

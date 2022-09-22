@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:app/services/firebase_service.dart';
+import 'package:app/system/publicAccess.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -21,11 +22,14 @@ Future<void> main() async {
     SchedulerBinding.instance.window.scheduleFrame();
 
     FlutterError.onError = (FlutterErrorDetails errorDetails) {
-      debugPrint('@@ FlutterError: ${errorDetails.exception.toString()}');
-      debugPrint('@@ FlutterError stack: ${errorDetails.stack}');
+      PublicAccess.logger.logToAll('@@ FlutterError: ${errorDetails.exception.toString()}');
+      PublicAccess.logger.logToAll('@@ FlutterError-stack: ${errorDetails.stack}');
     };
 
-    FireBaseService.init();
+    FireBaseService.init().then((value){
+      FireBaseService.subscribeToTopic('daily_text');
+    });
+
     GoRouter.setUrlPathStrategy(UrlPathStrategy.path);
   }
 
@@ -42,7 +46,7 @@ Future<void> main() async {
     flutterBindingInitialize();
     runApp(const MyApp());
     }, (error, stackTrace) {
-      debugPrint('@@ ZonedGuarded: ${error.toString()}');
+    PublicAccess.logger.logToAll('@@ ZonedGuarded: ${error.toString()}');
 
       if(kDebugMode) {
         throw error;

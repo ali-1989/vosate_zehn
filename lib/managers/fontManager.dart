@@ -231,16 +231,17 @@ class FontManager {
     final Map data = res[lang]?? <String, dynamic>{};
 
     AppThemes.instance.baseFont = Font.fromMap(data['UserBaseFont']);
+    AppThemes.instance.subFont = Font.fromMap(data['UserSubFont']);
+    AppThemes.instance.boldFont = Font.fromMap(data['UserBoldFont']);
+
     if(AppThemes.instance.baseFont.family == null) {
       AppThemes.instance.baseFont = FontManager.instance.defaultFontFor(lang, FontUsage.normal);
     }
 
-    AppThemes.instance.subFont = Font.fromMap(data['UserSubFont']);
     if(AppThemes.instance.subFont.family == null) {
       AppThemes.instance.subFont = FontManager.instance.defaultFontFor(lang, FontUsage.sub);
     }
 
-    AppThemes.instance.boldFont = Font.fromMap(data['UserBoldFont']);
     if(AppThemes.instance.boldFont.family == null) {
       AppThemes.instance.boldFont = FontManager.instance.defaultFontFor(lang, FontUsage.bold);
     }

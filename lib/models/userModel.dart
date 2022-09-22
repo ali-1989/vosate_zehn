@@ -39,8 +39,6 @@ class UserModel {
     email = map['email'];
     userType = map['user_type'];
 
-    token = map[Keys.token] != null ? Token.fromMap(map[Keys.token]) : null;
-
     if(map[Keys.token] is Map) {
       token = Token.fromMap(map[Keys.token]);
     }

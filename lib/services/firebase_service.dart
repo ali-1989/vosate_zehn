@@ -1,23 +1,25 @@
+import 'package:app/system/publicAccess.dart';
+import 'package:app/tools/app/appNotification.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:iris_tools/api/logger/reporter.dart';
 
 Future<void> _fbMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
-
-  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
-    alert: true,
-    badge: true,
-    sound: true,
-  );
-
+  PublicAccess.logger.logToFile('_fbMessagingBackgroundHandler: ${message.notification!.title}');
   //showFlutterNotification(message);
 }
-
+///================================================================================================
 class FireBaseService {
   FireBaseService._();
 
   static Future init() async {
     await Firebase.initializeApp();
+
+    FirebaseMessaging.instance.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
 
     await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
       alert: true,
@@ -30,13 +32,28 @@ class FireBaseService {
   }
 
   static void setListening(){
-    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
-      print(event.notification!.body);
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      AppNotification.sendNotification(message.notification!.title, message.notification!.body!);
+
+      PublicAccess.reporter.addReport(Report()..description = '${message.notification!.title}'..type = ReportType.appInfo);
+      PublicAccess.logger.logToFile('${message.notification!.title}');
+
     });
 
-    FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      print('Message clicked!');
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      PublicAccess.reporter.addReport(Report()..description = 'onMessageOpenedApp'..type = ReportType.appInfo);
+      PublicAccess.reporter.addReport(Report()..description = '${message.notification!.title}'..type = ReportType.appInfo);
+      PublicAccess.logger.logToFile('${message.notification!.title}');
+      //AppNotification.sendNotification(message.notification!.title, message.notification!.body!);
     });
+  }
+
+  static Future<String?> getToken() async {
+    return await FirebaseMessaging.instance.getToken();
+  }
+
+  static Future<void> subscribeToTopic(String name) async {
+    return FirebaseMessaging.instance.subscribeToTopic(name);
   }
 
   static Future<void> sendPushMessage() async {
@@ -51,8 +68,9 @@ class FireBaseService {
 
     final js = {};
     js['token'] = token;
+
     js['data'] = {
-    'via': 'FlutterFire Cloud Messaging!!!',
+    'from': 'FlutterFire Cloud Messaging!!!',
     'count': messageCount.toString(),
     };
 

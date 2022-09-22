@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:app/system/publicAccess.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:iris_tools/api/generator.dart';
 
@@ -110,9 +111,8 @@ class AppNotification {
 
 	static void startListenTap() {
 		AwesomeNotifications().actionStream.listen((ReceivedNotification receivedNotification){
-			//receivedNotification.id , payload
-				}
-		);
+			PublicAccess.logger.logToAll('@@@ tap: ${receivedNotification.id} | ${receivedNotification.payload}');
+		});
 	}
 
 	static void dismissAll() {
@@ -155,7 +155,14 @@ class AppNotification {
 				autoDismissible: true,
 				category: NotificationCategory.Email,
 				notificationLayout: NotificationLayout.Inbox,
-				body: '<b> 10.000 visitor! Congratz!</b> You just won our prize'
+				body: message,
+				//largeIcon: largeIcon,
+				//customSound: 'resource://raw/res_morph_power_rangers'
+			),
+		);
+
+		/*
+		'<b> 10.000 visitor! Congratz!</b> You just won our prize'
 						'\n'
 						'<b>Want to loose weight?</b> Are you tired from false advertisements? '
 						'\n'
@@ -164,10 +171,7 @@ class AppNotification {
 						'<b>READ MY MESSAGE</b> Stop to ignore me!'
 						'\n'
 						'<b>READ MY MESSAGE</b> Stop to ignore me!'
-						'<b>READ MY MESSAGE</b> Stop to ignore me!',
-				//largeIcon: largeIcon,
-				//customSound: 'resource://raw/res_morph_power_rangers'
-			),
-		);
+						'<b>READ MY MESSAGE</b> Stop to ignore me!'
+		 */
 	}
 }

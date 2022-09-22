@@ -45,7 +45,7 @@ class SplashScreenState extends State<SplashPage> {
     /// ReBuild First Widgets tree, not call on Navigator pages
     return StreamBuilder<bool>(
         initialData: false,
-        stream: AppBroadcast.materialUpdaterStream.stream,
+        stream: AppBroadcast.viewUpdaterStream.stream,
         builder: (context, snapshot) {
           splashTimer();
           init();

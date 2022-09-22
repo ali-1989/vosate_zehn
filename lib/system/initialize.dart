@@ -114,6 +114,6 @@ class InitialApplication {
     MediaManager.loadAllRecords();
     AdvertisingManager.init();
     AidService.checkShowDialog();
-    DailyTextService.checkShowDialog();
+    //DailyTextService.checkShowDialog();
   }
 }

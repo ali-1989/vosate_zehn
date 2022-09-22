@@ -13,7 +13,7 @@ import 'package:iris_tools/api/extendValueNotifier.dart';
 class AppBroadcast {
   AppBroadcast._();
 
-  static final StreamController<bool> materialUpdaterStream = StreamController<bool>();
+  static final StreamController<bool> viewUpdaterStream = StreamController<bool>();
   static final RefreshController drawerMenuRefresher = RefreshController();
   static final NotifyBroadcast avatarNotifier = NotifyBroadcast();
   static final ExtendValueNotifier<int> newAdvNotifier = ExtendValueNotifier<int>(0);
@@ -37,7 +37,7 @@ class AppBroadcast {
   }
 
   static void reBuildMaterial() {
-    materialUpdaterStream.sink.add(true);
+    viewUpdaterStream.sink.add(true);
   }
 
   static void gotoSplash(int waitingInSplash) {
