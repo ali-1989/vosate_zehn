@@ -16,7 +16,8 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:glowstone/glowstone.dart';
 import 'package:go_router/go_router.dart';
-import 'package:iris_pic_editor/pic_editor.dart';
+import 'package:iris_pic_editor/picEditor/models/edit_options.dart';
+import 'package:iris_pic_editor/picEditor/picEditor.dart';
 import 'package:iris_tools/api/helpers/fileHelper.dart';
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
 import 'package:iris_tools/api/helpers/mathHelper.dart';
@@ -287,6 +288,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
     );
 
     print('hhhhhhhhhhhh $newDate');
+    uploadBirthdate(newDate);
   }
 
   void changeGenderClick() async {
@@ -300,6 +302,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
     );
 
     print('hhhhhhhhhhhh $sex');
+    uploadGender(sex.index);
   }
 
   void changeNameFamilyClick() async {
@@ -309,6 +312,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
     inject.onButton = (name, family){
       print('name: $name');
       AppNavigator.pop(context);
+      uploadName(name, family);
     };
 
     final body = ChangeNameFamilyView(
@@ -528,6 +532,95 @@ class _ProfilePageState extends StateBase<ProfilePage> {
     requester.request(context, false);
   }
   
+  void uploadName(String name, String family){
+    final js = <String, dynamic>{};
+    js[Keys.requestZone] = 'DeleteProfileAvatar';
+    js[Keys.requesterId] = user.userId;
+    js[Keys.forUserId] = user.userId;
+    js[Keys.name] = name;
+    js[Keys.fileName] = family;
+
+    requester.httpRequestEvents.onAnyState = (req) async {
+      await hideLoading();
+    };
+
+    requester.httpRequestEvents.onFailState = (req) async {
+      AppSnack.showSnack$OperationFailed(context);
+    };
+
+    requester.httpRequestEvents.onStatusOk = (req, data) async {
+      user.name = name;
+      user.family = family;
+
+      assistCtr.updateMain();
+      //todo save user
+    };
+
+    showLoading(canBack: false);
+    requester.bodyJson = js;
+    requester.prepareUrl();
+
+    requester.request(context, false);
+  }
+
+  void uploadGender(int gender){
+    final js = <String, dynamic>{};
+    js[Keys.requestZone] = 'DeleteProfileAvatar';
+    js[Keys.requesterId] = user.userId;
+    js[Keys.forUserId] = user.userId;
+    js[Keys.sex] = gender;
+
+    requester.httpRequestEvents.onAnyState = (req) async {
+      await hideLoading();
+    };
+
+    requester.httpRequestEvents.onFailState = (req) async {
+      AppSnack.showSnack$OperationFailed(context);
+    };
+
+    requester.httpRequestEvents.onStatusOk = (req, data) async {
+      user.sex = gender;
+
+      assistCtr.updateMain();
+      //todo save user
+    };
+
+    showLoading(canBack: false);
+    requester.bodyJson = js;
+    requester.prepareUrl();
+
+    requester.request(context, false);
+  }
+
+  void uploadBirthdate(DateTime dt){
+    final js = <String, dynamic>{};
+    js[Keys.requestZone] = 'DeleteProfileAvatar';
+    js[Keys.requesterId] = user.userId;
+    js[Keys.forUserId] = user.userId;
+    js[Keys.date] = DateHelper.toTimestamp(dt);
+
+    requester.httpRequestEvents.onAnyState = (req) async {
+      await hideLoading();
+    };
+
+    requester.httpRequestEvents.onFailState = (req) async {
+      AppSnack.showSnack$OperationFailed(context);
+    };
+
+    requester.httpRequestEvents.onStatusOk = (req, data) async {
+      user.birthDate = dt;
+
+      assistCtr.updateMain();
+      //todo save user
+    };
+
+    showLoading(canBack: false);
+    requester.bodyJson = js;
+    requester.prepareUrl();
+
+    requester.request(context, false);
+  }
+
   void requestProfileData() async {
     final js = <String, dynamic>{};
     js[Keys.requestZone] = 'get_profile_data';
