@@ -224,8 +224,8 @@ class _RegisterPageState extends StateBase<RegisterPage> {
               );
             },
             currentDate: birthDate,
-            minYear: 1922,
-            maxYear: GregorianDate().getYear(),
+            minYearAsGregorian: 1922,
+            maxYearAsGregorian: GregorianDate().getYear(),
           );
         }
     );

@@ -51,7 +51,7 @@ class PublicAccess {
     res['app_version_name'] = Constants.appVersionName;
 
     if (token != null) {
-      res['token'] = token;
+      res[Keys.token] = token;
     }
 
     return res;

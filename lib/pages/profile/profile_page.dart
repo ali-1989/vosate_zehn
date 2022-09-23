@@ -1,3 +1,6 @@
+import 'package:app/tools/app/appSheet.dart';
+import 'package:app/views/dateViews/selectDateCalendarView.dart';
+import 'package:app/views/selectGenderView.dart';
 import 'package:flutter/material.dart';
 
 import 'package:animate_do/animate_do.dart';
@@ -226,12 +229,12 @@ class _ProfilePageState extends StateBase<ProfilePage> {
                               ActionChip(
                                 backgroundColor: AppThemes.instance.currentTheme.differentColor,
                                   label: Text('${DateHelper.calculateAge(user.birthDate)} سال').color(Colors.white),
-                                  onPressed: (){}
+                                  onPressed: changeBirthdateClick,
                               ),
                             ],
                           ),
 
-                          SizedBox(height: 15,),
+                          SizedBox(height: 15),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -239,7 +242,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
                               ActionChip(
                                   backgroundColor: AppThemes.instance.currentTheme.differentColor,
                                   label: Text(user.sex == 1? AppMessages.man: AppMessages.woman).color(Colors.white),
-                                  onPressed: (){}
+                                  onPressed: changeGenderClick,
                               ),
                             ],
                           )
@@ -256,13 +259,54 @@ class _ProfilePageState extends StateBase<ProfilePage> {
     );
   }
 
+  void changeBirthdateClick() async {
+
+    final newDate = await AppSheet.showSheetCustom(
+        context,
+        SelectDateCalendarView(
+          minYearAsGregorian: 1922,
+          maxYearAsGregorian: 2020,
+          title: 'تاریخ تولد',
+          currentDate: user.birthDate,
+        ),
+        routeName: 'changeBirthdate'
+    );
+
+    print('hhhhhhhhhhhh $newDate');
+  }
+
+  void changeGenderClick() async {
+    final sex = await AppSheet.showSheetCustom(
+        context,
+        SelectGenderView(
+          title: 'جنسیت',
+          genderType: user.sex == 1? GenderType.man: (user.sex == 2 ? GenderType.woman: GenderType.other),
+        ),
+        routeName: 'changeGender'
+    );
+
+    print('hhhhhhhhhhhh $sex');
+  }
+
+  void changeNameFamilyClick() async {
+    final sex = await AppSheet.showSheetCustom(
+        context,
+        SelectGenderView(
+          title: 'جنسیت',
+          genderType: user.sex == 1? GenderType.man: (user.sex == 2 ? GenderType.woman: GenderType.other),
+        ),
+        routeName: 'changeGender'
+    );
+
+    print('hhhhhhhhhhhh $sex');
+  }
+
   void requestProfileData() async {
     final js = <String, dynamic>{};
     js[Keys.requestZone] = 'get_profile_data';
     js[Keys.requesterId] = Session.getLastLoginUser()?.userId;
     js[Keys.forUserId] = js[Keys.requesterId];
 
-    requester.bodyJson = js;
 
     requester.httpRequestEvents.onFailState = (req) async {
       AppToast.showToast(context, AppMessages.errorCommunicatingServer);
@@ -274,6 +318,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
       assistCtr.updateMain();
     };
 
+    requester.bodyJson = js;
     requester.prepareUrl();
     requester.request(context);
   }

@@ -40,10 +40,9 @@ class InitialApplication {
   static bool isLaunchOk = false;
 
   static Future<bool> importantInit() async {
-    AppDirectories.prepareStoragePaths(Constants.appName);
+    await AppDirectories.prepareStoragePaths(Constants.appName);
 
     if (!kIsWeb) {
-      print('getAppFolderInExternalStorage() ${AppDirectories.getAppFolderInExternalStorage()}');
       PublicAccess.reporter = Reporter(AppDirectories.getAppFolderInExternalStorage(), 'report');
     }
 
