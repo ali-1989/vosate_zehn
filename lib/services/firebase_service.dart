@@ -1,8 +1,10 @@
+import 'package:app/managers/settingsManager.dart';
 import 'package:app/system/publicAccess.dart';
 import 'package:app/tools/app/appNotification.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:iris_tools/api/logger/reporter.dart';
+import 'package:iris_tools/dateSection/ADateStructure.dart';
+import 'package:iris_tools/dateSection/dateHelper.dart';
 
 Future<void> _fbMessagingBackgroundHandler(RemoteMessage message) async {
   PublicAccess.logger.logToFile('_fbMessagingBackgroundHandler: ${message.notification!.body}');
@@ -10,6 +12,9 @@ Future<void> _fbMessagingBackgroundHandler(RemoteMessage message) async {
 }
 ///================================================================================================
 class FireBaseService {
+  static String? token;
+  static DateTime? lastUpdateToken;
+
   FireBaseService._();
 
   static Future init() async {
@@ -33,20 +38,39 @@ class FireBaseService {
 
   static void setListening(){
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      AppNotification.sendNotification(message.notification!.title, message.notification!.body!);
+      if(SettingsManager.settingsModel.notificationDailyText) {
+        AppNotification.sendNotification(message.notification!.title, message.notification!.body!);
+      }
 
-      PublicAccess.logger.logToFile('onMessage [sendNotification]: ${message.notification!.title}');
-      PublicAccess.reporter.addReport(Report()..description = '${message.notification!.body}'..type = ReportType.appInfo);
+      PublicAccess.logger.logToFile('on Fcm [sendNotification]: ${message.notification!.title}');
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       PublicAccess.logger.logToFile('onMessageOpenedApp: ${message.notification!.body}');
-      PublicAccess.reporter.addReport(Report()..description = 'onMessageOpenedApp'..type = ReportType.appInfo);
     });
   }
 
+  static Future<String?> getTokenForce() async {
+    token = await FirebaseMessaging.instance.getToken();
+
+    final gd = GregorianDate();
+    gd.moveLocalToUTC();
+
+    lastUpdateToken = gd.convertToSystemDate();
+
+    return token;
+  }
+
   static Future<String?> getToken() async {
-    return await FirebaseMessaging.instance.getToken();
+    if(token == null || lastUpdateToken == null){
+      return getTokenForce();
+    }
+
+    if(DateHelper.isPastOf(lastUpdateToken, Duration(hours: 1))){
+      return getTokenForce();
+    }
+
+    return token;
   }
 
   static Future<void> subscribeToTopic(String name) async {

@@ -169,7 +169,6 @@ class SplashScreenState extends State<SplashPage> {
 
     _isInit = true;
 
-    await InitialApplication.importantInit();
     await AppDB.init();
 
     AppThemes.initial();

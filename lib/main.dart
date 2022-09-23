@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:app/services/firebase_service.dart';
+import 'package:app/system/initialize.dart';
 import 'package:app/system/publicAccess.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -16,37 +17,32 @@ bool _isInit = false;
 ///===== call on any hot restart ================================================================
 Future<void> main() async {
 
-  Future<void> flutterBindingInitialize() async {
+  Future<void> appInitialize() async {
     WidgetsFlutterBinding.ensureInitialized();
     SchedulerBinding.instance.ensureVisualUpdate();
     SchedulerBinding.instance.window.scheduleFrame();
+    await InitialApplication.importantInit();
 
     FlutterError.onError = (FlutterErrorDetails errorDetails) {
-      PublicAccess.logger.logToAll('@@ FlutterError: ${errorDetails.exception.toString()}');
-      PublicAccess.logger.logToAll('@@ FlutterError-stack: ${errorDetails.stack}');
+      var data = '@@ on Error catch: ${errorDetails.exception.toString()}';
+      data += '\n stack: ${errorDetails.stack}';
+
+      PublicAccess.logger.logToAll(data);
     };
+
+    GoRouter.setUrlPathStrategy(UrlPathStrategy.path);
 
     FireBaseService.init().then((value){
       FireBaseService.subscribeToTopic('daily_text');
     });
-
-    GoRouter.setUrlPathStrategy(UrlPathStrategy.path);
   }
-
-  /*if(kIsWeb){
-    flutterBindingInitialize();
-  }
-  else {
-    Timer(const Duration(milliseconds: 100), flutterBindingInitialize);
-  }*/
-
 
   ///===== call on any hot reload
   runZonedGuarded((){
-    flutterBindingInitialize();
+    appInitialize();
     runApp(const MyApp());
     }, (error, stackTrace) {
-    PublicAccess.logger.logToAll('@@ ZonedGuarded: ${error.toString()}');
+    PublicAccess.logger.logToAll('@@ catch on ZonedGuarded: ${error.toString()}');
 
       if(kDebugMode) {
         throw error;
@@ -54,7 +50,7 @@ Future<void> main() async {
     }
   );
 
-  //flutterBindingInitialize();
+  //appInitialize();
   //runApp(const MyApp());
 }
 ///==============================================================================================
@@ -79,3 +75,11 @@ class MyApp extends StatelessWidget {
     _isInit = true;
   }
 }
+
+
+/*if(kIsWeb){
+    flutterBindingInitialize();
+  }
+  else {
+    Timer(const Duration(milliseconds: 100), flutterBindingInitialize);
+  }*/

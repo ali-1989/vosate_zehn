@@ -1,3 +1,4 @@
+import 'package:app/services/firebase_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/logger/logger.dart';
@@ -38,21 +39,22 @@ class PublicAccess {
   static Map addAppInfo(Map src, {UserModel? curUser}) {
     final token = curUser?.token ?? Session.getLastLoginUser()?.token;
 
-    src.addAll(getAppInfo(token?.token));
+    src.addAll(getAppInfo());
+
+    if (token?.token != null) {
+      src[Keys.token] = token?.token;
+      src['fcm_token'] = FireBaseService.token;
+    }
 
     return src;
   }
 
-  static Map<String, dynamic> getAppInfo(String? token) {
+  static Map<String, dynamic> getAppInfo() {
     final res = <String, dynamic>{};
     res[Keys.deviceId] = DeviceInfoTools.deviceId;
     res[Keys.appName] = Constants.appName;
     res['app_version_code'] = Constants.appVersionCode;
     res['app_version_name'] = Constants.appVersionName;
-
-    if (token != null) {
-      res[Keys.token] = token;
-    }
 
     return res;
   }
@@ -100,36 +102,15 @@ class PublicAccess {
     list.sort(sorter);
   }
 
-  ///----------- HowIs ----------------------------------------------------
-  static Map<String, dynamic> getHowIsMap() {
-    final howIs = <String, dynamic>{
-      'how_is': 'HowIs',
-      Keys.deviceId: DeviceInfoTools.deviceId,
-      Keys.languageIso: System.getLocalizationsLanguageCode(AppRoute.getContext()),
-      'app_version_code': Constants.appVersionCode,
-      'app_version_name': Constants.appVersionName,
-      'app_name': Constants.appName,
-    };
-
-    final users = [];
-
-    for(var um in Session.currentLoginList) {
-      users.add(um.userId);
-    }
-
-    howIs['users'] = users;
-
-    return howIs;
-  }
-
   static Map<String, dynamic> getHeartMap() {
     final heart = <String, dynamic>{
-      'heart': 'Heart',
+      'heart': 'heart',
       Keys.deviceId: DeviceInfoTools.deviceId,
       Keys.languageIso: System.getLocalizationsLanguageCode(AppRoute.getContext()),
       'app_version_code': Constants.appVersionCode,
       'app_version_name': Constants.appVersionName,
       'app_name': Constants.appName,
+      'fcm_token': FireBaseService.token,
     };
 
     final users = [];

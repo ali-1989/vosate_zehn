@@ -126,7 +126,7 @@ class WebsocketService {
 	static void _onConnected() async {
 		_isConnected = true;
 		reconnectInterval = const Duration(seconds: 6);
-		sendData(JsonHelper.mapToJson(PublicAccess.getHowIsMap()));
+		sendData(JsonHelper.mapToJson(PublicAccess.getHeartMap()));
 
 		NetListenerTools.onWsConnectedListener();
 
@@ -182,7 +182,7 @@ class WebsocketService {
 						UserLoginTools.forceLogoffAll();
 						break;
 					case HttpCodes.com_talkMeWho:
-						sendData(JsonHelper.mapToJson(PublicAccess.getHowIsMap()));
+						sendData(JsonHelper.mapToJson(PublicAccess.getHeartMap()));
 						break;
 					case HttpCodes.com_sendDeviceInfo:
 						sendData(JsonHelper.mapToJson(DeviceInfoTools.getDeviceInfo()));

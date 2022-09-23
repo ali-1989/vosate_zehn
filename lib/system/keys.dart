@@ -80,6 +80,7 @@ class Keys {
   static const setting$textOfDayGetPreMonth = 'text_of_day_get_pre_month';
   static const setting$lastAidDialogShowTime = 'last_aid_dialog_show_time';
   static const setting$dailyIdsList = 'daily_ids_show';
+  static const setting$notificationDailyText = 'notification_daily_text';
 
   static String genDownloadKey_userAvatar(int userId) {
     return 'downloadUserAvatar_$userId';

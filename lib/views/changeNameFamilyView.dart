@@ -11,6 +11,8 @@ class ChangeNameFamilyViewInjection {
   TextStyle? textStyle;
   String? name;
   String? family;
+  String? nameHint;
+  String? familyHint;
   OnButton? onButton;
 }
 ///================================================================================================
@@ -31,10 +33,17 @@ class ChangeNameFamilyView extends StatefulWidget {
 class ChangeNameFamilyViewState extends State<ChangeNameFamilyView> {
   TextEditingController nameCtr = TextEditingController();
   TextEditingController familyCtr = TextEditingController();
+  late InputDecoration inputDecoration;
 
   @override
   void initState() {
     super.initState();
+
+    inputDecoration = InputDecoration(
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+      focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+    );
   }
 
   @override
@@ -63,24 +72,39 @@ class ChangeNameFamilyViewState extends State<ChangeNameFamilyView> {
               Visibility(
                 visible: widget.injection.title != null,
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                  child: Text('${widget.injection.title}').color(AppThemes.instance.currentTheme.textColor),
+                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
+                  child: Text('${widget.injection.title}')
+                      .color(AppThemes.instance.currentTheme.textColor),
                 ),
               ),
 
               TextField(
                 controller: nameCtr,
+                decoration: inputDecoration.copyWith(
+                  hintText: widget.injection.nameHint?? '',
+                ),
               ),
+
+              SizedBox(height: 2),
 
               TextField(
                 controller: familyCtr,
+                decoration: inputDecoration.copyWith(
+                  hintText: widget.injection.familyHint?? '',
+                ),
               ),
 
+              SizedBox(height: 30),
 
-              ElevatedButton(
-                  onPressed: onButtonClick,
-                  child: Text('تغییر')
-              )
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                    onPressed: onButtonClick,
+                    child: Text('تغییر')
+                ),
+              ),
+
+              SizedBox(height: 20),
             ],
           ),
         ),

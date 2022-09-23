@@ -1,14 +1,18 @@
+import 'package:app/managers/settingsManager.dart';
 import 'package:app/models/dailyTextModel.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/publicAccess.dart';
 import 'package:app/system/requester.dart';
 import 'package:app/system/session.dart';
 import 'package:app/tools/app/appDb.dart';
+import 'package:app/tools/app/appIcons.dart';
 import 'package:app/tools/app/appImages.dart';
+import 'package:app/tools/app/appOverlay.dart';
 import 'package:app/tools/dateTools.dart';
 import 'package:app/views/emptyData.dart';
 import 'package:app/views/notFetchData.dart';
 import 'package:app/views/progressView.dart';
+import 'package:app/system/extensions.dart';
 import 'package:appinio_swiper/appinio_swiper.dart';
 import 'package:flutter/material.dart';
 
@@ -16,11 +20,13 @@ import 'package:go_router/go_router.dart';
 import 'package:iris_tools/api/generator.dart';
 import 'package:iris_tools/dateSection/ADateStructure.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
+import 'package:iris_tools/features/overlayDialog.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 
 import 'package:app/models/abstract/stateBase.dart';
 import 'package:app/tools/app/appMessages.dart';
 import 'package:app/views/AppBarCustom.dart';
+import 'package:iris_tools/widgets/optionsRow/checkRow.dart';
 
 class SentencesPage extends StatefulWidget {
   static final route = GoRoute(
@@ -92,6 +98,15 @@ class _SentencesPageState extends StateBase<SentencesPage> {
         Image.asset(background, fit: BoxFit.fill),
 
         Positioned(
+          top: 80,
+          left: 5,
+          child: IconButton(
+            icon: Icon(AppIcons.settings, color: Colors.white),
+            onPressed: showSettingDialog,
+          ),
+        ),
+
+        Positioned(
           top: 100,
           bottom: 0,
           left: 0,
@@ -113,7 +128,8 @@ class _SentencesPageState extends StateBase<SentencesPage> {
               return AppinioSwiper(
                 cards: cards,
                 padding: EdgeInsets.symmetric(horizontal: 25, vertical: 40),
-                allowUnswipe: false,
+                allowUnswipe: true,
+                unlimitedUnswipe: false,
               );
             },
           ),
@@ -133,7 +149,7 @@ class _SentencesPageState extends StateBase<SentencesPage> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(DateTools.dateOnlyRelative(t.date), style: TextStyle(color: Colors.grey),),
-              SizedBox(height: 12,),
+              SizedBox(height: 12),
               Text(t.text, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
             ],
           ),
@@ -142,6 +158,55 @@ class _SentencesPageState extends StateBase<SentencesPage> {
     }).toList();
 
     cards.addAll(list);
+  }
+
+  void showSettingDialog(){
+    final view = Align(
+      child: FractionallySizedBox(
+        widthFactor: .8,
+        child: Card(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 30),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(child: Text('تنظیمات').bold()),
+
+                SizedBox(
+                  height: 8,
+                ),
+
+                SizedBox(
+                  height: 1,
+                  width: double.infinity,
+                  child: ColoredBox(
+                    color: Colors.grey[300]!,
+                  ),
+                ),
+
+                SizedBox(
+                  height: 8,
+                ),
+
+                CheckBoxRow(
+                    value: SettingsManager.settingsModel.notificationDailyText,
+                    description: Text('نمایش جملات روز به صورت نوتیفیکیشن'),
+                    onChanged: (v){
+                      SettingsManager.settingsModel.notificationDailyText = v;
+                      SettingsManager.saveSettings();
+                    }
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+
+    final overlay = OverlayScreenView(content: view, backgroundColor: Colors.black26);
+
+    AppOverlay.showScreen(context, overlay, canBack: true);
   }
 
   void requestData(DateTime dateTime) async {

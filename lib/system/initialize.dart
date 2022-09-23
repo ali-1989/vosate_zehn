@@ -1,6 +1,7 @@
 import 'package:app/managers/advertisingManager.dart';
 import 'package:app/managers/mediaManager.dart';
 import 'package:app/services/aidService.dart';
+import 'package:app/services/firebase_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -46,6 +47,8 @@ class InitialApplication {
       PublicAccess.reporter = Reporter(AppDirectories.getAppFolderInExternalStorage(), 'report');
     }
 
+    PublicAccess.logger = Logger('${AppDirectories.getTempDir$ex()}/logs');
+
     return true;
   }
 
@@ -56,7 +59,6 @@ class InitialApplication {
 
     isCallInit = true;
     TrustSsl.acceptBadCertificate();
-    PublicAccess.logger = Logger('${AppDirectories.getTempDir$ex()}/logs');
     await DeviceInfoTools.prepareDeviceInfo();
     await DeviceInfoTools.prepareDeviceId();
 
@@ -113,6 +115,7 @@ class InitialApplication {
     MediaManager.loadAllRecords();
     AdvertisingManager.init();
     AidService.checkShowDialog();
+    FireBaseService.getToken();
     //DailyTextService.checkShowDialog();
   }
 }

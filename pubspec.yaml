@@ -61,6 +61,7 @@ dependencies:
   firebase_core: ^1.22.0
   firebase_messaging: ^13.0.2
   appinio_swiper: ^1.0.3
+  image_picker: ^0.8.5+3
   permission_handler: ^9.2.0            # NoWeb
 
   iris_tools:
@@ -73,7 +74,8 @@ dependencies:
     git: https://github.com/ali-1989/IrisDownloadManager.git
   getsocket:
     git: https://github.com/ali-1989/GetSocket.git
-
+  iris_pic_editor:
+    path: ../#FlutterPackages/IrisPicEditor
 
 dependency_overrides:
   path: ^1.8.2

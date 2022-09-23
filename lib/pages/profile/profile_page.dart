@@ -1,4 +1,13 @@
+import 'dart:async';
+import 'dart:io';
+
+import 'package:app/system/publicAccess.dart';
+import 'package:app/tools/app/appNavigator.dart';
+import 'package:app/tools/app/appOverlay.dart';
 import 'package:app/tools/app/appSheet.dart';
+import 'package:app/tools/app/appSnack.dart';
+import 'package:app/tools/permissionTools.dart';
+import 'package:app/views/changeNameFamilyView.dart';
 import 'package:app/views/dateViews/selectDateCalendarView.dart';
 import 'package:app/views/selectGenderView.dart';
 import 'package:flutter/material.dart';
@@ -7,12 +16,17 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:glowstone/glowstone.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iris_pic_editor/pic_editor.dart';
 import 'package:iris_tools/api/helpers/fileHelper.dart';
+import 'package:iris_tools/api/helpers/jsonHelper.dart';
 import 'package:iris_tools/api/helpers/mathHelper.dart';
+import 'package:iris_tools/api/helpers/pathHelper.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
+import 'package:iris_tools/features/overlayDialog.dart';
+import 'package:iris_tools/models/dataModels/mediaModel.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:iris_tools/modules/stateManagers/notifyRefresh.dart';
-
+import 'package:image_picker/image_picker.dart';
 import 'package:app/models/abstract/stateBase.dart';
 import 'package:app/models/userModel.dart';
 import 'package:app/system/enums.dart';
@@ -29,6 +43,7 @@ import 'package:app/tools/app/appSizes.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/app/appToast.dart';
 import 'package:app/views/AppBarCustom.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class ProfilePage extends StatefulWidget {
   static final route = GoRoute(
@@ -164,7 +179,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
                                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                             visualDensity: VisualDensity.compact,
                                           ),
-                                            onPressed: (){},
+                                            onPressed: changeAvatarClick,
                                             child: Icon(AppIcons.picture, size: 15)
                                         ),
 
@@ -176,7 +191,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
                                               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                               visualDensity: VisualDensity.compact,
                                             ),
-                                            onPressed: (){},
+                                            onPressed: changeNameFamilyClick,
                                             child: Icon(AppIcons.edit, size: 15,)
                                         ),
                                       ],
@@ -260,7 +275,6 @@ class _ProfilePageState extends StateBase<ProfilePage> {
   }
 
   void changeBirthdateClick() async {
-
     final newDate = await AppSheet.showSheetCustom(
         context,
         SelectDateCalendarView(
@@ -289,18 +303,231 @@ class _ProfilePageState extends StateBase<ProfilePage> {
   }
 
   void changeNameFamilyClick() async {
-    final sex = await AppSheet.showSheetCustom(
-        context,
-        SelectGenderView(
-          title: 'جنسیت',
-          genderType: user.sex == 1? GenderType.man: (user.sex == 2 ? GenderType.woman: GenderType.other),
-        ),
-        routeName: 'changeGender'
+    final inject = ChangeNameFamilyViewInjection();
+    inject.nameHint = 'نام';
+    inject.familyHint = 'فامیلی';
+    inject.onButton = (name, family){
+      print('name: $name');
+      AppNavigator.pop(context);
+    };
+
+    final body = ChangeNameFamilyView(
+      injection: inject,
     );
 
-    print('hhhhhhhhhhhh $sex');
+    final view = OverlayScreenView(content: body);
+
+    AppOverlay.showScreen(context, view);
   }
 
+  void changeAvatarClick() async {
+    List<Widget> widgets = [];
+    widgets.add(
+        GestureDetector(
+          onTap: (){
+            onSelectProfile(1);
+          },
+          child: Row(
+            children: [
+              Icon(AppIcons.camera),
+              Text('دوربین'),
+            ],
+    ),
+        ));
+
+    widgets.add(
+        GestureDetector(
+          onTap: (){
+            onSelectProfile(2);
+          },
+          child: Row(
+            children: [
+              Icon(AppIcons.picture),
+              Text('گالری'),
+            ],
+          ),
+        ));
+
+    if(user.profileModel != null){
+      widgets.add(
+          GestureDetector(
+            onTap: deleteProfile,
+            child: Row(
+              children: [
+                Icon(AppIcons.delete),
+                Text('حذف'),
+              ],
+            ),
+          ));
+    }
+
+    AppSheet.showSheetMenu(
+        context,
+        widgets,
+        'changeAvatar',
+    );
+  }
+
+  void onSelectProfile(int state) async {
+    XFile? image;
+
+    if(state == 1){
+      image = await selectImageFromCamera();
+    }
+    else {
+      image = await selectImageFromGallery();
+    }
+
+    if(image == null){
+      return;
+    }
+
+    String? path = await editImage(image.path);
+
+    if(path != null){
+
+    }
+  }
+
+  Future<XFile?> selectImageFromCamera() async {
+    final hasPermission = await PermissionTools.requestStoragePermission();
+
+    if(hasPermission != PermissionStatus.granted) {
+      return null;
+    }
+
+    final pick = await ImagePicker().pickImage(source: ImageSource.camera);
+
+    if(pick == null) {
+      return null;
+    }
+
+    return pick;
+  }
+
+  Future<XFile?> selectImageFromGallery() async {
+    final hasPermission = await PermissionTools.requestStoragePermission();
+
+    if(hasPermission != PermissionStatus.granted) {
+      return null;
+    }
+
+    final pick = await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    if(pick == null) {
+      return null;
+    }
+
+    return pick;
+  }
+
+  Future<String?> editImage(String imgPath) async {
+    final comp = Completer<String?>();
+
+    final editOptions = EditOptions.byPath(imgPath);
+    editOptions.cropBoxInitSize = const Size(200, 170);
+
+    void onOk(EditOptions op) async {
+      final pat = AppDirectories.getSavePathByPath(SavePathType.userProfile, imgPath)!;
+
+      FileHelper.createNewFileSync(pat);
+      FileHelper.writeBytesSync(pat, editOptions.imageBytes!);
+
+      comp.complete(pat);
+    }
+
+    editOptions.callOnResult = onOk;
+    final ov = OverlayScreenView(content: PicEditor(editOptions), backgroundColor: Colors.black);
+    OverlayDialog().show(context, ov).then((value){
+      if(!comp.isCompleted){
+        comp.complete(null/*imgPath*/);
+      }
+    });
+
+    return comp.future;
+  }
+
+  void afterUploadAvatar(String imgPath, Map map){
+    final String? url = map[Keys.url];
+
+    if(url == null){
+      return;
+    }
+
+    final newName = PathHelper.getFileName(url);
+    final newFileAddress = PathHelper.getParentDirPath(imgPath) + PathHelper.getSeparator() + newName;
+
+    final f = FileHelper.renameSyncSafe(imgPath, newFileAddress);
+
+    user.profileModel = MediaModel()..url = url..path = f.path;
+
+    hideLoading();
+    assistCtr.updateMain();
+    Session.sinkUserInfo(user);
+
+    //after load image, auto will call: OverlayCenter().hideLoading(context);
+    AppSnack.showSnack$operationSuccess(context);
+  }
+
+  void uploadAvatar(String filePath) {
+    final partName = 'ProfileAvatar';
+    final fileName = PathHelper.getFileName(filePath);
+
+    final js = <String, dynamic>{};
+    js[Keys.requestZone] = 'UpdateProfileAvatar';
+    js[Keys.requesterId] = user.userId;
+    js[Keys.forUserId] = user.userId;
+    js[Keys.fileName] = fileName;
+    js[Keys.partName] = partName;
+    PublicAccess.addAppInfo(js);
+
+    requester.httpRequestEvents.onFailState = (req) async {
+      await hideLoading();
+      AppSnack.showSnack$errorCommunicatingServer(context);
+    };
+
+    requester.httpRequestEvents.onStatusOk = (req, data) async {
+      afterUploadAvatar(filePath, data);
+    };
+
+    requester.prepareUrl();
+    requester.bodyJson = null;
+    requester.httpItem.addBodyField(Keys.jsonPart, JsonHelper.mapToJson(js));
+    requester.httpItem.addBodyFile(partName, fileName, File(filePath));
+
+    showLoading(canBack: false);
+    requester.request(context, false);
+  }
+
+  void deleteProfile(){
+    //OverlayDialog().hideByName(context, 'MenuForProfileAvatar');
+
+    final js = <String, dynamic>{};
+    js[Keys.requestZone] = 'DeleteProfileAvatar';
+    js[Keys.requesterId] = user.userId;
+    js[Keys.forUserId] = user.userId;
+
+    requester.httpRequestEvents.onAnyState = (req) async {
+      await hideLoading();
+    };
+
+    requester.httpRequestEvents.onFailState = (req) async {
+      AppSnack.showSnack$OperationFailed(context);
+    };
+
+    requester.httpRequestEvents.onStatusOk = (req, data) async {
+      user.profileModel = null;
+
+      assistCtr.updateMain();
+    };
+
+    showLoading(canBack: false);
+    requester.bodyJson = js;
+    requester.prepareUrl();
+
+    requester.request(context, false);
+  }
+  
   void requestProfileData() async {
     final js = <String, dynamic>{};
     js[Keys.requestZone] = 'get_profile_data';
