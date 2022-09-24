@@ -82,7 +82,7 @@ class DrawerMenuBuilder {
 
             ListTile(
               title: Text(AppMessages.sentencesTitle),
-              leading: Icon(AppIcons.message),
+              leading: Icon(AppIcons.report2),
               onTap: gotoSentencePage,
             ),
 

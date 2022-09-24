@@ -20,7 +20,7 @@ class FireBaseService {
   static Future init() async {
     await Firebase.initializeApp();
 
-    FirebaseMessaging.instance.requestPermission(
+    await FirebaseMessaging.instance.requestPermission(
       alert: true,
       badge: true,
       sound: true,
@@ -38,11 +38,11 @@ class FireBaseService {
 
   static void setListening(){
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      PublicAccess.logger.logToFile('on Fcm [sendNotification]: ${message.notification!.title}');
+
       if(SettingsManager.settingsModel.notificationDailyText) {
         AppNotification.sendNotification(message.notification!.title, message.notification!.body!);
       }
-
-      PublicAccess.logger.logToFile('on Fcm [sendNotification]: ${message.notification!.title}');
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
@@ -52,7 +52,7 @@ class FireBaseService {
 
   static Future<String?> getTokenForce() async {
     token = await FirebaseMessaging.instance.getToken();
-
+    PublicAccess.logger.logToAll('fcm token: $token');//todo
     final gd = GregorianDate();
     gd.moveLocalToUTC();
 

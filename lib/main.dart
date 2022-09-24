@@ -24,8 +24,8 @@ Future<void> main() async {
     await InitialApplication.importantInit();
 
     FlutterError.onError = (FlutterErrorDetails errorDetails) {
-      var data = '@@ on Error catch: ${errorDetails.exception.toString()}';
-      data += '\n stack: ${errorDetails.stack}';
+      var data = 'on Error catch: ${errorDetails.exception.toString()}';
+      data += '\n stack: ${errorDetails.stack} \n---------------...----------------';
 
       PublicAccess.logger.logToAll(data);
     };
@@ -42,7 +42,8 @@ Future<void> main() async {
     appInitialize();
     runApp(const MyApp());
     }, (error, stackTrace) {
-    PublicAccess.logger.logToAll('@@ catch on ZonedGuarded: ${error.toString()}');
+    var txt = 'catch on ZonedGuarded: ${error.toString()}\n---------------...----------------';
+    PublicAccess.logger.logToAll(txt);
 
       if(kDebugMode) {
         throw error;
