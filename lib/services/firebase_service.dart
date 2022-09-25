@@ -7,8 +7,14 @@ import 'package:iris_tools/dateSection/ADateStructure.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
 
 Future<void> _fbMessagingBackgroundHandler(RemoteMessage message) async {
-  PublicAccess.logger.logToFile('_fbMessagingBackgroundHandler: ${message.notification!.body}');
-  //showFlutterNotification(message);
+  PublicAccess.logger.logToFile('fb MessagingBackgroundHandler: ${message.notification!.body}');
+  _sendNotification(message);
+}
+
+Future<void> _sendNotification(RemoteMessage message) async {
+  if(SettingsManager.settingsModel.notificationDailyText) {
+    AppNotification.sendNotification(message.notification!.title, message.notification!.body!);
+  }
 }
 ///================================================================================================
 class FireBaseService {
@@ -19,6 +25,13 @@ class FireBaseService {
 
   static Future init() async {
     await Firebase.initializeApp();
+
+    RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+
+    if (initialMessage != null) {
+      PublicAccess.logger.logToFile('on Fcm [initialMessage]: ${initialMessage.notification!.title}');
+      _sendNotification(initialMessage);
+    }
 
     await FirebaseMessaging.instance.requestPermission(
       alert: true,
@@ -32,22 +45,20 @@ class FireBaseService {
       sound: true,
     );
 
-    FirebaseMessaging.onBackgroundMessage(_fbMessagingBackgroundHandler);
     setListening();
   }
 
   static void setListening(){
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       PublicAccess.logger.logToFile('on Fcm [sendNotification]: ${message.notification!.title}');
-
-      if(SettingsManager.settingsModel.notificationDailyText) {
-        AppNotification.sendNotification(message.notification!.title, message.notification!.body!);
-      }
+      _sendNotification(message);
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       PublicAccess.logger.logToFile('onMessageOpenedApp: ${message.notification!.body}');
     });
+
+    FirebaseMessaging.onBackgroundMessage(_fbMessagingBackgroundHandler);
   }
 
   static Future<String?> getTokenForce() async {

@@ -41,7 +41,7 @@ Future<void> main() async {
   runZonedGuarded((){
     appInitialize();
     runApp(const MyApp());
-    }, (error, stackTrace) {
+    }, (error, sTrace) {
     var txt = 'catch on ZonedGuarded: ${error.toString()}\n---------------...----------------';
     PublicAccess.logger.logToAll(txt);
 

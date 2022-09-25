@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:app/system/publicAccess.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:iris_tools/api/generator.dart';
 
@@ -111,7 +110,7 @@ class AppNotification {
 
 	static void startListenTap() {
 		AwesomeNotifications().actionStream.listen((ReceivedNotification receivedNotification){
-			PublicAccess.logger.logToFile('@@@ tap notification  id: ${receivedNotification.id} | ${receivedNotification.body}');
+			//PublicAccess.logger.logToFile('@@@ tap notification  id: ${receivedNotification.id} ');
 		});
 	}
 
