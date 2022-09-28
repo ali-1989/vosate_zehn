@@ -11,7 +11,6 @@ import 'package:app/tools/deviceInfoTools.dart';
 import 'package:flutter/material.dart';
 import 'package:iris_tools/api/helpers/urlHelper.dart';
 import 'package:iris_tools/api/system.dart';
-import '/managers/settingsManager.dart';
 
 class VersionManager {
   VersionManager._();
@@ -19,7 +18,7 @@ class VersionManager {
   static Future<void> onFirstInstall() async {
     SettingsManager.settingsModel.currentVersion = Constants.appVersionCode;
 
-    await AppDB.firstDatabasePrepare();
+    await AppDB.firstLaunch();
     SettingsManager.saveSettings();
   }
 

@@ -125,7 +125,7 @@ class AppDB {
     return res.map((e) => e[Keys.value]).toList();
   }
 
-  static dynamic fetchKv(String key){
+  static T? fetchKv<T>(String key){
     final con = Conditions();
     con.add(Condition()..key = Keys.name..value = key);
 
@@ -135,7 +135,7 @@ class AppDB {
       return null;
     }
 
-    return res[0][Keys.value];
+    return res[0][Keys.value] as T;
   }
 
   static List<T> fetchAsList<T>(String key){

@@ -17,41 +17,56 @@ bool _isInit = false;
 ///===== call on any hot restart ================================================================
 Future<void> main() async {
 
-  Future<void> appInitialize() async {
+  void onErrorCatch(FlutterErrorDetails errorDetails) {
+    var data = 'on Error catch: ${errorDetails.exception.toString()}';
+    data += '\n stack: ${errorDetails.stack}\n------------------...-------------------';
+
+    PublicAccess.logger.logToAll(data);
+  }
+  ///-------------------------
+  zonedGuardedCatch(error, sTrace) {
+    final txt = 'on ZonedGuarded catch: ${error.toString()}\n------------------...-------------------';
+    PublicAccess.logger.logToAll(txt);
+
+    if(kDebugMode) {
+      throw error;
+    }
+  }
+  ///-------------------------
+  Future<bool> appInitialize() async {
     WidgetsFlutterBinding.ensureInitialized();
     SchedulerBinding.instance.ensureVisualUpdate();
     SchedulerBinding.instance.window.scheduleFrame();
-    await InitialApplication.importantInit();
+    final initOk = await InitialApplication.importantInit();
 
-    FlutterError.onError = (FlutterErrorDetails errorDetails) {
-      var data = 'on Error catch: ${errorDetails.exception.toString()}';
-      data += '\n stack: ${errorDetails.stack} \n---------------...----------------';
+    if(!initOk){
+      return false;
+    }
 
-      PublicAccess.logger.logToAll(data);
-    };
-
+    FlutterError.onError = onErrorCatch;
     GoRouter.setUrlPathStrategy(UrlPathStrategy.path);
 
     FireBaseService.init().then((value){
       FireBaseService.subscribeToTopic('daily_text');
     });
+    
+    return true;
   }
 
+
   ///===== call on any hot reload
-  runZonedGuarded((){
-    appInitialize();
-    runApp(const MyApp());
-    }, (error, sTrace) {
-    var txt = 'catch on ZonedGuarded: ${error.toString()}\n---------------...----------------';
-    PublicAccess.logger.logToAll(txt);
+  runZonedGuarded(() async {
+    final isOk = await appInitialize();
 
-      if(kDebugMode) {
-        throw error;
-      }
+    if (isOk) {
+      runApp(const MyApp());
     }
-  );
+    else {
+      runApp(const MyErrorApp());
+    }
+  }, zonedGuardedCatch);
 
-  //appInitialize();
+  //await appInitialize();
   //runApp(const MyApp());
 }
 ///==============================================================================================
@@ -74,6 +89,25 @@ class MyApp extends StatelessWidget {
     }
 
     _isInit = true;
+  }
+}
+///==============================================================================================
+class MyErrorApp extends StatelessWidget {
+  const MyErrorApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Material(
+      child: Directionality(
+        textDirection: TextDirection.ltr,
+        child: SizedBox.expand(
+          child: ColoredBox(
+              color: Colors.brown,
+            child: Text('Error in init.'),
+          ),
+        ),
+      ),
+    );
   }
 }
 

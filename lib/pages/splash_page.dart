@@ -107,7 +107,6 @@ class SplashScreenState extends State<SplashPage> {
         //scrollBehavior: MyCustomScrollBehavior(),
         title: Constants.appTitle,
         theme: AppThemes.instance.themeData,
-        // ThemeData.light()
         //darkTheme: ThemeData.dark(),
         themeMode: AppThemes.instance.currentThemeMode,
         scaffoldMessengerKey: AppBroadcast.rootScaffoldMessengerKey,
@@ -118,31 +117,69 @@ class SplashScreenState extends State<SplashPage> {
         /*localeResolutionCallback: (deviceLocale, supportedLocales) {
         return SettingsManager.settingsModel.appLocale;
       },*/
-        //home: const HomePage(),
       scrollBehavior: ScrollConfiguration.of(context).copyWith(
         dragDevices: {
           PointerDeviceKind.mouse,
           PointerDeviceKind.touch,
         },
       ),
+        home: homeBuilder(),
         builder: (context, home) {
-          AppRoute.materialContext = context;
-          final mediaQueryData = MediaQuery.of(context);
-
-          /// detect orientation change and rotate screen
-          return MediaQuery(
-            data: mediaQueryData.copyWith(textScaleFactor: 1.0),
-            child: OrientationBuilder(builder: (context, orientation) {
-              //AppLocale.detectLocaleDirection(SettingsManager.settingsModel.appLocale); //Localizations.localeOf(context)
-              testCodes(context);
-
-                return Directionality(
-                    textDirection: AppThemes.instance.textDirection,
-                    child: Toaster(child: home!)
-              );
-            }),
-          );
+          return home!;
         },
+    );
+  }
+
+  Widget homeBuilder(){
+    return Builder(
+      builder: (ctx){
+        AppRoute.materialContext = ctx;
+        final mediaQueryData = MediaQuery.of(ctx);
+
+        /// detect orientation change and rotate screen
+        return MediaQuery(
+          data: mediaQueryData.copyWith(textScaleFactor: 1.0),
+          child: OrientationBuilder(builder: (context, orientation) {
+            //AppLocale.detectLocaleDirection(SettingsManager.settingsModel.appLocale); //Localizations.localeOf(context)
+            testCodes(context);
+
+            return Directionality(
+                textDirection: AppThemes.instance.textDirection,
+                child: Toaster(child: pageRouting())
+            );
+          }),
+        );
+      },
+    );
+  }
+
+  /// first route
+  Widget pageRouting(){
+    return Builder(
+      builder: (ctx){
+        if (LockPageService.mustSetPattern() || LockPageService.mustShowLock()) {
+          SettingsManager.settingsModel.currentRouteScreen = RoutesName.lockScreenPage;
+        }
+
+        switch(SettingsManager.settingsModel.currentRouteScreen) {
+          case RoutesName.lockScreenPage:
+            return LockPageService.buildLockScreen(context, false);
+
+          case RoutesName.homePage:
+            return FadeInUp(
+                child: HomeScreen()
+            );
+
+          default:
+            return Container(
+              alignment: Alignment.center,
+              child: const Text(
+                'Page not found.',
+                style: TextStyle(decoration: TextDecoration.none, color: Colors.red, fontSize: 28),
+              ),
+            );
+        }
+      },
     );
   }
   ///==================================================================================================
@@ -180,6 +217,7 @@ class SplashScreenState extends State<SplashPage> {
       await InitialApplication.onceInit(context);
 
       AppBroadcast.reBuildMaterialBySetTheme();
+      // ignore: use_build_context_synchronously
       asyncInitial(context);
     }
   }

@@ -41,15 +41,20 @@ class InitialApplication {
   static bool isLaunchOk = false;
 
   static Future<bool> importantInit() async {
-    await AppDirectories.prepareStoragePaths(Constants.appName);
+    try {
+      await AppDirectories.prepareStoragePaths(Constants.appName);
 
-    if (!kIsWeb) {
-      PublicAccess.reporter = Reporter(AppDirectories.getAppFolderInExternalStorage(), 'report');
+      if (!kIsWeb) {
+        PublicAccess.reporter = Reporter(AppDirectories.getAppFolderInExternalStorage(), 'report');
+      }
+
+      PublicAccess.logger = Logger('${AppDirectories.getTempDir$ex()}/logs');
+
+      return true;
     }
-
-    PublicAccess.logger = Logger('${AppDirectories.getTempDir$ex()}/logs');
-
-    return true;
+    catch (e){
+      return false;
+    }
   }
 
   static Future<bool> onceInit(BuildContext context) async {
