@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:app/constants.dart';
+import 'package:app/managers/settingsManager.dart';
 import 'package:app/models/versionModel.dart';
 import 'package:app/system/requester.dart';
 import 'package:app/tools/app/appDb.dart';

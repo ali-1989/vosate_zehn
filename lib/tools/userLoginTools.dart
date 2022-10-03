@@ -48,7 +48,7 @@ class UserLoginTools {
     await Session.logoff(userId);
 
     AppBroadcast.drawerMenuRefresher.update();
-    AppBroadcast.homeScreenKey.currentState?.scaffoldState.currentState?.closeDrawer();
+    AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
 
     if (isCurrent) {
       AppRoute.backToRoot(AppRoute.getContext());
@@ -63,7 +63,7 @@ class UserLoginTools {
     await Session.logoffAll();
 
     AppBroadcast.drawerMenuRefresher.update();
-    AppBroadcast.homeScreenKey.currentState?.scaffoldState.currentState?.closeDrawer();
+    AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
 
     AppRoute.backToRoot(AppRoute.getContext());
   }

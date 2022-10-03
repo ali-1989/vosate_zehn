@@ -179,17 +179,17 @@ class DrawerMenuBuilder {
   }
 
   static void shareAppCall() {
-    AppBroadcast.homeScreenKey.currentState?.scaffoldState.currentState?.closeDrawer();
+    AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
     ShareExtend.share('https://cafebazaar.ir/app/ir.vosatezehn.com', 'text');
   }
 
   static void gotoFavoritesPage(){
-    AppBroadcast.homeScreenKey.currentState?.scaffoldState.currentState?.closeDrawer();
+    AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
     AppRoute.pushNamed(AppRoute.getContext(), FavoritesPage.route.name!);
   }
 
   static void gotoLastSeenPage(){
-    AppBroadcast.homeScreenKey.currentState?.scaffoldState.currentState?.closeDrawer();
+    AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
     AppRoute.pushNamed(AppRoute.getContext(), LastSeenPage.route.name!);
   }
 
@@ -198,22 +198,22 @@ class DrawerMenuBuilder {
   }
 
   static void gotoContactUsPage(){
-    AppBroadcast.homeScreenKey.currentState?.scaffoldState.currentState?.closeDrawer();
+    AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
     AppRoute.pushNamed(AppRoute.getContext(), ContactUsPage.route.name!);
   }
 
   static void gotoSentencePage(){
-    AppBroadcast.homeScreenKey.currentState?.scaffoldState.currentState?.closeDrawer();
+    AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
     AppRoute.pushNamed(AppRoute.getContext(), SentencesPage.route.name!);
   }
 
   static void gotoAboutUsPage(){
-    AppBroadcast.homeScreenKey.currentState?.scaffoldState.currentState?.closeDrawer();
+    AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
     AppRoute.pushNamed(AppRoute.getContext(), AboutUsPage.route.name!);
   }
 
   static void gotoProfilePage(){
-    AppBroadcast.homeScreenKey.currentState?.scaffoldState.currentState?.closeDrawer();
+    AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
     AppRoute.pushNamed(AppRoute.getContext(), ProfilePage.route.name!);
   }
 

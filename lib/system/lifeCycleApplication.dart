@@ -8,7 +8,7 @@ class LifeCycleApplication {
       return;
     }
 
-    LockPageService.onPause();
+    //LockPageService.onPause();
   }
 
   static void onDetach() async {
@@ -16,10 +16,10 @@ class LifeCycleApplication {
       return;
     }
 
-    LockPageService.onDetach();
+    //LockPageService.onDetach();
   }
 
   static void onResume() {
-    LockPageService.onResume();
+    //LockPageService.onResume();
   }
 }

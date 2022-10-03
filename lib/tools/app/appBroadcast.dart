@@ -22,7 +22,7 @@ class AppBroadcast {
   static final LocalKey materialAppKey = UniqueKey();
   static final rootScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
   static final rootNavigatorStateKey = GlobalKey<NavigatorState>();
-  static final homeScreenKey = GlobalKey<LayoutPageState>();
+  static final layoutPageKey = GlobalKey<LayoutPageState>();
 
   //static final homePageBadges = <int, int>{};
   static bool isNetConnected = true;

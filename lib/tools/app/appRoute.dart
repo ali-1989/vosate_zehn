@@ -52,11 +52,11 @@ class AppRoute {
     return AppDB.fetchKv(Keys.setting$lastRouteName);
   }
 
-  static void navigateRouteScreen(String routeName) {
+  /*static void reCallBuildRoutePage(String routeName) {
     saveRouteName(routeName);
     SettingsManager.settingsModel.currentRouteScreen = routeName;
     AppBroadcast.reBuildMaterial();
-  }
+  }*/
 
   static void backRoute() {
     final mustLastCtx = AppNavigator.getLastRouteContext(getContext());

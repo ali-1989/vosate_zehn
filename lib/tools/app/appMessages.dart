@@ -310,6 +310,14 @@ class AppMessages {
     return 'لطفا نام و نام خانوادگی خود را کامل وارد کنید';
   }
 
+  static String get enterName {
+    return 'لطفا نام خود را وارد کنید';
+  }
+
+  static String get enterFamily {
+    return 'لطفا نام خانوادگی خود را وارد کنید';
+  }
+
   static String get pleaseSelectAge {
     return 'لطفا سن خود را انتخاب کنید';
   }

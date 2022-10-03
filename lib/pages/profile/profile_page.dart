@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:app/system/publicAccess.dart';
-import 'package:app/tools/app/appNavigator.dart';
 import 'package:app/tools/app/appOverlay.dart';
 import 'package:app/tools/app/appSheet.dart';
 import 'package:app/tools/app/appSnack.dart';
@@ -19,6 +18,7 @@ import 'package:go_router/go_router.dart';
 import 'package:iris_pic_editor/picEditor/models/edit_options.dart';
 import 'package:iris_pic_editor/picEditor/picEditor.dart';
 import 'package:iris_tools/api/helpers/fileHelper.dart';
+import 'package:iris_tools/api/helpers/focusHelper.dart';
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
 import 'package:iris_tools/api/helpers/mathHelper.dart';
 import 'package:iris_tools/api/helpers/pathHelper.dart';
@@ -174,7 +174,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
                                       children: [
                                         ElevatedButton(
                                           style: ElevatedButton.styleFrom(
-                                            primary: AppThemes.instance.currentTheme.differentColor,
+                                            backgroundColor: AppThemes.instance.currentTheme.differentColor,
                                             shape: CircleBorder(),
                                             padding: EdgeInsets.zero,
                                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -186,7 +186,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
 
                                         ElevatedButton(
                                             style: ElevatedButton.styleFrom(
-                                              primary: AppThemes.instance.currentTheme.differentColor,
+                                              backgroundColor: AppThemes.instance.currentTheme.differentColor,
                                               shape: CircleBorder(),
                                               padding: EdgeInsets.zero,
                                               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -287,7 +287,6 @@ class _ProfilePageState extends StateBase<ProfilePage> {
         routeName: 'changeBirthdate'
     );
 
-    print('hhhhhhhhhhhh $newDate');
     uploadBirthdate(newDate);
   }
 
@@ -301,17 +300,29 @@ class _ProfilePageState extends StateBase<ProfilePage> {
         routeName: 'changeGender'
     );
 
-    print('hhhhhhhhhhhh $sex');
-    uploadGender(sex.index);
+    uploadGender(sex == GenderType.man? 1: 2);
   }
 
   void changeNameFamilyClick() async {
     final inject = ChangeNameFamilyViewInjection();
     inject.nameHint = 'نام';
     inject.familyHint = 'فامیلی';
+    inject.name = user.name;
+    inject.family = user.family;
+    inject.title = 'تغییر نام';
+
     inject.onButton = (name, family){
-      print('name: $name');
-      AppNavigator.pop(context);
+      if(name.isEmpty){
+        AppSnack.showInfo(context, AppMessages.enterName);
+        return;
+      }
+
+      if(family.isEmpty){
+        AppSnack.showInfo(context, AppMessages.enterName);
+        return;
+      }
+
+      FocusHelper.hideKeyboardByUnFocusRoot();
       uploadName(name, family);
     };
 
@@ -525,7 +536,6 @@ class _ProfilePageState extends StateBase<ProfilePage> {
       assistCtr.updateMain();
     };
 
-    showLoading(canBack: false);
     requester.bodyJson = js;
     requester.prepareUrl();
 
@@ -534,11 +544,11 @@ class _ProfilePageState extends StateBase<ProfilePage> {
   
   void uploadName(String name, String family){
     final js = <String, dynamic>{};
-    js[Keys.requestZone] = 'DeleteProfileAvatar';
+    js[Keys.requestZone] = 'update_user_nameFamily';
     js[Keys.requesterId] = user.userId;
     js[Keys.forUserId] = user.userId;
     js[Keys.name] = name;
-    js[Keys.fileName] = family;
+    js[Keys.family] = family;
 
     requester.httpRequestEvents.onAnyState = (req) async {
       await hideLoading();
@@ -553,7 +563,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
       user.family = family;
 
       assistCtr.updateMain();
-      //todo save user
+      Session.sinkUserInfo(user);
     };
 
     showLoading(canBack: false);
@@ -565,7 +575,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
 
   void uploadGender(int gender){
     final js = <String, dynamic>{};
-    js[Keys.requestZone] = 'DeleteProfileAvatar';
+    js[Keys.requestZone] = 'update_user_gender';
     js[Keys.requesterId] = user.userId;
     js[Keys.forUserId] = user.userId;
     js[Keys.sex] = gender;
@@ -582,7 +592,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
       user.sex = gender;
 
       assistCtr.updateMain();
-      //todo save user
+      Session.sinkUserInfo(user);
     };
 
     showLoading(canBack: false);
@@ -594,7 +604,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
 
   void uploadBirthdate(DateTime dt){
     final js = <String, dynamic>{};
-    js[Keys.requestZone] = 'DeleteProfileAvatar';
+    js[Keys.requestZone] = 'update_user_birthdate';
     js[Keys.requesterId] = user.userId;
     js[Keys.forUserId] = user.userId;
     js[Keys.date] = DateHelper.toTimestamp(dt);
@@ -611,7 +621,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
       user.birthDate = dt;
 
       assistCtr.updateMain();
-      //todo save user
+      Session.sinkUserInfo(user);
     };
 
     showLoading(canBack: false);

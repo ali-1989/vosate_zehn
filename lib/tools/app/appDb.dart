@@ -34,7 +34,7 @@ class AppDB {
   static String tbAdvertising = 'Advertising';
 
 
-  static Future<bool> firstDatabasePrepare() async {
+  static Future<bool> firstLaunch() async {
     //await insertLanguages();
 
     return true;

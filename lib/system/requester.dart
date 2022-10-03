@@ -88,7 +88,7 @@ class Requester {
 
     var f = _httpRequester.response.catchError((e){
       if(debug){
-        Logger.L.logToScreen(' catchError --> $e');
+        Logger.L.logToScreen('Dio catch error --> $e');
       }
 
       if (_httpRequester.isDioCancelError){
@@ -109,7 +109,6 @@ class Requester {
         }
 
         await httpRequestEvents.onFailState?.call(_httpRequester);
-        await httpRequestEvents.onResponseError?.call(_httpRequester, false);
         return;
       }
 
@@ -121,7 +120,6 @@ class Requester {
         }
 
         await httpRequestEvents.onFailState?.call(_httpRequester);
-        await httpRequestEvents.onResponseError?.call(_httpRequester, true);
         return;
       }
 
@@ -166,7 +164,6 @@ class HttpRequestEvents {
   Future Function(HttpRequester)? onAnyState;
   Future Function(HttpRequester)? onFailState;
   Future Function(HttpRequester)? onNetworkError;
-  Future Function(HttpRequester, bool)? onResponseError;
   Future Function(HttpRequester, Map)? manageResponse;
   Future Function(HttpRequester, Map)? onStatusOk;
   Future<bool> Function(HttpRequester, Map, int?, String?)? onStatusError;

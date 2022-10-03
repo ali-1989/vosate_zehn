@@ -1,5 +1,5 @@
-# Flutter: 3.0.1     old: -
-# Dart: 2.17.1       old: -
+# Flutter: 3.3.2     old: 3.0.1
+# Dart: 2.18.1       old: 2.17.1
 # Java: 17
 
 name: app     		# vosate_zehn
@@ -48,7 +48,7 @@ dependencies:
   #sign_in_with_apple: ^4.0.0
   flip_card: ^0.6.0
   pin_code_fields: ^7.4.0
-  argon_buttons_flutter: ^1.1.0
+  #argon_buttons_flutter: ^1.1.0
   toggle_switch: ^2.0.1
   numberpicker: ^2.1.1
   shaped_bottom_bar: ^1.1.0

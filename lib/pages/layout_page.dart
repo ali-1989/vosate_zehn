@@ -24,7 +24,7 @@ class LayoutPage extends StatefulWidget {
   static final route = GoRoute(
     path: '/',
     name: (LayoutPage).toString().toLowerCase(),
-    builder: (BuildContext context, GoRouterState state) => LayoutPage(key: AppBroadcast.homeScreenKey),
+    builder: (BuildContext context, GoRouterState state) => LayoutPage(key: AppBroadcast.layoutPageKey),
   );
 
   const LayoutPage({super.key});

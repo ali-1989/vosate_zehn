@@ -16,7 +16,7 @@ class AidService {
   AidService._();
 
   static void gotoAidPage(){
-    AppBroadcast.homeScreenKey.currentState?.scaffoldState.currentState?.closeDrawer();
+    AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
     AppRoute.pushNamed(AppRoute.getContext(), AidPage.route.name!);
   }
 

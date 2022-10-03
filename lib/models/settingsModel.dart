@@ -30,7 +30,7 @@ class SettingsModel {
   String dateFormat = defaultDateFormat;
   String? colorTheme;
   String? appPatternKey;
-  String? lastForegroundTs;
+  String? lastToBackgroundTs;
   bool confirmOnExit = true;
   String httpAddress = defaultHttpAddress;
   String wsAddress = defaultWsAddress;
@@ -40,7 +40,9 @@ class SettingsModel {
   bool notificationDailyText = true;
 
 
-  SettingsModel();
+  SettingsModel(){
+    //currentRouteScreen = RoutesName.homePage;
+  }
 
   SettingsModel.fromMap(Map map){
     final localeMap = map['app_locale'];
@@ -54,7 +56,7 @@ class SettingsModel {
     dateFormat = map['date_format']?? defaultDateFormat;
     colorTheme = map[Keys.setting$colorThemeName];
     appPatternKey = map[Keys.setting$patternKey];
-    lastForegroundTs = map[Keys.setting$lastForegroundTs];
+    lastToBackgroundTs = map[Keys.setting$toBackgroundTs];
     confirmOnExit = map[Keys.setting$confirmOnExit]?? true;
     httpAddress = map['http_address']?? defaultHttpAddress;
     wsAddress = map['ws_address']?? defaultWsAddress;
@@ -74,7 +76,7 @@ class SettingsModel {
     map['date_format'] = dateFormat;
     map[Keys.setting$colorThemeName] = colorTheme;
     map[Keys.setting$patternKey] = appPatternKey;
-    map[Keys.setting$lastForegroundTs] = lastForegroundTs;
+    map[Keys.setting$toBackgroundTs] = lastToBackgroundTs;
     map[Keys.setting$confirmOnExit] = confirmOnExit;
     map[Keys.setting$currentVersion] = currentVersion;
     map['http_address'] = httpAddress;
@@ -93,7 +95,7 @@ class SettingsModel {
     colorTheme = other.colorTheme;
     confirmOnExit = other.confirmOnExit;
     appPatternKey = other.appPatternKey;
-    lastForegroundTs = other.lastForegroundTs;
+    lastToBackgroundTs = other.lastToBackgroundTs;
     httpAddress = other.httpAddress;
     wsAddress = other.wsAddress;
     proxyAddress = other.proxyAddress;

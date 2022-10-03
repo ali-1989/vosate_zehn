@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:animate_do/animate_do.dart';
+import 'package:app/pages/layout_page.dart';
 import 'package:app/views/progressView.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -123,14 +124,14 @@ class SplashScreenState extends State<SplashPage> {
           PointerDeviceKind.touch,
         },
       ),
-        home: homeBuilder(),
+        //home: homeBuilder(),
         builder: (context, home) {
-          return home!;
+          return homeBuilder(home!);
         },
     );
   }
 
-  Widget homeBuilder(){
+  Widget homeBuilder(Widget home){
     return Builder(
       builder: (ctx){
         AppRoute.materialContext = ctx;
@@ -145,7 +146,7 @@ class SplashScreenState extends State<SplashPage> {
 
             return Directionality(
                 textDirection: AppThemes.instance.textDirection,
-                child: Toaster(child: pageRouting())
+                child: Toaster(child: home)
             );
           }),
         );
@@ -157,28 +158,7 @@ class SplashScreenState extends State<SplashPage> {
   Widget pageRouting(){
     return Builder(
       builder: (ctx){
-        if (LockPageService.mustSetPattern() || LockPageService.mustShowLock()) {
-          SettingsManager.settingsModel.currentRouteScreen = RoutesName.lockScreenPage;
-        }
-
-        switch(SettingsManager.settingsModel.currentRouteScreen) {
-          case RoutesName.lockScreenPage:
-            return LockPageService.buildLockScreen(context, false);
-
-          case RoutesName.homePage:
-            return FadeInUp(
-                child: HomeScreen()
-            );
-
-          default:
-            return Container(
-              alignment: Alignment.center,
-              child: const Text(
-                'Page not found.',
-                style: TextStyle(decoration: TextDecoration.none, color: Colors.red, fontSize: 28),
-              ),
-            );
-        }
+        return LayoutPage(key: AppBroadcast.layoutPageKey);
       },
     );
   }

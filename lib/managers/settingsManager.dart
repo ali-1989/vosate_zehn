@@ -50,14 +50,14 @@ class SettingsManager {
 		final res = AppDB.fetchKv(Keys.setting$appSettings);
 
 		if(!_isInit) {
+			_isInit = true;
+
 			if (res == null) {
 				_settingsModel = SettingsModel();
 			}
 			else {
 				_settingsModel = SettingsModel.fromMap(res);
 			}
-
-			_isInit = true;
 		}
 
 		saveSettings();

@@ -446,11 +446,11 @@ PublicAccess.logger.logToAll('@@ adv1: avd=null ${adv == null}');
   }
 
   void moreMeditation(){
-    AppBroadcast.homeScreenKey.currentState?.gotoPage(1);
+    AppBroadcast.layoutPageKey.currentState?.gotoPage(1);
   }
 
   void moreVideo(){
-    AppBroadcast.homeScreenKey.currentState?.gotoPage(4);
+    AppBroadcast.layoutPageKey.currentState?.gotoPage(4);
   }
 
   void tryLoadClick() async {

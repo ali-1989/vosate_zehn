@@ -359,10 +359,6 @@ class _SearchPageState extends StateBase<SearchPage> {
       assistCtr.removeStateAndUpdate(state$fetchData);
     };
 
-    requester.httpRequestEvents.onResponseError = (req, data) async {
-      return true;
-    };
-
     requester.httpRequestEvents.onStatusOk = (req, data) async {
       isInFetchData = false;
 

@@ -67,7 +67,7 @@ class Keys {
   static const setting$fontThemeData = 'font_theme_data';
   static const setting$colorThemeName = 'color_theme_name';
   static const setting$patternKey = 'lock_pattern';
-  static const setting$lastForegroundTs = 'last_foreground_ts';
+  static const setting$toBackgroundTs = 'to_background_ts';
   static const setting$confirmOnExit = 'confirm_on_exit';
   static const setting$notificationChanelKey = 'notification_chanel_key';
   static const setting$notificationChanelGroup = 'notification_chanel_group';

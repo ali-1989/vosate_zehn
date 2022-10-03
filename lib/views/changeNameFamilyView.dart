@@ -58,7 +58,9 @@ class ChangeNameFamilyViewState extends State<ChangeNameFamilyView> {
     //Color itemColor = iconColor?? AppThemes.currentTheme.textColor;
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text(widget.injection.title?? ''),
+      ),
       body: ColoredBox(
         color: AppThemes.instance.currentTheme.backgroundColor,
         child: Padding(
@@ -67,7 +69,7 @@ class ChangeNameFamilyViewState extends State<ChangeNameFamilyView> {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              const SizedBox(height: 5),
+              const SizedBox(height: 16),
 
               Visibility(
                 visible: widget.injection.title != null,
@@ -80,12 +82,13 @@ class ChangeNameFamilyViewState extends State<ChangeNameFamilyView> {
 
               TextField(
                 controller: nameCtr,
+                textInputAction: TextInputAction.next,
                 decoration: inputDecoration.copyWith(
                   hintText: widget.injection.nameHint?? '',
                 ),
               ),
 
-              SizedBox(height: 2),
+              SizedBox(height: 10),
 
               TextField(
                 controller: familyCtr,

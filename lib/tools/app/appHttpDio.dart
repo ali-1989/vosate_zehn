@@ -86,11 +86,9 @@ class AppHttpDio {
 										data: DioError(requestOptions: ro, error: err.error, type: DioErrorType.response)
 								);
 
-								itemRes._response = res;
-								err.response = res;
+								itemRes._response = err.response;
 
-								//handler.next(err);
-								handler.resolve(res);
+								handler.resolve(err.response?? res);
 							}
 					)
 			);
@@ -446,7 +444,7 @@ class HttpItem {
 	List<FormDataItem> formDataItems = [];
 	Options options = Options(
 		method: 'GET',
-		receiveDataWhenStatusError: false,// if true: go to error section in interceptors
+		receiveDataWhenStatusError: true,// if true: go to error section in interceptors
 		responseType: ResponseType.plain,
 		//sendTimeout: ,
 		//receiveTimeout: ,

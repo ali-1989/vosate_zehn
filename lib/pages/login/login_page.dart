@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:argon_buttons_flutter/argon_buttons_flutter.dart';
+//import 'package:argon_buttons_flutter/argon_buttons_flutter.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flip_card/flip_card_controller.dart';
 import 'package:go_router/go_router.dart';
@@ -158,7 +158,7 @@ class _LoginPageState extends StateBase<LoginPage> {
             child: ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   shape: const StadiumBorder(),
-                  primary: AppThemes.instance.currentTheme.differentColor,
+                  backgroundColor: AppThemes.instance.currentTheme.differentColor,
                 ),
                 onPressed: (){
                   signWithGoogleCall();
@@ -228,7 +228,7 @@ class _LoginPageState extends StateBase<LoginPage> {
                   child: Text(AppMessages.changeNumber)
               ),
 
-              SizedBox(
+              /*SizedBox(
                 key: timerKey,
                 child: ArgonTimerButton(
                   initialTimer: timerValue,
@@ -253,7 +253,7 @@ class _LoginPageState extends StateBase<LoginPage> {
                     }
                   },
                 ),
-              ),
+              ),*/
             ],
           ),
 
