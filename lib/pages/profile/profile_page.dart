@@ -309,7 +309,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
     inject.familyHint = 'فامیلی';
     inject.name = user.name;
     inject.family = user.family;
-    inject.title = 'تغییر نام';
+    inject.pageTitle = 'تغییر نام';
 
     inject.onButton = (name, family){
       if(name.isEmpty){
@@ -318,7 +318,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
       }
 
       if(family.isEmpty){
-        AppSnack.showInfo(context, AppMessages.enterName);
+        AppSnack.showInfo(context, AppMessages.enterFamily);
         return;
       }
 
@@ -332,46 +332,61 @@ class _ProfilePageState extends StateBase<ProfilePage> {
 
     final view = OverlayScreenView(content: body);
 
-    AppOverlay.showScreen(context, view);
+    AppOverlay.showScreen(context, view, canBack: true);
   }
 
   void changeAvatarClick() async {
     List<Widget> widgets = [];
     widgets.add(
         GestureDetector(
+          behavior: HitTestBehavior.translucent,
           onTap: (){
             onSelectProfile(1);
           },
-          child: Row(
-            children: [
-              Icon(AppIcons.camera),
-              Text('دوربین'),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            child: Row(
+              children: [
+                Icon(AppIcons.camera, size: 20),
+                SizedBox(width: 12),
+                Text('دوربین').bold(),
+              ],
     ),
+          ),
         ));
 
     widgets.add(
         GestureDetector(
+          behavior: HitTestBehavior.translucent,
           onTap: (){
             onSelectProfile(2);
           },
-          child: Row(
-            children: [
-              Icon(AppIcons.picture),
-              Text('گالری'),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            child: Row(
+              children: [
+                Icon(AppIcons.picture, size:20),
+                SizedBox(width: 12),
+                Text('گالری').bold(),
+              ],
+            ),
           ),
         ));
 
     if(user.profileModel != null){
       widgets.add(
           GestureDetector(
+            behavior: HitTestBehavior.translucent,
             onTap: deleteProfile,
-            child: Row(
-              children: [
-                Icon(AppIcons.delete),
-                Text('حذف'),
-              ],
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              child: Row(
+                children: [
+                  Icon(AppIcons.delete, size: 20),
+                  SizedBox(width: 12),
+                  Text('حذف').bold(),
+                ],
+              ),
             ),
           ));
     }
@@ -380,10 +395,13 @@ class _ProfilePageState extends StateBase<ProfilePage> {
         context,
         widgets,
         'changeAvatar',
+
     );
   }
 
   void onSelectProfile(int state) async {
+    AppSheet.closeSheet(context);
+
     XFile? image;
 
     if(state == 1){
@@ -515,7 +533,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
   }
 
   void deleteProfile(){
-    //OverlayDialog().hideByName(context, 'MenuForProfileAvatar');
+    AppSheet.closeSheet(context);
 
     final js = <String, dynamic>{};
     js[Keys.requestZone] = 'DeleteProfileAvatar';
@@ -564,6 +582,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
 
       assistCtr.updateMain();
       Session.sinkUserInfo(user);
+      AppOverlay.hideScreen(context);
     };
 
     showLoading(canBack: false);

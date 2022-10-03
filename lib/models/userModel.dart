@@ -47,7 +47,9 @@ class UserModel {
       token = Token()..token = map[Keys.token];
     }
 
-    if(map['profile_image_model'] != null) {
+    final Map? avatarTemp = map['profile_image_model'];
+
+    if(avatarTemp != null && avatarTemp.isNotEmpty) {
       profileModel = MediaModel.fromMap(map['profile_image_model']);
     }
 

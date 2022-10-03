@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 typedef OnButton = void Function(String name, String family);
 
 class ChangeNameFamilyViewInjection {
-  String? title;
+  String? pageTitle;
+  String? description;
   String? buttonText;
   TextStyle? textStyle;
   String? name;
@@ -44,6 +45,9 @@ class ChangeNameFamilyViewState extends State<ChangeNameFamilyView> {
       enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
       focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
     );
+
+    nameCtr.text = widget.injection.name?? '';
+    familyCtr.text = widget.injection.family?? '';
   }
 
   @override
@@ -59,7 +63,7 @@ class ChangeNameFamilyViewState extends State<ChangeNameFamilyView> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.injection.title?? ''),
+        title: Text(widget.injection.pageTitle?? ''),
       ),
       body: ColoredBox(
         color: AppThemes.instance.currentTheme.backgroundColor,
@@ -72,11 +76,15 @@ class ChangeNameFamilyViewState extends State<ChangeNameFamilyView> {
               const SizedBox(height: 16),
 
               Visibility(
-                visible: widget.injection.title != null,
+                visible: widget.injection.description != null,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
-                  child: Text('${widget.injection.title}')
-                      .color(AppThemes.instance.currentTheme.textColor),
+                  child: Row(
+                    children: [
+                      Text('${widget.injection.description}')
+                          .color(AppThemes.instance.currentTheme.textColor),
+                    ],
+                  ),
                 ),
               ),
 

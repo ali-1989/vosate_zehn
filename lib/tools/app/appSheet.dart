@@ -430,6 +430,7 @@ class AppSheet {
       String routeName, {
         Color? backgroundColor,
         bool isDismissible = true,
+        EdgeInsets? padding,
       }) {
 
     final view = BottomSheet(
@@ -443,12 +444,15 @@ class AppSheet {
           )
       ),
       builder: (BuildContext context) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ...widgets,
-          ],
+        return Padding(
+          padding: padding?? const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ...widgets,
+            ],
+          ),
         );
       },
     ).wrapListTileTheme();
