@@ -336,7 +336,7 @@ class _SubBucketPageState extends StateBase<SubBucketPage> {
 
     requester.bodyJson = js;
 
-    requester.httpRequestEvents.onFailState = (req) async {
+    requester.httpRequestEvents.onFailState = (req, r) async {
       isInFetchData = false;
       assistCtr.removeStateAndUpdate(state$fetchData);
     };

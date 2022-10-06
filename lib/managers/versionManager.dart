@@ -60,7 +60,7 @@ class VersionManager {
       requester.dispose();
     };
 
-    requester.httpRequestEvents.onFailState = (req) async {
+    requester.httpRequestEvents.onFailState = (req, response) async {
       res.complete(null);
     };
 

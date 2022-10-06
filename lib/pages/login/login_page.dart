@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 
-//import 'package:argon_buttons_flutter/argon_buttons_flutter.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flip_card/flip_card_controller.dart';
 import 'package:go_router/go_router.dart';
-import 'package:iris_tools/api/generator.dart';
 import 'package:iris_tools/api/helpers/localeHelper.dart';
 import 'package:iris_tools/api/helpers/mathHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
@@ -31,6 +29,7 @@ import 'package:app/tools/app/appToast.dart';
 import 'package:app/tools/countryTools.dart';
 import 'package:app/views/phoneNumberInput.dart';
 import 'package:app/views/screens/countrySelect.dart';
+import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 class LoginPage extends StatefulWidget {
   static final route = GoRoute(
@@ -46,14 +45,16 @@ class LoginPage extends StatefulWidget {
 }
 ///=================================================================================================
 class _LoginPageState extends StateBase<LoginPage> {
+  TextEditingController pinCodeCtr = TextEditingController();
   late PhoneNumberInputController phoneNumberController;
   late FlipCardController flipCardController;
-  ValueKey timerKey = const ValueKey('1');
-  ValueKey pinCodeKey = const ValueKey('1');
+  late final StopWatchTimer stopWatchTimer;
+  //ValueKey pinCodeKey = const ValueKey('1');
   CountryModel countryModel = CountryModel();
   String phoneNumber = '';
   String pinCode = '';
-  int timerValue = 60;
+  int timerValueSec = 60;
+  bool showResendOtpButton = false;
 
 
   @override
@@ -68,6 +69,23 @@ class _LoginPageState extends StateBase<LoginPage> {
       countryModel = CountryTools.countryModelByCountryIso('IR');
       assistCtr.updateMain();
     });
+
+    stopWatchTimer = StopWatchTimer(
+      mode: StopWatchMode.countDown,
+      isLapHours: false,
+      presetMillisecond: timerValueSec*1000,
+      onEnded: (){
+        showResendOtpButton = true;
+        assistCtr.updateMain();
+      },
+    );
+  }
+
+  @override
+  void dispose(){
+    stopWatchTimer.dispose();
+
+    super.dispose();
   }
 
   @override
@@ -191,7 +209,8 @@ class _LoginPageState extends StateBase<LoginPage> {
           Directionality(
             textDirection: TextDirection.ltr,
             child: PinCodeTextField(
-              key: pinCodeKey,
+              controller: pinCodeCtr,
+              //key: pinCodeKey,
               appContext: context,
               length: 4,
               obscureText: false,
@@ -228,32 +247,30 @@ class _LoginPageState extends StateBase<LoginPage> {
                   child: Text(AppMessages.changeNumber)
               ),
 
-              /*SizedBox(
-                key: timerKey,
-                child: ArgonTimerButton(
-                  initialTimer: timerValue,
-                  height: 37,
-                  width: 140,
-                  borderRadius: 5.0,
-                  child: Text(AppMessages.resendOtpCode,),
-                  loader: (timeLeft) {
-                    return Text(
-                      '$timeLeft',
-                      style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700
-                      ),
-                    );
-                  },
-                  onTap: (startTimer, btnState) {
-                    if (btnState == ButtonState.Idle) {
-                      startTimer(timerValue);
-                      reSendOtpCodeCall();
-                    }
-                  },
-                ),
-              ),*/
+              Row(
+                children: [
+                  Visibility(
+                    visible: showResendOtpButton,
+                      child: TextButton(
+                        onPressed: resetTimer,
+                          child: Text(AppMessages.resendOtpCode, style: TextStyle(color: Colors.red))
+                      )
+                  ),
+
+                  Visibility(
+                    visible: !showResendOtpButton,
+                    child: StreamBuilder<int>(
+                      stream: stopWatchTimer.rawTime,
+                      initialData: 0,
+                      builder: (context, snap) {
+                        final value = snap.data;
+                        final displayTime = StopWatchTimer.getDisplayTime(value!, hours: false, milliSecond: false, minute: false);
+                        return Text('  $displayTime  ',);
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
 
@@ -327,6 +344,19 @@ class _LoginPageState extends StateBase<LoginPage> {
     flipCardController.toggleCard();
   }
 
+  void resetTimer(){
+    stopWatchTimer.setPresetTime(mSec: timerValueSec);
+    stopWatchTimer.onResetTimer();
+    stopWatchTimer.onStartTimer();
+
+    reSendOtpCodeCall();
+
+    showResendOtpButton = false;
+    pinCodeCtr.clear();
+
+    assistCtr.updateMain();
+  }
+
   void onTapCountryArrow(){
     AppNavigator.pushNextPage(
         context,
@@ -369,8 +399,11 @@ class _LoginPageState extends StateBase<LoginPage> {
       phoneNumber = phoneNumber.substring(1);
     }
 
-    timerKey = ValueKey(Generator.generateKey(2));
-    pinCodeKey = ValueKey(Generator.generateKey(2));
+    showResendOtpButton = false;
+    stopWatchTimer.onResetTimer();
+    stopWatchTimer.onStartTimer();
+
+    //pinCodeKey = ValueKey(Generator.generateKey(2));
     callState();
 
     LoginService.requestSendOtp(countryModel: countryModel, phoneNumber: phoneNumber).then((value) {

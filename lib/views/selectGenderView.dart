@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 
-typedef OnChange = void Function(int sex);
+typedef OnSelect = void Function(GenderType sex);
 
 enum GenderType {
   woman,
@@ -22,6 +22,7 @@ class SelectGenderView extends StatefulWidget {
   final bool showButton;
   final BorderRadiusGeometry? borderRadius;
   final BoxBorder? border;
+  final OnSelect? onSelect;
 
   SelectGenderView({
     this.title,
@@ -31,6 +32,7 @@ class SelectGenderView extends StatefulWidget {
     this.textStyle,
     this.borderRadius,
     this.border,
+    this.onSelect,
     Key? key,
     }): super(key: key);
 
@@ -134,6 +136,11 @@ class SelectGenderViewState extends State<SelectGenderView> {
   }
 
   void onButtonClick(){
-    AppNavigator.pop(context, result: gender);
+    if(widget.onSelect != null){
+      widget.onSelect!.call(gender);
+    }
+    else {
+      AppNavigator.pop(context, result: gender);
+    }
   }
 }

@@ -354,7 +354,7 @@ class _SearchPageState extends StateBase<SearchPage> {
       assistCtr.removeState(state$noRequestYet);
     };
 
-    requester.httpRequestEvents.onFailState = (req) async {
+    requester.httpRequestEvents.onFailState = (req, r) async {
       isInFetchData = false;
       assistCtr.removeStateAndUpdate(state$fetchData);
     };

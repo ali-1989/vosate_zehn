@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:app/system/publicAccess.dart';
 import 'package:app/tools/app/appOverlay.dart';
+import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/app/appSheet.dart';
 import 'package:app/tools/app/appSnack.dart';
 import 'package:app/tools/permissionTools.dart';
@@ -137,8 +138,8 @@ class _ProfilePageState extends StateBase<ProfilePage> {
                                           final path = AppDirectories.getSavePathUri(user.profileModel!.url?? '', SavePathType.userProfile, user.avatarFileName);
                                           final img = FileHelper.getFile(path);
 
-                                          if(img.existsSync() && img.lengthSync() == user.profileModel!.volume!){
-                                            return Image.file(img);
+                                          if(img.existsSync() && img.lengthSync() == (user.profileModel!.volume?? 0)){
+                                            return Image.file(img, width: 120, height: 120, fit: BoxFit.fill,);
                                           }
                                         }
 
@@ -276,31 +277,35 @@ class _ProfilePageState extends StateBase<ProfilePage> {
   }
 
   void changeBirthdateClick() async {
-    final newDate = await AppSheet.showSheetCustom(
+    await AppSheet.showSheetCustom(
         context,
         SelectDateCalendarView(
           minYearAsGregorian: 1922,
           maxYearAsGregorian: 2020,
           title: 'تاریخ تولد',
           currentDate: user.birthDate,
+          onSelect: (dt){
+            AppRoute.popTopView(context);
+            uploadBirthdate(dt);
+          },
         ),
         routeName: 'changeBirthdate'
     );
-
-    uploadBirthdate(newDate);
   }
 
   void changeGenderClick() async {
-    final sex = await AppSheet.showSheetCustom(
+    await AppSheet.showSheetCustom(
         context,
         SelectGenderView(
           title: 'جنسیت',
           genderType: user.sex == 1? GenderType.man: (user.sex == 2 ? GenderType.woman: GenderType.other),
+          onSelect: (gender){
+            AppRoute.popTopView(context);
+            uploadGender(gender == GenderType.man? 1: 2);
+          },
         ),
-        routeName: 'changeGender'
+        routeName: 'changeGender',
     );
-
-    uploadGender(sex == GenderType.man? 1: 2);
   }
 
   void changeNameFamilyClick() async {
@@ -418,7 +423,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
     String? path = await editImage(image.path);
 
     if(path != null){
-
+      uploadAvatar(path);
     }
   }
 
@@ -495,8 +500,8 @@ class _ProfilePageState extends StateBase<ProfilePage> {
     user.profileModel = MediaModel()..url = url..path = f.path;
 
     hideLoading();
-    assistCtr.updateMain();
     Session.sinkUserInfo(user);
+    assistCtr.updateMain();
 
     //after load image, auto will call: OverlayCenter().hideLoading(context);
     AppSnack.showSnack$operationSuccess(context);
@@ -507,14 +512,14 @@ class _ProfilePageState extends StateBase<ProfilePage> {
     final fileName = PathHelper.getFileName(filePath);
 
     final js = <String, dynamic>{};
-    js[Keys.requestZone] = 'UpdateProfileAvatar';
+    js[Keys.requestZone] = 'Update_profile_avatar';
     js[Keys.requesterId] = user.userId;
     js[Keys.forUserId] = user.userId;
     js[Keys.fileName] = fileName;
     js[Keys.partName] = partName;
     PublicAccess.addAppInfo(js);
 
-    requester.httpRequestEvents.onFailState = (req) async {
+    requester.httpRequestEvents.onFailState = (req, r) async {
       await hideLoading();
       AppSnack.showSnack$errorCommunicatingServer(context);
     };
@@ -536,7 +541,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
     AppSheet.closeSheet(context);
 
     final js = <String, dynamic>{};
-    js[Keys.requestZone] = 'DeleteProfileAvatar';
+    js[Keys.requestZone] = 'delete_profile_avatar';
     js[Keys.requesterId] = user.userId;
     js[Keys.forUserId] = user.userId;
 
@@ -544,16 +549,18 @@ class _ProfilePageState extends StateBase<ProfilePage> {
       await hideLoading();
     };
 
-    requester.httpRequestEvents.onFailState = (req) async {
+    requester.httpRequestEvents.onFailState = (req, r) async {
       AppSnack.showSnack$OperationFailed(context);
     };
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
       user.profileModel = null;
 
-      assistCtr.updateMain();
+      AppBroadcast.avatarNotifier.notifyAll(null);
+      Session.sinkUserInfo(user);
     };
 
+    showLoading();
     requester.bodyJson = js;
     requester.prepareUrl();
 
@@ -572,7 +579,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
       await hideLoading();
     };
 
-    requester.httpRequestEvents.onFailState = (req) async {
+    requester.httpRequestEvents.onFailState = (req, r) async {
       AppSnack.showSnack$OperationFailed(context);
     };
 
@@ -603,7 +610,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
       await hideLoading();
     };
 
-    requester.httpRequestEvents.onFailState = (req) async {
+    requester.httpRequestEvents.onFailState = (req, r) async {
       AppSnack.showSnack$OperationFailed(context);
     };
 
@@ -632,7 +639,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
       await hideLoading();
     };
 
-    requester.httpRequestEvents.onFailState = (req) async {
+    requester.httpRequestEvents.onFailState = (req, r) async {
       AppSnack.showSnack$OperationFailed(context);
     };
 
@@ -657,7 +664,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
     js[Keys.forUserId] = js[Keys.requesterId];
 
 
-    requester.httpRequestEvents.onFailState = (req) async {
+    requester.httpRequestEvents.onFailState = (req, r) async {
       AppToast.showToast(context, AppMessages.errorCommunicatingServer);
     };
 

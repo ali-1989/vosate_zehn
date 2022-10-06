@@ -38,7 +38,7 @@ class AdvertisingManager {
   }
 
   static void check() async {
-    await Future.delayed(Duration(seconds: 5), (){}); // for avoid call fast after init
+    await Future.delayed(Duration(seconds: 8), (){}); // for avoid call fast after init
     if(lastRequest == null || DateHelper.isPastOf(lastRequest, Duration(minutes: 29))){
       requestAdvertising();
     }
@@ -65,10 +65,9 @@ class AdvertisingManager {
 
   static AdvModel addItem(AdvModel item){
     final existItem = getById(item.id);
+    item.mediaModel ??= MediaManager.getById(item.mediaId);
 
     if(existItem == null) {
-      item.mediaModel ??= MediaManager.getById(item.mediaId);
-
       _list.add(item);
       return item;
     }
@@ -145,7 +144,8 @@ class AdvertisingManager {
 
       MediaManager.addItemsFromMap(mediaList);
       MediaManager.sinkItems(MediaManager.mediaList);
-      AdvertisingManager.addItemsFromMap(advList);
+
+      addItemsFromMap(advList);
 
       AppBroadcast.newAdvNotifier.value++;
       //sinkAdv();

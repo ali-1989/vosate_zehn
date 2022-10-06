@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/helpers/colorHelper.dart';
@@ -128,9 +130,8 @@ class DrawerMenuBuilder {
 
                       if(img.existsSync() && img.lengthSync() == (user.profileModel!.volume?? 0)){
                         return CircleAvatar(
-                          backgroundColor: ColorHelper.textToColor(user.nameFamily,),
+                          backgroundImage: FileImage(File(img.path)),
                           radius: 30,
-                          child: Image.file(img),
                         );
                       }
                     }
@@ -139,7 +140,7 @@ class DrawerMenuBuilder {
                     return CircleAvatar(
                       backgroundColor: ColorHelper.textToColor(user.nameFamily,),
                       radius: 30,
-                      child: Image.asset(AppImages.appIcon, ),
+                      child: Image.asset(AppImages.appIcon),
                     );
                   },
                 );
@@ -241,7 +242,7 @@ class DrawerMenuBuilder {
     final path = AppDirectories.getSavePathUri(user.profileModel!.url!, SavePathType.userProfile, user.avatarFileName);
     final img = FileHelper.getFile(path);
 
-    if(img.existsSync() && img.lengthSync() == user.profileModel!.volume!){
+    if(img.existsSync() && img.lengthSync() == (user.profileModel!.volume?? 0)){
       return;
     }
 

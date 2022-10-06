@@ -17,7 +17,7 @@ class AppParameterManager {
       requester.dispose();
     };
 
-    requester.httpRequestEvents.onFailState = (req) async {
+    requester.httpRequestEvents.onFailState = (req, r) async {
       res.complete(null);
       return true;
     };

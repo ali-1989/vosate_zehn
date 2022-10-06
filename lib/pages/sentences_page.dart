@@ -26,6 +26,7 @@ import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:app/models/abstract/stateBase.dart';
 import 'package:app/tools/app/appMessages.dart';
 import 'package:app/views/AppBarCustom.dart';
+import 'package:iris_tools/modules/stateManagers/selfRefresh.dart';
 import 'package:iris_tools/widgets/optionsRow/checkRow.dart';
 
 class SentencesPage extends StatefulWidget {
@@ -162,45 +163,60 @@ class _SentencesPageState extends StateBase<SentencesPage> {
 
   void showSettingDialog(){
     final view = Align(
-      child: FractionallySizedBox(
-        widthFactor: .8,
-        child: Card(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 30),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(child: Text('تنظیمات').bold()),
+      child: SelfRefresh(
+        builder: (ctx, ctr){
+          return FractionallySizedBox(
+            widthFactor: .8,
+            child: Card(
+              child: Stack(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 30),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Center(child: Text('تنظیمات').bold()),
 
-                SizedBox(
-                  height: 8,
-                ),
+                        SizedBox(
+                          height: 8,
+                        ),
 
-                SizedBox(
-                  height: 1,
-                  width: double.infinity,
-                  child: ColoredBox(
-                    color: Colors.grey[300]!,
+                        SizedBox(
+                          height: 1,
+                          width: double.infinity,
+                          child: ColoredBox(
+                            color: Colors.grey[300]!,
+                          ),
+                        ),
+
+                        SizedBox(
+                          height: 8,
+                        ),
+
+                        CheckBoxRow(
+                            value: SettingsManager.settingsModel.notificationDailyText,
+                            description: Text('نمایش جملات روز به صورت نوتیفیکیشن'),
+                            onChanged: (v){
+                              SettingsManager.settingsModel.notificationDailyText = v;
+                              ctr.update();
+                              SettingsManager.saveSettings();
+                            }
+                        )
+                      ],
+                    ),
                   ),
-                ),
 
-                SizedBox(
-                  height: 8,
-                ),
-
-                CheckBoxRow(
-                    value: SettingsManager.settingsModel.notificationDailyText,
-                    description: Text('نمایش جملات روز به صورت نوتیفیکیشن'),
-                    onChanged: (v){
-                      SettingsManager.settingsModel.notificationDailyText = v;
-                      SettingsManager.saveSettings();
-                    }
-                )
-              ],
+                  Positioned(
+                    top: 0,
+                      left: 0,
+                      child: CloseButton()
+                  ),
+                ],
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
 
@@ -215,7 +231,7 @@ class _SentencesPageState extends StateBase<SentencesPage> {
     js[Keys.requesterId] = Session.getLastLoginUser()?.userId;
     js[Keys.date] = DateHelper.toTimestamp(dateTime);
 
-    requester.httpRequestEvents.onFailState = (req) async {
+    requester.httpRequestEvents.onFailState = (req, r) async {
       isInFetchData = false;
       assistCtr.removeStateAndUpdate(state$fetchData);
     };

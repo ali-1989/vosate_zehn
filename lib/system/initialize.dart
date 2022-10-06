@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'package:app/managers/advertisingManager.dart';
 import 'package:app/managers/mediaManager.dart';
+import 'package:app/managers/versionManager.dart';
 import 'package:app/services/aidService.dart';
 import 'package:app/services/firebase_service.dart';
 import 'package:flutter/foundation.dart';
@@ -36,9 +38,13 @@ import 'package:iris_tools/net/trustSsl.dart';
 class InitialApplication {
   InitialApplication._();
 
-  static bool isCallInit = false;
-  static bool isInitialOk = false;
-  static bool isLaunchOk = false;
+  static bool _callLaunchUpInit = false;
+  static bool _isInitialOk = false;
+  static bool _callLazyInit = false;
+
+  static bool isInit() {
+    return _isInitialOk;
+  }
 
   static Future<bool> importantInit() async {
     try {
@@ -57,12 +63,12 @@ class InitialApplication {
     }
   }
 
-  static Future<bool> onceInit(BuildContext context) async {
-    if (isCallInit) {
-      return true;
+  static Future<void> launchUpInit() async {
+    if (_callLaunchUpInit) {
+      return;
     }
 
-    isCallInit = true;
+    _callLaunchUpInit = true;
     TrustSsl.acceptBadCertificate();
     await DeviceInfoTools.prepareDeviceInfo();
     await DeviceInfoTools.prepareDeviceId();
@@ -71,7 +77,7 @@ class InitialApplication {
     await AppLocale.localeDelegate().getLocalization().setFallbackByLocale(const Locale('en', 'EE'));
 
     AppCache.screenBack = const AssetImage(AppImages.background);
-    await precacheImage(AppCache.screenBack!, context);
+    await precacheImage(AppCache.screenBack!, AppRoute.getContext());
     //PlayerTools.init();
 
     if (!kIsWeb) {
@@ -79,17 +85,32 @@ class InitialApplication {
       AppNotification.startListenTap();
     }
 
-    isInitialOk = true;
-    return true;
+    _isInitialOk = true;
+    return;
   }
 
-  static void callOnLaunchUp() {
-    if (isLaunchOk) {
+  static void appLazyInit() {
+    if (!_callLazyInit) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        Timer.periodic(const Duration(milliseconds: 50), (Timer timer) {
+          if (_isInitialOk) {
+            timer.cancel();
+
+            _lazyInitCommands();
+          }
+        });
+      });
+    }
+  }
+
+  static void _lazyInitCommands() {
+    if (_callLazyInit) {
       return;
     }
 
-    isLaunchOk = true;
+    _callLazyInit = true;
 
+    VersionManager.checkAppHasNewVersion(AppRoute.getContext());
     final eventListener = AppEventListener();
     eventListener.addResumeListener(LifeCycleApplication.onResume);
     eventListener.addPauseListener(LifeCycleApplication.onPause);
@@ -120,7 +141,9 @@ class InitialApplication {
     MediaManager.loadAllRecords();
     AdvertisingManager.init();
     AidService.checkShowDialog();
-    FireBaseService.getToken();
+    FireBaseService.getToken().then((value) {
+      FireBaseService.subscribeToTopic('daily_text');
+    });
     //DailyTextService.checkShowDialog();
   }
 }

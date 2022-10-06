@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/widgets.dart';
 
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
@@ -88,7 +89,7 @@ class Requester {
 
     var f = _httpRequester.response.catchError((e){
       if(debug){
-        Logger.L.logToScreen('Dio catch error --> $e');
+        Logger.L.logToScreen(' dio catch Error --> $e');
       }
 
       if (_httpRequester.isDioCancelError){
@@ -96,7 +97,7 @@ class Requester {
       }
 
       httpRequestEvents.onAnyState?.call(_httpRequester);
-      httpRequestEvents.onFailState?.call(_httpRequester);
+      httpRequestEvents.onFailState?.call(_httpRequester, null);
       httpRequestEvents.onNetworkError?.call(_httpRequester);
     });
 
@@ -108,7 +109,7 @@ class Requester {
           Logger.L.logToScreen('>> Response receive, but is not ok | $val');
         }
 
-        await httpRequestEvents.onFailState?.call(_httpRequester);
+        await httpRequestEvents.onFailState?.call(_httpRequester, val);
         return;
       }
 
@@ -119,7 +120,7 @@ class Requester {
           Logger.L.logToScreen('>> Response receive, but is not json | $val');
         }
 
-        await httpRequestEvents.onFailState?.call(_httpRequester);
+        await httpRequestEvents.onFailState?.call(_httpRequester, val);
         return;
       }
 
@@ -138,7 +139,7 @@ class Requester {
         await httpRequestEvents.onStatusOk?.call(_httpRequester, js);
       }
       else {
-        await httpRequestEvents.onFailState?.call(_httpRequester);
+        await httpRequestEvents.onFailState?.call(_httpRequester, val);
 
         final cause = js[Keys.cause];
         final causeCode = js[Keys.causeCode];
@@ -162,7 +163,7 @@ class Requester {
 ///================================================================================================
 class HttpRequestEvents {
   Future Function(HttpRequester)? onAnyState;
-  Future Function(HttpRequester)? onFailState;
+  Future Function(HttpRequester, Response?)? onFailState;
   Future Function(HttpRequester)? onNetworkError;
   Future Function(HttpRequester, Map)? manageResponse;
   Future Function(HttpRequester, Map)? onStatusOk;

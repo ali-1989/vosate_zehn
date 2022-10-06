@@ -7,7 +7,6 @@ import 'package:app/pages/levels/video_player_page.dart';
 import 'package:app/services/favoriteService.dart';
 import 'package:app/services/lastSeenService.dart';
 import 'package:app/system/enums.dart';
-import 'package:app/system/publicAccess.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/app/appIcons.dart';
@@ -17,6 +16,7 @@ import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/app/appToast.dart';
 import 'package:flutter/material.dart';
 import 'package:iris_tools/api/duration/durationFormater.dart';
+import 'package:iris_tools/api/helpers/urlHelper.dart';
 
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:iris_tools/widgets/irisImageView.dart';
@@ -113,17 +113,23 @@ class _HomePageState extends StateBase<HomePage> {
       child: Builder(
         builder: (ctx){
           final adv = AdvertisingManager.getAdv1();
-PublicAccess.logger.logToAll('@@ adv1: avd=null ${adv == null}');
-          PublicAccess.logger.logToAll('@@ adv1: media=null ${adv?.mediaModel == null}');
+
           if(adv == null || adv.mediaModel == null){
             return SizedBox();
           }
-          PublicAccess.logger.logToAll('@@ adv1: is ok');
-          return IrisImageView(
-            height: 170,
-            url: adv.mediaModel!.url,
-            fit: BoxFit.fill,
-            imagePath: AppDirectories.getSavePathMedia(adv.mediaModel, SavePathType.anyOnInternal, null),
+
+          return GestureDetector(
+            onTap: (){
+              if(adv.clickUrl?.isNotEmpty?? false){
+                UrlHelper.launchLink(adv.clickUrl!);
+              }
+            },
+            child: IrisImageView(
+              height: 170,
+              url: adv.mediaModel!.url,
+              fit: BoxFit.fill,
+              imagePath: AppDirectories.getSavePathMedia(adv.mediaModel, SavePathType.anyOnInternal, null),
+            ),
           );
         },
       ),
@@ -139,11 +145,18 @@ PublicAccess.logger.logToAll('@@ adv1: avd=null ${adv == null}');
           if(adv == null || adv.mediaModel == null){
             return SizedBox();
           }
-          return IrisImageView(
-            height: 170,
-            url: adv.mediaModel!.url,
-            fit: BoxFit.fill,
-            imagePath: AppDirectories.getSavePathMedia(adv.mediaModel, SavePathType.anyOnInternal, null),
+          return GestureDetector(
+            onTap: (){
+              if(adv.clickUrl?.isNotEmpty?? false){
+                UrlHelper.launchLink(adv.clickUrl!);
+              }
+            },
+            child: IrisImageView(
+              height: 170,
+              url: adv.mediaModel!.url,
+              fit: BoxFit.fill,
+              imagePath: AppDirectories.getSavePathMedia(adv.mediaModel, SavePathType.anyOnInternal, null),
+            ),
           );
         },
       ),
@@ -158,11 +171,18 @@ PublicAccess.logger.logToAll('@@ adv1: avd=null ${adv == null}');
         if(adv == null || adv.mediaModel == null){
           return SizedBox();
         }
-        return IrisImageView(
-          height: 170,
-          url: adv.mediaModel!.url,
-          fit: BoxFit.fill,
-          imagePath: AppDirectories.getSavePathMedia(adv.mediaModel, SavePathType.anyOnInternal, null),
+        return GestureDetector(
+          onTap: (){
+            if(adv.clickUrl?.isNotEmpty?? false){
+              UrlHelper.launchLink(adv.clickUrl!);
+            }
+          },
+          child: IrisImageView(
+            height: 170,
+            url: adv.mediaModel!.url,
+            fit: BoxFit.fill,
+            imagePath: AppDirectories.getSavePathMedia(adv.mediaModel, SavePathType.anyOnInternal, null),
+          ),
         );
       },
     );
@@ -524,7 +544,7 @@ PublicAccess.logger.logToAll('@@ adv1: avd=null ${adv == null}');
     js[Keys.requestZone] = 'get_home_page_data';
     js[Keys.requesterId] = Session.getLastLoginUser()?.userId;
 
-    requester.httpRequestEvents.onFailState = (req) async {
+    requester.httpRequestEvents.onFailState = (req, r) async {
       isInFetchData = false;
       assistCtr.removeStateAndUpdate(state$fetchData);
     };

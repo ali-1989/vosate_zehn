@@ -110,7 +110,7 @@ class AppNotification {
 
 	static void startListenTap() {
 		AwesomeNotifications().actionStream.listen((ReceivedNotification receivedNotification){
-			//PublicAccess.logger.logToFile('@@@ tap notification  id: ${receivedNotification.id} ');
+			//PublicAccess.logger.logToFile('tap notification  id: ${receivedNotification.id} ');
 		});
 	}
 

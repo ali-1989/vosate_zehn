@@ -41,7 +41,7 @@ class AppBroadcast {
   }
 
   static void gotoSplash(int waitingInSplash) {
-    mustShowSplash = true;
+    isInSplashTimer = true;
     splashWaitingMil = waitingInSplash;
     reBuildMaterial();
   }

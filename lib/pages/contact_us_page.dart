@@ -125,7 +125,7 @@ class _ContactUsPageState extends StateBase<ContactUsPage> {
 
     requester.bodyJson = js;
 
-    requester.httpRequestEvents.onFailState = (req) async {
+    requester.httpRequestEvents.onFailState = (req, r) async {
       hideLoading();
 
       AppSheet.showSheet$OperationFailed(context);
@@ -135,7 +135,7 @@ class _ContactUsPageState extends StateBase<ContactUsPage> {
       hideLoading();
 
       AppSheet.showSheet$SuccessOperation(context, onBtn: (){
-        AppRoute.pop(context);
+        AppRoute.popTopView(context);
       });
     };
 

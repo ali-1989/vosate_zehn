@@ -52,25 +52,22 @@ class AppThemes {
 
 	static void initial() {
 		if(!_isInit) {
+			_isInit = true;
+
 			_instance = AppThemes._();
 
 			_instance.baseFont = Font();
 			_instance.subFont = Font();
 			_instance.boldFont = Font();
+
+			prepareThemes();
+			applyDefaultTheme();
 		}
-
-		_instance.themeList.clear();
-		prepareThemes();
-
-		if(!_isInit) {
-			_instance.currentTheme = _instance.defaultTheme;
-		}
-
-		_instance.themeData = createThemeData(_instance.currentTheme);
-		_isInit = true;
 	}
 
 	static void prepareThemes() {
+		_instance.themeList.clear();
+
 		{
 			final blueTheme = ColorTheme(Colors.amber, Colors.orange, const Color(0xFFFF006E), Colors.black);
 			//primary: ^1976D2, 1060A0 | dif: (FF006E|d81b60), ^F77F00
@@ -575,7 +572,7 @@ class AppThemes {
 
 	static TextStyle relativeSheetTextStyle() {
 		final app = AppThemes._instance.themeData.appBarTheme.toolbarTextStyle!;
-		final color = ColorHelper.getUnNearColor(app.color!, AppThemes._instance.currentTheme.primaryColor, Colors.black);
+		final color = ColorHelper.getUnNearColor(/*app.color!*/Colors.white, AppThemes._instance.currentTheme.primaryColor, Colors.white);
 
 		return app.copyWith(color: color, fontSize: 14);//currentTheme.appBarItemColor
 	}

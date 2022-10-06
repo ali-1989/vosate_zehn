@@ -261,7 +261,7 @@ class _RegisterPageState extends StateBase<RegisterPage> {
       final userModel = await Session.login$newProfileData(data);
 
       if(userModel != null) {
-        AppRoute.pop(context);
+        AppRoute.popTopView(context);
         AppRoute.replaceNamed(context, LayoutPage.route.name!);
       }
       else {

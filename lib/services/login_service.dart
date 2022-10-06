@@ -9,6 +9,7 @@ import 'package:app/system/publicAccess.dart';
 import 'package:app/tools/app/appHttpDio.dart';
 import 'package:app/tools/deviceInfoTools.dart';
 
+
 class LoginService {
   LoginService._();
 
@@ -152,6 +153,33 @@ class LoginService {
       }
 
       result.complete(loginWrapper);
+      return null;
+    });
+
+    return result.future;
+  }
+  
+  static Future<HttpRequester?> requestOnSplash() async {
+    final http = HttpItem();
+    final result = Completer<HttpRequester?>();
+
+    http.fullUrl = '';
+    http.method = 'GET';
+    //http.setBodyJson(js);
+
+    final request = AppHttpDio.send(http);
+
+    var f = request.response.catchError((e){
+      result.complete(null);
+    });
+
+    f = f.then((Response? response){
+      if(response == null || response.statusCode == null) {
+        result.complete(null);
+        return;
+      }
+
+      result.complete(request);
       return null;
     });
 

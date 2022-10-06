@@ -246,7 +246,6 @@ class FontManager {
       AppThemes.instance.boldFont = FontManager.instance.defaultFontFor(lang, FontUsage.bold);
     }
 
-    AppThemes.prepareDefaultFontFor(lang);
     return;
   }
 }

@@ -42,19 +42,21 @@ class Toaster extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _state = ToasterState();
+    return ToasterState();
   }
 
   static void showToast(Widget? toast){
     _state.showToast(toast);
   }
 }
-
+///=========================================================================================================
 class ToasterState extends State<Toaster> {
   Widget? toast;
 
   @override
   Widget build(BuildContext context) {
+    Toaster._state = this;
+
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [

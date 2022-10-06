@@ -29,8 +29,9 @@ class AppLocale {
   }
 
   static Iterable<Locale> getAssetSupportedLocales() {
+    /// must for any record ,create a file in assets/locales directory
     return [
-      const Locale('en', 'US'),
+      //const Locale('en', 'US'),
       const Locale('fa', 'IR'),
     ];
   }

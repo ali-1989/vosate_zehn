@@ -97,7 +97,7 @@ class _AidPageState extends StateBase<AidPage> {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                     //minimumSize: Size(180, 46),
-                  primary: AppThemes.instance.currentTheme.successColor,
+                  backgroundColor: AppThemes.instance.currentTheme.successColor,
                 ),
                   onPressed: onPayCall,
                   child: Text(AppMessages.pay)
@@ -125,7 +125,7 @@ class _AidPageState extends StateBase<AidPage> {
 
     requester.bodyJson = js;
 
-    requester.httpRequestEvents.onFailState = (req) async {
+    requester.httpRequestEvents.onFailState = (req, r) async {
       isInFetchData = false;
       assistCtr.removeStateAndUpdate(state$fetchData);
     };

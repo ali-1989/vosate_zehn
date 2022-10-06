@@ -25,7 +25,15 @@ class AppHttpDio {
 
 	static HttpRequester send(HttpItem item, {BaseOptions? options}){
 		if(item.debugMode && !kIsWeb) {
-			PublicAccess.logger.logToAll('==== Stack Trace : ${StackTrace.current.toString()}');
+			var txt = '\n-------------------------http debug\n';
+			txt += 'url: ${item.fullUrl}\n';
+			txt += 'Method: ${item.method}\n';
+
+			if(item.body is String) {
+				txt += 'Body: ${item.body} \n------------------------- End';
+			}
+
+			PublicAccess.logger.logToAll(txt);
 		}
 
 		item.prepareMultiParts();
@@ -69,6 +77,14 @@ class AppHttpDio {
 								//return handler.reject(dioError);
 							},
 							 onResponse: (Response<dynamic> res, ResponseInterceptorHandler handler) {
+								 if(item.debugMode) {
+									 var txt = '\n----------------- http Debug [onResponse]\n';
+									 txt += 'statusCode:  ${res.statusCode}\n';
+									 txt += 'data: ${res.data}\n-----------------------End';
+
+									 PublicAccess.logger.logToAll(txt);
+								 }
+
 								itemRes._response = res;
 								itemRes.isOk = !(res is Error
 										|| res is Exception
@@ -79,12 +95,25 @@ class AppHttpDio {
 									handler.next(res);
 								}
 							},
-							onError: (DioError err, ErrorInterceptorHandler handler) async{
+							onError: (DioError err, ErrorInterceptorHandler handler) async {
+								if(item.debugMode) {
+									var txt = '\n----------------- http Debug [onError]\n';
+									txt += 'statusCode: ${err.response?.statusCode}\n';
+									txt += 'data: ${err.response?.data}';
+									txt += 'error: ${err.error} \n--------------------------- End';
+
+									PublicAccess.logger.logToAll(txt);
+								}
+
 								final ro = RequestOptions(path: uri);
-								final res = Response<DioError>(
+								final res = Response<dynamic>(
 										requestOptions: ro,
-										data: DioError(requestOptions: ro, error: err.error, type: DioErrorType.response)
+										statusCode: err.response?.statusCode,
+										data: err.response ?? DioError(requestOptions: ro, error: err.error, type: DioErrorType.response)
 								);
+
+								/*itemRes._response = res;
+								err.response = res;*/
 
 								itemRes._response = err.response;
 
@@ -444,7 +473,7 @@ class HttpItem {
 	List<FormDataItem> formDataItems = [];
 	Options options = Options(
 		method: 'GET',
-		receiveDataWhenStatusError: true,// if true: go to error section in interceptors
+		receiveDataWhenStatusError: true,// if true: error section in interceptors has body
 		responseType: ResponseType.plain,
 		//sendTimeout: ,
 		//receiveTimeout: ,

@@ -81,7 +81,7 @@ class DailyTextService {
     final comp = Completer<List<DailyTextModel>?>();
     final requester = Requester();
 
-    requester.httpRequestEvents.onFailState = (req) async {
+    requester.httpRequestEvents.onFailState = (req, r) async {
       comp.complete(null);
     };
 

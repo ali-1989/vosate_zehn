@@ -120,7 +120,7 @@ class _LevelPageState extends StateBase<ContentViewPage> {
           child: Text(widget.injectData.subBucket.description?? '').bold().fsR(2),
         ),
 
-        SizedBox(height: 50),
+        SizedBox(height: 40),
 
         Expanded(
             child: Builder(
@@ -157,7 +157,7 @@ class _LevelPageState extends StateBase<ContentViewPage> {
                       ),
                     ),
 
-                    SizedBox(height: 20,),
+                    SizedBox(height: 16),
 
                     Expanded(
                       child: Padding(
@@ -209,9 +209,14 @@ class _LevelPageState extends StateBase<ContentViewPage> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    ConstrainedBox(
-                      constraints: BoxConstraints.tightFor(width: 20),
-                        child: Center(child: Text('$i').color(Colors.white))
+                    Visibility(
+                      visible: contentModel!.hasOrder,
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints.tightFor(width: 20),
+                          child: Center(
+                              child: Text('$i').color(Colors.white)
+                          )
+                      ),
                     ),
 
                     Builder(
@@ -288,7 +293,7 @@ class _LevelPageState extends StateBase<ContentViewPage> {
   }
 
   void onItemClick(MediaModelWrapForContent media) {
-    if(!media.isSee){
+    if(!media.isSee && contentModel!.hasOrder){
       //final contentModel = widget.injectData.subBucket.contentModel;
       final curIdx = contentModel!.mediaIds.indexWhere((element) => element == media.id);
 
@@ -351,7 +356,7 @@ class _LevelPageState extends StateBase<ContentViewPage> {
 
     requester.bodyJson = js;
 
-    requester.httpRequestEvents.onFailState = (req) async {
+    requester.httpRequestEvents.onFailState = (req, r) async {
       isInFetchData = false;
       assistCtr.removeStateAndUpdate(state$fetchData);
     };

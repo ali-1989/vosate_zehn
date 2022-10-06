@@ -35,47 +35,62 @@ class AppRoute {
 
   static late BuildContext materialContext;
 
+  static void init() {
+    freeRoutes.add(LoginPage.route);
+    freeRoutes.add(RegisterPage.route);
+    freeRoutes.add(TermPage.route);
+    freeRoutes.add(AboutUsPage.route);
+  }
+
   static BuildContext getContext() {
     var res = WidgetsBinding.instance.focusManager.rootScope.focusedChild?.context;//deep: 50
     res ??= WidgetsBinding.instance.focusManager.primaryFocus?.context; //deep: 71
 
-    return res?? materialContext;
+    return res?? getMaterialContext();
   }
 
-  static Future<bool> saveRouteName(String routeName) async {
+  static BuildContext getMaterialContext() {
+    return materialContext;
+  }
+
+  static Future<bool> saveRoutePageName(String routeName) async {
     final int res = await AppDB.setReplaceKv(Keys.setting$lastRouteName, routeName);
 
     return res > 0;
   }
 
-  static String? fetchRouteScreenName() {
+  static String? fetchRoutePageName() {
     return AppDB.fetchKv(Keys.setting$lastRouteName);
   }
 
-  /*static void reCallBuildRoutePage(String routeName) {
+  /*static void navigateRouteScreen(String routeName) {
     saveRouteName(routeName);
     SettingsManager.settingsModel.currentRouteScreen = routeName;
     AppBroadcast.reBuildMaterial();
   }*/
 
   static void backRoute() {
-    final mustLastCtx = AppNavigator.getLastRouteContext(getContext());
-    AppNavigator.backRoute(mustLastCtx);
+    final lastCtx = AppNavigator.getLastRouteContext(getContext());
+    AppNavigator.backRoute(lastCtx);
   }
 
   static void backToRoot(BuildContext context) {
     //AppNavigator.popRoutesUntilRoot(AppRoute.getContext());
 
     while(canPop(context)){
-      pop(context);
+      popTopView(context);
     }
   }
 
   static bool canPop(BuildContext context) {
-    return GoRouter.of(context).canPop();
+    return AppNavigator.canPop(context);
   }
 
-  static void pop(BuildContext context) {
+  static void popTopView(BuildContext context) {
+    AppNavigator.pop(context);
+  }
+
+  static void popPage(BuildContext context) {
     GoRouter.of(context).pop();
   }
 
@@ -86,6 +101,14 @@ class AppRoute {
     else {
       GoRouter.of(context).push(address, extra: extra);
     }
+  }
+
+  static void replace(BuildContext context, Widget page, {dynamic extra}) {
+    final r = MaterialPageRoute(builder: (ctx){
+      return page;
+    });
+
+    Navigator.of(context).pushReplacement(r);
   }
 
   static void pushNamed(BuildContext context, String name, {dynamic extra}) {
@@ -99,13 +122,6 @@ class AppRoute {
 
   static void replaceNamed(BuildContext context, String name, {dynamic extra}) {
     GoRouter.of(context).replaceNamed(name, params: {}, extra: extra);
-  }
-
-  static void init(){
-    freeRoutes.add(LoginPage.route);
-    freeRoutes.add(RegisterPage.route);
-    freeRoutes.add(TermPage.route);
-    freeRoutes.add(AboutUsPage.route);
   }
 }
 ///============================================================================================
