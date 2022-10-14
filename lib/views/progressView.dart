@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class ProgressView extends StatelessWidget {
 
   const ProgressView({

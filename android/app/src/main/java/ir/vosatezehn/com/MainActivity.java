@@ -1,4 +1,4 @@
-package ir.iris.vosate_zehn.vosate_zehn;
+package ir.vosatezehn.com;
 
 import io.flutter.embedding.android.FlutterActivity;
 

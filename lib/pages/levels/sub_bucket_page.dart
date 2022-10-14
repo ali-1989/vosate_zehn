@@ -1,6 +1,3 @@
-import 'package:app/services/lastSeenService.dart';
-import 'package:app/tools/app/appDirectories.dart';
-import 'package:app/tools/app/appThemes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
@@ -17,16 +14,19 @@ import 'package:app/pages/levels/audio_player_page.dart';
 import 'package:app/pages/levels/content_view_page.dart';
 import 'package:app/pages/levels/video_player_page.dart';
 import 'package:app/services/favoriteService.dart';
+import 'package:app/services/lastSeenService.dart';
 import 'package:app/system/enums.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/publicAccess.dart';
 import 'package:app/system/requester.dart';
 import 'package:app/system/session.dart';
+import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/app/appIcons.dart';
 import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appRoute.dart';
+import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/app/appToast.dart';
 import 'package:app/tools/searchFilterTool.dart';
 import 'package:app/views/AppBarCustom.dart';

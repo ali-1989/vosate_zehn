@@ -1,5 +1,19 @@
+import 'package:flutter/material.dart';
+
+import 'package:appinio_swiper/appinio_swiper.dart';
+import 'package:go_router/go_router.dart';
+import 'package:iris_tools/api/generator.dart';
+import 'package:iris_tools/dateSection/ADateStructure.dart';
+import 'package:iris_tools/dateSection/dateHelper.dart';
+import 'package:iris_tools/features/overlayDialog.dart';
+import 'package:iris_tools/modules/stateManagers/assist.dart';
+import 'package:iris_tools/modules/stateManagers/selfRefresh.dart';
+import 'package:iris_tools/widgets/optionsRow/checkRow.dart';
+
 import 'package:app/managers/settingsManager.dart';
+import 'package:app/models/abstract/stateBase.dart';
 import 'package:app/models/dailyTextModel.dart';
+import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/publicAccess.dart';
 import 'package:app/system/requester.dart';
@@ -7,27 +21,13 @@ import 'package:app/system/session.dart';
 import 'package:app/tools/app/appDb.dart';
 import 'package:app/tools/app/appIcons.dart';
 import 'package:app/tools/app/appImages.dart';
+import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appOverlay.dart';
 import 'package:app/tools/dateTools.dart';
+import 'package:app/views/AppBarCustom.dart';
 import 'package:app/views/emptyData.dart';
 import 'package:app/views/notFetchData.dart';
 import 'package:app/views/progressView.dart';
-import 'package:app/system/extensions.dart';
-import 'package:appinio_swiper/appinio_swiper.dart';
-import 'package:flutter/material.dart';
-
-import 'package:go_router/go_router.dart';
-import 'package:iris_tools/api/generator.dart';
-import 'package:iris_tools/dateSection/ADateStructure.dart';
-import 'package:iris_tools/dateSection/dateHelper.dart';
-import 'package:iris_tools/features/overlayDialog.dart';
-import 'package:iris_tools/modules/stateManagers/assist.dart';
-
-import 'package:app/models/abstract/stateBase.dart';
-import 'package:app/tools/app/appMessages.dart';
-import 'package:app/views/AppBarCustom.dart';
-import 'package:iris_tools/modules/stateManagers/selfRefresh.dart';
-import 'package:iris_tools/widgets/optionsRow/checkRow.dart';
 
 class SentencesPage extends StatefulWidget {
   static final route = GoRoute(

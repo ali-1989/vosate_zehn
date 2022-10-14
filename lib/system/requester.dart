@@ -1,6 +1,6 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/widgets.dart';
 
+import 'package:dio/dio.dart';
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
 import 'package:iris_tools/api/logger/logger.dart';
 

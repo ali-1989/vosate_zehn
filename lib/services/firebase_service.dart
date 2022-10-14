@@ -1,10 +1,11 @@
-import 'package:app/managers/settingsManager.dart';
-import 'package:app/system/publicAccess.dart';
-import 'package:app/tools/app/appNotification.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:iris_tools/dateSection/ADateStructure.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
+
+import 'package:app/managers/settingsManager.dart';
+import 'package:app/system/publicAccess.dart';
+import 'package:app/tools/app/appNotification.dart';
 
 Future<void> _fbMessagingBackgroundHandler(RemoteMessage message) async {
   PublicAccess.logger.logToFile('fb MessagingBackgroundHandler: ${message.notification!.body}');
@@ -55,7 +56,7 @@ class FireBaseService {
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      PublicAccess.logger.logToFile('onMessageOpenedApp: ${message.notification!.body}');
+      PublicAccess.logger.logToFile('onMessage-OpenedApp: ${message.notification!.body}');
     });
 
     FirebaseMessaging.onBackgroundMessage(_fbMessagingBackgroundHandler);
@@ -63,7 +64,7 @@ class FireBaseService {
 
   static Future<String?> getTokenForce() async {
     token = await FirebaseMessaging.instance.getToken();
-    PublicAccess.logger.logToAll('fcm token: $token');//todo
+    PublicAccess.logger.logToAll('fcm token ============> $token');//todo
     final gd = GregorianDate();
     gd.moveLocalToUTC();
 

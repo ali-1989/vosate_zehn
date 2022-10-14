@@ -1,4 +1,3 @@
-import 'package:app/pages/search_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -9,9 +8,9 @@ import 'package:app/pages/aid_page.dart';
 import 'package:app/pages/contact_us_page.dart';
 import 'package:app/pages/e404_page.dart';
 import 'package:app/pages/favorites_page.dart';
-import 'package:app/pages/layout_page.dart';
 import 'package:app/pages/image_full_screen.dart';
 import 'package:app/pages/last_seen_page.dart';
+import 'package:app/pages/layout_page.dart';
 import 'package:app/pages/levels/audio_player_page.dart';
 import 'package:app/pages/levels/content_view_page.dart';
 import 'package:app/pages/levels/sub_bucket_page.dart';
@@ -19,6 +18,7 @@ import 'package:app/pages/levels/video_player_page.dart';
 import 'package:app/pages/login/login_page.dart';
 import 'package:app/pages/login/register_page.dart';
 import 'package:app/pages/profile/profile_page.dart';
+import 'package:app/pages/search_page.dart';
 import 'package:app/pages/sentences_page.dart';
 import 'package:app/pages/term_page.dart';
 import 'package:app/pages/zarinpal_page.dart';
@@ -84,6 +84,7 @@ class AppRoute {
 
   static bool canPop(BuildContext context) {
     return AppNavigator.canPop(context);
+    //return GoRouter.of(context).canPop();
   }
 
   static void popTopView(BuildContext context) {

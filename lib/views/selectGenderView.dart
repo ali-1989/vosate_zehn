@@ -1,10 +1,11 @@
+import 'package:flutter/material.dart';
+
+import 'package:toggle_switch/toggle_switch.dart';
+
+import 'package:app/system/extensions.dart';
 import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appNavigator.dart';
 import 'package:app/tools/app/appThemes.dart';
-import 'package:app/system/extensions.dart';
-import 'package:flutter/material.dart';
-import 'package:toggle_switch/toggle_switch.dart';
-
 
 typedef OnSelect = void Function(GenderType sex);
 

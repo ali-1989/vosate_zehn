@@ -9,7 +9,6 @@ import 'package:app/system/publicAccess.dart';
 import 'package:app/tools/app/appHttpDio.dart';
 import 'package:app/tools/deviceInfoTools.dart';
 
-
 class LoginService {
   LoginService._();
 

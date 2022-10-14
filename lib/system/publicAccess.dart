@@ -1,4 +1,3 @@
-import 'package:app/services/firebase_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/logger/logger.dart';
@@ -11,6 +10,7 @@ import 'package:app/constants.dart';
 import 'package:app/managers/settingsManager.dart';
 import 'package:app/models/mixin/dateFieldMixin.dart';
 import 'package:app/models/userModel.dart';
+import 'package:app/services/firebase_service.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/session.dart';
 import 'package:app/tools/app/appRoute.dart';

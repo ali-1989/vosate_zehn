@@ -1,5 +1,3 @@
-import 'package:app/pages/search_page.dart';
-import 'package:app/tools/app/appRoute.dart';
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
@@ -11,14 +9,17 @@ import 'package:shaped_bottom_bar/utils/arrays.dart';
 import 'package:app/models/abstract/stateBase.dart';
 import 'package:app/pages/home_page.dart';
 import 'package:app/pages/levels/bucket_page.dart';
+import 'package:app/pages/search_page.dart';
 import 'package:app/services/aidService.dart';
 import 'package:app/system/enums.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appIcons.dart';
 import 'package:app/tools/app/appMessages.dart';
+import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/views/AppBarCustom.dart';
 import 'package:app/views/genDrawerMenu.dart';
+import 'package:move_to_background/move_to_background.dart';
 
 class LayoutPage extends StatefulWidget {
   static final route = GoRoute(
@@ -41,6 +42,14 @@ class LayoutPageState extends StateBase<LayoutPage> {
 
 
   @override
+  Future<bool> onWillBack<s extends StateBase>(s state) {
+    print('==============> onWillBack');
+    MoveToBackground.moveTaskToBack();
+
+    return Future<bool>.value(false);
+  }
+
+  @override
   initState(){
     super.initState();
 
@@ -49,21 +58,24 @@ class LayoutPageState extends StateBase<LayoutPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Assist(
-      controller: assistCtr,
-        builder: (context, ctr, data) {
-        return Scaffold(
-          key: scaffoldState,
-          appBar: buildAppBar(),
-          body: SafeArea(
-            bottom: false,
-              child: buildBody()
-          ),
-          drawer: DrawerMenuBuilder.getDrawer(),
-          extendBody: true,
-          bottomNavigationBar: buildNavBar(),
-        );
-      }
+    return WillPopScope(
+      onWillPop: ()=> onWillBack(this),
+      child: Assist(
+        controller: assistCtr,
+          builder: (context, ctr, data) {
+          return Scaffold(
+            key: scaffoldState,
+            appBar: buildAppBar(),
+            body: SafeArea(
+              bottom: false,
+                child: buildBody()
+            ),
+            drawer: DrawerMenuBuilder.getDrawer(),
+            extendBody: true,
+            bottomNavigationBar: buildNavBar(),
+          );
+        }
+      ),
     );
   }
 

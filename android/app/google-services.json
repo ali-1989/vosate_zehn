@@ -1,35 +1,36 @@
 {
   "project_info": {
-    "project_number": "52170676254",
-    "project_id": "vosatezehn",
-    "storage_bucket": "vosatezehn.appspot.com"
+    "project_number": "731359726004",
+    "project_id": "vosate-zehn-7d8fe",
+    "storage_bucket": "vosate-zehn-7d8fe.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:52170676254:android:5ac725b2937c13beff360f",
+        "mobilesdk_app_id": "1:731359726004:android:fbbd8cd236c4fc31b20ae1",
         "android_client_info": {
-          "package_name": "ir.iris.vosate_zehn.vosate_zehn"
+          "package_name": "ir.vosatezehn.com"
         }
       },
       "oauth_client": [
         {
-          "client_id": "52170676254-t63j3a69rtd8ilmhssg1p24t3o5s2sfa.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "ir.iris.vosate_zehn.vosate_zehn",
-            "certificate_hash": "cc12fc353ac7fcf5310641ed9a3716690f3b90f1"
-          }
+          "client_id": "731359726004-om1nsl47c9l9mjm246h3ebe0rt5lkgdi.apps.googleusercontent.com",
+          "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCLRjWxn8L_Fca--_tQMLQnMbRSHRGVsxc"
+          "current_key": "AIzaSyBVuGcqQFjUl1t5mIUJ04rfr9EKkDRqYxM"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "731359726004-om1nsl47c9l9mjm246h3ebe0rt5lkgdi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

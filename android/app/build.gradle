@@ -69,7 +69,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "ir.iris.vosate_zehn.vosate_zehn"
+        applicationId "ir.vosatezehn.com"
         minSdkVersion minSdkVersionVal.toInteger()      //base:16
         targetSdkVersion targetSdkVersionVal.toInteger()
         versionCode flutterVersionCode.toInteger()

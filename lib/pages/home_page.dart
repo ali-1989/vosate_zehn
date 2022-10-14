@@ -1,5 +1,14 @@
+import 'package:flutter/material.dart';
+
+import 'package:iris_tools/api/duration/durationFormater.dart';
+import 'package:iris_tools/api/helpers/urlHelper.dart';
+import 'package:iris_tools/modules/stateManagers/assist.dart';
+import 'package:iris_tools/widgets/irisImageView.dart';
+import 'package:iris_tools/widgets/keepAliveWrap.dart';
+
 import 'package:app/managers/advertisingManager.dart';
 import 'package:app/managers/mediaManager.dart';
+import 'package:app/models/abstract/stateBase.dart';
 import 'package:app/models/subBuketModel.dart';
 import 'package:app/pages/levels/audio_player_page.dart';
 import 'package:app/pages/levels/content_view_page.dart';
@@ -7,30 +16,21 @@ import 'package:app/pages/levels/video_player_page.dart';
 import 'package:app/services/favoriteService.dart';
 import 'package:app/services/lastSeenService.dart';
 import 'package:app/system/enums.dart';
+import 'package:app/system/extensions.dart';
+import 'package:app/system/keys.dart';
+import 'package:app/system/requester.dart';
+import 'package:app/system/session.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/app/appIcons.dart';
 import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appMessages.dart';
+import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/app/appToast.dart';
-import 'package:flutter/material.dart';
-import 'package:iris_tools/api/duration/durationFormater.dart';
-import 'package:iris_tools/api/helpers/urlHelper.dart';
-
-import 'package:iris_tools/modules/stateManagers/assist.dart';
-import 'package:iris_tools/widgets/irisImageView.dart';
-
-import 'package:app/models/abstract/stateBase.dart';
-import 'package:app/system/extensions.dart';
-import 'package:app/system/keys.dart';
-import 'package:app/system/requester.dart';
-import 'package:app/system/session.dart';
-import 'package:app/tools/app/appRoute.dart';
 import 'package:app/views/emptyData.dart';
 import 'package:app/views/notFetchData.dart';
 import 'package:app/views/progressView.dart';
-import 'package:iris_tools/widgets/keepAliveWrap.dart';
 
 class HomePage extends StatefulWidget {
 

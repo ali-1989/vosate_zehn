@@ -108,7 +108,7 @@
 -keep class io.flutter.plugins.firebase.messaging.FlutterFirebaseMessagingService { <init>(); }
 -keep class io.flutter.plugins.imagepicker.ImagePickerFileProvider { <init>(); }
 -keep class io.flutter.plugins.urllauncher.WebViewActivity { <init>(); }
--keep class ir.iris.vosate_zehn.vosate_zehn.MainActivity { <init>(); }
+-keep class ir.vosatezehn.com.MainActivity { <init>(); }
 -keep class me.carda.awesome_notifications.notifications.broadcastReceivers.DismissedNotificationReceiver { <init>(); }
 -keep class me.carda.awesome_notifications.notifications.broadcastReceivers.KeepOnTopActionReceiver { <init>(); }
 -keep class me.carda.awesome_notifications.notifications.broadcastReceivers.RefreshSchedulesReceiver { <init>(); }

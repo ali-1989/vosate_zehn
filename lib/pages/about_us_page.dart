@@ -1,4 +1,3 @@
-import 'package:app/views/progressView.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_html/flutter_html.dart';
@@ -12,6 +11,7 @@ import 'package:app/system/session.dart';
 import 'package:app/tools/app/appMessages.dart';
 import 'package:app/views/AppBarCustom.dart';
 import 'package:app/views/notFetchData.dart';
+import 'package:app/views/progressView.dart';
 
 class AboutUsPage extends StatefulWidget {
   static final route = GoRoute(

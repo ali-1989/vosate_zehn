@@ -1,25 +1,26 @@
 import 'dart:async';
 
+import 'package:app/services/cronTask.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+
+import 'package:go_router/go_router.dart';
+
 import 'package:app/constants.dart';
+import 'package:app/managers/settingsManager.dart';
 import 'package:app/models/settingsModel.dart';
+import 'package:app/pages/splash_page.dart';
 import 'package:app/services/firebase_service.dart';
 import 'package:app/system/initialize.dart';
 import 'package:app/system/publicAccess.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appLocale.dart';
+import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/app/appToast.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:app/managers/settingsManager.dart';
-
-import 'package:go_router/go_router.dart';
-
-import 'package:app/pages/splash_page.dart';
-import 'package:app/tools/app/appRoute.dart';
-
+import 'package:workmanager/workmanager.dart';
 
 ///================ call on any hot restart
 Future<void> main() async {
@@ -32,6 +33,7 @@ Future<void> main() async {
     GoRouter.setUrlPathStrategy(UrlPathStrategy.path);
 
     FireBaseService.init();
+    CronTask.init();
   }
 
   WidgetsFlutterBinding.ensureInitialized();
@@ -132,7 +134,7 @@ class MyErrorApp extends StatelessWidget {
         child: SizedBox.expand(
           child: ColoredBox(
               color: Colors.brown,
-            child: Center(child: Text('Error in init.')),
+            child: Center(child: Text('Error in init')),
           ),
         ),
       ),
@@ -142,13 +144,19 @@ class MyErrorApp extends StatelessWidget {
 ///==============================================================================================
 void onErrorCatch(FlutterErrorDetails errorDetails) {
   var data = 'on Error catch: ${errorDetails.exception.toString()}';
-  data += '\n stack: ${errorDetails.stack}\n==========================================';
+
+  if(!kIsWeb) {
+    data += '\n stack: ${errorDetails.stack}';
+  }
+
+  data += '\n==========================================[Error catch]';
 
   PublicAccess.logger.logToAll(data);
 }
 ///==============================================================================================
 zonedGuardedCatch(error, sTrace) {
-  final txt = 'on ZonedGuarded catch: ${error.toString()}\n==========================================';
+  var txt = 'on ZonedGuarded catch: ${error.toString()}';
+  txt += '\n==========================================[ZonedGuarded]';
   PublicAccess.logger.logToAll(txt);
 
   if(kDebugMode) {

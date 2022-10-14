@@ -7,6 +7,7 @@ import 'package:iris_tools/api/helpers/localeHelper.dart';
 import 'package:iris_tools/api/helpers/mathHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 import 'package:app/models/abstract/stateBase.dart';
 import 'package:app/models/countryModel.dart';
@@ -29,7 +30,6 @@ import 'package:app/tools/app/appToast.dart';
 import 'package:app/tools/countryTools.dart';
 import 'package:app/views/phoneNumberInput.dart';
 import 'package:app/views/screens/countrySelect.dart';
-import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 class LoginPage extends StatefulWidget {
   static final route = GoRoute(

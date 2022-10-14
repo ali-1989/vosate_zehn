@@ -1,9 +1,5 @@
 import 'dart:async';
-import 'package:app/managers/advertisingManager.dart';
-import 'package:app/managers/mediaManager.dart';
-import 'package:app/managers/versionManager.dart';
-import 'package:app/services/aidService.dart';
-import 'package:app/services/firebase_service.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -14,10 +10,17 @@ import 'package:iris_tools/api/logger/logger.dart';
 import 'package:iris_tools/api/logger/reporter.dart';
 import 'package:iris_tools/api/system.dart';
 import 'package:iris_tools/net/netManager.dart';
+import 'package:iris_tools/net/trustSsl.dart';
 
 import 'package:app/constants.dart';
+import 'package:app/managers/advertisingManager.dart';
+import 'package:app/managers/mediaManager.dart';
 import 'package:app/managers/settingsManager.dart';
+import 'package:app/managers/versionManager.dart';
+import 'package:app/services/aidService.dart';
 import 'package:app/services/downloadUpload.dart';
+import 'package:app/services/firebase_service.dart';
+import 'package:app/services/websocketService.dart';
 import 'package:app/system/lifeCycleApplication.dart';
 import 'package:app/system/publicAccess.dart';
 import 'package:app/system/session.dart';
@@ -29,11 +32,9 @@ import 'package:app/tools/app/appLocale.dart';
 import 'package:app/tools/app/appNotification.dart';
 import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/app/appSizes.dart';
-import 'package:app/services/websocketService.dart';
 import 'package:app/tools/deviceInfoTools.dart';
 import 'package:app/tools/netListenerTools.dart';
 import 'package:app/tools/userLoginTools.dart';
-import 'package:iris_tools/net/trustSsl.dart';
 
 class InitialApplication {
   InitialApplication._();

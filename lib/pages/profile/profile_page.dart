@@ -1,21 +1,13 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:app/system/publicAccess.dart';
-import 'package:app/tools/app/appOverlay.dart';
-import 'package:app/tools/app/appRoute.dart';
-import 'package:app/tools/app/appSheet.dart';
-import 'package:app/tools/app/appSnack.dart';
-import 'package:app/tools/permissionTools.dart';
-import 'package:app/views/changeNameFamilyView.dart';
-import 'package:app/views/dateViews/selectDateCalendarView.dart';
-import 'package:app/views/selectGenderView.dart';
 import 'package:flutter/material.dart';
 
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:glowstone/glowstone.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:iris_pic_editor/picEditor/models/edit_options.dart';
 import 'package:iris_pic_editor/picEditor/picEditor.dart';
 import 'package:iris_tools/api/helpers/fileHelper.dart';
@@ -28,12 +20,14 @@ import 'package:iris_tools/features/overlayDialog.dart';
 import 'package:iris_tools/models/dataModels/mediaModel.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:iris_tools/modules/stateManagers/notifyRefresh.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
+
 import 'package:app/models/abstract/stateBase.dart';
 import 'package:app/models/userModel.dart';
 import 'package:app/system/enums.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
+import 'package:app/system/publicAccess.dart';
 import 'package:app/system/requester.dart';
 import 'package:app/system/session.dart';
 import 'package:app/tools/app/appBroadcast.dart';
@@ -41,11 +35,18 @@ import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/app/appIcons.dart';
 import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appMessages.dart';
+import 'package:app/tools/app/appOverlay.dart';
+import 'package:app/tools/app/appRoute.dart';
+import 'package:app/tools/app/appSheet.dart';
 import 'package:app/tools/app/appSizes.dart';
+import 'package:app/tools/app/appSnack.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/app/appToast.dart';
+import 'package:app/tools/permissionTools.dart';
 import 'package:app/views/AppBarCustom.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:app/views/changeNameFamilyView.dart';
+import 'package:app/views/dateViews/selectDateCalendarView.dart';
+import 'package:app/views/selectGenderView.dart';
 
 class ProfilePage extends StatefulWidget {
   static final route = GoRoute(

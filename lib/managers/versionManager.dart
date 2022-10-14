@@ -1,5 +1,10 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
+
+import 'package:iris_tools/api/helpers/urlHelper.dart';
+import 'package:iris_tools/api/system.dart';
+
 import 'package:app/constants.dart';
 import 'package:app/managers/settingsManager.dart';
 import 'package:app/models/versionModel.dart';
@@ -9,9 +14,6 @@ import 'package:app/tools/app/appDialogIris.dart';
 import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/deviceInfoTools.dart';
-import 'package:flutter/material.dart';
-import 'package:iris_tools/api/helpers/urlHelper.dart';
-import 'package:iris_tools/api/system.dart';
 
 class VersionManager {
   VersionManager._();

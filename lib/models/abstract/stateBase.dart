@@ -100,7 +100,7 @@ abstract class StateBase<W extends StatefulWidget> extends State<W> {
 	IrisLocalizations localization() {
 		return AppLocale.appLocalize;
 	}
-
+	///-------------------------------------------------------
 	void addPostOrCall(Function() fn){
 		if(!mounted){
 			return;
@@ -166,89 +166,11 @@ abstract class StateBase<W extends StatefulWidget> extends State<W> {
 	.............
 	WillPopScope(
 			onWillPop: () => state.onWillBack(state),
-			child: ...)
- --------------------------------------------------------------------------------------
- sample of build():
-
- state.mediaQuery ??= MediaQuery.of(state.context).size;
-
-  return WillPopScope(
-    onWillPop: () => state.onWillBack(state),
-    child: Material( //or Scaffold
-        child: SizedBox(
-          width: state.mediaQuery.width,
-          height: state.mediaQuery.height,
-          child: SafeArea(
-            child:
+			onWillPop: () => onWillBack(this),
+			child: ...
+	)
  --------------------------------------------------------------------------------------
 
+ --------------------------------------------------------------------------------------
 
-
-
-
-
- dynamic tDynamicOrFirst(String key, String subKey) {
-		final list = tAsMap(key);
-
-		if(list == null) {
-		  return null;
-		}
-
-		final Iterable<MapEntry> tra = list.entries;
-		MapEntry? find;
-
-		try {
-			find = tra.firstWhere((element) {
-				return element.key == subKey;
-			});
-		}
-		catch (e){}
-
-		if(find != null) {
-		  return find.value;
-		}
-
-		return tra.first.value;
-	}
-
-	String? tJoin(String key, {String join = ''}) {
-		final list = tAsMap(key);
-
-		if(list == null) {
-		  return null;
-		}
-
-		var res = '';
-
-		for(final s in list.entries){
-			res += s.value.toString() + join;
-		}
-
-		if(res.length > join.length) {
-			res = res.substring(0, res.length - join.length);
-		}
-
-		return res;
-	}
-
-
- 	String? tC(String key, {String? key2, String? key3}) {
-		var res1 = AppLocale.appLocalize.translateCapitalize(key);
-
-		if(res1 == null) {
-		  return null;
-		}
-
-		if(key2 != null) {
-		  res1 += ' ${AppLocale.appLocalize.translate(key2)?? ''}';
-		}
-
-		if(key3 != null) {
-		  res1 += ' ${AppLocale.appLocalize.translate(key3)?? ''}';
-		}
-
-		return res1;
-	}
-
-
- */
+*/
