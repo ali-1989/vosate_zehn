@@ -54,13 +54,13 @@ class SettingsManager {
 
 			if (res == null) {
 				_settingsModel = SettingsModel();
+				saveSettings();
 			}
 			else {
 				_settingsModel = SettingsModel.fromMap(res);
 			}
 		}
 
-		saveSettings();
 		return true;
 	}
 

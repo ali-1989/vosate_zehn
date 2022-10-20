@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "731359726004-1hes6hsqkkuh7cjchmcooofs4siam3qs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ir.vosatezehn.com",
+            "certificate_hash": "f0a9eb92077278fe1eebe9ec7747e2a3294e9e66"
+          }
+        },
+        {
           "client_id": "731359726004-om1nsl47c9l9mjm246h3ebe0rt5lkgdi.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,6 +37,13 @@
             {
               "client_id": "731359726004-om1nsl47c9l9mjm246h3ebe0rt5lkgdi.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "731359726004-nfpd9f3ns2qq0d239j1a0kbvsn90s00d.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "ir.vosatezehn.com"
+              }
             }
           ]
         }

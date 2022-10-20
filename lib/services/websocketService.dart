@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:app/tools/app/appNotification.dart';
+import 'package:app/tools/app/appRoute.dart';
+import 'package:flutter/material.dart';
 import 'package:getsocket/getsocket.dart';
 import 'package:iris_tools/api/checker.dart';
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
@@ -15,7 +18,6 @@ import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appDb.dart';
 import 'package:app/tools/app/appDialogIris.dart';
 import 'package:app/tools/app/appMessages.dart';
-import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/deviceInfoTools.dart';
 import 'package:app/tools/netListenerTools.dart';
 import 'package:app/tools/userLoginTools.dart';
@@ -173,6 +175,9 @@ class WebsocketService {
 					case HttpCodes.com_messageForUser:
 						messageForUser(js);
 						break;
+					case HttpCodes.com_dailyText:
+						dailyText(js);
+						break;
 					case HttpCodes.com_forceLogOff:
 						// ignore: unawaited_futures
 						UserLoginTools.forceLogoff(userId);
@@ -191,7 +196,7 @@ class WebsocketService {
 			}
 			//--------------------------------------------------
 			if(section == HttpCodes.sec_userData){
-				userDataSec(command, data, userId, js);
+				userDataSection(command, data, userId, js);
 			}
 
 			// ignore: unawaited_futures
@@ -202,6 +207,13 @@ class WebsocketService {
 			});
 		}
 		catch(e){}
+	}
+
+	static void userDataSection(String command, Map<String, dynamic> data, int userId, Map js) async {
+		/// new profile =======================
+		if(command == HttpCodes.com_updateProfileSettings) {
+			await Session.newProfileData(data);
+		}
 	}
 
 	static void messageForUser(Map js) async {
@@ -215,24 +227,38 @@ class WebsocketService {
 		}
 
 		final ids = AppDB.fetchAsList(Keys.setting$userMessageIds);
+
 		if(!ids.contains(messageId)) {
-			_prompt(message);
-			AppDB.addToList(Keys.setting$userMessageIds, messageId);
+			if(AppRoute.materialContext != null) {
+				_promptDialog(AppRoute.getContext()!, message);
+				AppDB.addToList(Keys.setting$userMessageIds, messageId);
+			}
 		}
 	}
 
-	static void userDataSec(String command, Map<String, dynamic> data, int userId, Map js) async {
-		/// new profile =======================
-		if(command == HttpCodes.com_updateProfileSettings) {
-			await Session.newProfileData(data);
+	static void dailyText(Map js) async {
+		final data = js[Keys.data];
+		final message = data['message'];
+		final title = data['title'];
+		final messageId = data['id'];
+
+		final ids = AppDB.fetchAsList(Keys.setting$dailyTextIds);
+
+		if(!ids.contains(messageId)) {
+			_promptNotification(title, message);
+			AppDB.addToList(Keys.setting$dailyTextIds, messageId);
 		}
 	}
 
-	static _prompt(String msg){
+	static _promptDialog(BuildContext context, String msg){
 		AppDialogIris.instance.showIrisDialog(
-				AppRoute.getContext(),
+				context,
 				yesText: AppMessages.yes,
 				desc: msg,
 		);
+	}
+
+	static _promptNotification(String? title, String msg){
+		AppNotification.sendNotification(title, msg);
 	}
 }

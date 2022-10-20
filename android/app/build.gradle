@@ -60,11 +60,18 @@ android {
     }
 
     signingConfigs {
-        release {
+        /*release {
             storeFile file('K:\\Programming\\Tools\\Key\\venusAdviser.jks')
             keyAlias 'key'
             keyPassword 'venusAdviser123'
             storePassword 'venusAdviser123'
+        }*/
+
+        release {
+            storeFile file('K:\\Programming\\FlutterProjects\\VosateZehn\\android\\app\\key.keystore')
+            keyAlias 'b4a'
+            keyPassword 'a6987@7896b'
+            storePassword 'a6987@7896b'
         }
     }
 

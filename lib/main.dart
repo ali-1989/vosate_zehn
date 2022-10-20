@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app/services/javaCallService.dart';
 import 'package:app/services/cronTask.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -20,7 +21,6 @@ import 'package:app/tools/app/appLocale.dart';
 import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/app/appToast.dart';
-import 'package:workmanager/workmanager.dart';
 
 ///================ call on any hot restart
 Future<void> main() async {
@@ -33,6 +33,7 @@ Future<void> main() async {
     GoRouter.setUrlPathStrategy(UrlPathStrategy.path);
 
     FireBaseService.init();
+    JavaCallService.init();
     CronTask.init();
   }
 

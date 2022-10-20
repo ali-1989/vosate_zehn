@@ -33,7 +33,7 @@ class AppRoute {
 
   AppRoute._();
 
-  static late BuildContext materialContext;
+  static BuildContext? materialContext;
 
   static void init() {
     freeRoutes.add(LoginPage.route);
@@ -42,14 +42,14 @@ class AppRoute {
     freeRoutes.add(AboutUsPage.route);
   }
 
-  static BuildContext getContext() {
+  static BuildContext? getContext() {
     var res = WidgetsBinding.instance.focusManager.rootScope.focusedChild?.context;//deep: 50
     res ??= WidgetsBinding.instance.focusManager.primaryFocus?.context; //deep: 71
 
     return res?? getMaterialContext();
   }
 
-  static BuildContext getMaterialContext() {
+  static BuildContext? getMaterialContext() {
     return materialContext;
   }
 
@@ -70,7 +70,7 @@ class AppRoute {
   }*/
 
   static void backRoute() {
-    final lastCtx = AppNavigator.getLastRouteContext(getContext());
+    final lastCtx = AppNavigator.getLastRouteContext(getContext()!);
     AppNavigator.backRoute(lastCtx);
   }
 

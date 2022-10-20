@@ -70,5 +70,6 @@ class HttpCodes {
   static const com_talkMeWho = 'TalkMeWho';
   static const com_sendDeviceInfo = 'SendDeviceInfo';
   static const com_messageForUser = 'messageForUser';
+  static const com_dailyText = 'dailyText';
   static const com_updateProfileSettings = 'UpdateProfileSettings';
 }

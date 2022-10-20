@@ -50,11 +50,11 @@ class UserLoginTools {
     AppBroadcast.drawerMenuRefresher.update();
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
 
-    if (isCurrent) {
-      AppRoute.backToRoot(AppRoute.getContext());
+    if (isCurrent && AppRoute.materialContext != null) {
+      AppRoute.backToRoot(AppRoute.getContext()!);
 
       Future.delayed(Duration(milliseconds: 400), (){
-        AppRoute.replaceNamed(AppRoute.getContext(), LoginPage.route.name!);
+        AppRoute.replaceNamed(AppRoute.getContext()!, LoginPage.route.name!);
       });
     }
   }
@@ -65,7 +65,9 @@ class UserLoginTools {
     AppBroadcast.drawerMenuRefresher.update();
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
 
-    AppRoute.backToRoot(AppRoute.getContext());
+    if (AppRoute.materialContext != null) {
+      AppRoute.backToRoot(AppRoute.getContext()!);
+    }
   }
 
 

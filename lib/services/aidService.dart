@@ -19,11 +19,11 @@ class AidService {
 
   static void gotoAidPage(){
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    AppRoute.pushNamed(AppRoute.getContext(), AidPage.route.name!);
+    AppRoute.pushNamed(AppRoute.getContext()!, AidPage.route.name!);
   }
 
   static void gotoZarinpalPage() async {
-    AppRoute.pushNamed(AppRoute.getContext(), ZarinpalPage.route.name!);
+    AppRoute.pushNamed(AppRoute.getContext()!, ZarinpalPage.route.name!);
   }
 
   static void showAidDialog(){
@@ -43,9 +43,9 @@ class AidService {
             SizedBox(
               width: 100,
               child: ElevatedButton(
-                style: ElevatedButton.styleFrom(primary: Colors.green),
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
                   onPressed: (){
-                    Navigator.of(AppRoute.getContext()).pop();
+                    Navigator.of(AppRoute.getContext()!).pop();
                     gotoZarinpalPage();
                   },
                   child: Text(AppMessages.aid)
@@ -55,7 +55,7 @@ class AidService {
             SizedBox(width: 30),
             TextButton(
                 onPressed: (){
-                  Navigator.of(AppRoute.getContext()).pop();
+                  Navigator.of(AppRoute.getContext()!).pop();
                 },
                 child: Text(AppMessages.later)
             )
@@ -65,7 +65,7 @@ class AidService {
     );
 
     AppDialogIris.instance.showIrisDialog(
-        AppRoute.getContext(),
+        AppRoute.getContext()!,
        title: AppMessages.aidUs,
       yesFn: gotoZarinpalPage,
       //desc: msg,

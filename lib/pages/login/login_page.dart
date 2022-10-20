@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flip_card/flip_card_controller.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:iris_tools/api/helpers/localeHelper.dart';
 import 'package:iris_tools/api/helpers/mathHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
-
+import 'dart:async';
 import 'package:app/models/abstract/stateBase.dart';
 import 'package:app/models/countryModel.dart';
 import 'package:app/pages/layout_page.dart';
@@ -294,13 +295,31 @@ class _LoginPageState extends StateBase<LoginPage> {
     final google = GoogleService();
 
     AppLoading.instance.showWaiting(context);
-    final googleResult = await google.signIn();
+    GoogleSignInAccount? googleResult;
+
+    final t = Timer(Duration(seconds: 60), (){
+      AppLoading.instance.hideLoading(context);
+      AppSheet.showSheet$OperationFailed(context);
+      return;
+    });
+
+    try {
+      googleResult = await google.signIn();
+
+      if(t.isActive){
+        t.cancel();
+      }
+    }
+    catch(e){
+      AppLoading.instance.hideLoading(context);
+      AppSheet.showSheet$OperationFailed(context);
+      return;
+    }
 
     if(googleResult == null){
       AppLoading.instance.hideLoading(context);
 
       AppSheet.showSheet$OperationFailed(context);
-      return;
     }
     else {
       final injectData = RegisterPageInjectData();

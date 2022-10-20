@@ -31,7 +31,7 @@ class PublicAccess {
   );
 
   static Map addLanguageIso(Map src, [BuildContext? ctx]) {
-    src[Keys.languageIso] = System.getLocalizationsLanguageCode(ctx ?? AppRoute.getContext());
+    src[Keys.languageIso] = System.getLocalizationsLanguageCode(ctx ?? AppRoute.getContext()!);
 
     return src;
   }
@@ -103,15 +103,20 @@ class PublicAccess {
   }
 
   static Map<String, dynamic> getHeartMap() {
-    final heart = <String, dynamic>{
-      'heart': 'heart',
-      Keys.deviceId: DeviceInfoTools.deviceId,
-      Keys.languageIso: System.getLocalizationsLanguageCode(AppRoute.getContext()),
-      'app_version_code': Constants.appVersionCode,
-      'app_version_name': Constants.appVersionName,
-      'app_name': Constants.appName,
-      'fcm_token': FireBaseService.token,
-    };
+    final heart = <String, dynamic>{};
+    heart['heart'] = 'heart';
+    heart['app_name'] = Constants.appName;
+    heart['app_version_code'] = Constants.appVersionCode;
+    heart['app_version_name'] = Constants.appVersionName;
+    heart['fcm_token'] = FireBaseService.token;
+    heart[Keys.deviceId] = DeviceInfoTools.deviceId;
+
+    if(AppRoute.materialContext != null) {
+      heart[Keys.languageIso] = System.getLocalizationsLanguageCode(AppRoute.getContext()!);
+    }
+    else {
+      heart[Keys.languageIso] = SettingsManager.settingsModel.appLocale.languageCode;
+    }
 
     final users = [];
 

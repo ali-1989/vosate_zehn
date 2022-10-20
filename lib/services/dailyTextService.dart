@@ -11,13 +11,12 @@ import 'package:app/system/session.dart';
 import 'package:app/tools/app/appDb.dart';
 import 'package:app/tools/app/appDialogIris.dart';
 import 'package:app/tools/app/appIcons.dart';
-import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/app/appThemes.dart';
 
 class DailyTextService {
   DailyTextService._();
 
-  static void checkShowDialog() async {
+  static void checkShowDialog(BuildContext context) async {
     await Future.delayed(Duration(seconds: 10), (){});
 
     if(!Session.hasAnyLogin()){
@@ -35,21 +34,21 @@ class DailyTextService {
     for(final k in list){
      if(k.date != null && DateHelper.isToday(k.date!)){
         if(!ids.contains(k.id)){
-          showDailyDialog(k.text);
+          showDailyDialog(context, k.text);
           AppDB.addToList(Keys.setting$dailyIdsList, k.id);
         }
       }
     }
   }
 
-  static void showDailyDialog(String msg){
+  static void showDailyDialog(BuildContext context, String msg){
     final body = Column(
       children: [
         Align(
           alignment: Alignment.topLeft,
           child: IconButton(
               onPressed: (){
-                Navigator.of(AppRoute.getContext()).pop();
+                Navigator.of(context).pop();
               },
               icon: Icon(AppIcons.close)
           ),
@@ -68,7 +67,7 @@ class DailyTextService {
     decoration.padding = EdgeInsets.zero;
 
     AppDialogIris.instance.showIrisDialog(
-      AppRoute.getContext(),
+      context,
       descView: body,
       decoration: decoration,
     );

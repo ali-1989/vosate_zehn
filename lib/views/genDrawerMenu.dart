@@ -186,12 +186,12 @@ class DrawerMenuBuilder {
 
   static void gotoFavoritesPage(){
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    AppRoute.pushNamed(AppRoute.getContext(), FavoritesPage.route.name!);
+    AppRoute.pushNamed(AppRoute.getContext()!, FavoritesPage.route.name!);
   }
 
   static void gotoLastSeenPage(){
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    AppRoute.pushNamed(AppRoute.getContext(), LastSeenPage.route.name!);
+    AppRoute.pushNamed(AppRoute.getContext()!, LastSeenPage.route.name!);
   }
 
   static void gotoAidPage(){
@@ -200,22 +200,22 @@ class DrawerMenuBuilder {
 
   static void gotoContactUsPage(){
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    AppRoute.pushNamed(AppRoute.getContext(), ContactUsPage.route.name!);
+    AppRoute.pushNamed(AppRoute.getContext()!, ContactUsPage.route.name!);
   }
 
   static void gotoSentencePage(){
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    AppRoute.pushNamed(AppRoute.getContext(), SentencesPage.route.name!);
+    AppRoute.pushNamed(AppRoute.getContext()!, SentencesPage.route.name!);
   }
 
   static void gotoAboutUsPage(){
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    AppRoute.pushNamed(AppRoute.getContext(), AboutUsPage.route.name!);
+    AppRoute.pushNamed(AppRoute.getContext()!, AboutUsPage.route.name!);
   }
 
   static void gotoProfilePage(){
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    AppRoute.pushNamed(AppRoute.getContext(), ProfilePage.route.name!);
+    AppRoute.pushNamed(AppRoute.getContext()!, ProfilePage.route.name!);
   }
 
   static void onLogoffCall(){
@@ -224,7 +224,7 @@ class DrawerMenuBuilder {
     }
 
     AppDialogIris.instance.showYesNoDialog(
-      AppRoute.getContext(),
+      AppRoute.getContext()!,
       desc: AppMessages.doYouWantLogoutYourAccount,
       dismissOnButtons: true,
       yesText: AppMessages.yes,

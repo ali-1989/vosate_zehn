@@ -12,7 +12,6 @@ import 'package:app/system/requester.dart';
 import 'package:app/tools/app/appDb.dart';
 import 'package:app/tools/app/appDialogIris.dart';
 import 'package:app/tools/app/appMessages.dart';
-import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/deviceInfoTools.dart';
 
 class VersionManager {
@@ -48,7 +47,7 @@ class VersionManager {
 
     if(vm != null){
       if(vm.newVersionCode > Constants.appVersionCode){
-        showUpdateDialog(AppRoute.getContext(), vm);
+        showUpdateDialog(context, vm);
       }
     }
   }

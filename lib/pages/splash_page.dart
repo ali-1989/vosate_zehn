@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app/tools/app/appRoute.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -12,9 +13,7 @@ import 'package:app/pages/layout_page.dart';
 import 'package:app/system/initialize.dart';
 import 'package:app/system/session.dart';
 import 'package:app/tools/app/appBroadcast.dart';
-import 'package:app/tools/app/appDb.dart';
 import 'package:app/tools/app/appImages.dart';
-import 'package:app/tools/app/appThemes.dart';
 import 'package:app/views/progressView.dart';
 
 bool _isInit = false;
@@ -122,14 +121,13 @@ class SplashScreenState extends State<SplashPage> {
 
     _isInit = true;
 
-    await AppDB.init();
-    AppThemes.initial();
+    await InitialApplication.launchUpInit();
+    await InitialApplication.launchUpInitWithContext(AppRoute.getContext()!);
     final settingsLoad = SettingsManager.loadSettings();
 
     if (settingsLoad) {
       await Session.fetchLoginUsers();
       await VersionManager.checkInstallVersion();
-      await InitialApplication.launchUpInit();
       connectToServer();
 
       InitialApplication.appLazyInit();

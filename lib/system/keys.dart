@@ -81,6 +81,7 @@ class Keys {
   static const setting$lastAidDialogShowTime = 'last_aid_dialog_show_time';
   static const setting$dailyIdsList = 'daily_ids_show';
   static const setting$notificationDailyText = 'notification_daily_text';
+  static const setting$dailyTextIds = 'daily_text_ids';
 
   static String genDownloadKey_userAvatar(int userId) {
     return 'downloadUserAvatar_$userId';

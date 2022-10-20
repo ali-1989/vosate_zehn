@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:app/tools/app/appDb.dart';
+import 'package:app/tools/app/appThemes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -39,6 +41,7 @@ import 'package:app/tools/userLoginTools.dart';
 class InitialApplication {
   InitialApplication._();
 
+  static bool _importantInit = false;
   static bool _callLaunchUpInit = false;
   static bool _isInitialOk = false;
   static bool _callLazyInit = false;
@@ -48,6 +51,10 @@ class InitialApplication {
   }
 
   static Future<bool> importantInit() async {
+    if (_importantInit) {
+      return true;
+    }
+
     try {
       await AppDirectories.prepareStoragePaths(Constants.appName);
 
@@ -57,6 +64,7 @@ class InitialApplication {
 
       PublicAccess.logger = Logger('${AppDirectories.getTempDir$ex()}/logs');
 
+      _importantInit = true;
       return true;
     }
     catch (e){
@@ -70,15 +78,15 @@ class InitialApplication {
     }
 
     _callLaunchUpInit = true;
+    await AppDB.init();
+    AppThemes.initial();
+
     TrustSsl.acceptBadCertificate();
     await DeviceInfoTools.prepareDeviceInfo();
     await DeviceInfoTools.prepareDeviceId();
 
-    AppRoute.init();
     await AppLocale.localeDelegate().getLocalization().setFallbackByLocale(const Locale('en', 'EE'));
 
-    AppCache.screenBack = const AssetImage(AppImages.background);
-    await precacheImage(AppCache.screenBack!, AppRoute.getContext());
     //PlayerTools.init();
 
     if (!kIsWeb) {
@@ -88,6 +96,12 @@ class InitialApplication {
 
     _isInitialOk = true;
     return;
+  }
+
+  static Future<void> launchUpInitWithContext(BuildContext context) async {
+    AppRoute.init();
+    AppCache.screenBack = const AssetImage(AppImages.background);
+    await precacheImage(AppCache.screenBack!, context);
   }
 
   static void appLazyInit() {
@@ -109,42 +123,54 @@ class InitialApplication {
       return;
     }
 
-    _callLazyInit = true;
+    try {
+      _callLazyInit = true;
 
-    VersionManager.checkAppHasNewVersion(AppRoute.getContext());
-    final eventListener = AppEventListener();
-    eventListener.addResumeListener(LifeCycleApplication.onResume);
-    eventListener.addPauseListener(LifeCycleApplication.onPause);
-    eventListener.addDetachListener(LifeCycleApplication.onDetach);
-    WidgetsBinding.instance.addObserver(eventListener);
+      /// net & websocket
+      WebsocketService.prepareWebSocket(SettingsManager.settingsModel.wsAddress);
+      NetManager.addChangeListener(NetListenerTools.onNetListener);
 
-    WebsocketService.prepareWebSocket(SettingsManager.settingsModel.wsAddress);
-    NetManager.addChangeListener(NetListenerTools.onNetListener);
+      /// life cycle
+      final eventListener = AppEventListener();
+      eventListener.addResumeListener(LifeCycleApplication.onResume);
+      eventListener.addPauseListener(LifeCycleApplication.onPause);
+      eventListener.addDetachListener(LifeCycleApplication.onDetach);
+      WidgetsBinding.instance.addObserver(eventListener);
 
-    DownloadUploadService.downloadManager = DownloadManager('${Constants.appName}DownloadManager');
-    DownloadUploadService.uploadManager = UploadManager('${Constants.appName}UploadManager');
+      /// downloader
+      DownloadUploadService.downloadManager = DownloadManager('${Constants.appName}DownloadManager');
+      DownloadUploadService.uploadManager = UploadManager('${Constants.appName}UploadManager');
+      DownloadUploadService.downloadManager.addListener(DownloadUploadService.commonDownloadListener);
+      DownloadUploadService.uploadManager.addListener(DownloadUploadService.commonUploadListener);
 
-    DownloadUploadService.downloadManager.addListener(DownloadUploadService.commonDownloadListener);
-    DownloadUploadService.uploadManager.addListener(DownloadUploadService.commonUploadListener);
+      /// login & logoff
+      Session.addLoginListener(UserLoginTools.onLogin);
+      Session.addLogoffListener(UserLoginTools.onLogoff);
+      Session.addProfileChangeListener(UserLoginTools.onProfileChange);
 
-    if (System.isWeb()) {
-      void onSizeCheng(oldW, oldH, newW, newH) {
-        AppDialogIris.prepareDialogDecoration();
+      if (System.isWeb()) {
+        void onSizeCheng(oldW, oldH, newW, newH) {
+          AppDialogIris.prepareDialogDecoration();
+        }
+
+        AppSizes.instance.addMetricListener(onSizeCheng);
       }
 
-      AppSizes.instance.addMetricListener(onSizeCheng);
+      MediaManager.loadAllRecords();
+      FireBaseService.getToken().then((value) {
+        FireBaseService.subscribeToTopic('daily_text');
+      });
+
+      if(AppRoute.materialContext != null) {
+        AdvertisingManager.init();
+        AidService.checkShowDialog();
+
+        VersionManager.checkAppHasNewVersion(AppRoute.getContext()!);
+      }
+      //DailyTextService.checkShowDialog();
     }
-
-    Session.addLoginListener(UserLoginTools.onLogin);
-    Session.addLogoffListener(UserLoginTools.onLogoff);
-    Session.addProfileChangeListener(UserLoginTools.onProfileChange);
-
-    MediaManager.loadAllRecords();
-    AdvertisingManager.init();
-    AidService.checkShowDialog();
-    FireBaseService.getToken().then((value) {
-      FireBaseService.subscribeToTopic('daily_text');
-    });
-    //DailyTextService.checkShowDialog();
+    catch (e){
+      _callLazyInit = false;
+    }
   }
 }

@@ -43,7 +43,6 @@ class LayoutPageState extends StateBase<LayoutPage> {
 
   @override
   Future<bool> onWillBack<s extends StateBase>(s state) {
-    print('==============> onWillBack');
     MoveToBackground.moveTaskToBack();
 
     return Future<bool>.value(false);
