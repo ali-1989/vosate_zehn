@@ -167,7 +167,7 @@ class _LoginPageState extends StateBase<LoginPage> {
             width: double.maxFinite,
             child: ElevatedButton(
                 style: ElevatedButton.styleFrom(shape: const StadiumBorder()),
-                onPressed: onSendCall,
+                onPressed: onSendClick,
                 child: Text(AppMessages.send)
             ),
           ),
@@ -180,7 +180,7 @@ class _LoginPageState extends StateBase<LoginPage> {
                   backgroundColor: AppThemes.instance.currentTheme.differentColor,
                 ),
                 onPressed: (){
-                  signWithGoogleCall();
+                  signWithGoogleClick();
                 },
                 icon: Image.asset(AppImages.googleIco, width: 20, height: 20,),
                 label: Text(AppMessages.loginWithGoogle)
@@ -291,7 +291,7 @@ class _LoginPageState extends StateBase<LoginPage> {
     );
   }
 
-  void signWithGoogleCall() async {
+  void signWithGoogleClick() async {
     final google = GoogleService();
 
     AppLoading.instance.showWaiting(context);
@@ -318,13 +318,9 @@ class _LoginPageState extends StateBase<LoginPage> {
 
     if(googleResult == null){
       AppLoading.instance.hideLoading(context);
-
       AppSheet.showSheet$OperationFailed(context);
     }
     else {
-      final injectData = RegisterPageInjectData();
-      injectData.email = googleResult.email;
-
       final result = await LoginService.requestVerifyEmail(email: googleResult.email);
       AppLoading.instance.cancel(context);
 
@@ -342,6 +338,9 @@ class _LoginPageState extends StateBase<LoginPage> {
         final userId = result.jsResult![Keys.userId];
 
         if (userId == null) {
+          final injectData = RegisterPageInjectData();
+          injectData.email = googleResult.email;
+
           AppRoute.push(context, RegisterPage.route.path, extra: injectData);
         }
         else {
@@ -396,7 +395,7 @@ class _LoginPageState extends StateBase<LoginPage> {
         name: 'TermPage');*/
   }
 
-  void onSendCall(){
+  void onSendClick(){
     countryModel.countryPhoneCode = phoneNumberController.getCountryCode()!;
     phoneNumber = phoneNumberController.getPhoneNumber()!;
 
