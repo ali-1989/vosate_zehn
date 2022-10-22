@@ -118,6 +118,8 @@ class WebsocketService {
 	///-------------- on disConnect -----------------------------------------------------------
 	static void _onDisConnected() async{
 		_isConnected = false;
+		PublicAccess.logger.logToAll('---ws (no ok): ${AppBroadcast.isWsConnected}---');//todo
+
 		periodicHeartTimer?.cancel();
 
 		NetListenerTools.onWsDisConnectedListener();
@@ -127,6 +129,7 @@ class WebsocketService {
 	///-------------- on new Connect -----------------------------------------------------------
 	static void _onConnected() async {
 		_isConnected = true;
+		PublicAccess.logger.logToAll('---ws (is ok): ${AppBroadcast.isWsConnected}---');//todo
 		reconnectInterval = const Duration(seconds: 6);
 		sendData(JsonHelper.mapToJson(PublicAccess.getHeartMap()));
 

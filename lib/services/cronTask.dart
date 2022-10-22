@@ -1,8 +1,6 @@
 import 'package:app/services/firebase_service.dart';
 import 'package:app/system/initialize.dart';
 import 'package:app/system/publicAccess.dart';
-import 'package:app/tools/app/appBroadcast.dart';
-import 'package:flutter/material.dart';
 import 'package:workmanager/workmanager.dart';
 import 'package:app/constants.dart';
 
@@ -10,16 +8,15 @@ import 'package:app/constants.dart';
 void callbackWorkManager() {
   Workmanager().executeTask((task, inputData) async {
     try {
-      WidgetsFlutterBinding.ensureInitialized();
       await InitialApplication.importantInit();
-      PublicAccess.logger.logToAll('---callbackWorkManager---');//todo
+      await PublicAccess.logger.logToAll('---> callbackWorkManager ---');//todo
       await InitialApplication.launchUpInit();
       InitialApplication.appLazyInit();
 
       await FireBaseService.init();
       await FireBaseService.getToken();
       FireBaseService.subscribeToTopic('daily_text');
-      PublicAccess.logger.logToAll('---ws: ${AppBroadcast.isWsConnected}---');//todo
+
       /*switch (task) {
       case Workmanager.iOSBackgroundTask:
         break;
@@ -47,8 +44,8 @@ class CronTask {
         'periodic-${Constants.appName}',
         frequency: Duration(hours: 2),
       initialDelay: Duration(milliseconds: 20),
-      backoffPolicyDelay: Duration(minutes: 20),
-      existingWorkPolicy: ExistingWorkPolicy.keep,
+      backoffPolicyDelay: Duration(minutes: 5),
+      existingWorkPolicy: ExistingWorkPolicy.replace,
         backoffPolicy: BackoffPolicy.linear,
         constraints: Constraints(
           networkType: NetworkType.not_required,

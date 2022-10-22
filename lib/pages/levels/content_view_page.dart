@@ -202,7 +202,7 @@ class _LevelPageState extends StateBase<ContentViewPage> {
           child: Chip(
             backgroundColor: itm.isSee?
             AppThemes.instance.currentTheme.successColor
-                : AppThemes.instance.currentTheme.successColor.withAlpha(140),
+                : AppThemes.instance.currentTheme.successColor.withAlpha(130),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             label: SizedBox(
                 height: 40,
@@ -210,7 +210,7 @@ class _LevelPageState extends StateBase<ContentViewPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Visibility(
-                      visible: contentModel!.hasOrder,
+                      visible: contentModel!.hasOrder || itm.title == null,
                       child: ConstrainedBox(
                         constraints: BoxConstraints.tightFor(width: 20),
                           child: Center(

@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:app/services/firebase_service.dart';
 import 'package:app/system/initialize.dart';
 import 'package:app/system/publicAccess.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 
@@ -33,9 +32,8 @@ class JavaCallService {
 ///===================================================================================
 void appJavaCallback() async {
   try {
-    WidgetsFlutterBinding.ensureInitialized();
     await InitialApplication.importantInit();
-    PublicAccess.logger.logToAll('---appJavaCallback call---');//todo
+    await PublicAccess.logger.logToAll('--- appJavaCallback call ---');//todo
     await InitialApplication.launchUpInit();
     InitialApplication.appLazyInit();
 

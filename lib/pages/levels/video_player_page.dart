@@ -10,6 +10,7 @@ import 'package:app/models/abstract/stateBase.dart';
 import 'package:app/system/enums.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/views/AppBarCustom.dart';
+import 'package:wakelock/wakelock.dart';
 
 class VideoPlayerPageInjectData {
   late VideoSourceType videoSourceType;
@@ -53,10 +54,12 @@ class VideoPlayerPageState extends StateBase<VideoPlayerPage> {
     //videoInfo = widget.injectData.videoInformation?? VideoInformation();
 
     _initVideo();
+    Wakelock.enable();
   }
 
   @override
   void dispose() {
+    Wakelock.disable();
     chewieVideoController?.dispose();
     playerController?.dispose();
 

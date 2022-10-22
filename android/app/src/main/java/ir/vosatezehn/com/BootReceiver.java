@@ -72,10 +72,10 @@ public class BootReceiver extends BroadcastReceiver {
         FlutterLoader loader = new FlutterLoader();
         Handler handler = new Handler(Looper.getMainLooper());
 
-        if(!loader.initialized()) {
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                if(!loader.initialized()) {
                     loader.startInitialization(context.getApplicationContext());
                     loader.ensureInitializationCompleteAsync(
                             context.getApplicationContext(),
@@ -84,26 +84,23 @@ public class BootReceiver extends BroadcastReceiver {
                             new Runnable() {
                                 @Override
                                 public void run() {
-                                    runOnAsync(context, loader);
+                                    startEngin(context, loader);
                                 }
                             }
                     );
                 }
-            });
-        }
-        else {
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    runOnAsync(context, loader);
+                else {
+                    startEngin(context, loader);
                 }
-            });
-        }
+            }
+        };
+
+        handler.post(r);
     }
 
-    private static void runOnAsync(Context context, FlutterLoader loader){
+    private static void startEngin(Context context, FlutterLoader loader){
         FlutterEngine engine = new FlutterEngine(context.getApplicationContext());
-        GeneratedPluginRegistrant.registerWith(engine);
+        //GeneratedPluginRegistrant.registerWith(engine);
 
         String bundlePath = loader.findAppBundlePath();//FlutterInjector.instance().flutterLoader().findAppBundlePath();
         Long handlerId = SharedPreferenceHelper.getLong(context.getApplicationContext(), "dart_handler_id");
