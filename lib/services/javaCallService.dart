@@ -33,15 +33,15 @@ class JavaCallService {
 void appJavaCallback() async {
   try {
     await InitialApplication.importantInit();
-    await PublicAccess.logger.logToAll('--- appJavaCallback call ---');//todo
-    await InitialApplication.launchUpInit();
+    await PublicAccess.logger.logToAll('--->> appJavaCallback call ---');//todo
+    /*await InitialApplication.launchUpInit();
     InitialApplication.appLazyInit();
 
     await FireBaseService.init();
     await FireBaseService.getToken();
     FireBaseService.subscribeToTopic('daily_text');
 
-    JavaCallService.init();
+    JavaCallService.init();*/
   }
   catch (e){/**/}
 }

@@ -71,6 +71,7 @@ public class BootReceiver extends BroadcastReceiver {
     private static void run(Context context){
         FlutterLoader loader = new FlutterLoader();
         Handler handler = new Handler(Looper.getMainLooper());
+        Handler handler2 = new Handler(Looper.getMainLooper());
 
         Runnable r = new Runnable() {
             @Override
@@ -80,7 +81,7 @@ public class BootReceiver extends BroadcastReceiver {
                     loader.ensureInitializationCompleteAsync(
                             context.getApplicationContext(),
                             null,
-                            handler,
+                            handler2,
                             new Runnable() {
                                 @Override
                                 public void run() {

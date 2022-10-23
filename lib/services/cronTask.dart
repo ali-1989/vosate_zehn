@@ -11,11 +11,14 @@ void callbackWorkManager() {
       await InitialApplication.importantInit();
       await PublicAccess.logger.logToAll('---> callbackWorkManager ---');//todo
       await InitialApplication.launchUpInit();
+      await PublicAccess.logger.logToAll('---> callbackWorkManager 2---');//todo
       InitialApplication.appLazyInit();
+      await PublicAccess.logger.logToAll('---> callbackWorkManager 3---');//todo
 
       await FireBaseService.init();
       await FireBaseService.getToken();
       FireBaseService.subscribeToTopic('daily_text');
+      await PublicAccess.logger.logToAll('---> callbackWorkManager end---');//todo
 
       /*switch (task) {
       case Workmanager.iOSBackgroundTask:
@@ -45,7 +48,7 @@ class CronTask {
         frequency: Duration(hours: 2),
       initialDelay: Duration(milliseconds: 20),
       backoffPolicyDelay: Duration(minutes: 5),
-      existingWorkPolicy: ExistingWorkPolicy.replace,
+      existingWorkPolicy: ExistingWorkPolicy.keep,
         backoffPolicy: BackoffPolicy.linear,
         constraints: Constraints(
           networkType: NetworkType.not_required,

@@ -118,7 +118,7 @@ class InitialApplication {
     }
   }
 
-  static void _lazyInitCommands() {
+  static void _lazyInitCommands() async {
     if (_callLazyInit) {
       return;
     }
@@ -127,8 +127,11 @@ class InitialApplication {
       _callLazyInit = true;
 
       /// net & websocket
+      await PublicAccess.logger.logToAll('---> 1 wsAddress: ${SettingsManager.settingsModel.wsAddress}');//todo
+
       WebsocketService.prepareWebSocket(SettingsManager.settingsModel.wsAddress);
       NetManager.addChangeListener(NetListenerTools.onNetListener);
+      await PublicAccess.logger.logToAll('---> 2');//todo
 
       /// life cycle
       final eventListener = AppEventListener();
@@ -136,12 +139,14 @@ class InitialApplication {
       eventListener.addPauseListener(LifeCycleApplication.onPause);
       eventListener.addDetachListener(LifeCycleApplication.onDetach);
       WidgetsBinding.instance.addObserver(eventListener);
+      await PublicAccess.logger.logToAll('---> 3');//todo
 
       /// downloader
       DownloadUploadService.downloadManager = DownloadManager('${Constants.appName}DownloadManager');
       DownloadUploadService.uploadManager = UploadManager('${Constants.appName}UploadManager');
       DownloadUploadService.downloadManager.addListener(DownloadUploadService.commonDownloadListener);
       DownloadUploadService.uploadManager.addListener(DownloadUploadService.commonUploadListener);
+      await PublicAccess.logger.logToAll('---> 4');//todo
 
       /// login & logoff
       Session.addLoginListener(UserLoginTools.onLogin);
@@ -171,6 +176,8 @@ class InitialApplication {
     }
     catch (e){
       _callLazyInit = false;
+      await PublicAccess.logger.logToAll('---> e: $e');//todo
+
     }
   }
 }
