@@ -17,9 +17,14 @@ class VideoPlayerPageInjectData {
   late String srcAddress;
   String? heroTag;
   Color? backColor;
+  OnStartPlay? onStartPlay;
+  OnEndPlay? onEndPlay;
   //String? info;
   //TextStyle? infoStyle;
 }
+///---------------------------------------------------------------------------------
+typedef OnStartPlay = void Function();
+typedef OnEndPlay = void Function();
 ///---------------------------------------------------------------------------------
 class VideoPlayerPage extends StatefulWidget {
   static final route = GoRoute(
@@ -60,6 +65,7 @@ class VideoPlayerPageState extends StateBase<VideoPlayerPage> {
   @override
   void dispose() {
     Wakelock.disable();
+    playerController?.removeListener(listener);
     chewieVideoController?.dispose();
     playerController?.dispose();
 
@@ -78,8 +84,8 @@ class VideoPlayerPageState extends StateBase<VideoPlayerPage> {
             child: Hero(
                 tag: widget.injectData.heroTag?? '',
                 child: isVideoInit?
-                    Chewie(controller: chewieVideoController!,)
-                    : Center(child: CircularProgressIndicator(),)
+                    Chewie(controller: chewieVideoController!)
+                    : Center(child: CircularProgressIndicator())
             ),
           ),
         ]
@@ -146,6 +152,13 @@ class VideoPlayerPageState extends StateBase<VideoPlayerPage> {
     //int w = playerController!.value.size.width.toInt(); //?? 440
     //int h = playerController!.value.size.height.toInt(); //?? 260
 
+    playerController!.addListener(listener);
+
     update();
+  }
+
+  void listener() async {
+    print(await playerController?.position);
+    print(await chewieVideoController?.isPlaying);
   }
 }

@@ -113,6 +113,8 @@ class InitialApplication {
 
             _lazyInitCommands();
           }
+          PublicAccess.logger.logToAll('--->  _isInitialOk: $_isInitialOk');//todo
+
         });
       });
     }
@@ -129,9 +131,9 @@ class InitialApplication {
       /// net & websocket
       await PublicAccess.logger.logToAll('---> 1 wsAddress: ${SettingsManager.settingsModel.wsAddress}');//todo
 
-      WebsocketService.prepareWebSocket(SettingsManager.settingsModel.wsAddress);
       NetManager.addChangeListener(NetListenerTools.onNetListener);
-      await PublicAccess.logger.logToAll('---> 2');//todo
+      WebsocketService.prepareWebSocket(SettingsManager.settingsModel.wsAddress);
+      await PublicAccess.logger.logToAll('---> 2  prepareWebSocket');//todo
 
       /// life cycle
       final eventListener = AppEventListener();

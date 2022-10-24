@@ -4,7 +4,6 @@ import 'package:app/system/publicAccess.dart';
 import 'package:app/tools/app/appDb.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
 import 'package:iris_tools/dateSection/ADateStructure.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
 
@@ -16,7 +15,7 @@ Future<void> _fbMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 Future<void> _sendNotification(RemoteMessage message) async {
-  WidgetsFlutterBinding.ensureInitialized();
+  print('mmmmmmmmmmmmmmmmm');
   await InitialApplication.importantInit();
   await PublicAccess.logger.logToAll('---> _sendNotification ---');//todo
 
@@ -47,7 +46,7 @@ class FireBaseService {
       messagingSenderId: '731359726004',
     );
 
-    await Firebase.initializeApp(options: firebaseOptions);
+    await Firebase.initializeApp();//options: firebaseOptions
 
     setListening();
 
@@ -88,7 +87,7 @@ class FireBaseService {
 
   static Future<String?> getTokenForce() async {
     token = await FirebaseMessaging.instance.getToken();
-    //PublicAccess.logger.logToAll('fcm token ============> $token');
+    PublicAccess.logger.logToAll('fcm token ============> $token');
     final gd = GregorianDate();
     gd.moveLocalToUTC();
 

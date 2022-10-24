@@ -59,22 +59,28 @@ class NetListenerTools {
   static void onWsConnectedListener(){
     AppBroadcast.isWsConnected = true;
 
-    /*todo if (Session.hasAnyLogin()) {
+    try {
+      /*todo if (Session.hasAnyLogin()) {
       final user = Session.getLastLoginUser()!;
 
       UserLoginTools.prepareRequestUsersProfileData();
     }*/
 
-    for(final fn in _wsConnectListeners){
-      fn.call(true);
+      for (final fn in _wsConnectListeners) {
+        fn.call(true);
+      }
     }
+    catch (e){/**/}
   }
 
   static void onWsDisConnectedListener(){
     AppBroadcast.isWsConnected = false;
 
-    for(final fn in _wsConnectListeners){
-      fn.call(false);
+    try{
+      for(final fn in _wsConnectListeners){
+        fn.call(false);
+      }
     }
+    catch (e){/**/}
   }
 }

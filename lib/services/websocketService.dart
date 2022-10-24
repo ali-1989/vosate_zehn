@@ -69,6 +69,7 @@ class WebsocketService {
 		}
 
 		try {
+			PublicAccess.logger.logToAll('---> try ws');//todo
 			_ws = GetSocket(_uri!);
 
 			_ws!.onOpen(_onConnected);
@@ -118,22 +119,21 @@ class WebsocketService {
 	///-------------- on disConnect -----------------------------------------------------------
 	static void _onDisConnected() async{
 		_isConnected = false;
-		PublicAccess.logger.logToAll('---ws (no ok): ${AppBroadcast.isWsConnected}---');//todo
-
 		periodicHeartTimer?.cancel();
 
 		NetListenerTools.onWsDisConnectedListener();
+		PublicAccess.logger.logToAll('---ws (no - ok)  &  ${AppBroadcast.isWsConnected}---');//todo
 
 		_reconnect();
 	}
 	///-------------- on new Connect -----------------------------------------------------------
 	static void _onConnected() async {
 		_isConnected = true;
-		PublicAccess.logger.logToAll('---ws (is ok): ${AppBroadcast.isWsConnected}---');//todo
 		reconnectInterval = const Duration(seconds: 6);
-		sendData(JsonHelper.mapToJson(PublicAccess.getHeartMap()));
 
+		sendData(JsonHelper.mapToJson(PublicAccess.getHeartMap()));
 		NetListenerTools.onWsConnectedListener();
+		PublicAccess.logger.logToAll('---ws (is ok)  & ${AppBroadcast.isWsConnected}---');//todo
 
 		periodicHeartTimer?.cancel();
 		periodicHeartTimer = Timer.periodic(Duration(minutes: SettingsModel.webSocketPeriodicHeartMinutes), (timer) {

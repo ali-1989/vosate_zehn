@@ -9,7 +9,7 @@ void callbackWorkManager() {
   Workmanager().executeTask((task, inputData) async {
     try {
       await InitialApplication.importantInit();
-      await PublicAccess.logger.logToAll('---> callbackWorkManager ---');//todo
+      await PublicAccess.logger.logToAll('---> callbackWorkManager 1---');//todo
       await InitialApplication.launchUpInit();
       await PublicAccess.logger.logToAll('---> callbackWorkManager 2---');//todo
       InitialApplication.appLazyInit();
