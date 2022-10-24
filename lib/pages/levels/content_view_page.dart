@@ -335,17 +335,21 @@ class _LevelPageState extends StateBase<ContentViewPage> {
       inject.videoSourceType = VideoSourceType.network;
 
       AppRoute.pushNamed(context, VideoPlayerPage.route.name!, extra: inject);
-      requestRegisterSeenContent(media);
+      onFullTimePlay(media);
     }
     else if(type == SubBucketTypes.audio){
       final inject = AudioPlayerPageInjectData();
       inject.srcAddress = media.url!;
       inject.audioSourceType = AudioSourceType.network;
       inject.title = media.title;
+      inject.onFullTimePlay = (){onFullTimePlay(media);};
 
       AppRoute.pushNamed(context, AudioPlayerPage.route.name!, extra: inject);
-      requestRegisterSeenContent(media);
     }
+  }
+
+  void onFullTimePlay(MediaModelWrapForContent media) {
+    requestRegisterSeenContent(media);
   }
 
   void requestData() async {

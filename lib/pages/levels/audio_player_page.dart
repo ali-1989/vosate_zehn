@@ -36,6 +36,7 @@ class AudioPlayerPageInjectData {
   String? title;
   String? subTitle;
   Color? backColor;
+  void Function()? onFullTimePlay;
 }
 ///---------------------------------------------------------------------------------
 class AudioPlayerPage extends StatefulWidget {
@@ -66,6 +67,7 @@ class AudioPlayerPageState extends StateBase<AudioPlayerPage> {
   Duration totalTime = Duration();
   Duration currentTime = Duration();
   late StreamController<PlaybackDisposition> durationStreamCtr;
+  Timer? seeToEndTimer;
 
   @override
   void initState() {
@@ -84,6 +86,10 @@ class AudioPlayerPageState extends StateBase<AudioPlayerPage> {
 
   @override
   void dispose() {
+    if(seeToEndTimer != null && seeToEndTimer!.isActive) {
+      seeToEndTimer!.cancel();
+    }
+
     audioPlayer.dispose();
 
     super.dispose();
@@ -214,6 +220,8 @@ class AudioPlayerPageState extends StateBase<AudioPlayerPage> {
   void eventListener(PlaybackEvent event){
     if(event.duration != null){
       totalTime = event.duration!;
+
+      startTimerForSeeFull();
     }
 
     assistCtr.updateMain();
@@ -240,5 +248,11 @@ class AudioPlayerPageState extends StateBase<AudioPlayerPage> {
 
   void errorListener(Object e, StackTrace st){
     //rint('error: ${e.toString()}');
+  }
+
+  void startTimerForSeeFull(){
+    seeToEndTimer = Timer(totalTime - Duration(seconds: 4), (){
+      widget.injectData.onFullTimePlay?.call();
+    });
   }
 }

@@ -15,12 +15,11 @@ Future<void> _fbMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 Future<void> _sendNotification(RemoteMessage message) async {
-  print('mmmmmmmmmmmmmmmmm');
   await InitialApplication.importantInit();
-  await PublicAccess.logger.logToAll('---> _sendNotification ---');//todo
+  //await PublicAccess.logger.logToAll('---> _sendNotification ---');//todo
+  await InitialApplication.launchUpInit();
 
   final id = message.data['id'];
-
   final ids = AppDB.fetchAsList(Keys.setting$dailyTextIds);
 
   if(!ids.contains(id)) {
@@ -87,7 +86,7 @@ class FireBaseService {
 
   static Future<String?> getTokenForce() async {
     token = await FirebaseMessaging.instance.getToken();
-    PublicAccess.logger.logToAll('fcm token ============> $token');
+    //PublicAccess.logger.logToAll(' token ==> $token');todo
     final gd = GregorianDate();
     gd.moveLocalToUTC();
 
@@ -101,7 +100,7 @@ class FireBaseService {
       return getTokenForce();
     }
 
-    if(DateHelper.isPastOf(lastUpdateToken, Duration(minutes: 30))){
+    if(DateHelper.isPastOf(lastUpdateToken, Duration(hours: 2))){
       return getTokenForce();
     }
 

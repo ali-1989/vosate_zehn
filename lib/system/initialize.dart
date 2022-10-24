@@ -77,24 +77,30 @@ class InitialApplication {
       return;
     }
 
-    _callLaunchUpInit = true;
-    await AppDB.init();
-    AppThemes.initial();
+    try {
+      _callLaunchUpInit = true;
+      await AppDB.init();
+      AppThemes.initial();
 
-    TrustSsl.acceptBadCertificate();
-    await DeviceInfoTools.prepareDeviceInfo();
-    await DeviceInfoTools.prepareDeviceId();
+      if (!kIsWeb) {
+        await AppNotification.initial();
+        AppNotification.startListenTap();
+      }
 
-    await AppLocale.localeDelegate().getLocalization().setFallbackByLocale(const Locale('en', 'EE'));
+      TrustSsl.acceptBadCertificate();
+      await DeviceInfoTools.prepareDeviceInfo();
+      await DeviceInfoTools.prepareDeviceId();
 
-    //PlayerTools.init();
+      await AppLocale.localeDelegate().getLocalization().setFallbackByLocale(const Locale('en', 'EE'));
 
-    if (!kIsWeb) {
-      await AppNotification.initial();
-      AppNotification.startListenTap();
+      //PlayerTools.init();
+
+      _isInitialOk = true;
+    }
+    catch (e){
+      PublicAccess.logger.logToAll('error in launchUpInit >> $e');
     }
 
-    _isInitialOk = true;
     return;
   }
 
@@ -105,17 +111,16 @@ class InitialApplication {
   }
 
   static void appLazyInit() {
+    // no call if not widget: WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
     if (!_callLazyInit) {
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        Timer.periodic(const Duration(milliseconds: 50), (Timer timer) {
-          if (_isInitialOk) {
-            timer.cancel();
+      Timer.periodic(const Duration(milliseconds: 50), (Timer timer) {
+        if (_isInitialOk) {
+          timer.cancel();
 
-            _lazyInitCommands();
-          }
-          PublicAccess.logger.logToAll('--->  _isInitialOk: $_isInitialOk');//todo
+          _lazyInitCommands();
+        }
+        //PublicAccess.logger.logToAll('--->  _isInitialOk: $_isInitialOk');//todo
 
-        });
       });
     }
   }
@@ -129,11 +134,11 @@ class InitialApplication {
       _callLazyInit = true;
 
       /// net & websocket
-      await PublicAccess.logger.logToAll('---> 1 wsAddress: ${SettingsManager.settingsModel.wsAddress}');//todo
+      //await PublicAccess.logger.logToAll('---> 1 wsAddress: ${SettingsManager.settingsModel.wsAddress}');//todo
 
       NetManager.addChangeListener(NetListenerTools.onNetListener);
       WebsocketService.prepareWebSocket(SettingsManager.settingsModel.wsAddress);
-      await PublicAccess.logger.logToAll('---> 2  prepareWebSocket');//todo
+      //await PublicAccess.logger.logToAll('---> 2  prepareWebSocket');//todo
 
       /// life cycle
       final eventListener = AppEventListener();
@@ -141,14 +146,12 @@ class InitialApplication {
       eventListener.addPauseListener(LifeCycleApplication.onPause);
       eventListener.addDetachListener(LifeCycleApplication.onDetach);
       WidgetsBinding.instance.addObserver(eventListener);
-      await PublicAccess.logger.logToAll('---> 3');//todo
 
       /// downloader
       DownloadUploadService.downloadManager = DownloadManager('${Constants.appName}DownloadManager');
       DownloadUploadService.uploadManager = UploadManager('${Constants.appName}UploadManager');
       DownloadUploadService.downloadManager.addListener(DownloadUploadService.commonDownloadListener);
       DownloadUploadService.uploadManager.addListener(DownloadUploadService.commonUploadListener);
-      await PublicAccess.logger.logToAll('---> 4');//todo
 
       /// login & logoff
       Session.addLoginListener(UserLoginTools.onLogin);
@@ -178,8 +181,7 @@ class InitialApplication {
     }
     catch (e){
       _callLazyInit = false;
-      await PublicAccess.logger.logToAll('---> e: $e');//todo
-
+      await PublicAccess.logger.logToAll('error in lazyInitCommands: $e');
     }
   }
 }

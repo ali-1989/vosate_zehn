@@ -101,7 +101,7 @@ public class BootReceiver extends BroadcastReceiver {
 
     private static void startEngin(Context context, FlutterLoader loader){
         FlutterEngine engine = new FlutterEngine(context.getApplicationContext());
-        //GeneratedPluginRegistrant.registerWith(engine);
+        GeneratedPluginRegistrant.registerWith(engine);
 
         String bundlePath = loader.findAppBundlePath();//FlutterInjector.instance().flutterLoader().findAppBundlePath();
         Long handlerId = SharedPreferenceHelper.getLong(context.getApplicationContext(), "dart_handler_id");

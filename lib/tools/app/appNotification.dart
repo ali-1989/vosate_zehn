@@ -36,7 +36,7 @@ class AppNotification {
 		var ch = fetchChannelKey();
 
 		if(ch == null){
-			await AppNotification.sinkNotificationIds();
+			await sinkNotificationIds();
 			ch = fetchChannelKey();
 		}
 		else {
@@ -44,28 +44,29 @@ class AppNotification {
 		}
 
 		final lastNotifyModel = fetchNotificationModel();
+		final nc1 = NotificationChannel(
+			channelGroupKey: AppDB.fetchKv(Keys.setting$notificationChanelGroup),
+			channelKey: ch?? '',
+			channelName: lastNotifyModel.name,
+			channelDescription: Constants.appName,
+			defaultColor: lastNotifyModel.defaultColor,
+			ledColor: lastNotifyModel.ledColor,
+			defaultPrivacy: lastNotifyModel.isPublic? NotificationPrivacy.Public : NotificationPrivacy.Private,
+			importance: lastNotifyModel.importanceIsHigh? NotificationImportance.High : NotificationImportance.Default,
+			enableLights: lastNotifyModel.enableLights,
+			enableVibration: lastNotifyModel.enableVibration,
+			playSound: lastNotifyModel.playSound,
+			//soundSource: ,
+			vibrationPattern: getVibration(),
+			ledOnMs: 500,
+			ledOffMs: 500,
+		);
 
 		AwesomeNotifications().initialize(
 			/// drawable/app_icon.png   or   mipmap-hdpi/ic_launcher.png       resource://drawable/app_icon
 			null, //'resource://drawable/app_icon.png'
 			[
-					NotificationChannel(
-          channelGroupKey: AppDB.fetchKv(Keys.setting$notificationChanelGroup),
-          channelKey: ch?? '',
-          channelName: lastNotifyModel.name,
-          channelDescription: Constants.appName,
-          defaultColor: lastNotifyModel.defaultColor,
-          ledColor: lastNotifyModel.ledColor,
-          defaultPrivacy: lastNotifyModel.isPublic? NotificationPrivacy.Public : NotificationPrivacy.Private,
-          importance: lastNotifyModel.importanceIsHigh? NotificationImportance.High : NotificationImportance.Default,
-          enableLights: lastNotifyModel.enableLights,
-          enableVibration: lastNotifyModel.enableVibration,
-          playSound: lastNotifyModel.playSound,
-					//soundSource: ,
-          vibrationPattern: getVibration(),
-          ledOnMs: 500,
-          ledOffMs: 500,
-        )
+				nc1,
       ],
 				/*channelGroups: [
 					NotificationChannelGroup(
@@ -90,22 +91,25 @@ class AppNotification {
 	}
 
 	static void requestPermission() {
-		AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
-			if (!isAllowed) {
-				AwesomeNotifications().requestPermissionToSendNotifications(
-					channelKey: fetchChannelKey(),
-					permissions: [
-						NotificationPermission.Alert,
-						NotificationPermission.Sound,
-						NotificationPermission.Badge,
-						NotificationPermission.Vibration,
-						NotificationPermission.Light,
-						NotificationPermission.PreciseAlarms, // allows the scheduled notifications to be displayed at the expected time
-						NotificationPermission.FullScreenIntent, // pop up even if the user is using another app
-					]
-				);
-			}
-		});
+		try {
+			AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+				if (!isAllowed) {
+					AwesomeNotifications().requestPermissionToSendNotifications(
+							channelKey: fetchChannelKey(),
+							permissions: [
+								NotificationPermission.Alert,
+								NotificationPermission.Sound,
+								NotificationPermission.Badge,
+								NotificationPermission.Vibration,
+								NotificationPermission.Light,
+								NotificationPermission.PreciseAlarms, // allows the scheduled notifications to be displayed at the expected time
+								NotificationPermission.FullScreenIntent, // pop up even if the user is using another app
+							]
+					);
+				}
+			});
+		}
+		catch (e){/**/}
 	}
 
 	static void startListenTap() {

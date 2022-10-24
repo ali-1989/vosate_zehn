@@ -9,16 +9,14 @@ void callbackWorkManager() {
   Workmanager().executeTask((task, inputData) async {
     try {
       await InitialApplication.importantInit();
-      await PublicAccess.logger.logToAll('---> callbackWorkManager 1---');//todo
+      //await PublicAccess.logger.logToAll('---> callbackWorkManager 1---');//todo
       await InitialApplication.launchUpInit();
-      await PublicAccess.logger.logToAll('---> callbackWorkManager 2---');//todo
       InitialApplication.appLazyInit();
-      await PublicAccess.logger.logToAll('---> callbackWorkManager 3---');//todo
 
       await FireBaseService.init();
       await FireBaseService.getToken();
       FireBaseService.subscribeToTopic('daily_text');
-      await PublicAccess.logger.logToAll('---> callbackWorkManager end---');//todo
+      //await PublicAccess.logger.logToAll('---> callbackWorkManager end---');//todo
 
       /*switch (task) {
       case Workmanager.iOSBackgroundTask:
