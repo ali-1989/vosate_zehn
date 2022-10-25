@@ -31,7 +31,6 @@ Future<void> main() async {
 
     FlutterError.onError = onErrorCatch;
     GoRouter.setUrlPathStrategy(UrlPathStrategy.path);
-
     FireBaseService.init();
     JavaCallService.init();
     CronTask.init();

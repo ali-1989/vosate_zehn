@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -17,14 +18,12 @@ class VideoPlayerPageInjectData {
   late String srcAddress;
   String? heroTag;
   Color? backColor;
-  OnStartPlay? onStartPlay;
-  OnEndPlay? onEndPlay;
+  OnFullTimePlay? onFullTimePlay;
   //String? info;
   //TextStyle? infoStyle;
 }
 ///---------------------------------------------------------------------------------
-typedef OnStartPlay = void Function();
-typedef OnEndPlay = void Function();
+typedef OnFullTimePlay = void Function();
 ///---------------------------------------------------------------------------------
 class VideoPlayerPage extends StatefulWidget {
   static final route = GoRoute(
@@ -50,6 +49,8 @@ class VideoPlayerPageState extends StateBase<VideoPlayerPage> {
   VideoPlayerController? playerController;
   ChewieController? chewieVideoController;
   bool isVideoInit = false;
+  Timer? seeToEndTimer;
+  Duration? totalTime;
 
   @override
   void initState() {
@@ -65,6 +66,11 @@ class VideoPlayerPageState extends StateBase<VideoPlayerPage> {
   @override
   void dispose() {
     Wakelock.disable();
+
+    if(seeToEndTimer != null && seeToEndTimer!.isActive) {
+      seeToEndTimer!.cancel();
+    }
+
     playerController?.removeListener(listener);
     chewieVideoController?.dispose();
     playerController?.dispose();
@@ -158,7 +164,20 @@ class VideoPlayerPageState extends StateBase<VideoPlayerPage> {
   }
 
   void listener() async {
-    print(await playerController?.position);
-    print(await chewieVideoController?.isPlaying);
+    if(playerController?.value.duration != null){
+      totalTime = playerController!.value.duration;
+    }
+
+    if((chewieVideoController?.isPlaying?? false) && totalTime != null){
+      startTimerForSeeFull();
+    }
+  }
+
+  void startTimerForSeeFull(){
+    if(seeToEndTimer == null || !seeToEndTimer!.isActive) {
+      seeToEndTimer = Timer(totalTime! - Duration(seconds: 3), () {
+        widget.injectData.onFullTimePlay?.call();
+      });
+    }
   }
 }

@@ -333,9 +333,9 @@ class _LevelPageState extends StateBase<ContentViewPage> {
       final inject = VideoPlayerPageInjectData();
       inject.srcAddress = media.url!;
       inject.videoSourceType = VideoSourceType.network;
+      inject.onFullTimePlay = (){onFullTimePlay(media);};
 
       AppRoute.pushNamed(context, VideoPlayerPage.route.name!, extra: inject);
-      onFullTimePlay(media);
     }
     else if(type == SubBucketTypes.audio){
       final inject = AudioPlayerPageInjectData();

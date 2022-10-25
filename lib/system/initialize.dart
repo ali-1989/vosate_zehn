@@ -119,8 +119,6 @@ class InitialApplication {
 
           _lazyInitCommands();
         }
-        //PublicAccess.logger.logToAll('--->  _isInitialOk: $_isInitialOk');//todo
-
       });
     }
   }
@@ -134,11 +132,8 @@ class InitialApplication {
       _callLazyInit = true;
 
       /// net & websocket
-      //await PublicAccess.logger.logToAll('---> 1 wsAddress: ${SettingsManager.settingsModel.wsAddress}');//todo
-
       NetManager.addChangeListener(NetListenerTools.onNetListener);
       WebsocketService.prepareWebSocket(SettingsManager.settingsModel.wsAddress);
-      //await PublicAccess.logger.logToAll('---> 2  prepareWebSocket');//todo
 
       /// life cycle
       final eventListener = AppEventListener();
@@ -168,7 +163,7 @@ class InitialApplication {
 
       MediaManager.loadAllRecords();
       FireBaseService.getToken().then((value) {
-        FireBaseService.subscribeToTopic('daily_text');
+        FireBaseService.subscribeToTopic(PublicAccess.fcmTopic);
       });
 
       if(AppRoute.materialContext != null) {
@@ -181,7 +176,7 @@ class InitialApplication {
     }
     catch (e){
       _callLazyInit = false;
-      await PublicAccess.logger.logToAll('error in lazyInitCommands: $e');
+      await PublicAccess.logger.logToAll('error in lazyInitCommands >> $e');
     }
   }
 }

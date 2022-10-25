@@ -16,7 +16,7 @@ Future<void> _fbMessagingBackgroundHandler(RemoteMessage message) async {
 
 Future<void> _sendNotification(RemoteMessage message) async {
   await InitialApplication.importantInit();
-  //await PublicAccess.logger.logToAll('---> _sendNotification ---');//todo
+  await PublicAccess.logger.logToAll('---> _sendNotification --- ${message.notification?.body}');//todo
   await InitialApplication.launchUpInit();
 
   final id = message.data['id'];
@@ -86,7 +86,7 @@ class FireBaseService {
 
   static Future<String?> getTokenForce() async {
     token = await FirebaseMessaging.instance.getToken();
-    //PublicAccess.logger.logToAll(' token ==> $token');todo
+    PublicAccess.logger.logToAll(' token ==> $token'); //todo
     final gd = GregorianDate();
     gd.moveLocalToUTC();
 

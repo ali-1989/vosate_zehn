@@ -22,6 +22,7 @@ class PublicAccess {
   static late Logger logger;
   static late Reporter reporter;
   static String graphApi = '${SettingsManager.settingsModel.httpAddress}/graph-v1';
+  static String fcmTopic = 'daily_text';
   static ClassicFooter classicFooter = ClassicFooter(
     loadingText: '',
     idleText: '',

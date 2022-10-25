@@ -18,7 +18,7 @@ import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appSizes.dart';
 import 'package:app/views/AppBarCustom.dart';
 
-/// foi iOS: must visit page and add code to Info.plist
+/// for iOS: must visit page and add code to Info.plist
 
 //todo: add assist for time display, and list of subscriptions
 
@@ -36,8 +36,10 @@ class AudioPlayerPageInjectData {
   String? title;
   String? subTitle;
   Color? backColor;
-  void Function()? onFullTimePlay;
+  OnFullTimePlay? onFullTimePlay;
 }
+///---------------------------------------------------------------------------------
+typedef OnFullTimePlay = void Function();
 ///---------------------------------------------------------------------------------
 class AudioPlayerPage extends StatefulWidget {
   static final route = GoRoute(
@@ -251,8 +253,10 @@ class AudioPlayerPageState extends StateBase<AudioPlayerPage> {
   }
 
   void startTimerForSeeFull(){
-    seeToEndTimer = Timer(totalTime - Duration(seconds: 4), (){
-      widget.injectData.onFullTimePlay?.call();
-    });
+    if(seeToEndTimer == null || !seeToEndTimer!.isActive) {
+      seeToEndTimer = Timer(totalTime - Duration(seconds: 4), () {
+        widget.injectData.onFullTimePlay?.call();
+      });
+    }
   }
 }
