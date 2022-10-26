@@ -144,7 +144,7 @@ class SplashScreenState extends State<SplashPage> {
       AppSheet.showSheetOneAction(
         AppRoute.materialContext,
         AppMessages.errorCommunicatingServer, (){
-        AppBroadcast.gotoSplash(2);
+        AppBroadcast.gotoSplash(2000);
         connectToServer();
       },
           buttonText: AppMessages.tryAgain,

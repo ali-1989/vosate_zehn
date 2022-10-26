@@ -5,16 +5,20 @@ import 'package:iris_tools/api/generator.dart';
 
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/appDb.dart';
-import '/constants.dart';
-import '/models/notificationModel.dart' as nm;
+import 'package:app/constants.dart';
+import 'package:app/models/notificationModel.dart' as my_not_model;
 
 // https://github.com/rafaelsetragni/awesome_notifications/blob/master/example/lib/utils/notification_util.dart
 
+void onNotificationTap(ReceivedNotification notification){
+	//PublicAccess.logger.logToFile('tap notification  id: ${notification.id} ');
+}
+///=======================================================================================
 class AppNotification {
 	AppNotification._();
 
-	static Future<void> sinkNotificationIds() async {
-		await AppDB.setReplaceKv(Keys.setting$notificationChanelKey, 'C_${Generator.generateName(8)}');
+	static Future<void> generateAndSinkNotificationIds() async {
+		await AppDB.setReplaceKv(Keys.setting$notificationChanelKey, 'C_${Constants.appName}');
 		await AppDB.setReplaceKv(Keys.setting$notificationChanelGroup, 'CG_${Generator.generateName(8)}');
 
 		return;
@@ -24,29 +28,33 @@ class AppNotification {
 		return AppDB.fetchKv(Keys.setting$notificationChanelKey);
 	}
 
-	static nm.NotificationModel fetchNotificationModel(){
-		return nm.NotificationModel.fromMap(AppDB.fetchKv(Keys.setting$notificationModel));
+	static my_not_model.NotificationModel fetchNotificationModel(){
+		return my_not_model.NotificationModel.fromMap(AppDB.fetchKv(Keys.setting$notificationModel));
 	}
 
-	static Future saveNotificationModel(nm.NotificationModel model){
+	static Future saveNotificationModel(my_not_model.NotificationModel model){
 		return AppDB.setReplaceKv(Keys.setting$notificationModel, model.toMap());
 	}
 
 	static Future<bool> initial() async {
 		var ch = fetchChannelKey();
 
+		/* no need: because ini do update last channel.
+		if(ch != null){
+			AwesomeNotifications().removeChannel(ch);
+			return true;
+		}*/
+
 		if(ch == null){
-			await sinkNotificationIds();
+			await generateAndSinkNotificationIds();
 			ch = fetchChannelKey();
 		}
-		else {
-			AwesomeNotifications().removeChannel(ch);
-		}
 
+		final chg = AppDB.fetchKv(Keys.setting$notificationChanelGroup);
 		final lastNotifyModel = fetchNotificationModel();
 		final nc1 = NotificationChannel(
-			channelGroupKey: AppDB.fetchKv(Keys.setting$notificationChanelGroup),
 			channelKey: ch?? '',
+			channelGroupKey: chg,
 			channelName: lastNotifyModel.name,
 			channelDescription: Constants.appName,
 			defaultColor: lastNotifyModel.defaultColor,
@@ -62,18 +70,13 @@ class AppNotification {
 			ledOffMs: 500,
 		);
 
+		/// drawable/app_icon.png
+		/// mipmap-hdpi/ic_launcher.png
+		///* resource://drawable/app_icon.png
 		AwesomeNotifications().initialize(
-			/// drawable/app_icon.png   or   mipmap-hdpi/ic_launcher.png       resource://drawable/app_icon
-			null, //'resource://drawable/app_icon.png'
-			[
-				nc1,
-      ],
-				/*channelGroups: [
-					NotificationChannelGroup(
-							channelGroupkey: 'basic_channel_group',
-							channelGroupName: 'Basic group')
-				],*/
-				debug: false,
+			null,
+			[nc1,],
+			debug: false,
 		);
 
 		requestPermission();
@@ -113,12 +116,18 @@ class AppNotification {
 	}
 
 	static void startListenTap() {
-		AwesomeNotifications().actionStream.listen((ReceivedNotification receivedNotification){
-			//PublicAccess.logger.logToFile('tap notification  id: ${receivedNotification.id} ');
-		});
+		AwesomeNotifications().actionStream.listen(onNotificationTap);
 	}
 
-	static void dismissAll() {
+	static void removeChannel(String channelKey) {
+		AwesomeNotifications().removeChannel(channelKey);
+	}
+
+	static void updateChannel(NotificationChannel channel) {
+		AwesomeNotifications().setChannel(channel, forceUpdate: true);
+	}
+
+	static void dismissAllNotifications() {
 		AwesomeNotifications().dismissAllNotifications();
 	}
 
@@ -135,16 +144,18 @@ class AppNotification {
 	}
 
 	static void sendNotification(String? title, String text, {int? id}) {
+		final n = NotificationContent(
+			id: id ?? Generator.generateIntId(5),
+			channelKey: fetchChannelKey()?? '',
+			title: title,
+			body: text,
+			autoDismissible: true,
+			category: NotificationCategory.Message,
+			notificationLayout: NotificationLayout.Default,
+		);
+
 		AwesomeNotifications().createNotification(
-				content: NotificationContent(
-						id: id ?? Generator.generateIntId(5),
-						channelKey: fetchChannelKey()?? '',
-						title: title,
-						body: text,
-					autoDismissible: true,
-					category: NotificationCategory.Message,
-					notificationLayout: NotificationLayout.Default,
-				),
+				content: n,
 		);
 	}
 
