@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:app/services/javaCallService.dart';
-import 'package:app/services/cronTask.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -24,18 +23,6 @@ import 'package:app/tools/app/appToast.dart';
 
 ///================ call on any hot restart
 Future<void> main() async {
-
-  Future<void> mainInitialize() async {
-    SchedulerBinding.instance.ensureVisualUpdate();
-    SchedulerBinding.instance.window.scheduleFrame();
-
-    FlutterError.onError = onErrorCatch;
-    GoRouter.setUrlPathStrategy(UrlPathStrategy.path);
-    FireBaseService.init();
-    JavaCallService.init();
-    CronTask.init();
-  }
-
   WidgetsFlutterBinding.ensureInitialized();
   final initOk = await InitialApplication.importantInit();
 
@@ -48,6 +35,17 @@ Future<void> main() async {
       runApp(const MyApp());
     }, zonedGuardedCatch);
   }
+}
+
+Future<void> mainInitialize() async {
+  SchedulerBinding.instance.ensureVisualUpdate();
+  SchedulerBinding.instance.window.scheduleFrame();
+
+  FlutterError.onError = onErrorCatch;
+  GoRouter.setUrlPathStrategy(UrlPathStrategy.path);
+  FireBaseService.init();
+  JavaCallService.init();
+  await JavaCallService.invokeMethod('appIsRun');
 }
 ///==============================================================================================
 class MyApp extends StatelessWidget {
@@ -67,6 +65,7 @@ class MyApp extends StatelessWidget {
           key: AppBroadcast.materialAppKey,
           scaffoldMessengerKey: AppBroadcast.rootScaffoldMessengerKey,
           debugShowCheckedModeBanner: false,
+	  useInheritedMediaQuery: true,
           routeInformationProvider: mainRouter.routeInformationProvider,
           routeInformationParser: mainRouter.routeInformationParser,
           routerDelegate: mainRouter.routerDelegate,
@@ -143,19 +142,24 @@ class MyErrorApp extends StatelessWidget {
 }
 ///==============================================================================================
 void onErrorCatch(FlutterErrorDetails errorDetails) {
-  var data = 'on Error catch: ${errorDetails.exception.toString()}';
+  var txt = 'on Error catch: ${errorDetails.exception.toString()}';
 
   if(!kIsWeb) {
-    data += '\n stack: ${errorDetails.stack}';
+    txt += '\n stack: ${errorDetails.stack}';
   }
 
-  data += '\n==========================================[Error catch]';
+  txt += '\n==========================================[Error catch]';
 
-  PublicAccess.logger.logToAll(data);
+  PublicAccess.logger.logToAll(txt);
 }
 ///==============================================================================================
-zonedGuardedCatch(error, sTrace) {
+void zonedGuardedCatch(error, sTrace) {
   var txt = 'on ZonedGuarded catch: ${error.toString()}';
+
+  if(!kIsWeb) {
+    txt += '\n stack: $sTrace';
+  }
+
   txt += '\n==========================================[ZonedGuarded]';
   PublicAccess.logger.logToAll(txt);
 

@@ -4,9 +4,6 @@ import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
 class JwtService {
-  static String? refreshToken;
-  static String? accessToken;
-
   JwtService._();
 
   static Map decodeToken(String token){
@@ -25,9 +22,7 @@ class JwtService {
     return JwtDecoder.getExpirationDate(token);
   }
 
-  static String sign(Map payload, JWTKey key */
-/*SecretKey('secret passphrase')*//*
-,{
+  static String sign(Map payload, JWTKey key /*SecretKey('secret passphrase')*/,{
     String? issuer,
     String? jwtId,
     JWTAlgorithm algorithm = JWTAlgorithm.RS256,
@@ -51,26 +46,60 @@ class JwtService {
           checkHeaderType: checkHeader,
       );
     }
-    catch (ex) {*/
-/**//*
-}
+    catch (ex) {/**/}
 
     return null;
   }
 
-  static bool refreshTokenIsOk(){
-    if(refreshToken == null){
+  static bool refreshTokenIsOk(String? rToken){
+    if(rToken == null){
       return false;
     }
 
-    return !isExpired(refreshToken!);
+    return !isExpired(rToken);
   }
 
-  static bool accessTokenIsOk(){
+  static bool accessTokenIsOk(String? accessToken){
     if(accessToken == null){
       return false;
     }
 
-    return !isExpired(accessToken!);
+    return !isExpired(accessToken);
   }
-}*/
+
+  static Future<bool> requestNewToken(UserModel um) async {
+    final js = <String, dynamic>{};
+    js['accessToken'] = um.token?.token;
+    js['refreshToken'] = um.token?.refreshToken;
+
+    final r = HttpItem();
+    r.fullUrl = '${PublicAccess.serverApi}/updateToken';
+    r.method = 'PUT';
+    r.body = js;
+    r.headers['accept'] = 'application/json';
+    r.headers['Content-Type'] = 'application/json';
+
+    final a = AppHttpDio.send(r);
+    await a.response;
+
+    if(a.responseData?.statusCode == 200){
+      final dataJs = a.getBodyAsJson()!;
+      um.token?.token = dataJs['data'];
+
+      return true;
+    }
+
+    else if(a.responseData?.statusCode == 307){
+      final dataJs = a.getBodyAsJson()!;
+      final message = dataJs['message'];
+
+      await Session.logoff(um.userId);
+
+      AppToast.showToast(AppRoute.getMaterialContext(), message);
+      AppBroadcast.reBuildMaterial();
+    }
+
+    return false;
+  }
+}
+*/

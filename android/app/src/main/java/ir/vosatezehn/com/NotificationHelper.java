@@ -45,4 +45,8 @@ public class NotificationHelper {
 
         NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, notification);
     }
+
+    static void dismissNotification(Context context, int notificationId) {
+        NotificationManagerCompat.from(context).cancel(null, notificationId);
+    }
 }

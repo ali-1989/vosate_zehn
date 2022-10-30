@@ -127,7 +127,7 @@ public class BootReceiver extends BroadcastReceiver {
             public void notImplemented() {}
         });*/
 
-        //NotificationHelper.createChannel(context);
-        //NotificationHelper.showNotification(context, "boot - " + handlerId.toString());
+        NotificationHelper.createChannel(context);
+        NotificationHelper.showNotification(context, "boot - " + handlerId.toString());
     }
 }

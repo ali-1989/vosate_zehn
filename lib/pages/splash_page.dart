@@ -44,11 +44,10 @@ class SplashScreenState extends State<SplashPage> {
     init();
 
     if (waitInSplash()) {
-      //System.hideBothStatusBar();
+      //System.hideBothStatusBarOnce();
       return getSplashView();
     }
     else {
-      //System.showBothStatusBar();
       return getFirstPage();
     }
   }
@@ -106,7 +105,6 @@ class SplashScreenState extends State<SplashPage> {
     if(splashWaitingMil > 0){
       Timer(Duration(milliseconds: splashWaitingMil), (){
         isInSplashTimer = false;
-
         AppBroadcast.reBuildMaterial();
       });
 

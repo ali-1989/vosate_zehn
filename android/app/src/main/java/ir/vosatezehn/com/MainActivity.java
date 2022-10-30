@@ -14,6 +14,8 @@ import io.flutter.plugin.common.MethodCall;
 
 public class MainActivity extends FlutterActivity {
 
+    static boolean flutterAppIsRun = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,11 +35,31 @@ public class MainActivity extends FlutterActivity {
             if (call.method.equals("set_dart_handler")) {
                 setDartHandler(call, result);
             }
+            else if (call.method.equals("appIsRun")) {
+                flutterAppIsRun = true;
+            }
+            else if (call.method.equals("isAppRun")) {
+                result.success(flutterAppIsRun);
+                return;
+            }
+
+            else if (call.method.equals("dismissNotification")) {
+                dismissNotification(call, result);
+                result.success(true);
+                return;
+            }
+
+            result.success(null);
         });
     }
 
     private void setDartHandler(MethodCall call, Result result){
         Long id = call.argument("handle_id");
         SharedPreferenceHelper.setLong(getApplicationContext(), "dart_handler_id", id);
+    }
+
+    private void dismissNotification(MethodCall call, Result result){
+        Integer id = call.argument("notification_id");
+        NotificationHelper.dismissNotification(getApplicationContext(), id);
     }
 }

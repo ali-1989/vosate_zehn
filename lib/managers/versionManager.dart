@@ -40,18 +40,6 @@ class VersionManager {
     }
   }
 
-  static void checkAppHasNewVersion(BuildContext context) async {
-    final deviceInfo = DeviceInfoTools.getDeviceInfo();
-
-    final vm = await requestCheckVersion(context, deviceInfo);
-
-    if(vm != null){
-      if(vm.newVersionCode > Constants.appVersionCode){
-        showUpdateDialog(context, vm);
-      }
-    }
-  }
-
   static Future<VersionModel?> requestCheckVersion(BuildContext context, Map<String, dynamic> data) async {
     final res = Completer<VersionModel?>();
 
@@ -76,6 +64,27 @@ class VersionManager {
     requester.request(context, false);
     return res.future;
   }
+
+  static void checkAppHasNewVersion(BuildContext context) async {
+    final deviceInfo = DeviceInfoTools.getDeviceInfo();
+
+    final vm = await requestCheckVersion(context, deviceInfo);
+
+    if(vm != null){
+      if(vm.newVersionCode > Constants.appVersionCode){
+        showUpdateDialog(context, vm);
+      }
+    }
+  }
+
+  /*static void checkAppHasNewVersion(BuildContext context, VersionModel serverVersion) async {
+    var v = serverVersion.newVersionName;
+    v = v.replaceAll('.', '');
+
+    if(MathHelper.toInt(v) > Constants.appVersionCode){
+      showUpdateDialog(context, serverVersion);
+    }
+  }*/
 
   static void showUpdateDialog(BuildContext context, VersionModel vm) {
     final msg = vm.description?? AppMessages.newAppVersionIsOk;

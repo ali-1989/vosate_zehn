@@ -16,10 +16,16 @@ Future<void> _fbMessagingBackgroundHandler(RemoteMessage message) async {
 
 Future<void> _sendNotification(RemoteMessage message) async {
   await InitialApplication.importantInit();
-  await PublicAccess.logger.logToAll('---> _sendNotification --- ${message.notification?.body}');//todo
+  await PublicAccess.logger.logToAll('---> Notification  --- ${message.notification?.body}');//todo
   await InitialApplication.launchUpInit();
 
-  final id = message.data['id'];
+  int? id;
+
+  try{
+    id = message.data['id'];
+  }
+  catch (e){}
+
   final ids = AppDB.fetchAsList(Keys.setting$dailyTextIds);
 
   if(!ids.contains(id)) {
@@ -65,23 +71,26 @@ class FireBaseService {
     }
     catch (e){/**/}
 
+    ///When there is a notification in the statusbar and the app is opened by the user's click, not by the notification
     RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
 
     if (initialMessage != null) {
-      _sendNotification(initialMessage);
+      print('=================== ${initialMessage.notification?.body} ');
     }
   }
 
   static void setListening(){
+    /// it's fire when app is open and in foreground
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
      _sendNotification(message);
     });
 
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      _sendNotification(message);
-    });
+    /// it's fire when be click on Fcm notification. (no notification that app sent)
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {});
 
+    /// it's fire when app is be in background or is was terminated
     FirebaseMessaging.onBackgroundMessage(_fbMessagingBackgroundHandler);
+    //FirebaseMessaging.instance.setAutoInitEnabled(false);
   }
 
   static Future<String?> getTokenForce() async {
@@ -109,6 +118,10 @@ class FireBaseService {
 
   static Future<void> subscribeToTopic(String name) async {
     return FirebaseMessaging.instance.subscribeToTopic(name);
+  }
+
+  static Future<void> unsubscribeFromTopic(String name) async {
+    return FirebaseMessaging.instance.unsubscribeFromTopic(name);
   }
 
   static Future<void> sendPushMessage() async {

@@ -21,7 +21,7 @@ class EmptyData extends StatelessWidget {
           Text(AppMessages.thereAreNoResults,
             style: textStyle?? TextStyle(fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
         ],
       ),
     );

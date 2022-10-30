@@ -1,32 +1,45 @@
 import 'package:app/services/firebase_service.dart';
+import 'package:app/services/javaCallService.dart';
 import 'package:app/system/initialize.dart';
 import 'package:app/system/publicAccess.dart';
 import 'package:workmanager/workmanager.dart';
 import 'package:app/constants.dart';
 
 ///--------------------------------------------------------------------------------------------
-void callbackWorkManager() {
-  Workmanager().executeTask((task, inputData) async {
-    try {
-      await InitialApplication.importantInit();
-      await InitialApplication.launchUpInit();
-      InitialApplication.appLazyInit();
+Future<bool> _callbackWorkManager(task, inputData) async {
+  await InitialApplication.importantInit();
+  await PublicAccess.logger.logToAll('@@@@@@@@@@@@');//todo
+  var isAppRun = false;
 
-      await FireBaseService.init();
-      await FireBaseService.getToken();
-      FireBaseService.subscribeToTopic(PublicAccess.fcmTopic);
+  try {
+    final isAppRun = await JavaCallService.invokeMethod('isAppRun');
+    await PublicAccess.logger.logToAll('@@@@@@@@@@@@ isAppRun: $isAppRun'); //todo
+  }
+  catch (e){}
 
-      /*switch (task) {
+  if(isAppRun){
+    return true;
+  }
+  await PublicAccess.logger.logToAll('@@@@@@@@@ app is close');
+  try {
+    await FireBaseService.init();
+    await InitialApplication.launchUpInit();
+    await InitialApplication.appLazyInit();
+
+    /*switch (task) {
       case Workmanager.iOSBackgroundTask:
         break;
     }*/
 
-      return true;
-    }
-    catch (e){
-      return false;
-    }
-  });
+    return true;
+  }
+  catch (e){
+    return false;
+  }
+}
+
+void callbackWorkManager() {
+  Workmanager().executeTask(_callbackWorkManager);
 }
 ///============================================================================================
 class CronTask {

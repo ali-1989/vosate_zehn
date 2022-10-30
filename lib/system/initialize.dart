@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app/services/cronTask.dart';
 import 'package:app/tools/app/appDb.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:flutter/foundation.dart';
@@ -58,11 +59,11 @@ class InitialApplication {
     try {
       await AppDirectories.prepareStoragePaths(Constants.appName);
 
+      PublicAccess.logger = Logger('${AppDirectories.getTempDir$ex()}/logs');
+
       if (!kIsWeb) {
         PublicAccess.reporter = Reporter(AppDirectories.getAppFolderInExternalStorage(), 'report');
       }
-
-      PublicAccess.logger = Logger('${AppDirectories.getTempDir$ex()}/logs');
 
       _importantInit = true;
       return true;
@@ -93,8 +94,6 @@ class InitialApplication {
 
       await AppLocale.localeDelegate().getLocalization().setFallbackByLocale(const Locale('en', 'EE'));
 
-      //PlayerTools.init();
-
       _isInitialOk = true;
     }
     catch (e){
@@ -110,31 +109,39 @@ class InitialApplication {
     await precacheImage(AppCache.screenBack!, context);
   }
 
-  static void appLazyInit() {
-    // no call if not widget: WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+  static Future<void> appLazyInit() {
+    // error if main() not called: WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    final c = Completer<void>();
+
     if (!_callLazyInit) {
-      Timer.periodic(const Duration(milliseconds: 50), (Timer timer) {
+      Timer.periodic(const Duration(milliseconds: 50), (Timer timer) async {
         if (_isInitialOk) {
           timer.cancel();
-
-          _lazyInitCommands();
+          await _lazyInitCommands();
+          c.complete();
         }
       });
     }
+    else {
+      c.complete();
+    }
+
+    return c.future;
   }
 
-  static void _lazyInitCommands() async {
+  static Future<void> _lazyInitCommands() async {
     if (_callLazyInit) {
       return;
     }
 
     try {
       _callLazyInit = true;
+      CronTask.init();
 
       /// net & websocket
       NetManager.addChangeListener(NetListenerTools.onNetListener);
       WebsocketService.prepareWebSocket(SettingsManager.settingsModel.wsAddress);
-
+      await PublicAccess.logger.logToAll('@@@@@@@ prepareWebSocket'); //todo
       /// life cycle
       final eventListener = AppEventListener();
       eventListener.addResumeListener(LifeCycleApplication.onResume);
@@ -172,11 +179,12 @@ class InitialApplication {
 
         VersionManager.checkAppHasNewVersion(AppRoute.getContext()!);
       }
+
       //DailyTextService.checkShowDialog();
     }
     catch (e){
       _callLazyInit = false;
-      await PublicAccess.logger.logToAll('error in lazyInitCommands >> $e');
+      PublicAccess.logger.logToAll('error in lazyInitCommands >> $e');
     }
   }
 }

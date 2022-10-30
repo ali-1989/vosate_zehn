@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:app/services/firebase_service.dart';
 import 'package:app/system/initialize.dart';
 import 'package:app/system/publicAccess.dart';
 import 'package:flutter/services.dart';
@@ -14,39 +13,48 @@ class JavaCallService {
   static void init() async {
     if(javaChannel == null) {
       javaChannel = MethodChannel('my_channel');
-      javaChannel!.setMethodCallHandler(appJavaHandler);
+      javaChannel!.setMethodCallHandler(methodCallHandler);
     }
 
-    final callback = PluginUtilities.getCallbackHandle(appJavaCallback);
+    setBootCallbackHandler();
+  }
+
+  static Future<void> setBootCallbackHandler() async {
+    final callback = PluginUtilities.getCallbackHandle(bootCallbackHandler);
 
     if (callback != null) {
       final int handle = callback.toRawHandle();
+      await invokeMethod('set_dart_handler', data: {'handle_id': handle});
+    }
+  }
 
-      await javaChannel?.invokeMethod<void>(
-        'set_dart_handler',
-        {'handle_id': handle},
-      );
+  static Future<T?> invokeMethod<T>(String method, {Map? data}) async {
+    if(javaChannel == null){
+      init();
+    }
+
+    try {
+      return javaChannel?.invokeMethod<T>(method, data);
+    }
+    catch (e){
+      return null;
     }
   }
 }
 ///===================================================================================
-void appJavaCallback() async {
+void bootCallbackHandler() async {
   try {
     await InitialApplication.importantInit();
     await PublicAccess.logger.logToAll('--->> appJavaCallback call ---');//todo
     /*await InitialApplication.launchUpInit();
-    InitialApplication.appLazyInit();
-
-    await FireBaseService.init();
-    await FireBaseService.getToken();
-    FireBaseService.subscribeToTopic('daily_text');
+    await InitialApplication.appLazyInit();
 
     JavaCallService.init();*/
   }
   catch (e){/**/}
 }
-
-Future appJavaHandler(MethodCall methodCall) async {
+///===================================================================================
+Future methodCallHandler(MethodCall methodCall) async {
   try {
     return true;
   }

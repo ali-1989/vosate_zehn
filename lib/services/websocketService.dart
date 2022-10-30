@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:getsocket/getsocket.dart';
 import 'package:iris_tools/api/checker.dart';
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
-import 'package:iris_tools/api/system.dart';
 
 import 'package:app/models/settingsModel.dart';
 import 'package:app/system/httpCodes.dart';
@@ -54,6 +53,7 @@ class WebsocketService {
 	static Future<void> prepareWebSocket(String uri) async{
 		_uri = uri;
 		_isConnected = false;
+		await PublicAccess.logger.logToAll('@@@@@@@@@ ws: isConnected:$isConnected');
 
 		try {
 				_ws?.close(1000); //status.normalClosure
@@ -64,7 +64,7 @@ class WebsocketService {
 	}
 
 	static void connect() async {
-		if(isConnected || System.isWeb()) {
+		if(isConnected) {
 			return;
 		}
 
@@ -118,6 +118,7 @@ class WebsocketService {
 	///-------------- on disConnect -----------------------------------------------------------
 	static void _onDisConnected() async{
 		_isConnected = false;
+		await PublicAccess.logger.logToAll('@@@@@@@@@ ws: is ok:$isConnected');
 		periodicHeartTimer?.cancel();
 
 		NetListenerTools.onWsDisConnectedListener();
@@ -127,6 +128,7 @@ class WebsocketService {
 	///-------------- on new Connect -----------------------------------------------------------
 	static void _onConnected() async {
 		_isConnected = true;
+		await PublicAccess.logger.logToAll('@@@@@@@@@ ws: is ok:$isConnected');
 		reconnectInterval = const Duration(seconds: 6);
 
 		sendData(JsonHelper.mapToJson(PublicAccess.getHeartMap()));

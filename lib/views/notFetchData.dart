@@ -21,7 +21,7 @@ class NotFetchData extends StatelessWidget {
           Text(AppMessages.serverNotRespondProperly,
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 15,),
+          const SizedBox(height: 15),
 
           if(tryClick != null)
             TextButton(

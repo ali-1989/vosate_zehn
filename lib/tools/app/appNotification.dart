@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:flutter/material.dart';
 import 'package:iris_tools/api/generator.dart';
 
 import 'package:app/system/keys.dart';
@@ -39,7 +40,7 @@ class AppNotification {
 	static Future<bool> initial() async {
 		var ch = fetchChannelKey();
 
-		/* no need: because ini do update last channel.
+		/* no need: because initialize do update last channel.
 		if(ch != null){
 			AwesomeNotifications().removeChannel(ch);
 			return true;
@@ -70,11 +71,9 @@ class AppNotification {
 			ledOffMs: 500,
 		);
 
-		/// drawable/app_icon.png
-		/// mipmap-hdpi/ic_launcher.png
-		///* resource://drawable/app_icon.png
+		///* resource://drawable/app_icon
 		AwesomeNotifications().initialize(
-			null,
+			'resource://drawable/ic_stat_app_icon',
 			[nc1,],
 			debug: false,
 		);
@@ -150,6 +149,7 @@ class AppNotification {
 			title: title,
 			body: text,
 			autoDismissible: true,
+			color: Colors.orange,
 			category: NotificationCategory.Message,
 			notificationLayout: NotificationLayout.Default,
 		);
