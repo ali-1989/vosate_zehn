@@ -6,7 +6,7 @@ import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:iris_tools/widgets/maxWidth.dart';
 
 import 'package:app/models/abstract/stateBase.dart';
-import 'package:app/pages/zarinpal_page.dart';
+import 'package:app/pages/pay_web_page.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/requester.dart';
 import 'package:app/system/session.dart';
@@ -99,13 +99,30 @@ class _AidPageState extends StateBase<AidPage> {
                     //minimumSize: Size(180, 46),
                   backgroundColor: AppThemes.instance.currentTheme.successColor,
                 ),
-                  onPressed: onPayCall,
-                  child: Text(AppMessages.pay)
+                  onPressed: onPayIranCall,
+                  child: Text(AppMessages.payWitIran)
               ),
             ),
           ),
 
-          SizedBox(height: 10,),
+          SizedBox(height: 15),
+
+          MaxWidth(
+            maxWidth: 300,
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    //minimumSize: Size(180, 46),
+                    backgroundColor: AppThemes.instance.currentTheme.successColor,
+                  ),
+                  onPressed: onPayPalCall,
+                  child: Text(AppMessages.payWitPaypal)
+              ),
+            ),
+          ),
+
+          SizedBox(height: 10),
         ],
       ),
     );
@@ -140,7 +157,11 @@ class _AidPageState extends StateBase<AidPage> {
     requester.request(context);
   }
 
-  void onPayCall() async {
-    AppRoute.pushNamed(context, ZarinpalPage.route.name!);
+  void onPayIranCall() async {
+    AppRoute.pushNamed(context, PayWebPage.route.name!, extra: 'https://zarinp.al/vosatezehn.ir');
+  }
+
+  void onPayPalCall() async {
+    AppRoute.pushNamed(context, PayWebPage.route.name!, extra: 'https://www.paypal.com/donate/?hosted_button_id=K75F6ZADA3YCW');
   }
 }

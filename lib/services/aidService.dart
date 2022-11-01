@@ -4,7 +4,7 @@ import 'package:iris_tools/dateSection/dateHelper.dart';
 
 import 'package:app/managers/appParameterManager.dart';
 import 'package:app/pages/aid_page.dart';
-import 'package:app/pages/zarinpal_page.dart';
+import 'package:app/pages/pay_web_page.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/session.dart';
 import 'package:app/tools/app/appBroadcast.dart';
@@ -23,7 +23,7 @@ class AidService {
   }
 
   static void gotoZarinpalPage() async {
-    AppRoute.pushNamed(AppRoute.getContext()!, ZarinpalPage.route.name!);
+    AppRoute.pushNamed(AppRoute.getContext()!, PayWebPage.route.name!);
   }
 
   static void showAidDialog(){

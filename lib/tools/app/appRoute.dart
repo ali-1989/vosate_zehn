@@ -21,7 +21,7 @@ import 'package:app/pages/profile/profile_page.dart';
 import 'package:app/pages/search_page.dart';
 import 'package:app/pages/sentences_page.dart';
 import 'package:app/pages/term_page.dart';
-import 'package:app/pages/zarinpal_page.dart';
+import 'package:app/pages/pay_web_page.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/session.dart';
 import 'package:app/tools/app/appDb.dart';
@@ -138,7 +138,7 @@ final mainRouter = GoRouter(
       LastSeenPage.route,
       FavoritesPage.route,
       ContactUsPage.route,
-      ZarinpalPage.route,
+      PayWebPage.route,
       ProfilePage.route,
       SubBucketPage.route,
       ContentViewPage.route,

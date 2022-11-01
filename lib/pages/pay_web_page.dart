@@ -9,20 +9,22 @@ import 'package:app/tools/app/appMessages.dart';
 import 'package:app/views/AppBarCustom.dart';
 import 'package:app/views/progressView.dart';
 
-class ZarinpalPage extends StatefulWidget {
+class PayWebPage extends StatefulWidget {
+  final String url;
+
   static final route = GoRoute(
     path: '/payPage',
-    name: (ZarinpalPage).toString().toLowerCase(),
-    builder: (BuildContext context, GoRouterState state) => ZarinpalPage(),
+    name: (PayWebPage).toString().toLowerCase(),
+    builder: (BuildContext context, GoRouterState state) => PayWebPage(url: state.extra as String),
   );
 
-  const ZarinpalPage({Key? key}) : super(key: key);
+  const PayWebPage({required this.url, Key? key}) : super(key: key);
 
   @override
-  State<ZarinpalPage> createState() => _ZarinpalPageState();
+  State<PayWebPage> createState() => _PayWebPageState();
 }
 ///==================================================================================
-class _ZarinpalPageState extends StateBase<ZarinpalPage> {
+class _PayWebPageState extends StateBase<PayWebPage> {
   bool isInPreparing = true;
   WebViewXController? webController;
 
@@ -63,7 +65,7 @@ class _ZarinpalPageState extends StateBase<ZarinpalPage> {
             child: WebViewX(
               height: double.infinity,
               width: double.infinity,
-              initialContent: 'https://zarinp.al/vosatezehn.ir',
+              initialContent: widget.url,
               initialSourceType: SourceType.url,
               onWebViewCreated: (ctr){
                 if(webController == null) {

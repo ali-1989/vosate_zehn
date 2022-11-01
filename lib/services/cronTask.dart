@@ -8,19 +8,19 @@ import 'package:app/constants.dart';
 ///--------------------------------------------------------------------------------------------
 Future<bool> _callbackWorkManager(task, inputData) async {
   await InitialApplication.importantInit();
-  await PublicAccess.logger.logToAll('@@@@@@@@@@@@');//todo
+  //await PublicAccess.logger.logToAll('@@@@@@@@@@@@');//todo
   var isAppRun = false;
 
   try {
     final isAppRun = await JavaCallService.invokeMethod('isAppRun');
-    await PublicAccess.logger.logToAll('@@@@@@@@@@@@ isAppRun: $isAppRun'); //todo
+    //await PublicAccess.logger.logToAll('@@@@@@@@@@@@ isAppRun: $isAppRun'); //todo
   }
   catch (e){}
 
   if(isAppRun){
     return true;
   }
-  await PublicAccess.logger.logToAll('@@@@@@@@@ app is close');
+  //await PublicAccess.logger.logToAll('@@@@@@@@@ app is close');
   try {
     await FireBaseService.init();
     await InitialApplication.launchUpInit();

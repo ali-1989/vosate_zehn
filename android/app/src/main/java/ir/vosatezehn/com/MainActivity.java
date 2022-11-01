@@ -29,6 +29,8 @@ public class MainActivity extends FlutterActivity {
     }
 
     private void init(FlutterEngine flutterEngine){
+        //FlutterView view = getFlutterView();
+        //MethodChannel myChannel = new MethodChannel(view, "my_channel");
         MethodChannel myChannel = new MethodChannel(flutterEngine.getDartExecutor(), "my_channel");
 
         myChannel.setMethodCallHandler((MethodCall call, Result result) -> {

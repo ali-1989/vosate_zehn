@@ -11,12 +11,12 @@ import 'package:app/managers/settingsManager.dart';
 import 'package:app/tools/app/appNotification.dart';
 
 Future<void> _fbMessagingBackgroundHandler(RemoteMessage message) async {
-  _sendNotification(message);
+  //_sendNotification(message);
 }
 
 Future<void> _sendNotification(RemoteMessage message) async {
   await InitialApplication.importantInit();
-  await PublicAccess.logger.logToAll('---> Notification  --- ${message.notification?.body}');//todo
+  //await PublicAccess.logger.logToAll('---> Notification  --- ${message.notification?.body}');//todo
   await InitialApplication.launchUpInit();
 
   int? id;
@@ -75,7 +75,7 @@ class FireBaseService {
     RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
 
     if (initialMessage != null) {
-      print('=================== ${initialMessage.notification?.body} ');
+      //print('=================== ${initialMessage.notification?.body} ');//todo
     }
   }
 
@@ -95,7 +95,7 @@ class FireBaseService {
 
   static Future<String?> getTokenForce() async {
     token = await FirebaseMessaging.instance.getToken();
-    PublicAccess.logger.logToAll(' token ==> $token'); //todo
+    //PublicAccess.logger.logToAll(' token ==> $token'); //todo
     final gd = GregorianDate();
     gd.moveLocalToUTC();
 
