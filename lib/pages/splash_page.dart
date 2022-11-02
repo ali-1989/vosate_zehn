@@ -62,6 +62,7 @@ class SplashScreenState extends State<SplashPage> {
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage(AppImages.logoSplash),
+            fit: BoxFit.fill,
           )
         ),
         child: Column(

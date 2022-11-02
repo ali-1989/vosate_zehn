@@ -96,7 +96,7 @@ class AppMessages {
   }
 
   static String get payWitPaypal {
-    return getContext().t('pay')?? _noText;
+    return getContext().t('payWitPaypal')?? _noText;
   }
 
   static String get logout {
