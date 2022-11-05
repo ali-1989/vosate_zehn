@@ -136,12 +136,12 @@ class InitialApplication {
 
     try {
       _callLazyInit = true;
-      CronTask.init();
+      //CronTask.init();
 
       /// net & websocket
       NetManager.addChangeListener(NetListenerTools.onNetListener);
       WebsocketService.prepareWebSocket(SettingsManager.settingsModel.wsAddress);
-      await PublicAccess.logger.logToAll('@@@@@@@ prepareWebSocket'); //todo
+      //await PublicAccess.logger.logToAll('@@@@@@@ prepareWebSocket'); //todo
       /// life cycle
       final eventListener = AppEventListener();
       eventListener.addResumeListener(LifeCycleApplication.onResume);

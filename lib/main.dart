@@ -32,7 +32,12 @@ Future<void> main() async {
   else {
     runZonedGuarded(() async {
       await mainInitialize();
-      runApp(const MyApp());
+
+      runApp(
+          Toaster(
+            child: const MyApp()
+          )
+      );
     }, zonedGuardedCatch);
   }
 }
@@ -65,7 +70,7 @@ class MyApp extends StatelessWidget {
           key: AppBroadcast.materialAppKey,
           scaffoldMessengerKey: AppBroadcast.rootScaffoldMessengerKey,
           debugShowCheckedModeBanner: false,
-	  useInheritedMediaQuery: true,
+	        useInheritedMediaQuery: true,
           routeInformationProvider: mainRouter.routeInformationProvider,
           routeInformationParser: mainRouter.routeInformationParser,
           routerDelegate: mainRouter.routerDelegate,
@@ -110,7 +115,7 @@ class MyApp extends StatelessWidget {
           child: OrientationBuilder(builder: (context, orientation) {
             testCodes(context);
 
-            return Toaster(child: SplashPage(firstPage: firstPage));
+            return SplashPage(firstPage: firstPage);
           }),
         );
       },
@@ -156,7 +161,7 @@ void onErrorCatch(FlutterErrorDetails errorDetails) {
 void zonedGuardedCatch(error, sTrace) {
   var txt = 'on ZonedGuarded catch: ${error.toString()}';
 
-  if(!kIsWeb) {
+  if(!kIsWeb && !kDebugMode) {
     txt += '\n stack: $sTrace';
   }
 

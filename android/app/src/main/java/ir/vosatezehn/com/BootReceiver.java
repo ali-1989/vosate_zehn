@@ -71,32 +71,31 @@ public class BootReceiver extends BroadcastReceiver {
     private static void run(Context context){
         FlutterLoader loader = new FlutterLoader();
         Handler handler = new Handler(Looper.getMainLooper());
-        Handler handler2 = new Handler(Looper.getMainLooper());
 
-        Runnable r = new Runnable() {
-            @Override
-            public void run() {
-                if(!loader.initialized()) {
-                    loader.startInitialization(context.getApplicationContext());
-                    loader.ensureInitializationCompleteAsync(
-                            context.getApplicationContext(),
-                            null,
-                            handler2,
-                            new Runnable() {
-                                @Override
-                                public void run() {
-                                    startEngin(context, loader);
-                                }
-                            }
-                    );
-                }
-                else {
+        if(!loader.initialized()) {
+            loader.startInitialization(context.getApplicationContext());
+            loader.ensureInitializationCompleteAsync(
+                    context.getApplicationContext(),
+                    null,
+                    handler,
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            startEngin(context, loader);
+                        }
+                    }
+            );
+        }
+        else {
+            Runnable r = new Runnable() {
+                @Override
+                public void run() {
                     startEngin(context, loader);
                 }
-            }
-        };
+            };
 
-        handler.post(r);
+            handler.post(r);
+        }
     }
 
     private static void startEngin(Context context, FlutterLoader loader){

@@ -12,12 +12,16 @@ Future<bool> _callbackWorkManager(task, inputData) async {
   var isAppRun = false;
 
   try {
+    /*Future.delayed(Duration(minutes: 2), () async{
+      await PublicAccess.logger.logToAll('@@@@@@@@@@@@ delayed');//todo
+    });*/
+
     final isAppRun = await JavaCallService.invokeMethod('isAppRun');
     //await PublicAccess.logger.logToAll('@@@@@@@@@@@@ isAppRun: $isAppRun'); //todo
   }
-  catch (e){}
+  catch (e) {}
 
-  if(isAppRun){
+  if (isAppRun) {
     return true;
   }
   //await PublicAccess.logger.logToAll('@@@@@@@@@ app is close');
@@ -33,7 +37,7 @@ Future<bool> _callbackWorkManager(task, inputData) async {
 
     return true;
   }
-  catch (e){
+  catch (e) {
     return false;
   }
 }
@@ -45,27 +49,27 @@ void callbackWorkManager() {
 class CronTask {
   CronTask._();
 
-  static void init(){
+  static void init() {
     Workmanager().initialize(
       callbackWorkManager,
       isInDebugMode: false,
     );
 
     Workmanager().registerPeriodicTask(
-        'WorkManager-task-${Constants.appName}',
-        'periodic-${Constants.appName}',
-        frequency: Duration(hours: 2),
+      'WorkManager-task-${Constants.appName}',
+      'periodic-${Constants.appName}',
+      frequency: Duration(hours: 1),
       initialDelay: Duration(milliseconds: 20),
       backoffPolicyDelay: Duration(minutes: 5),
       existingWorkPolicy: ExistingWorkPolicy.keep,
-        backoffPolicy: BackoffPolicy.linear,
-        constraints: Constraints(
-          networkType: NetworkType.not_required,
-          requiresBatteryNotLow: false,
-          requiresCharging: false,
-          requiresDeviceIdle: false,
-          requiresStorageNotLow: false,
-        ),
+      backoffPolicy: BackoffPolicy.linear,
+      constraints: Constraints(
+        networkType: NetworkType.not_required,
+        requiresBatteryNotLow: false,
+        requiresCharging: false,
+        requiresDeviceIdle: false,
+        requiresStorageNotLow: false,
+      ),
     );
   }
 }
