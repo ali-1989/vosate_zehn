@@ -1,3 +1,4 @@
+import 'package:app/views/states/waitToLoad.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_html/flutter_html.dart';
@@ -9,9 +10,9 @@ import 'package:app/system/keys.dart';
 import 'package:app/system/requester.dart';
 import 'package:app/system/session.dart';
 import 'package:app/tools/app/appMessages.dart';
-import 'package:app/views/AppBarCustom.dart';
-import 'package:app/views/notFetchData.dart';
-import 'package:app/views/progressView.dart';
+import 'package:app/views/homeComponents/appBarBuilder.dart';
+import 'package:app/views/states/errorOccur.dart';
+import 'package:app/views/states/waitToLoad.dart';
 
 class AboutUsPage extends StatefulWidget {
   static final route = GoRoute(
@@ -65,11 +66,11 @@ class _AboutUsPageState extends StateBase<AboutUsPage> {
 
   Widget buildBody(){
     if(isInFetchData) {
-      return ProgressView();
+      return WaitToLoad();
     }
 
     if(!assistCtr.hasState(state$fetchData)){
-      return NotFetchData(tryClick: tryLoadClick,);
+      return ErrorOccur(onRefresh: tryLoadClick);
     }
 
     return Padding(

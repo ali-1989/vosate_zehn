@@ -101,12 +101,12 @@ abstract class StateBase<W extends StatefulWidget> extends State<W> {
 		return AppLocale.appLocalize;
 	}
 	///-------------------------------------------------------
-	void addPostOrCall(Function() fn){
+	void addPostOrCall({required Function() fn, BuildContext? subContext}){
 		if(!mounted){
 			return;
 		}
 
-		var status = (context as Element).dirty;
+		final status = ((subContext?? context) as Element).dirty;
 
 		if(status) {
 			WidgetsBinding.instance.addPostFrameCallback((timeStamp) {

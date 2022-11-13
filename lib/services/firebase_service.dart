@@ -44,16 +44,15 @@ class FireBaseService {
   FireBaseService._();
 
   static Future init() async {
-    const firebaseOptions = FirebaseOptions(
+    /*const firebaseOptions = FirebaseOptions(
       appId: '1:731359726004:android:fbbd8cd236c4fc31b20ae1',
       apiKey: 'AIzaSyBVuGcqQFjUl1t5mIUJ04rfr9EKkDRqYxM',
       projectId: 'vosate-zehn-7d8fe',
       messagingSenderId: '731359726004',
-    );
+    );*/
 
     await Firebase.initializeApp();//options: firebaseOptions
-
-    setListening();
+    //FirebaseMessaging.instance.setAutoInitEnabled(false);
 
     try {
       await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
@@ -71,7 +70,9 @@ class FireBaseService {
     }
     catch (e){/**/}
 
-    ///When there is a notification in the statusbar and the app is opened by the user's click, not by the notification
+    setListening();
+
+    ///When there is a notification in the statusbar and the app is opened by the user, not by the notification
     RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
 
     if (initialMessage != null) {
@@ -90,12 +91,11 @@ class FireBaseService {
 
     /// it's fire when app is be in background or is was terminated
     FirebaseMessaging.onBackgroundMessage(_fbMessagingBackgroundHandler);
-    //FirebaseMessaging.instance.setAutoInitEnabled(false);
   }
 
   static Future<String?> getTokenForce() async {
     token = await FirebaseMessaging.instance.getToken();
-    //PublicAccess.logger.logToAll(' token ==> $token'); //todo
+    PublicAccess.logger.logToAll(' token ==> $token'); //todo
     final gd = GregorianDate();
     gd.moveLocalToUTC();
 

@@ -29,8 +29,8 @@ import 'package:app/tools/app/appSnack.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/app/appToast.dart';
 import 'package:app/tools/countryTools.dart';
-import 'package:app/views/phoneNumberInput.dart';
-import 'package:app/views/screens/countrySelect.dart';
+import 'package:app/views/components/phoneNumberInput.dart';
+import 'package:app/views/components/countrySelect.dart';
 
 class LoginPage extends StatefulWidget {
   static final route = GoRoute(

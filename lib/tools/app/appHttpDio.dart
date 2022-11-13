@@ -80,7 +80,7 @@ class AppHttpDio {
 								 if(item.debugMode) {
 									 var txt = '\n----------------- http Debug [onResponse]\n';
 									 txt += 'statusCode:  ${res.statusCode}\n';
-									 txt += 'data: ${res.data}\n-----------------------End';
+									 txt += 'response.data: ${res.data}\n----------------------- End Debug';
 
 									 PublicAccess.logger.logToAll(txt);
 								 }
@@ -99,8 +99,8 @@ class AppHttpDio {
 								if(item.debugMode) {
 									var txt = '\n----------------- http Debug [onError]\n';
 									txt += 'statusCode: ${err.response?.statusCode}\n';
-									txt += 'data: ${err.response?.data}';
-									txt += 'error: ${err.error} \n--------------------------- End';
+									txt += 'response.data: ${err.response?.data}\n';
+									txt += 'error: ${err.error} \n--------------------------- End Debug';
 
 									PublicAccess.logger.logToAll(txt);
 								}

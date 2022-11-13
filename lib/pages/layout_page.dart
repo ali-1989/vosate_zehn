@@ -17,8 +17,8 @@ import 'package:app/tools/app/appIcons.dart';
 import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/app/appThemes.dart';
-import 'package:app/views/AppBarCustom.dart';
-import 'package:app/views/genDrawerMenu.dart';
+import 'package:app/views/homeComponents/appBarBuilder.dart';
+import 'package:app/views/homeComponents/drawerMenuBuilder.dart';
 import 'package:move_to_background/move_to_background.dart';
 
 class LayoutPage extends StatefulWidget {

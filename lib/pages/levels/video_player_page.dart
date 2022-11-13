@@ -10,7 +10,7 @@ import 'package:video_player/video_player.dart';
 import 'package:app/models/abstract/stateBase.dart';
 import 'package:app/system/enums.dart';
 import 'package:app/tools/app/appThemes.dart';
-import 'package:app/views/AppBarCustom.dart';
+import 'package:app/views/homeComponents/appBarBuilder.dart';
 import 'package:wakelock/wakelock.dart';
 
 class VideoPlayerPageInjectData {

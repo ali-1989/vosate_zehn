@@ -8,25 +8,29 @@ import 'package:app/constants.dart';
 ///--------------------------------------------------------------------------------------------
 Future<bool> _callbackWorkManager(task, inputData) async {
   await InitialApplication.importantInit();
-  //await PublicAccess.logger.logToAll('@@@@@@@@@@@@');//todo
+  await PublicAccess.logger.logToAll('@@@@@@@-@@@@@');//todo
   var isAppRun = false;
 
   try {
-    /*Future.delayed(Duration(minutes: 2), () async{
-      await PublicAccess.logger.logToAll('@@@@@@@@@@@@ delayed');//todo
-    });*/
+    Future.delayed(Duration(minutes: 1), () async{
+      await PublicAccess.logger.logToAll('@@@@@@@@@@@@ delayed 2');//todo
+    });
 
-    final isAppRun = await JavaCallService.invokeMethod('isAppRun');
-    //await PublicAccess.logger.logToAll('@@@@@@@@@@@@ isAppRun: $isAppRun'); //todo
+    Future.delayed(Duration(milliseconds: 5000), () async{
+      await PublicAccess.logger.logToAll('@@@@@@@@@@@@ delayed 1');//todo
+    });
+
+    isAppRun = await JavaCallService.invokeMethod('isAppRun');
+    await PublicAccess.logger.logToAll('@@@@@@@@@@@@ isAppRun: $isAppRun'); //todo
   }
   catch (e) {}
 
   if (isAppRun) {
     return true;
   }
-  //await PublicAccess.logger.logToAll('@@@@@@@@@ app is close');
+
+  await PublicAccess.logger.logToAll('@@@@@@@@@ app was closed');
   try {
-    await FireBaseService.init();
     await InitialApplication.launchUpInit();
     await InitialApplication.appLazyInit();
 
@@ -52,14 +56,14 @@ class CronTask {
   static void init() {
     Workmanager().initialize(
       callbackWorkManager,
-      isInDebugMode: false,
+      isInDebugMode: true,
     );
 
     Workmanager().registerPeriodicTask(
       'WorkManager-task-${Constants.appName}',
       'periodic-${Constants.appName}',
       frequency: Duration(hours: 1),
-      initialDelay: Duration(milliseconds: 20),
+      initialDelay: Duration(milliseconds: 30),
       backoffPolicyDelay: Duration(minutes: 5),
       existingWorkPolicy: ExistingWorkPolicy.keep,
       backoffPolicy: BackoffPolicy.linear,

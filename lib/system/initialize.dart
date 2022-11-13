@@ -82,17 +82,15 @@ class InitialApplication {
       _callLaunchUpInit = true;
       await AppDB.init();
       AppThemes.initial();
+      TrustSsl.acceptBadCertificate();
+      await AppLocale.localeDelegate().getLocalization().setFallbackByLocale(const Locale('en', 'EE'));
+      await DeviceInfoTools.prepareDeviceInfo();
+      await DeviceInfoTools.prepareDeviceId();
 
       if (!kIsWeb) {
         await AppNotification.initial();
         AppNotification.startListenTap();
       }
-
-      TrustSsl.acceptBadCertificate();
-      await DeviceInfoTools.prepareDeviceInfo();
-      await DeviceInfoTools.prepareDeviceId();
-
-      await AppLocale.localeDelegate().getLocalization().setFallbackByLocale(const Locale('en', 'EE'));
 
       _isInitialOk = true;
     }
@@ -110,7 +108,6 @@ class InitialApplication {
   }
 
   static Future<void> appLazyInit() {
-    // error if main() not called: WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
     final c = Completer<void>();
 
     if (!_callLazyInit) {
@@ -136,12 +133,12 @@ class InitialApplication {
 
     try {
       _callLazyInit = true;
-      //CronTask.init();
+      CronTask.init();
 
       /// net & websocket
       NetManager.addChangeListener(NetListenerTools.onNetListener);
       WebsocketService.prepareWebSocket(SettingsManager.settingsModel.wsAddress);
-      //await PublicAccess.logger.logToAll('@@@@@@@ prepareWebSocket'); //todo
+      await PublicAccess.logger.logToAll('@@@@@@@ prepared WebSocket'); //todo
       /// life cycle
       final eventListener = AppEventListener();
       eventListener.addResumeListener(LifeCycleApplication.onResume);
@@ -168,10 +165,12 @@ class InitialApplication {
         AppSizes.instance.addMetricListener(onSizeCheng);
       }
 
-      MediaManager.loadAllRecords();
+      await FireBaseService.init();
       FireBaseService.getToken().then((value) {
         FireBaseService.subscribeToTopic(PublicAccess.fcmTopic);
       });
+
+      MediaManager.loadAllRecords();
 
       if(AppRoute.materialContext != null) {
         AdvertisingManager.init();

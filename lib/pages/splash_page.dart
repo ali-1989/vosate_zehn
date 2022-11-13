@@ -14,7 +14,7 @@ import 'package:app/system/initialize.dart';
 import 'package:app/system/session.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appImages.dart';
-import 'package:app/views/progressView.dart';
+import 'package:app/views/states/waitToLoad.dart';
 
 bool _isInit = false;
 bool _isInLoadingSettings = true;
@@ -54,7 +54,7 @@ class SplashScreenState extends State<SplashPage> {
   ///==================================================================================================
   Widget getSplashView() {
     if(kIsWeb){
-      return const ProgressView();
+      return const WaitToLoad();
     }
 
     return SizedBox.expand(

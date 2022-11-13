@@ -550,12 +550,12 @@ class AppSheet {
     return showSheetOneAction<T>(context, AppMessages.operationCanceled, null);
   }
 
-  static Future<T?> showSheet$YouDoNotHaveAccess<T>(BuildContext context) {
-    return showSheetOneAction<T>(context, AppMessages.sorryYouDoNotHaveAccess, null);
-  }
-
   static Future<T?> showSheet$AccountIsBlock<T>(BuildContext context) {
     return showSheetOneAction<T>(context, AppMessages.accountIsBlock, null);
+  }
+
+static Future<T?> showSheet$YouDoNotHaveAccess<T>(BuildContext context) {
+    return showSheetOneAction<T>(context, AppMessages.sorryYouDoNotHaveAccess, null);
   }
 
   static Future<T?> showSheet$ThereAreNoResults<T>(BuildContext context) {

@@ -6,8 +6,8 @@ import 'package:webviewx/webviewx.dart';
 
 import 'package:app/models/abstract/stateBase.dart';
 import 'package:app/tools/app/appMessages.dart';
-import 'package:app/views/AppBarCustom.dart';
-import 'package:app/views/progressView.dart';
+import 'package:app/views/homeComponents/AppBarBuilder.dart';
+import 'package:app/views/states/waitToLoad.dart';
 
 class PayWebPage extends StatefulWidget {
   final String url;
@@ -82,7 +82,7 @@ class _PayWebPageState extends StateBase<PayWebPage> {
         ),
 
       if(isInPreparing)
-        ProgressView(),
+        WaitToLoad(),
       ],
     );
   }

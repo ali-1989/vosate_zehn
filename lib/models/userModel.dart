@@ -45,6 +45,7 @@ class UserModel {
 
     else if(map[Keys.token] is String) {
       token = Token()..token = map[Keys.token];
+      //token?.parseToken();
     }
 
     final Map? avatarTemp = map['profile_image_model'];

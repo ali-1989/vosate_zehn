@@ -28,9 +28,9 @@ import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/app/appToast.dart';
-import 'package:app/views/emptyData.dart';
-import 'package:app/views/notFetchData.dart';
-import 'package:app/views/progressView.dart';
+import 'package:app/views/states/emptyData.dart';
+import 'package:app/views/states/errorOccur.dart';
+import 'package:app/views/states/waitToLoad.dart';
 
 class HomePage extends StatefulWidget {
 
@@ -84,11 +84,11 @@ class _HomePageState extends StateBase<HomePage> {
 
   Widget buildBody(){
     if(isInFetchData) {
-      return ProgressView();
+      return WaitToLoad();
     }
 
     if(!assistCtr.hasState(state$fetchData)){
-      return NotFetchData(tryClick: tryLoadClick,);
+      return ErrorOccur(onRefresh: tryLoadClick);
     }
 
     if(newItems.isEmpty || meditationItems.isEmpty){

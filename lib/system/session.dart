@@ -63,6 +63,8 @@ class Session {
 
 	static void _setLastLoginUser(UserModel? newUser){
 		_lastLoginUser = newUser;
+		SettingsManager.settingsModel.lastUserId = newUser?.userId;
+
 		SettingsManager.saveSettings();
 	}
 
@@ -225,7 +227,8 @@ class Session {
 
 		if(currentLoginList.isNotEmpty) {
 		  _setLastLoginUser(currentLoginList.last);
-		} else {
+		}
+		else {
 		  _setLastLoginUser(null);
 		}
 
@@ -245,8 +248,11 @@ class Session {
 	}
 
 	static Future<bool> logoffAll() async{
-		//Map<String, dynamic> val = {'LastLoginDate': null};
-		//int res = await AppManager.db.updateNull(Constants.tbUserModel, {}, val);
+		final val = <String, dynamic>{};
+		val[Keys.setting$lastLoginDate] = null;
+
+		final con = Conditions().add(Condition(ConditionType.DefinedNotNull)..key = Keys.userId);
+		await AppDB.db.update(AppDB.tbUserModel, val, con);
 
 		for(var u in currentLoginList){
 			notifyLogoff(u);

@@ -21,7 +21,7 @@ class AppBroadcast {
   //---------------------- keys
   static final LocalKey materialAppKey = UniqueKey();
   static final rootScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
-  static final rootNavigatorStateKey = GlobalKey<NavigatorState>();
+  static final rootNavigatorKey = GlobalKey<NavigatorState>();
   static final layoutPageKey = GlobalKey<LayoutPageState>();
 
   //static final homePageBadges = <int, int>{};

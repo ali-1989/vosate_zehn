@@ -53,7 +53,7 @@ class WebsocketService {
 	static Future<void> prepareWebSocket(String uri) async{
 		_uri = uri;
 		_isConnected = false;
-		//await PublicAccess.logger.logToAll('@@@@@@@@@ ws: isConnected:$isConnected');//todo
+		await PublicAccess.logger.logToAll('@@@@@@@@@ ws: isConnected:$isConnected');//todo
 
 		try {
 				_ws?.close(1000); //status.normalClosure
@@ -118,7 +118,7 @@ class WebsocketService {
 	///-------------- on disConnect -----------------------------------------------------------
 	static void _onDisConnected() async{
 		_isConnected = false;
-		//await PublicAccess.logger.logToAll('@@@@@@@@@ ws: is ok:$isConnected');//todo
+		await PublicAccess.logger.logToAll('@@@@@@@@@ ws: is ok:$isConnected');//todo
 		periodicHeartTimer?.cancel();
 
 		NetListenerTools.onWsDisConnectedListener();
@@ -128,7 +128,7 @@ class WebsocketService {
 	///-------------- on new Connect -----------------------------------------------------------
 	static void _onConnected() async {
 		_isConnected = true;
-		//await PublicAccess.logger.logToAll('@@@@@@@@@ ws: is ok:$isConnected');//todo
+		await PublicAccess.logger.logToAll('@@@@@@@@@ ws: is ok:$isConnected');//todo
 		reconnectInterval = const Duration(seconds: 6);
 
 		sendData(JsonHelper.mapToJson(PublicAccess.getHeartMap()));

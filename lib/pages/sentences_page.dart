@@ -24,10 +24,10 @@ import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appOverlay.dart';
 import 'package:app/tools/dateTools.dart';
-import 'package:app/views/AppBarCustom.dart';
-import 'package:app/views/emptyData.dart';
-import 'package:app/views/notFetchData.dart';
-import 'package:app/views/progressView.dart';
+import 'package:app/views/homeComponents/appBarBuilder.dart';
+import 'package:app/views/states/emptyData.dart';
+import 'package:app/views/states/errorOccur.dart';
+import 'package:app/views/states/waitToLoad.dart';
 
 class SentencesPage extends StatefulWidget {
   static final route = GoRoute(
@@ -115,11 +115,11 @@ class _SentencesPageState extends StateBase<SentencesPage> {
           child: Builder(
             builder: (ctx){
               if(isInFetchData){
-                return ProgressView();
+                return WaitToLoad();
               }
 
               if(!assistCtr.hasState(state$fetchData)){
-                return NotFetchData();
+                return ErrorOccur();
               }
 
               if(cards.isEmpty){

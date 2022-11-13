@@ -28,10 +28,10 @@ import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/searchFilterTool.dart';
-import 'package:app/views/AppBarCustom.dart';
-import 'package:app/views/emptyData.dart';
-import 'package:app/views/notFetchData.dart';
-import 'package:app/views/progressView.dart';
+import 'package:app/views/homeComponents/appBarBuilder.dart';
+import 'package:app/views/states/emptyData.dart';
+import 'package:app/views/states/errorOccur.dart';
+import 'package:app/views/states/waitToLoad.dart';
 
 class SearchPage extends StatefulWidget {
   static final route = GoRoute(
@@ -119,11 +119,11 @@ class _SearchPageState extends StateBase<SearchPage> {
             child: Builder(
               builder: (context) {
                 if(isInFetchData) {
-                  return ProgressView();
+                  return WaitToLoad();
                 }
 
                 if(!assistCtr.hasState(state$fetchData) && !assistCtr.hasState(state$noRequestYet)){
-                  return NotFetchData(tryClick: tryLoadClick);
+                  return ErrorOccur(onRefresh: tryLoadClick);
                 }
 
                 if(searchList.isEmpty){

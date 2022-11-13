@@ -29,10 +29,10 @@ import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/app/appToast.dart';
 import 'package:app/tools/searchFilterTool.dart';
-import 'package:app/views/AppBarCustom.dart';
-import 'package:app/views/emptyData.dart';
-import 'package:app/views/notFetchData.dart';
-import 'package:app/views/progressView.dart';
+import 'package:app/views/homeComponents/appBarBuilder.dart';
+import 'package:app/views/states/emptyData.dart';
+import 'package:app/views/states/errorOccur.dart';
+import 'package:app/views/states/waitToLoad.dart';
 
 class SubBucketPageInjectData {
   BucketModel? bucketModel;
@@ -98,11 +98,11 @@ class _SubBucketPageState extends StateBase<SubBucketPage> {
 
   Widget buildBody(){
     if(isInFetchData) {
-      return ProgressView();
+      return WaitToLoad();
     }
 
     if(!assistCtr.hasState(state$fetchData)){
-      return NotFetchData(tryClick: tryLoadClick,);
+      return ErrorOccur(onRefresh: tryLoadClick,);
     }
 
     if(listItems.isEmpty){

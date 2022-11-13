@@ -43,10 +43,10 @@ import 'package:app/tools/app/appSnack.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/app/appToast.dart';
 import 'package:app/tools/permissionTools.dart';
-import 'package:app/views/AppBarCustom.dart';
-import 'package:app/views/changeNameFamilyView.dart';
-import 'package:app/views/dateViews/selectDateCalendarView.dart';
-import 'package:app/views/selectGenderView.dart';
+import 'package:app/views/homeComponents/AppBarBuilder.dart';
+import 'package:app/views/components/changeNameFamilyView.dart';
+import 'package:app/views/components/dateViews/selectDateCalendarView.dart';
+import 'package:app/views/components/selectGenderView.dart';
 
 class ProfilePage extends StatefulWidget {
   static final route = GoRoute(

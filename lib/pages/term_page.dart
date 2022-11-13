@@ -9,9 +9,9 @@ import 'package:app/system/keys.dart';
 import 'package:app/system/requester.dart';
 import 'package:app/system/session.dart';
 import 'package:app/tools/app/appMessages.dart';
-import 'package:app/views/AppBarCustom.dart';
-import 'package:app/views/notFetchData.dart';
-import 'package:app/views/progressView.dart';
+import 'package:app/views/homeComponents/AppBarBuilder.dart';
+import 'package:app/views/states/errorOccur.dart';
+import 'package:app/views/states/waitToLoad.dart';
 
 class TermPage extends StatefulWidget {
   static final route = GoRoute(
@@ -65,11 +65,11 @@ class _TermPageState extends StateBase<TermPage> {
 
   Widget buildBody(){
     if(isInFetchData) {
-      return ProgressView();
+      return WaitToLoad();
     }
 
     if(!assistCtr.hasState(state$fetchData)){
-      return NotFetchData(tryClick: tryLoadClick,);
+      return ErrorOccur(onRefresh: tryLoadClick);
     }
 
     return Padding(

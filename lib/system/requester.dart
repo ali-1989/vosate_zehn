@@ -113,10 +113,11 @@ class Requester {
     });
 
     f = f.then((val) async {
-      /*if(_httpRequester.responseData?.statusCode == 401){
-        final rToken = await JwtService.requestNewToken(Session.getLastLoginUser()!);
+      /*if(_httpRequester.responseData?.statusCode == 401){ // token
+        final getNewToken = await JwtService.requestNewToken(Session.getLastLoginUser()!);
 
-        if(rToken) {
+        /// try request again
+        if(getNewToken) {
           request(context, promptErrors);
         }
 

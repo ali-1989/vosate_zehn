@@ -21,8 +21,8 @@ import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/app/appToast.dart';
-import 'package:app/views/AppBarCustom.dart';
-import 'package:app/views/progressView.dart';
+import 'package:app/views/homeComponents/AppBarBuilder.dart';
+import 'package:app/views/states/waitToLoad.dart';
 
 class LastSeenPage extends StatefulWidget {
   static final route = GoRoute(
@@ -70,7 +70,7 @@ class _LastSeenPageState extends StateBase<LastSeenPage> {
 
   Widget buildBody(){
     if(isInFetchData) {
-      return ProgressView();
+      return WaitToLoad();
     }
 
     return ListView.builder(

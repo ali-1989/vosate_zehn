@@ -18,10 +18,25 @@ class EmptyData extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(AppMessages.thereAreNoResults,
-            style: textStyle?? TextStyle(fontWeight: FontWeight.bold),
+          const SizedBox(height: 40),
+
+          /*Flexible(
+            flex: 2,
+              child: AspectRatio(
+                  aspectRatio: 3/5,
+                  child: Image.asset(AppImages.notFound)
+              )
+          ),*/
+
+          Flexible(
+            flex: 1,
+            child: Center(
+              child: Text(AppMessages.thereAreNoResults,
+                style: textStyle?? const TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
           ),
-          const SizedBox(height: 5),
+          const SizedBox(height: 10),
         ],
       ),
     );

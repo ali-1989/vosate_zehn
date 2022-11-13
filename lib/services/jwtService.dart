@@ -89,14 +89,26 @@ class JwtService {
       return true;
     }
 
+    else if(a.responseData?.statusCode == 422){
+      final dataJs = a.getBodyAsJson()!;
+      final message = dataJs['message'];
+
+      AppToast.showToast(AppRoute.getBaseContext(), message);
+
+      await Session.logoff(um.userId);
+      AppBroadcast.reBuildMaterial();
+      AppRoute.backToRoot(AppRoute.getLastContext());
+    }
+
     else if(a.responseData?.statusCode == 307){
       final dataJs = a.getBodyAsJson()!;
       final message = dataJs['message'];
 
-      await Session.logoff(um.userId);
+      AppToast.showToast(AppRoute.getBaseContext(), message);
 
-      AppToast.showToast(AppRoute.getMaterialContext(), message);
+      await Session.logoff(um.userId);
       AppBroadcast.reBuildMaterial();
+      AppRoute.backToRoot(AppRoute.getLastContext());
     }
 
     return false;

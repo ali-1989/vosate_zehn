@@ -187,6 +187,10 @@ class AppMessages {
     return getContext().t('errorOccur')?? _noText;
   }
 
+  static String get errorOccurTryAgain {
+    return getContext().t('errorOccurTryAgain')?? _noText;
+  }
+
   static String get wantToLeave {
     return getContext().tC('wantToLeave')?? _noText;
   }

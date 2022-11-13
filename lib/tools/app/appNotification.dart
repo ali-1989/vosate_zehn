@@ -11,9 +11,27 @@ import 'package:app/models/notificationModel.dart' as my_not_model;
 
 // https://github.com/rafaelsetragni/awesome_notifications/blob/master/example/lib/utils/notification_util.dart
 
-void onNotificationTap(ReceivedNotification notification){
-	//PublicAccess.logger.logToFile('tap notification  id: ${notification.id} ');
+///---------------------------------------------------------------------
+/*@pragma('vm:entry-point')
+Future <void> onNotificationCreatedMethod(ReceivedNotification receivedNotification) async {
 }
+
+/// Use this method to detect every time that a new notification is displayed
+@pragma('vm:entry-point')
+Future <void> onNotificationDisplayedMethod(ReceivedNotification receivedNotification) async {
+}
+
+/// Use this method to detect if the user dismissed a notification
+@pragma('vm:entry-point')
+Future <void> onDismissActionReceivedMethod(ReceivedAction receivedAction) async {
+}
+
+/// Use this method to detect when the user taps on a notification or action button
+@pragma('vm:entry-point')
+Future <void> onActionReceivedMethod(ReceivedAction receivedAction) async {
+
+}*/
+
 ///=======================================================================================
 class AppNotification {
 	AppNotification._();
@@ -115,7 +133,12 @@ class AppNotification {
 	}
 
 	static void startListenTap() {
-		AwesomeNotifications().actionStream.listen(onNotificationTap);
+	/*AwesomeNotifications().setListeners(
+				onActionReceivedMethod: onActionReceivedMethod,
+				onNotificationCreatedMethod:onNotificationCreatedMethod,
+				onNotificationDisplayedMethod: onNotificationDisplayedMethod,
+				onDismissActionReceivedMethod: onDismissActionReceivedMethod
+		);*/
 	}
 
 	static void removeChannel(String channelKey) {

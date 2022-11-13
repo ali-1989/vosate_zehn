@@ -37,14 +37,15 @@ public class MainActivity extends FlutterActivity {
             if (call.method.equals("set_dart_handler")) {
                 setDartHandler(call, result);
             }
-            else if (call.method.equals("appIsRun")) {
+            else if (call.method.equals("setAppIsRun")) {
                 flutterAppIsRun = true;
+                result.success(null);
+                return;
             }
             else if (call.method.equals("isAppRun")) {
                 result.success(flutterAppIsRun);
                 return;
             }
-
             else if (call.method.equals("dismissNotification")) {
                 dismissNotification(call, result);
                 result.success(true);

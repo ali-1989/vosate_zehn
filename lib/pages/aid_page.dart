@@ -1,3 +1,4 @@
+import 'package:app/views/states/errorOccur.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_html/flutter_html.dart';
@@ -13,9 +14,8 @@ import 'package:app/system/session.dart';
 import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/app/appThemes.dart';
-import 'package:app/views/AppBarCustom.dart';
-import 'package:app/views/notFetchData.dart';
-import 'package:app/views/progressView.dart';
+import 'package:app/views/homeComponents/appBarBuilder.dart';
+import 'package:app/views/states/waitToLoad.dart';
 
 class AidPage extends StatefulWidget {
   static final route = GoRoute(
@@ -69,11 +69,11 @@ class _AidPageState extends StateBase<AidPage> {
 
   Widget buildBody(){
     if(isInFetchData) {
-      return ProgressView();
+      return WaitToLoad();
     }
 
     if(!assistCtr.hasState(state$fetchData)){
-      return NotFetchData(tryClick: tryLoadClick,);
+      return ErrorOccur(onRefresh: tryLoadClick);
     }
 
     return Padding(

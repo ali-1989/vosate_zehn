@@ -12,7 +12,6 @@ class JavaCallService {
 
   static void init() async {
     if(javaChannel == null) {
-      DartPluginRegistrant.ensureInitialized();
       javaChannel = MethodChannel('my_channel');
       javaChannel!.setMethodCallHandler(methodCallHandler);
     }
@@ -43,11 +42,14 @@ class JavaCallService {
   }
 }
 ///===================================================================================
+@pragma('vm:entry-point')
 void bootCallbackHandler() async {
   try {
     await InitialApplication.importantInit();
-    //await PublicAccess.logger.logToAll('--->> appJavaCallback call ---');//todo
-    /*await InitialApplication.launchUpInit();
+    await PublicAccess.logger.logToAll('--->> appJavaCallback call ---');//todo
+    /*
+    DartPluginRegistrant.ensureInitialized(); //must not calling in root isolate
+    await InitialApplication.launchUpInit();
     await InitialApplication.appLazyInit();
 
     JavaCallService.init();*/

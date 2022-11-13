@@ -34,10 +34,20 @@ Future<void> main() async {
       await mainInitialize();
 
       runApp(
-          Toaster(
-            child: const MyApp()
+        /// ReBuild First Widgets tree, not call on Navigator pages
+          StreamBuilder<bool>(
+              initialData: true,
+              stream: AppBroadcast.viewUpdaterStream.stream,
+              builder: (context, snapshot) {
+              return DefaultTextHeightBehavior(
+                textHeightBehavior: TextHeightBehavior(applyHeightToFirstAscent: false, applyHeightToLastDescent: false),
+                child: Toaster(
+                  child: MyApp(),
+                ),
+              );
+            }
           )
-      );
+    );
     }, zonedGuardedCatch);
   }
 }
@@ -48,9 +58,9 @@ Future<void> mainInitialize() async {
 
   FlutterError.onError = onErrorCatch;
   GoRouter.setUrlPathStrategy(UrlPathStrategy.path);
-  FireBaseService.init();
+  //FireBaseService.init();
   JavaCallService.init();
-  await JavaCallService.invokeMethod('appIsRun');
+  await JavaCallService.invokeMethod('setAppIsRun');
 }
 ///==============================================================================================
 class MyApp extends StatelessWidget {
@@ -61,45 +71,40 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     AppRoute.materialContext = context;
 
-    /// ReBuild First Widgets tree, not call on Navigator pages
-    return StreamBuilder<bool>(
-        initialData: false,
-        stream: AppBroadcast.viewUpdaterStream.stream,
-        builder: (context, snapshot) {
-        return MaterialApp.router(
-          key: AppBroadcast.materialAppKey,
-          scaffoldMessengerKey: AppBroadcast.rootScaffoldMessengerKey,
-          debugShowCheckedModeBanner: false,
-	        useInheritedMediaQuery: true,
-          routeInformationProvider: mainRouter.routeInformationProvider,
-          routeInformationParser: mainRouter.routeInformationParser,
-          routerDelegate: mainRouter.routerDelegate,
-          title: Constants.appTitle,
-          theme: AppThemes.instance.themeData,
-          //darkTheme: ThemeData.dark(),
-          themeMode: AppThemes.instance.currentThemeMode,
-          //navigatorObservers: [ClearFocusOnPush()],
-          scrollBehavior: ScrollConfiguration.of(context).copyWith(
-            dragDevices: {
-              PointerDeviceKind.mouse,
-              PointerDeviceKind.touch,
-            },
-          ),
-          localizationsDelegates: AppLocale.getLocaleDelegates(),
-          supportedLocales: AppLocale.getAssetSupportedLocales(),
-          locale: InitialApplication.isInit()? SettingsManager.settingsModel.appLocale : SettingsModel.defaultAppLocale,
-          /*localeResolutionCallback: (deviceLocale, supportedLocales) {
+    return MaterialApp.router(
+      key: AppBroadcast.materialAppKey,
+      //navigatorKey: AppBroadcast.rootNavigatorKey,
+      scaffoldMessengerKey: AppBroadcast.rootScaffoldMessengerKey,
+      debugShowCheckedModeBanner: false,
+      useInheritedMediaQuery: true,
+      routeInformationProvider: mainRouter.routeInformationProvider,
+      routeInformationParser: mainRouter.routeInformationParser,
+      routerDelegate: mainRouter.routerDelegate,
+      title: Constants.appTitle,
+      theme: AppThemes.instance.themeData,
+      //darkTheme: ThemeData.dark(),
+      themeMode: AppThemes.instance.currentThemeMode,
+      //navigatorObservers: [ClearFocusOnPush()],
+      scrollBehavior: ScrollConfiguration.of(context).copyWith(
+        dragDevices: {
+          PointerDeviceKind.mouse,
+          PointerDeviceKind.touch,
+        },
+      ),
+      localizationsDelegates: AppLocale.getLocaleDelegates(),
+      supportedLocales: AppLocale.getAssetSupportedLocales(),
+      locale: InitialApplication.isInit()? SettingsManager.settingsModel.appLocale : SettingsModel.defaultAppLocale,
+      /*localeResolutionCallback: (deviceLocale, supportedLocales) {
             return SettingsManager.settingsModel.appLocale;
           },*/
-          //home: materialHomeBuilder(),
-          builder: (subContext, home) {
-            return Directionality(
-                textDirection: AppThemes.instance.textDirection,
-                child: materialHomeBuilder(home)
-            );
-          },
+      //home: materialHomeBuilder(),
+      builder: (subContext, home) {
+        AppRoute.materialContext = subContext;
+        return Directionality(
+            textDirection: AppThemes.instance.textDirection,
+            child: materialHomeBuilder(home)
         );
-      }
+      },
     );
   }
 

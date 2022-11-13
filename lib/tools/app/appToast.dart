@@ -31,7 +31,7 @@ class AppToast {
     Future.delayed(duration, () => Toaster.showToast(null));
   }
 }
-
+///=========================================================================================================
 class Toaster extends StatefulWidget {
   final Widget child;
   static late ToasterState _state;
