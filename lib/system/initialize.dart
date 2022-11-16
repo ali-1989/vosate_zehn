@@ -138,7 +138,7 @@ class InitialApplication {
       /// net & websocket
       NetManager.addChangeListener(NetListenerTools.onNetListener);
       WebsocketService.prepareWebSocket(SettingsManager.settingsModel.wsAddress);
-      await PublicAccess.logger.logToAll('@@@@@@@ prepared WebSocket'); //todo
+      //await PublicAccess.logger.logToAll('@@@@@@@ prepared WebSocket'); //todo
       /// life cycle
       final eventListener = AppEventListener();
       eventListener.addResumeListener(LifeCycleApplication.onResume);

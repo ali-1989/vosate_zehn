@@ -8,20 +8,12 @@ import 'package:app/constants.dart';
 ///--------------------------------------------------------------------------------------------
 Future<bool> _callbackWorkManager(task, inputData) async {
   await InitialApplication.importantInit();
-  await PublicAccess.logger.logToAll('@@@@@@@-@@@@@');//todo
+  //await PublicAccess.logger.logToAll('@@@@@@@-@@@@@');//todo
   var isAppRun = false;
 
   try {
-    Future.delayed(Duration(minutes: 1), () async{
-      await PublicAccess.logger.logToAll('@@@@@@@@@@@@ delayed 2');//todo
-    });
-
-    Future.delayed(Duration(milliseconds: 5000), () async{
-      await PublicAccess.logger.logToAll('@@@@@@@@@@@@ delayed 1');//todo
-    });
-
     isAppRun = await JavaCallService.invokeMethod('isAppRun');
-    await PublicAccess.logger.logToAll('@@@@@@@@@@@@ isAppRun: $isAppRun'); //todo
+    //await PublicAccess.logger.logToAll('@@@@@@@@@@@@ isAppRun: $isAppRun'); //todo
   }
   catch (e) {}
 
@@ -29,7 +21,7 @@ Future<bool> _callbackWorkManager(task, inputData) async {
     return true;
   }
 
-  await PublicAccess.logger.logToAll('@@@@@@@@@ app was closed');
+  //await PublicAccess.logger.logToAll('@@@@@@@@@ app was closed'); //todo
   try {
     await InitialApplication.launchUpInit();
     await InitialApplication.appLazyInit();
@@ -56,13 +48,13 @@ class CronTask {
   static void init() {
     Workmanager().initialize(
       callbackWorkManager,
-      isInDebugMode: true,
+      isInDebugMode: false,
     );
 
     Workmanager().registerPeriodicTask(
       'WorkManager-task-${Constants.appName}',
       'periodic-${Constants.appName}',
-      frequency: Duration(hours: 1),
+      frequency: Duration(hours: 4),
       initialDelay: Duration(milliseconds: 30),
       backoffPolicyDelay: Duration(minutes: 5),
       existingWorkPolicy: ExistingWorkPolicy.keep,

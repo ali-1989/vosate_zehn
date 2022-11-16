@@ -95,7 +95,7 @@ class FireBaseService {
 
   static Future<String?> getTokenForce() async {
     token = await FirebaseMessaging.instance.getToken();
-    PublicAccess.logger.logToAll(' token ==> $token'); //todo
+    //PublicAccess.logger.logToAll(' token ==> $token'); //todo
     final gd = GregorianDate();
     gd.moveLocalToUTC();
 

@@ -114,14 +114,15 @@ android {
             zipAlignEnabled true
             ext.enableCrashlytics = false
             ext.alwaysUpdateBuildId = false
+            signingConfig signingConfigs.debug
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
 
         release {
-            signingConfig signingConfigs.release
             minifyEnabled true
             shrinkResources true
             zipAlignEnabled true
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

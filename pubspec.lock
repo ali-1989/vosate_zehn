@@ -7,7 +7,7 @@ packages:
       name: _flutterfire_internals
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.8"
+    version: "1.0.2"
   android_path_provider:
     dependency: transitive
     description:
@@ -112,14 +112,14 @@ packages:
       name: cloud_firestore_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.8.5"
+    version: "5.7.7"
   cloud_firestore_web:
     dependency: transitive
     description:
       name: cloud_firestore_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.5"
+    version: "2.8.10"
   collection:
     dependency: transitive
     description:
@@ -322,7 +322,7 @@ packages:
       name: firebase_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.0"
+    version: "1.22.0"
   firebase_core_platform_interface:
     dependency: transitive
     description:
@@ -336,28 +336,28 @@ packages:
       name: firebase_core_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.1"
+    version: "1.7.3"
   firebase_messaging:
     dependency: "direct main"
     description:
       name: firebase_messaging
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "14.1.0"
+    version: "13.0.2"
   firebase_messaging_platform_interface:
     dependency: transitive
     description:
       name: firebase_messaging_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.2.6"
+    version: "4.2.0"
   firebase_messaging_web:
     dependency: transitive
     description:
       name: firebase_messaging_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.2.6"
+    version: "3.2.0"
   flip_card:
     dependency: "direct main"
     description:
