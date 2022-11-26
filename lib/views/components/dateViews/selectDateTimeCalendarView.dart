@@ -6,12 +6,12 @@ import 'package:iris_tools/dateSection/calendarTools.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 import 'package:app/tools/app/appSnack.dart';
-import '/managers/settingsManager.dart';
-import '/system/extensions.dart';
-import '/tools/app/appNavigator.dart';
-import '/tools/app/appSizes.dart';
-import '/tools/app/appThemes.dart';
-import '/tools/dateTools.dart';
+import 'package:app/managers/settingsManager.dart';
+import 'package:app/system/extensions.dart';
+import 'package:app/tools/app/appNavigator.dart';
+import 'package:app/tools/app/appSizes.dart';
+import 'package:app/tools/app/appThemes.dart';
+import 'package:app/tools/dateTools.dart';
 
 typedef OnSelect = void Function(DateTime dateTime);
 typedef OnChange = Widget? Function(DateTime dateTime);

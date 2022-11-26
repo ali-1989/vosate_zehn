@@ -31,7 +31,7 @@ class SplashPage extends StatefulWidget {
   SplashScreenState createState() => SplashScreenState();
 }
 ///======================================================================================================
-class SplashScreenState extends State<SplashPage> {
+class SplashScreenState extends StateBase<SplashPage> {
 
   @override
   void initState() {

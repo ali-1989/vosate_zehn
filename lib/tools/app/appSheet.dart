@@ -86,22 +86,24 @@ class AppSheet {
 
   static Future<T?> showModalBottomSheet$<T>(
       BuildContext context, {
-      required Widget Function(BuildContext context) builder,
-      Color? backgroundColor,
-      Color? barrierColor,
-      double elevation = 1.0,
-      ShapeBorder? shape,
-      bool isDismissible = true,
-      /** isScrollControlled:
-        if false: on small sheet show elevation to center page
-       if true can have full screen **/
-      bool isScrollControlled = true,
-      String routeName = 'ModalBottomSheet',
+        required Widget Function(BuildContext context) builder,
+        Color? backgroundColor,
+        Color? barrierColor,
+        double elevation = 1.0,
+        ShapeBorder? shape,
+        String routeName = 'ModalBottomSheet',
+        bool useRootNavigator = true,
+        bool isDismissible = true,
+        /** isScrollControlled:
+          if false: on small sheet show elevation to center page
+          if true can have full screen, can use TextField  **/
+        bool isScrollControlled = true,
       }) {
     FocusHelper.hideKeyboardByUnFocus(context);
 
     return showModalBottomSheet<T>(
         context: context,
+        builder: builder,
         elevation: elevation,
         shape: shape,
         constraints: AppSizes.isBigWidth()? BoxConstraints.tightFor(width: AppSizes.webMaxDialogSize) : null,
@@ -111,8 +113,7 @@ class AppSheet {
         barrierColor: barrierColor,
         routeSettings: RouteSettings(name: routeName),
         isScrollControlled: isScrollControlled,
-        builder: builder,
-        useRootNavigator: true, // if false: sheet show under bottom bar and not show fully
+        useRootNavigator: useRootNavigator, // if false: sheet show under bottom bar and not show fully
     );
   }
 
@@ -153,9 +154,9 @@ class AppSheet {
     }
 
     var body = _buildBody(
-      context,
-      theme.contentColor,
-      content,
+      ctx :context,
+      builder: (ctx) => content,
+      contentColor: theme.contentColor,
       posButton: posBtn,
       title: titleView,
       buttonBarColor: theme.buttonbarColor,
@@ -220,9 +221,9 @@ class AppSheet {
     );
 
     final body = _buildBody(
-      context,
-      theme.contentColor,
-      msg,
+      ctx: context,
+      builder: (ctx) => msg,
+      contentColor: theme.contentColor,
       posButton: posBtn,
       negButton: negBtn,
       title: title,
@@ -241,42 +242,32 @@ class AppSheet {
   }
 
   static Future<T?> showSheetCustom<T>(
-      BuildContext context,
-      Widget content, {
+      BuildContext context, {
+        required Widget Function(BuildContext context) builder,
         required String routeName,
         Widget? positiveButton,
+        Widget? negativeButton,
         Color? backgroundColor,
         Color? contentColor,
         Color? buttonBarColor,
         Color? barrierColor,
         bool isDismissible = true,
-        bool useExpanded = false,
+        /// isScrollControlled: true if need TextField or Big height view
         bool isScrollControlled = false,
         ShapeBorder? shape,
         double elevation = 0.0,
-        Widget? negativeButton,
         Text? title,
       }) {
 
     final theme = _genTheme();
     backgroundColor ??= Colors.transparent;
-    contentColor ??= theme.contentColor;
     barrierColor ??= theme.barrierColor;
 
-    Widget body;
-
-    if (useExpanded) {
-      body = _buildBodyForList(
-          context, contentColor, content,
-          posButton: positiveButton,
-          title: title,
-          negButton: negativeButton,
-          buttonBarColor: buttonBarColor ?? contentColor
-      );
-    }
-    else {
-      body = _buildBody(
-          context, contentColor, content,
+    Widget buildBody(BuildContext sheetCtx){
+      return _buildBody(
+          ctx: sheetCtx,
+          builder: builder,
+          contentColor: contentColor?? theme.contentColor,
           posButton: positiveButton,
           title: title,
           negButton: negativeButton,
@@ -284,8 +275,9 @@ class AppSheet {
       );
     }
 
-    return showModalBottomSheet$<T>(context,
-      builder: (ctx) => body,
+    return showModalBottomSheet$<T>(
+      context,
+      builder: (ctx) => buildBody(ctx),
       backgroundColor: backgroundColor,
       isDismissible: isDismissible,
       isScrollControlled: isScrollControlled,
@@ -296,134 +288,78 @@ class AppSheet {
     );
   }
   ///=======================================================================================================
-  static Widget _buildBodyForList(
-      BuildContext ctx,
-      Color contentColor,
-      Widget description, {
-        Widget? title,
-        Widget? posButton,
-        Widget? negButton,
-        Color? buttonBarColor,
-        EdgeInsets padding = EdgeInsets.zero,
+  static Widget _buildBody({
+    required BuildContext ctx,
+    required Widget Function(BuildContext context) builder,
+    required Color contentColor,
+    Widget? title,
+    Widget? posButton,
+    Widget? negButton,
+    Color? buttonBarColor,
+    EdgeInsets padding = EdgeInsets.zero,
       }) {
     final theme = Theme.of(ctx);
 
     return ColoredBox(
       color: contentColor,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.end,
-        //crossAxisAlignment: CrossAxisAlignment.stretch,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-
-          Expanded(
-            child: Padding(
+      child: Padding(
+        padding: EdgeInsets.only(bottom: MediaQuery.of(ctx).viewInsets.bottom),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          //mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Padding(
               padding: padding,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  if(title != null)
-                    DefaultTextStyle(
-                        style: theme.textTheme.headline6!.copyWith(fontSize: 17, fontWeight: FontWeight.bold,),
-                        textAlign: TextAlign.start,
-                        child: title
-                    ),
-
-                  Expanded(
+                  Visibility(
+                    visible: title != null,
                     child: DefaultTextStyle(
-                      style: theme.textTheme.headline6!.copyWith(fontSize: 16, fontWeight: FontWeight.normal),
-                      child: description,
+                        style: theme.textTheme.headline6!.copyWith(
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.start,
+                        child: title?? SizedBox(),
+                    ),
+                  ),
+
+                  if (title != null)
+                    const SizedBox(height: 15),
+
+                  Flexible(
+                    child: DefaultTextStyle(
+                      style: theme.textTheme.headline6!.copyWith(fontSize: 14, fontWeight: FontWeight.normal),
+                      child: builder(ctx),
                     ),
                   )
                 ],
               ),
             ),
-          ),
 
-          ///------- buttons
-          if(posButton != null || negButton != null)
-            ColoredBox(
-              color: buttonBarColor ?? contentColor,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    posButton ?? const SizedBox(),
-                    negButton ?? const SizedBox(),
-                  ],
+            ///------- buttons
+            Visibility(
+              visible: posButton != null || negButton != null,
+              child: ColoredBox(
+                color: buttonBarColor ?? contentColor,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(12, 8, 12, 18),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      posButton ?? const SizedBox(),
+                      negButton ?? const SizedBox(),
+                    ],
+                  ),
                 ),
               ),
-            )
-        ],
-      ),
-    );
-  }
-
-  static Widget _buildBody(
-      BuildContext ctx,
-      Color contentColor,
-      Widget description, {
-        Widget? title,
-        Widget? posButton,
-        Widget? negButton,
-        Color? buttonBarColor,
-        EdgeInsets padding = EdgeInsets.zero,
-      }) {
-    final theme = Theme.of(ctx);
-
-    return ColoredBox(
-      color: contentColor,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Padding(
-            padding: padding,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                if (title != null)
-                  DefaultTextStyle(
-                      style: theme.textTheme.headline6!.copyWith(
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.start,
-                      child: title),
-                if (title != null)
-                  const SizedBox(height: 15),
-
-                DefaultTextStyle(
-                  style: theme.textTheme.headline6!.copyWith(fontSize: 14, fontWeight: FontWeight.normal),
-                  child: description,
-                )
-              ],
             ),
-          ),
-
-          ///------- buttons
-          if (posButton != null || negButton != null)
-            ColoredBox(
-              color: buttonBarColor ?? contentColor,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(12, 8, 12, 18),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    posButton ?? const SizedBox(),
-                    negButton ?? const SizedBox(),
-                  ],
-                ),
-              ),
-            )
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -561,7 +497,6 @@ static Future<T?> showSheet$YouDoNotHaveAccess<T>(BuildContext context) {
   static Future<T?> showSheet$ThereAreNoResults<T>(BuildContext context) {
     return showSheetOneAction<T>(context, AppMessages.thereAreNoResults, null);
   }
-
   ///======== third party package ===============================================================================
   static void showSheetDialog(
       BuildContext context, {

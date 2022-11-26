@@ -17,6 +17,7 @@ class AppSnack {
     return AppBroadcast.rootScaffoldMessengerKey.currentState!;
   }
 
+  /// must call inside a scaffold.   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('')));
   /// width: AppSizes.isBigWidth()? AppSizes.webMaxDialogSize: null,
   static ScaffoldFeatureController showFlutterSnackBar(SnackBar snackBar){
     return getScaffoldMessengerByKey().showSnackBar(snackBar);

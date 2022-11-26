@@ -12,7 +12,6 @@ import 'package:app/system/session.dart';
 import 'package:app/tools/app/appMessages.dart';
 import 'package:app/views/homeComponents/appBarBuilder.dart';
 import 'package:app/views/states/errorOccur.dart';
-import 'package:app/views/states/waitToLoad.dart';
 
 class AboutUsPage extends StatefulWidget {
   static final route = GoRoute(

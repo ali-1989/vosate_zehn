@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_html/flutter_html.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iris_tools/api/helpers/urlHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:iris_tools/widgets/maxWidth.dart';
 
@@ -16,6 +17,7 @@ import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/views/homeComponents/appBarBuilder.dart';
 import 'package:app/views/states/waitToLoad.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AidPage extends StatefulWidget {
   static final route = GoRoute(
@@ -107,7 +109,7 @@ class _AidPageState extends StateBase<AidPage> {
 
           SizedBox(height: 15),
 
-          MaxWidth(
+          /*MaxWidth(
             maxWidth: 300,
             child: SizedBox(
               width: double.infinity,
@@ -117,10 +119,10 @@ class _AidPageState extends StateBase<AidPage> {
                     backgroundColor: AppThemes.instance.currentTheme.successColor,
                   ),
                   onPressed: onPayPalCall,
-                  child: Text(AppMessages.payWitPaypal)
+                  child: Text(AppMessages.payWitPaypal, textDirection: TextDirection.ltr)
               ),
             ),
-          ),
+          ),*/
 
           SizedBox(height: 10),
         ],
@@ -158,10 +160,12 @@ class _AidPageState extends StateBase<AidPage> {
   }
 
   void onPayIranCall() async {
-    AppRoute.pushNamed(context, PayWebPage.route.name!, extra: 'https://zarinp.al/vosatezehn.ir');
+    //AppRoute.pushNamed(context, PayWebPage.route.name!, extra: 'https://zarinp.al/vosatezehn.ir');
+    UrlHelper.launchLink('https://zarinp.al/vosatezehn.ir', mode: LaunchMode.externalApplication);
   }
 
   void onPayPalCall() async {
-    AppRoute.pushNamed(context, PayWebPage.route.name!, extra: 'https://www.paypal.com/donate/?hosted_button_id=K75F6ZADA3YCW');
+    //AppRoute.pushNamed(context, PayWebPage.route.name!, extra: 'https://www.paypal.com/donate/?hosted_button_id=K75F6ZADA3YCW');
+    UrlHelper.launchLink('https://www.paypal.com/donate/?hosted_button_id=K75F6ZADA3YCW', mode: LaunchMode.externalApplication);
   }
 }

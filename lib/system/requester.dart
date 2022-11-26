@@ -67,7 +67,7 @@ class Requester {
     pathUrl ??= '/graph-v1';
 
     if(!_http.fullUrl.contains(pathUrl)) {
-      _http.fullUrl += pathUrl;
+      _http.fullUrl = SettingsManager.settingsModel.httpAddress + pathUrl;
     }
   }
 

@@ -33,7 +33,7 @@ class AppRoute {
 
   AppRoute._();
 
-  static BuildContext? materialContext;
+  static late BuildContext materialContext;
 
   static void init() {
     freeRoutes.add(LoginPage.route);
@@ -42,14 +42,14 @@ class AppRoute {
     freeRoutes.add(AboutUsPage.route);
   }
 
-  static BuildContext? getContext() {
+  static BuildContext getLastContext() {
     var res = WidgetsBinding.instance.focusManager.rootScope.focusedChild?.context;//deep: 50
     res ??= WidgetsBinding.instance.focusManager.primaryFocus?.context; //deep: 71
 
-    return res?? getMaterialContext();
+    return res?? getBaseContext();
   }
 
-  static BuildContext? getMaterialContext() {
+  static BuildContext getBaseContext() {
     return materialContext;
   }
 
@@ -70,7 +70,7 @@ class AppRoute {
   }*/
 
   static void backRoute() {
-    final lastCtx = AppNavigator.getLastRouteContext(getContext()!);
+    final lastCtx = AppNavigator.getLastRouteContext(getLastContext());
     AppNavigator.backRoute(lastCtx);
   }
 
@@ -95,6 +95,15 @@ class AppRoute {
     GoRouter.of(context).pop();
   }
 
+	/*
+	static Future push(BuildContext context, Widget page, {dynamic extra}) async {
+    final r = MaterialPageRoute(builder: (ctx){
+      return page;
+    });
+
+    return Navigator.of(context).push(r);
+  }*/
+  
   static void push(BuildContext context, String address, {dynamic extra}) {
     if(kIsWeb){
       GoRouter.of(context).go(address, extra: extra);

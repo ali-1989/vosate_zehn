@@ -329,7 +329,7 @@ packages:
       name: firebase_core_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.5.2"
+    version: "4.5.1"
   firebase_core_web:
     dependency: transitive
     description:
@@ -660,10 +660,12 @@ packages:
   iris_tools:
     dependency: "direct main"
     description:
-      path: "../#FlutterPackages/IrisTools"
-      relative: true
-    source: path
-    version: "0.0.19"
+      path: "."
+      ref: HEAD
+      resolved-ref: "8d007b201de9125f8f2b3449d5b137c9443f8623"
+      url: "https://github.com/ali-1989/IrisTools.git"
+    source: git
+    version: "0.0.21"
   jiffy:
     dependency: transitive
     description:

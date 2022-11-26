@@ -54,7 +54,7 @@ class CronTask {
     Workmanager().registerPeriodicTask(
       'WorkManager-task-${Constants.appName}',
       'periodic-${Constants.appName}',
-      frequency: Duration(hours: 4),
+      frequency: Duration(hours: 3),
       initialDelay: Duration(milliseconds: 30),
       backoffPolicyDelay: Duration(minutes: 5),
       existingWorkPolicy: ExistingWorkPolicy.keep,

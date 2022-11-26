@@ -5,10 +5,11 @@
 name: app     		  # vosate_zehn
 description: meditation app
 homepage: https://iris.ir
+#repository: https://github.com/...
 
 publish_to: 'none'
 
-version: 5.2.2+9
+version: 5.2.5+13
 
 
 environment:
@@ -72,8 +73,8 @@ dependencies:
 
 
   iris_tools:
-    path: ../#FlutterPackages/IrisTools
-#    git: https://github.com/ali-1989/IrisTools.git
+    #path: ../#FlutterPackages/IrisTools
+    git: https://github.com/ali-1989/IrisTools.git
   iris_db:
 #    path: ../../DartProjects/IrisDB
     git: https://github.com/ali-1989/IrisDB.git
@@ -103,13 +104,14 @@ dependency_overrides:
   path: ^1.8.2
   xml: ^6.0.0
   ffi: ^2.0.1
-  firebase_core_platform_interface: 4.5.1
+  #firebase_core_platform_interface: 4.5.1
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
+
 
 flutter:
   uses-material-design: true

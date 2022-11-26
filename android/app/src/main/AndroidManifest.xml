@@ -6,10 +6,12 @@
       installLocation: auto| preferExternal
        ============================================== -->
 
-    <!--<uses-permission android:name="android.permission.GET_ACCOUNTS"/>-->
+    <!--
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    -->
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
     <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
     <uses-permission android:name="android.permission.BROADCAST_STICKY"/>
@@ -18,7 +20,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
-    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
 
     <!-- ..........................  shortcut -->
     <uses-permission android:name="android.permission.INSTALL_SHORTCUT"/>
@@ -179,7 +181,8 @@
         <meta-data
                 android:name="com.google.firebase.messaging.default_notification_channel_id"
                 android:value="@string/default_notification_channel_id"/>
-        <!-- .......................... BOOT RECEIVER -->
+        
+	<!-- .......................... BOOT RECEIVER -->
         <receiver
                 android:name=".BootReceiver"
                 android:exported="true"

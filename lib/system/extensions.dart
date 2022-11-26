@@ -241,9 +241,9 @@ extension WidgetExtension on Widget {
   }
   ///----------------------------------------------------------
   Widget wrapBoxBorder({
-    double radius = 10.0,
+    double radius = 6.0,
     int alpha = 200,
-    double stroke = 0.8,
+    double stroke = 1.0,
     Color? color,
     EdgeInsets padding = const EdgeInsets.symmetric(horizontal: 6, vertical: 0),
   }) {
@@ -295,18 +295,19 @@ extension WidgetExtension on Widget {
   }
   ///----------------------------------------------------------
   Widget wrapDotBorder({
-    double radius = 10.0,
+    double radius = 6.0,
     int alpha = 200,
-    double stroke = 0.8,
+    double stroke = 1.0,
     Color? color,
     BorderType borderType = BorderType.rRect,
     EdgeInsets padding = const EdgeInsets.symmetric(horizontal: 6, vertical: 0),
+    List<double> dashPattern = const [6, 4],
   }) {
 
     color ??= AppThemes.instance.currentTheme.fabBackColor;
 
     return DottedBorder(
-      dashPattern: const [6, 4, 6, 4],
+      dashPattern: dashPattern,
       padding: padding,
       color: color.withAlpha(alpha),
       borderType: borderType,

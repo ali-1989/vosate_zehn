@@ -128,6 +128,7 @@ class AppThemes {
 			height: _instance.baseFont.height,
 			color: th.textColor,
 		);
+
 		th.subTextStyle = raw.subtitle1!.copyWith(
 			fontSize: _instance.subFont.size,
 			fontFamily: _instance.subFont.family,
@@ -310,9 +311,11 @@ class AppThemes {
 						if (states.contains(MaterialState.disabled)) {
 						  return th.inactiveBackColor;
 						}
+
 						if (states.contains(MaterialState.hovered)) {
 							return th.buttonBackColor.withAlpha(200);
 						}
+
 						if (states.contains(MaterialState.focused) ||
 								states.contains(MaterialState.pressed)) {
 						  return th.buttonBackColor;

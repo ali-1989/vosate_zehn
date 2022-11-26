@@ -51,7 +51,7 @@ class UserLoginTools {
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
 
     if (isCurrent && AppRoute.materialContext != null) {
-      AppRoute.backToRoot(AppRoute.getContext()!);
+      AppRoute.backToRoot(AppRoute.getLastContext());
 
       Future.delayed(Duration(milliseconds: 400), (){
         AppRoute.replaceNamed(AppRoute.getContext()!, LoginPage.route.name!);
@@ -69,6 +69,4 @@ class UserLoginTools {
       AppRoute.backToRoot(AppRoute.getContext()!);
     }
   }
-
-
 }

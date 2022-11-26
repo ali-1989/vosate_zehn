@@ -68,7 +68,7 @@ class FireBaseService {
         sound: true,
       );
     }
-    catch (e){/**/}
+    catch (e){}
 
     setListening();
 
@@ -128,7 +128,9 @@ class FireBaseService {
     try {
       //body: constructFCMPayload(_token);
     }
-    catch (e) {/**/}
+    catch (e) {
+
+}
   }
 
   static Map generateMessage(String? token) {
