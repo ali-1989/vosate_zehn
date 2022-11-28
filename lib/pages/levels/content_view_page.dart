@@ -1,4 +1,3 @@
-import 'package:app/views/states/errorOccur.dart';
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
@@ -7,13 +6,13 @@ import 'package:iris_tools/widgets/avatarChip.dart';
 import 'package:iris_tools/widgets/irisImageView.dart';
 
 import 'package:app/managers/mediaManager.dart';
-import 'package:app/models/abstract/stateBase.dart';
-import 'package:app/models/contentModel.dart';
-import 'package:app/models/mediaModelWrapForContent.dart';
-import 'package:app/models/speakerModel.dart';
-import 'package:app/models/subBuketModel.dart';
 import 'package:app/pages/levels/audio_player_page.dart';
 import 'package:app/pages/levels/video_player_page.dart';
+import 'package:app/structures/abstract/stateBase.dart';
+import 'package:app/structures/models/contentModel.dart';
+import 'package:app/structures/models/mediaModelWrapForContent.dart';
+import 'package:app/structures/models/speakerModel.dart';
+import 'package:app/structures/models/subBuketModel.dart';
 import 'package:app/system/enums.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
@@ -25,7 +24,8 @@ import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/app/appToast.dart';
-import 'package:app/views/homeComponents/AppBarBuilder.dart';
+import 'package:app/views/homeComponents/appBarBuilder.dart';
+import 'package:app/views/states/errorOccur.dart';
 import 'package:app/views/states/waitToLoad.dart';
 
 class ContentViewPageInjectData {

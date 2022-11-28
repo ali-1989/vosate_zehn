@@ -5,7 +5,6 @@ import 'package:flutter/scheduler.dart';
 
 import 'package:app/views/widgets/overlay/overlayAnimations.dart';
 
-
 enum OverlayIndicatorType {
   fadingCircle,
   circle,

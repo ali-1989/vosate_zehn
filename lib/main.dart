@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:app/services/javaCallService.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -10,9 +9,9 @@ import 'package:go_router/go_router.dart';
 
 import 'package:app/constants.dart';
 import 'package:app/managers/settingsManager.dart';
-import 'package:app/models/settingsModel.dart';
 import 'package:app/pages/splash_page.dart';
-import 'package:app/services/firebase_service.dart';
+import 'package:app/services/native_call_service.dart';
+import 'package:app/structures/models/settingsModel.dart';
 import 'package:app/system/initialize.dart';
 import 'package:app/system/publicAccess.dart';
 import 'package:app/tools/app/appBroadcast.dart';
@@ -58,9 +57,8 @@ Future<void> mainInitialize() async {
 
   FlutterError.onError = onErrorCatch;
   GoRouter.setUrlPathStrategy(UrlPathStrategy.path);
-  //FireBaseService.init();
-  JavaCallService.init();
-  await JavaCallService.invokeMethod('setAppIsRun');
+  NativeCallService.init();
+  await NativeCallService.invokeMethod('setAppIsRun');
 }
 ///==============================================================================================
 class MyApp extends StatelessWidget {
@@ -143,7 +141,7 @@ class MyErrorApp extends StatelessWidget {
         child: SizedBox.expand(
           child: ColoredBox(
               color: Colors.brown,
-            child: Center(child: Text('Error in init')),
+            child: Center(child: Text('Error in app initialization')),
           ),
         ),
       ),
@@ -152,25 +150,25 @@ class MyErrorApp extends StatelessWidget {
 }
 ///==============================================================================================
 void onErrorCatch(FlutterErrorDetails errorDetails) {
-  var txt = 'on Error catch: ${errorDetails.exception.toString()}';
+  var txt = 'AN ERROR HAS OCCURRED:: ${errorDetails.exception.toString()}';
 
   if(!kIsWeb) {
-    txt += '\n stack: ${errorDetails.stack}';
+    txt += '\n STACK TRACE:: ${errorDetails.stack}';
   }
 
-  txt += '\n==========================================[Error catch]';
+  txt += '\n========================================== [END CATCH]';
 
   PublicAccess.logger.logToAll(txt);
 }
 ///==============================================================================================
 void zonedGuardedCatch(error, sTrace) {
-  var txt = 'on ZonedGuarded catch: ${error.toString()}';
+  var txt = 'ZONED-GUARDED CAUGHT AN ERROR:: ${error.toString()}';
 
   if(!kIsWeb && !kDebugMode) {
-    txt += '\n stack: $sTrace';
+    txt += '\n STACK TRACE:: $sTrace';
   }
 
-  txt += '\n==========================================[ZonedGuarded]';
+  txt += '\n========================================== [END ZONED-GUARDED]';
   PublicAccess.logger.logToAll(txt);
 
   if(kDebugMode) {

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:app/tools/app/appRoute.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -10,10 +9,12 @@ import 'package:lottie/lottie.dart';
 import 'package:app/managers/settingsManager.dart';
 import 'package:app/managers/versionManager.dart';
 import 'package:app/pages/layout_page.dart';
+import 'package:app/structures/abstract/stateBase.dart';
 import 'package:app/system/initialize.dart';
 import 'package:app/system/session.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appImages.dart';
+import 'package:app/tools/app/appRoute.dart';
 import 'package:app/views/states/waitToLoad.dart';
 
 bool _isInit = false;
@@ -121,7 +122,7 @@ class SplashScreenState extends StateBase<SplashPage> {
     _isInit = true;
 
     await InitialApplication.launchUpInit();
-    await InitialApplication.launchUpInitWithContext(AppRoute.getContext()!);
+    await InitialApplication.launchUpInitWithContext(AppRoute.getLastContext()!);
     final settingsLoad = SettingsManager.loadSettings();
 
     if (settingsLoad) {

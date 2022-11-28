@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'package:flip_card/flip_card.dart';
@@ -9,14 +11,14 @@ import 'package:iris_tools/api/helpers/mathHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
-import 'dart:async';
-import 'package:app/models/abstract/stateBase.dart';
-import 'package:app/models/countryModel.dart';
+
 import 'package:app/pages/layout_page.dart';
 import 'package:app/pages/login/register_page.dart';
 import 'package:app/pages/term_page.dart';
 import 'package:app/services/google_service.dart';
 import 'package:app/services/login_service.dart';
+import 'package:app/structures/abstract/stateBase.dart';
+import 'package:app/structures/models/countryModel.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/session.dart';
 import 'package:app/tools/app/appImages.dart';
@@ -29,8 +31,8 @@ import 'package:app/tools/app/appSnack.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/app/appToast.dart';
 import 'package:app/tools/countryTools.dart';
-import 'package:app/views/components/phoneNumberInput.dart';
 import 'package:app/views/components/countrySelect.dart';
+import 'package:app/views/components/phoneNumberInput.dart';
 
 class LoginPage extends StatefulWidget {
   static final route = GoRoute(

@@ -5,9 +5,9 @@ import 'package:iris_tools/widgets/irisImageView.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:app/managers/mediaManager.dart';
-import 'package:app/models/abstract/stateBase.dart';
-import 'package:app/models/bucketModel.dart';
 import 'package:app/pages/levels/sub_bucket_page.dart';
+import 'package:app/structures/abstract/stateBase.dart';
+import 'package:app/structures/models/bucketModel.dart';
 import 'package:app/system/enums.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';

@@ -1,14 +1,15 @@
-import 'package:app/tools/app/appRoute.dart';
 import 'package:flutter/material.dart';
+
+import 'package:app/tools/app/appRoute.dart';
 import '/system/extensions.dart';
 
 class AppMessages {
   AppMessages._();
 
-  static const _noText = 'n_n';
+  static const _noText = 'NaT';
 
-  static BuildContext getContext(){
-    return AppRoute.getContext()!;
+  static BuildContext _getContext(){
+    return AppRoute.getLastContext()!;
   }
   
   static String httpMessage(String? cause) {
@@ -16,139 +17,139 @@ class AppMessages {
       return errorOccur;
     }
 
-    return getContext().tInMap('httpCodes', cause)?? errorOccur;
+    return _getContext().tInMap('httpCodes', cause)?? errorOccur;
   }
 
   static String get ok {
-    return getContext().tC('ok')?? _noText;
+    return _getContext().tC('ok')?? _noText;
   }
 
   static String get yes {
-    return getContext().tC('yes')?? _noText;
+    return _getContext().tC('yes')?? _noText;
   }
 
   static String get no {
-    return getContext().tC('no')?? _noText;
+    return _getContext().tC('no')?? _noText;
   }
 
   static String get select {
-    return getContext().tC('select')?? _noText;
+    return _getContext().tC('select')?? _noText;
   }
 
   static String get name {
-    return getContext().tC('name')?? _noText;
+    return _getContext().tC('name')?? _noText;
   }
 
   static String get family {
-    return getContext().tC('family')?? _noText;
+    return _getContext().tC('family')?? _noText;
   }
 
   static String get age {
-    return getContext().tC('age')?? _noText;
+    return _getContext().tC('age')?? _noText;
   }
 
   static String get gender {
-    return getContext().tC('gender')?? _noText;
+    return _getContext().tC('gender')?? _noText;
   }
 
   static String get man {
-    return getContext().tC('man')?? _noText;
+    return _getContext().tC('man')?? _noText;
   }
 
   static String get woman {
-    return getContext().tC('woman')?? _noText;
+    return _getContext().tC('woman')?? _noText;
   }
 
   static String get notice {
-    return getContext().t('notice')?? _noText;
+    return _getContext().t('notice')?? _noText;
   }
 
   static String get send {
-    return getContext().t('send')?? _noText;
+    return _getContext().t('send')?? _noText;
   }
 
   static String get home {
-    return getContext().t('home')?? _noText;
+    return _getContext().t('home')?? _noText;
   }
 
   static String get contactUs {
-    return getContext().t('contactUs')?? _noText;
+    return _getContext().t('contactUs')?? _noText;
   }
 
   static String get aboutUs {
-    return getContext().t('aboutUs')?? _noText;
+    return _getContext().t('aboutUs')?? _noText;
   }
 
   static String get userName {
-    return getContext().t('userName')?? _noText;
+    return _getContext().t('userName')?? _noText;
   }
 
   static String get password {
-    return getContext().t('password')?? _noText;
+    return _getContext().t('password')?? _noText;
   }
 
   static String get pay {
-    return getContext().t('pay')?? _noText;
+    return _getContext().t('pay')?? _noText;
   }
 
   static String get payWitIran {
-    return getContext().t('payWitIran')?? _noText;
+    return _getContext().t('payWitIran')?? _noText;
   }
 
   static String get payWitPaypal {
-    return getContext().t('payWitPaypal')?? _noText;
+    return _getContext().t('payWitPaypal')?? _noText;
   }
 
   static String get logout {
-    return getContext().t('logout')?? _noText;
+    return _getContext().t('logout')?? _noText;
   }
 
   static String get exit {
-    return getContext().t('exit')?? _noText;
+    return _getContext().t('exit')?? _noText;
   }
 
   static String get search {
-    return getContext().t('search')?? _noText;
+    return _getContext().t('search')?? _noText;
   }
 
   static String get later {
-    return getContext().t('later')?? _noText;
+    return _getContext().t('later')?? _noText;
   }
 
   static String get update {
-    return getContext().t('update')?? _noText;
+    return _getContext().t('update')?? _noText;
   }
 
   static String get validation {
-    return getContext().tInMap('loginSection', 'validation')?? _noText;
+    return _getContext().tInMap('loginSection', 'validation')?? _noText;
   }
 
   static String get resendOtpCode {
-    return getContext().tInMap('loginSection', 'resendOtpCode')?? _noText;
+    return _getContext().tInMap('loginSection', 'resendOtpCode')?? _noText;
   }
 
   static String get otpCodeIsResend {
-    return getContext().tInMap('loginSection', 'otpCodeIsResend')?? _noText;
+    return _getContext().tInMap('loginSection', 'otpCodeIsResend')?? _noText;
   }
 
   static String get otpCodeIsInvalid {
-    return getContext().tInMap('loginSection', 'otpCodeIsInvalid')?? _noText;
+    return _getContext().tInMap('loginSection', 'otpCodeIsInvalid')?? _noText;
   }
 
   static String get pleaseWait {
-    return getContext().t('pleaseWait')?? _noText;
+    return _getContext().t('pleaseWait')?? _noText;
   }
 
   static String get countrySelection {
-    return getContext().tInMap('countrySection', 'countrySelection')?? _noText;
+    return _getContext().tInMap('countrySection', 'countrySelection')?? _noText;
   }
 
   static String get doYouWantLogoutYourAccount {
-    return getContext().tInMap('loginSection', 'doYouWantLogoutYourAccount')?? _noText;
+    return _getContext().tInMap('loginSection', 'doYouWantLogoutYourAccount')?? _noText;
   }
 
   static String get newAppVersionIsOk {
-    return getContext().t('newAppVersionIsOk')?? _noText;
+    return _getContext().t('newAppVersionIsOk')?? _noText;
   }
 
   static String get terms {
@@ -156,11 +157,11 @@ class AppMessages {
   }
 
   static String get mobileNumber {
-    return getContext().t('mobileNumber')?? _noText;
+    return _getContext().t('mobileNumber')?? _noText;
   }
 
   static String get loginBtn {
-    return getContext().t('login')?? _noText;
+    return _getContext().t('login')?? _noText;
   }
 
   static String get loginWithGoogle {
@@ -184,23 +185,23 @@ class AppMessages {
   }
 
   static String get errorOccur {
-    return getContext().t('errorOccur')?? _noText;
+    return _getContext().t('errorOccur')?? _noText;
   }
 
   static String get errorOccurTryAgain {
-    return getContext().t('errorOccurTryAgain')?? _noText;
+    return _getContext().t('errorOccurTryAgain')?? _noText;
   }
 
   static String get wantToLeave {
-    return getContext().tC('wantToLeave')?? _noText;
+    return _getContext().tC('wantToLeave')?? _noText;
   }
 
   static String get e404 {
-    return getContext().tC('thisPageNotFound')?? _noText;
+    return _getContext().tC('thisPageNotFound')?? _noText;
   }
 
   static String get tryAgain {
-    return getContext().t('tryAgain')?? _noText;
+    return _getContext().t('tryAgain')?? _noText;
   }
 
   static String get requestKeyNotExist {
@@ -212,79 +213,79 @@ class AppMessages {
   }
 
   static String get tokenIsIncorrectOrExpire {
-    return getContext().tInMap('httpCodes', 'tokenIsIncorrectOrExpire')?? _noText;
+    return _getContext().tInMap('httpCodes', 'tokenIsIncorrectOrExpire')?? _noText;
   }
 
   static String get databaseError {
-    return getContext().tInMap('httpCodes', 'databaseError')?? _noText;
+    return _getContext().tInMap('httpCodes', 'databaseError')?? _noText;
   }
 
   static String get userNameOrPasswordIncorrect {
-    return getContext().tInMap('httpCodes', 'userNameOrPasswordIncorrect')?? _noText;
+    return _getContext().tInMap('httpCodes', 'userNameOrPasswordIncorrect')?? _noText;
   }
 
   static String get errorOccurredInSubmittedParameters {
-    return getContext().tInMap('httpCodes', 'errorOccurredInSubmittedParameters')?? _noText;
+    return _getContext().tInMap('httpCodes', 'errorOccurredInSubmittedParameters')?? _noText;
   }
 
   static String get dataNotFound {
-    return getContext().tInMap('httpCodes', 'dataNotFound')?? _noText;
+    return _getContext().tInMap('httpCodes', 'dataNotFound')?? _noText;
   }
 
   static String get thisRequestNotDefined {
-    return getContext().tInMap('httpCodes', 'thisRequestNotDefined')?? _noText;
+    return _getContext().tInMap('httpCodes', 'thisRequestNotDefined')?? _noText;
   }
 
   static String get informationWasSend {
-    return getContext().tInMap('httpCodes', 'informationWasSend')?? _noText;
+    return _getContext().tInMap('httpCodes', 'informationWasSend')?? _noText;
   }
 
   static String get errorUploadingData {
-    return getContext().tInMap('httpCodes', 'errorUploadingData')?? _noText;
+    return _getContext().tInMap('httpCodes', 'errorUploadingData')?? _noText;
   }
 
   static String get netConnectionIsDisconnect {
-    return getContext().tInMap('httpCodes', 'netConnectionIsDisconnect')?? _noText;
+    return _getContext().tInMap('httpCodes', 'netConnectionIsDisconnect')?? _noText;
   }
 
   static String get errorCommunicatingServer {
-    return getContext().tInMap('httpCodes', 'errorCommunicatingServer')?? _noText;
+    return _getContext().tInMap('httpCodes', 'errorCommunicatingServer')?? _noText;
   }
 
   static String get serverNotRespondProperly {
-    return getContext().tInMap('httpCodes', 'serverNotRespondProperly')?? _noText;
+    return _getContext().tInMap('httpCodes', 'serverNotRespondProperly')?? _noText;
   }
 
   static String get accountIsBlock {
-    return getContext().tInMap('httpCodes', 'accountIsBlock')?? _noText;
+    return _getContext().tInMap('httpCodes', 'accountIsBlock')?? _noText;
   }
 
   static String get operationCannotBePerformed {
-    return getContext().tInMap('operationSection', 'operationCannotBePerformed')?? _noText;
+    return _getContext().tInMap('operationSection', 'operationCannotBePerformed')?? _noText;
   }
 
   static String get operationSuccess {
-    return getContext().tInMap('operationSection', 'successOperation')?? _noText;
+    return _getContext().tInMap('operationSection', 'successOperation')?? _noText;
   }
 
   static String get operationFailed {
-    return getContext().tInMap('operationSection', 'operationFailed')?? _noText;
+    return _getContext().tInMap('operationSection', 'operationFailed')?? _noText;
   }
 
   static String get operationFailedTryAgain {
-    return getContext().tInMap('operationSection','operationFailedTryAgain')?? _noText;
+    return _getContext().tInMap('operationSection','operationFailedTryAgain')?? _noText;
   }
 
   static String get operationCanceled {
-    return getContext().tInMap('operationSection', 'operationCanceled')?? _noText;
+    return _getContext().tInMap('operationSection', 'operationCanceled')?? _noText;
   }
 
   static String get sorryYouDoNotHaveAccess {
-    return getContext().tC('sorryYouDoNotHaveAccess')?? _noText;
+    return _getContext().tC('sorryYouDoNotHaveAccess')?? _noText;
   }
 
   static String get thereAreNoResults {
-    return getContext().tC('thereAreNoResults')?? _noText;
+    return _getContext().tC('thereAreNoResults')?? _noText;
   }
 
   static String get appName {
@@ -292,7 +293,7 @@ class AppMessages {
   }
 
   static String get profileTitle {
-    return getContext().tC('profile')?? _noText;
+    return _getContext().tC('profile')?? _noText;
   }
 
   static String get loginTitle {

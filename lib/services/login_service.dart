@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 
-import 'package:app/models/countryModel.dart';
+import 'package:app/structures/models/countryModel.dart';
 import 'package:app/system/httpCodes.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/publicAccess.dart';

@@ -1,8 +1,5 @@
 import 'dart:async';
 
-import 'package:app/services/cronTask.dart';
-import 'package:app/tools/app/appDb.dart';
-import 'package:app/tools/app/appThemes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -21,13 +18,15 @@ import 'package:app/managers/mediaManager.dart';
 import 'package:app/managers/settingsManager.dart';
 import 'package:app/managers/versionManager.dart';
 import 'package:app/services/aidService.dart';
-import 'package:app/services/downloadUpload.dart';
+import 'package:app/services/cron_task.dart';
+import 'package:app/services/download_upload_service.dart';
 import 'package:app/services/firebase_service.dart';
-import 'package:app/services/websocketService.dart';
-import 'package:app/system/lifeCycleApplication.dart';
+import 'package:app/services/websocket_service.dart';
+import 'package:app/system/applicationLifeCycle.dart';
 import 'package:app/system/publicAccess.dart';
 import 'package:app/system/session.dart';
 import 'package:app/tools/app/appCache.dart';
+import 'package:app/tools/app/appDb.dart';
 import 'package:app/tools/app/appDialogIris.dart';
 import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/app/appImages.dart';
@@ -35,6 +34,7 @@ import 'package:app/tools/app/appLocale.dart';
 import 'package:app/tools/app/appNotification.dart';
 import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/app/appSizes.dart';
+import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/deviceInfoTools.dart';
 import 'package:app/tools/netListenerTools.dart';
 import 'package:app/tools/userLoginTools.dart';
@@ -141,9 +141,9 @@ class InitialApplication {
       //await PublicAccess.logger.logToAll('@@@@@@@ prepared WebSocket'); //todo
       /// life cycle
       final eventListener = AppEventListener();
-      eventListener.addResumeListener(LifeCycleApplication.onResume);
-      eventListener.addPauseListener(LifeCycleApplication.onPause);
-      eventListener.addDetachListener(LifeCycleApplication.onDetach);
+      eventListener.addResumeListener(ApplicationLifeCycle.onResume);
+      eventListener.addPauseListener(ApplicationLifeCycle.onPause);
+      eventListener.addDetachListener(ApplicationLifeCycle.onDetach);
       WidgetsBinding.instance.addObserver(eventListener);
 
       /// downloader
@@ -176,7 +176,7 @@ class InitialApplication {
         AdvertisingManager.init();
         AidService.checkShowDialog();
 
-        VersionManager.checkAppHasNewVersion(AppRoute.getContext()!);
+        VersionManager.checkAppHasNewVersion(AppRoute.getLastContext()!);
       }
 
       //DailyTextService.checkShowDialog();

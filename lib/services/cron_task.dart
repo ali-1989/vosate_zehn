@@ -1,9 +1,10 @@
+import 'package:workmanager/workmanager.dart';
+
+import 'package:app/constants.dart';
 import 'package:app/services/firebase_service.dart';
-import 'package:app/services/javaCallService.dart';
+import 'package:app/services/native_call_service.dart';
 import 'package:app/system/initialize.dart';
 import 'package:app/system/publicAccess.dart';
-import 'package:workmanager/workmanager.dart';
-import 'package:app/constants.dart';
 
 ///--------------------------------------------------------------------------------------------
 Future<bool> _callbackWorkManager(task, inputData) async {
@@ -12,7 +13,7 @@ Future<bool> _callbackWorkManager(task, inputData) async {
   var isAppRun = false;
 
   try {
-    isAppRun = await JavaCallService.invokeMethod('isAppRun');
+    isAppRun = await NativeCallService.invokeMethod('isAppRun');
     //await PublicAccess.logger.logToAll('@@@@@@@@@@@@ isAppRun: $isAppRun'); //todo
   }
   catch (e) {}

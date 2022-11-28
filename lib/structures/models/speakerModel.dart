@@ -1,6 +1,6 @@
 import 'package:iris_tools/models/dataModels/mediaModel.dart';
 
-import 'package:app/models/mixin/dateFieldMixin.dart';
+import 'package:app/structures/mixin/dateFieldMixin.dart';
 import 'package:app/system/keys.dart';
 
 class SpeakerModel with DateFieldMixin {

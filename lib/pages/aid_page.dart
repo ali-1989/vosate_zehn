@@ -1,4 +1,3 @@
-import 'package:app/views/states/errorOccur.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_html/flutter_html.dart';
@@ -6,18 +5,17 @@ import 'package:go_router/go_router.dart';
 import 'package:iris_tools/api/helpers/urlHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:iris_tools/widgets/maxWidth.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-import 'package:app/models/abstract/stateBase.dart';
-import 'package:app/pages/pay_web_page.dart';
+import 'package:app/structures/abstract/stateBase.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/requester.dart';
 import 'package:app/system/session.dart';
 import 'package:app/tools/app/appMessages.dart';
-import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/views/homeComponents/appBarBuilder.dart';
+import 'package:app/views/states/errorOccur.dart';
 import 'package:app/views/states/waitToLoad.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class AidPage extends StatefulWidget {
   static final route = GoRoute(
@@ -109,7 +107,7 @@ class _AidPageState extends StateBase<AidPage> {
 
           SizedBox(height: 15),
 
-          /*MaxWidth(
+          MaxWidth(
             maxWidth: 300,
             child: SizedBox(
               width: double.infinity,
@@ -122,7 +120,7 @@ class _AidPageState extends StateBase<AidPage> {
                   child: Text(AppMessages.payWitPaypal, textDirection: TextDirection.ltr)
               ),
             ),
-          ),*/
+          ),
 
           SizedBox(height: 10),
         ],

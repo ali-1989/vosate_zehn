@@ -1,13 +1,14 @@
 import 'dart:typed_data';
 
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
+
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:iris_tools/api/generator.dart';
 
+import 'package:app/constants.dart';
+import 'package:app/structures/models/notificationModel.dart' as my_not_model;
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/appDb.dart';
-import 'package:app/constants.dart';
-import 'package:app/models/notificationModel.dart' as my_not_model;
 
 // https://github.com/rafaelsetragni/awesome_notifications/blob/master/example/lib/utils/notification_util.dart
 

@@ -1,7 +1,7 @@
 import 'package:app/tools/app/appCache.dart';
 
-class LifeCycleApplication {
-  LifeCycleApplication._();
+class ApplicationLifeCycle {
+  ApplicationLifeCycle._();
 
   static void onPause() async {
     if(!AppCache.timeoutCache.addTimeout('onPause', const Duration(seconds: 5))) {

@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:chewie/chewie.dart';
 import 'package:go_router/go_router.dart';
 import 'package:video_player/video_player.dart';
+import 'package:wakelock/wakelock.dart';
 
-import 'package:app/models/abstract/stateBase.dart';
+import 'package:app/structures/abstract/stateBase.dart';
 import 'package:app/system/enums.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/views/homeComponents/appBarBuilder.dart';
-import 'package:wakelock/wakelock.dart';
 
 class VideoPlayerPageInjectData {
   late VideoSourceType videoSourceType;

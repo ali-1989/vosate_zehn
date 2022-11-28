@@ -8,9 +8,9 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:app/constants.dart';
 import 'package:app/managers/settingsManager.dart';
-import 'package:app/models/mixin/dateFieldMixin.dart';
-import 'package:app/models/userModel.dart';
 import 'package:app/services/firebase_service.dart';
+import 'package:app/structures/mixin/dateFieldMixin.dart';
+import 'package:app/structures/models/userModel.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/session.dart';
 import 'package:app/tools/app/appRoute.dart';
@@ -32,7 +32,7 @@ class PublicAccess {
   );
 
   static Map addLanguageIso(Map src, [BuildContext? ctx]) {
-    src[Keys.languageIso] = System.getLocalizationsLanguageCode(ctx ?? AppRoute.getLastContext());
+    src[Keys.languageIso] = System.getLocalizationsLanguageCode(ctx ?? AppRoute.getLastContext()!);
 
     return src;
   }
@@ -113,7 +113,7 @@ class PublicAccess {
     heart[Keys.deviceId] = DeviceInfoTools.deviceId;
 
     if(AppRoute.materialContext != null) {
-      heart[Keys.languageIso] = System.getLocalizationsLanguageCode(AppRoute.getContext()!);
+      heart[Keys.languageIso] = System.getLocalizationsLanguageCode(AppRoute.getLastContext()!);
     }
     else {
       heart[Keys.languageIso] = SettingsManager.settingsModel.appLocale.languageCode;

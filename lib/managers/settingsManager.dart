@@ -4,7 +4,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import 'package:app/models/settingsModel.dart';
+import 'package:app/structures/models/settingsModel.dart';
 import 'package:app/tools/app/appDb.dart';
 import '/system/keys.dart';
 

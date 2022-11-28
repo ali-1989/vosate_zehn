@@ -1,19 +1,21 @@
 import 'dart:ui';
 
-import 'package:app/system/initialize.dart';
-import 'package:app/system/publicAccess.dart';
 import 'package:flutter/services.dart';
 
+import 'package:iris_tools/api/system.dart';
 
-class JavaCallService {
-  static MethodChannel? javaChannel;
+import 'package:app/system/initialize.dart';
+import 'package:app/system/publicAccess.dart';
 
-  JavaCallService._();
+class NativeCallService {
+  static MethodChannel? nativeChannel;
+
+  NativeCallService._();
 
   static void init() async {
-    if(javaChannel == null) {
-      javaChannel = MethodChannel('my_channel');
-      javaChannel!.setMethodCallHandler(methodCallHandler);
+    if(nativeChannel == null) {
+      nativeChannel = MethodChannel('my_channel');
+      nativeChannel!.setMethodCallHandler(methodCallHandler);
     }
 
     setBootCallbackHandler();
@@ -29,12 +31,12 @@ class JavaCallService {
   }
 
   static Future<T?> invokeMethod<T>(String method, {Map? data}) async {
-    if(javaChannel == null){
+    if(nativeChannel == null){
       init();
     }
 
     try {
-      return javaChannel?.invokeMethod<T>(method, data);
+      return nativeChannel?.invokeMethod<T>(method, data);
     }
     catch (e){
       return null;

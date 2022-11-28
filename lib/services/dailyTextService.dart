@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:iris_tools/dateSection/dateHelper.dart';
 
-import 'package:app/models/dailyTextModel.dart';
+import 'package:app/structures/models/dailyTextModel.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/requester.dart';
 import 'package:app/system/session.dart';

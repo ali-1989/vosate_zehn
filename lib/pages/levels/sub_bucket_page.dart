@@ -7,14 +7,14 @@ import 'package:iris_tools/widgets/irisImageView.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:app/managers/mediaManager.dart';
-import 'package:app/models/abstract/stateBase.dart';
-import 'package:app/models/bucketModel.dart';
-import 'package:app/models/subBuketModel.dart';
 import 'package:app/pages/levels/audio_player_page.dart';
 import 'package:app/pages/levels/content_view_page.dart';
 import 'package:app/pages/levels/video_player_page.dart';
 import 'package:app/services/favoriteService.dart';
 import 'package:app/services/lastSeenService.dart';
+import 'package:app/structures/abstract/stateBase.dart';
+import 'package:app/structures/models/bucketModel.dart';
+import 'package:app/structures/models/subBuketModel.dart';
 import 'package:app/system/enums.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';

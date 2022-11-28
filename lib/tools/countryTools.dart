@@ -1,7 +1,7 @@
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
 import 'package:iris_tools/api/managers/assetManager.dart';
 
-import 'package:app/models/countryModel.dart';
+import 'package:app/structures/models/countryModel.dart';
 import 'package:app/tools/app/appCache.dart';
 import '/system/extensions.dart';
 

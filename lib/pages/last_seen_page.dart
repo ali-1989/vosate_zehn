@@ -5,13 +5,13 @@ import 'package:iris_tools/api/duration/durationFormater.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:iris_tools/widgets/irisImageView.dart';
 
-import 'package:app/models/abstract/stateBase.dart';
-import 'package:app/models/subBuketModel.dart';
 import 'package:app/pages/levels/audio_player_page.dart';
 import 'package:app/pages/levels/content_view_page.dart';
 import 'package:app/pages/levels/video_player_page.dart';
 import 'package:app/services/favoriteService.dart';
 import 'package:app/services/lastSeenService.dart';
+import 'package:app/structures/abstract/stateBase.dart';
+import 'package:app/structures/models/subBuketModel.dart';
 import 'package:app/system/enums.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/tools/app/appDirectories.dart';
@@ -21,7 +21,7 @@ import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/app/appToast.dart';
-import 'package:app/views/homeComponents/AppBarBuilder.dart';
+import 'package:app/views/homeComponents/appBarBuilder.dart';
 import 'package:app/views/states/waitToLoad.dart';
 
 class LastSeenPage extends StatefulWidget {

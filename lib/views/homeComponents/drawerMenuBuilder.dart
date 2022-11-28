@@ -9,7 +9,6 @@ import 'package:iris_tools/modules/stateManagers/notifyRefresh.dart';
 import 'package:iris_tools/modules/stateManagers/refresh.dart';
 import 'package:share_extend/share_extend.dart';
 
-import 'package:app/models/userModel.dart';
 import 'package:app/pages/about_us_page.dart';
 import 'package:app/pages/contact_us_page.dart';
 import 'package:app/pages/favorites_page.dart';
@@ -17,7 +16,8 @@ import 'package:app/pages/last_seen_page.dart';
 import 'package:app/pages/profile/profile_page.dart';
 import 'package:app/pages/sentences_page.dart';
 import 'package:app/services/aidService.dart';
-import 'package:app/services/downloadUpload.dart';
+import 'package:app/services/download_upload_service.dart';
+import 'package:app/structures/models/userModel.dart';
 import 'package:app/system/enums.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/session.dart';
@@ -186,12 +186,12 @@ class DrawerMenuBuilder {
 
   static void gotoFavoritesPage(){
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    AppRoute.pushNamed(AppRoute.getContext()!, FavoritesPage.route.name!);
+    AppRoute.pushNamed(AppRoute.getLastContext()!, FavoritesPage.route.name!);
   }
 
   static void gotoLastSeenPage(){
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    AppRoute.pushNamed(AppRoute.getContext()!, LastSeenPage.route.name!);
+    AppRoute.pushNamed(AppRoute.getLastContext()!, LastSeenPage.route.name!);
   }
 
   static void gotoAidPage(){
@@ -200,22 +200,22 @@ class DrawerMenuBuilder {
 
   static void gotoContactUsPage(){
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    AppRoute.pushNamed(AppRoute.getContext()!, ContactUsPage.route.name!);
+    AppRoute.pushNamed(AppRoute.getLastContext()!, ContactUsPage.route.name!);
   }
 
   static void gotoSentencePage(){
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    AppRoute.pushNamed(AppRoute.getContext()!, SentencesPage.route.name!);
+    AppRoute.pushNamed(AppRoute.getLastContext()!, SentencesPage.route.name!);
   }
 
   static void gotoAboutUsPage(){
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    AppRoute.pushNamed(AppRoute.getContext()!, AboutUsPage.route.name!);
+    AppRoute.pushNamed(AppRoute.getLastContext()!, AboutUsPage.route.name!);
   }
 
   static void gotoProfilePage(){
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    AppRoute.pushNamed(AppRoute.getContext()!, ProfilePage.route.name!);
+    AppRoute.pushNamed(AppRoute.getLastContext()!, ProfilePage.route.name!);
   }
 
   static void onLogoffCall(){
@@ -224,7 +224,7 @@ class DrawerMenuBuilder {
     }
 
     AppDialogIris.instance.showYesNoDialog(
-      AppRoute.getContext()!,
+      AppRoute.getLastContext()!,
       desc: AppMessages.doYouWantLogoutYourAccount,
       dismissOnButtons: true,
       yesText: AppMessages.yes,

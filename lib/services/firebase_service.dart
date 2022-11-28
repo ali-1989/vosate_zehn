@@ -1,13 +1,13 @@
-import 'package:app/system/initialize.dart';
-import 'package:app/system/keys.dart';
-import 'package:app/system/publicAccess.dart';
-import 'package:app/tools/app/appDb.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:iris_tools/dateSection/ADateStructure.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
 
 import 'package:app/managers/settingsManager.dart';
+import 'package:app/system/initialize.dart';
+import 'package:app/system/keys.dart';
+import 'package:app/system/publicAccess.dart';
+import 'package:app/tools/app/appDb.dart';
 import 'package:app/tools/app/appNotification.dart';
 
 Future<void> _fbMessagingBackgroundHandler(RemoteMessage message) async {

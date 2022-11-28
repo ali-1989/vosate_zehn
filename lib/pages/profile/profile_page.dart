@@ -22,8 +22,8 @@ import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:iris_tools/modules/stateManagers/notifyRefresh.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import 'package:app/models/abstract/stateBase.dart';
-import 'package:app/models/userModel.dart';
+import 'package:app/structures/abstract/stateBase.dart';
+import 'package:app/structures/models/userModel.dart';
 import 'package:app/system/enums.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
@@ -43,10 +43,10 @@ import 'package:app/tools/app/appSnack.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/app/appToast.dart';
 import 'package:app/tools/permissionTools.dart';
-import 'package:app/views/homeComponents/AppBarBuilder.dart';
 import 'package:app/views/components/changeNameFamilyView.dart';
 import 'package:app/views/components/dateViews/selectDateCalendarView.dart';
 import 'package:app/views/components/selectGenderView.dart';
+import 'package:app/views/homeComponents/appBarBuilder.dart';
 
 class ProfilePage extends StatefulWidget {
   static final route = GoRoute(
@@ -280,16 +280,18 @@ class _ProfilePageState extends StateBase<ProfilePage> {
   void changeBirthdateClick() async {
     await AppSheet.showSheetCustom(
         context,
-        SelectDateCalendarView(
-          minYearAsGregorian: 1922,
-          maxYearAsGregorian: 2020,
-          title: 'تاریخ تولد',
-          currentDate: user.birthDate,
-          onSelect: (dt){
-            AppRoute.popTopView(context);
-            uploadBirthdate(dt);
-          },
-        ),
+        builder: (_){
+          return SelectDateCalendarView(
+            minYearAsGregorian: 1922,
+            maxYearAsGregorian: 2020,
+            title: 'تاریخ تولد',
+            currentDate: user.birthDate,
+            onSelect: (dt){
+              AppRoute.popTopView(context);
+              uploadBirthdate(dt);
+            },
+          );
+        },
         routeName: 'changeBirthdate'
     );
   }
@@ -297,14 +299,16 @@ class _ProfilePageState extends StateBase<ProfilePage> {
   void changeGenderClick() async {
     await AppSheet.showSheetCustom(
         context,
-        SelectGenderView(
-          title: 'جنسیت',
-          genderType: user.sex == 1? GenderType.man: (user.sex == 2 ? GenderType.woman: GenderType.other),
-          onSelect: (gender){
-            AppRoute.popTopView(context);
-            uploadGender(gender == GenderType.man? 1: 2);
-          },
-        ),
+        builder: (_){
+          return SelectGenderView(
+            title: 'جنسیت',
+            genderType: user.sex == 1? GenderType.man: (user.sex == 2 ? GenderType.woman: GenderType.other),
+            onSelect: (gender){
+              AppRoute.popTopView(context);
+              uploadGender(gender == GenderType.man? 1: 2);
+            },
+          );
+        },
         routeName: 'changeGender',
     );
   }

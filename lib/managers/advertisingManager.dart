@@ -7,7 +7,7 @@ import 'package:iris_db/iris_db.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
 
 import 'package:app/managers/mediaManager.dart';
-import 'package:app/models/advModel.dart';
+import 'package:app/structures/models/advModel.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/requester.dart';
 import 'package:app/tools/app/appBroadcast.dart';

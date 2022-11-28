@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
 import 'package:iris_tools/models/dataModels/mediaModel.dart';
 
-import 'package:app/models/mixin/dateFieldMixin.dart';
+import 'package:app/structures/mixin/dateFieldMixin.dart';
 import 'package:app/system/enums.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/appIcons.dart';

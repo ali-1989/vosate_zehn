@@ -1,14 +1,13 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:app/tools/app/appNotification.dart';
-import 'package:app/tools/app/appRoute.dart';
 import 'package:flutter/material.dart';
+
 import 'package:getsocket/getsocket.dart';
 import 'package:iris_tools/api/checker.dart';
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
 
-import 'package:app/models/settingsModel.dart';
+import 'package:app/structures/models/settingsModel.dart';
 import 'package:app/system/httpCodes.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/publicAccess.dart';
@@ -17,6 +16,8 @@ import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appDb.dart';
 import 'package:app/tools/app/appDialogIris.dart';
 import 'package:app/tools/app/appMessages.dart';
+import 'package:app/tools/app/appNotification.dart';
+import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/deviceInfoTools.dart';
 import 'package:app/tools/netListenerTools.dart';
 import 'package:app/tools/userLoginTools.dart';
@@ -232,7 +233,7 @@ class WebsocketService {
 
 		if(!ids.contains(messageId)) {
 			if(AppRoute.materialContext != null) {
-				_promptDialog(AppRoute.getContext()!, message);
+				_promptDialog(AppRoute.getLastContext()!, message);
 				AppDB.addToList(Keys.setting$userMessageIds, messageId);
 			}
 		}

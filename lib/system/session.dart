@@ -2,7 +2,7 @@ import 'package:iris_db/iris_db.dart';
 import 'package:iris_tools/api/checker.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
 
-import 'package:app/models/userModel.dart';
+import 'package:app/structures/models/userModel.dart';
 import 'package:app/tools/app/appDb.dart';
 import 'package:app/tools/app/appLocale.dart';
 import '/managers/settingsManager.dart';

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:app/models/appParameterModel.dart';
+import 'package:app/structures/models/appParameterModel.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/requester.dart';
 

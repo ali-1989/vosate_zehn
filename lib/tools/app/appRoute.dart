@@ -17,11 +17,11 @@ import 'package:app/pages/levels/sub_bucket_page.dart';
 import 'package:app/pages/levels/video_player_page.dart';
 import 'package:app/pages/login/login_page.dart';
 import 'package:app/pages/login/register_page.dart';
+import 'package:app/pages/pay_web_page.dart';
 import 'package:app/pages/profile/profile_page.dart';
 import 'package:app/pages/search_page.dart';
 import 'package:app/pages/sentences_page.dart';
 import 'package:app/pages/term_page.dart';
-import 'package:app/pages/pay_web_page.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/session.dart';
 import 'package:app/tools/app/appDb.dart';
@@ -29,27 +29,26 @@ import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/app/appNavigator.dart';
 
 class AppRoute {
-  static final List<GoRoute> freeRoutes = [];
+  static final List<GoRoute> _webFreeRoutes = [];
+  static BuildContext? materialContext;
 
   AppRoute._();
 
-  static late BuildContext materialContext;
-
   static void init() {
-    freeRoutes.add(LoginPage.route);
-    freeRoutes.add(RegisterPage.route);
-    freeRoutes.add(TermPage.route);
-    freeRoutes.add(AboutUsPage.route);
+    _webFreeRoutes.add(LoginPage.route);
+    _webFreeRoutes.add(RegisterPage.route);
+    _webFreeRoutes.add(TermPage.route);
+    _webFreeRoutes.add(AboutUsPage.route);
   }
 
-  static BuildContext getLastContext() {
+  static BuildContext? getLastContext() {
     var res = WidgetsBinding.instance.focusManager.rootScope.focusedChild?.context;//deep: 50
     res ??= WidgetsBinding.instance.focusManager.primaryFocus?.context; //deep: 71
 
     return res?? getBaseContext();
   }
 
-  static BuildContext getBaseContext() {
+  static BuildContext? getBaseContext() {
     return materialContext;
   }
 
@@ -70,7 +69,7 @@ class AppRoute {
   }*/
 
   static void backRoute() {
-    final lastCtx = AppNavigator.getLastRouteContext(getLastContext());
+    final lastCtx = AppNavigator.getLastRouteContext(getLastContext()!);
     AppNavigator.backRoute(lastCtx);
   }
 
@@ -185,7 +184,7 @@ String? _mainRedirect(GoRouterState state){
   }
 
   if(!Session.hasAnyLogin()){
-    if(AppRoute.freeRoutes.any((r) => checkFreeRoute(r, state))){
+    if(AppRoute._webFreeRoutes.any((r) => checkFreeRoute(r, state))){
       return null;
     }
     else {

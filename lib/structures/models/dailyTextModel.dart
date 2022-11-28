@@ -1,6 +1,6 @@
 import 'package:iris_tools/dateSection/dateHelper.dart';
 
-import 'package:app/models/mixin/dateFieldMixin.dart';
+import 'package:app/structures/mixin/dateFieldMixin.dart';
 import 'package:app/system/keys.dart';
 
 class DailyTextModel with DateFieldMixin {

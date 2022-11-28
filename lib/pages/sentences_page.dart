@@ -11,8 +11,8 @@ import 'package:iris_tools/modules/stateManagers/selfRefresh.dart';
 import 'package:iris_tools/widgets/optionsRow/checkRow.dart';
 
 import 'package:app/managers/settingsManager.dart';
-import 'package:app/models/abstract/stateBase.dart';
-import 'package:app/models/dailyTextModel.dart';
+import 'package:app/structures/abstract/stateBase.dart';
+import 'package:app/structures/models/dailyTextModel.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/publicAccess.dart';

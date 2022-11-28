@@ -1,8 +1,8 @@
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
 
 import 'package:app/managers/settingsManager.dart';
-import 'package:app/models/userModel.dart';
 import 'package:app/pages/login/login_page.dart';
+import 'package:app/structures/models/userModel.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/publicAccess.dart';
 import 'package:app/system/session.dart';
@@ -51,10 +51,10 @@ class UserLoginTools {
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
 
     if (isCurrent && AppRoute.materialContext != null) {
-      AppRoute.backToRoot(AppRoute.getLastContext());
+      AppRoute.backToRoot(AppRoute.getLastContext()!);
 
       Future.delayed(Duration(milliseconds: 400), (){
-        AppRoute.replaceNamed(AppRoute.getContext()!, LoginPage.route.name!);
+        AppRoute.replaceNamed(AppRoute.getLastContext()!, LoginPage.route.name!);
       });
     }
   }
@@ -66,7 +66,7 @@ class UserLoginTools {
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
 
     if (AppRoute.materialContext != null) {
-      AppRoute.backToRoot(AppRoute.getContext()!);
+      AppRoute.backToRoot(AppRoute.getLastContext()!);
     }
   }
 }

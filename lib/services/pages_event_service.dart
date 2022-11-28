@@ -1,41 +1,43 @@
 
-class PagesEventBus {
-  PagesEventBus._();
+typedef EventCaller = void Function(dynamic param);
+///-----------------------------------------------------------------
+class PagesEventService {
+  PagesEventService._();
 
   static final List<EventBus> _events = [];
 
-  static EventBus getEventBus(String id){
-    final idx = _events.indexWhere((element) => element.id == id);
+  static EventBus getEventBus(String pageId){
+    final idx = _events.indexWhere((element) => element.id == pageId);
 
     if(idx > -1){
       return _events[idx];
     }
 
-    final e = EventBus._()..id = id;
+    final e = EventBus._()..id = pageId;
     _events.add(e);
 
     return e;
   }
 
-  static void removeFor(String id){
-    _events.removeWhere((element) => element.id == id);
+  static void removeFor(String pageId){
+    _events.removeWhere((element) => element.id == pageId);
   }
 }
 ///===============================================================================
 class EventBus {
   late final String id;
-  final List<_Event> _events = [];
+  final List<Event> _events = [];
 
   EventBus._();
 
-  void addEvent(String name, void Function(dynamic param) event){
-    if(exist(name)){
-      _get(name)!.event = event;
+  void addEvent(String eventName, EventCaller event){
+    if(exist(eventName)){
+      _get(eventName)!.event = event;
       return;
     }
 
-    final e = _Event();
-    e.name = name;
+    final e = Event();
+    e.name = eventName;
     e.event = event;
 
     _events.add(e);
@@ -49,7 +51,7 @@ class EventBus {
     return _events.indexWhere((element) => element.name == name) > -1;
   }
 
-  _Event? _get(String name){
+  Event? _get(String name){
     final idx = _events.indexWhere((element) => element.name == name);
 
     if(idx > -1){
@@ -59,15 +61,15 @@ class EventBus {
     return null;
   }
 
-  void callEvent(String name, dynamic data){
+  void callEvent(String name, dynamic parameters){
     try {
-      _get(name)?.event.call(data);
+      _get(name)?.event.call(parameters);
     }
     catch (e){/**/}
   }
 }
 ///===============================================================================
-class _Event {
+class Event {
   late String name;
-  late void Function(dynamic param) event;
+  late EventCaller event;
 }
