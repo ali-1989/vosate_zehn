@@ -469,15 +469,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.3.2"
-  getsocket:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "37e88746a17b88974369024b65512f0f4dcea454"
-      url: "https://github.com/ali-1989/GetSocket.git"
-    source: git
-    version: "1.2.0"
   glowstone:
     dependency: "direct main"
     description:
@@ -666,6 +657,15 @@ packages:
       url: "https://github.com/ali-1989/IrisTools.git"
     source: git
     version: "0.0.21"
+  iris_websocket:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: "24ec651b5eb9f52692f2145f930e58bf76107cb4"
+      url: "https://github.com/ali-1989/IrisWebSocket.git"
+    source: git
+    version: "1.2.1"
   jiffy:
     dependency: transitive
     description:

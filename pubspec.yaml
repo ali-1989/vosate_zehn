@@ -81,8 +81,8 @@ dependencies:
     git: https://github.com/ali-1989/IrisDB.git
   iris_download_manager:
     git: https://github.com/ali-1989/IrisDownloadManager.git
-  getsocket:
-    git: https://github.com/ali-1989/GetSocket.git
+  iris_websocket:
+    git: https://github.com/ali-1989/IrisWebSocket.git
   iris_pic_editor:
     path: ../#FlutterPackages/IrisPicEditor
 
