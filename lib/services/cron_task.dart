@@ -3,12 +3,12 @@ import 'package:workmanager/workmanager.dart';
 import 'package:app/constants.dart';
 import 'package:app/services/firebase_service.dart';
 import 'package:app/services/native_call_service.dart';
-import 'package:app/system/initialize.dart';
+import 'package:app/system/applicationInitialize.dart';
 import 'package:app/system/publicAccess.dart';
 
 ///--------------------------------------------------------------------------------------------
 Future<bool> _callbackWorkManager(task, inputData) async {
-  await InitialApplication.importantInit();
+  await ApplicationInitial.prepareDirectoriesAndLogger();
   //await PublicAccess.logger.logToAll('@@@@@@@-@@@@@');//todo
   var isAppRun = false;
 
@@ -24,8 +24,8 @@ Future<bool> _callbackWorkManager(task, inputData) async {
 
   //await PublicAccess.logger.logToAll('@@@@@@@@@ app was closed'); //todo
   try {
-    await InitialApplication.launchUpInit();
-    await InitialApplication.appLazyInit();
+    await ApplicationInitial.inSplashInit();
+    await ApplicationInitial.appLazyInit();
 
     /*switch (task) {
       case Workmanager.iOSBackgroundTask:

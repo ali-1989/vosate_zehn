@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 
 import 'package:iris_tools/api/system.dart';
 
-import 'package:app/system/initialize.dart';
+import 'package:app/system/applicationInitialize.dart';
 import 'package:app/system/publicAccess.dart';
 
 class NativeCallService {
@@ -47,7 +47,7 @@ class NativeCallService {
 @pragma('vm:entry-point')
 void bootCallbackHandler() async {
   try {
-    await InitialApplication.importantInit();
+    await ApplicationInitial.prepareDirectoriesAndLogger();
     await PublicAccess.logger.logToAll('--->> appJavaCallback call ---');//todo
     /*
     DartPluginRegistrant.ensureInitialized(); //must not calling in root isolate

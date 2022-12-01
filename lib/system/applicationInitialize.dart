@@ -39,11 +39,11 @@ import 'package:app/tools/deviceInfoTools.dart';
 import 'package:app/tools/netListenerTools.dart';
 import 'package:app/tools/userLoginTools.dart';
 
-class InitialApplication {
-  InitialApplication._();
+class ApplicationInitial {
+  ApplicationInitial._();
 
   static bool _importantInit = false;
-  static bool _callLaunchUpInit = false;
+  static bool _callInSplashInit = false;
   static bool _isInitialOk = false;
   static bool _callLazyInit = false;
 
@@ -51,35 +51,35 @@ class InitialApplication {
     return _isInitialOk;
   }
 
-  static Future<bool> importantInit() async {
+  static Future<bool> prepareDirectoriesAndLogger() async {
     if (_importantInit) {
       return true;
     }
 
     try {
+      _importantInit = true;
       await AppDirectories.prepareStoragePaths(Constants.appName);
-
       PublicAccess.logger = Logger('${AppDirectories.getTempDir$ex()}/logs');
 
       if (!kIsWeb) {
         PublicAccess.reporter = Reporter(AppDirectories.getAppFolderInExternalStorage(), 'report');
       }
 
-      _importantInit = true;
       return true;
     }
     catch (e){
+      _importantInit = false;
       return false;
     }
   }
 
-  static Future<void> launchUpInit() async {
-    if (_callLaunchUpInit) {
+  static Future<void> inSplashInit() async {
+    if (_callInSplashInit) {
       return;
     }
 
     try {
-      _callLaunchUpInit = true;
+      _callInSplashInit = true;
       await AppDB.init();
       AppThemes.initial();
       TrustSsl.acceptBadCertificate();
@@ -101,7 +101,7 @@ class InitialApplication {
     return;
   }
 
-  static Future<void> launchUpInitWithContext(BuildContext context) async {
+  static Future<void> inSplashInitWithContext(BuildContext context) async {
     AppRoute.init();
     AppCache.screenBack = const AssetImage(AppImages.background);
     await precacheImage(AppCache.screenBack!, context);
@@ -140,22 +140,13 @@ class InitialApplication {
       WebsocketService.prepareWebSocket(SettingsManager.settingsModel.wsAddress);
       //await PublicAccess.logger.logToAll('@@@@@@@ prepared WebSocket'); //todo
       /// life cycle
-      final eventListener = AppEventListener();
-      eventListener.addResumeListener(ApplicationLifeCycle.onResume);
-      eventListener.addPauseListener(ApplicationLifeCycle.onPause);
-      eventListener.addDetachListener(ApplicationLifeCycle.onDetach);
-      WidgetsBinding.instance.addObserver(eventListener);
+      ApplicationLifeCycle.init();
 
       /// downloader
-      DownloadUploadService.downloadManager = DownloadManager('${Constants.appName}DownloadManager');
-      DownloadUploadService.uploadManager = UploadManager('${Constants.appName}UploadManager');
-      DownloadUploadService.downloadManager.addListener(DownloadUploadService.commonDownloadListener);
-      DownloadUploadService.uploadManager.addListener(DownloadUploadService.commonUploadListener);
+      DownloadUploadService.init();
 
       /// login & logoff
-      Session.addLoginListener(UserLoginTools.onLogin);
-      Session.addLogoffListener(UserLoginTools.onLogoff);
-      Session.addProfileChangeListener(UserLoginTools.onProfileChange);
+      UserLoginTools.init();
 
       if (System.isWeb()) {
         void onSizeCheng(oldW, oldH, newW, newH) {

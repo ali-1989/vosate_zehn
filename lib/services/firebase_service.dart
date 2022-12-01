@@ -4,7 +4,7 @@ import 'package:iris_tools/dateSection/ADateStructure.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
 
 import 'package:app/managers/settingsManager.dart';
-import 'package:app/system/initialize.dart';
+import 'package:app/system/applicationInitialize.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/publicAccess.dart';
 import 'package:app/tools/app/appDb.dart';
@@ -15,9 +15,9 @@ Future<void> _fbMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 Future<void> _sendNotification(RemoteMessage message) async {
-  await InitialApplication.importantInit();
+  await ApplicationInitial.prepareDirectoriesAndLogger();
   //await PublicAccess.logger.logToAll('---> Notification  --- ${message.notification?.body}');//todo
-  await InitialApplication.launchUpInit();
+  await ApplicationInitial.inSplashInit();
 
   int? id;
 

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app/tools/app/appThemes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/helpers/urlHelper.dart';
@@ -21,6 +22,7 @@ class VersionManager {
     SettingsManager.settingsModel.currentVersion = Constants.appVersionCode;
 
     await AppDB.firstLaunch();
+    AppThemes.prepareFonts(SettingsManager.settingsModel.appLocale.languageCode);
     SettingsManager.saveSettings();
   }
 

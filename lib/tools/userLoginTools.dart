@@ -13,6 +13,12 @@ import 'package:app/tools/app/appRoute.dart';
 class UserLoginTools {
   UserLoginTools._();
 
+  static void init(){
+    Session.addLoginListener(UserLoginTools.onLogin);
+    Session.addLogoffListener(UserLoginTools.onLogoff);
+    Session.addProfileChangeListener(UserLoginTools.onProfileChange);
+  }
+
   static void onLogin(UserModel user){
   }
 

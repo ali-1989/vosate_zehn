@@ -12,7 +12,7 @@ import 'package:app/managers/settingsManager.dart';
 import 'package:app/pages/splash_page.dart';
 import 'package:app/services/native_call_service.dart';
 import 'package:app/structures/models/settingsModel.dart';
-import 'package:app/system/initialize.dart';
+import 'package:app/system/applicationInitialize.dart';
 import 'package:app/system/publicAccess.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appLocale.dart';
@@ -23,7 +23,7 @@ import 'package:app/tools/app/appToast.dart';
 ///================ call on any hot restart
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final initOk = await InitialApplication.importantInit();
+  final initOk = await ApplicationInitial.prepareDirectoriesAndLogger();
 
   if(!initOk){
     runApp(const MyErrorApp());
@@ -69,6 +69,25 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     AppRoute.materialContext = context;
 
+    /// this need for web
+    if(!ApplicationInitial.isInit() && kIsWeb){
+      return MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        routeInformationProvider: mainRouter.routeInformationProvider,
+        routeInformationParser: mainRouter.routeInformationParser,
+        routerDelegate: mainRouter.routerDelegate,
+        theme: AppThemes.instance.themeData,
+        themeMode: AppThemes.instance.currentThemeMode,
+        //home: materialHomeBuilder(null),
+        builder: (subContext, home) {
+          return Directionality(
+              textDirection: AppThemes.instance.textDirection,
+              child: materialHomeBuilder(home)
+          );
+        },
+      );
+    }
+
     return MaterialApp.router(
       key: AppBroadcast.materialAppKey,
       //navigatorKey: AppBroadcast.rootNavigatorKey,
@@ -91,16 +110,21 @@ class MyApp extends StatelessWidget {
       ),
       localizationsDelegates: AppLocale.getLocaleDelegates(),
       supportedLocales: AppLocale.getAssetSupportedLocales(),
-      locale: InitialApplication.isInit()? SettingsManager.settingsModel.appLocale : SettingsModel.defaultAppLocale,
+      locale: ApplicationInitial.isInit()? SettingsManager.settingsModel.appLocale : SettingsModel.defaultAppLocale,
       /*localeResolutionCallback: (deviceLocale, supportedLocales) {
             return SettingsManager.settingsModel.appLocale;
           },*/
-      //home: materialHomeBuilder(),
-      builder: (subContext, home) {
-        AppRoute.materialContext = subContext;
-        return Directionality(
-            textDirection: AppThemes.instance.textDirection,
-            child: materialHomeBuilder(home)
+      //home: materialHomeBuilder(null),
+      builder: (localContext, home) {
+        AppRoute.materialContext = localContext;
+
+        return DefaultTextStyle(
+          style: AppThemes.instance.themeData.textTheme.bodyText1?? TextStyle(),
+          child: Directionality(
+              textDirection: AppThemes.instance.textDirection,
+              child: home! //materialHomeBuilder(home)
+              //child: DevicePreview.appBuilder(subContext, home)
+          ),
         );
       },
     );
@@ -108,13 +132,12 @@ class MyApp extends StatelessWidget {
 
   Widget materialHomeBuilder(Widget? firstPage){
     return Builder(
-      builder: (subContext){
-        AppRoute.materialContext = subContext;
-        final mediaQueryData = MediaQuery.of(subContext);
+      builder: (localContext){
+        AppRoute.materialContext = localContext;
 
         /// detect orientation change and rotate screen
         return MediaQuery(
-          data: mediaQueryData.copyWith(textScaleFactor: 1.0),
+          data: MediaQuery.of(localContext).copyWith(textScaleFactor: 1.0),
           child: OrientationBuilder(builder: (context, orientation) {
             testCodes(context);
 
@@ -156,7 +179,7 @@ void onErrorCatch(FlutterErrorDetails errorDetails) {
     txt += '\n STACK TRACE:: ${errorDetails.stack}';
   }
 
-  txt += '\n========================================== [END CATCH]';
+  txt += '\n**************************************** [END CATCH]';
 
   PublicAccess.logger.logToAll(txt);
 }
@@ -168,7 +191,7 @@ void zonedGuardedCatch(error, sTrace) {
     txt += '\n STACK TRACE:: $sTrace';
   }
 
-  txt += '\n========================================== [END ZONED-GUARDED]';
+  txt += '\n**************************************** [END ZONED-GUARDED]';
   PublicAccess.logger.logToAll(txt);
 
   if(kDebugMode) {

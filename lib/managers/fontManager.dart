@@ -12,7 +12,7 @@ class FontManager {
 
   static late final FontManager _instance;
 
-  static final List<Font> _list = [];
+  static final List<Font> _fontList = [];
   static late Font _platformDefaultFont;
   static late final TextTheme _rawTextTheme;
   static late final ThemeData _rawThemeData;
@@ -38,13 +38,18 @@ class FontManager {
   TextTheme get rawTextTheme => _rawTextTheme;
 
   String getPlatformFontFamily(){
-    BuildContext? context = WidgetsBinding.instance.focusManager.primaryFocus?.context;
-    context ??= WidgetsBinding.instance.focusManager.rootScope.focusedChild?.context;
-    context ??= WidgetsBinding.instance.focusManager.rootScope.context;
+    BuildContext? context;
 
-    String? def = getPlatformFontFamilyOf(context!);
+    try{
+      context = WidgetsBinding.instance.focusManager.primaryFocus?.context;
+      context ??= WidgetsBinding.instance.focusManager.rootScope.focusedChild?.context;
+      context ??= WidgetsBinding.instance.focusManager.rootScope.context;
 
-    return def?? (kIsWeb? 'Segoe UI' : 'Roboto'); // monospace
+      return getPlatformFontFamilyOf(context!)!;
+    }
+    catch (e){/**/}
+
+    return (kIsWeb? 'Segoe UI' : 'Roboto'); // monospace
   }
 
   String? getPlatformFontFamilyOf(BuildContext context){
@@ -58,7 +63,7 @@ class FontManager {
   List<Font> fontListFor(String language, FontUsage usage, bool onlyDefault) {
     final result = <Font>[];
     
-    for(final fon in _list){
+    for(final fon in _fontList){
       var matchLanguage = fon.defaultLanguage == language;
       var matchUsage = fon.defaultUsage == usage;
 
@@ -78,9 +83,9 @@ class FontManager {
     return result;
   }
 
-  // defaultFontFor(Settings.appLocale.languageCode, 'sub');
+  // defaultFontFor(Settings.appLocale.languageCode, FontUsage.sub);
   Font defaultFontFor(String language, FontUsage usage) {
-    for(final fon in _list){
+    for(final fon in _fontList){
       final matchLanguage = fon.defaultLanguage == language;
       final matchUsage = fon.defaultUsage == usage;
 
@@ -92,6 +97,10 @@ class FontManager {
     return _platformDefaultFont.clone();
   }
 
+  String defaultFontFamilyFor(String language, FontUsage usage) {
+    return defaultFontFor(language, usage).family!;
+  }
+
   Font getPlatformFont(){
     return _platformDefaultFont.clone();
   }
@@ -100,12 +109,16 @@ class FontManager {
     return defaultFontFor('en', FontUsage.normal);
   }
 
+  String? getEnglishFontFamily(){
+    return getEnglishFont()?.family;
+  }
+
   static void _prepareFontList() {
-    if(_list.isNotEmpty){
+    if(_fontList.isNotEmpty){
       return;
     }
 
-    // family: any-name   fileName: font name in [pubspec.yaml]
+    /// family: any-name   fileName: font name in [pubspec.yaml]
 
     /*final atlanta = Font.bySize()
         ..family = 'Atlanta'
@@ -139,24 +152,24 @@ class FontManager {
       ..usages = [FontUsage.sub, FontUsage.bold]
       ..height = 1;
 
-    _list.add(iranSans);
-    _list.add(sans);
-    _list.add(icomoon);
+    _fontList.add(iranSans);
+    _fontList.add(sans);
+    _fontList.add(icomoon);
 
     var rawDef = _getDefaultFontFamily();
 
     try {
-      final findIdx = _list.indexWhere((font) => font.family == rawDef);
+      final findIdx = _fontList.indexWhere((font) => font.family == rawDef);
 
       if (findIdx < 0) { // && rawDef != def
         _platformDefaultFont = Font.bySize()
           ..family = rawDef
           ..fileName = rawDef;
 
-        _list.add(_platformDefaultFont);
+        _fontList.add(_platformDefaultFont);
       }
       else {
-        _platformDefaultFont = _list[findIdx];
+        _platformDefaultFont = _fontList[findIdx];
       }
     }
     catch (e){/**/}
@@ -166,7 +179,7 @@ class FontManager {
     final fs = Font.getRelativeFontSize();
     final temp = ThemeData();
     const c1 = Colors.teal;
-    const c2 = Colors.blue;
+    final c2 = Colors.blue.shade700;
 
     _rawTextTheme = TextTheme(
       /// Drawer {textColor}  [emphasizing text]

@@ -1,19 +1,16 @@
 import 'dart:async';
 
+import 'package:app/views/components/splash_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-import 'package:animate_do/animate_do.dart';
-import 'package:lottie/lottie.dart';
 
 import 'package:app/managers/settingsManager.dart';
 import 'package:app/managers/versionManager.dart';
 import 'package:app/pages/layout_page.dart';
 import 'package:app/structures/abstract/stateBase.dart';
-import 'package:app/system/initialize.dart';
+import 'package:app/system/applicationInitialize.dart';
 import 'package:app/system/session.dart';
 import 'package:app/tools/app/appBroadcast.dart';
-import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appRoute.dart';
 import 'package:app/views/states/waitToLoad.dart';
 
@@ -58,37 +55,7 @@ class SplashScreenState extends StateBase<SplashPage> {
       return const WaitToLoad();
     }
 
-    return SizedBox.expand(
-      child: DecoratedBox(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(AppImages.logoSplash),
-            fit: BoxFit.fill,
-          )
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Lottie.asset(
-              AppImages.loadingLottie,
-              width: 300,
-              height: 300,
-              reverse: false,
-              animate: true,
-              fit: BoxFit.fill,
-            ),
-
-            FadeIn(
-              duration: const Duration(milliseconds: 700),
-              child: Image.asset(AppImages.appIcon,
-              width: 100,
-              height: 100,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+    return SplashScreen();
   }
   ///==================================================================================================
   Widget getFirstPage(){
@@ -107,7 +74,7 @@ class SplashScreenState extends StateBase<SplashPage> {
     if(splashWaitingMil > 0){
       Timer(Duration(milliseconds: splashWaitingMil), (){
         isInSplashTimer = false;
-        AppBroadcast.reBuildMaterial();
+        callState();
       });
 
       splashWaitingMil = 0;
@@ -121,8 +88,8 @@ class SplashScreenState extends StateBase<SplashPage> {
 
     _isInit = true;
 
-    await InitialApplication.launchUpInit();
-    await InitialApplication.launchUpInitWithContext(AppRoute.getLastContext()!);
+    await ApplicationInitial.inSplashInit();
+    await ApplicationInitial.inSplashInitWithContext(AppRoute.getLastContext()!);
     final settingsLoad = SettingsManager.loadSettings();
 
     if (settingsLoad) {
@@ -130,7 +97,7 @@ class SplashScreenState extends StateBase<SplashPage> {
       await VersionManager.checkInstallVersion();
       connectToServer();
 
-      InitialApplication.appLazyInit();
+      ApplicationInitial.appLazyInit();
       _isInLoadingSettings = false;
 
       AppBroadcast.reBuildMaterialBySetTheme();
@@ -142,7 +109,7 @@ class SplashScreenState extends StateBase<SplashPage> {
 
     if(serverData == null){
       AppSheet.showSheetOneAction(
-        AppRoute.materialContext,
+        AppRoute.materialContext!,
         AppMessages.errorCommunicatingServer, (){
         AppBroadcast.gotoSplash(2000);
         connectToServer();
@@ -153,7 +120,7 @@ class SplashScreenState extends StateBase<SplashPage> {
     }
     else {
       _isConnectToServer = true;
-      AppBroadcast.reBuildMaterial();
+      callState();
     }*/
   }
 }
