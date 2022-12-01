@@ -6,7 +6,7 @@ import 'package:iris_tools/dateSection/dateHelper.dart';
 
 import 'package:app/structures/models/dailyTextModel.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/system/requester.dart';
+import 'package:app/structures/middleWare/requester.dart';
 import 'package:app/system/session.dart';
 import 'package:app/tools/app/appDb.dart';
 import 'package:app/tools/app/appDialogIris.dart';

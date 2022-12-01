@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:app/structures/models/appParameterModel.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/system/requester.dart';
+import 'package:app/structures/middleWare/requester.dart';
 
 class AppParameterManager {
   static AppParameterModel? parameterModel;
