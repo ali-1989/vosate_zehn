@@ -122,7 +122,7 @@ class MyApp extends StatelessWidget {
           style: AppThemes.instance.themeData.textTheme.bodyText1?? TextStyle(),
           child: Directionality(
               textDirection: AppThemes.instance.textDirection,
-              child: home! //materialHomeBuilder(home)
+              child: materialHomeBuilder(home) //materialHomeBuilder(home) or home!
               //child: DevicePreview.appBuilder(subContext, home)
           ),
         );
@@ -140,7 +140,6 @@ class MyApp extends StatelessWidget {
           data: MediaQuery.of(localContext).copyWith(textScaleFactor: 1.0),
           child: OrientationBuilder(builder: (context, orientation) {
             testCodes(context);
-
             return SplashPage(firstPage: firstPage);
           }),
         );

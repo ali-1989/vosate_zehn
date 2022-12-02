@@ -71,6 +71,7 @@ class SelectDateCalendarViewState extends State<SelectDateCalendarView> {
   late int minOfYear;
   Widget? messageView;
   late TextStyle titleStyle;
+  ScrollController scrollCtr = ScrollController();
 
 
   @override
@@ -197,8 +198,10 @@ class SelectDateCalendarViewState extends State<SelectDateCalendarView> {
 
           Scrollbar(
             thumbVisibility: true,
+            controller: scrollCtr,
             child: ListView(
               shrinkWrap: true,
+              controller: scrollCtr,
               children: [
                 Visibility(
                   visible: widget.title != null,

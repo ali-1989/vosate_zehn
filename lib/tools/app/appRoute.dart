@@ -94,8 +94,8 @@ class AppRoute {
     GoRouter.of(context).pop();
   }
 
-	/*
-	static Future push(BuildContext context, Widget page, {dynamic extra}) async {
+  /*
+  static Future push(BuildContext context, Widget page, {dynamic extra}) async {
     final r = MaterialPageRoute(builder: (ctx){
       return page;
     });

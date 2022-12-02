@@ -55,6 +55,7 @@ class SelectDateTimeCalendarView extends StatefulWidget {
 }
 ///==============================================================================================
 class SelectDateTimeCalendarViewState extends State<SelectDateTimeCalendarView> {
+  ScrollController scrollCtr = ScrollController();
   late DateTime curDate;
   late ADateStructure curDateRelative;
   late int selectedYear;
@@ -175,7 +176,9 @@ class SelectDateTimeCalendarViewState extends State<SelectDateTimeCalendarView> 
 
           Scrollbar(
             thumbVisibility: true,
+            controller: scrollCtr,
             child: ListView(
+              controller: scrollCtr,
               shrinkWrap: true,
               children: [
                 Visibility(

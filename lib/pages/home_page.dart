@@ -225,6 +225,8 @@ class _HomePageState extends StateBase<HomePage> {
                   }
               ),
             ),
+
+            SizedBox(height: 20),
           ],
         );
       },
@@ -242,6 +244,7 @@ class _HomePageState extends StateBase<HomePage> {
           mainAxisSize: MainAxisSize.min,
 
           children: [
+            SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -272,6 +275,8 @@ class _HomePageState extends StateBase<HomePage> {
                   }
               ),
             ),
+
+            SizedBox(height: 20),
           ],
         );
       },
@@ -288,6 +293,8 @@ class _HomePageState extends StateBase<HomePage> {
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            SizedBox(height: 10),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -318,6 +325,8 @@ class _HomePageState extends StateBase<HomePage> {
                   }
               ),
             ),
+
+            SizedBox(height: 20),
           ],
         );
       },

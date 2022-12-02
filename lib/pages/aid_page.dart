@@ -17,6 +17,9 @@ import 'package:app/views/homeComponents/appBarBuilder.dart';
 import 'package:app/views/states/errorOccur.dart';
 import 'package:app/views/states/waitToLoad.dart';
 
+/// zone: to catch all unhandled-asynchronous-errors
+/// FlutterError.onError: to catch all unhandled-flutter-framework-errors
+
 class AidPage extends StatefulWidget {
   static final route = GoRoute(
     path: '/aid',
