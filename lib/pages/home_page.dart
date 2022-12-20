@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:iris_tools/api/duration/durationFormater.dart';
+import 'package:iris_tools/api/duration/durationFormatter.dart';
 import 'package:iris_tools/api/helpers/urlHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:iris_tools/widgets/irisImageView.dart';
@@ -15,7 +15,7 @@ import 'package:app/services/favoriteService.dart';
 import 'package:app/services/lastSeenService.dart';
 import 'package:app/structures/abstract/stateBase.dart';
 import 'package:app/structures/models/subBuketModel.dart';
-import 'package:app/system/enums.dart';
+import 'package:app/structures/enums/enums.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/structures/middleWare/requester.dart';
@@ -471,7 +471,7 @@ class _HomePageState extends StateBase<HomePage> {
       k.isFavorite = FavoriteService.isFavorite(k.id!);
     }
 
-    assistCtr.updateMain();
+    assistCtr.updateHead();
   }
 
   void moreMeditation(){
@@ -484,7 +484,7 @@ class _HomePageState extends StateBase<HomePage> {
 
   void tryLoadClick() async {
     isInFetchData = true;
-    assistCtr.updateMain();
+    assistCtr.updateHead();
 
     requestData();
   }
@@ -513,7 +513,7 @@ class _HomePageState extends StateBase<HomePage> {
       AppToast.showToast(context, AppMessages.operationFailed);
     }
 
-    //this is will call by broadcast : assistCtr.updateMain();
+    //this is will call by broadcast : assistCtr.updateHead();
   }
 
   void onItemClick(SubBucketModel itm) {
@@ -555,7 +555,7 @@ class _HomePageState extends StateBase<HomePage> {
 
     requester.httpRequestEvents.onFailState = (req, r) async {
       isInFetchData = false;
-      assistCtr.removeStateAndUpdate(state$fetchData);
+      assistCtr.removeStateAndUpdateHead(state$fetchData);
     };
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
@@ -594,7 +594,7 @@ class _HomePageState extends StateBase<HomePage> {
         videoItems.add(itm);
       }
 
-      assistCtr.addStateAndUpdate(state$fetchData);
+      assistCtr.addStateAndUpdateHead(state$fetchData);
     };
 
     requester.bodyJson = js;

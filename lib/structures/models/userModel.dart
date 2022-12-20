@@ -1,3 +1,4 @@
+import 'package:app/structures/enums/userType.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
 import 'package:iris_tools/models/dataModels/mediaModel.dart';
 
@@ -18,7 +19,7 @@ class UserModel {
   MediaModel? profileModel;
   CountryModel countryModel = CountryModel();
   String? email;
-  int? userType;
+  late UserType userType;
   //---------------- locale
   DateTime? loginDate;
 
@@ -37,7 +38,7 @@ class UserModel {
     sex = map[Keys.sex];
     countryModel = CountryModel.fromMap(map['country_js']);
     email = map['email'];
-    userType = map['user_type'];
+    userType = UserType.from(map['user_type']?? 1);
 
     if(map[Keys.token] is Map) {
       token = Token.fromMap(map[Keys.token]);
@@ -90,7 +91,7 @@ class UserModel {
     map[Keys.sex] = sex;
     map['profile_image_model'] = profileModel?.toMap();
     map['email'] = email;
-    map['user_type'] = userType;
+    map['user_type'] = userType.type();
 
     if (token != null) {
       map[Keys.token] = token!.toMap();

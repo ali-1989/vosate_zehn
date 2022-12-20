@@ -11,7 +11,6 @@ import 'package:app/structures/abstract/stateBase.dart';
 import 'package:app/system/applicationInitialize.dart';
 import 'package:app/system/session.dart';
 import 'package:app/tools/app/appBroadcast.dart';
-import 'package:app/tools/app/appRoute.dart';
 import 'package:app/views/states/waitToLoad.dart';
 
 bool _isInit = false;
@@ -89,7 +88,7 @@ class SplashScreenState extends StateBase<SplashPage> {
     _isInit = true;
 
     await ApplicationInitial.inSplashInit();
-    await ApplicationInitial.inSplashInitWithContext(AppRoute.getLastContext()!);
+    await ApplicationInitial.inSplashInitWithContext(context);
     final settingsLoad = SettingsManager.loadSettings();
 
     if (settingsLoad) {

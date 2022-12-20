@@ -12,7 +12,7 @@ import 'package:app/pages/levels/bucket_page.dart';
 import 'package:app/pages/search_page.dart';
 import 'package:app/services/aidService.dart';
 import 'package:app/structures/abstract/stateBase.dart';
-import 'package:app/system/enums.dart';
+import 'package:app/structures/enums/enums.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appIcons.dart';
 import 'package:app/tools/app/appMessages.dart';
@@ -143,9 +143,9 @@ class LayoutPageState extends StateBase<LayoutPage> {
         listItems: [
           ShapedItemObject(iconData: AppIcons.home, title: AppMessages.home),
           ShapedItemObject(iconData: AppIcons.meditation, title: AppMessages.meditation),
-          ShapedItemObject(iconData: AppIcons.zoomIn, title: AppMessages.focus),
           ShapedItemObject(iconData: AppIcons.motion, title: AppMessages.motion),
           ShapedItemObject(iconData: AppIcons.playArrow, title: AppMessages.video),
+          ShapedItemObject(iconData: AppIcons.zoomIn, title: AppMessages.focus),
         ],
         onItemChanged: (position) {
           selectedPage = position;

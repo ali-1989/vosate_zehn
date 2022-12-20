@@ -56,6 +56,7 @@ class _AidPageState extends StateBase<AidPage> {
   @override
   Widget build(BuildContext context) {
     return Assist(
+      isHead: true,
         controller: assistCtr,
         builder: (context, ctr, data) {
           return Scaffold(
@@ -110,7 +111,8 @@ class _AidPageState extends StateBase<AidPage> {
 
           SizedBox(height: 15),
 
-          MaxWidth(
+          /// for bazar:comment
+          /*MaxWidth(
             maxWidth: 300,
             child: SizedBox(
               width: double.infinity,
@@ -123,7 +125,7 @@ class _AidPageState extends StateBase<AidPage> {
                   child: Text(AppMessages.payWitPaypal, textDirection: TextDirection.ltr)
               ),
             ),
-          ),
+          ),*/
 
           SizedBox(height: 10),
         ],
@@ -133,7 +135,7 @@ class _AidPageState extends StateBase<AidPage> {
 
   void tryLoadClick() async {
     isInFetchData = true;
-    assistCtr.updateMain();
+    assistCtr.updateHead();
 
     requestAidData();
   }
@@ -147,13 +149,13 @@ class _AidPageState extends StateBase<AidPage> {
 
     requester.httpRequestEvents.onFailState = (req, r) async {
       isInFetchData = false;
-      assistCtr.removeStateAndUpdate(state$fetchData);
+      assistCtr.removeStateAndUpdateHead(state$fetchData);
     };
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
       isInFetchData = false;
       htmlData = data[Keys.data]?? '_';
-      assistCtr.addStateAndUpdate(state$fetchData);
+      assistCtr.addStateAndUpdateHead(state$fetchData);
     };
 
     requester.prepareUrl();

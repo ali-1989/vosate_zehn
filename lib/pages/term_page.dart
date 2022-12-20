@@ -84,7 +84,7 @@ class _TermPageState extends StateBase<TermPage> {
 
   void tryLoadClick() async {
     isInFetchData = true;
-    assistCtr.updateMain();
+    assistCtr.updateHead();
 
     requestTerm();
   }
@@ -98,13 +98,13 @@ class _TermPageState extends StateBase<TermPage> {
 
     requester.httpRequestEvents.onFailState = (req, r) async {
       isInFetchData = false;
-      assistCtr.removeStateAndUpdate(state$fetchData);
+      assistCtr.removeStateAndUpdateHead(state$fetchData);
     };
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
       isInFetchData = false;
       htmlData = data[Keys.data]?? '_';
-      assistCtr.addStateAndUpdate(state$fetchData);
+      assistCtr.addStateAndUpdateHead(state$fetchData);
     };
 
     requester.prepareUrl();

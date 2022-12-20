@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
-import 'package:iris_tools/api/duration/durationFormater.dart';
+import 'package:iris_tools/api/duration/durationFormatter.dart';
 import 'package:iris_tools/api/generator.dart';
 import 'package:iris_tools/api/helpers/mathHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
@@ -226,7 +226,7 @@ class AudioPlayerPageState extends StateBase<AudioPlayerPage> {
       startTimerForSeeFull();
     }
 
-    assistCtr.updateMain();
+    assistCtr.updateHead();
   }
 
   void stateListener(PlayerState state){
@@ -235,7 +235,7 @@ class AudioPlayerPageState extends StateBase<AudioPlayerPage> {
 
   void positionListener(Duration dur) {
     currentTime = dur;
-    assistCtr.updateMain();
+    assistCtr.updateHead();
 
     if(audioPlayer.processingState == ProcessingState.ready){
       durationStreamCtr.add(
@@ -254,7 +254,8 @@ class AudioPlayerPageState extends StateBase<AudioPlayerPage> {
 
   void startTimerForSeeFull(){
     if(seeToEndTimer == null || !seeToEndTimer!.isActive) {
-      seeToEndTimer = Timer(totalTime - Duration(seconds: 4), () {
+      var per = 40 / 100 * totalTime.inMilliseconds;
+      seeToEndTimer = Timer(Duration(milliseconds: per.toInt()), () { //totalTime - Duration(seconds: 4)
         widget.injectData.onFullTimePlay?.call();
       });
     }

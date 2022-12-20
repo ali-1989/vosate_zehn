@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
-import 'package:iris_tools/api/duration/durationFormater.dart';
+import 'package:iris_tools/api/duration/durationFormatter.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:iris_tools/widgets/irisImageView.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -15,7 +15,7 @@ import 'package:app/services/lastSeenService.dart';
 import 'package:app/structures/abstract/stateBase.dart';
 import 'package:app/structures/models/bucketModel.dart';
 import 'package:app/structures/models/subBuketModel.dart';
-import 'package:app/system/enums.dart';
+import 'package:app/structures/enums/enums.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/publicAccess.dart';
@@ -259,7 +259,7 @@ class _SubBucketPageState extends StateBase<SubBucketPage> {
 
   void tryLoadClick() async {
     isInFetchData = true;
-    assistCtr.updateMain();
+    assistCtr.updateHead();
 
     requestData();
   }
@@ -288,7 +288,7 @@ class _SubBucketPageState extends StateBase<SubBucketPage> {
       AppToast.showToast(context, AppMessages.operationFailed);
     }
 
-    assistCtr.updateMain();
+    assistCtr.updateHead();
   }
 
   void onItemClick(SubBucketModel itm) {
@@ -338,7 +338,7 @@ class _SubBucketPageState extends StateBase<SubBucketPage> {
 
     requester.httpRequestEvents.onFailState = (req, r) async {
       isInFetchData = false;
-      assistCtr.removeStateAndUpdate(state$fetchData);
+      assistCtr.removeStateAndUpdateHead(state$fetchData);
     };
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
@@ -370,7 +370,7 @@ class _SubBucketPageState extends StateBase<SubBucketPage> {
         listItems.add(itm);
       }
 
-      assistCtr.addStateAndUpdate(state$fetchData);
+      assistCtr.addStateAndUpdateHead(state$fetchData);
     };
 
     requester.prepareUrl();

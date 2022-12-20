@@ -10,7 +10,7 @@ import 'package:iris_tools/api/system.dart';
 import 'package:iris_tools/models/dataModels/mediaModel.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import 'package:app/system/enums.dart';
+import 'package:app/structures/enums/enums.dart';
 import 'package:app/tools/permissionTools.dart';
 
 class AppDirectories {

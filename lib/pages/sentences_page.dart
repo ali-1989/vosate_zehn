@@ -233,7 +233,7 @@ class _SentencesPageState extends StateBase<SentencesPage> {
 
     requester.httpRequestEvents.onFailState = (req, r) async {
       isInFetchData = false;
-      assistCtr.removeStateAndUpdate(state$fetchData);
+      assistCtr.removeStateAndUpdateHead(state$fetchData);
     };
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
@@ -246,7 +246,7 @@ class _SentencesPageState extends StateBase<SentencesPage> {
       }
 
       prepareCards();
-      assistCtr.addStateAndUpdate(state$fetchData);
+      assistCtr.addStateAndUpdateHead(state$fetchData);
 
       if(AppDB.fetchKv(Keys.setting$textOfDayGetPreMonth) == null){
         var now = GregorianDate();

@@ -31,10 +31,16 @@ import 'package:app/tools/app/appNavigator.dart';
 class AppRoute {
   static final List<GoRoute> _webFreeRoutes = [];
   static BuildContext? materialContext;
+  static bool _isInit = false;
 
   AppRoute._();
 
   static void init() {
+    if(_isInit){
+      return;
+    }
+
+    _isInit = true;
     _webFreeRoutes.add(LoginPage.route);
     _webFreeRoutes.add(RegisterPage.route);
     _webFreeRoutes.add(TermPage.route);
@@ -58,16 +64,16 @@ class AppRoute {
     return res > 0;
   }
 
-  static String? fetchRoutePageName() {
+  /*static String? fetchRoutePageName() {
     return AppDB.fetchKv(Keys.setting$lastRouteName);
   }
 
-  /*static void navigateRouteScreen(String routeName) {
+  static void navigateRouteScreen(String routeName) {
     saveRouteName(routeName);
     SettingsManager.settingsModel.currentRouteScreen = routeName;
     AppBroadcast.reBuildMaterial();
   }*/
-
+  ///------------------------------------------------------------
   static void backRoute() {
     final lastCtx = AppNavigator.getLastRouteContext(getLastContext()!);
     AppNavigator.backRoute(lastCtx);
@@ -87,23 +93,26 @@ class AppRoute {
   }
 
   static void popTopView(BuildContext context) {
-    AppNavigator.pop(context);
+    if(canPop(context)) {
+      AppNavigator.pop(context);
+    }
   }
 
   static void popPage(BuildContext context) {
     GoRouter.of(context).pop();
+    //AppNavigator.pop(context);
   }
 
-  /*
+
   static Future push(BuildContext context, Widget page, {dynamic extra}) async {
     final r = MaterialPageRoute(builder: (ctx){
       return page;
     });
 
     return Navigator.of(context).push(r);
-  }*/
+  }
   
-  static void push(BuildContext context, String address, {dynamic extra}) {
+  static void pushAddress(BuildContext context, String address, {dynamic extra}) {
     if(kIsWeb){
       GoRouter.of(context).go(address, extra: extra);
     }
@@ -131,6 +140,10 @@ class AppRoute {
 
   static void replaceNamed(BuildContext context, String name, {dynamic extra}) {
     GoRouter.of(context).replaceNamed(name, params: {}, extra: extra);
+  }
+
+  static void refreshRouter(BuildContext context) {
+    GoRouter.of(context).refresh();
   }
 }
 ///============================================================================================
@@ -160,6 +173,7 @@ final mainRouter = GoRouter(
     routerNeglect: true,//In browser 'back' button not work
     errorBuilder: routeErrorHandler,
     redirect: _mainRedirect,
+  debugLogDiagnostics: false,
 );
 
 bool checkFreeRoute(GoRoute route, GoRouterState state){
@@ -171,7 +185,7 @@ bool checkFreeRoute(GoRoute route, GoRouterState state){
   }
 
   if(!routeIsTop){
-    //return '${HomePage.route.path}/${route.path}' == state.subloc;  if homePage is not backSlash, like:/admin
+    //return '${HomePage.route.path}/${route.path}' == state.subloc;//  if homePage is not backSlash, like:/admin
     return route.path == state.subloc;
   }
 
@@ -179,6 +193,8 @@ bool checkFreeRoute(GoRoute route, GoRouterState state){
 }
 
 String? _mainRedirect(GoRouterState state){
+  AppRoute.init();
+  
   if(state.subloc == LayoutPage.route.path){
     AppDirectories.generateNoMediaFile();
   }

@@ -24,7 +24,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 import 'package:app/structures/abstract/stateBase.dart';
 import 'package:app/structures/models/userModel.dart';
-import 'package:app/system/enums.dart';
+import 'package:app/structures/enums/enums.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/publicAccess.dart';
@@ -506,7 +506,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
 
     hideLoading();
     Session.sinkUserInfo(user);
-    assistCtr.updateMain();
+    assistCtr.updateHead();
 
     //after load image, auto will call: OverlayCenter().hideLoading(context);
     AppSnack.showSnack$operationSuccess(context);
@@ -592,7 +592,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
       user.name = name;
       user.family = family;
 
-      assistCtr.updateMain();
+      assistCtr.updateHead();
       Session.sinkUserInfo(user);
       AppOverlay.hideScreen(context);
     };
@@ -622,7 +622,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
     requester.httpRequestEvents.onStatusOk = (req, data) async {
       user.sex = gender;
 
-      assistCtr.updateMain();
+      assistCtr.updateHead();
       Session.sinkUserInfo(user);
     };
 
@@ -651,7 +651,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
     requester.httpRequestEvents.onStatusOk = (req, data) async {
       user.birthDate = dt;
 
-      assistCtr.updateMain();
+      assistCtr.updateHead();
       Session.sinkUserInfo(user);
     };
 
@@ -663,9 +663,15 @@ class _ProfilePageState extends StateBase<ProfilePage> {
   }
 
   void requestProfileData() async {
+    final user = Session.getLastLoginUser();
+
+    if(user == null || user.userId == '0'){
+      return;
+    }
+
     final js = <String, dynamic>{};
     js[Keys.requestZone] = 'get_profile_data';
-    js[Keys.requesterId] = Session.getLastLoginUser()?.userId;
+    js[Keys.requesterId] = user.userId;
     js[Keys.forUserId] = js[Keys.requesterId];
 
 
@@ -676,7 +682,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
     requester.httpRequestEvents.onStatusOk = (req, data) async {
       await Session.newProfileData(data as Map<String, dynamic>);
 
-      assistCtr.updateMain();
+      assistCtr.updateHead();
     };
 
     requester.bodyJson = js;

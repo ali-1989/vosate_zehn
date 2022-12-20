@@ -19,23 +19,31 @@ class IrisLocalizations {
 		return Localizations.of<IrisLocalizations>(context, IrisLocalizations);
 	}
 
+	static String? translateBy(BuildContext context, String key) {
+		return Localizations.of<IrisLocalizations>(context, IrisLocalizations)?.translate(key);
+	}
+
+	///---------------------------------------------------------------
 	Future<String> _loadAssets(String address) async {
 		return await rootBundle.loadString(address);
 	}
 
-	Future<bool> loadByAssets(Locale locale) async {
+	Future<Map<String, dynamic>> _loadLocaleAsset(Locale locale) async {
 		String? strJson;
-		_currentLocale = locale;
 
 		if(locale.countryCode != null && locale.countryCode!.isNotEmpty) {
 			strJson = await _loadAssets('assets/locales/${locale.languageCode}_${locale.countryCode}.json');
 		}
 
 		strJson ??= await _loadAssets('assets/locales/${locale.languageCode}.json');
-
 		final Map<String, dynamic> mappedJson = jsonDecode(strJson);
-		//unNeed: _keyValues = mappedJson.map((key, value) => MapEntry(key, value.toString()));
-		_keyValues = mappedJson;
+
+		return mappedJson;
+	}
+
+	Future<bool> loadByAssets(Locale locale) async {
+		_currentLocale = locale;
+		_keyValues = await _loadLocaleAsset(locale);
 
 		return true;
 	}
@@ -46,24 +54,15 @@ class IrisLocalizations {
 	}
 
 	Future<void> setFallbackByLocale(Locale locale) async {
-		String? strJson;
-
-		if(locale.countryCode != null && locale.countryCode!.isNotEmpty) {
-			strJson = await _loadAssets('assets/locales/${locale.languageCode}_${locale.countryCode}.json');
-		}
-
-		strJson ??= await _loadAssets('assets/locales/${locale.languageCode}.json');
-
-		_fallback = jsonDecode(strJson);
+		_fallback = await _loadLocaleAsset(locale);
 	}
 
 	void setFallbackByMap(Map<String, String> kv) async {
 		_fallback = kv;
 	}
 
-	/// static
-	static String? translateBy(BuildContext context, String key) {
-		return Localizations.of<IrisLocalizations>(context, IrisLocalizations)?.translate(key);
+	bool isSetFallback() {
+		return _fallback != null;
 	}
 
 	String? translate(String key) {

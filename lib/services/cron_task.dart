@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:workmanager/workmanager.dart';
 
 import 'package:app/constants.dart';
@@ -47,6 +48,10 @@ class CronTask {
   CronTask._();
 
   static void init() {
+    if(kIsWeb){
+      return;
+    }
+
     Workmanager().initialize(
       callbackWorkManager,
       isInDebugMode: false,

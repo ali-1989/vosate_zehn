@@ -7,6 +7,7 @@ class GoogleService {
 
   GoogleService(){
     obj = GoogleSignIn(
+      signInOption: SignInOption.standard,
       scopes: [
         'https://www.googleapis.com/auth/userinfo.email',
         //'https://www.googleapis.com/auth/cloud-platform.read-only',

@@ -49,6 +49,7 @@ class _AboutUsPageState extends StateBase<AboutUsPage> {
   @override
   Widget build(BuildContext context) {
     return Assist(
+      isHead: true,
       controller: assistCtr,
       builder: (context, ctr, data) {
         return Scaffold(
@@ -59,7 +60,7 @@ class _AboutUsPageState extends StateBase<AboutUsPage> {
               child: buildBody()
           ),
         );
-      }
+      },
     );
   }
 
@@ -84,7 +85,7 @@ class _AboutUsPageState extends StateBase<AboutUsPage> {
 
   void tryLoadClick() async {
     isInFetchData = true;
-    assistCtr.updateMain();
+    assistCtr.updateHead();
 
     requestAboutUs();
   }
@@ -98,13 +99,13 @@ class _AboutUsPageState extends StateBase<AboutUsPage> {
 
     requester.httpRequestEvents.onFailState = (req, r) async {
       isInFetchData = false;
-      assistCtr.removeStateAndUpdate(state$fetchData);
+      assistCtr.removeStateAndUpdateHead(state$fetchData);
     };
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
       isInFetchData = false;
       htmlData = data[Keys.data];
-      assistCtr.addStateAndUpdate(state$fetchData);
+      assistCtr.addStateAndUpdateHead(state$fetchData);
     };
 
     requester.prepareUrl();

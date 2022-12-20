@@ -18,7 +18,7 @@ import 'package:app/pages/sentences_page.dart';
 import 'package:app/services/aidService.dart';
 import 'package:app/services/download_upload_service.dart';
 import 'package:app/structures/models/userModel.dart';
-import 'package:app/system/enums.dart';
+import 'package:app/structures/enums/enums.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/session.dart';
 import 'package:app/tools/app/appBroadcast.dart';

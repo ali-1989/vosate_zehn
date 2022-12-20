@@ -345,7 +345,7 @@ class AppMessages {
   }
 
   static String get focus {
-    return 'تمرکز';
+    return 'چندبخشی';
   }
 
   static String get motion {
@@ -402,5 +402,13 @@ class AppMessages {
 
   static String get mobile {
     return 'موبایل';
+  }
+
+  static String get welcome {
+    return 'خوش آمدید';
+  }
+
+  static String get inEmailSignOutError {
+    return 'هنگام خروج از ایمیل خطایی رخ داده است';
   }
 }

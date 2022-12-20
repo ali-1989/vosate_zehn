@@ -69,25 +69,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     AppRoute.materialContext = context;
 
-    /// this need for web
-    if(!ApplicationInitial.isInit() && kIsWeb){
-      return MaterialApp.router(
-        debugShowCheckedModeBanner: false,
-        routeInformationProvider: mainRouter.routeInformationProvider,
-        routeInformationParser: mainRouter.routeInformationParser,
-        routerDelegate: mainRouter.routerDelegate,
-        theme: AppThemes.instance.themeData,
-        themeMode: AppThemes.instance.currentThemeMode,
-        //home: materialHomeBuilder(null),
-        builder: (subContext, home) {
-          return Directionality(
-              textDirection: AppThemes.instance.textDirection,
-              child: materialHomeBuilder(home)
-          );
-        },
-      );
-    }
-
     return MaterialApp.router(
       key: AppBroadcast.materialAppKey,
       //navigatorKey: AppBroadcast.rootNavigatorKey,
@@ -149,6 +130,7 @@ class MyApp extends StatelessWidget {
 
   Future<void> testCodes(BuildContext context) async {
     //await AppDB.db.clearTable(AppDB.tbKv);
+    //SettingsManager.settingsModel.httpAddress = 'http://192.168.43.140:7436';
   }
 }
 ///==============================================================================================

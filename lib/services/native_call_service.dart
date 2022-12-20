@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import 'package:iris_tools/api/system.dart';
@@ -13,7 +14,7 @@ class NativeCallService {
   NativeCallService._();
 
   static void init() async {
-    if(nativeChannel == null) {
+    if(nativeChannel == null && !kIsWeb) {
       nativeChannel = MethodChannel('my_channel');
       nativeChannel!.setMethodCallHandler(methodCallHandler);
     }
@@ -22,6 +23,10 @@ class NativeCallService {
   }
 
   static Future<void> setBootCallbackHandler() async {
+    if(kIsWeb){
+      return;
+    }
+
     final callback = PluginUtilities.getCallbackHandle(bootCallbackHandler);
 
     if (callback != null) {

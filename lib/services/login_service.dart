@@ -1,5 +1,9 @@
 import 'dart:async';
 
+import 'package:app/pages/layout_page.dart';
+import 'package:app/system/session.dart';
+import 'package:app/tools/app/appRoute.dart';
+import 'package:app/tools/app/appSheet.dart';
 import 'package:dio/dio.dart';
 
 import 'package:app/structures/models/countryModel.dart';
@@ -8,6 +12,7 @@ import 'package:app/system/keys.dart';
 import 'package:app/system/publicAccess.dart';
 import 'package:app/tools/app/appHttpDio.dart';
 import 'package:app/tools/deviceInfoTools.dart';
+import 'package:flutter/cupertino.dart';
 
 class LoginService {
   LoginService._();
@@ -183,6 +188,18 @@ class LoginService {
     });
 
     return result.future;
+  }
+
+  static loginGuestUser(BuildContext context) async {
+    final gUser = Session.getGuestUser();
+    final userModel = await Session.login$newProfileData(gUser.toMap());
+
+    if(userModel != null) {
+      AppRoute.replaceNamed(context, LayoutPage.route.name!);
+    }
+    else {
+      AppSheet.showSheet$OperationFailed(context);
+    }
   }
 }
 ///============================================================================

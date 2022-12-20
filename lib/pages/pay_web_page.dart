@@ -70,12 +70,12 @@ class _PayWebPageState extends StateBase<PayWebPage> {
               onWebViewCreated: (ctr){
                 if(webController == null) {
                   webController = ctr;
-                  assistCtr.updateMain();
+                  assistCtr.updateHead();
                 }
               },
               onPageFinished: (str){
                 isInPreparing = false;
-                assistCtr.updateMain();
+                assistCtr.updateHead();
               },
             ),
           ),

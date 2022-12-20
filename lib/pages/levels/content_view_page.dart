@@ -13,7 +13,7 @@ import 'package:app/structures/models/contentModel.dart';
 import 'package:app/structures/models/mediaModelWrapForContent.dart';
 import 'package:app/structures/models/speakerModel.dart';
 import 'package:app/structures/models/subBuketModel.dart';
-import 'package:app/system/enums.dart';
+import 'package:app/structures/enums/enums.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/structures/middleWare/requester.dart';
@@ -287,7 +287,7 @@ class _LevelPageState extends StateBase<ContentViewPage> {
 
   void tryLoadClick() async {
     isInFetchData = true;
-    assistCtr.updateMain();
+    assistCtr.updateHead();
 
     requestData();
   }
@@ -362,7 +362,7 @@ class _LevelPageState extends StateBase<ContentViewPage> {
 
     requester.httpRequestEvents.onFailState = (req, r) async {
       isInFetchData = false;
-      assistCtr.removeStateAndUpdate(state$fetchData);
+      assistCtr.removeStateAndUpdateHead(state$fetchData);
     };
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
@@ -396,7 +396,7 @@ class _LevelPageState extends StateBase<ContentViewPage> {
         }
       }
 
-      assistCtr.addStateAndUpdate(state$fetchData);
+      assistCtr.addStateAndUpdateHead(state$fetchData);
     };
 
     requester.prepareUrl();
@@ -404,9 +404,16 @@ class _LevelPageState extends StateBase<ContentViewPage> {
   }
 
   void requestRegisterSeenContent(MediaModelWrapForContent media) async {
+    final user = Session.getLastLoginUser();
+
+    if(user == null || user.userId == '0'){
+      media.isSee = true;
+      return;
+    }
+
     final js = <String, dynamic>{};
     js[Keys.requestZone] = 'set_content_seen';
-    js[Keys.requesterId] = Session.getLastLoginUser()?.userId;
+    js[Keys.requesterId] = user.userId;
     js[Keys.id] = widget.injectData.subBucket.id;
     js['content_id'] = contentModel!.id;
     js['media_id'] = media.id;
@@ -419,5 +426,4 @@ class _LevelPageState extends StateBase<ContentViewPage> {
     requester.prepareUrl();
     requester.request(context, false);
   }
-
 }

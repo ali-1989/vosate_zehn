@@ -9,7 +9,7 @@ homepage: https://iris.ir
 
 publish_to: 'none'
 
-version: 5.2.5+13
+version: 5.2.7+15
 
 
 environment:

@@ -653,10 +653,10 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "8d007b201de9125f8f2b3449d5b137c9443f8623"
+      resolved-ref: d68a4e79519154ca18f5924e6402a3c313d982d1
       url: "https://github.com/ali-1989/IrisTools.git"
     source: git
-    version: "0.0.21"
+    version: "0.0.24"
   iris_websocket:
     dependency: "direct main"
     description:

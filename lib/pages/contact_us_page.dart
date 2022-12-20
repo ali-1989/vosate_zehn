@@ -104,7 +104,7 @@ class _ContactUsPageState extends StateBase<ContactUsPage> {
   }
 
   void onSendCall(){
-    FocusHelper.hideKeyboardByUnFocus(context);
+    FocusHelper.hideKeyboardByUnFocusRoot();
     final txt = textCtr.text.trim();
 
     if(txt.isEmpty){

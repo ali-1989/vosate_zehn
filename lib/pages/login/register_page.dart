@@ -1,3 +1,4 @@
+import 'package:app/tools/app/appToast.dart';
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
@@ -157,7 +158,7 @@ class _RegisterPageState extends StateBase<RegisterPage> {
                 children: [
                   Text('${AppMessages.age}:'),
 
-                  SizedBox(width: 15),
+                  SizedBox(width: 7),
                   TextButton(
                     onPressed: (){
                       onSelectDateCall();
@@ -211,7 +212,7 @@ class _RegisterPageState extends StateBase<RegisterPage> {
           return SelectDateCalendarView(
             onSelect: (dt){
               birthDate = dt;
-              assistCtr.updateMain();
+              assistCtr.updateHead();
               AppSheet.closeSheet(context);
             },
             //title: 'تاریخ تولد',
@@ -250,17 +251,19 @@ class _RegisterPageState extends StateBase<RegisterPage> {
       js['email'] = widget.injectData.email;
     }
 
-    requester.prepareUrl();
-    requester.bodyJson = js;
-
     requester.httpRequestEvents.onAnyState = (req) async {
       hideLoading();
     };
+
+    /*requester.httpRequestEvents.onFailState = (req, r) async {
+      AppToast.showToast(context, AppMessages.);
+    };*/
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
       final userModel = await Session.login$newProfileData(data);
 
       if(userModel != null) {
+        AppToast.showToast(context, AppMessages.welcome);
         AppRoute.popTopView(context);
         AppRoute.replaceNamed(context, LayoutPage.route.name!);
       }
@@ -270,6 +273,8 @@ class _RegisterPageState extends StateBase<RegisterPage> {
     };
 
     showLoading();
+    requester.prepareUrl();
+    requester.bodyJson = js;
     requester.request(context);
   }
 }

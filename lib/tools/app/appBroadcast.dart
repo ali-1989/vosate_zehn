@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/extendValueNotifier.dart';
@@ -19,7 +20,7 @@ class AppBroadcast {
   static final ExtendValueNotifier<int> newAdvNotifier = ExtendValueNotifier<int>(0);
   static final ExtendValueNotifier<int> changeFavoriteNotifier = ExtendValueNotifier<int>(0);
   //---------------------- keys
-  static final LocalKey materialAppKey = UniqueKey();
+  static LocalKey materialAppKey = UniqueKey();
   static final rootScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
   static final rootNavigatorKey = GlobalKey<NavigatorState>();
   static final layoutPageKey = GlobalKey<LayoutPageState>();
@@ -37,6 +38,10 @@ class AppBroadcast {
   }
 
   static void reBuildMaterial() {
+    if(kIsWeb){
+      materialAppKey = UniqueKey();
+    }
+
     viewUpdaterStream.sink.add(true);
   }
 

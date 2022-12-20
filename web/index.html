@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <!--
     If you are serving your web app in a path other than the root, change the
@@ -14,11 +14,11 @@
     This is a placeholder for base href that will be replaced by the value of
     the `--base-href` argument provided to `flutter build`.
   -->
-  <base href="$FLUTTER_BASE_HREF">
+  <base href="/"> <!-- <base href="$FLUTTER_BASE_HREF"> -->
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
+  <meta name="description" content="Vosate Zehn">
 
   <!-- iOS meta tags & icons -->
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -29,10 +29,26 @@
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
-  <title>vosate_zehn</title>
+  <title>وسعت ذهن - مدیریت</title>
   <link rel="manifest" href="manifest.json">
 
+  <style>
+		body {
+		height: 100%;
+		width: 100%;
+		background-color: #eeeeee;
+		}
+  
+		.centered {
+		top: 50%;
+		left: 50%;
+		transform: translate(-50% , -50%);
+		position: absolute;
+	}
+  </style>
+  
   <script>
+    //window.flutterWebRenderer = "html";
     // The value below is injected by flutter build, do not touch.
     var serviceWorkerVersion = null;
   </script>
@@ -40,6 +56,11 @@
   <script src="flutter.js" defer></script>
 </head>
 <body>
+
+	<div class='centered'>
+        <img src="loading.gif" alt="loading-image">
+    </div>
+	
   <script>
     window.addEventListener('load', function(ev) {
       // Download main.dart.js

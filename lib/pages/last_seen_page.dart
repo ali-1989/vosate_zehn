@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
-import 'package:iris_tools/api/duration/durationFormater.dart';
+import 'package:iris_tools/api/duration/durationFormatter.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:iris_tools/widgets/irisImageView.dart';
 
@@ -12,7 +12,7 @@ import 'package:app/services/favoriteService.dart';
 import 'package:app/services/lastSeenService.dart';
 import 'package:app/structures/abstract/stateBase.dart';
 import 'package:app/structures/models/subBuketModel.dart';
-import 'package:app/system/enums.dart';
+import 'package:app/structures/enums/enums.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/app/appIcons.dart';
@@ -225,7 +225,7 @@ class _LastSeenPageState extends StateBase<LastSeenPage> {
 
     listItems.removeWhere((element) => element.id == itm.id);
 
-    assistCtr.updateMain();
+    assistCtr.updateHead();
   }
 
   void onItemClick(SubBucketModel itm) {
@@ -266,6 +266,6 @@ class _LastSeenPageState extends StateBase<LastSeenPage> {
     }
 
     isInFetchData = false;
-    assistCtr.updateMain();
+    assistCtr.updateHead();
   }
 }

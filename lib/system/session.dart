@@ -1,3 +1,4 @@
+import 'package:app/structures/enums/userType.dart';
 import 'package:iris_db/iris_db.dart';
 import 'package:iris_tools/api/checker.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
@@ -330,6 +331,17 @@ class Session {
 
 	static void clearProfileChangeListeners(){
 		_profileChangeListeners.clear();
+	}
+
+	static UserModel getGuestUser(){
+		final g = UserModel();
+		g.userId = '0';
+		g.userName = 'مهمان';
+		g.userType = UserType.guest;
+		g.name = 'مهمان';
+		g.family = '';
+
+		return g;
 	}
 }
 ///======================================================================================================

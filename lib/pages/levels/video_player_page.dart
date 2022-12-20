@@ -9,7 +9,7 @@ import 'package:video_player/video_player.dart';
 import 'package:wakelock/wakelock.dart';
 
 import 'package:app/structures/abstract/stateBase.dart';
-import 'package:app/system/enums.dart';
+import 'package:app/structures/enums/enums.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/views/homeComponents/appBarBuilder.dart';
 
@@ -71,7 +71,7 @@ class VideoPlayerPageState extends StateBase<VideoPlayerPage> {
       seeToEndTimer!.cancel();
     }
 
-    playerController?.removeListener(listener);
+    playerController?.removeListener(videoTimeListener);
     chewieVideoController?.dispose();
     playerController?.dispose();
 
@@ -158,12 +158,12 @@ class VideoPlayerPageState extends StateBase<VideoPlayerPage> {
     //int w = playerController!.value.size.width.toInt(); //?? 440
     //int h = playerController!.value.size.height.toInt(); //?? 260
 
-    playerController!.addListener(listener);
+    playerController!.addListener(videoTimeListener);
 
     update();
   }
 
-  void listener() async {
+  void videoTimeListener() async {
     if(playerController?.value.duration != null){
       totalTime = playerController!.value.duration;
     }
@@ -175,7 +175,8 @@ class VideoPlayerPageState extends StateBase<VideoPlayerPage> {
 
   void startTimerForSeeFull(){
     if(seeToEndTimer == null || !seeToEndTimer!.isActive) {
-      seeToEndTimer = Timer(totalTime! - Duration(seconds: 3), () {
+      int tSec = totalTime!.inSeconds;
+      seeToEndTimer = Timer(totalTime! - Duration(seconds: tSec ~/ 4), () {
         widget.injectData.onFullTimePlay?.call();
       });
     }

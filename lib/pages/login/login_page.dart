@@ -70,7 +70,7 @@ class _LoginPageState extends StateBase<LoginPage> {
 
     CountryTools.fetchCountries().then((value) {
       countryModel = CountryTools.countryModelByCountryIso('IR');
-      assistCtr.updateMain();
+      assistCtr.updateHead();
     });
 
     stopWatchTimer = StopWatchTimer(
@@ -79,7 +79,7 @@ class _LoginPageState extends StateBase<LoginPage> {
       presetMillisecond: timerValueSec*1000,
       onEnded: (){
         showResendOtpButton = true;
-        assistCtr.updateMain();
+        assistCtr.updateHead();
       },
     );
   }
@@ -187,6 +187,13 @@ class _LoginPageState extends StateBase<LoginPage> {
                 icon: Image.asset(AppImages.googleIco, width: 20, height: 20,),
                 label: Text(AppMessages.loginWithGoogle)
             ),
+          ),
+
+          TextButton(
+            child: Text('ورود مهمان'),
+            onPressed: (){
+              LoginService.loginGuestUser(context);
+            },
           ),
 
           const SizedBox(height: 32,),
@@ -299,7 +306,7 @@ class _LoginPageState extends StateBase<LoginPage> {
     AppLoading.instance.showWaiting(context);
     GoogleSignInAccount? googleResult;
 
-    final t = Timer(Duration(seconds: 60), (){
+    final timer = Timer(Duration(seconds: 60), (){
       AppLoading.instance.hideLoading(context);
       AppSheet.showSheet$OperationFailed(context);
       return;
@@ -308,8 +315,8 @@ class _LoginPageState extends StateBase<LoginPage> {
     try {
       googleResult = await google.signIn();
 
-      if(t.isActive){
-        t.cancel();
+      if(timer.isActive){
+        timer.cancel();
       }
     }
     catch(e){
@@ -343,13 +350,13 @@ class _LoginPageState extends StateBase<LoginPage> {
           final injectData = RegisterPageInjectData();
           injectData.email = googleResult.email;
 
-          AppRoute.push(context, RegisterPage.route.path, extra: injectData);
+          AppRoute.pushAddress(context, RegisterPage.route.path, extra: injectData);
         }
         else {
           final userModel = await Session.login$newProfileData(result.jsResult!);
 
           if(userModel != null) {
-            AppRoute.push(context, LayoutPage.route.path);
+            AppRoute.pushAddress(context, LayoutPage.route.path);
           }
           else {
             AppSheet.showSheet$OperationFailed(context);
@@ -374,7 +381,7 @@ class _LoginPageState extends StateBase<LoginPage> {
     showResendOtpButton = false;
     pinCodeCtr.clear();
 
-    assistCtr.updateMain();
+    assistCtr.updateHead();
   }
 
   void onTapCountryArrow(){
@@ -471,7 +478,7 @@ class _LoginPageState extends StateBase<LoginPage> {
       final userId = result.jsResult![Keys.userId];
 
       if (userId == null) {
-        AppRoute.push(context, RegisterPage.route.path, extra: injectData);
+        AppRoute.pushAddress(context, RegisterPage.route.path, extra: injectData);
       }
       else {
         final userModel = await Session.login$newProfileData(result.jsResult!);

@@ -1,3 +1,6 @@
+import 'package:app/services/google_service.dart';
+import 'package:app/tools/app/appMessages.dart';
+import 'package:app/tools/app/appToast.dart';
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
 
 import 'package:app/managers/settingsManager.dart';
@@ -50,22 +53,51 @@ class UserLoginTools {
   }
 
   static Future forceLogoff(String userId) async {
-    final isCurrent = Session.getLastLoginUser()?.userId == userId;
-    await Session.logoff(userId);
+    final lastUser = Session.getLastLoginUser();
 
-    AppBroadcast.drawerMenuRefresher.update();
-    AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
+    if(lastUser != null) {
+      final isCurrent = lastUser.userId == userId;
 
-    if (isCurrent && AppRoute.materialContext != null) {
-      AppRoute.backToRoot(AppRoute.getLastContext()!);
+      if(lastUser.email != null){
+        final google = GoogleService();
+        await google.signOut();
 
-      Future.delayed(Duration(milliseconds: 400), (){
-        AppRoute.replaceNamed(AppRoute.getLastContext()!, LoginPage.route.name!);
-      });
+        if(await google.isSignIn()){
+          AppToast.showToast(AppRoute.getLastContext()!, AppMessages.inEmailSignOutError);
+          return;
+        }
+
+        await Session.logoff(userId);
+      }
+      else {
+        await Session.logoff(userId);
+      }
+
+      AppBroadcast.drawerMenuRefresher.update();
+      AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
+
+      if (isCurrent && AppRoute.materialContext != null) {
+        AppRoute.backToRoot(AppRoute.getLastContext()!);
+
+        Future.delayed(Duration(milliseconds: 400), (){
+          AppRoute.replaceNamed(AppRoute.getLastContext()!, LoginPage.route.name!);
+        });
+      }
     }
   }
 
   static Future forceLogoffAll() async {
+    while(Session.hasAnyLogin()){
+      final lastUser = Session.getLastLoginUser();
+
+      if(lastUser != null) {
+        if (lastUser.email != null) {
+          final google = GoogleService();
+          await google.signOut();
+        }
+      }
+    }
+
     await Session.logoffAll();
 
     AppBroadcast.drawerMenuRefresher.update();
@@ -73,6 +105,10 @@ class UserLoginTools {
 
     if (AppRoute.materialContext != null) {
       AppRoute.backToRoot(AppRoute.getLastContext()!);
+
+      Future.delayed(Duration(milliseconds: 400), (){
+        AppRoute.replaceNamed(AppRoute.getLastContext()!, LoginPage.route.name!);
+      });
     }
   }
 }

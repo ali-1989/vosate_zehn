@@ -3,9 +3,6 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:iris_download_manager/downloadManager/downloadManager.dart';
-import 'package:iris_download_manager/uploadManager/uploadManager.dart';
-import 'package:iris_tools/api/appEventListener.dart';
 import 'package:iris_tools/api/logger/logger.dart';
 import 'package:iris_tools/api/logger/reporter.dart';
 import 'package:iris_tools/api/system.dart';
@@ -24,7 +21,6 @@ import 'package:app/services/firebase_service.dart';
 import 'package:app/services/websocket_service.dart';
 import 'package:app/system/applicationLifeCycle.dart';
 import 'package:app/system/publicAccess.dart';
-import 'package:app/system/session.dart';
 import 'package:app/tools/app/appCache.dart';
 import 'package:app/tools/app/appDb.dart';
 import 'package:app/tools/app/appDialogIris.dart';
@@ -102,7 +98,6 @@ class ApplicationInitial {
   }
 
   static Future<void> inSplashInitWithContext(BuildContext context) async {
-    AppRoute.init();
     AppCache.screenBack = const AssetImage(AppImages.background);
     await precacheImage(AppCache.screenBack!, context);
   }
@@ -138,7 +133,7 @@ class ApplicationInitial {
       /// net & websocket
       NetManager.addChangeListener(NetListenerTools.onNetListener);
       WebsocketService.prepareWebSocket(SettingsManager.settingsModel.wsAddress);
-      //await PublicAccess.logger.logToAll('@@@@@@@ prepared WebSocket'); //todo
+
       /// life cycle
       ApplicationLifeCycle.init();
 

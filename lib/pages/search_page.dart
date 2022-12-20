@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
-import 'package:iris_tools/api/duration/durationFormater.dart';
+import 'package:iris_tools/api/duration/durationFormatter.dart';
 import 'package:iris_tools/api/helpers/focusHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:iris_tools/widgets/irisImageView.dart';
@@ -15,7 +15,7 @@ import 'package:app/pages/levels/video_player_page.dart';
 import 'package:app/services/favoriteService.dart';
 import 'package:app/structures/abstract/stateBase.dart';
 import 'package:app/structures/models/subBuketModel.dart';
-import 'package:app/system/enums.dart';
+import 'package:app/structures/enums/enums.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/publicAccess.dart';
@@ -109,7 +109,7 @@ class _SearchPageState extends StateBase<SearchPage> {
             },
             onClearEvent: (){
               searchList.clear();
-              assistCtr.updateMain();
+              assistCtr.updateHead();
             },
           ),
         ),
@@ -292,7 +292,7 @@ class _SearchPageState extends StateBase<SearchPage> {
 
   void tryLoadClick() async {
     //isInFetchData = true;
-    //assistCtr.updateMain();
+    //assistCtr.updateHead();
 
     requestData();
   }
@@ -358,7 +358,7 @@ class _SearchPageState extends StateBase<SearchPage> {
 
     requester.httpRequestEvents.onFailState = (req, r) async {
       isInFetchData = false;
-      assistCtr.removeStateAndUpdate(state$fetchData);
+      assistCtr.removeStateAndUpdateHead(state$fetchData);
     };
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
@@ -390,11 +390,11 @@ class _SearchPageState extends StateBase<SearchPage> {
         searchList.add(itm);
       }
 
-      assistCtr.addStateAndUpdate(state$fetchData);
+      assistCtr.addStateAndUpdateHead(state$fetchData);
     };
 
     isInFetchData = true;
-    assistCtr.updateMain();
+    assistCtr.updateHead();
 
     requester.bodyJson = js;
     requester.prepareUrl();
