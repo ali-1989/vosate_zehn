@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:chewie/chewie.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iris_tools/api/helpers/mathHelper.dart';
 import 'package:video_player/video_player.dart';
 import 'package:wakelock/wakelock.dart';
 
@@ -110,6 +111,8 @@ class VideoPlayerPageState extends StateBase<VideoPlayerPage> {
   }
 
   void _initVideo(){
+    //rint('@@@@@@@@@@${widget.injectData.srcAddress}');
+    //widget.injectData.srcAddress = widget.injectData.srcAddress.replaceFirst('vosatezehn.com', '162.223.90.121');
     switch(widget.injectData.videoSourceType){
       case VideoSourceType.file:
         playerController = VideoPlayerController.file(File(widget.injectData.srcAddress));
@@ -167,7 +170,7 @@ class VideoPlayerPageState extends StateBase<VideoPlayerPage> {
     if(playerController?.value.duration != null){
       totalTime = playerController!.value.duration;
     }
-
+    
     if((chewieVideoController?.isPlaying?? false) && totalTime != null){
       startTimerForSeeFull();
     }
@@ -176,7 +179,9 @@ class VideoPlayerPageState extends StateBase<VideoPlayerPage> {
   void startTimerForSeeFull(){
     if(seeToEndTimer == null || !seeToEndTimer!.isActive) {
       int tSec = totalTime!.inSeconds;
-      seeToEndTimer = Timer(totalTime! - Duration(seconds: tSec ~/ 4), () {
+      int nSec = MathHelper.percentInt(tSec, 10);
+
+      seeToEndTimer = Timer(Duration(seconds: nSec), () {
         widget.injectData.onFullTimePlay?.call();
       });
     }

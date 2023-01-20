@@ -94,7 +94,7 @@ class AidService {
     }
 
     if(lastTime == null
-        || DateHelper.isPastOf(lastTimeDt, Duration(days: AppParameterManager.parameterModel?.aidRepeatDays?? 10))){
+        || DateHelper.isPastOf(lastTimeDt, Duration(days: AppParameterManager.parameterModel?.aidRepeatDays?? 30))){
       showAidDialog();
     }
   }

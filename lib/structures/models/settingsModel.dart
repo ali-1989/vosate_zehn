@@ -8,8 +8,8 @@ import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/dateTools.dart';
 
 class SettingsModel {
-  static const defaultHttpAddress = 'http://vosatezehn.com:7436'; // http://vosatezehn.com, http://192.168.43.140 1.103
-  static const defaultWsAddress = 'ws://vosatezehn.com:7438/ws'; // ws://vosatezehn.com:7438 ws://192.168.43.140
+  static const defaultHttpAddress = 'http://vosatezehn.com:7436'; // http://vosatezehn.com, http://192.168.43.140, 1.103
+  static const defaultWsAddress = 'ws://vosatezehn.com:7438/ws';
   static const defaultProxyAddress = '95.174.67.50:18080';
   static const Locale defaultAppLocale = Locale('fa', 'IR');
   static final CalendarType defaultCalendarType = CalendarType.solarHijri;

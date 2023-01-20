@@ -130,7 +130,6 @@ class MyApp extends StatelessWidget {
 
   Future<void> testCodes(BuildContext context) async {
     //await AppDB.db.clearTable(AppDB.tbKv);
-    //SettingsManager.settingsModel.httpAddress = 'http://192.168.43.140:7436';
   }
 }
 ///==============================================================================================

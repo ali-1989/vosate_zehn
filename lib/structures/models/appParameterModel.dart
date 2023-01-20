@@ -1,13 +1,13 @@
 
 class AppParameterModel {
   String? aidPopMessage;
-  int aidRepeatDays = 10;
+  int aidRepeatDays = 30;
 
   AppParameterModel();
 
   AppParameterModel.fromMap(Map map) {
     aidPopMessage = map['aid_pop_message'];
-    aidRepeatDays = map['aid_pop_repeat_days']?? 10;
+    aidRepeatDays = map['aid_pop_repeat_days']?? 30;
   }
 
   Map<String, dynamic> toMap() {

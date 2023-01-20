@@ -9,7 +9,7 @@ homepage: https://iris.ir
 
 publish_to: 'none'
 
-version: 5.2.7+15
+version: 5.2.8+16
 
 
 environment:
@@ -70,6 +70,7 @@ dependencies:
   image_picker: ^0.8.5+3
   wakelock: ^0.6.2
   url_launcher: any
+  carousel_slider: ^4.2.1
   permission_handler: ^9.2.0            # NoWeb
 
 

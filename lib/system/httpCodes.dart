@@ -52,6 +52,7 @@ class HttpCodes {
   static int error_tokenNotCorrect = 55;
   static int error_existThis = 60;
   static int error_canNotAccess = 65;
+  static int error_youMustRegisterForThis = 66;
   static int error_operationCannotBePerformed = 70;
   static int error_notUpload = 75;
   static int error_userNamePassIncorrect = 80;
@@ -59,7 +60,6 @@ class HttpCodes {
   static int error_translateMessage = 86;
   static int error_spacialError = 90;
 
-  //static int error_userNotManager = 777;
   //------------ sections -----------------------------------------------------
   static const sec_command = 'command';
   static const sec_userData = 'UserData';

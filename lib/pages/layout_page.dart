@@ -88,9 +88,9 @@ class LayoutPageState extends StateBase<LayoutPage> {
         children: [
           HomePage(),
           BucketPage(injectData: BucketPageInjectData()..bucketTypes = BucketTypes.meditation),
-          BucketPage(injectData: BucketPageInjectData()..bucketTypes = BucketTypes.focus),
           BucketPage(injectData: BucketPageInjectData()..bucketTypes = BucketTypes.motion),
           BucketPage(injectData: BucketPageInjectData()..bucketTypes = BucketTypes.video),
+          BucketPage(injectData: BucketPageInjectData()..bucketTypes = BucketTypes.focus),
         ],
       ),
     );

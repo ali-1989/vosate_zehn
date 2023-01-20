@@ -194,6 +194,7 @@
   "thereAreNoResults" : "موردی یافت نشد",
   "thereIsNoConversation" : "هیچ گفتگویی وجود ندارد",
   "sorryYouDoNotHaveAccess" : "متاسفانه شما اجازه دسترسی به این بخش را ندارید",
+  "youMustRegister" : "برای دسترسی به این بخش باید ثبت نام کنید",
   "youMustCompleteRequestedInformation": "شما باید اطلاعات درخواستی را کامل کنید",
   "mustSelectImageFirst" : "لازم است یک عکس انتخاب کنید.",
   "mustSelectOneFileFirst" : "ابتدا یک پرونده را انتخاب کنید.",

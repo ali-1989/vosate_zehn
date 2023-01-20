@@ -65,6 +65,10 @@ class HttpProcess {
       AppSheet.showSheet$YouDoNotHaveAccess(context);
       return true;
     }
+    else if(causeCode == HttpCodes.error_youMustRegisterForThis){
+      AppSheet.showSheetOk(context, AppMessages.youMustRegister);
+      return true;
+    }
     else if(causeCode == HttpCodes.error_operationCannotBePerformed){
       AppSheet.showSheet$OperationCannotBePerformed(context);
       return true;

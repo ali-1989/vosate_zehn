@@ -98,7 +98,7 @@ class SplashScreenState extends StateBase<SplashPage> {
 
       ApplicationInitial.appLazyInit();
       _isInLoadingSettings = false;
-
+      //SettingsManager.settingsModel.httpAddress = 'http://192.168.43.140:7436';
       AppBroadcast.reBuildMaterialBySetTheme();
     }
   }

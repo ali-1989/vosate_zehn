@@ -284,6 +284,10 @@ class AppMessages {
     return _getContext().tC('sorryYouDoNotHaveAccess')?? _noText;
   }
 
+  static String get youMustRegister {
+    return _getContext().tC('youMustRegister')?? _noText;
+  }
+
   static String get thereAreNoResults {
     return _getContext().tC('thereAreNoResults')?? _noText;
   }

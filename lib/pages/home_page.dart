@@ -1,3 +1,4 @@
+import 'package:app/managers/carouselManager.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/duration/durationFormatter.dart';
@@ -31,6 +32,7 @@ import 'package:app/tools/app/appToast.dart';
 import 'package:app/views/states/emptyData.dart';
 import 'package:app/views/states/errorOccur.dart';
 import 'package:app/views/states/waitToLoad.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class HomePage extends StatefulWidget {
 
@@ -98,13 +100,39 @@ class _HomePageState extends StateBase<HomePage> {
     return ListView(
       addAutomaticKeepAlives: true,
      children: [
-        buildAdv1(),
-        buildNews(),
-        buildAdv2(),
-        buildMeditation(),
-        buildVideo(),
-        buildAdv3(),
+       buildCarousel(),
+       buildNews(),
+       buildAdv1(),
+       buildMeditation(),
+       buildVideo(),
+       buildAdv2(),
      ],
+    );
+  }
+
+  Widget buildCarousel(){
+    return KeepAliveWrap(
+      child: Builder(
+        builder: (ctx){
+          final sliders = CarouselManager.getCarousel();
+
+          if(sliders.isEmpty){
+            return SizedBox();
+          }
+
+          return CarouselSlider(
+            options: CarouselOptions(
+                height: 180.0,
+              autoPlay: true,
+              autoPlayAnimationDuration: Duration(seconds: 2),
+              autoPlayInterval: Duration(seconds: 8),
+              reverse: true,
+              //viewportFraction: ,
+            ),
+            items: sliders,
+          );
+        },
+      ),
     );
   }
 
@@ -120,9 +148,7 @@ class _HomePageState extends StateBase<HomePage> {
 
           return GestureDetector(
             onTap: (){
-              if(adv.clickUrl?.isNotEmpty?? false){
-                UrlHelper.launchLink(adv.clickUrl!);
-              }
+              AdvertisingManager.onAdvertisingClick(adv);
             },
             child: IrisImageView(
               height: 170,
@@ -163,7 +189,7 @@ class _HomePageState extends StateBase<HomePage> {
     );
   }
 
-  Widget buildAdv3(){
+  /*Widget buildAdv3(){
     return Builder(
       builder: (ctx){
         final adv = AdvertisingManager.getAdv3();
@@ -186,7 +212,7 @@ class _HomePageState extends StateBase<HomePage> {
         );
       },
     );
-  }
+  }*/
 
   Widget buildNews(){
     return Builder(

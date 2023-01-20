@@ -54,6 +54,14 @@ class Session {
 		return currentLoginList.isNotEmpty;
 	}
 
+	static bool isGuestCurrent(){
+		if(!hasAnyLogin()){
+			return false;
+		}
+
+		return getLastLoginUser()!.userType == UserType.guest;
+	}
+
 	static bool isLogin(String userId){
 		return currentLoginList.firstWhereSafe((element) => element.userId == userId) != null;
 	}

@@ -59,7 +59,7 @@ class DrawerMenuBuilder {
 
             if(Session.hasAnyLogin())
               ListTile(
-                title: Text(AppMessages.logout).color(Colors.redAccent),
+                title: Text(Session.isGuestCurrent()? AppMessages.registerTitle :AppMessages.logout).color(Colors.redAccent),
                 leading: Icon(AppIcons.logout, size: 18, color: Colors.redAccent),
                 onTap: onLogoffCall,
               ),
@@ -214,11 +214,20 @@ class DrawerMenuBuilder {
   }
 
   static void gotoProfilePage(){
+    if(Session.isGuestCurrent()){
+      return;
+    }
+
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
     AppRoute.pushNamed(AppRoute.getLastContext()!, ProfilePage.route.name!);
   }
 
   static void onLogoffCall(){
+    if(Session.isGuestCurrent()){
+      UserLoginTools.forceLogoff(Session.getLastLoginUser()!.userId);
+      return;
+    }
+
     void yesFn(){
       UserLoginTools.forceLogoff(Session.getLastLoginUser()!.userId);
     }

@@ -3,7 +3,18 @@
 import 'dart:async';
 import 'dart:core';
 
+import 'package:app/managers/carouselManager.dart';
+import 'package:app/pages/levels/audio_player_page.dart';
+import 'package:app/pages/levels/content_view_page.dart';
+import 'package:app/pages/levels/video_player_page.dart';
+import 'package:app/services/lastSeenService.dart';
+import 'package:app/structures/enums/enums.dart';
+import 'package:app/structures/models/subBuketModel.dart';
+import 'package:app/tools/app/appDialogIris.dart';
+import 'package:app/tools/app/appRoute.dart';
 import 'package:iris_db/iris_db.dart';
+import 'package:iris_tools/api/helpers/jsonHelper.dart';
+import 'package:iris_tools/api/helpers/urlHelper.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
 
 import 'package:app/managers/mediaManager.dart';
@@ -16,8 +27,8 @@ import 'package:app/tools/app/appDb.dart';
 class AdvertisingManager {
   AdvertisingManager._();
   
-  static final List<AdvModel> _list = [];
-  static List<AdvModel> get advList => _list;
+  static final List<AdvModel> _advList = [];
+  static List<AdvModel> get advList => _advList;
   ///-----------------------------------------------------------------------------------------
   static DateTime? lastRequest;
   static Timer? timer;
@@ -56,7 +67,7 @@ class AdvertisingManager {
 
   static AdvModel? getById(int? id){
     try {
-      return _list.firstWhere((element) => element.id == id);
+      return _advList.firstWhere((element) => element.id == id);
     }
     catch(e){
       return null;
@@ -68,7 +79,7 @@ class AdvertisingManager {
     item.mediaModel ??= MediaManager.getById(item.mediaId);
 
     if(existItem == null) {
-      _list.add(item);
+      _advList.add(item);
       return item;
     }
     else {
@@ -93,11 +104,11 @@ class AdvertisingManager {
   }
 
   static Future removeItem(int id/*, bool fromDb*/) async {
-    _list.removeWhere((element) => element.id == id);
+    _advList.removeWhere((element) => element.id == id);
   }
 
   static void sortList(bool asc) async {
-    _list.sort((AdvModel p1, AdvModel p2){
+    _advList.sort((AdvModel p1, AdvModel p2){
       final d1 = p1.date;
       final d2 = p2.date;
 
@@ -114,7 +125,7 @@ class AdvertisingManager {
   }
 
   static Future removeNotMatchByServer(List<int> serverIds) async {
-    _list.removeWhere((element) => !serverIds.contains(element.id));
+    _advList.removeWhere((element) => !serverIds.contains(element.id));
   }
 
   static Future sinkAdv() async {
@@ -140,12 +151,14 @@ class AdvertisingManager {
       lastRequest = DateHelper.getNowToUtc();
 
       final advList = data['advertising_list'];
+      final carouselList = data['carousel_list'];
       final mediaList = data['media_list'];
 
       MediaManager.addItemsFromMap(mediaList);
       MediaManager.sinkItems(MediaManager.mediaList);
 
       addItemsFromMap(advList);
+      CarouselManager.addItemsFromMap(carouselList);
 
       AppBroadcast.newAdvNotifier.value++;
       //sinkAdv();
@@ -160,7 +173,7 @@ class AdvertisingManager {
   }
 
   static bool hasAdv1(){
-    return _list.indexWhere((element) => element.tag == 'avd1') > -1;
+    return _advList.indexWhere((element) => element.tag == 'avd1') > -1;
   }
 
   static AdvModel? getAdv1(){
@@ -173,7 +186,7 @@ class AdvertisingManager {
   }
 
   static bool hasAdv2(){
-    return _list.indexWhere((element) => element.tag == 'avd2') > -1;
+    return _advList.indexWhere((element) => element.tag == 'avd2') > -1;
   }
 
   static AdvModel? getAdv2(){
@@ -185,7 +198,7 @@ class AdvertisingManager {
     }
   }
 
-  static bool hasAdv3(){
+  /*static bool hasAdv3(){
     return _list.indexWhere((element) => element.tag == 'avd3') > -1;
   }
 
@@ -195,6 +208,62 @@ class AdvertisingManager {
     }
     catch (e){
       return null;
+    }
+  }*/
+
+  static void onAdvertisingClick(AdvModel adv){
+    if(adv.clickUrl == null || adv.clickUrl!.isEmpty){
+      return;
+    }
+
+    if(adv.type == 'url'){
+      UrlHelper.launchLink(adv.clickUrl!);
+    }
+
+    else if(adv.type == 'sub_bucket'){
+      final sub = SubBucketModel.fromMap(JsonHelper.jsonToMap(adv.clickUrl)!);
+      sub.mediaModel = MediaManager.getById(sub.mediaId);
+
+      _onClickSubBucket(sub);
+    }
+
+    else if(adv.type == 'text'){
+      AppDialogIris.instance.showIrisDialog(AppRoute.getLastContext()!,
+          desc: adv.clickUrl!,
+          yesText: 'بله'
+      );
+    }
+  }
+
+  static void _onClickSubBucket(SubBucketModel itm) {
+    LastSeenService.addItem(itm);
+
+    if(itm.type == SubBucketTypes.video.id()){
+      final inject = VideoPlayerPageInjectData();
+      inject.srcAddress = itm.mediaModel!.url!;
+      inject.videoSourceType = VideoSourceType.network;
+
+      AppRoute.pushNamed(AppRoute.getLastContext()!, VideoPlayerPage.route.name!, extra: inject);
+      return;
+    }
+
+    if(itm.type == SubBucketTypes.audio.id()){
+      final inject = AudioPlayerPageInjectData();
+      inject.srcAddress = itm.mediaModel!.url!;
+      inject.audioSourceType = AudioSourceType.network;
+      inject.title = '';//bucketModel?.title;
+      inject.subTitle = itm.title;
+
+      AppRoute.pushNamed(AppRoute.getLastContext()!, AudioPlayerPage.route.name!, extra: inject);
+      return;
+    }
+
+    if(itm.type == SubBucketTypes.list.id()){
+      final inject = ContentViewPageInjectData();
+      inject.subBucket = itm;
+
+      AppRoute.pushNamed(AppRoute.getLastContext()!, ContentViewPage.route.name!, extra: inject);
+      return;
     }
   }
 }
