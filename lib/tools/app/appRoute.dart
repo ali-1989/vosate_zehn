@@ -139,7 +139,7 @@ class AppRoute {
   }
 
   static void replaceNamed(BuildContext context, String name, {dynamic extra}) {
-    GoRouter.of(context).replaceNamed(name, params: {}, extra: extra);
+    GoRouter.of(context).pushReplacementNamed(name, params: {}, extra: extra);
   }
 
   static void refreshRouter(BuildContext context) {
@@ -192,7 +192,7 @@ bool checkFreeRoute(GoRoute route, GoRouterState state){
   return false;
 }
 
-String? _mainRedirect(GoRouterState state){
+String? _mainRedirect(BuildContext _, GoRouterState state){
   AppRoute.init();
   
   if(state.subloc == LayoutPage.route.path){

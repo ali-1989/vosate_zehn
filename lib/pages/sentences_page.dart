@@ -7,7 +7,6 @@ import 'package:iris_tools/dateSection/ADateStructure.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
 import 'package:iris_tools/features/overlayDialog.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
-import 'package:iris_tools/modules/stateManagers/selfRefresh.dart';
 import 'package:iris_tools/widgets/optionsRow/checkRow.dart';
 
 import 'package:app/managers/settingsManager.dart';
@@ -163,8 +162,9 @@ class _SentencesPageState extends StateBase<SentencesPage> {
 
   void showSettingDialog(){
     final view = Align(
-      child: SelfRefresh(
-        builder: (ctx, ctr){
+      child: Assist(
+        selfControl: true,
+        builder: (ctx, ctr, data){
           return FractionallySizedBox(
             widthFactor: .8,
             child: Card(
@@ -199,7 +199,7 @@ class _SentencesPageState extends StateBase<SentencesPage> {
                             description: Text('نمایش جملات روز به صورت نوتیفیکیشن'),
                             onChanged: (v){
                               SettingsManager.settingsModel.notificationDailyText = v;
-                              ctr.update();
+                              ctr.updateSelf();
                               SettingsManager.saveSettings();
                             }
                         )

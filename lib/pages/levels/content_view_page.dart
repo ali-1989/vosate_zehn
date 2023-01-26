@@ -350,6 +350,7 @@ class _LevelPageState extends StateBase<ContentViewPage> {
 
   void onFullTimePlay(MediaModelWrapForContent media) {
     requestRegisterSeenContent(media);
+    AppToast.showToast(context, 'جلسه بعدی باز شد');
   }
 
   void requestData() async {
@@ -417,6 +418,10 @@ class _LevelPageState extends StateBase<ContentViewPage> {
     js[Keys.id] = widget.injectData.subBucket.id;
     js['content_id'] = contentModel!.id;
     js['media_id'] = media.id;
+
+    requester.httpRequestEvents.onFailState = (req, data) async {
+      AppToast.showToast(context, 'خطا در باز کردن جلسه');
+    };
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
       media.isSee = true;

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app/tools/app/appToast.dart';
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
@@ -254,7 +255,9 @@ class AudioPlayerPageState extends StateBase<AudioPlayerPage> {
 
   void startTimerForSeeFull(){
     if(seeToEndTimer == null || !seeToEndTimer!.isActive) {
-      var per = 40 / 100 * totalTime.inMilliseconds;
+      AppToast.showToast(context, 'شروع');
+      var per = 20 / 100 * totalTime.inMilliseconds;
+
       seeToEndTimer = Timer(Duration(milliseconds: per.toInt()), () { //totalTime - Duration(seconds: 4)
         widget.injectData.onFullTimePlay?.call();
       });

@@ -13,7 +13,7 @@ class AppSizes {
   static bool _initialState = false;
 
   static double sizeOfBigScreen = 700;
-  static double webMaxDialogSize = 700;
+  static double webMaxDialogSize = 500; // 700;  because used MaxWidth(500) in main
 
   double? realPixelWidth;
   double? realPixelHeight;
@@ -136,7 +136,9 @@ class AppSizes {
       return 0;
     }
 
-    return over / 2;
+    return 0;
+    /// if in main used [MaxWidth()],not need to below line
+    //return over / 2;
   }
 
   double mTextSize(double tSize){

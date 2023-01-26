@@ -5,8 +5,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
-import 'package:go_router/go_router.dart';
-
 import 'package:app/constants.dart';
 import 'package:app/managers/settingsManager.dart';
 import 'package:app/pages/splash_page.dart';
@@ -19,6 +17,7 @@ import 'package:app/tools/app/appLocale.dart';
 import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/app/appToast.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
 
 ///================ call on any hot restart
 Future<void> main() async {
@@ -56,7 +55,7 @@ Future<void> mainInitialize() async {
   SchedulerBinding.instance.window.scheduleFrame();
 
   FlutterError.onError = onErrorCatch;
-  GoRouter.setUrlPathStrategy(UrlPathStrategy.path);
+  usePathUrlStrategy();
   NativeCallService.init();
   await NativeCallService.invokeMethod('setAppIsRun');
 }
