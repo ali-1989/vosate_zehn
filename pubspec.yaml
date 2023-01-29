@@ -9,7 +9,7 @@ homepage: https://iris.ir
 
 publish_to: 'none'
 
-version: 5.2.8+16
+version: 5.2.9+17
 
 
 environment:
@@ -50,7 +50,7 @@ dependencies:
   material_dialogs: ^1.1.4
   awesome_notifications: ^0.6.21        # no update: occur error
   popover: ^0.2.8
-  google_sign_in: ^5.4.3
+  google_sign_in: ^5.4.4
   #sign_in_with_apple: ^4.0.0
   flip_card: ^0.7.0
   pin_code_fields: ^7.4.0

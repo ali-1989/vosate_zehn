@@ -173,7 +173,7 @@ class AppMessages {
   }
 
   static String get changeNumber {
-    return 'شماره ی دیکر';
+    return 'شماره ی دیگر';
   }
 
   static String get enterVerifyCode {

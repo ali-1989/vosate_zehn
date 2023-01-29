@@ -255,7 +255,6 @@ class AudioPlayerPageState extends StateBase<AudioPlayerPage> {
 
   void startTimerForSeeFull(){
     if(seeToEndTimer == null || !seeToEndTimer!.isActive) {
-      AppToast.showToast(context, 'شروع');
       var per = 20 / 100 * totalTime.inMilliseconds;
 
       seeToEndTimer = Timer(Duration(milliseconds: per.toInt()), () { //totalTime - Duration(seconds: 4)

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/cache/memoryCache.dart';
-import 'package:iris_tools/api/manageCallAction.dart';
+import 'package:iris_tools/api/cache/timeoutCache.dart';
 
 class AppCache {
   AppCache._();
@@ -9,23 +9,23 @@ class AppCache {
   static ImageProvider? screenBack;
   static MemoryCache appCache = MemoryCache();
   static TimeoutCache timeoutCache = TimeoutCache();
-  static TimeoutCache downloadingItems = TimeoutCache();
+  static TimeoutCache downloadingCache = TimeoutCache();
 
   //-------- Download --------------------------------------------------------------------------------
   static void addStartToDownload(String tag){
-    downloadingItems.addTimeout(tag, const Duration(seconds: 30));
+    downloadingCache.addTimeout(tag, const Duration(seconds: 30));
   }
 
   static bool isDownloading(String tag){
-    return downloadingItems.existTimeout(tag);
+    return downloadingCache.existTimeout(tag);
   }
 
   static void clearDownloading(){
-    downloadingItems.clearAll();
+    downloadingCache.clearAll();
   }
 
   static void removeDownloading(String tag){
-    downloadingItems.deleteTimeout(tag);
+    downloadingCache.deleteTimeout(tag);
   }
   //---------- | Download ------------------------------------------------------------------------------
 }

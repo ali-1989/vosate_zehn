@@ -350,7 +350,7 @@ class _LevelPageState extends StateBase<ContentViewPage> {
 
   void onFullTimePlay(MediaModelWrapForContent media) {
     requestRegisterSeenContent(media);
-    AppToast.showToast(context, 'جلسه بعدی باز شد');
+    //AppToast.showToast(context, 'جلسه بعدی باز شد');
   }
 
   void requestData() async {
