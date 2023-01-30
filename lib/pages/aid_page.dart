@@ -112,7 +112,7 @@ class _AidPageState extends StateBase<AidPage> {
           SizedBox(height: 15),
 
           /// for bazar:comment
-          /*MaxWidth(
+          MaxWidth(
             maxWidth: 300,
             child: SizedBox(
               width: double.infinity,
@@ -125,7 +125,7 @@ class _AidPageState extends StateBase<AidPage> {
                   child: Text(AppMessages.payWitPaypal, textDirection: TextDirection.ltr)
               ),
             ),
-          ),*/
+          ),//
 
           SizedBox(height: 10),
         ],
