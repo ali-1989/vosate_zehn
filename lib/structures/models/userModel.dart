@@ -151,12 +151,12 @@ class UserModel {
   }
 
   bool hasAvatar(){
-    return avatarModel != null && avatarModel!.fileLocation != null;
+    return profileModel != null && profileModel!.path != null;
   }
 
   @override
   String toString(){
-    return '$userId _ name: $name _ family: $lastName _ mobile: $mobile _ sex: $gender | token: ${token?.token} , refresh Token: ${token?.refreshToken} ';
+    return '$userId _ name: $name _ family: $family _ mobile: $mobile _ sex: $sex | token: ${token?.token} , refresh Token: ${token?.refreshToken} ';
   }
 }
 ///=======================================================================================================
