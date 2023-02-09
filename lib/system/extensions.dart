@@ -938,7 +938,7 @@ extension TextExtension on Text {
 
   Text fs(double size) {
     var ts = style ?? AppThemes.instance.currentTheme.baseTextStyle;
-    ts = ts.copyWith(fontSize: AppSizes.fwFontSize(size));
+    ts = ts.copyWith(fontSize: AppSizes.webFontSize(size));
 
     return Text(
       data!,
@@ -1120,7 +1120,7 @@ extension TextFieldExtension on TextField {
       inputFormatters: inputFormatters,
       autofillHints: autofillHints,
       buildCounter: buildCounter,
-      toolbarOptions: toolbarOptions,
+      contextMenuBuilder: contextMenuBuilder,
       focusNode: focusNode,
       autofocus: autofocus,
       readOnly: readOnly,
@@ -1212,7 +1212,7 @@ extension TextFormFieldExtension on TextFormField {
       inputFormatters: my.inputFormatters,
       autofillHints: my.autofillHints,
       buildCounter: my.buildCounter,
-      toolbarOptions: my.toolbarOptions,
+      contextMenuBuilder: my.contextMenuBuilder,
       focusNode: my.focusNode,
       autofocus: my.autofocus,
       readOnly: my.readOnly,
@@ -1313,3 +1313,22 @@ extension RadioExtension on Radio {
   }
 }
 ///==========================================================================================================
+extension TextHeightBehaviorExtension on TextHeightBehavior {
+  Map<String, dynamic> toMap(){
+    return <String, dynamic>{
+      'applyHeightToFirstAscent': applyHeightToFirstAscent,
+      'applyHeightToLastDescent': applyHeightToLastDescent,
+    };
+  }
+
+  TextHeightBehavior? fromMap(Map<String, dynamic>? map){
+    if(map == null){
+      return null;
+    }
+
+    return TextHeightBehavior(
+        applyHeightToLastDescent: map['applyHeightToLastDescent'],
+        applyHeightToFirstAscent: map['applyHeightToFirstAscent']
+    );
+  }
+}

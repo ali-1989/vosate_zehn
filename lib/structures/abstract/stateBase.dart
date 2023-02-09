@@ -118,6 +118,7 @@ abstract class StateBase<W extends StatefulWidget> extends State<W> {
 		}
 	}
 
+	/// note: can not show a dialog in initState(), use addPostFrameCallback() if it is force
 	void showLoading({bool canBack = false, Duration? startDelay}){
 		AppLoading.instance.showLoading(context, dismiss: canBack);
 	}

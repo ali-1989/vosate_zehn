@@ -222,7 +222,7 @@ class _SentencesPageState extends StateBase<SentencesPage> {
 
     final overlay = OverlayScreenView(content: view, backgroundColor: Colors.black26);
 
-    AppOverlay.showScreen(context, overlay, canBack: true);
+    AppOverlay.showDialogScreen(context, overlay, canBack: true);
   }
 
   void requestData(DateTime dateTime) async {

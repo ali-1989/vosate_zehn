@@ -1,9 +1,15 @@
+import 'dart:async';
+
+import 'package:app/structures/middleWare/requester.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:iris_tools/api/helpers/jsonHelper.dart';
 
 import 'package:iris_tools/api/logger/logger.dart';
 import 'package:iris_tools/api/logger/reporter.dart';
 import 'package:iris_tools/api/system.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
+import 'package:iris_tools/models/twoStateReturn.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:app/constants.dart';
@@ -60,6 +66,30 @@ class PublicAccess {
     return res;
   }
 
+  static Future<TwoStateReturn<Map, Response>> publicApiCaller(String url, MethodType methodType, Map<String, dynamic>? body){
+    Requester requester = Requester();
+    Completer<TwoStateReturn<Map, Response>> res = Completer();
+
+    requester.httpRequestEvents.onFailState = (req, response) async {
+      res.complete(TwoStateReturn(r2: response));
+    };
+
+    requester.httpRequestEvents.onStatusOk = (req, data) async {
+      final js = JsonHelper.jsonToMap(data)!;
+
+      res.complete(TwoStateReturn(r1: js));
+    };
+
+    if(body != null){
+      requester.bodyJson = body;
+    }
+
+    requester.prepareUrl(pathUrl: url);
+    requester.methodType = methodType;
+
+    requester.request(null, false);
+    return res.future;
+  }
   static WidgetsBinding getAppWidgetsBinding() {
     return WidgetsBinding.instance;
   }

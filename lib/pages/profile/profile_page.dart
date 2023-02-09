@@ -342,7 +342,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
 
     final view = OverlayScreenView(content: body);
 
-    AppOverlay.showScreen(context, view, canBack: true);
+    AppOverlay.showDialogScreen(context, view, canBack: true);
   }
 
   void changeAvatarClick() async {
@@ -535,8 +535,8 @@ class _ProfilePageState extends StateBase<ProfilePage> {
 
     requester.prepareUrl();
     requester.bodyJson = null;
-    requester.httpItem.addBodyField(Keys.jsonPart, JsonHelper.mapToJson(js));
-    requester.httpItem.addBodyFile(partName, fileName, File(filePath));
+    requester.httpItem.addFormField(Keys.jsonPart, JsonHelper.mapToJson(js));
+    requester.httpItem.addFormFile(partName, fileName, File(filePath));
 
     showLoading(canBack: false);
     requester.request(context, false);
@@ -594,7 +594,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
 
       assistCtr.updateHead();
       Session.sinkUserInfo(user);
-      AppOverlay.hideScreen(context);
+      AppOverlay.hideDialog(context);
     };
 
     showLoading(canBack: false);

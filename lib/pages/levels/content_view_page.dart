@@ -27,6 +27,7 @@ import 'package:app/tools/app/appToast.dart';
 import 'package:app/views/homeComponents/appBarBuilder.dart';
 import 'package:app/views/states/errorOccur.dart';
 import 'package:app/views/states/waitToLoad.dart';
+import 'package:iris_tools/widgets/sizePosition/sizeInInfinity.dart';
 
 class ContentViewPageInjectData {
   late SubBucketModel subBucket;
@@ -89,20 +90,22 @@ class _LevelPageState extends StateBase<ContentViewPage> {
   }
 
   Widget buildBody(){
-    return Column(
-      children: [
-        SizedBox(height: 20,),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          SizedBox(height: 20),
 
-        Padding(
+          Padding(
             padding: EdgeInsets.symmetric(horizontal: 50, vertical: 8),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
               child: Builder(
                 builder: (ctx){
                   if(widget.injectData.subBucket.imageModel?.url != null){
                     return IrisImageView(
                       width: double.infinity,
                       height: 160,
+                      //beforeLoadWidget: SizedBox(height: 160),
                       fit: BoxFit.fill,
                       url: widget.injectData.subBucket.imageModel!.url!,
                       imagePath: AppDirectories.getSavePathMedia(widget.injectData.subBucket.imageModel, SavePathType.anyOnInternal, null),
@@ -112,25 +115,48 @@ class _LevelPageState extends StateBase<ContentViewPage> {
                   return Image.asset(AppImages.appIcon, width: double.infinity, height: 100, fit: BoxFit.contain);
                 },
               ),
+            ),
           ),
-        ),
 
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-          child: Text(widget.injectData.subBucket.description?? '').bold().fsR(2),
-        ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+            child: Text(widget.injectData.subBucket.description?? '').bold().fsR(2),
+          ),
 
-        SizedBox(height: 40),
+          SizedBox(height: 40),
 
-        Expanded(
-            child: Builder(
+           Builder(
               builder: (ctx){
                 if(isInFetchData) {
-                  return WaitToLoad();
+                  return SizeInInfinity(
+                      builder: (BuildContext context, double? top, double? realHeight, double? height) {
+
+                        if(height == null){
+                          return SizedBox();
+                        }
+
+                        return SizedBox(
+                            height: height,
+                            child: WaitToLoad()
+                        );
+                    }
+                  );
                 }
 
                 if(!assistCtr.hasState(state$fetchData)){
-                  return ErrorOccur(onRefresh: tryLoadClick);
+                  return SizeInInfinity(
+                      builder: (BuildContext context, double? top, double? realHeight, double? height) {
+
+                        if(height == null){
+                          return SizedBox();
+                        }
+
+                        return SizedBox(
+                            height: height,
+                            child: ErrorOccur(onRefresh: tryLoadClick)
+                        );
+                      }
+                  );
                 }
 
                 return Column(
@@ -141,7 +167,7 @@ class _LevelPageState extends StateBase<ContentViewPage> {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: AvatarChip(
-                            label: Text(contentModel!.speakerModel?.name?? ''),
+                          label: Text(contentModel!.speakerModel?.name?? ''),
                           avatar: contentModel!.speakerModel?.profileModel != null?
                           ClipOval(
                               child: IrisImageView(
@@ -152,38 +178,34 @@ class _LevelPageState extends StateBase<ContentViewPage> {
                                 imagePath: AppDirectories.getSavePathMedia(contentModel!.speakerModel!.profileModel, SavePathType.anyOnInternal, null),
                               )
                           )
-                          : null,
+                              : null,
                         ),
                       ),
                     ),
 
                     SizedBox(height: 16),
 
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                        child: SingleChildScrollView(
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: Wrap(
-                              textDirection: TextDirection.rtl,
-                              alignment: WrapAlignment.start,
-                              runAlignment: WrapAlignment.start,
-                              crossAxisAlignment: WrapCrossAlignment.start,
-                              spacing: 8,
-                              runSpacing: 4,
-                              children: buildWrapItems(),
-                            ),
-                          ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Wrap(
+                          textDirection: TextDirection.rtl,
+                          alignment: WrapAlignment.start,
+                          runAlignment: WrapAlignment.start,
+                          crossAxisAlignment: WrapCrossAlignment.start,
+                          spacing: 8,
+                          runSpacing: 4,
+                          children: buildWrapItems(),
                         ),
                       ),
-                    ),
+                    )
                   ],
                 );
               },
             ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

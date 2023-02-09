@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:iris_tools/api/extendValueNotifier.dart';
 import 'package:iris_tools/modules/stateManagers/notifyRefresh.dart';
 import 'package:iris_tools/modules/stateManagers/refresh.dart';
+import 'package:iris_tools/api/notifiers/extendValueNotifier.dart';
 
 import 'package:app/pages/layout_page.dart';
 import 'package:app/pages/splash_page.dart';

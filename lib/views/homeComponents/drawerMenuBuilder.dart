@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app/services/login_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/helpers/colorHelper.dart';
@@ -29,7 +30,6 @@ import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/app/appSizes.dart';
-import 'package:app/tools/userLoginTools.dart';
 
 class DrawerMenuBuilder {
   DrawerMenuBuilder._();
@@ -224,12 +224,12 @@ class DrawerMenuBuilder {
 
   static void onLogoffCall(){
     if(Session.isGuestCurrent()){
-      UserLoginTools.forceLogoff(Session.getLastLoginUser()!.userId);
+      LoginService.forceLogoff(Session.getLastLoginUser()!.userId);
       return;
     }
 
     void yesFn(){
-      UserLoginTools.forceLogoff(Session.getLastLoginUser()!.userId);
+      LoginService.forceLogoff(Session.getLastLoginUser()!.userId);
     }
 
     AppDialogIris.instance.showYesNoDialog(

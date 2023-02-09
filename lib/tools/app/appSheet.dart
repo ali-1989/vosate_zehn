@@ -28,7 +28,9 @@ class AppSheet {
   AppSheet._();
 
   static void closeSheet<T>(BuildContext context, {T? result}) {
-    Navigator.of(context).pop(result);
+    if(Navigator.of(context).canPop()){
+      Navigator.of(context).pop(result);
+    }
   }
 
   static void closeSheetByName<T>(BuildContext context, String routeName, {T? result}) {
@@ -147,6 +149,7 @@ class AppSheet {
     //TextButton.icon(onPressed: fn, label: Text(btnText,), icon: Icon(icon, color: textColor,),);
 
     final content = Text(message, style: txtStyle);
+
     Widget? titleView;
 
     if (title != null) {
@@ -490,7 +493,7 @@ class AppSheet {
     return showSheetOneAction<T>(context, AppMessages.accountIsBlock, null);
   }
 
-static Future<T?> showSheet$YouDoNotHaveAccess<T>(BuildContext context) {
+  static Future<T?> showSheet$YouDoNotHaveAccess<T>(BuildContext context) {
     return showSheetOneAction<T>(context, AppMessages.sorryYouDoNotHaveAccess, null);
   }
 

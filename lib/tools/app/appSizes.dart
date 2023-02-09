@@ -153,21 +153,14 @@ class AppSizes {
     return size * heightMultiplier; // ~6.4
   }
 
-  double fwSize(double s){
-    if(kIsWeb) {
-      return s * 1.3;
-    }
-    return s;
-  }
-
-  static double fwTextFactor(double fact){
+  static double webFontTextFactor(double fact){
     if(kIsWeb) {
       return fact * 1.4;
     }
     return fact;
   }
 
-  static double fwFontSize(double size){
+  static double webFontSize(double size){
     if(kIsWeb) {
       return size * 1.3;
     }
@@ -223,7 +216,7 @@ class AppSizes {
 
   static double getViewPortHeight(BuildContext context){
     final full = MediaQuery.of(context).size.height;
-    final status = MediaQuery.of(context).padding.top;
+    final status = MediaQuery.of(context).viewPadding.top; // this is variable
     const appBar = kToolbarHeight;
 
     return full - (status + appBar);

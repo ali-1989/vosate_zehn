@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:app/services/event_dispatcher_service.dart';
+import 'package:app/services/login_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -33,7 +35,6 @@ import 'package:app/tools/app/appSizes.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/deviceInfoTools.dart';
 import 'package:app/tools/netListenerTools.dart';
-import 'package:app/tools/userLoginTools.dart';
 
 class ApplicationInitial {
   ApplicationInitial._();
@@ -82,6 +83,7 @@ class ApplicationInitial {
       await AppLocale.localeDelegate().getLocalization().setFallbackByLocale(const Locale('en', 'EE'));
       await DeviceInfoTools.prepareDeviceInfo();
       await DeviceInfoTools.prepareDeviceId();
+      //AudioPlayerService.init();
 
       if (!kIsWeb) {
         await AppNotification.initial();
@@ -98,6 +100,7 @@ class ApplicationInitial {
   }
 
   static Future<void> inSplashInitWithContext(BuildContext context) async {
+    AppRoute.init();
     AppCache.screenBack = const AssetImage(AppImages.background);
     await precacheImage(AppCache.screenBack!, context);
   }
@@ -141,7 +144,7 @@ class ApplicationInitial {
       DownloadUploadService.init();
 
       /// login & logoff
-      UserLoginTools.init();
+      EventDispatcherService.attachFunction(EventDispatcher.userLogoff, LoginService.onLogoffObservable);
 
       if (System.isWeb()) {
         void onSizeCheng(oldW, oldH, newW, newH) {

@@ -18,6 +18,7 @@ import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/app/appToast.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
+import 'package:iris_tools/widgets/maxWidth.dart';
 
 ///================ call on any hot restart
 Future<void> main() async {
@@ -34,13 +35,17 @@ Future<void> main() async {
       runApp(
         /// ReBuild First Widgets tree, not call on Navigator pages
           StreamBuilder<bool>(
-              initialData: true,
+              initialData: false,
               stream: AppBroadcast.viewUpdaterStream.stream,
               builder: (context, snapshot) {
-              return DefaultTextHeightBehavior(
-                textHeightBehavior: TextHeightBehavior(applyHeightToFirstAscent: false, applyHeightToLastDescent: false),
-                child: Toaster(
-                  child: MyApp(),
+              return MaxWidth(
+                maxWidth: 520,
+                apply: kIsWeb,
+                child: DefaultTextHeightBehavior(
+                  textHeightBehavior: TextHeightBehavior(applyHeightToFirstAscent: false, applyHeightToLastDescent: false),
+                  child: Toaster(
+                    child: MyApp(),
+                  ),
                 ),
               );
             }
@@ -99,7 +104,7 @@ class MyApp extends StatelessWidget {
         AppRoute.materialContext = localContext;
 
         return DefaultTextStyle(
-          style: AppThemes.instance.themeData.textTheme.bodyText1?? TextStyle(),
+          style: AppThemes.instance.themeData.textTheme.bodyLarge?? TextStyle(),
           child: Directionality(
               textDirection: AppThemes.instance.textDirection,
               child: materialHomeBuilder(home) //materialHomeBuilder(home) or home!
@@ -120,6 +125,7 @@ class MyApp extends StatelessWidget {
           data: MediaQuery.of(localContext).copyWith(textScaleFactor: 1.0),
           child: OrientationBuilder(builder: (context, orientation) {
             testCodes(context);
+
             return SplashPage(firstPage: firstPage);
           }),
         );

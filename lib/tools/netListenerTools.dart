@@ -1,3 +1,4 @@
+import 'package:app/services/event_dispatcher_service.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:iris_tools/net/netManager.dart';
 
@@ -12,32 +13,13 @@ import 'package:app/tools/app/appCache.dart';
 class NetListenerTools {
   NetListenerTools._();
 
-  static final List<void Function(bool isConnected)> _wsConnectListeners = [];
-
-  static void addNetListener(void Function(ConnectivityResult) fn){
-    NetManager.addChangeListener(fn);
-  }
-
-  static void removeNetListener(void Function(ConnectivityResult) fn){
-    NetManager.removeChangeListener(fn);
-  }
-
-  static void addWsListener(void Function(bool) fn){
-    if(!_wsConnectListeners.contains(fn)) {
-      _wsConnectListeners.add(fn);
-    }
-  }
-
-  static void removeWsListener(void Function(bool) fn){
-    _wsConnectListeners.remove(fn);
-  }
-
   /// this fn call on app launch: if (wifi/cell data) is on.
   static void onNetListener(ConnectivityResult connectivityResult) async {
+    EventDispatcherService.notify(EventDispatcher.networkStateChange);
 
     if(connectivityResult != ConnectivityResult.none) {
       AppBroadcast.isNetConnected = true;
-
+      EventDispatcherService.notify(EventDispatcher.networkConnected);
       //await ServerTimeTools.requestUtcTimeOfServer();
       AppParameterManager.requestParameters();
       AdvertisingManager.check();
@@ -52,35 +34,20 @@ class NetListenerTools {
     }
     else {
       AppBroadcast.isNetConnected = false;
+      EventDispatcherService.notify(EventDispatcher.networkDisConnected);
+
       AppCache.clearDownloading();
     }
   }
 
   static void onWsConnectedListener(){
     AppBroadcast.isWsConnected = true;
-
-    try {
-      /*todo if (Session.hasAnyLogin()) {
-      final user = Session.getLastLoginUser()!;
-
-      UserLoginTools.prepareRequestUsersProfileData();
-    }*/
-
-      for (final fn in _wsConnectListeners) {
-        fn.call(true);
-      }
-    }
-    catch (e){/**/}
+    EventDispatcherService.notify(EventDispatcher.webSocketStateChange);
+    EventDispatcherService.notify(EventDispatcher.webSocketConnected);
   }
 
   static void onWsDisConnectedListener(){
     AppBroadcast.isWsConnected = false;
-
-    try{
-      for(final fn in _wsConnectListeners){
-        fn.call(false);
-      }
-    }
-    catch (e){/**/}
+    EventDispatcherService.notify(EventDispatcher.webSocketDisConnected);
   }
 }

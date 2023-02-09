@@ -121,7 +121,7 @@ class _LoginPageState extends StateBase<LoginPage> {
 
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25.0),
+            padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10),
             child: Align(
               child: FlipCard(
                 controller: flipCardController,

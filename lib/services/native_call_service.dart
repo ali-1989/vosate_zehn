@@ -14,7 +14,11 @@ class NativeCallService {
   NativeCallService._();
 
   static void init() async {
-    if(nativeChannel == null && !kIsWeb) {
+    if(kIsWeb || !System.isAndroid()){
+      return;
+    }
+
+    if(nativeChannel == null) {
       nativeChannel = MethodChannel('my_channel');
       nativeChannel!.setMethodCallHandler(methodCallHandler);
     }
@@ -23,7 +27,7 @@ class NativeCallService {
   }
 
   static Future<void> setBootCallbackHandler() async {
-    if(kIsWeb){
+    if(kIsWeb || !System.isAndroid()){
       return;
     }
 

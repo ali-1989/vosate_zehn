@@ -15,7 +15,8 @@ import 'package:app/tools/app/appSheet.dart';
 enum MethodType {
   post,
   get,
-  put
+  put,
+  delete,
 }
 
 enum RequestPath {
@@ -66,9 +67,7 @@ class Requester {
 
     pathUrl ??= '/graph-v1';
 
-    if(!_http.fullUrl.contains(pathUrl)) {
-      _http.fullUrl = SettingsManager.settingsModel.httpAddress + pathUrl;
-    }
+    _http.fullUrl = SettingsManager.settingsModel.httpAddress + pathUrl;
   }
 
   void request([BuildContext? context, bool promptErrors = true]){
@@ -80,6 +79,9 @@ class Requester {
         break;
       case MethodType.post:
         _http.method = 'POST';
+        break;
+      case MethodType.delete:
+        _http.method = 'DELETE';
         break;
       case MethodType.put:
         _http.method = 'PUT';
@@ -110,15 +112,21 @@ class Requester {
       httpRequestEvents.onAnyState?.call(_httpRequester);
       httpRequestEvents.onFailState?.call(_httpRequester, null);
       httpRequestEvents.onNetworkError?.call(_httpRequester);
+
+      return null;
     });
 
     f = f.then((val) async {
       /*if(_httpRequester.responseData?.statusCode == 401){ // token
         final getNewToken = await JwtService.requestNewToken(Session.getLastLoginUser()!);
 
-        /// try request again
+        /// try request old api again
         if(getNewToken) {
           request(context, promptErrors);
+        }
+        else {
+          await httpRequestEvents.onAnyState?.call(_httpRequester);
+          await httpRequestEvents.onFailState?.call(_httpRequester, val);
         }
 
         return;
@@ -185,9 +193,18 @@ class Requester {
 ///================================================================================================
 class HttpRequestEvents {
   Future Function(HttpRequester)? onAnyState;
-  Future Function(HttpRequester, Response?)? onFailState;
+  Future Function(HttpRequester requester, Response? response)? onFailState;
   Future Function(HttpRequester)? onNetworkError;
   Future Function(HttpRequester, Map)? manageResponse;
   Future Function(HttpRequester, Map)? onStatusOk;
-  Future<bool> Function(HttpRequester, Map, int?, String?)? onStatusError;
+  Future<bool> Function(HttpRequester requester, Map jsData, String cause, int causeCode)? onStatusError;
+
+  void clear(){
+    onAnyState = null;
+    onFailState = null;
+    onNetworkError = null;
+    manageResponse = null;
+    onStatusOk = null;
+    onStatusError = null;
+  }
 }

@@ -150,9 +150,13 @@ class UserModel {
     return '${userId}_${profileModel!.id}.jpg';
   }
 
+  bool hasAvatar(){
+    return avatarModel != null && avatarModel!.fileLocation != null;
+  }
+
   @override
   String toString(){
-    return '$userId _ userName: $userName _ name: $name _ family: $family _ mobile: $mobile _ sex: $sex ';
+    return '$userId _ name: $name _ family: $lastName _ mobile: $mobile _ sex: $gender | token: ${token?.token} , refresh Token: ${token?.refreshToken} ';
   }
 }
 ///=======================================================================================================

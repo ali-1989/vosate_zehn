@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:app/services/login_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_websocket/iris_websocket.dart';
@@ -20,7 +21,7 @@ import 'package:app/tools/app/appNotification.dart';
 import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/deviceInfoTools.dart';
 import 'package:app/tools/netListenerTools.dart';
-import 'package:app/tools/userLoginTools.dart';
+
 
 class WebsocketService {
 	WebsocketService._();
@@ -183,11 +184,11 @@ class WebsocketService {
 						break;
 					case HttpCodes.com_forceLogOff:
 						// ignore: unawaited_futures
-						UserLoginTools.forceLogoff(userId);
+						LoginService.forceLogoff(userId);
 						break;
 					case HttpCodes.com_forceLogOffAll:
 						// ignore: unawaited_futures
-						UserLoginTools.forceLogoffAll();
+						LoginService.forceLogoffAll();
 						break;
 					case HttpCodes.com_talkMeWho:
 						sendData(JsonHelper.mapToJson(PublicAccess.getHeartMap()));

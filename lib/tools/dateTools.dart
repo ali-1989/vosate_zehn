@@ -115,7 +115,7 @@ class DateTools {
     return dateAndHmRelative(DateHelper.tsToSystemDate(date), isUtc: isUtc);
   }
 
-  static String dateYmOnlyRelative(DateTime? date, {bool isUtc = true}){
+  static String ymOnlyRelative(DateTime? date, {bool isUtc = true}){
     if(date == null) {
       return '';
     }
@@ -137,7 +137,7 @@ class DateTools {
     return LocaleHelper.overrideLtr(mDate.format('YYYY/MM', 'en').localeNum());
   }
 
-  static String dateHmOnlyRelative(DateTime? date, {bool isUtc = true}){
+  static String hmOnlyRelative(DateTime? date, {bool isUtc = true}){
     if(date == null) {
       return '';
     }
@@ -160,7 +160,7 @@ class DateTools {
   }
 
   static String dateHmOnlyRelative$String(String? date, {bool isUtc = true}){
-    return dateHmOnlyRelative(DateHelper.tsToSystemDate(date), isUtc: isUtc);
+    return hmOnlyRelative(DateHelper.tsToSystemDate(date), isUtc: isUtc);
   }
   ///---------------------------------------------------------------------------------------
   static Future saveAppCalendar(CalendarType calendarType, {BuildContext? context}) {

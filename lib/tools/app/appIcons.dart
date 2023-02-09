@@ -46,7 +46,6 @@ class AppIcons {
   static const IconData message = Icons.message;
   static const IconData email = Icons.email;
   static const IconData sendMessage = Icons.send;
-  static const IconData whatsapp = Icons.whatsapp;
   static const IconData search = Icons.search;
   static const IconData fileUpload = Icons.upload_file;
   static const IconData file = Icons.insert_drive_file_sharp;
@@ -63,9 +62,16 @@ class AppIcons {
   static const IconData pauseCircle = Icons.pause_circle;
   static const IconData chartBar = Icons.bar_chart;
   static const IconData edit = Icons.edit;
-  static const IconData fileDownload = Icons.file_download;
-  static const IconData fileDownloadDone = Icons.file_download_done_sharp;
-  static const IconData uploadFile = Icons.file_upload;
+  static const IconData download = Icons.file_download;
+  static const IconData downloadCloud = Icons.cloud_download_rounded;
+  static const IconData downloadSolidCircle = Icons.download_for_offline;
+  static const IconData downloadFile = Icons.file_download_outlined;
+  static const IconData downloadDone = Icons.file_download_done_sharp;
+  static const IconData uploadCloud = Icons.backup;
+  static const IconData upload = Icons.file_upload;
+  static const IconData uploadFile = Icons.file_upload_outlined;
+  static const IconData refresh = Icons.refresh;
+  static const IconData refreshCircle = Icons.replay_circle_filled;
   static const IconData attach = Icons.attach_file;
   static const IconData pencil = Icons.mode_edit;
   static const IconData pushPin = Icons.push_pin;
@@ -86,6 +92,8 @@ class AppIcons {
   static const IconData zoomIn = Icons.zoom_in_map;
   static const IconData share = Icons.share;
   static const IconData history = Icons.history;
+  static const IconData questionMark = Icons.question_mark;
+  static const IconData filtering = Icons.workspaces;
   static const IconData lastSeenClock = CommunityMaterialIcons.history;
   static const IconData heartSolid = CommunityMaterialIcons.heart;
   static const IconData heart = CommunityMaterialIcons.heart_outline;
@@ -94,4 +102,5 @@ class AppIcons {
   static const IconData cashMultiple = CommunityMaterialIcons.cash_multiple;
   static const IconData medicalBag = CommunityMaterialIcons.medical_bag;
   static const IconData focus = CommunityMaterialIcons.image_filter_center_focus;
+  static const IconData translate = CommunityMaterialIcons.translate;
 }

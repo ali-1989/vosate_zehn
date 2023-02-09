@@ -82,7 +82,7 @@ class AppSnack {
   static void showSuccess(BuildContext context, String message){
     final v = Row(
       children: [
-        Icon(AppIcons.fileDownloadDone, size: 30, color: AppThemes.instance.currentTheme.successColor),
+        Icon(AppIcons.downloadDone, size: 30, color: AppThemes.instance.currentTheme.successColor),
         const SizedBox(width: 30,),
         Flexible(child: Text(message))
       ],

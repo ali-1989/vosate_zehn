@@ -64,11 +64,11 @@ class AppRoute {
     return res > 0;
   }
 
-  /*static String? fetchRoutePageName() {
+  static String? fetchRoutePageName() {
     return AppDB.fetchKv(Keys.setting$lastRouteName);
   }
 
-  static void navigateRouteScreen(String routeName) {
+  /*static void navigateRouteScreen(String routeName) {
     saveRouteName(routeName);
     SettingsManager.settingsModel.currentRouteScreen = routeName;
     AppBroadcast.reBuildMaterial();
@@ -88,13 +88,13 @@ class AppRoute {
   }
 
   static bool canPop(BuildContext context) {
-    return AppNavigator.canPop(context);
-    //return GoRouter.of(context).canPop();
+    //return AppNavigator.canPop(context);
+    return GoRouter.of(context).canPop();
   }
 
-  static void popTopView(BuildContext context) {
+  static void popTopView(BuildContext context, {dynamic data}) {
     if(canPop(context)) {
-      AppNavigator.pop(context);
+    AppNavigator.pop(context, result: data);
     }
   }
 
@@ -103,14 +103,14 @@ class AppRoute {
     //AppNavigator.pop(context);
   }
 
-
+  /*
   static Future push(BuildContext context, Widget page, {dynamic extra}) async {
     final r = MaterialPageRoute(builder: (ctx){
       return page;
     });
 
     return Navigator.of(context).push(r);
-  }
+  }*/
   
   static void pushAddress(BuildContext context, String address, {dynamic extra}) {
     if(kIsWeb){
@@ -130,6 +130,7 @@ class AppRoute {
   }
 
   static void pushNamed(BuildContext context, String name, {dynamic extra}) {
+    //Navigator.of(context).pushNamed(name, arguments: extra);
     if(kIsWeb){
       GoRouter.of(context).goNamed(name, params: {}, extra: extra);
     }
@@ -139,6 +140,7 @@ class AppRoute {
   }
 
   static void replaceNamed(BuildContext context, String name, {dynamic extra}) {
+    //Navigator.of(context).pushReplacementNamed(name, arguments: extra);
     GoRouter.of(context).pushReplacementNamed(name, params: {}, extra: extra);
   }
 
@@ -185,14 +187,14 @@ bool checkFreeRoute(GoRoute route, GoRouterState state){
   }
 
   if(!routeIsTop){
-    //return '${HomePage.route.path}/${route.path}' == state.subloc;//  if homePage is not backSlash, like:/admin
-    return route.path == state.subloc;
+    //return '${HomePage.route.path}/${route.path}' == state.subloc; // if homePage is not backSlash, like:/admin
+    return '/${route.path}' == state.subloc;
   }
 
   return false;
 }
 
-String? _mainRedirect(BuildContext _, GoRouterState state){
+String? _mainRedirect(BuildContext ctx, GoRouterState state){
   AppRoute.init();
   
   if(state.subloc == LayoutPage.route.path){

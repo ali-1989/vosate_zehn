@@ -165,7 +165,7 @@ class AppDialog {
 
 	void showSuccessDialog(BuildContext context, String? title, String desc) {//shield-check, sticker-check, thump-up
 		showDialog(context, title: title, desc: desc, yesText: AppMessages.ok,
-				icon: Icon(AppIcons.fileDownloadDone, size: 48, color: AppThemes.instance.currentTheme.successColor,)
+				icon: Icon(AppIcons.downloadDone, size: 48, color: AppThemes.instance.currentTheme.successColor,)
 		);
 	}
 
