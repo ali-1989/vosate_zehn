@@ -388,7 +388,8 @@ class _LoginPageState extends StateBase<LoginPage> {
     AppNavigator.pushNextPage(
         context,
         const CountrySelectScreen(),
-        name: 'CountrySelect').then((value) {
+        name: 'CountrySelect',
+    ).then((value) {
           if(value is CountryModel){
             countryModel = value;
             phoneNumberController.getCountryController()?.text = countryModel.countryPhoneCode!;
@@ -398,10 +399,7 @@ class _LoginPageState extends StateBase<LoginPage> {
 
   void gotoTermPage(){
     AppRoute.pushNamed(context, TermPage.route.name!);
-    /*AppNavigator.pushNextPage(
-        context,
-        const TermPage(),
-        name: 'TermPage');*/
+    //AppRoute.pushWidget(context, TermPage());
   }
 
   void onSendClick(){

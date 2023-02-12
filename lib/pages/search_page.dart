@@ -47,12 +47,10 @@ class SearchPage extends StatefulWidget {
 }
 ///====================================================================================================
 class _SearchPageState extends StateBase<SearchPage> {
-  List<SubBucketModel> searchList = [];
+  List<SubBucketModel> foundList = [];
   late ThemeData chipTheme;
   Requester requester = Requester();
-  bool isInFetchData = false;
-  String state$noRequestYet = 'state_noRequestYet';
-  String state$fetchData = 'state_fetchData';
+  //String state$noRequestYet = 'state_noRequestYet';
   SearchFilterTool searchFilter = SearchFilterTool();
   RefreshController refreshController = RefreshController(initialRefresh: false);
 
@@ -63,7 +61,6 @@ class _SearchPageState extends StateBase<SearchPage> {
     searchFilter.limit = 20;
     searchFilter.ascOrder = true;
     chipTheme = AppThemes.instance.themeData.copyWith(canvasColor: Colors.transparent);
-    assistCtr.addState(state$noRequestYet);
   }
 
   @override
@@ -95,6 +92,15 @@ class _SearchPageState extends StateBase<SearchPage> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 14.0),
           child: SearchBar(
+            iconColor: Colors.white,
+            decoration: BoxDecoration(
+              color: AppThemes.instance.currentTheme.primaryColor,
+              borderRadius: BorderRadius.all(Radius.circular(8)),
+              border: Border.symmetric(
+                horizontal: BorderSide(color: Colors.black38, width: 0.7, style: BorderStyle.solid),
+                vertical: BorderSide(color:  Colors.black38, width: 0.7, style: BorderStyle.solid),
+              ),
+            ),
             onChangeEvent: (txt){
               if(txt.length > 2 && searchFilter.searchText != txt){
                 searchFilter.searchText = txt;
@@ -108,7 +114,9 @@ class _SearchPageState extends StateBase<SearchPage> {
               }
             },
             onClearEvent: (){
-              searchList.clear();
+              searchFilter.searchText = '';
+              foundList.clear();
+              assistCtr.clearStates();
               assistCtr.updateHead();
             },
           ),
@@ -118,15 +126,15 @@ class _SearchPageState extends StateBase<SearchPage> {
         Expanded(
             child: Builder(
               builder: (context) {
-                if(isInFetchData) {
-                  return WaitToLoad();
-                }
-
-                if(!assistCtr.hasState(state$fetchData) && !assistCtr.hasState(state$noRequestYet)){
+                if(assistCtr.hasState(AssistController.state$error)) {
                   return ErrorOccur(onRefresh: tryLoadClick);
                 }
 
-                if(searchList.isEmpty){
+                if(assistCtr.hasState(AssistController.state$loading)) {
+                  return WaitToLoad();
+                }
+
+                if(foundList.isEmpty){
                   return EmptyData();
                 }
 
@@ -145,7 +153,7 @@ class _SearchPageState extends StateBase<SearchPage> {
                     onRefresh: (){},
                     onLoading: onLoadingMoreCall,
                     child: ListView.builder(
-                      itemCount: searchList.length,
+                      itemCount: foundList.length,
                         itemBuilder: (ctx, idx){
                           return buildListItem(idx);
                         }
@@ -160,7 +168,7 @@ class _SearchPageState extends StateBase<SearchPage> {
   }
 
   Widget buildListItem(int idx){
-    final itm = searchList[idx];
+    final itm = foundList[idx];
 
     return SizedBox(
       height: 120,
@@ -267,8 +275,13 @@ class _SearchPageState extends StateBase<SearchPage> {
                                   splashRadius: 20,
                                   visualDensity: VisualDensity.compact,
                                   iconSize: 20,
-                                  onPressed: (){
-                                    //setFavorite(itm);
+                                  onPressed: () async {
+                                    final res = await FavoriteService.addFavorite(itm);
+
+                                    if(res){
+                                      itm.isFavorite = true;
+                                      assistCtr.updateHead();
+                                    }
                                   },
                                   icon: Icon(itm.isFavorite ? AppIcons.heartSolid: AppIcons.heart,
                                     size: 20,
@@ -291,8 +304,9 @@ class _SearchPageState extends StateBase<SearchPage> {
   }
 
   void tryLoadClick() async {
-    //isInFetchData = true;
-    //assistCtr.updateHead();
+    assistCtr.clearStates();
+    assistCtr.addState(AssistController.state$loading);
+    assistCtr.updateHead();
 
     requestData();
   }
@@ -334,14 +348,18 @@ class _SearchPageState extends StateBase<SearchPage> {
   }
 
   void resetSearch(){
-    searchList.clear();
+    foundList.clear();
     refreshController.resetNoData();
+
+    assistCtr.clearStates();
+    assistCtr.addState(AssistController.state$loading);
+    assistCtr.updateHead();
 
     requestData();
   }
 
   void requestData() async {
-    final ul = PublicAccess.findUpperLower(searchList, searchFilter.ascOrder);
+    final ul = PublicAccess.findUpperLower(foundList, searchFilter.ascOrder);
     searchFilter.upper = ul.upperAsTS;
     searchFilter.lower = ul.lowerAsTS;
 
@@ -353,17 +371,14 @@ class _SearchPageState extends StateBase<SearchPage> {
 
 
     requester.httpRequestEvents.onAnyState = (req) async {
-      assistCtr.removeState(state$noRequestYet);
+      assistCtr.clearStates();
     };
 
     requester.httpRequestEvents.onFailState = (req, r) async {
-      isInFetchData = false;
-      assistCtr.removeStateAndUpdateHead(state$fetchData);
+      assistCtr.addStateWithClear(AssistController.state$error);
     };
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
-      isInFetchData = false;
-
       final List bList = data['sub_bucket_list']?? [];
       final List mList = data['media_list']?? [];
       //final List count = data['all_count'];
@@ -387,14 +402,11 @@ class _SearchPageState extends StateBase<SearchPage> {
         itm.mediaModel = MediaManager.getById(itm.mediaId);
         itm.isFavorite = FavoriteService.isFavorite(itm.id!);
 
-        searchList.add(itm);
+        foundList.add(itm);
       }
 
-      assistCtr.addStateAndUpdateHead(state$fetchData);
+      assistCtr.updateHead();
     };
-
-    isInFetchData = true;
-    assistCtr.updateHead();
 
     requester.bodyJson = js;
     requester.prepareUrl();

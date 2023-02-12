@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:app/services/event_dispatcher_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:animate_do/animate_do.dart';
@@ -10,6 +12,7 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:iris_pic_editor/picEditor/models/edit_options.dart';
 import 'package:iris_pic_editor/picEditor/picEditor.dart';
+import 'package:iris_tools/api/generator.dart';
 import 'package:iris_tools/api/helpers/fileHelper.dart';
 import 'package:iris_tools/api/helpers/focusHelper.dart';
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
@@ -19,7 +22,6 @@ import 'package:iris_tools/dateSection/dateHelper.dart';
 import 'package:iris_tools/features/overlayDialog.dart';
 import 'package:iris_tools/models/dataModels/mediaModel.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
-import 'package:iris_tools/modules/stateManagers/notifyRefresh.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:app/structures/abstract/stateBase.dart';
@@ -30,7 +32,7 @@ import 'package:app/system/keys.dart';
 import 'package:app/system/publicAccess.dart';
 import 'package:app/structures/middleWare/requester.dart';
 import 'package:app/system/session.dart';
-import 'package:app/tools/app/appBroadcast.dart';
+
 import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/app/appIcons.dart';
 import 'package:app/tools/app/appImages.dart';
@@ -130,25 +132,21 @@ class _ProfilePageState extends StateBase<ProfilePage> {
                               child: SizedBox(
                                 height: 120,
                                 width: 120,
-                                child: NotifyRefresh(
-                                  notifier: AppBroadcast.avatarNotifier,
+                                child: StreamBuilder(
+                                  stream: EventDispatcherService.getStream(EventDispatcher.userProfileChange),
                                   builder: (ctx, data) {
-                                    return Builder(
-                                      builder: (ctx){
-                                        if(user.profileModel != null){
-                                          final path = AppDirectories.getSavePathUri(user.profileModel!.url?? '', SavePathType.userProfile, user.avatarFileName);
-                                          final img = FileHelper.getFile(path);
+                                    if(user.profileModel != null){
+                                      final path = AppDirectories.getSavePathUri(user.profileModel!.url?? '', SavePathType.userProfile, user.avatarFileName);
+                                      final img = FileHelper.getFile(path);
 
-                                          if(img.existsSync() && img.lengthSync() == (user.profileModel!.volume?? 0)){
-                                            return Image.file(img, width: 120, height: 120, fit: BoxFit.fill,);
-                                          }
+                                      if(img.existsSync()) {
+                                        if (user.profileModel!.volume == null || img.lengthSync() == user.profileModel!.volume) {
+                                          return Image.file(img, width: 120, height: 120, fit: BoxFit.fill);
                                         }
+                                      }
+                                    }
 
-                                        //checkAvatar(user);
-                                        //return ColoredBox(color: ColorHelper.textToColor(user.nameFamily,));
-                                        return ColoredBox(color: AppThemes.instance.currentTheme.accentColor);
-                                      },
-                                    );
+                                    return ColoredBox(color: AppThemes.instance.currentTheme.accentColor);
                                   },
                                 ),
                               ),
@@ -490,26 +488,31 @@ class _ProfilePageState extends StateBase<ProfilePage> {
     return comp.future;
   }
 
-  void afterUploadAvatar(String imgPath, Map map){
+  void afterUploadAvatar(String imgPath, Map map) async {
     final String? url = map[Keys.url];
 
     if(url == null){
       return;
     }
 
-    final newName = PathHelper.getFileName(url);
-    final newFileAddress = PathHelper.getParentDirPath(imgPath) + PathHelper.getSeparator() + newName;
+    user.profileModel = MediaModel()..url = url.. id = Generator.generateIntId(5);
 
-    final f = FileHelper.renameSyncSafe(imgPath, newFileAddress);
+    if(kIsWeb){
+      await Session.sinkUserInfo(user);
+      EventDispatcherService.notify(EventDispatcher.userProfileChange);
+      return;
+    }
 
-    user.profileModel = MediaModel()..url = url..path = f.path;
+    final path = AppDirectories.getSavePathUri(url, SavePathType.userProfile, user.avatarFileName);
+    final f = FileHelper.renameSyncSafe(imgPath, path!);
+
+    user.profileModel!.path = f.path;
 
     hideLoading();
-    Session.sinkUserInfo(user);
-    assistCtr.updateHead();
-
-    //after load image, auto will call: OverlayCenter().hideLoading(context);
     AppSnack.showSnack$operationSuccess(context);
+
+    await Session.sinkUserInfo(user);
+    EventDispatcherService.notify(EventDispatcher.userProfileChange);
   }
 
   void uploadAvatar(String filePath) {
@@ -535,6 +538,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
 
     requester.prepareUrl();
     requester.bodyJson = null;
+    requester.httpItem.clearFormField();
     requester.httpItem.addFormField(Keys.jsonPart, JsonHelper.mapToJson(js));
     requester.httpItem.addFormFile(partName, fileName, File(filePath));
 
@@ -561,7 +565,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
     requester.httpRequestEvents.onStatusOk = (req, data) async {
       user.profileModel = null;
 
-      AppBroadcast.avatarNotifier.notifyAll(null);
+      EventDispatcherService.notify(EventDispatcher.userProfileChange);
       Session.sinkUserInfo(user);
     };
 
@@ -593,8 +597,9 @@ class _ProfilePageState extends StateBase<ProfilePage> {
       user.family = family;
 
       assistCtr.updateHead();
-      Session.sinkUserInfo(user);
+      await Session.sinkUserInfo(user);
       AppOverlay.hideDialog(context);
+      EventDispatcherService.notify(EventDispatcher.userProfileChange);
     };
 
     showLoading(canBack: false);
@@ -623,7 +628,8 @@ class _ProfilePageState extends StateBase<ProfilePage> {
       user.sex = gender;
 
       assistCtr.updateHead();
-      Session.sinkUserInfo(user);
+      await Session.sinkUserInfo(user);
+      EventDispatcherService.notify(EventDispatcher.userProfileChange);
     };
 
     showLoading(canBack: false);
@@ -652,7 +658,8 @@ class _ProfilePageState extends StateBase<ProfilePage> {
       user.birthDate = dt;
 
       assistCtr.updateHead();
-      Session.sinkUserInfo(user);
+      await Session.sinkUserInfo(user);
+      EventDispatcherService.notify(EventDispatcher.userProfileChange);
     };
 
     showLoading(canBack: false);

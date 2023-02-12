@@ -1,6 +1,5 @@
 import 'package:app/services/event_dispatcher_service.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:iris_tools/net/netManager.dart';
 
 import 'package:app/managers/advertisingManager.dart';
 import 'package:app/managers/appParameterManager.dart';

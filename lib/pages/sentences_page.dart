@@ -1,3 +1,4 @@
+import 'package:app/tools/app/appCache.dart';
 import 'package:flutter/material.dart';
 
 import 'package:appinio_swiper/appinio_swiper.dart';
@@ -17,7 +18,6 @@ import 'package:app/system/keys.dart';
 import 'package:app/system/publicAccess.dart';
 import 'package:app/structures/middleWare/requester.dart';
 import 'package:app/system/session.dart';
-import 'package:app/tools/app/appDb.dart';
 import 'package:app/tools/app/appIcons.dart';
 import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appMessages.dart';
@@ -43,8 +43,6 @@ class SentencesPage extends StatefulWidget {
 ///==================================================================================
 class _SentencesPageState extends StateBase<SentencesPage> {
   Requester requester = Requester();
-  bool isInFetchData = true;
-  String state$fetchData = 'state_fetchData';
   List<String> backgrounds = [];
   String background = '';
   List<DailyTextModel> dailyList = [];
@@ -113,12 +111,12 @@ class _SentencesPageState extends StateBase<SentencesPage> {
           right: 0,
           child: Builder(
             builder: (ctx){
-              if(isInFetchData){
-                return WaitToLoad();
+              if(assistCtr.hasState(AssistController.state$error)){
+                return ErrorOccur();
               }
 
-              if(!assistCtr.hasState(state$fetchData)){
-                return ErrorOccur();
+              if(assistCtr.hasState(AssistController.state$loading)){
+                return WaitToLoad();
               }
 
               if(cards.isEmpty){
@@ -139,7 +137,7 @@ class _SentencesPageState extends StateBase<SentencesPage> {
   }
 
   void prepareCards() {
-    PublicAccess.sortList(dailyList, false);
+    PublicAccess.sortList(dailyList, true);
 
     final list = dailyList.map((t) {
       return Card(
@@ -157,6 +155,7 @@ class _SentencesPageState extends StateBase<SentencesPage> {
       );
     }).toList();
 
+    cards.clear();
     cards.addAll(list);
   }
 
@@ -226,19 +225,12 @@ class _SentencesPageState extends StateBase<SentencesPage> {
   }
 
   void requestData(DateTime dateTime) async {
-    final js = <String, dynamic>{};
-    js[Keys.requestZone] = 'get_daily_text_data';
-    js[Keys.requesterId] = Session.getLastLoginUser()?.userId;
-    js[Keys.date] = DateHelper.toTimestamp(dateTime);
-
     requester.httpRequestEvents.onFailState = (req, r) async {
-      isInFetchData = false;
-      assistCtr.removeStateAndUpdateHead(state$fetchData);
+      assistCtr.addStateWithClear(AssistController.state$error);
+      assistCtr.updateHead();
     };
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
-      isInFetchData = false;
-
       final List tList = data[Keys.dataList]?? [];
 
       for(final m in tList){
@@ -246,17 +238,22 @@ class _SentencesPageState extends StateBase<SentencesPage> {
       }
 
       prepareCards();
-      assistCtr.addStateAndUpdateHead(state$fetchData);
+      assistCtr.clearStates();
+      assistCtr.updateHead();
 
-      if(AppDB.fetchKv(Keys.setting$textOfDayGetPreMonth) == null){
+      if(AppCache.timeoutCache.addTimeout(Keys.setting$textOfDayGetPreMonth, Duration(minutes: 5))){
         var now = GregorianDate();
         now.changeTime(0, 0, 0, 0);
         final pre = now.addMonth(-1);
 
-        AppDB.setReplaceKv(Keys.setting$textOfDayGetPreMonth, true);
         requestData(pre.getFirstOfMonth().convertToSystemDate());
       }
     };
+
+    final js = <String, dynamic>{};
+    js[Keys.requestZone] = 'get_daily_text_data';
+    js[Keys.requesterId] = Session.getLastLoginUser()?.userId;
+    js[Keys.date] = DateHelper.toTimestamp(dateTime);
 
     requester.bodyJson = js;
     requester.prepareUrl();

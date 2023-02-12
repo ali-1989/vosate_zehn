@@ -1,12 +1,14 @@
 import 'dart:io';
 
+import 'package:app/services/event_dispatcher_service.dart';
 import 'package:app/services/login_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/helpers/colorHelper.dart';
 import 'package:iris_tools/api/helpers/fileHelper.dart';
 import 'package:iris_tools/api/helpers/mathHelper.dart';
-import 'package:iris_tools/modules/stateManagers/notifyRefresh.dart';
+
 import 'package:iris_tools/modules/stateManagers/refresh.dart';
 import 'package:share_extend/share_extend.dart';
 
@@ -76,10 +78,13 @@ class DrawerMenuBuilder {
               onTap: gotoLastSeenPage,
             ),
 
-            ListTile(
-              title: Text(AppMessages.shareApp),
-              leading: Icon(AppIcons.share),
-              onTap: shareAppCall,
+            Visibility(
+              visible: !kIsWeb,
+              child: ListTile(
+                title: Text(AppMessages.shareApp),
+                leading: Icon(AppIcons.share),
+                onTap: shareAppCall,
+              ),
             ),
 
             ListTile(
@@ -119,8 +124,8 @@ class DrawerMenuBuilder {
         onTap: gotoProfilePage,
         child: Column(
           children: [
-            NotifyRefresh(
-              notifier: AppBroadcast.avatarNotifier,
+            StreamBuilder(
+              stream: EventDispatcherService.getStream(EventDispatcher.userProfileChange),
               builder: (ctx, data) {
                 return Builder(
                   builder: (ctx){
@@ -128,17 +133,19 @@ class DrawerMenuBuilder {
                       final path = AppDirectories.getSavePathUri(user.profileModel!.url?? '', SavePathType.userProfile, user.avatarFileName);
                       final img = FileHelper.getFile(path);
 
-                      if(img.existsSync() && img.lengthSync() == (user.profileModel!.volume?? 0)){
-                        return CircleAvatar(
-                          backgroundImage: FileImage(File(img.path)),
-                          radius: 30,
-                        );
+                      if(img.existsSync()) {
+                        if (user.profileModel!.volume == null || img.lengthSync() == user.profileModel!.volume) {
+                          return CircleAvatar(
+                            backgroundImage: FileImage(File(img.path)),
+                            radius: 30,
+                          );
+                        }
                       }
                     }
 
                     checkAvatar(user);
                     return CircleAvatar(
-                      backgroundColor: ColorHelper.textToColor(user.nameFamily,),
+                      backgroundColor: ColorHelper.textToColor(user.nameFamily),
                       radius: 30,
                       child: Image.asset(AppImages.appIcon),
                     );
@@ -251,8 +258,10 @@ class DrawerMenuBuilder {
     final path = AppDirectories.getSavePathUri(user.profileModel!.url!, SavePathType.userProfile, user.avatarFileName);
     final img = FileHelper.getFile(path);
 
-    if(img.existsSync() && img.lengthSync() == (user.profileModel!.volume?? 0)){
-      return;
+    if(img.existsSync()) {
+      if (user.profileModel!.volume == null || img.existsSync() && img.lengthSync() == user.profileModel!.volume) {
+        return;
+      }
     }
 
     final dItm = DownloadUploadService.downloadManager.createDownloadItem(user.profileModel!.url!, tag: '${user.profileModel!.id!}');

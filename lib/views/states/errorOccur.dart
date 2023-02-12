@@ -21,7 +21,7 @@ class ErrorOccur extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: ColoredBox(
-        color: backgroundColor?? Colors.grey.shade200,
+        color: backgroundColor?? Colors.grey.shade50,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

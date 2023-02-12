@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
@@ -67,12 +66,6 @@ class AppRoute {
   static String? fetchRoutePageName() {
     return AppDB.fetchKv(Keys.setting$lastRouteName);
   }
-
-  /*static void navigateRouteScreen(String routeName) {
-    saveRouteName(routeName);
-    SettingsManager.settingsModel.currentRouteScreen = routeName;
-    AppBroadcast.reBuildMaterial();
-  }*/
   ///------------------------------------------------------------
   static void backRoute() {
     final lastCtx = AppNavigator.getLastRouteContext(getLastContext()!);
@@ -99,44 +92,18 @@ class AppRoute {
   }
 
   static void popPage(BuildContext context) {
-    GoRouter.of(context).pop();
     //AppNavigator.pop(context);
+    GoRouter.of(context).pop();
   }
 
-  /*
-  static Future push(BuildContext context, Widget page, {dynamic extra}) async {
-    final r = MaterialPageRoute(builder: (ctx){
-      return page;
-    });
-
-    return Navigator.of(context).push(r);
-  }*/
-  
   static void pushAddress(BuildContext context, String address, {dynamic extra}) {
-    if(kIsWeb){
-      GoRouter.of(context).go(address, extra: extra);
-    }
-    else {
-      GoRouter.of(context).push(address, extra: extra);
-    }
-  }
-
-  static void replace(BuildContext context, Widget page, {dynamic extra}) {
-    final r = MaterialPageRoute(builder: (ctx){
-      return page;
-    });
-
-    Navigator.of(context).pushReplacement(r);
+    //GoRouter.of(context).go(address, extra: extra);//this is cause canPop() == false
+    GoRouter.of(context).push(address, extra: extra);
   }
 
   static void pushNamed(BuildContext context, String name, {dynamic extra}) {
     //Navigator.of(context).pushNamed(name, arguments: extra);
-    if(kIsWeb){
-      GoRouter.of(context).goNamed(name, params: {}, extra: extra);
-    }
-    else {
-      GoRouter.of(context).pushNamed(name, params: {}, extra: extra);
-    }
+    GoRouter.of(context).pushNamed(name, params: {}, extra: extra);
   }
 
   static void replaceNamed(BuildContext context, String name, {dynamic extra}) {
@@ -146,6 +113,24 @@ class AppRoute {
 
   static void refreshRouter(BuildContext context) {
     GoRouter.of(context).refresh();
+  }
+
+  /// note: Navigator.of()... not change url automatic in browser.use [GoRouter] for this
+  /// note: Navigator.of()... can not effect on back/pre buttons in browser
+  static Future pushWidget(BuildContext context, Widget page, {dynamic extra}) async {
+    final r = MaterialPageRoute(
+        builder: (ctx){return page;}
+    );
+
+    return Navigator.of(context).push(r);
+  }
+
+  static void pushReplaceWidget(BuildContext context, Widget page, {dynamic extra}) {
+    final r = MaterialPageRoute(
+        builder: (ctx){return page;}
+    );
+
+    Navigator.of(context).pushReplacement(r);
   }
 }
 ///============================================================================================
@@ -172,7 +157,7 @@ final mainRouter = GoRouter(
       SearchPage.route,
     ],
     initialLocation: LayoutPage.route.path,
-    routerNeglect: true,//In browser 'back' button not work
+    routerNeglect: true, // true: In browser, 'back' button not work
     errorBuilder: routeErrorHandler,
     redirect: _mainRedirect,
   debugLogDiagnostics: false,

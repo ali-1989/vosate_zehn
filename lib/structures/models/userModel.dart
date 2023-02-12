@@ -143,11 +143,12 @@ class UserModel {
   }*/
 
   String? get avatarFileName {
-    if(profileModel == null || profileModel?.id == null){
-      return null;
+    if(profileModel != null && profileModel?.id != null){
+      return '${userId}_${profileModel!.id}.jpg';
     }
 
-    return '${userId}_${profileModel!.id}.jpg';
+
+    return '$userId.jpg';
   }
 
   bool hasAvatar(){

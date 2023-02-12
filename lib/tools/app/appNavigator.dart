@@ -661,11 +661,13 @@ class AppNavigator {
   }
 
   static Future<T?> pushNextPage<T>(BuildContext context, Widget next, {required String name, dynamic arguments, bool maintainState = true}) {
-    return Navigator.push<T>(context,
-        MaterialPageRoute(builder: (ctx) {return next;},
-            settings: RouteSettings(name: name, arguments: arguments),
-            maintainState: maintainState)
+    final p = MaterialPageRoute<T>(
+        builder: (ctx) {return next;},
+        settings: RouteSettings(name: name, arguments: arguments),
+        maintainState: maintainState,
     );
+
+    return Navigator.of(context).push<T>(p);
   }
 
   static Future<T?> pushNextPageExtra<T>(BuildContext context, Widget next, {

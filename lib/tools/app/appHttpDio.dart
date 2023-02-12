@@ -526,12 +526,25 @@ class HttpItem {
 		body = system_convert.json.encode(js);
 	}
 
+	List? _getFormField(){
+		if(body is! FormData) {
+			return null;
+		}
+
+		return (body as FormData).fields;
+	}
+
+	void clearFormField(){
+		formDataItems.clear();
+		_getFormField()?.clear();
+	}
+
 	void addFormField(String key, String value){
 		if(body is! FormData) {
 			body = FormData();
 		}
 
-		(body as FormData).fields.add(MapEntry(key, value));
+		_getFormField()!.add(MapEntry(key, value));
 	}
 
 	void addFormFile(String partName, String fileName, File file){

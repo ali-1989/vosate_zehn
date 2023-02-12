@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:iris_tools/modules/stateManagers/notifyRefresh.dart';
 import 'package:iris_tools/modules/stateManagers/refresh.dart';
 import 'package:iris_tools/api/notifiers/extendValueNotifier.dart';
 
@@ -16,7 +15,7 @@ class AppBroadcast {
 
   static final StreamController<bool> viewUpdaterStream = StreamController<bool>();
   static final RefreshController drawerMenuRefresher = RefreshController();
-  static final NotifyBroadcast avatarNotifier = NotifyBroadcast();
+  //static final NotifyBroadcast avatarNotifier = NotifyBroadcast();
   static final ExtendValueNotifier<int> newAdvNotifier = ExtendValueNotifier<int>(0);
   static final ExtendValueNotifier<int> changeFavoriteNotifier = ExtendValueNotifier<int>(0);
   //---------------------- keys
