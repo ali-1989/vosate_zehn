@@ -1,3 +1,4 @@
+import 'package:app/tools/app/appRoute.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/helpers/mathHelper.dart';
@@ -7,7 +8,7 @@ import 'package:numberpicker/numberpicker.dart';
 
 import 'package:app/managers/settingsManager.dart';
 import 'package:app/system/extensions.dart';
-import 'package:app/tools/app/appNavigator.dart';
+
 import 'package:app/tools/app/appSizes.dart';
 import 'package:app/tools/app/appSnack.dart';
 import 'package:app/tools/app/appThemes.dart';
@@ -351,13 +352,13 @@ class SelectDateCalendarViewState extends State<SelectDateCalendarView> {
       return;
     }
 
-    final sd = date.convertToSystemDate();
+    final result = date.convertToSystemDate();
 
     if(widget.onSelect != null) {
-      widget.onSelect?.call(sd);
+      widget.onSelect?.call(result);
     }
     else {
-      AppNavigator.pop(context, result: sd);
+      AppRoute.popTopView(context, data: result);
     }
   }
 

@@ -1,10 +1,10 @@
 import 'dart:async';
 
+import 'package:app/tools/app/appBroadcast.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flip_card/flip_card.dart';
 import 'package:flip_card/flip_card_controller.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:iris_tools/api/helpers/localeHelper.dart';
 import 'package:iris_tools/api/helpers/mathHelper.dart';
@@ -12,7 +12,6 @@ import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
-import 'package:app/pages/layout_page.dart';
 import 'package:app/pages/login/register_page.dart';
 import 'package:app/pages/term_page.dart';
 import 'package:app/services/google_service.dart';
@@ -24,7 +23,6 @@ import 'package:app/system/session.dart';
 import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appLoading.dart';
 import 'package:app/tools/app/appMessages.dart';
-import 'package:app/tools/app/appNavigator.dart';
 import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/app/appSheet.dart';
 import 'package:app/tools/app/appSnack.dart';
@@ -34,14 +32,9 @@ import 'package:app/tools/countryTools.dart';
 import 'package:app/views/components/countrySelect.dart';
 import 'package:app/views/components/phoneNumberInput.dart';
 
-class LoginPage extends StatefulWidget {
-  static final route = GoRoute(
-    path: '/login',
-    name: (LoginPage).toString().toLowerCase(),
-    builder: (BuildContext context, GoRouterState state) => const LoginPage(),
-  );
+class LoginPage extends StatefulWidget{
 
-  const LoginPage({super.key});
+  LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -52,7 +45,6 @@ class _LoginPageState extends StateBase<LoginPage> {
   late PhoneNumberInputController phoneNumberController;
   late FlipCardController flipCardController;
   late final StopWatchTimer stopWatchTimer;
-  //ValueKey pinCodeKey = const ValueKey('1');
   CountryModel countryModel = CountryModel();
   String phoneNumber = '';
   String pinCode = '';
@@ -350,13 +342,14 @@ class _LoginPageState extends StateBase<LoginPage> {
           final injectData = RegisterPageInjectData();
           injectData.email = googleResult.email;
 
-          AppRoute.pushAddress(context, RegisterPage.route.path, extra: injectData);
+          AppRoute.pushPage(context, RegisterPage(injectData: injectData));
         }
         else {
           final userModel = await Session.login$newProfileData(result.jsResult!);
 
           if(userModel != null) {
-            AppRoute.pushAddress(context, LayoutPage.route.path);
+            //AppRoute.pushPage(context, LayoutPage(key: AppBroadcast.layoutPageKey));
+            AppBroadcast.reBuildMaterial();
           }
           else {
             AppSheet.showSheet$OperationFailed(context);
@@ -384,22 +377,17 @@ class _LoginPageState extends StateBase<LoginPage> {
     assistCtr.updateHead();
   }
 
-  void onTapCountryArrow(){
-    AppNavigator.pushNextPage(
-        context,
-        const CountrySelectScreen(),
-        name: 'CountrySelect',
-    ).then((value) {
-          if(value is CountryModel){
-            countryModel = value;
-            phoneNumberController.getCountryController()?.text = countryModel.countryPhoneCode!;
-          }
-    });
+  void onTapCountryArrow() async {
+    final value = await AppRoute.pushPage(context, CountrySelectScreen());
+
+    if(value is CountryModel){
+      countryModel = value;
+      phoneNumberController.getCountryController()?.text = countryModel.countryPhoneCode!;
+    }
   }
 
   void gotoTermPage(){
-    AppRoute.pushNamed(context, TermPage.route.name!);
-    //AppRoute.pushWidget(context, TermPage());
+    AppRoute.pushPage(context, TermPage());
   }
 
   void onSendClick(){
@@ -476,13 +464,14 @@ class _LoginPageState extends StateBase<LoginPage> {
       final userId = result.jsResult![Keys.userId];
 
       if (userId == null) {
-        AppRoute.pushAddress(context, RegisterPage.route.path, extra: injectData);
+        AppRoute.pushPage(context, RegisterPage(injectData: injectData));
       }
       else {
         final userModel = await Session.login$newProfileData(result.jsResult!);
 
         if(userModel != null) {
-          AppRoute.replaceNamed(context, LayoutPage.route.name!);
+          //AppRoute.pushPage(context, LayoutPage(key: AppBroadcast.layoutPageKey));
+          AppBroadcast.reBuildMaterial();
         }
         else {
           AppSheet.showSheet$OperationFailed(context);

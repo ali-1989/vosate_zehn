@@ -19,11 +19,11 @@ class AidService {
 
   static void gotoAidPage(){
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    AppRoute.pushNamed(AppRoute.getLastContext()!, AidPage.route.name!);
+    AppRoute.pushPage(AppRoute.getLastContext()!, AidPage());
   }
 
   static void gotoZarinpalPage() async {
-    AppRoute.pushNamed(AppRoute.getLastContext()!, PayWebPage.route.name!);
+    AppRoute.pushPage(AppRoute.getLastContext()!, PayWebPage(url: 'https://zarinp.al/vosatezehn.ir'));
   }
 
   static void showAidDialog(){
@@ -35,7 +35,7 @@ class AidService {
 
     final body = Column(
       children: [
-        Text(msg, style: AppThemes.body2TextStyle()!.copyWith(fontSize: 14, fontWeight: FontWeight.bold)),
+        Text(msg, style: AppThemes.bodyTextStyle()!.copyWith(fontSize: 14, fontWeight: FontWeight.bold)),
 
         SizedBox(height: 20),
         Row(
@@ -45,7 +45,7 @@ class AidService {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
                   onPressed: (){
-                    Navigator.of(AppRoute.getLastContext()!).pop();
+                    AppRoute.popTopView(AppRoute.getLastContext()!);
                     gotoZarinpalPage();
                   },
                   child: Text(AppMessages.aid)
@@ -55,7 +55,7 @@ class AidService {
             SizedBox(width: 30),
             TextButton(
                 onPressed: (){
-                  Navigator.of(AppRoute.getLastContext()!).pop();
+                  AppRoute.popTopView(AppRoute.getLastContext()!);
                 },
                 child: Text(AppMessages.later)
             )

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app/tools/app/appRoute.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -51,7 +52,7 @@ class AppSheet {
     return showBottomSheet<T>(
       context: ctx,
       shape: shape,
-      constraints: AppSizes.isBigWidth()? BoxConstraints.tightFor(width: AppSizes.webMaxDialogSize) : null,
+      constraints: AppSizes.isBigWidth()? BoxConstraints.tightFor(width: AppSizes.webMaxWidthSize) : null,
       clipBehavior: shape != null ? Clip.antiAlias : Clip.none,
       elevation: elevation,
       backgroundColor: backgroundColor ?? Colors.transparent,
@@ -72,13 +73,6 @@ class AppSheet {
       barrierDismissible: dismissible,
       routeSettings: routeSettings,
       builder: (BuildContext context){
-        if(AppSizes.isBigWidth()){
-          return Padding(
-            padding: EdgeInsets.symmetric(horizontal: AppSizes.getWebPadding(), vertical: 0),
-            child: view,
-          );
-        }
-
         return view;
       },
     );
@@ -108,7 +102,7 @@ class AppSheet {
         builder: builder,
         elevation: elevation,
         shape: shape,
-        constraints: AppSizes.isBigWidth()? BoxConstraints.tightFor(width: AppSizes.webMaxDialogSize) : null,
+        constraints: AppSizes.isBigWidth()? BoxConstraints.tightFor(width: AppSizes.webMaxWidthSize) : null,
         isDismissible: isDismissible,
         clipBehavior: shape != null ? Clip.antiAlias : Clip.none,
         backgroundColor: backgroundColor ?? Colors.transparent,
@@ -136,7 +130,7 @@ class AppSheet {
     final theme = _genTheme();
 
     void close() {
-      Navigator.maybeOf(context)?.pop();
+      AppRoute.popTopView(context);
       fn?.call();
     }
 
@@ -200,12 +194,12 @@ class AppSheet {
     final theme = _genTheme();
 
     void posClose() {
-      Navigator.of(context).pop();
+      AppRoute.popTopView(context);
       posFn?.call();
     }
 
     void negClose() {
-      Navigator.of(context).pop();
+      AppRoute.popTopView(context);
       negFn?.call();
     }
 
@@ -322,7 +316,7 @@ class AppSheet {
                   Visibility(
                     visible: title != null,
                     child: DefaultTextStyle(
-                        style: theme.textTheme.headline6!.copyWith(
+                        style: theme.textTheme.titleLarge!.copyWith(
                           fontSize: 17,
                           fontWeight: FontWeight.bold,
                         ),
@@ -336,7 +330,7 @@ class AppSheet {
 
                   Flexible(
                     child: DefaultTextStyle(
-                      style: theme.textTheme.headline6!.copyWith(fontSize: 14, fontWeight: FontWeight.normal),
+                      style: theme.textTheme.titleLarge!.copyWith(fontSize: 14, fontWeight: FontWeight.normal),
                       child: builder(ctx),
                     ),
                   )
@@ -442,7 +436,7 @@ class AppSheet {
                         materialColor: AppThemes.instance.currentTheme.primaryColor.withAlpha(70),
                         padding: const EdgeInsets.all(4),
                         onTapDelay: () {
-                          AppNavigator.pop(context);
+                          AppRoute.popTopView(context);
                         }
                     ),
                 ],
@@ -574,7 +568,7 @@ final items = <Map>[];
       'icon': IconList.delete,
       'fn': (){
         yesFn(){
-          AppNavigator.pop(state.context);
+        AppRoute.pop();
           deleteFood();
         }
 

@@ -62,7 +62,7 @@ class AppDialogIris {
 			double factor = 0.8;
 			double wid = AppSizes.instance.appWidth * factor;
 
-			while(wid > (AppSizes.webMaxDialogSize - 50)){
+			while(wid > (AppSizes.webMaxWidthSize - 50)){
 				factor -= 0.05;
 				wid = AppSizes.instance.appWidth * factor;
 			}
@@ -240,7 +240,6 @@ class AppDialogIris {
 			decoration: AppDialogIris.instance.dialogDecoration,
 			positivePress: (ctx){
 				return true;
-				//Navigator.of(context).pop<bool>(true);
 			},
 			negativePress: (ctx)=> false,
 		);

@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:iris_tools/features/overlayDialog.dart';
 import 'package:popover/popover.dart';
 
-import 'package:app/tools/app/appSizes.dart';
-
 class AppOverlay {
 
   AppOverlay._();
@@ -19,7 +17,7 @@ class AppOverlay {
   static Future showDialogScreen(BuildContext context, OverlayScreenView view, {bool canBack = false}){
     OverlayScreenView v = view;
 
-    if(AppSizes.isBigWidth()){
+    /*if(AppSizes.isBigWidth()){
       v = OverlayScreenView(
         content: Padding(
           padding: EdgeInsets.symmetric(horizontal: AppSizes.getWebPadding()),
@@ -29,7 +27,7 @@ class AppOverlay {
         routingName: view.routeName,
         scrollable: view.scrollable,
       );
-    }
+    }*/
 
     return OverlayDialog().show(context, v, canBack: canBack);
   }
@@ -59,7 +57,7 @@ class AppOverlay {
   }
 
   static void showOverlay(BuildContext context, OverlayEntry view){
-    Overlay.of(context)?.insert(view);
+    Overlay.of(context).insert(view);
   }// LayerLink()
 
   /// must wrap widget with Builder() to get anchorContext

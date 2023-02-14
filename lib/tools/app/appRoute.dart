@@ -1,7 +1,3 @@
-import 'package:flutter/material.dart';
-
-import 'package:go_router/go_router.dart';
-
 import 'package:app/pages/about_us_page.dart';
 import 'package:app/pages/aid_page.dart';
 import 'package:app/pages/contact_us_page.dart';
@@ -11,6 +7,7 @@ import 'package:app/pages/image_full_screen.dart';
 import 'package:app/pages/last_seen_page.dart';
 import 'package:app/pages/layout_page.dart';
 import 'package:app/pages/levels/audio_player_page.dart';
+import 'package:app/pages/levels/bucket_page.dart';
 import 'package:app/pages/levels/content_view_page.dart';
 import 'package:app/pages/levels/sub_bucket_page.dart';
 import 'package:app/pages/levels/video_player_page.dart';
@@ -18,19 +15,21 @@ import 'package:app/pages/login/login_page.dart';
 import 'package:app/pages/login/register_page.dart';
 import 'package:app/pages/pay_web_page.dart';
 import 'package:app/pages/profile/profile_page.dart';
-import 'package:app/pages/search_page.dart';
-import 'package:app/pages/sentences_page.dart';
 import 'package:app/pages/term_page.dart';
+
+import 'package:flutter/material.dart';
+
 import 'package:app/system/keys.dart';
-import 'package:app/system/session.dart';
 import 'package:app/tools/app/appDb.dart';
-import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/app/appNavigator.dart';
+import 'package:app/tools/app/appRouteNoneWeb.dart'
+ if (dart.library.html) 'package:app/tools/app/appRouteWeb.dart' as web;
 
 class AppRoute {
-  static final List<GoRoute> _webFreeRoutes = [];
   static BuildContext? materialContext;
   static bool _isInit = false;
+
+  static final Map<Type, String?> webRoutes = {};
 
   AppRoute._();
 
@@ -39,16 +38,36 @@ class AppRoute {
       return;
     }
 
+    webRoutes[ProfilePage] = null;
+    webRoutes[LoginPage] = null;
+    webRoutes[LayoutPage] = null;
+    webRoutes[RegisterPage] = null;
+    webRoutes[AudioPlayerPage] = null;
+    webRoutes[SubBucketPage] = null;
+    webRoutes[BucketPage] = null;
+    webRoutes[ContentViewPage] = null;
+    webRoutes[VideoPlayerPage] = null;
+    webRoutes[AboutUsPage] = null;
+    webRoutes[AidPage] = null;
+    webRoutes[ContactUsPage] = null;
+    webRoutes[E404Page] = null;
+    webRoutes[FavoritesPage] = null;
+    webRoutes[ImageFullScreen] = null;
+    webRoutes[LastSeenPage] = null;
+    webRoutes[PayWebPage] = null;
+    webRoutes[TermPage] = null;
+
     _isInit = true;
-    _webFreeRoutes.add(LoginPage.route);
-    _webFreeRoutes.add(RegisterPage.route);
-    _webFreeRoutes.add(TermPage.route);
-    _webFreeRoutes.add(AboutUsPage.route);
   }
 
   static BuildContext? getLastContext() {
-    var res = WidgetsBinding.instance.focusManager.rootScope.focusedChild?.context;//deep: 50
-    res ??= WidgetsBinding.instance.focusManager.primaryFocus?.context; //deep: 71
+    var res = WidgetsBinding.instance.focusManager.rootScope.focusedChild?.context;//deep: 50,66
+
+    Navigator? nav1 = res?.findAncestorWidgetOfExactType();
+
+    if(res == null || nav1 == null) {
+      res = WidgetsBinding.instance.focusManager.primaryFocus?.context; //deep: 71
+    }
 
     return res?? getBaseContext();
   }
@@ -57,13 +76,13 @@ class AppRoute {
     return materialContext;
   }
 
-  static Future<bool> saveRoutePageName(String routeName) async {
+  static Future<bool> saveRouteName(String routeName) async {
     final int res = await AppDB.setReplaceKv(Keys.setting$lastRouteName, routeName);
 
     return res > 0;
   }
 
-  static String? fetchRoutePageName() {
+  static String? fetchLastRouteName() {
     return AppDB.fetchKv(Keys.setting$lastRouteName);
   }
   ///------------------------------------------------------------
@@ -81,159 +100,54 @@ class AppRoute {
   }
 
   static bool canPop(BuildContext context) {
-    //return AppNavigator.canPop(context);
-    return GoRouter.of(context).canPop();
+    return AppNavigator.canPop(context);
   }
 
   static void popTopView(BuildContext context, {dynamic data}) {
     if(canPop(context)) {
-    AppNavigator.pop(context, result: data);
+      AppNavigator.pop(context, result: data);
     }
   }
 
-  static void popPage(BuildContext context) {
-    //AppNavigator.pop(context);
-    GoRouter.of(context).pop();
+  static void popPage(BuildContext context, {dynamic data}) {
+    if(canPop(context)) {
+      AppNavigator.pop(context, result: data);
+    }
   }
 
-  static void pushAddress(BuildContext context, String address, {dynamic extra}) {
-    //GoRouter.of(context).go(address, extra: extra);//this is cause canPop() == false
-    GoRouter.of(context).push(address, extra: extra);
-  }
-
-  static void pushNamed(BuildContext context, String name, {dynamic extra}) {
-    //Navigator.of(context).pushNamed(name, arguments: extra);
-    GoRouter.of(context).pushNamed(name, params: {}, extra: extra);
+  /*static void pushNamed(BuildContext context, String name, {dynamic extra}) {
+    Navigator.of(context).pushNamed(name, arguments: extra);
+    ///updateAddressBar(url);
   }
 
   static void replaceNamed(BuildContext context, String name, {dynamic extra}) {
-    //Navigator.of(context).pushReplacementNamed(name, arguments: extra);
-    GoRouter.of(context).pushReplacementNamed(name, params: {}, extra: extra);
-  }
+    Navigator.of(context).pushReplacementNamed(name, arguments: extra);
+    ///updateAddressBar(url);
+  }*/
 
-  static void refreshRouter(BuildContext context) {
-    GoRouter.of(context).refresh();
-  }
+  /// note: Navigator.of()... not change url automatic in browser. if use [MaterialApp.router]
+  /// and can not effect on back/pre buttons in browser
+  static Future pushPage(BuildContext context, Widget page, {dynamic args, String? name}) async {
+    final n = name?? (page).toString();
 
-  /// note: Navigator.of()... not change url automatic in browser.use [GoRouter] for this
-  /// note: Navigator.of()... can not effect on back/pre buttons in browser
-  static Future pushWidget(BuildContext context, Widget page, {dynamic extra}) async {
     final r = MaterialPageRoute(
-        builder: (ctx){return page;}
+        builder: (ctx){return page;},
+        settings: RouteSettings(name: n, arguments: args)
     );
 
+    web.changeAddressBar(n);
     return Navigator.of(context).push(r);
   }
 
-  static void pushReplaceWidget(BuildContext context, Widget page, {dynamic extra}) {
+  static Future pushReplacePage(BuildContext context, Widget page, {dynamic args, String? name}) {
+    final n = name?? (page).toString();
+
     final r = MaterialPageRoute(
-        builder: (ctx){return page;}
+        builder: (ctx){return page;},
+        settings: RouteSettings(name: n, arguments: args)
     );
 
-    Navigator.of(context).pushReplacement(r);
+    web.changeAddressBar(n);
+    return Navigator.of(context).pushReplacement(r);
   }
-}
-///============================================================================================
-final mainRouter = GoRouter(
-    routes: <GoRoute>[
-      E404Page.route,
-      LayoutPage.route,
-      LoginPage.route,
-      RegisterPage.route,
-      TermPage.route,
-      AboutUsPage.route,
-      AidPage.route,
-      LastSeenPage.route,
-      FavoritesPage.route,
-      ContactUsPage.route,
-      PayWebPage.route,
-      ProfilePage.route,
-      SubBucketPage.route,
-      ContentViewPage.route,
-      ImageFullScreen.route,
-      VideoPlayerPage.route,
-      AudioPlayerPage.route,
-      SentencesPage.route,
-      SearchPage.route,
-    ],
-    initialLocation: LayoutPage.route.path,
-    routerNeglect: true, // true: In browser, 'back' button not work
-    errorBuilder: routeErrorHandler,
-    redirect: _mainRedirect,
-  debugLogDiagnostics: false,
-);
-
-bool checkFreeRoute(GoRoute route, GoRouterState state){
-  final routeIsTop = route.path.startsWith('/');
-  final stateIsTop = state.subloc.startsWith('/');
-
-  if((routeIsTop && stateIsTop) || (!routeIsTop && !stateIsTop)){
-    return route.path == state.subloc;
-  }
-
-  if(!routeIsTop){
-    //return '${HomePage.route.path}/${route.path}' == state.subloc; // if homePage is not backSlash, like:/admin
-    return '/${route.path}' == state.subloc;
-  }
-
-  return false;
-}
-
-String? _mainRedirect(BuildContext ctx, GoRouterState state){
-  AppRoute.init();
-  
-  if(state.subloc == LayoutPage.route.path){
-    AppDirectories.generateNoMediaFile();
-  }
-
-  if(!Session.hasAnyLogin()){
-    if(AppRoute._webFreeRoutes.any((r) => checkFreeRoute(r, state))){
-      return null;
-    }
-    else {
-      final from = state.subloc == '/' ? '' : '?gt=${state.location}';
-      return '/${LoginPage.route.path}$from'.replaceFirst('//', '/');
-    }
-  }
-
-  return state.queryParams['gt'];
-}
-
-Widget routeErrorHandler(BuildContext context, GoRouterState state) {
-  /*final split = state.subloc.split('/');
-  final count = state.subloc.startsWith('/')? 1 : 0;
-
-  if(split.length > count){
-    AppRoute.pushNamed(AppRoute.getContext(), state.subloc.substring(0, state.subloc.lastIndexOf('/')));
-    return SizedBox();
-  }*/
-
- return const E404Page();
-}
-///============================================================================================
-class MyPageRoute extends PageRouteBuilder {
-  final Widget widget;
-  final String? routeName;
-
-  MyPageRoute({
-    required this.widget,
-    this.routeName,
-  })
-      : super(
-        settings: RouteSettings(name: routeName),
-        pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
-          return widget;
-        },
-      transitionDuration: const Duration(milliseconds: 500),
-      transitionsBuilder: (BuildContext context,
-          Animation<double> animation,
-          Animation<double> secondaryAnimation,
-          Widget child) {
-        //ScaleTransition, RotationTransition, SizeTransition, FadeTransition
-        return SlideTransition(
-          textDirection: TextDirection.rtl,
-          position: Tween<Offset>(begin: const Offset(1.0, 0.0), end: Offset.zero,).animate(animation),
-          child: child,
-        );
-      });
 }

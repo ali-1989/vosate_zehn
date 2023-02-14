@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 
-import 'package:app/tools/app/appSizes.dart';
 import 'package:app/tools/app/appThemes.dart';
 
 class AppToast {
@@ -19,13 +18,6 @@ class AppToast {
         ),
       )
     );
-
-    if(AppSizes.isBigWidth()){
-      toast = Padding(
-        padding: EdgeInsets.symmetric(horizontal: AppSizes.getWebPadding()),
-        child: toast,
-      );
-    }
 
     Toaster.showToast(toast);
     Future.delayed(duration, () => Toaster.showToast(null));

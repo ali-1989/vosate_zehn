@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:go_router/go_router.dart';
 import 'package:photo_view/photo_view.dart';
 
 import 'package:app/structures/enums/enums.dart';
@@ -17,12 +16,7 @@ class ImageFullScreenInjectData {
   TextStyle? infoStyle;
 }
 ///---------------------------------------------------------------------------------
-class ImageFullScreen extends StatefulWidget {
-  static final route = GoRoute(
-    path: '/image_view',
-    name: (ImageFullScreen).toString().toLowerCase(),
-    builder: (BuildContext context, GoRouterState state) => ImageFullScreen(injectData: state.extra as ImageFullScreenInjectData),
-  );
+class ImageFullScreen extends StatefulWidget{
 
   final ImageFullScreenInjectData injectData;
 
@@ -62,6 +56,8 @@ class ImageFullScreenState extends State<ImageFullScreen> {
         pic = AssetImage(
           widget.injectData.imageObj,
         );
+        break;
+      case ImageType.network:
         break;
     }
   }

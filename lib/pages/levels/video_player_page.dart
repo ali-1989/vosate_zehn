@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:chewie/chewie.dart';
-import 'package:go_router/go_router.dart';
+
 import 'package:iris_tools/api/helpers/mathHelper.dart';
 import 'package:video_player/video_player.dart';
 import 'package:wakelock/wakelock.dart';
@@ -26,12 +26,7 @@ class VideoPlayerPageInjectData {
 ///---------------------------------------------------------------------------------
 typedef OnFullTimePlay = void Function();
 ///---------------------------------------------------------------------------------
-class VideoPlayerPage extends StatefulWidget {
-  static final route = GoRoute(
-    path: '/video_player',
-    name: (VideoPlayerPage).toString().toLowerCase(),
-    builder: (BuildContext context, GoRouterState state) => VideoPlayerPage(injectData: state.extra as VideoPlayerPageInjectData),
-  );
+class VideoPlayerPage extends StatefulWidget{
 
   final VideoPlayerPageInjectData injectData;
 

@@ -1,8 +1,7 @@
 import 'dart:async';
 
 import 'package:app/managers/settingsManager.dart';
-import 'package:app/pages/layout_page.dart';
-import 'package:app/pages/login/login_page.dart';
+
 import 'package:app/services/google_service.dart';
 import 'package:app/structures/models/userModel.dart';
 import 'package:app/system/session.dart';
@@ -81,7 +80,7 @@ class LoginService {
         AppRoute.backToRoot(AppRoute.getLastContext()!);
 
         Future.delayed(Duration(milliseconds: 400), (){
-          AppRoute.replaceNamed(AppRoute.getLastContext()!, LoginPage.route.name!);
+          AppBroadcast.reBuildMaterial();
         });
       }
     }
@@ -108,7 +107,8 @@ class LoginService {
       AppRoute.backToRoot(AppRoute.getLastContext()!);
 
       Future.delayed(Duration(milliseconds: 400), (){
-        AppRoute.replaceNamed(AppRoute.getLastContext()!, LoginPage.route.name!);
+        AppBroadcast.reBuildMaterial();
+        //AppRoute.pushReplacePage(AppRoute.getLastContext()!, LoginPage());
       });
     }
   }
@@ -299,7 +299,7 @@ class LoginService {
     final userModel = await Session.login$newProfileData(gUser.toMap());
 
     if(userModel != null) {
-      AppRoute.replaceNamed(context, LayoutPage.route.name!);
+      AppBroadcast.reBuildMaterial();
     }
     else {
       AppSheet.showSheet$OperationFailed(context);

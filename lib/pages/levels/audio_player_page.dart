@@ -1,9 +1,7 @@
 import 'dart:async';
 
-import 'package:app/tools/app/appToast.dart';
 import 'package:flutter/material.dart';
 
-import 'package:go_router/go_router.dart';
 import 'package:iris_tools/api/duration/durationFormatter.dart';
 import 'package:iris_tools/api/generator.dart';
 import 'package:iris_tools/api/helpers/mathHelper.dart';
@@ -42,12 +40,7 @@ class AudioPlayerPageInjectData {
 ///---------------------------------------------------------------------------------
 typedef OnFullTimePlay = void Function();
 ///---------------------------------------------------------------------------------
-class AudioPlayerPage extends StatefulWidget {
-  static final route = GoRoute(
-    path: '/audio_player',
-    name: (AudioPlayerPage).toString().toLowerCase(),
-    builder: (BuildContext context, GoRouterState state) => AudioPlayerPage(injectData: state.extra as AudioPlayerPageInjectData),
-  );
+class AudioPlayerPage extends StatefulWidget{
 
   final AudioPlayerPageInjectData injectData;
 

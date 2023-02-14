@@ -192,11 +192,11 @@ class AppDirectories {
   }
 
   static String getAvatarDir$ex() {
-    return '${getAppFolderInExternalStorage()}${PathHelper.getSeparator()}avatar';
+    return '${getAppFolderInInternalStorage()}${PathHelper.getSeparator()}avatar';
   }
 
   static String getAdvertisingDir$ex(){
-    return '${getAppFolderInExternalStorage()}${PathHelper.getSeparator()}advertising';
+    return '${getAppFolderInInternalStorage()}${PathHelper.getSeparator()}advertising';
   }
 
   static String getMediaDir$ex() {

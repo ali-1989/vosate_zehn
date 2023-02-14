@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_html/flutter_html.dart';
-import 'package:go_router/go_router.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 
 import 'package:app/structures/abstract/stateBase.dart';
@@ -13,12 +12,7 @@ import 'package:app/views/homeComponents/appBarBuilder.dart';
 import 'package:app/views/states/errorOccur.dart';
 import 'package:app/views/states/waitToLoad.dart';
 
-class AboutUsPage extends StatefulWidget {
-  static final route = GoRoute(
-    path: '/about_us',
-    name: (AboutUsPage).toString().toLowerCase(),
-    builder: (BuildContext context, GoRouterState state) => const AboutUsPage(),
-  );
+class AboutUsPage extends StatefulWidget{
 
   const AboutUsPage({super.key});
 

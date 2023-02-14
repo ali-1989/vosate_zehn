@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_html/flutter_html.dart';
-import 'package:go_router/go_router.dart';
 import 'package:iris_tools/api/helpers/urlHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:iris_tools/widgets/maxWidth.dart';
@@ -20,12 +19,7 @@ import 'package:app/views/states/waitToLoad.dart';
 /// zone: to catch all unhandled-asynchronous-errors
 /// FlutterError.onError: to catch all unhandled-flutter-framework-errors
 
-class AidPage extends StatefulWidget {
-  static final route = GoRoute(
-    path: '/aid',
-    name: (AidPage).toString().toLowerCase(),
-    builder: (BuildContext context, GoRouterState state) => AidPage(),
-  );
+class AidPage extends StatefulWidget{
 
   const AidPage({Key? key}) : super(key: key);
 

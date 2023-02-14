@@ -26,7 +26,7 @@ class BucketPageInjectData {
   late BucketTypes bucketTypes;
 }
 ///---------------------------------------------------------------------------------
-class BucketPage extends StatefulWidget {
+class BucketPage extends StatefulWidget{
   final BucketPageInjectData injectData;
 
   BucketPage({
@@ -146,7 +146,7 @@ class _BucketPageState extends StateBase<BucketPage> {
                 },
               ),
 
-              SizedBox(width: 8,),
+              SizedBox(width: 8),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -177,7 +177,7 @@ class _BucketPageState extends StateBase<BucketPage> {
   }
 
   void onItemClick(BucketModel itm) {
-    AppRoute.pushNamed(context, SubBucketPage.route.name!, extra: SubBucketPageInjectData()..bucketModel = itm);
+    AppRoute.pushPage(context, SubBucketPage(injectData: SubBucketPageInjectData()..bucketModel = itm));
   }
 
   void requestData() async {

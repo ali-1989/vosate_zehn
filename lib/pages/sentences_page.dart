@@ -2,7 +2,6 @@ import 'package:app/tools/app/appCache.dart';
 import 'package:flutter/material.dart';
 
 import 'package:appinio_swiper/appinio_swiper.dart';
-import 'package:go_router/go_router.dart';
 import 'package:iris_tools/api/generator.dart';
 import 'package:iris_tools/dateSection/ADateStructure.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
@@ -29,11 +28,6 @@ import 'package:app/views/states/errorOccur.dart';
 import 'package:app/views/states/waitToLoad.dart';
 
 class SentencesPage extends StatefulWidget {
-  static final route = GoRoute(
-    path: '/Sentences',
-    name: (SentencesPage).toString().toLowerCase(),
-    builder: (BuildContext context, GoRouterState state) => SentencesPage(),
-  );
 
   const SentencesPage({Key? key}) : super(key: key);
 

@@ -32,7 +32,6 @@ dependencies:
   device_info_plus: ^8.1.0
   platform_device_id: ^1.0.1
   connectivity_plus: ^3.0.3
-  go_router: ^6.0.6
   move_to_background: ^1.0.2
   workmanager: ^0.5.1
   simple_animations: ^5.0.0+3

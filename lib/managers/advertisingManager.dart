@@ -23,6 +23,7 @@ import 'package:app/system/keys.dart';
 import 'package:app/structures/middleWare/requester.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appDb.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AdvertisingManager {
   AdvertisingManager._();
@@ -217,7 +218,7 @@ class AdvertisingManager {
     }
 
     if(adv.type == 'url'){
-      UrlHelper.launchLink(adv.clickUrl!);
+      UrlHelper.launchWeb(adv.clickUrl!, mode: LaunchMode.externalApplication);
     }
 
     else if(adv.type == 'sub_bucket'){
@@ -243,7 +244,7 @@ class AdvertisingManager {
       inject.srcAddress = itm.mediaModel!.url!;
       inject.videoSourceType = VideoSourceType.network;
 
-      AppRoute.pushNamed(AppRoute.getLastContext()!, VideoPlayerPage.route.name!, extra: inject);
+      AppRoute.pushPage(AppRoute.getLastContext()!, VideoPlayerPage(injectData: inject));
       return;
     }
 
@@ -254,7 +255,7 @@ class AdvertisingManager {
       inject.title = '';//bucketModel?.title;
       inject.subTitle = itm.title;
 
-      AppRoute.pushNamed(AppRoute.getLastContext()!, AudioPlayerPage.route.name!, extra: inject);
+      AppRoute.pushPage(AppRoute.getLastContext()!, AudioPlayerPage(injectData: inject));
       return;
     }
 
@@ -262,7 +263,7 @@ class AdvertisingManager {
       final inject = ContentViewPageInjectData();
       inject.subBucket = itm;
 
-      AppRoute.pushNamed(AppRoute.getLastContext()!, ContentViewPage.route.name!, extra: inject);
+      AppRoute.pushPage(AppRoute.getLastContext()!, ContentViewPage(injectData: inject));
       return;
     }
   }

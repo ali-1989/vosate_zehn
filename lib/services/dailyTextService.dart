@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app/tools/app/appRoute.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/dateSection/dateHelper.dart';
@@ -48,7 +49,7 @@ class DailyTextService {
           alignment: Alignment.topLeft,
           child: IconButton(
               onPressed: (){
-                Navigator.of(context).pop();
+                AppRoute.popTopView(context);
               },
               icon: Icon(AppIcons.close)
           ),
@@ -56,7 +57,7 @@ class DailyTextService {
 
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical:8.0),
-          child: Text(msg, style: AppThemes.body2TextStyle()!.copyWith(fontSize: 14, fontWeight: FontWeight.bold)),
+          child: Text(msg, style: AppThemes.bodyTextStyle()!.copyWith(fontSize: 14, fontWeight: FontWeight.bold)),
         ),
 
         SizedBox(height: 10),

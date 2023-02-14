@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:go_router/go_router.dart';
+
 import 'package:iris_tools/api/helpers/focusHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:iris_tools/widgets/maxWidth.dart';
@@ -16,12 +16,7 @@ import 'package:app/tools/app/appSheet.dart';
 import 'package:app/tools/app/appSnack.dart';
 import 'package:app/views/homeComponents/appBarBuilder.dart';
 
-class ContactUsPage extends StatefulWidget {
-  static final route = GoRoute(
-    path: '/ContactUsPage',
-    name: (ContactUsPage).toString().toLowerCase(),
-    builder: (BuildContext context, GoRouterState state) => ContactUsPage(),
-  );
+class ContactUsPage extends StatefulWidget{
 
   const ContactUsPage({Key? key}) : super(key: key);
 

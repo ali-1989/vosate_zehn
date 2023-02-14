@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:go_router/go_router.dart';
 import 'package:iris_tools/api/duration/durationFormatter.dart';
 import 'package:iris_tools/api/helpers/focusHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
@@ -34,11 +33,6 @@ import 'package:app/views/states/errorOccur.dart';
 import 'package:app/views/states/waitToLoad.dart';
 
 class SearchPage extends StatefulWidget {
-  static final route = GoRoute(
-    path: '/search',
-    name: (SearchPage).toString().toLowerCase(),
-    builder: (BuildContext context, GoRouterState state) => SearchPage(),
-  );
 
   const SearchPage({Key? key}) : super(key: key);
 
@@ -50,7 +44,6 @@ class _SearchPageState extends StateBase<SearchPage> {
   List<SubBucketModel> foundList = [];
   late ThemeData chipTheme;
   Requester requester = Requester();
-  //String state$noRequestYet = 'state_noRequestYet';
   SearchFilterTool searchFilter = SearchFilterTool();
   RefreshController refreshController = RefreshController(initialRefresh: false);
 
@@ -88,19 +81,10 @@ class _SearchPageState extends StateBase<SearchPage> {
   Widget buildBody(){
     return Column(
       children: [
-        SizedBox(height: 30),
+        SizedBox(height: 20),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 14.0),
           child: SearchBar(
-            iconColor: Colors.white,
-            decoration: BoxDecoration(
-              color: AppThemes.instance.currentTheme.primaryColor,
-              borderRadius: BorderRadius.all(Radius.circular(8)),
-              border: Border.symmetric(
-                horizontal: BorderSide(color: Colors.black38, width: 0.7, style: BorderStyle.solid),
-                vertical: BorderSide(color:  Colors.black38, width: 0.7, style: BorderStyle.solid),
-              ),
-            ),
             onChangeEvent: (txt){
               if(txt.length > 2 && searchFilter.searchText != txt){
                 searchFilter.searchText = txt;
@@ -319,7 +303,7 @@ class _SearchPageState extends StateBase<SearchPage> {
       inject.srcAddress = itm.mediaModel!.url!;
       inject.videoSourceType = VideoSourceType.network;
 
-      AppRoute.pushNamed(context, VideoPlayerPage.route.name!, extra: inject);
+      AppRoute.pushPage(context, VideoPlayerPage(injectData: inject));
       return;
     }
 
@@ -330,7 +314,7 @@ class _SearchPageState extends StateBase<SearchPage> {
       inject.title = '';//widget.injectData.level1model?.title;
       inject.subTitle = itm.title;
 
-      AppRoute.pushNamed(context, AudioPlayerPage.route.name!, extra: inject);
+      AppRoute.pushPage(context, AudioPlayerPage(injectData: inject));
       return;
     }
 
@@ -338,7 +322,7 @@ class _SearchPageState extends StateBase<SearchPage> {
       final inject = ContentViewPageInjectData();
       inject.subBucket = itm;
 
-      AppRoute.pushNamed(context, ContentViewPage.route.name!, extra: inject);
+      AppRoute.pushPage(context, ContentViewPage(injectData: inject));
       return;
     }
   }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:go_router/go_router.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:webviewx/webviewx.dart';
 
@@ -9,14 +8,8 @@ import 'package:app/tools/app/appMessages.dart';
 import 'package:app/views/homeComponents/appBarBuilder.dart';
 import 'package:app/views/states/waitToLoad.dart';
 
-class PayWebPage extends StatefulWidget {
+class PayWebPage extends StatefulWidget{
   final String url;
-
-  static final route = GoRoute(
-    path: '/payPage',
-    name: (PayWebPage).toString().toLowerCase(),
-    builder: (BuildContext context, GoRouterState state) => PayWebPage(url: state.extra as String),
-  );
 
   const PayWebPage({required this.url, Key? key}) : super(key: key);
 
@@ -27,16 +20,6 @@ class PayWebPage extends StatefulWidget {
 class _PayWebPageState extends StateBase<PayWebPage> {
   bool isInPreparing = true;
   WebViewXController? webController;
-
-  @override
-  void initState(){
-    super.initState();
-  }
-
-  @override
-  void dispose(){
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {

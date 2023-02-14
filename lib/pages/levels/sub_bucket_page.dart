@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:go_router/go_router.dart';
 import 'package:iris_tools/api/duration/durationFormatter.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:iris_tools/widgets/irisImageView.dart';
@@ -38,12 +37,7 @@ class SubBucketPageInjectData {
   BucketModel? bucketModel;
 }
 ///---------------------------------------------------------------------------------
-class SubBucketPage extends StatefulWidget {
-  static final route = GoRoute(
-    path: '/sub_bucket',
-    name: (SubBucketPage).toString().toLowerCase(),
-    builder: (BuildContext context, GoRouterState state) => SubBucketPage(injectData: state.extra as SubBucketPageInjectData),
-  );
+class SubBucketPage extends StatefulWidget{
 
   final SubBucketPageInjectData injectData;
 
@@ -141,115 +135,118 @@ class _SubBucketPageState extends StateBase<SubBucketPage> {
   Widget buildListItem(int idx){
     final itm = listItems[idx];
 
-    return InkWell(
-      onTap: (){
-        onItemClick(itm);
-      },
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black26),
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: InkWell(
+        onTap: (){
+          onItemClick(itm);
+        },
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.black26),
+            borderRadius: BorderRadius.circular(10),
+          ),
+
+          child: Padding(
+            padding: const EdgeInsets.all(1.0),
+            child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
-            ),
-
-            child: Column(
-              children: [
-                Stack(
-                  children: [
-                    Builder(
-                      builder: (ctx){
-                        if(itm.imageModel?.url != null){
-                          return IrisImageView(
-                            width: double.infinity,
-                            height: 100,
-                            fit: BoxFit.fill,
-                            url: itm.imageModel!.url!,
-                            imagePath: AppDirectories.getSavePathMedia(itm.imageModel, SavePathType.anyOnInternal, null),
-                          );
-                        }
-
-                        return Image.asset(AppImages.appIcon, width: double.infinity, height: 100, fit: BoxFit.contain);
-                      },
-                    ),
-
-                    Positioned(
-                        top: 0,
-                        left: 0,
-                        child: Builder(
-                            builder: (context) {
-                              if(itm.type == SubBucketTypes.video.id()){
-                                return Theme(
-                                  data: AppThemes.instance.themeData.copyWith(canvasColor: Colors.transparent),
-                                  child: Chip(
-                                    backgroundColor: Colors.grey.withAlpha(160),
-                                    shadowColor: Colors.transparent,
-                                    visualDensity: VisualDensity.compact,
-                                    elevation: 0,
-                                    label: Icon(AppIcons.videoCamera, size: 15, color: Colors.white),
-                                  ),
-                                );
-                              }
-
-                              if(itm.type == SubBucketTypes.audio.id()){
-                                return Chip(
-                                  backgroundColor: Colors.black.withAlpha(200),
-                                  shadowColor: Colors.transparent,
-                                  visualDensity: VisualDensity.compact,
-                                  elevation: 0,
-                                  label: Icon(AppIcons.headset, size: 15, color: Colors.white),
-                                );
-                              }
-
-                              return SizedBox();
-                            }
-                        )
-                    ),
-                  ],
-                ),
-
-                SizedBox(height: 12),
-
-                Text(itm.title, maxLines: 1).bold().fsR(1),
-
-                SizedBox(height: 12,),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 7.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Column(
+                children: [
+                  Stack(
                     children: [
                       Builder(
                         builder: (ctx){
-                          if(itm.duration > 0){
-                            final dur = Duration(milliseconds: itm.duration);
-                            return Text('${DurationFormatter.duration(dur, showSuffix: false)} ثانیه').alpha().subFont();
+                          if(itm.imageModel?.url != null){
+                            return IrisImageView(
+                              width: double.infinity,
+                              height: 100,
+                              fit: BoxFit.fill,
+                              url: itm.imageModel!.url!,
+                              imagePath: AppDirectories.getSavePathMedia(itm.imageModel, SavePathType.anyOnInternal, null),
+                            );
                           }
 
-                          return SizedBox();
+                          return Image.asset(AppImages.appIcon, width: double.infinity, height: 100, fit: BoxFit.contain);
                         },
                       ),
 
-                      IconButton(
-                          constraints: BoxConstraints.tightFor(),
-                          padding: EdgeInsets.all(4),
-                          splashRadius: 20,
-                          visualDensity: VisualDensity.compact,
-                          iconSize: 20,
-                          onPressed: (){
-                            setFavorite(itm);
-                          },
-                          icon: Icon(itm.isFavorite ? AppIcons.heartSolid: AppIcons.heart,
-                            size: 20,
-                            color: itm.isFavorite ? Colors.red: Colors.black,
+                      Positioned(
+                          top: 0,
+                          left: 0,
+                          child: Builder(
+                              builder: (context) {
+                                if(itm.type == SubBucketTypes.video.id()){
+                                  return Theme(
+                                    data: AppThemes.instance.themeData.copyWith(canvasColor: Colors.transparent),
+                                    child: Chip(
+                                      backgroundColor: Colors.grey.withAlpha(160),
+                                      shadowColor: Colors.transparent,
+                                      visualDensity: VisualDensity.compact,
+                                      elevation: 0,
+                                      label: Icon(AppIcons.videoCamera, size: 15, color: Colors.white),
+                                    ),
+                                  );
+                                }
+
+                                if(itm.type == SubBucketTypes.audio.id()){
+                                  return Chip(
+                                    backgroundColor: Colors.black.withAlpha(200),
+                                    shadowColor: Colors.transparent,
+                                    visualDensity: VisualDensity.compact,
+                                    elevation: 0,
+                                    label: Icon(AppIcons.headset, size: 15, color: Colors.white),
+                                  );
+                                }
+
+                                return SizedBox();
+                              }
                           )
-                      )
+                      ),
                     ],
                   ),
-                )
-              ],
+
+                  SizedBox(height: 12),
+
+                  Text(itm.title, maxLines: 1).bold().fsR(1),
+
+                  SizedBox(height: 12,),
+
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 7.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Builder(
+                          builder: (ctx){
+                            if(itm.duration > 0){
+                              final dur = Duration(milliseconds: itm.duration);
+                              return Text('${DurationFormatter.duration(dur, showSuffix: false)} ثانیه').alpha().subFont();
+                            }
+
+                            return SizedBox();
+                          },
+                        ),
+
+                        IconButton(
+                            constraints: BoxConstraints.tightFor(),
+                            padding: EdgeInsets.all(4),
+                            splashRadius: 20,
+                            visualDensity: VisualDensity.compact,
+                            iconSize: 20,
+                            onPressed: (){
+                              setFavorite(itm);
+                            },
+                            icon: Icon(itm.isFavorite ? AppIcons.heartSolid: AppIcons.heart,
+                              size: 20,
+                              color: itm.isFavorite ? Colors.red: Colors.black,
+                            )
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
@@ -299,7 +296,7 @@ class _SubBucketPageState extends StateBase<SubBucketPage> {
       inject.srcAddress = itm.mediaModel!.url!;
       inject.videoSourceType = VideoSourceType.network;
 
-      AppRoute.pushNamed(context, VideoPlayerPage.route.name!, extra: inject);
+      AppRoute.pushPage(context, VideoPlayerPage(injectData: inject));
       return;
     }
 
@@ -310,7 +307,7 @@ class _SubBucketPageState extends StateBase<SubBucketPage> {
       inject.title = widget.injectData.bucketModel?.title;
       inject.subTitle = itm.title;
 
-      AppRoute.pushNamed(context, AudioPlayerPage.route.name!, extra: inject);
+      AppRoute.pushPage(context, AudioPlayerPage(injectData: inject));
       return;
     }
 
@@ -318,7 +315,7 @@ class _SubBucketPageState extends StateBase<SubBucketPage> {
       final inject = ContentViewPageInjectData();
       inject.subBucket = itm;
 
-      AppRoute.pushNamed(context, ContentViewPage.route.name!, extra: inject);
+      AppRoute.pushPage(context, ContentViewPage(injectData: inject));
       return;
     }
   }

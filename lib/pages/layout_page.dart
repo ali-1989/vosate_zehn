@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:go_router/go_router.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:move_to_background/move_to_background.dart';
 import 'package:shaped_bottom_bar/models/shaped_item_object.dart';
@@ -13,7 +12,6 @@ import 'package:app/pages/search_page.dart';
 import 'package:app/services/aidService.dart';
 import 'package:app/structures/abstract/stateBase.dart';
 import 'package:app/structures/enums/enums.dart';
-import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appIcons.dart';
 import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appRoute.dart';
@@ -21,12 +19,7 @@ import 'package:app/tools/app/appThemes.dart';
 import 'package:app/views/homeComponents/appBarBuilder.dart';
 import 'package:app/views/homeComponents/drawerMenuBuilder.dart';
 
-class LayoutPage extends StatefulWidget {
-  static final route = GoRoute(
-    path: '/',
-    name: (LayoutPage).toString().toLowerCase(),
-    builder: (BuildContext context, GoRouterState state) => LayoutPage(key: AppBroadcast.layoutPageKey),
-  );
+class LayoutPage extends StatefulWidget{
 
   const LayoutPage({super.key});
 
@@ -120,7 +113,7 @@ class LayoutPageState extends StateBase<LayoutPage> {
 
         IconButton(
             onPressed: (){
-              AppRoute.pushNamed(context, SearchPage.route.name!);
+              AppRoute.pushPage(context, SearchPage());
             },
             icon: Icon(AppIcons.search)
         ),

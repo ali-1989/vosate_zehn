@@ -12,3 +12,4 @@ typedef TryLogin = void Function(State state);
 /// typedef AsyncCallback = Future<void> Function();
 /// typedef AsyncValueSetter<T> = Future<void> Function(T value);
 /// typedef AsyncValueGetter<T> = Future<T> Function();
+//typedef EE<T extends WebAddress> = T;

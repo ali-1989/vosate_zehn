@@ -1,3 +1,6 @@
+import 'package:app/tools/app/appRoute.dart';
+import 'package:app/tools/app/appSizes.dart';
+import 'package:app/tools/app/appThemes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/widgets/searchBar.dart';
@@ -6,9 +9,7 @@ import 'package:app/structures/abstract/stateBase.dart';
 import 'package:app/structures/models/countryModel.dart';
 import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/countryTools.dart';
-import '/tools/app/appNavigator.dart';
-import '/tools/app/appSizes.dart';
-import '/tools/app/appThemes.dart';
+
 
 class CountrySelectScreen extends StatefulWidget {
 
@@ -44,15 +45,10 @@ class CountrySelectScreenState extends StateBase<CountrySelectScreen> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Future<bool> onWillBack<S extends StateBase>(S state) {
     //CountrySelectScreenState state = state as CountrySelectScreenState;
 
-    AppNavigator.pop(context, result: result);
+    AppRoute.popTopView(context, data: result);
     return Future<bool>.value(false);
   }
 
@@ -127,7 +123,7 @@ class CountrySelectScreenState extends StateBase<CountrySelectScreen> {
                       };
 
                       result = CountryModel.fromMap(resultMap);
-                      AppNavigator.pop(context, result: result);
+                      AppRoute.popTopView(context, data: result);
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 22),

@@ -1,3 +1,4 @@
+import 'package:app/tools/app/appRoute.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/helpers/mathHelper.dart';
@@ -411,7 +412,7 @@ class SelectDateTimeCalendarViewState extends State<SelectDateTimeCalendarView> 
       widget.onSelect?.call(sd);
     }
     else {
-      AppNavigator.pop(context, result: sd);
+      AppRoute.popTopView(context, data: sd);
     }
   }
 

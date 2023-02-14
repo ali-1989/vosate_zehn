@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:go_router/go_router.dart';
 import 'package:iris_tools/api/duration/durationFormatter.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:iris_tools/widgets/irisImageView.dart';
@@ -24,12 +23,7 @@ import 'package:app/tools/app/appToast.dart';
 import 'package:app/views/homeComponents/appBarBuilder.dart';
 import 'package:app/views/states/waitToLoad.dart';
 
-class LastSeenPage extends StatefulWidget {
-  static final route = GoRoute(
-    path: '/LastSeenPage',
-    name: (LastSeenPage).toString().toLowerCase(),
-    builder: (BuildContext context, GoRouterState state) => LastSeenPage(),
-  );
+class LastSeenPage extends StatefulWidget{
 
   const LastSeenPage({Key? key}) : super(key: key);
 
@@ -234,7 +228,7 @@ class _LastSeenPageState extends StateBase<LastSeenPage> {
       inject.srcAddress = itm.mediaModel!.url!;
       inject.videoSourceType = VideoSourceType.network;
 
-      AppRoute.pushNamed(context, VideoPlayerPage.route.name!, extra: inject);
+      AppRoute.pushPage(context, VideoPlayerPage(injectData: inject));
       return;
     }
 
@@ -245,7 +239,7 @@ class _LastSeenPageState extends StateBase<LastSeenPage> {
       inject.title = '';//widget.injectData.level1model?.title;
       inject.subTitle = itm.title;
 
-      AppRoute.pushNamed(context, AudioPlayerPage.route.name!, extra: inject);
+      AppRoute.pushPage(context, AudioPlayerPage(injectData: inject));
       return;
     }
 
@@ -253,7 +247,7 @@ class _LastSeenPageState extends StateBase<LastSeenPage> {
       final inject = ContentViewPageInjectData();
       inject.subBucket = itm;
 
-      AppRoute.pushNamed(context, ContentViewPage.route.name!, extra: inject);
+      AppRoute.pushPage(context, ContentViewPage(injectData: inject));
       return;
     }
   }

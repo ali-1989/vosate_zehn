@@ -18,6 +18,7 @@ import 'package:app/structures/models/advModel.dart';
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
 import 'package:iris_tools/api/helpers/urlHelper.dart';
 import 'package:iris_tools/widgets/irisImageView.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CarouselManager {
   CarouselManager._();
@@ -120,7 +121,8 @@ class CarouselManager {
     }
 
     if(itm.type == 'url'){
-      UrlHelper.launchLink(itm.clickUrl!);
+      // https://t.me/VosateZehnApp, https://eitaa.com/Roshangari_ir
+      UrlHelper.launchWeb(itm.clickUrl!, mode: LaunchMode.externalApplication);
     }
 
     else if(itm.type == 'sub_bucket'){
@@ -146,7 +148,7 @@ class CarouselManager {
       inject.srcAddress = itm.mediaModel!.url!;
       inject.videoSourceType = VideoSourceType.network;
 
-      AppRoute.pushNamed(AppRoute.getLastContext()!, VideoPlayerPage.route.name!, extra: inject);
+      AppRoute.pushPage(AppRoute.getLastContext()!, VideoPlayerPage(injectData: inject));
       return;
     }
 
@@ -157,7 +159,7 @@ class CarouselManager {
       inject.title = '';//bucketModel?.title;
       inject.subTitle = itm.title;
 
-      AppRoute.pushNamed(AppRoute.getLastContext()!, AudioPlayerPage.route.name!, extra: inject);
+      AppRoute.pushPage(AppRoute.getLastContext()!, AudioPlayerPage(injectData: inject));
       return;
     }
 
@@ -165,7 +167,7 @@ class CarouselManager {
       final inject = ContentViewPageInjectData();
       inject.subBucket = itm;
 
-      AppRoute.pushNamed(AppRoute.getLastContext()!, ContentViewPage.route.name!, extra: inject);
+      AppRoute.pushPage(AppRoute.getLastContext()!, ContentViewPage(injectData: inject));
       return;
     }
   }

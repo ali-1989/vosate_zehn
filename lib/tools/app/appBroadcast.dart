@@ -15,7 +15,6 @@ class AppBroadcast {
 
   static final StreamController<bool> viewUpdaterStream = StreamController<bool>();
   static final RefreshController drawerMenuRefresher = RefreshController();
-  //static final NotifyBroadcast avatarNotifier = NotifyBroadcast();
   static final ExtendValueNotifier<int> newAdvNotifier = ExtendValueNotifier<int>(0);
   static final ExtendValueNotifier<int> changeFavoriteNotifier = ExtendValueNotifier<int>(0);
   //---------------------- keys

@@ -48,7 +48,7 @@ class AppSnack {
       backgroundColor: backColor,
       shape: shape,
       onVisible: onVisible,
-      width: AppSizes.isBigWidth()? AppSizes.webMaxDialogSize: null,
+      width: AppSizes.isBigWidth()? AppSizes.webMaxWidthSize: null,
     );
 
     return getScaffoldMessenger(context).showSnackBar(snackBar);
@@ -62,7 +62,7 @@ class AppSnack {
       backgroundColor: backgroundColor,
       dismissDirection: DismissDirection.horizontal,
       action: action,
-      width: AppSizes.isBigWidth()? AppSizes.webMaxDialogSize: null,
+      width: AppSizes.isBigWidth()? AppSizes.webMaxWidthSize: null,
     );
   }
   ///---------------------------------------------------------------------------------------------------------

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:go_router/go_router.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:iris_tools/widgets/avatarChip.dart';
 import 'package:iris_tools/widgets/irisImageView.dart';
@@ -33,12 +32,7 @@ class ContentViewPageInjectData {
   late SubBucketModel subBucket;
 }
 ///---------------------------------------------------------------------------------
-class ContentViewPage extends StatefulWidget {
-  static final route = GoRoute(
-    path: '/content_view',
-    name: (ContentViewPage).toString().toLowerCase(),
-    builder: (BuildContext context, GoRouterState state) => ContentViewPage(injectData: state.extra as ContentViewPageInjectData),
-  );
+class ContentViewPage extends StatefulWidget{
 
   final ContentViewPageInjectData injectData;
 
@@ -357,7 +351,7 @@ class _LevelPageState extends StateBase<ContentViewPage> {
       inject.videoSourceType = VideoSourceType.network;
       inject.onFullTimePlay = (){onFullTimePlay(media);};
 
-      AppRoute.pushNamed(context, VideoPlayerPage.route.name!, extra: inject);
+      AppRoute.pushPage(context, VideoPlayerPage(injectData: inject));
     }
     else if(type == SubBucketTypes.audio){
       final inject = AudioPlayerPageInjectData();
@@ -366,11 +360,15 @@ class _LevelPageState extends StateBase<ContentViewPage> {
       inject.title = media.title;
       inject.onFullTimePlay = (){onFullTimePlay(media);};
 
-      AppRoute.pushNamed(context, AudioPlayerPage.route.name!, extra: inject);
+      AppRoute.pushPage(context, AudioPlayerPage(injectData: inject));
     }
   }
 
   void onFullTimePlay(MediaModelWrapForContent media) {
+    if(!mounted){
+      return;
+    }
+
     requestRegisterSeenContent(media);
     //AppToast.showToast(context, 'جلسه بعدی باز شد');
   }

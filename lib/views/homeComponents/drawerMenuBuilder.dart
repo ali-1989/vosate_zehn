@@ -129,16 +129,24 @@ class DrawerMenuBuilder {
               builder: (ctx, data) {
                 return Builder(
                   builder: (ctx){
-                    if(user.profileModel != null){
-                      final path = AppDirectories.getSavePathUri(user.profileModel!.url?? '', SavePathType.userProfile, user.avatarFileName);
-                      final img = FileHelper.getFile(path);
+                    if(user.profileModel?.url != null){
+                      if(kIsWeb){
+                        return CircleAvatar(
+                          backgroundImage: NetworkImage(user.profileModel!.url!),
+                          radius: 30,
+                        );
+                      }
+                      else {
+                        final path = AppDirectories.getSavePathUri(user.profileModel!.url ?? '', SavePathType.userProfile, user.avatarFileName);
+                        final img = FileHelper.getFile(path);
 
-                      if(img.existsSync()) {
-                        if (user.profileModel!.volume == null || img.lengthSync() == user.profileModel!.volume) {
-                          return CircleAvatar(
-                            backgroundImage: FileImage(File(img.path)),
-                            radius: 30,
-                          );
+                        if (img.existsSync()) {
+                          if (user.profileModel!.volume == null || img.lengthSync() == user.profileModel!.volume) {
+                            return CircleAvatar(
+                              backgroundImage: FileImage(File(img.path)),
+                              radius: 30,
+                            );
+                          }
                         }
                       }
                     }
@@ -193,12 +201,12 @@ class DrawerMenuBuilder {
 
   static void gotoFavoritesPage(){
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    AppRoute.pushNamed(AppRoute.getLastContext()!, FavoritesPage.route.name!);
+    AppRoute.pushPage(AppRoute.getLastContext()!, FavoritesPage());
   }
 
   static void gotoLastSeenPage(){
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    AppRoute.pushNamed(AppRoute.getLastContext()!, LastSeenPage.route.name!);
+    AppRoute.pushPage(AppRoute.getLastContext()!, LastSeenPage());
   }
 
   static void gotoAidPage(){
@@ -207,17 +215,17 @@ class DrawerMenuBuilder {
 
   static void gotoContactUsPage(){
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    AppRoute.pushNamed(AppRoute.getLastContext()!, ContactUsPage.route.name!);
+    AppRoute.pushPage(AppRoute.getLastContext()!, ContactUsPage());
   }
 
   static void gotoSentencePage(){
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    AppRoute.pushNamed(AppRoute.getLastContext()!, SentencesPage.route.name!);
+    AppRoute.pushPage(AppRoute.getLastContext()!, SentencesPage());
   }
 
   static void gotoAboutUsPage(){
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    AppRoute.pushNamed(AppRoute.getLastContext()!, AboutUsPage.route.name!);
+    AppRoute.pushPage(AppRoute.getLastContext()!, AboutUsPage());
   }
 
   static void gotoProfilePage(){
@@ -226,7 +234,7 @@ class DrawerMenuBuilder {
     }
 
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    AppRoute.pushNamed(AppRoute.getLastContext()!, ProfilePage.route.name!);
+    AppRoute.pushPage(AppRoute.getLastContext()!, ProfilePage());
   }
 
   static void onLogoffCall(){
@@ -251,7 +259,7 @@ class DrawerMenuBuilder {
   }
 
   static void checkAvatar(UserModel user) async {
-    if(user.profileModel?.url == null){
+    if(user.profileModel?.url == null || kIsWeb){
       return;
     }
 

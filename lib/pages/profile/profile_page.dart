@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:glowstone/glowstone.dart';
-import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:iris_pic_editor/picEditor/models/edit_options.dart';
 import 'package:iris_pic_editor/picEditor/picEditor.dart';
@@ -50,17 +49,17 @@ import 'package:app/views/components/dateViews/selectDateCalendarView.dart';
 import 'package:app/views/components/selectGenderView.dart';
 import 'package:app/views/homeComponents/appBarBuilder.dart';
 
-class ProfilePage extends StatefulWidget {
-  static final route = GoRoute(
-    path: '/profile',
-    name: (ProfilePage).toString().toLowerCase(),
-    builder: (BuildContext context, GoRouterState state) => ProfilePage(),
-  );
+class ProfilePage extends StatefulWidget{
 
   const ProfilePage({Key? key}) : super(key: key);
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
+
+  @override
+  String? getWebAddress() {
+    return (ProfilePage).toString();
+  }
 }
 ///==================================================================================
 class _ProfilePageState extends StateBase<ProfilePage> {
@@ -72,6 +71,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
     super.initState();
 
     requestProfileData();
+    //addPostOrCall(fn: checkPermission);
   }
 
   @override
@@ -135,13 +135,21 @@ class _ProfilePageState extends StateBase<ProfilePage> {
                                 child: StreamBuilder(
                                   stream: EventDispatcherService.getStream(EventDispatcher.userProfileChange),
                                   builder: (ctx, data) {
-                                    if(user.profileModel != null){
-                                      final path = AppDirectories.getSavePathUri(user.profileModel!.url?? '', SavePathType.userProfile, user.avatarFileName);
-                                      final img = FileHelper.getFile(path);
+                                    if(user.profileModel?.url != null){
+                                      if(kIsWeb){
+                                        return CircleAvatar(
+                                          backgroundImage: NetworkImage(user.profileModel!.url!),
+                                          radius: 30,
+                                        );
+                                      }
+                                      else {
+                                        final path = AppDirectories.getSavePathUri(user.profileModel!.url?? '', SavePathType.userProfile, user.avatarFileName);
+                                        final img = FileHelper.getFile(path);
 
-                                      if(img.existsSync()) {
-                                        if (user.profileModel!.volume == null || img.lengthSync() == user.profileModel!.volume) {
-                                          return Image.file(img, width: 120, height: 120, fit: BoxFit.fill);
+                                        if(img.existsSync()) {
+                                          if (user.profileModel!.volume == null || img.lengthSync() == user.profileModel!.volume) {
+                                            return Image.file(img, width: 120, height: 120, fit: BoxFit.fill);
+                                          }
                                         }
                                       }
                                     }
@@ -345,23 +353,27 @@ class _ProfilePageState extends StateBase<ProfilePage> {
 
   void changeAvatarClick() async {
     List<Widget> widgets = [];
-    widgets.add(
-        GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          onTap: (){
-            onSelectProfile(1);
-          },
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            child: Row(
-              children: [
-                Icon(AppIcons.camera, size: 20),
-                SizedBox(width: 12),
-                Text('دوربین').bold(),
-              ],
-    ),
+
+    if(!kIsWeb) {
+      final v = GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          onSelectProfile(1);
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: Row(
+            children: [
+              Icon(AppIcons.camera, size: 20),
+              SizedBox(width: 12),
+              Text('دوربین').bold(),
+            ],
           ),
-        ));
+        ),
+      );
+
+      widgets.add(v);
+    }
 
     widgets.add(
         GestureDetector(
@@ -403,7 +415,6 @@ class _ProfilePageState extends StateBase<ProfilePage> {
         context,
         widgets,
         'changeAvatar',
-
     );
   }
 
@@ -431,7 +442,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
   }
 
   Future<XFile?> selectImageFromCamera() async {
-    final hasPermission = await PermissionTools.requestStoragePermission();
+    final hasPermission = await PermissionTools.requestCameraPermission();
 
     if(hasPermission != PermissionStatus.granted) {
       return null;
@@ -695,5 +706,19 @@ class _ProfilePageState extends StateBase<ProfilePage> {
     requester.bodyJson = js;
     requester.prepareUrl();
     requester.request(context);
+  }
+
+  void checkPermission() async {
+    if(user.profileModel != null && user.profileModel!.url != null){
+      final hasPermission = await PermissionTools.isGrantedStoragePermission();
+
+      if(!hasPermission) {
+        final graPermission = await PermissionTools.requestStoragePermission();
+
+        if(graPermission == PermissionStatus.granted){
+          assistCtr.updateHead();
+        }
+      }
+    }
   }
 }

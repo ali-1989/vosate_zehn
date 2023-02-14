@@ -13,7 +13,7 @@ class AppSizes {
   static bool _initialState = false;
 
   static double sizeOfBigScreen = 700;
-  static double webMaxDialogSize = 500; // 700;  because used MaxWidth(500) in main
+  static double webMaxWidthSize = 500;
 
   double? realPixelWidth;
   double? realPixelHeight;
@@ -127,18 +127,6 @@ class AppSizes {
 
   static bool isBigWidth(){
     return instance.appWidth > sizeOfBigScreen;
-  }
-
-  static double getWebPadding(){
-    final over = instance.appWidth - webMaxDialogSize;
-
-    if(over < 1){
-      return 0;
-    }
-
-    return 0;
-    /// if in main used [MaxWidth()],not need to below line
-    //return over / 2;
   }
 
   double mTextSize(double tSize){

@@ -1,3 +1,4 @@
+import 'package:app/tools/app/appRoute.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/helpers/colorHelper.dart';
@@ -5,7 +6,7 @@ import 'package:material_dialogs/material_dialogs.dart';
 
 import 'package:app/tools/app/appIcons.dart';
 import 'package:app/tools/app/appMessages.dart';
-import 'package:app/tools/app/appNavigator.dart';
+
 import 'package:app/tools/app/appThemes.dart';
 
 class AppDialog {
@@ -99,7 +100,7 @@ class AppDialog {
 							yesFn.call();
 						}
 						else {
-							AppNavigator.pop(context);
+							AppRoute.popTopView(context);
 						}
 					},
 					child: Text(yesText)

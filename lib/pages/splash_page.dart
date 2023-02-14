@@ -1,12 +1,13 @@
 import 'dart:async';
 
-import 'package:app/views/components/splash_screen.dart';
+import 'package:app/views/homeComponents/splashScreen.dart';
+import 'package:app/views/homeComponents/routeDispatcher.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:app/managers/settingsManager.dart';
 import 'package:app/managers/versionManager.dart';
-import 'package:app/pages/layout_page.dart';
+
 import 'package:app/structures/abstract/stateBase.dart';
 import 'package:app/system/applicationInitialize.dart';
 import 'package:app/system/session.dart';
@@ -20,20 +21,14 @@ bool isInSplashTimer = true;
 int splashWaitingMil = 4000;
 
 class SplashPage extends StatefulWidget {
-  final Widget? firstPage;
 
-  SplashPage({this.firstPage, super.key});
+  SplashPage({super.key});
 
   @override
   SplashScreenState createState() => SplashScreenState();
 }
 ///======================================================================================================
 class SplashScreenState extends StateBase<SplashPage> {
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,11 +53,11 @@ class SplashScreenState extends StateBase<SplashPage> {
   }
   ///==================================================================================================
   Widget getFirstPage(){
-    return Builder(
-      builder: (ctx){
-         return widget.firstPage?? LayoutPage(key: AppBroadcast.layoutPageKey);
-      },
-    );
+    if(kIsWeb && !ApplicationInitial.isInit()){
+      return SizedBox();
+    }
+
+    return RouteDispatcher.dispatch();
   }
 
   bool waitInSplash(){
@@ -98,6 +93,7 @@ class SplashScreenState extends StateBase<SplashPage> {
 
       ApplicationInitial.appLazyInit();
       _isInLoadingSettings = false;
+
       //SettingsManager.settingsModel.httpAddress = 'http://192.168.43.140:7436';
       AppBroadcast.reBuildMaterialBySetTheme();
     }
