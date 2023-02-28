@@ -2,23 +2,24 @@
 
 import 'dart:core';
 
+import 'package:flutter/material.dart';
+
+import 'package:iris_tools/api/helpers/jsonHelper.dart';
+import 'package:iris_tools/api/helpers/urlHelper.dart';
+import 'package:iris_tools/widgets/irisImageView.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import 'package:app/managers/mediaManager.dart';
 import 'package:app/pages/levels/audio_player_page.dart';
 import 'package:app/pages/levels/content_view_page.dart';
 import 'package:app/pages/levels/video_player_page.dart';
 import 'package:app/services/lastSeenService.dart';
 import 'package:app/structures/enums/enums.dart';
+import 'package:app/structures/models/advModel.dart';
 import 'package:app/structures/models/subBuketModel.dart';
 import 'package:app/tools/app/appDialogIris.dart';
 import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/app/appRoute.dart';
-import 'package:flutter/material.dart';
-
-import 'package:app/managers/mediaManager.dart';
-import 'package:app/structures/models/advModel.dart';
-import 'package:iris_tools/api/helpers/jsonHelper.dart';
-import 'package:iris_tools/api/helpers/urlHelper.dart';
-import 'package:iris_tools/widgets/irisImageView.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class CarouselManager {
   CarouselManager._();

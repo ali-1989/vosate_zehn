@@ -1,11 +1,11 @@
 
-class AppParameterModel {
+class SystemParameterModel {
   String? aidPopMessage;
   int aidRepeatDays = 30;
 
-  AppParameterModel();
+  SystemParameterModel();
 
-  AppParameterModel.fromMap(Map map) {
+  SystemParameterModel.fromMap(Map map) {
     aidPopMessage = map['aid_pop_message'];
     aidRepeatDays = map['aid_pop_repeat_days']?? 30;
   }

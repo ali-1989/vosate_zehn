@@ -1,17 +1,17 @@
 import 'dart:async';
 
-import 'package:app/tools/app/appRoute.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/dateSection/dateHelper.dart';
 
+import 'package:app/structures/middleWare/requester.dart';
 import 'package:app/structures/models/dailyTextModel.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/structures/middleWare/requester.dart';
 import 'package:app/system/session.dart';
 import 'package:app/tools/app/appDb.dart';
 import 'package:app/tools/app/appDialogIris.dart';
 import 'package:app/tools/app/appIcons.dart';
+import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/app/appThemes.dart';
 
 class DailyTextService {

@@ -1,28 +1,29 @@
 import 'dart:async';
 
-import 'package:app/tools/app/appNavigatorObserver.dart';
-import 'package:app/tools/app/appRouterDelegate.dart';
-import 'package:app/tools/app/appSizes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
+import 'package:flutter_web_plugins/url_strategy.dart';
+import 'package:iris_tools/api/system.dart';
+import 'package:iris_tools/widgets/maxWidth.dart';
+
 import 'package:app/constants.dart';
 import 'package:app/managers/settingsManager.dart';
-import 'package:app/pages/splash_page.dart';
 import 'package:app/services/native_call_service.dart';
 import 'package:app/structures/models/settingsModel.dart';
 import 'package:app/system/applicationInitialize.dart';
 import 'package:app/system/publicAccess.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appLocale.dart';
+import 'package:app/tools/app/appNavigatorObserver.dart';
 import 'package:app/tools/app/appRoute.dart';
+import 'package:app/tools/app/appRouterDelegate.dart';
+import 'package:app/tools/app/appSizes.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/app/appToast.dart';
-import 'package:flutter_web_plugins/url_strategy.dart';
-import 'package:iris_tools/api/system.dart';
-import 'package:iris_tools/widgets/maxWidth.dart';
+import 'package:app/views/homeComponents/splashPage.dart';
 
 ///================ call on any hot restart
 Future<void> main() async {
@@ -117,16 +118,15 @@ class MyApp extends StatelessWidget {
         },
       ),
       routerConfig: RouterConfig(routerDelegate: AppRouterDelegate.instance()),
-      localizationsDelegates: AppLocale.getLocaleDelegates(),
-      supportedLocales: AppLocale.getAssetSupportedLocales(),
       locale: ApplicationInitial.isInit()? SettingsManager.settingsModel.appLocale : SettingsModel.defaultAppLocale,
+      supportedLocales: AppLocale.getAssetSupportedLocales(),
+      localizationsDelegates: AppLocale.getLocaleDelegates(), // this do correct Rtl/Ltr
       /*localeResolutionCallback: (deviceLocale, supportedLocales) {
             return SettingsManager.settingsModel.appLocale;
           },*/
       //home: materialHomeBuilder(),
       builder: (localContext, home) {
         AppRoute.materialContext = localContext;
-
         return MediaQuery(
           data: MediaQuery.of(localContext).copyWith(textScaleFactor: 1.0),
           child: Navigator( // or home!
@@ -164,13 +164,19 @@ class MyErrorApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Material(
+    return Material(
       child: Directionality(
         textDirection: TextDirection.ltr,
         child: SizedBox.expand(
           child: ColoredBox(
               color: Colors.brown,
-            child: Center(child: Text('Error in app initialization')),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Error in app initialization'),
+                Text(ApplicationInitial.errorInInit),
+              ],
+            ),
           ),
         ),
       ),

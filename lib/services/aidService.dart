@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:iris_tools/dateSection/dateHelper.dart';
 
-import 'package:app/managers/appParameterManager.dart';
+import 'package:app/managers/systemParameterManager.dart';
 import 'package:app/pages/aid_page.dart';
 import 'package:app/pages/pay_web_page.dart';
 import 'package:app/system/keys.dart';
@@ -27,7 +27,7 @@ class AidService {
   }
 
   static void showAidDialog(){
-    final msg = AppParameterManager.parameterModel?.aidPopMessage;
+    final msg = SystemParameterManager.systemParameters.aidPopMessage;
 
     if(msg == null){
       return;
@@ -94,7 +94,7 @@ class AidService {
     }
 
     if(lastTime == null
-        || DateHelper.isPastOf(lastTimeDt, Duration(days: AppParameterManager.parameterModel?.aidRepeatDays?? 30))){
+        || DateHelper.isPastOf(lastTimeDt, Duration(days: SystemParameterManager.systemParameters.aidRepeatDays?? 30))){
       showAidDialog();
     }
   }

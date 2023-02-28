@@ -12,7 +12,6 @@ import 'package:app/tools/app/appLocale.dart';
 import 'package:app/tools/app/appThemes.dart';
 import '/managers/fontManager.dart';
 import '/managers/settingsManager.dart';
-import '/tools/app/appSizes.dart';
 
 // usage: import 'package:common_version/tools/centers/extensions.dart';
 ///==========================================================================================================
@@ -938,7 +937,7 @@ extension TextExtension on Text {
 
   Text fs(double size) {
     var ts = style ?? AppThemes.instance.currentTheme.baseTextStyle;
-    ts = ts.copyWith(fontSize: AppSizes.webFontSize(size));
+    ts = ts.copyWith(fontSize: size);
 
     return Text(
       data!,
@@ -959,8 +958,7 @@ extension TextExtension on Text {
   }
 
   Text fsR(double size, {double? max /*20*/}) {
-    final ts = style ?? AppThemes.instance.currentTheme.baseTextStyle;
-    var siz = ts.fontSize;
+    var siz = style?.fontSize;
     siz ??= AppThemes.instance.currentTheme.baseTextStyle.fontSize;
 
     siz = siz! + size;

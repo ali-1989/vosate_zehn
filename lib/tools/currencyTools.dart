@@ -1,10 +1,10 @@
+//import 'package:intl/intl.dart';
 //import 'package:currency_formatter/currency_formatter.dart';
 
 class CurrencyTools {
   CurrencyTools._();
 
-  /*
-  static String formatCurrency(num cur, {String name = '', String? symbol}){
+  /*static String formatCurrency(num cur, {String name = '', String? symbol}){
     final format = NumberFormat.currency(
       locale: SettingsManager.settingsModel.appLocale.languageCode,
       name: name,
@@ -16,19 +16,37 @@ class CurrencyTools {
     return format.format(cur);
   }
 
+  static String formatCurrencyString(String? cur, {String name = '', String? symbol}){
+    if(cur == null || cur.isEmpty){
+      return '';
+    }
+
+    return formatCurrency(MathHelper.clearToDouble(cur), name: name, symbol: symbol);
+  }
   
-  static String formatCurrency(String price, {String? symbol}) {
-    CurrencyFormatterSettings euroSettings = CurrencyFormatterSettings(
-      symbol: symbol?? '',
-      symbolSide: SymbolSide.left,
-      thousandSeparator: ',',
-      decimalSeparator: '.',
-    );
+  static CurrencyModel getCurrencyBy(String currencyCode, String countryIso) {
+    final Map countryMap = CountryTools.countriesMap!;
+    final itr = countryMap.entries;
 
-    CurrencyFormatter cf = CurrencyFormatter();
-    num amount = double.parse(price);
+    final res = CurrencyModel();
+    res.currencyName = itr.first.value['currencyName'];
+    res.currencySymbol = itr.first.value['currencySymbol'];
+    res.currencyCode = itr.first.value['currencyCode'];
+    res.countryIso = itr.first.value['iso'];
 
-    return cf.format(amount, euroSettings);
+    itr.firstWhereSafe((country) {
+      if(country.value['currencyCode'] == currencyCode && country.value['iso'] == countryIso) {
+        res.currencyName = country.value['currencyName'];
+        res.currencySymbol = country.value['currencySymbol'];
+        res.currencyCode = country.value['currencyCode'];
+        res.countryIso = country.value['iso'];
+        return true;
+      }
+
+      return false;
+    });
+
+    return res;
   }*/
 }
 

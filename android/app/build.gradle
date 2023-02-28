@@ -61,21 +61,21 @@ android {
 
     signingConfigs {
         /*release {
-            storeFile file('D:\\Programming\\Tools\\Key\\venusAdviser.jks')
+            storeFile file('K:\\Programming\\Tools\\Key\\venusAdviser.jks')
             keyAlias 'key'
             keyPassword 'venusAdviser123'
             storePassword 'venusAdviser123'
         }*/
 
         debug {
-            storeFile file('H:\\Programming\\FlutterProjects\\VosateZehn\\android\\app\\key.keystore')
+            storeFile file('E:\\FlutterProjects\\vosate_zehn\\android\\app\\key.keystore')
             keyAlias 'b4a'
             keyPassword 'a6987@7896b'
             storePassword 'a6987@7896b'
         }
 
         release {
-            storeFile file('H:\\Programming\\FlutterProjects\\VosateZehn\\android\\app\\key.keystore')
+            storeFile file('E:\\FlutterProjects\\vosate_zehn\\android\\app\\key.keystore')
             keyAlias 'b4a'
             keyPassword 'a6987@7896b'
             storePassword 'a6987@7896b'

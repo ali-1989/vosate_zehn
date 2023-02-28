@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:app/services/event_dispatcher_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -23,15 +22,15 @@ import 'package:iris_tools/models/dataModels/mediaModel.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import 'package:app/services/event_dispatcher_service.dart';
 import 'package:app/structures/abstract/stateBase.dart';
-import 'package:app/structures/models/userModel.dart';
 import 'package:app/structures/enums/enums.dart';
+import 'package:app/structures/middleWare/requester.dart';
+import 'package:app/structures/models/userModel.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/publicAccess.dart';
-import 'package:app/structures/middleWare/requester.dart';
 import 'package:app/system/session.dart';
-
 import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/app/appIcons.dart';
 import 'package:app/tools/app/appImages.dart';

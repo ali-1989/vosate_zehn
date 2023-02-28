@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:app/constants.dart';
 import 'package:app/tools/app/appThemes.dart';
 
-class NotificationModel {
+class StatusBarNotificationModel {
   String name = '${Constants.appName}_channel';
   bool enableLights = true;
   bool enableVibration = true;
@@ -13,7 +13,7 @@ class NotificationModel {
   Color defaultColor = AppThemes.instance.currentTheme.successColor;
   Color ledColor = AppThemes.instance.currentTheme.successColor;
 
-  NotificationModel.fromMap(Map? map){
+  StatusBarNotificationModel.fromMap(Map? map){
     if(map == null){
       return;
     }

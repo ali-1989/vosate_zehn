@@ -2,8 +2,8 @@ import 'package:iris_db/iris_db.dart';
 import 'package:iris_tools/api/converter.dart';
 import 'package:iris_tools/api/helpers/databaseHelper.dart';
 
+import 'package:app/system/keys.dart';
 import 'package:app/tools/app/appDirectories.dart';
-import '/system/keys.dart';
 
 class AppDB {
   AppDB._();
@@ -17,7 +17,7 @@ class AppDB {
 
     await AppDB.db.openTable(AppDB.tbKv);
     await AppDB.db.openTable(AppDB.tbLanguages);
-    await AppDB.db.openTable(AppDB.tbUserModel);
+    await AppDB.db.openTable(AppDB.tbUsers);
     await AppDB.db.openTable(AppDB.tbFavorites);
     await AppDB.db.openTable(AppDB.tbLastSeen);
     await AppDB.db.openTable(AppDB.tbMedia);
@@ -27,7 +27,7 @@ class AppDB {
   }
   ///-------- tables -------------------------------------------------------------------------------------
   static String tbKv = 'KvTable';
-  static String tbUserModel = 'UserModel';
+  static String tbUsers = 'UserModel';
   static String tbFavorites = 'Favorites';
   static String tbLastSeen = 'LastSeen';
   static String tbMedia = 'Media';

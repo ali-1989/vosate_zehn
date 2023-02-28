@@ -1,25 +1,25 @@
 import 'dart:async';
 
-import 'package:app/managers/settingsManager.dart';
+import 'package:flutter/cupertino.dart';
 
+import 'package:dio/dio.dart';
+import 'package:iris_tools/api/helpers/jsonHelper.dart';
+
+import 'package:app/managers/settingsManager.dart';
 import 'package:app/services/google_service.dart';
+import 'package:app/structures/models/countryModel.dart';
 import 'package:app/structures/models/userModel.dart';
+import 'package:app/system/httpCodes.dart';
+import 'package:app/system/keys.dart';
+import 'package:app/system/publicAccess.dart';
 import 'package:app/system/session.dart';
 import 'package:app/tools/app/appBroadcast.dart';
+import 'package:app/tools/app/appHttpDio.dart';
 import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/app/appSheet.dart';
 import 'package:app/tools/app/appToast.dart';
-import 'package:dio/dio.dart';
-
-import 'package:app/structures/models/countryModel.dart';
-import 'package:app/system/httpCodes.dart';
-import 'package:app/system/keys.dart';
-import 'package:app/system/publicAccess.dart';
-import 'package:app/tools/app/appHttpDio.dart';
 import 'package:app/tools/deviceInfoTools.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:iris_tools/api/helpers/jsonHelper.dart';
 
 class LoginService {
   LoginService._();

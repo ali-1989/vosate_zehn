@@ -1,9 +1,9 @@
-import 'package:app/constants.dart';
-import 'package:app/services/event_dispatcher_service.dart';
 import 'package:iris_download_manager/downloadManager/downloadManager.dart';
 import 'package:iris_download_manager/uploadManager/uploadManager.dart';
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
 
+import 'package:app/constants.dart';
+import 'package:app/services/event_dispatcher_service.dart';
 
 class DownloadUploadService {
   DownloadUploadService._();

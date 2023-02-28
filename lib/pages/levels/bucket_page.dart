@@ -7,12 +7,12 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:app/managers/mediaManager.dart';
 import 'package:app/pages/levels/sub_bucket_page.dart';
 import 'package:app/structures/abstract/stateBase.dart';
-import 'package:app/structures/models/bucketModel.dart';
 import 'package:app/structures/enums/enums.dart';
+import 'package:app/structures/middleWare/requester.dart';
+import 'package:app/structures/models/bucketModel.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/publicAccess.dart';
-import 'package:app/structures/middleWare/requester.dart';
 import 'package:app/system/session.dart';
 import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/app/appImages.dart';
@@ -81,7 +81,7 @@ class _BucketPageState extends StateBase<BucketPage> {
     }
 
     if(!assistCtr.hasState(state$fetchData)){
-      return ErrorOccur(onRefresh: tryLoadClick);
+      return ErrorOccur(onTryAgain: tryLoadClick);
     }
 
     if(listItems.isEmpty){

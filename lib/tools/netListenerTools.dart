@@ -1,13 +1,11 @@
-import 'package:app/services/event_dispatcher_service.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
 import 'package:app/managers/advertisingManager.dart';
-import 'package:app/managers/appParameterManager.dart';
+import 'package:app/managers/systemParameterManager.dart';
+import 'package:app/services/event_dispatcher_service.dart';
 import 'package:app/system/session.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appCache.dart';
-
-/// this listener not work on start app, work on new event
 
 class NetListenerTools {
   NetListenerTools._();
@@ -20,16 +18,9 @@ class NetListenerTools {
       AppBroadcast.isNetConnected = true;
       EventDispatcherService.notify(EventDispatcher.networkConnected);
       //await ServerTimeTools.requestUtcTimeOfServer();
-      AppParameterManager.requestParameters();
+      SystemParameterManager.requestParameters();
       AdvertisingManager.check();
 
-      if (Session.hasAnyLogin()) {
-        //final user = Session.getLastLoginUser()!;
-
-        /*if (user.isSetProfileImage) {
-          DrawerMenuTool.prepareAvatar(user);
-        }*/
-      }
     }
     else {
       AppBroadcast.isNetConnected = false;

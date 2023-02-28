@@ -1,39 +1,23 @@
+import 'package:app/tools/app/appBroadcast.dart';
 
 class AppBadge {
   AppBadge._();
 
-  /*static void prepareBadgesAndRefresh() async {
-    final user = Session.getLastLoginUser();
+  static final _homePageBadges = <int, int>{};
 
-    if(user == null){
-      homePageBadges.clear();
-      return;
-    }
+  static void setMessageBadge(int count) async {
+    _homePageBadges[3] = count;
+  }
 
-    //------ notify --------------------------------------------------------------
-    final list = NotifierModelDb.fetchUnSeenRecords(user.userId);
+  static int getMessageBadge() {
+    return getBadge(3);
+  }
 
-    if(list.isEmpty){
-      homePageBadges[0] = 0;
-    }
-    else {
-      homePageBadges[0] = list.length;
-    }
-    //------ chat --------------------------------------------------------------
-    final manager = ChatManager.managerFor(user.userId);
-    var chatCount = 0;
+  static refreshViews() async {
+    AppBroadcast.layoutPageKey.currentState?.assistCtr.updateHead();
+  }
 
-    for(final chat in manager.allChatList){
-      chatCount += chat.unReadCount();
-    }
-
-    if(chatCount == 0){
-      homePageBadges[4] = 0;
-    }
-    else {
-      homePageBadges[4] = chatCount;
-    }
-    //--------------------------------------------------------------------
-    homeScreenKey.currentState?.navBarRefresher.update();
-  }*/
+  static int getBadge(int itemIdx) {
+    return _homePageBadges[itemIdx]?? 0;
+  }
 }

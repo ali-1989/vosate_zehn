@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -77,16 +78,16 @@ class AppThemes {
 		_instance.themeList.clear();
 
 		{
-			final blueTheme = ColorTheme(Colors.amber, Colors.orange, const Color(0xFFFF006E), Colors.black);
+			final mainTheme = ColorTheme(Colors.amber, Colors.orange, const Color(0xFFFF006E), Colors.black);
 			//primary: ^1976D2, 1060A0 | dif: (FF006E|d81b60), ^F77F00
 
-			blueTheme.themeName = 'Amber';
-			blueTheme.appBarItemColor = Colors.black.withAlpha(180);
+			mainTheme.themeName = 'Amber';
+			mainTheme.appBarItemColor = Colors.black.withAlpha(180);
 
-			AppThemes._instance.themeList[blueTheme.themeName] = blueTheme;
+			AppThemes._instance.themeList[mainTheme.themeName] = mainTheme;
 
 			/// set default
-			AppThemes._instance.defaultTheme = blueTheme;
+			AppThemes._instance.defaultTheme = mainTheme;
 		}
 	}
 
@@ -242,7 +243,7 @@ class AppThemes {
 		);
 
 		final iconTheme = raw.iconTheme.copyWith(
-			color: th.textColor,
+				color: th.textColor,
 		);
 
 		final appAppBarTheme = AppBarTheme(
@@ -318,9 +319,19 @@ class AppThemes {
 
 		/// https://flutter.dev/docs/release/breaking-changes/buttons
 
+		final buttonTheme = ButtonThemeData(
+		);
+
+		final iconButtonTheme = IconButtonThemeData(
+			style: ButtonStyle(
+				minimumSize: kIsWeb? MaterialStateProperty.all(Size(20, 45)): null,
+			),
+		);
+
 		final elevatedButtonTheme = ElevatedButtonThemeData(
 			style: ButtonStyle(
 					tapTargetSize: MaterialTapTargetSize.padded,
+				minimumSize: kIsWeb? MaterialStateProperty.all(Size(20, 45)) : null,// default: 28
 				//backgroundColor: MaterialStateProperty.all(th.buttonBackColor),
 				foregroundColor: MaterialStateProperty.all(th.buttonTextColor),
 				backgroundColor: MaterialStateProperty.resolveWith<Color>(
@@ -446,6 +457,8 @@ class AppThemes {
 			inputDecorationTheme: inputDecoration,
 			textSelectionTheme: textSelectionTheme,
 			cardTheme: cardTheme,
+			iconButtonTheme: iconButtonTheme,
+			buttonTheme: buttonTheme,
 			textButtonTheme: textButtonTheme,
 			elevatedButtonTheme: elevatedButtonTheme,
 			outlinedButtonTheme: outlinedButtonTheme,

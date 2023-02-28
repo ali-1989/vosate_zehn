@@ -99,16 +99,16 @@ class LayoutPageState extends StateBase<LayoutPage> {
       ),*/
 
       actions: [
-        IconButton(
-            onPressed: gotoAidPage,
-            icon: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(AppIcons.cashMultiple, size: 20,),
-                Text(AppMessages.aid, style: TextStyle(fontSize: 11),),
-              ],
-            )
+        GestureDetector(
+          onTap: gotoAidPage,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(AppIcons.cashMultiple, size: 20,),
+              Text(AppMessages.aid, maxLines: 1, softWrap: false),
+            ],
+          ),
         ),
 
         IconButton(

@@ -1,16 +1,16 @@
 import 'dart:async';
 
-import 'package:app/structures/models/appParameterModel.dart';
-import 'package:app/system/keys.dart';
 import 'package:app/structures/middleWare/requester.dart';
+import 'package:app/structures/models/systemParameterModel.dart';
+import 'package:app/system/keys.dart';
 
-class AppParameterManager {
-  static AppParameterModel? parameterModel;
+class SystemParameterManager {
+  static SystemParameterModel systemParameters = SystemParameterModel();
 
-  AppParameterManager._();
+  SystemParameterManager._();
 
-  static Future<AppParameterModel?> requestParameters() async {
-    final res = Completer<AppParameterModel?>();
+  static Future<SystemParameterModel?> requestParameters() async {
+    final res = Completer<SystemParameterModel?>();
     final requester = Requester();
 
     requester.httpRequestEvents.onAnyState = (req) async {
@@ -23,9 +23,9 @@ class AppParameterManager {
     };
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
-      parameterModel = AppParameterModel.fromMap(data);
+      systemParameters = SystemParameterModel.fromMap(data);
 
-      res.complete(parameterModel);
+      res.complete(systemParameters);
     };
 
     final js = <String, dynamic>{};

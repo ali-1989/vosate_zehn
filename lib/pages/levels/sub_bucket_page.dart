@@ -12,13 +12,13 @@ import 'package:app/pages/levels/video_player_page.dart';
 import 'package:app/services/favoriteService.dart';
 import 'package:app/services/lastSeenService.dart';
 import 'package:app/structures/abstract/stateBase.dart';
+import 'package:app/structures/enums/enums.dart';
+import 'package:app/structures/middleWare/requester.dart';
 import 'package:app/structures/models/bucketModel.dart';
 import 'package:app/structures/models/subBuketModel.dart';
-import 'package:app/structures/enums/enums.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/publicAccess.dart';
-import 'package:app/structures/middleWare/requester.dart';
 import 'package:app/system/session.dart';
 import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/app/appIcons.dart';
@@ -96,7 +96,7 @@ class _SubBucketPageState extends StateBase<SubBucketPage> {
     }
 
     if(!assistCtr.hasState(state$fetchData)){
-      return ErrorOccur(onRefresh: tryLoadClick,);
+      return ErrorOccur(onTryAgain: tryLoadClick,);
     }
 
     if(listItems.isEmpty){

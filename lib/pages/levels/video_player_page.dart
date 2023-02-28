@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:chewie/chewie.dart';
-
 import 'package:iris_tools/api/helpers/mathHelper.dart';
 import 'package:video_player/video_player.dart';
 import 'package:wakelock/wakelock.dart';

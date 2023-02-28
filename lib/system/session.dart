@@ -1,9 +1,9 @@
-import 'package:app/services/event_dispatcher_service.dart';
-import 'package:app/structures/enums/userType.dart';
 import 'package:iris_db/iris_db.dart';
 import 'package:iris_tools/api/checker.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
 
+import 'package:app/services/event_dispatcher_service.dart';
+import 'package:app/structures/enums/userType.dart';
 import 'package:app/structures/models/userModel.dart';
 import 'package:app/tools/app/appDb.dart';
 import 'package:app/tools/app/appLocale.dart';
@@ -18,7 +18,7 @@ class Session {
 	static List<UserModel> currentLoginList = [];
 	
 	static Future<int> fetchLoginUsers() async {
-		final list = AppDB.db.query(AppDB.tbUserModel,
+		final list = AppDB.db.query(AppDB.tbUsers,
 				Conditions().add(Condition(ConditionType.DefinedNotNull)..key = Keys.setting$lastLoginDate));
 
 		if(list.isNotEmpty){
@@ -105,7 +105,7 @@ class Session {
 		}
 
 		/// insert to db
-		final updateDb = await AppDB.db.insertOrUpdate(AppDB.tbUserModel, newUser.toMap(),
+		final updateDb = await AppDB.db.insertOrUpdate(AppDB.tbUsers, newUser.toMap(),
 				Conditions().add(Condition()..key = Keys.userId..value = newUser.userId));
 
 		if(updateDb > 0) {
@@ -156,7 +156,7 @@ class Session {
 		}
 
 		/// insert to db
-		final updateDb = await AppDB.db.insertOrUpdate(AppDB.tbUserModel, newUser.toMap(),
+		final updateDb = await AppDB.db.insertOrUpdate(AppDB.tbUsers, newUser.toMap(),
 				Conditions().add(Condition()..key = Keys.userId..value = newUser.userId));
 
 		if(updateDb > 0) {
@@ -186,7 +186,7 @@ class Session {
 	}
 
 	static Future<UserModel?> fetchUserById(String userId) async {
-		final cas = AppDB.db.query(AppDB.tbUserModel,
+		final cas = AppDB.db.query(AppDB.tbUsers,
 				Conditions().add(Condition()..key = Keys.userId..value = userId));
 
 		if(cas.isEmpty) {
@@ -210,7 +210,7 @@ class Session {
 	static Future<bool> sinkUserInfo(UserModel user) async {
 		//final old = (await fetchUserById(user.userId))?.toMap();
 
-		final res = await AppDB.db.update(AppDB.tbUserModel, user.toMap(),
+		final res = await AppDB.db.update(AppDB.tbUsers, user.toMap(),
 				Conditions().add(Condition()..key = Keys.userId..value = user.userId));
 
 		if(res > 0) {
@@ -231,8 +231,7 @@ class Session {
 		final val = <String, dynamic>{};
 		val[Keys.setting$lastLoginDate] = null;
 
-		await AppDB.db.update(AppDB.tbUserModel, val,
-				Conditions().add(Condition()..key = Keys.userId..value = userId));
+		await AppDB.db.update(AppDB.tbUsers, val, Conditions().add(Condition()..key = Keys.userId..value = userId));
 
 		currentLoginList.removeWhere((element) => element.userId == userId);
 
@@ -263,7 +262,7 @@ class Session {
 		val[Keys.setting$lastLoginDate] = null;
 
 		final con = Conditions().add(Condition(ConditionType.DefinedNotNull)..key = Keys.userId);
-		await AppDB.db.update(AppDB.tbUserModel, val, con);
+		await AppDB.db.update(AppDB.tbUsers, val, con);
 
 		for(var u in currentLoginList){
 			EventDispatcherService.notify(EventDispatcher.userLogoff, data: u);
@@ -276,7 +275,7 @@ class Session {
 	}
 
 	static Future<bool> deleteUserInfo(String userId) async{
-		final res = await AppDB.db.delete(AppDB.tbUserModel,
+		final res = await AppDB.db.delete(AppDB.tbUsers,
 				Conditions().add(Condition()..key = Keys.userId..value = userId));
 
 		return res > 0;

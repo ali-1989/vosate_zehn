@@ -1,40 +1,38 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:iris_tools/dateSection/ADateStructure.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
 
 import 'package:app/managers/settingsManager.dart';
+import 'package:app/services/event_dispatcher_service.dart';
 import 'package:app/system/applicationInitialize.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/system/publicAccess.dart';
 import 'package:app/tools/app/appDb.dart';
 import 'package:app/tools/app/appNotification.dart';
 
 Future<void> _fbMessagingBackgroundHandler(RemoteMessage message) async {
-  //_sendNotification(message);
+  // firebase it self sending a notification
 }
 
-Future<void> _sendNotification(RemoteMessage message) async {
+Future<void> _onNewNotification(RemoteMessage message) async {
   await ApplicationInitial.prepareDirectoriesAndLogger();
-  //await PublicAccess.logger.logToAll('---> Notification  --- ${message.notification?.body}');//todo
   await ApplicationInitial.inSplashInit();
 
   int? id;
 
   try{
     id = message.data['id'];
+
+    final ids = AppDB.fetchAsList(Keys.setting$dailyTextIds);
+
+    if(!ids.contains(id)) {
+      if (SettingsManager.settingsModel.notificationDailyText) {
+        AppNotification.sendNotification(message.notification!.title, message.notification!.body!);
+      }
+
+      AppDB.addToList(Keys.setting$dailyTextIds, id ?? 0);
+    }
   }
   catch (e){}
-
-  final ids = AppDB.fetchAsList(Keys.setting$dailyTextIds);
-
-  if(!ids.contains(id)) {
-    if(SettingsManager.settingsModel.notificationDailyText) {
-      AppNotification.sendNotification(message.notification!.title, message.notification!.body!);
-    }
-
-    AppDB.addToList(Keys.setting$dailyTextIds, id?? 0);
-  }
 }
 ///================================================================================================
 class FireBaseService {
@@ -44,14 +42,14 @@ class FireBaseService {
   FireBaseService._();
 
   static Future init() async {
-    /*const firebaseOptions = FirebaseOptions(
+    const firebaseOptions = FirebaseOptions(
       appId: '1:731359726004:android:fbbd8cd236c4fc31b20ae1',
       apiKey: 'AIzaSyBVuGcqQFjUl1t5mIUJ04rfr9EKkDRqYxM',
       projectId: 'vosate-zehn-7d8fe',
       messagingSenderId: '731359726004',
-    );*/
+    );
 
-    await Firebase.initializeApp();//options: firebaseOptions
+    await Firebase.initializeApp(options: firebaseOptions);
     //FirebaseMessaging.instance.setAutoInitEnabled(false);
 
     try {
@@ -76,14 +74,13 @@ class FireBaseService {
     RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
 
     if (initialMessage != null) {
-      //print('=================== ${initialMessage.notification?.body} ');//todo
     }
   }
 
   static void setListening(){
     /// it's fire when app is open and in foreground
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-     _sendNotification(message);
+     _onNewNotification(message);
     });
 
     /// it's fire when be click on Fcm notification. (no notification that app sent)
@@ -95,13 +92,17 @@ class FireBaseService {
 
   static Future<String?> getTokenForce() async {
     token = await FirebaseMessaging.instance.getToken();
-    //PublicAccess.logger.logToAll(' token ==> $token'); //todo
-    final gd = GregorianDate();
-    gd.moveLocalToUTC();
 
-    lastUpdateToken = gd.convertToSystemDate();
+    if(token != null) {
+      lastUpdateToken = DateHelper.getNow();
+      EventDispatcherService.notify(EventDispatcher.firebaseTokenReceived);
 
-    return token;
+      return token;
+    }
+    else {
+      EventDispatcherService.attachFunction(EventDispatcher.networkConnected, _onNetConnected);
+      return null;
+    }
   }
 
   static Future<String?> getToken() async {
@@ -124,15 +125,6 @@ class FireBaseService {
     return FirebaseMessaging.instance.unsubscribeFromTopic(name);
   }
 
-  static Future<void> sendPushMessage() async {
-    try {
-      //body: constructFCMPayload(_token);
-    }
-    catch (e) {
-
-}
-  }
-
   static Map generateMessage(String? token) {
     final messageCount = 0;
 
@@ -150,5 +142,10 @@ class FireBaseService {
     };
 
     return js;
+  }
+
+  static void _onNetConnected({data}) {
+    EventDispatcherService.deAttachFunction(EventDispatcher.networkConnected, _onNetConnected);
+    getTokenForce();
   }
 }

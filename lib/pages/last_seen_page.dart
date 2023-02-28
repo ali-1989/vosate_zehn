@@ -10,8 +10,8 @@ import 'package:app/pages/levels/video_player_page.dart';
 import 'package:app/services/favoriteService.dart';
 import 'package:app/services/lastSeenService.dart';
 import 'package:app/structures/abstract/stateBase.dart';
-import 'package:app/structures/models/subBuketModel.dart';
 import 'package:app/structures/enums/enums.dart';
+import 'package:app/structures/models/subBuketModel.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/app/appIcons.dart';
@@ -21,6 +21,7 @@ import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/app/appToast.dart';
 import 'package:app/views/homeComponents/appBarBuilder.dart';
+import 'package:app/views/states/emptyData.dart';
 import 'package:app/views/states/waitToLoad.dart';
 
 class LastSeenPage extends StatefulWidget{
@@ -32,13 +33,13 @@ class LastSeenPage extends StatefulWidget{
 }
 ///==================================================================================
 class _LastSeenPageState extends StateBase<LastSeenPage> {
-  bool isInFetchData = true;
   List<SubBucketModel> listItems = [];
 
   @override
   void initState(){
     super.initState();
 
+    assistCtr.addState(AssistController.state$loading);
     fetchData();
   }
 
@@ -63,8 +64,12 @@ class _LastSeenPageState extends StateBase<LastSeenPage> {
   }
 
   Widget buildBody(){
-    if(isInFetchData) {
+    if(assistCtr.hasState(AssistController.state$loading)) {
       return WaitToLoad();
+    }
+
+    if(listItems.isEmpty) {
+      return EmptyData();
     }
 
     return ListView.builder(
@@ -259,7 +264,7 @@ class _LastSeenPageState extends StateBase<LastSeenPage> {
       m.isFavorite = FavoriteService.isFavorite(m.id!);
     }
 
-    isInFetchData = false;
+    assistCtr.clearStates();
     assistCtr.updateHead();
   }
 }

@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:app/services/login_service.dart';
 import 'package:flutter/material.dart';
 
-import 'package:iris_websocket/iris_websocket.dart';
 import 'package:iris_tools/api/checker.dart';
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
+import 'package:iris_websocket/iris_websocket.dart';
 
+import 'package:app/services/login_service.dart';
 import 'package:app/structures/models/settingsModel.dart';
 import 'package:app/system/httpCodes.dart';
 import 'package:app/system/keys.dart';
@@ -21,7 +21,6 @@ import 'package:app/tools/app/appNotification.dart';
 import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/deviceInfoTools.dart';
 import 'package:app/tools/netListenerTools.dart';
-
 
 class WebsocketService {
 	WebsocketService._();

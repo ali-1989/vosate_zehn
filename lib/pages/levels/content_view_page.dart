@@ -3,19 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:iris_tools/widgets/avatarChip.dart';
 import 'package:iris_tools/widgets/irisImageView.dart';
+import 'package:iris_tools/widgets/sizePosition/sizeInInfinity.dart';
 
 import 'package:app/managers/mediaManager.dart';
 import 'package:app/pages/levels/audio_player_page.dart';
 import 'package:app/pages/levels/video_player_page.dart';
 import 'package:app/structures/abstract/stateBase.dart';
+import 'package:app/structures/enums/enums.dart';
+import 'package:app/structures/middleWare/requester.dart';
 import 'package:app/structures/models/contentModel.dart';
 import 'package:app/structures/models/mediaModelWrapForContent.dart';
 import 'package:app/structures/models/speakerModel.dart';
 import 'package:app/structures/models/subBuketModel.dart';
-import 'package:app/structures/enums/enums.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/structures/middleWare/requester.dart';
 import 'package:app/system/session.dart';
 import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/app/appImages.dart';
@@ -26,7 +27,6 @@ import 'package:app/tools/app/appToast.dart';
 import 'package:app/views/homeComponents/appBarBuilder.dart';
 import 'package:app/views/states/errorOccur.dart';
 import 'package:app/views/states/waitToLoad.dart';
-import 'package:iris_tools/widgets/sizePosition/sizeInInfinity.dart';
 
 class ContentViewPageInjectData {
   late SubBucketModel subBucket;
@@ -147,7 +147,7 @@ class _LevelPageState extends StateBase<ContentViewPage> {
 
                         return SizedBox(
                             height: height,
-                            child: ErrorOccur(onRefresh: tryLoadClick)
+                            child: ErrorOccur(onTryAgain: tryLoadClick)
                         );
                       }
                   );

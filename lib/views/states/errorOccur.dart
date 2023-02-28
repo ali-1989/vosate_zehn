@@ -6,13 +6,17 @@ import 'package:app/views/widgets/customCard.dart';
 
 class ErrorOccur extends StatelessWidget {
   final TextStyle? textStyle;
-  final VoidCallback? onRefresh;
+  final String? message;
+  final VoidCallback? onTryAgain;
   final Color? backgroundColor;
+  final Widget? backButton;
 
   ErrorOccur({
     this.textStyle,
+    this.message,
     this.backgroundColor,
-    this.onRefresh,
+    this.onTryAgain,
+    this.backButton,
     Key? key,
     }) : super(key: key);
 
@@ -52,7 +56,7 @@ class ErrorOccur extends StatelessWidget {
                       ),
 
                       Visibility(
-                          visible: onRefresh != null,
+                          visible: onTryAgain != null,
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -62,7 +66,7 @@ class ErrorOccur extends StatelessWidget {
                                 iconSize: 23,
                                 constraints: BoxConstraints.tightFor(),
                                 onPressed: (){
-                                  onRefresh?.call();
+                                  onTryAgain?.call();
                                 },
                                 icon: Icon(Icons.refresh, color: Colors.blue),
                               )

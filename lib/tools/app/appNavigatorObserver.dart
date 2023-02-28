@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:app/tools/app/appRouteNoneWeb.dart'
 if (dart.library.html) 'package:app/tools/app/appRouteWeb.dart' as web;
 
@@ -33,18 +34,14 @@ class AppNavigatorObserver with NavigatorObserver /*or RouteObserver*/{
   }
 
   static Route? onUnknownRoute(RouteSettings settings) {
-    print('HHHHHHHHHHHHHHHHHH onUnknownRoute');
     return null;
   }
 
   static Route? onGenerateRoute(RouteSettings settings) {
-    print('HHHHHHHHHHHHHHHHHH onGenerateRoute');
     return null;
   }
 
   static bool onPopPage(Route<dynamic> route, result) {
-    print('HHHHHHHHHHHHHHHHHH: $route');
-    print('HHHHHHHHHHHHHHHHHH: $result');
     return route.didPop(result);
   }
 }

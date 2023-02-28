@@ -6,11 +6,12 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:iris_tools/api/generator.dart';
 
 import 'package:app/constants.dart';
-import 'package:app/structures/models/notificationModel.dart' as my_not_model;
+import 'package:app/structures/models/statusBarNotificationModel.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/appDb.dart';
 
-// https://github.com/rafaelsetragni/awesome_notifications/blob/master/example/lib/utils/notification_util.dart
+// icon generator:
+// https://romannurik.github.io/AndroidAssetStudio/icons-notification.html#source.type=image&source.space.trim=1&source.space.pad=0&name=notif
 
 ///---------------------------------------------------------------------
 /*@pragma('vm:entry-point')
@@ -48,11 +49,11 @@ class AppNotification {
 		return AppDB.fetchKv(Keys.setting$notificationChanelKey);
 	}
 
-	static my_not_model.NotificationModel fetchNotificationModel(){
-		return my_not_model.NotificationModel.fromMap(AppDB.fetchKv(Keys.setting$notificationModel));
+	static StatusBarNotificationModel fetchNotificationModel(){
+		return StatusBarNotificationModel.fromMap(AppDB.fetchKv(Keys.setting$notificationModel));
 	}
 
-	static Future saveNotificationModel(my_not_model.NotificationModel model){
+	static Future saveNotificationModel(StatusBarNotificationModel model){
 		return AppDB.setReplaceKv(Keys.setting$notificationModel, model.toMap());
 	}
 

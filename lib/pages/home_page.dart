@@ -1,6 +1,7 @@
-import 'package:app/managers/carouselManager.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:iris_tools/api/duration/durationFormatter.dart';
 import 'package:iris_tools/api/helpers/urlHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
@@ -8,6 +9,7 @@ import 'package:iris_tools/widgets/irisImageView.dart';
 import 'package:iris_tools/widgets/keepAliveWrap.dart';
 
 import 'package:app/managers/advertisingManager.dart';
+import 'package:app/managers/carouselManager.dart';
 import 'package:app/managers/mediaManager.dart';
 import 'package:app/pages/levels/audio_player_page.dart';
 import 'package:app/pages/levels/content_view_page.dart';
@@ -15,11 +17,11 @@ import 'package:app/pages/levels/video_player_page.dart';
 import 'package:app/services/favoriteService.dart';
 import 'package:app/services/lastSeenService.dart';
 import 'package:app/structures/abstract/stateBase.dart';
-import 'package:app/structures/models/subBuketModel.dart';
 import 'package:app/structures/enums/enums.dart';
+import 'package:app/structures/middleWare/requester.dart';
+import 'package:app/structures/models/subBuketModel.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/structures/middleWare/requester.dart';
 import 'package:app/system/session.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appDirectories.dart';
@@ -32,7 +34,6 @@ import 'package:app/tools/app/appToast.dart';
 import 'package:app/views/states/emptyData.dart';
 import 'package:app/views/states/errorOccur.dart';
 import 'package:app/views/states/waitToLoad.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 
 class HomePage extends StatefulWidget {
 
@@ -58,22 +59,23 @@ class _HomePageState extends StateBase<HomePage> {
     super.initState();
 
     chipTheme = AppThemes.instance.themeData.copyWith(canvasColor: Colors.transparent);
-    AppBroadcast.newAdvNotifier.addListener(updateOnListening);
-    AppBroadcast.changeFavoriteNotifier.addListener(updateOnListening);
+    AppBroadcast.newAdvNotifier.addListener(updateOnAdvNotifier);
+    AppBroadcast.changeFavoriteNotifier.addListener(updateOnFavoriteNotifier);
     requestData();
   }
 
   @override
   void dispose(){
     requester.dispose();
-    AppBroadcast.newAdvNotifier.removeListener(updateOnListening);
-    AppBroadcast.changeFavoriteNotifier.removeListener(updateOnListening);
+    AppBroadcast.newAdvNotifier.removeListener(updateOnAdvNotifier);
+    AppBroadcast.changeFavoriteNotifier.removeListener(updateOnFavoriteNotifier);
 
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    print('----------------------0000000000000000000000000000000 build');
     return Assist(
         controller: assistCtr,
         builder: (context, ctr, data) {
@@ -90,7 +92,7 @@ class _HomePageState extends StateBase<HomePage> {
     }
 
     if(!assistCtr.hasState(state$fetchData)){
-      return ErrorOccur(onRefresh: tryLoadClick);
+      return ErrorOccur(onTryAgain: tryLoadClick);
     }
 
     if(newItems.isEmpty || meditationItems.isEmpty){
@@ -438,7 +440,7 @@ class _HomePageState extends StateBase<HomePage> {
 
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Text(itm.title, maxLines: 1).bold().fsR(1),
+                        child: Text(itm.title, maxLines: 1).bold(),
                       ),
 
                       SizedBox(height: 8),
@@ -487,7 +489,7 @@ class _HomePageState extends StateBase<HomePage> {
     );
   }
 
-  void updateOnListening(){
+  void updateOnFavoriteNotifier(){
     for(final k in newItems){
       k.isFavorite = FavoriteService.isFavorite(k.id!);
     }
@@ -500,6 +502,11 @@ class _HomePageState extends StateBase<HomePage> {
       k.isFavorite = FavoriteService.isFavorite(k.id!);
     }
 
+    assistCtr.updateHead();
+  }
+
+  void updateOnAdvNotifier(){
+    print('----------------------0000000000000000000000000000000');
     assistCtr.updateHead();
   }
 

@@ -3,8 +3,8 @@ import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:app/system/keys.dart';
 import 'package:app/system/extensions.dart';
+import 'package:app/system/keys.dart';
 import 'package:app/tools/app/appDb.dart';
 import 'package:app/tools/app/appThemes.dart';
 
@@ -195,6 +195,8 @@ class FontManager {
       bodyLarge: temp.textTheme.bodyLarge!.copyWith(fontSize: fs, color: c1, decorationColor: c2),
       ///default for Material
       bodyMedium: temp.textTheme.bodyMedium!.copyWith(fontSize: fs, color: c1, decorationColor: c2),
+      /// images caption
+      bodySmall: temp.textTheme.bodySmall!.copyWith(fontSize: fs, color: c1, decorationColor: c2),
       labelSmall: temp.textTheme.labelSmall!.copyWith(fontSize: fs, color: c1, decorationColor: c2),
       ///   [Extremely large]
       displayLarge: temp.textTheme.displayLarge!.copyWith(fontSize: fs, color: c1, decorationColor: c2),
@@ -212,8 +214,6 @@ class FontManager {
       titleSmall: temp.textTheme.titleSmall!.copyWith(fontSize: fs, color: c1, decorationColor: c2),
       /// Buttons
       labelLarge: temp.textTheme.labelLarge!.copyWith(fontSize: fs, color: c1, decorationColor: c2),
-      /// images caption
-      bodySmall: temp.textTheme.bodySmall!.copyWith(fontSize: fs, color: c1, decorationColor: c2),
     );
 
     _rawThemeData = ThemeData.from(colorScheme: temp.colorScheme, textTheme: _rawTextTheme);
@@ -348,7 +348,7 @@ class Font {
     }
     else {
       final appHeight = (isLandscape ? realPixelWidth : realPixelHeight) / pixelRatio;
-      return (appHeight / 100)/* ~6.3*/ + 6;
+      return (appHeight / 100 /* ~6.3*/) + 4; //~10,  this is relative to fonts
     }
   }
 }

@@ -66,7 +66,7 @@ class AppSizes {
   void _initial() {
     _prepareSizes();
 
-    //----------------- onMetricsChanged -----------------
+    ///----------------- onMetricsChanged -----------------
     void onMetricsChanged(){
       final oldW = realPixelWidth;
       final oldH = realPixelHeight;
@@ -85,7 +85,7 @@ class AppSizes {
       }
     }
 
-    //----------------- onLocalChanged -----------------
+    ///----------------- onLocalChanged -----------------
     void onLocalChanged(){
     }
 
@@ -93,21 +93,6 @@ class AppSizes {
     /// Note: if below listener be set, auto orientation reBuild not work {OrientationBuilder()}
     ui.window.onMetricsChanged = onMetricsChanged;
   }
-
-  /*static void detectSizeBy(BoxConstraints constraints, Orientation orientation) {
-    if (orientation == Orientation.landscape) {
-      appWidth = constraints.maxHeight;
-      appHeight = constraints.maxWidth;
-    }
-    else {
-      appWidth = constraints.maxWidth;
-      appHeight = constraints.maxHeight;
-    }
-
-    imageMultiplier = appWidth / 100;
-    textMultiplier = appHeight / 100;
-    heightMultiplier = appHeight / 100;
-  }*/
 
   void addMetricListener(Function(double oldW, double oldH, double newW, double newH) lis){
     onMetricListeners.add(lis);
@@ -129,29 +114,11 @@ class AppSizes {
     return instance.appWidth > sizeOfBigScreen;
   }
 
-  double mTextSize(double tSize){
-    return tSize * textMultiplier;
-  }
-
-  double mImageSize(double iSize){
-    return iSize * imageMultiplier;
-  }
-
-  double mSize(double size){
-    return size * heightMultiplier; // ~6.4
-  }
-
-  static double webFontTextFactor(double fact){
-    if(kIsWeb) {
-      return fact * 1.4;
-    }
-    return fact;
-  }
-
   static double webFontSize(double size){
     if(kIsWeb) {
-      return size * 1.3;
+      return size * 1.1;
     }
+
     return size;
   }
 
@@ -188,10 +155,6 @@ class AppSizes {
   /// same of appHeight.   Tecno: 640.0   ,Web: deferToWindow [620]
   static double getScreenHeight(BuildContext context){
     return MediaQuery.of(context).size.height;
-  }
-
-  static double getMaxSheetHeight(BuildContext context){
-    return (MediaQuery.of(context).size.height / 2) -30;
   }
   ///-----------------------------------------------------------------------------------------
   static double getStatusBarHeight(BuildContext context){

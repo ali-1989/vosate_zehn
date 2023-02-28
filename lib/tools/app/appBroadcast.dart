@@ -3,12 +3,12 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:iris_tools/modules/stateManagers/refresh.dart';
 import 'package:iris_tools/api/notifiers/extendValueNotifier.dart';
+import 'package:iris_tools/modules/stateManagers/refresh.dart';
 
 import 'package:app/pages/layout_page.dart';
-import 'package:app/pages/splash_page.dart';
 import 'package:app/tools/app/appThemes.dart';
+import 'package:app/views/homeComponents/splashPage.dart';
 
 class AppBroadcast {
   AppBroadcast._();
@@ -23,7 +23,7 @@ class AppBroadcast {
   static final rootNavigatorKey = GlobalKey<NavigatorState>();
   static final layoutPageKey = GlobalKey<LayoutPageState>();
 
-  //static final homePageBadges = <int, int>{};
+  //---------------------- status
   static bool isNetConnected = true;
   static bool isWsConnected = false;
 

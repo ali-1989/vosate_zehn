@@ -13,12 +13,12 @@ import 'package:app/pages/levels/content_view_page.dart';
 import 'package:app/pages/levels/video_player_page.dart';
 import 'package:app/services/favoriteService.dart';
 import 'package:app/structures/abstract/stateBase.dart';
-import 'package:app/structures/models/subBuketModel.dart';
 import 'package:app/structures/enums/enums.dart';
+import 'package:app/structures/middleWare/requester.dart';
+import 'package:app/structures/models/subBuketModel.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/publicAccess.dart';
-import 'package:app/structures/middleWare/requester.dart';
 import 'package:app/system/session.dart';
 import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/app/appIcons.dart';
@@ -111,7 +111,7 @@ class _SearchPageState extends StateBase<SearchPage> {
             child: Builder(
               builder: (context) {
                 if(assistCtr.hasState(AssistController.state$error)) {
-                  return ErrorOccur(onRefresh: tryLoadClick);
+                  return ErrorOccur(onTryAgain: tryLoadClick);
                 }
 
                 if(assistCtr.hasState(AssistController.state$loading)) {

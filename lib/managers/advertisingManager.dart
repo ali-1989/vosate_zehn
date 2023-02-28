@@ -3,27 +3,27 @@
 import 'dart:async';
 import 'dart:core';
 
+import 'package:iris_db/iris_db.dart';
+import 'package:iris_tools/api/helpers/jsonHelper.dart';
+import 'package:iris_tools/api/helpers/urlHelper.dart';
+import 'package:iris_tools/dateSection/dateHelper.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 import 'package:app/managers/carouselManager.dart';
+import 'package:app/managers/mediaManager.dart';
 import 'package:app/pages/levels/audio_player_page.dart';
 import 'package:app/pages/levels/content_view_page.dart';
 import 'package:app/pages/levels/video_player_page.dart';
 import 'package:app/services/lastSeenService.dart';
 import 'package:app/structures/enums/enums.dart';
-import 'package:app/structures/models/subBuketModel.dart';
-import 'package:app/tools/app/appDialogIris.dart';
-import 'package:app/tools/app/appRoute.dart';
-import 'package:iris_db/iris_db.dart';
-import 'package:iris_tools/api/helpers/jsonHelper.dart';
-import 'package:iris_tools/api/helpers/urlHelper.dart';
-import 'package:iris_tools/dateSection/dateHelper.dart';
-
-import 'package:app/managers/mediaManager.dart';
-import 'package:app/structures/models/advModel.dart';
-import 'package:app/system/keys.dart';
 import 'package:app/structures/middleWare/requester.dart';
+import 'package:app/structures/models/advModel.dart';
+import 'package:app/structures/models/subBuketModel.dart';
+import 'package:app/system/keys.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appDb.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:app/tools/app/appDialogIris.dart';
+import 'package:app/tools/app/appRoute.dart';
 
 class AdvertisingManager {
   AdvertisingManager._();
@@ -149,8 +149,10 @@ class AdvertisingManager {
     };
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
-      lastRequest = DateHelper.getNowToUtc();
-
+      lastRequest = DateHelper.getNow();
+print('0000000000000000000000000000000000000000000000\n\n');
+print(data);
+print('0000000000000000000000000000000000000000000000\n\n');
       final advList = data['advertising_list'];
       final carouselList = data['carousel_list'];
       final mediaList = data['media_list'];

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:app/tools/app/appThemes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/helpers/urlHelper.dart';
@@ -8,11 +7,12 @@ import 'package:iris_tools/api/system.dart';
 
 import 'package:app/constants.dart';
 import 'package:app/managers/settingsManager.dart';
-import 'package:app/structures/models/versionModel.dart';
 import 'package:app/structures/middleWare/requester.dart';
+import 'package:app/structures/models/versionModel.dart';
 import 'package:app/tools/app/appDb.dart';
 import 'package:app/tools/app/appDialogIris.dart';
 import 'package:app/tools/app/appMessages.dart';
+import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/deviceInfoTools.dart';
 
 class VersionManager {

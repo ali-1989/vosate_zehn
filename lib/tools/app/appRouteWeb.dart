@@ -1,5 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'dart:html' as html;
+
+import 'package:flutter/foundation.dart';
 
 void changeAddressBar(String url, {dynamic data, bool reload = false}) {
   //final location = '${html.window.location.protocol}//${html.window.location.host + (html.window.location.pathname?? '')}';

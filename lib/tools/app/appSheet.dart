@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:app/tools/app/appRoute.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -11,6 +10,7 @@ import 'package:material_dialogs/widgets/dialogs/dialog_widget.dart';
 
 import 'package:app/tools/app/appIcons.dart';
 import 'package:app/tools/app/appMessages.dart';
+import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/app/appSizes.dart';
 import 'package:app/tools/app/appThemes.dart';
 import '/system/extensions.dart';

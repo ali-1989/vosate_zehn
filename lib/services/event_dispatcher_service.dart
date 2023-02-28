@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:iris_tools/api/generator.dart';
 
-
 /*
 Alternative:
   import 'package:iris_tools/modules/stateManagers/notifyRefresh.dart';
@@ -92,7 +91,8 @@ enum EventDispatcher {
   userLogoff(112),
   appResume(115),
   appPause(116),
-  appDeatach(117);
+  appDeatach(117),
+  firebaseTokenReceived(120);
 
   final int _number;
 

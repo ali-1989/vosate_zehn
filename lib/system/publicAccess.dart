@@ -1,10 +1,9 @@
 import 'dart:async';
 
-import 'package:app/structures/middleWare/requester.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:iris_tools/api/helpers/jsonHelper.dart';
 
+import 'package:dio/dio.dart';
+import 'package:iris_tools/api/helpers/jsonHelper.dart';
 import 'package:iris_tools/api/logger/logger.dart';
 import 'package:iris_tools/api/logger/reporter.dart';
 import 'package:iris_tools/api/system.dart';
@@ -15,7 +14,9 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:app/constants.dart';
 import 'package:app/managers/settingsManager.dart';
 import 'package:app/services/firebase_service.dart';
+import 'package:app/structures/middleWare/requester.dart';
 import 'package:app/structures/mixin/dateFieldMixin.dart';
+import 'package:app/structures/models/upperLower.dart';
 import 'package:app/structures/models/userModel.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/session.dart';
@@ -64,6 +65,18 @@ class PublicAccess {
     res['app_version_name'] = Constants.appVersionName;
 
     return res;
+  }
+
+  static void sortList(List<DateFieldMixin> list, bool isAsc){
+    if(list.isEmpty){
+      return;
+    }
+
+    int sorter(DateFieldMixin d1, DateFieldMixin d2){
+      return DateHelper.compareDates(d1.date, d2.date, asc: isAsc);
+    }
+
+    list.sort(sorter);
   }
 
   static Future<TwoStateReturn<Map, Response>> publicApiCaller(String url, MethodType methodType, Map<String, dynamic>? body){
@@ -121,18 +134,6 @@ class PublicAccess {
     return UpperLower()..lower = lower..upper = upper;
   }
 
-  static void sortList(List<DateFieldMixin> list, bool isAsc){
-    if(list.isEmpty){
-      return;
-    }
-
-    int sorter(DateFieldMixin d1, DateFieldMixin d2){
-      return DateHelper.compareDates(d1.date, d2.date, asc: isAsc);
-    }
-
-    list.sort(sorter);
-  }
-
   static Map<String, dynamic> getHeartMap() {
     final heart = <String, dynamic>{};
     heart['heart'] = 'heart';
@@ -161,11 +162,3 @@ class PublicAccess {
   }
 }
 
-///===================================================================================
-class UpperLower {
-  DateTime? upper;
-  DateTime? lower;
-
-  String? get upperAsTS => DateHelper.toTimestampNullable(upper);
-  String? get lowerAsTS => DateHelper.toTimestampNullable(lower);
-}

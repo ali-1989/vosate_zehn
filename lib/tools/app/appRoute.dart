@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 import 'package:app/pages/about_us_page.dart';
 import 'package:app/pages/aid_page.dart';
 import 'package:app/pages/contact_us_page.dart';
@@ -16,12 +18,10 @@ import 'package:app/pages/login/register_page.dart';
 import 'package:app/pages/pay_web_page.dart';
 import 'package:app/pages/profile/profile_page.dart';
 import 'package:app/pages/term_page.dart';
-
-import 'package:flutter/material.dart';
-
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/appDb.dart';
 import 'package:app/tools/app/appNavigator.dart';
+
 import 'package:app/tools/app/appRouteNoneWeb.dart'
  if (dart.library.html) 'package:app/tools/app/appRouteWeb.dart' as web;
 

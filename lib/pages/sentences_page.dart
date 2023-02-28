@@ -1,4 +1,3 @@
-import 'package:app/tools/app/appCache.dart';
 import 'package:flutter/material.dart';
 
 import 'package:appinio_swiper/appinio_swiper.dart';
@@ -11,12 +10,13 @@ import 'package:iris_tools/widgets/optionsRow/checkRow.dart';
 
 import 'package:app/managers/settingsManager.dart';
 import 'package:app/structures/abstract/stateBase.dart';
+import 'package:app/structures/middleWare/requester.dart';
 import 'package:app/structures/models/dailyTextModel.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/publicAccess.dart';
-import 'package:app/structures/middleWare/requester.dart';
 import 'package:app/system/session.dart';
+import 'package:app/tools/app/appCache.dart';
 import 'package:app/tools/app/appIcons.dart';
 import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appMessages.dart';
@@ -248,6 +248,7 @@ class _SentencesPageState extends StateBase<SentencesPage> {
     js[Keys.requestZone] = 'get_daily_text_data';
     js[Keys.requesterId] = Session.getLastLoginUser()?.userId;
     js[Keys.date] = DateHelper.toTimestamp(dateTime);
+    js['end_date'] = DateHelper.toTimestamp(DateTime.now());
 
     requester.bodyJson = js;
     requester.prepareUrl();

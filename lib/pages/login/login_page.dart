@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:app/tools/app/appBroadcast.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flip_card/flip_card.dart';
@@ -20,6 +19,7 @@ import 'package:app/structures/abstract/stateBase.dart';
 import 'package:app/structures/models/countryModel.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/session.dart';
+import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appLoading.dart';
 import 'package:app/tools/app/appMessages.dart';
@@ -155,16 +155,17 @@ class _LoginPageState extends StateBase<LoginPage> {
               child: Text(AppMessages.terms)
           ),
 
-          const SizedBox(height: 12,),
+          const SizedBox(height: 12),
 
-          SizedBox(
-            width: double.maxFinite,
-            child: ElevatedButton(
-                style: ElevatedButton.styleFrom(shape: const StadiumBorder()),
-                onPressed: onSendClick,
-                child: Text(AppMessages.send)
-            ),
+          ElevatedButton(
+              style: ElevatedButton.styleFrom(shape: const StadiumBorder()),
+              onPressed: onSendClick,
+              child: Text(AppMessages.select)
           ),
+          /*SizedBox(
+            width: double.maxFinite,
+            child: ,
+          ),*/
 
           const SizedBox(height: 10),
           UnconstrainedBox(

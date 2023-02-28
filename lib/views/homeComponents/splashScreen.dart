@@ -1,7 +1,9 @@
-import 'package:animate_do/animate_do.dart';
-import 'package:app/tools/app/appImages.dart';
 import 'package:flutter/material.dart';
+
+import 'package:animate_do/animate_do.dart';
 import 'package:lottie/lottie.dart';
+
+import 'package:app/tools/app/appImages.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);

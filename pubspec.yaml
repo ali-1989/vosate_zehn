@@ -1,6 +1,6 @@
-# Flutter: 3.3.2     old: 3.0.1
-# Dart: 2.18.1       old: 2.17.1
-# Java: 17          gradle.properties (org.gradle.java.home)
+# Flutter: 3.3.4      old: 3.3.2
+# Dart: 2.18.2        old: 2.17.1
+# Java: 17    gradle.properties (org.gradle.java.home)
 
 name: app     		  # vosate_zehn
 description: meditation app
@@ -9,7 +9,7 @@ homepage: https://iris.ir
 
 publish_to: 'none'
 
-version: 5.2.9+17
+version: 5.2.10+18
 
 
 environment:
@@ -22,7 +22,7 @@ dependencies:
     sdk: flutter
 
   import_sorter: ^4.6.0
-  flutter_launcher_icons: ^0.11.0
+  flutter_launcher_icons: ^0.12.0 # image: 3.0.2  xml: ^5.0.0
 
   flutter_localizations:
     sdk: flutter
@@ -40,16 +40,16 @@ dependencies:
   lottie: ^2.2.0
   file_picker: ^5.2.5
   just_audio: ^0.9.31
-  video_player: ^2.5.1
+  video_player: ^2.5.2
   chewie: ^1.4.0
   http: ^0.13.5
-  dio: ^4.0.6
+  dio: ^5.0.1
   badges: ^3.0.2
   photo_view: ^0.14.0                   # image view gallery
   material_dialogs: ^1.1.4
   awesome_notifications: ^0.6.21        # no update: occur error
   popover: ^0.2.8+1
-  google_sign_in: ^5.4.4
+  google_sign_in: ^6.0.1
   #sign_in_with_apple: ^4.0.0
   flip_card: ^0.7.0
   pin_code_fields: ^7.4.0
@@ -63,10 +63,10 @@ dependencies:
   flutter_custom_clippers: ^2.1.0
   glowstone: ^0.0.2
   pull_to_refresh: ^2.0.0
-  firebase_core: ^2.5.0
-  firebase_messaging: ^14.2.2
+  firebase_core: ^2.7.0
+  firebase_messaging: ^14.2.5
   appinio_swiper: ^1.1.1
-  image_picker: ^0.8.6+1
+  image_picker: ^0.8.6+3
   wakelock: ^0.6.2
   url_launcher: any
   carousel_slider: ^4.2.1
@@ -107,6 +107,7 @@ dependency_overrides:
   ffi: ^2.0.1
   collection: ^1.17.1
   image: ^4.0.15
+  intl: ^0.17.0
   #firebase_core_platform_interface: 4.5.1
 
 
@@ -126,7 +127,7 @@ flutter:
     - assets/audio/
     - assets/raw/
 
-
+  #style: normal  # normal, italic
   #style: italic  weight: 700
   fonts:
     - family: OpenSans
@@ -151,6 +152,11 @@ flutter_icons:
   android: true
   ios: true
   remove_alpha_ios: true
+  web:
+    generate: true
+  windows:
+    generate: true
+    icon_size: 96
 
 
 import_sorter:
