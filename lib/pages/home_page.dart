@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:carousel_slider/carousel_slider.dart';
@@ -75,7 +74,6 @@ class _HomePageState extends StateBase<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    print('----------------------0000000000000000000000000000000 build');
     return Assist(
         controller: assistCtr,
         builder: (context, ctr, data) {
@@ -129,7 +127,7 @@ class _HomePageState extends StateBase<HomePage> {
               autoPlayAnimationDuration: Duration(seconds: 2),
               autoPlayInterval: Duration(seconds: 8),
               reverse: true,
-              //viewportFraction: ,
+              viewportFraction: 1.0,
             ),
             items: sliders,
           );
@@ -240,6 +238,7 @@ class _HomePageState extends StateBase<HomePage> {
               ],
             ),
 
+            SizedBox(height: 10),
             SizedBox(
               height: 172,
               child: ListView.builder(
@@ -506,7 +505,6 @@ class _HomePageState extends StateBase<HomePage> {
   }
 
   void updateOnAdvNotifier(){
-    print('----------------------0000000000000000000000000000000');
     assistCtr.updateHead();
   }
 

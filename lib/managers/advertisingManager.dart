@@ -150,9 +150,7 @@ class AdvertisingManager {
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
       lastRequest = DateHelper.getNow();
-print('0000000000000000000000000000000000000000000000\n\n');
-print(data);
-print('0000000000000000000000000000000000000000000000\n\n');
+
       final advList = data['advertising_list'];
       final carouselList = data['carousel_list'];
       final mediaList = data['media_list'];
