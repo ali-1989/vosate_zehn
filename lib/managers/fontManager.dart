@@ -344,11 +344,11 @@ class Font {
     final isLandscape = realPixelWidth > realPixelHeight;
 
     if(kIsWeb) {
-      return 12.2;
+      return 12.4;
     }
     else {
       final appHeight = (isLandscape ? realPixelWidth : realPixelHeight) / pixelRatio;
-      return (appHeight / 100 /* ~6.3*/) + 4; //~10,  this is relative to fonts
+      return (appHeight / 100 /* ~6.3*/) + 4.2;    // ~10,  this is relative to any fonts
     }
   }
 }
