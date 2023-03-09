@@ -60,7 +60,7 @@ void bootCallbackHandler() async {
     await PublicAccess.logger.logToAll('--->> appJavaCallback call ---');//todo
     /*
     DartPluginRegistrant.ensureInitialized(); //must not calling in root isolate
-    await InitialApplication.launchUpInit();
+    await InitialApplication.inSplashInit();
     await InitialApplication.appLazyInit();
 
     JavaCallService.init();*/

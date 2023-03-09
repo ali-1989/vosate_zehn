@@ -117,11 +117,11 @@ class Requester {
     });
 
     f = f.then((val) async {
-      /*if(kDebugMode) {
+      if(kDebugMode) {
         Tools.verbosePrint('@@@>> [${_httpRequester.requestOptions?.uri}]  response ======= [${_httpRequester.responseData?.statusCode}] $val');
       }
 
-      if(_httpRequester.responseData?.statusCode == 401 && Session.getLastLoginUser() != null){
+      /*if(_httpRequester.responseData?.statusCode == 401 && Session.getLastLoginUser() != null){
         final getNewToken = await JwtService.requestNewToken(Session.getLastLoginUser()!);
 
         /// try request old api again

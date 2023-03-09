@@ -24,7 +24,7 @@ import 'package:app/tools/deviceInfoTools.dart';
 class LoginService {
   LoginService._();
 
-  static void onLoginObservable(UserModel user){
+  static void onLoginObservable({dynamic data}){
   }
 
   static void onLogoffObservable({dynamic data}){

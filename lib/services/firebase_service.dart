@@ -9,13 +9,26 @@ import 'package:app/system/keys.dart';
 import 'package:app/tools/app/appDb.dart';
 import 'package:app/tools/app/appNotification.dart';
 
+
+// https://firebase.google.com/docs/cloud-messaging/flutter/receive
+// https://firebase.google.com/docs/cloud-messaging/flutter/client
+
+@pragma('vm:entry-point')
 Future<void> _fbMessagingBackgroundHandler(RemoteMessage message) async {
-  // firebase it self sending a notification
+  /// firebase it self sending a notification
+
+  // this is runs in its own isolate outside your applications context,
+  // and can, perform logic such as HTTP requests,
+  // perform IO operations (e.g. updating local storage),
+  // communicate with other plugins
+
+
+  //await Firebase.initializeApp();
+  //await ApplicationInitial.prepareDirectoriesAndLogger();
+  //await ApplicationInitial.inSplashInit();
 }
 
 Future<void> _onNewNotification(RemoteMessage message) async {
-  await ApplicationInitial.prepareDirectoriesAndLogger();
-  await ApplicationInitial.inSplashInit();
 
   int? id;
 
@@ -42,15 +55,25 @@ class FireBaseService {
   FireBaseService._();
 
   static Future init() async {
-    const firebaseOptions = FirebaseOptions(
+    var firebaseOptions = FirebaseOptions(
       appId: '1:731359726004:android:fbbd8cd236c4fc31b20ae1',
       apiKey: 'AIzaSyBVuGcqQFjUl1t5mIUJ04rfr9EKkDRqYxM',
       projectId: 'vosate-zehn-7d8fe',
       messagingSenderId: '731359726004',
+        measurementId: 'G-8ZKZGGLXRW',
     );
 
+    if(kIsWeb){
+      firebaseOptions = FirebaseOptions(
+      appId: '1:731359726004:web:7b371dd04042f69cb20ae1',
+      apiKey: 'AIzaSyC2gsyD1HYpP6LwXws6hZc_PTFoK68rl8c',
+      projectId: 'vosate-zehn-7d8fe',
+      messagingSenderId: '731359726004',
+        measurementId: 'G-8ZKZGGLXRW',
+    );
+    }
+
     await Firebase.initializeApp(options: firebaseOptions);
-    //FirebaseMessaging.instance.setAutoInitEnabled(false);
 
     try {
       await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
@@ -59,39 +82,52 @@ class FireBaseService {
         sound: true,
       );
 
-      /// ios
-      await FirebaseMessaging.instance.requestPermission(
+      ///----- ios
+      NotificationSettings settings = await FirebaseMessaging.instance.requestPermission(
         alert: true,
         badge: true,
         sound: true,
       );
+
+      /// https://firebase.google.com/docs/cloud-messaging/flutter/client#prevent-auto-init
+      //FirebaseMessaging.instance.setAutoInitEnabled(false);
     }
     catch (e){}
 
     setListening();
-
-    ///When there is a notification in the statusbar and the app is opened by the user, not by the notification
-    RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
-
-    if (initialMessage != null) {
-    }
   }
 
-  static void setListening(){
-    /// it's fire when app is open and in foreground
+  static void setListening() async {
+    /// it's fire when app is open and is in foreground
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
      _onNewNotification(message);
     });
 
-    /// it's fire when be click on Fcm notification. (no notification that app sent)
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {});
-
     /// it's fire when app is be in background or is was terminated
     FirebaseMessaging.onBackgroundMessage(_fbMessagingBackgroundHandler);
+
+    FirebaseMessaging.instance.onTokenRefresh.listen((fcmToken) {
+      token = fcmToken;
+      EventDispatcherService.notify(EventDispatcher.firebaseTokenReceived);
+    });
+
+    /// it's fire when be click on Fcm notification. (no notification by app)
+    FirebaseMessaging.onMessageOpenedApp.listen(_handler);
+
+    ///When app is opened by the user touch (not by the notification), and there is a Fcm notification in the statusbar
+    RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+
+    if (initialMessage != null) {
+      _handler(initialMessage);
+    }
+  }
+
+  static void _handler(RemoteMessage message) {
+    //if (message.data['type'] == 'chat') {}
   }
 
   static Future<String?> getTokenForce() async {
-    token = await FirebaseMessaging.instance.getToken();
+    token = await FirebaseMessaging.instance.getToken(vapidKey: 'BLkHyiaxrQJA7eSDwjrCos0BcsGVPjxM8JGXJ1CFBAeFa2wNGoJDGkOJu6CqsPhjwhf2_EII8SoJmos0TqMOitE');
 
     if(token != null) {
       lastUpdateToken = DateHelper.getNow();

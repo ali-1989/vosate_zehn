@@ -66,7 +66,8 @@ class AppRoute {
     Navigator? nav1 = res?.findAncestorWidgetOfExactType();
 
     if(res == null || nav1 == null) {
-      res = WidgetsBinding.instance.focusManager.primaryFocus?.context; //deep: 71
+      //res = WidgetsBinding.instance.focusManager.primaryFocus?.context; //deep: 71
+      res = WidgetsBinding.instance.focusManager.rootScope.context;
     }
 
     return res?? getBaseContext();
