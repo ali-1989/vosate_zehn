@@ -6,7 +6,6 @@ import 'package:iris_tools/dateSection/dateHelper.dart';
 
 import 'package:app/managers/settingsManager.dart';
 import 'package:app/services/event_dispatcher_service.dart';
-import 'package:app/system/applicationInitialize.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/appDb.dart';
 import 'package:app/tools/app/appNotification.dart';

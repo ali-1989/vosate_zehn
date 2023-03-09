@@ -82,18 +82,16 @@ class ApplicationInitial {
 
     try {
       _callInSplashInit = true;
-      PublicAccess.logger.logToAll('g-1');
+
       await AppDB.init();
-      PublicAccess.logger.logToAll('g-2');
       AppThemes.initial();
       TrustSsl.acceptBadCertificate();
       await AppLocale.localeDelegate().getLocalization().setFallbackByLocale(const Locale('en', 'EE'));
       await DeviceInfoTools.prepareDeviceInfo();
       await DeviceInfoTools.prepareDeviceId();
       //AudioPlayerService.init();
-      PublicAccess.logger.logToAll('g7');
+
       if (!kIsWeb) {
-        PublicAccess.logger.logToAll('g no');
         await AppNotification.initial();
         AppNotification.startListenTap();
       }

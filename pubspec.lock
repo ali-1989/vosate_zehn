@@ -601,18 +601,18 @@ packages:
     dependency: "direct main"
     description:
       name: image_picker
-      sha256: "715d68a53d6bcc2eae26005097dc74c375a04c0d7c0e657da84deebbbbbf51ed"
+      sha256: "64b21d9f0e065f9ab0e4dde458076226c97382cc0c6949144cb874c62bf8e9f8"
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.6+4"
+    version: "0.8.7"
   image_picker_android:
     dependency: transitive
     description:
       name: image_picker_android
-      sha256: "7673000751f45c4056bac27ad60ba79fc7c35c6c118e707c0f3e3f4da25fa67a"
+      sha256: "1f5a4b38eb742422d89c1a01d9db6077c3c9496f551bc9da74649e338a2b5101"
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.5+10"
+    version: "0.8.6"
   image_picker_for_web:
     dependency: transitive
     description:
@@ -674,10 +674,10 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: f3d99be78560495bd6e8427c12c18a1653e2e5fb
+      resolved-ref: c693e9a3cd23e48c04cf3e9cd6c3d067317f6d47
       url: "https://github.com/ali-1989/IrisDB.git"
     source: git
-    version: "0.0.5+4"
+    version: "0.0.6+1"
   iris_download_manager:
     dependency: "direct main"
     description:
@@ -701,10 +701,10 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "1b912e2650bb87b554ec94e060c464474c262734"
+      resolved-ref: f36b8cf2f6fee284bcc941794d43b974f20379bf
       url: "https://github.com/ali-1989/IrisTools.git"
     source: git
-    version: "0.0.33+2"
+    version: "0.0.33+4"
   iris_websocket:
     dependency: "direct main"
     description:
