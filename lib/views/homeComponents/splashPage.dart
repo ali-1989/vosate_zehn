@@ -1,17 +1,16 @@
 import 'dart:async';
 
-import 'package:app/views/homeComponents/splashScreen.dart';
-import 'package:app/views/homeComponents/routeDispatcher.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:app/managers/settingsManager.dart';
 import 'package:app/managers/versionManager.dart';
-
 import 'package:app/structures/abstract/stateBase.dart';
 import 'package:app/system/applicationInitialize.dart';
 import 'package:app/system/session.dart';
 import 'package:app/tools/app/appBroadcast.dart';
+import 'package:app/views/homeComponents/routeDispatcher.dart';
+import 'package:app/views/homeComponents/splashScreen.dart';
 import 'package:app/views/states/waitToLoad.dart';
 
 bool _isInit = false;

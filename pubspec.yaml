@@ -63,8 +63,8 @@ dependencies:
   flutter_custom_clippers: ^2.1.0
   glowstone: ^0.0.2
   pull_to_refresh: ^2.0.0
-  firebase_core: ^2.7.0
-  firebase_messaging: ^14.2.5
+  firebase_core: ^2.7.1
+  firebase_messaging: ^14.2.6
   appinio_swiper: ^1.1.1
   image_picker: ^0.8.6+4
   wakelock: ^0.6.2
@@ -102,12 +102,12 @@ dependencies:
 
 
 dependency_overrides:
-  path: ^1.8.3
-  xml: ^6.2.2
-  ffi: ^2.0.1
-  collection: ^1.17.1
-  image: ^4.0.15
-  intl: ^0.17.0
+  path: 1.8.3
+  xml: 6.2.2
+  ffi: 2.0.1
+  collection: 1.17.1
+  image: 4.0.15
+  intl: 0.17.0
   #firebase_core_platform_interface: 4.5.1
 
 

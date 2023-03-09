@@ -1,8 +1,9 @@
+import 'package:flutter/material.dart';
+
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appNavigatorObserver.dart';
 import 'package:app/tools/app/appRoute.dart';
 import 'package:app/views/homeComponents/splashPage.dart';
-import 'package:flutter/material.dart';
 
 class AppRouterDelegate<T> extends RouterDelegate<T> with ChangeNotifier, PopNavigatorRouterDelegateMixin {
   static AppRouterDelegate? _instance;
