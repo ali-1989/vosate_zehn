@@ -130,7 +130,7 @@ class AppSheet {
     final theme = _genTheme();
 
     void close() {
-      AppRoute.popTopView(context);
+      AppRoute.popTopView(context: context);
       fn?.call();
     }
 
@@ -194,12 +194,12 @@ class AppSheet {
     final theme = _genTheme();
 
     void posClose() {
-      AppRoute.popTopView(context);
+      AppRoute.popTopView(context: context);
       posFn?.call();
     }
 
     void negClose() {
-      AppRoute.popTopView(context);
+      AppRoute.popTopView(context: context);
       negFn?.call();
     }
 
@@ -436,7 +436,7 @@ class AppSheet {
                         materialColor: AppThemes.instance.currentTheme.primaryColor.withAlpha(70),
                         padding: const EdgeInsets.all(4),
                         onTapDelay: () {
-                          AppRoute.popTopView(context);
+                          AppRoute.popTopView(context: context);
                         }
                     ),
                 ],

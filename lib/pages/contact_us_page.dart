@@ -28,11 +28,6 @@ class _ContactUsPageState extends StateBase<ContactUsPage> {
   Requester requester = Requester();
 
   @override
-  void initState(){
-    super.initState();
-  }
-
-  @override
   void dispose(){
     textCtr.dispose();
     requester.dispose();
@@ -129,7 +124,7 @@ class _ContactUsPageState extends StateBase<ContactUsPage> {
       hideLoading();
 
       AppSheet.showSheet$SuccessOperation(context, onBtn: (){
-        AppRoute.popTopView(context);
+        AppRoute.popTopView(context: context);
       });
     };
 

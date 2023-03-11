@@ -261,10 +261,10 @@ packages:
     dependency: "direct main"
     description:
       name: dio
-      sha256: "3709d74615bba5e443eb141f6a7f4bcc4788f8fae6f743edadfb79c2a8e6287e"
+      sha256: "2644a9e0965a7aa3deb09cb8ce4081db4450c178f472818c8cd34216a3070d7b"
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.1"
+    version: "5.0.2"
   disk_space:
     dependency: transitive
     description:
@@ -609,10 +609,10 @@ packages:
     dependency: transitive
     description:
       name: image_picker_android
-      sha256: "1f5a4b38eb742422d89c1a01d9db6077c3c9496f551bc9da74649e338a2b5101"
+      sha256: "420ed22d2c9ce767ed96df723aaebfeb20ce92dfda8665cd2ba72d72a51ae669"
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.6"
+    version: "0.8.6+1"
   image_picker_for_web:
     dependency: transitive
     description:
@@ -699,12 +699,10 @@ packages:
   iris_tools:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: f36b8cf2f6fee284bcc941794d43b974f20379bf
-      url: "https://github.com/ali-1989/IrisTools.git"
-    source: git
-    version: "0.0.33+4"
+      path: "../IrisTools"
+      relative: true
+    source: path
+    version: "0.0.33+3"
   iris_websocket:
     dependency: "direct main"
     description:
@@ -718,10 +716,10 @@ packages:
     dependency: transitive
     description:
       name: jiffy
-      sha256: c3c1da3fe0c08bba3c2c455e8a3e724dfe7ea34dbe8069b992cab90ea1fe40b6
+      sha256: "9d1ea8fa2955d62d3fd5f83317db4d565350deea13d7884212aa7d0ddb1c9982"
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.1"
+    version: "6.1.0"
   js:
     dependency: transitive
     description:
@@ -1339,18 +1337,18 @@ packages:
     dependency: "direct main"
     description:
       name: video_player
-      sha256: "58dc3d6ceb199b82e652ec27f16485e33167ef021fe4221a954ff1aa12b1a5c0"
+      sha256: "868a139229acb5018d22aded3eb9cb4767ff43a8216573c086b6c535a4957481"
       url: "https://pub.dev"
     source: hosted
-    version: "2.5.3"
+    version: "2.6.0"
   video_player_android:
     dependency: transitive
     description:
       name: video_player_android
-      sha256: "83cd20b76749ef3d662742c650a0eb39f774960286a33d706a75c551874dbbb1"
+      sha256: "86d9d56ffe760a1e3b4855ea94bac6c944e99b9050946464857b3e2818e1662b"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.12"
+    version: "2.4.1"
   video_player_avfoundation:
     dependency: transitive
     description:

@@ -51,7 +51,7 @@ class AppRouterDelegate<T> extends RouterDelegate<T> with ChangeNotifier, PopNav
   Future<bool> popRoute() async {
     /// back button press
     if(AppRoute.canPop(AppRoute.getLastContext()!)) {
-      AppRoute.popTopView(AppRoute.getLastContext()! /*AppRoute.materialContext!*/);
+      AppRoute.popTopView();
       return true;
     }
 

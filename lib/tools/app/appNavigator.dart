@@ -36,7 +36,6 @@ class AppNavigator {
       return true;
     });
 
-
     return Navigator.maybeOf(navigatorCtx, rootNavigator: false);
   }
 
@@ -291,6 +290,7 @@ class AppNavigator {
 
   static ModalRoute? accessModalRouteByRouteName(BuildContext context, String name, {bool onlyActives = false}){
     final list = getAllModalRoutes(context: context, onlyActives: onlyActives);
+
     return findRouteByName(list, name);
   }
 

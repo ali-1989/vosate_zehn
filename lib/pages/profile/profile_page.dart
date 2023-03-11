@@ -54,11 +54,6 @@ class ProfilePage extends StatefulWidget{
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
-
-  @override
-  String? getWebAddress() {
-    return (ProfilePage).toString();
-  }
 }
 ///==================================================================================
 class _ProfilePageState extends StateBase<ProfilePage> {
@@ -292,7 +287,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
             title: 'تاریخ تولد',
             currentDate: user.birthDate,
             onSelect: (dt){
-              AppRoute.popTopView(context);
+              AppRoute.popTopView(context: context);
               uploadBirthdate(dt);
             },
           );
@@ -309,7 +304,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
             title: 'جنسیت',
             genderType: user.sex == 1? GenderType.man: (user.sex == 2 ? GenderType.woman: GenderType.other),
             onSelect: (gender){
-              AppRoute.popTopView(context);
+              AppRoute.popTopView(context: context);
               uploadGender(gender == GenderType.man? 1: 2);
             },
           );

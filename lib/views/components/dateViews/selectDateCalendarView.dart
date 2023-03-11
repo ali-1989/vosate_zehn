@@ -357,7 +357,7 @@ class SelectDateCalendarViewState extends State<SelectDateCalendarView> {
       widget.onSelect?.call(result);
     }
     else {
-      AppRoute.popTopView(context, data: result);
+      AppRoute.popTopView(context: context, data: result);
     }
   }
 

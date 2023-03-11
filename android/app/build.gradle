@@ -68,14 +68,14 @@ android {
         }*/
 
         debug {
-            storeFile file('H:\\Programming\\FlutterProjects\\VosateZehn\\android\\app\\key.keystore')
+            storeFile file('E:\\FlutterProjects\\vosate_zehn\\android\\app\\key.keystore')
             keyAlias 'b4a'
             keyPassword 'a6987@7896b'
             storePassword 'a6987@7896b'
         }
 
         release {
-            storeFile file('H:\\Programming\\FlutterProjects\\VosateZehn\\android\\app\\key.keystore')
+            storeFile file('E:\\FlutterProjects\\vosate_zehn\\android\\app\\key.keystore')
             keyAlias 'b4a'
             keyPassword 'a6987@7896b'
             storePassword 'a6987@7896b'

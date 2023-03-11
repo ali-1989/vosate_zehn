@@ -242,9 +242,11 @@ class DrawerMenuBuilder {
       return;
     }
 
-    bool yesFn(){
+    Future<bool?> yesFn() async{
+      AppRoute.popTopView();
+      await Future.delayed(Duration(seconds: 1), (){});
       LoginService.forceLogoff(Session.getLastLoginUser()!.userId);
-      return false;
+
     }
 
     AppDialogIris.instance.showYesNoDialog(

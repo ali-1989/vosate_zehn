@@ -99,7 +99,7 @@ class AppDialog {
 							yesFn.call();
 						}
 						else {
-							AppRoute.popTopView(context);
+							AppRoute.popTopView(context: context);
 						}
 					},
 					child: Text(yesText)

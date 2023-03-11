@@ -49,7 +49,7 @@ class DailyTextService {
           alignment: Alignment.topLeft,
           child: IconButton(
               onPressed: (){
-                AppRoute.popTopView(context);
+                AppRoute.popTopView(context: context);
               },
               icon: Icon(AppIcons.close)
           ),

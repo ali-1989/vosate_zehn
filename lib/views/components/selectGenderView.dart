@@ -141,7 +141,7 @@ class SelectGenderViewState extends State<SelectGenderView> {
       widget.onSelect!.call(gender);
     }
     else {
-      AppRoute.popTopView(context, data: gender);
+      AppRoute.popTopView(context: context, data: gender);
     }
   }
 }

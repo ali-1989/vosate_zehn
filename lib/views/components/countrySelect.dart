@@ -47,7 +47,7 @@ class CountrySelectScreenState extends StateBase<CountrySelectScreen> {
   Future<bool> onWillBack<S extends StateBase>(S state) {
     //CountrySelectScreenState state = state as CountrySelectScreenState;
 
-    AppRoute.popTopView(context, data: result);
+    AppRoute.popTopView(context: context, data: result);
     return Future<bool>.value(false);
   }
 
@@ -122,7 +122,7 @@ class CountrySelectScreenState extends StateBase<CountrySelectScreen> {
                       };
 
                       result = CountryModel.fromMap(resultMap);
-                      AppRoute.popTopView(context, data: result);
+                      AppRoute.popTopView(context: context, data: result);
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 22),

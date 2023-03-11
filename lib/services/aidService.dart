@@ -46,7 +46,7 @@ class AidService {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
                   onPressed: (){
-                    AppRoute.popTopView(AppRoute.getLastContext()!);
+                    AppRoute.popTopView();
                     gotoZarinpalPage();
                   },
                   child: Text(AppMessages.aid)
@@ -56,7 +56,7 @@ class AidService {
             SizedBox(width: 30),
             TextButton(
                 onPressed: (){
-                  AppRoute.popTopView(AppRoute.getLastContext()!);
+                  AppRoute.popTopView();
                 },
                 child: Text(AppMessages.later)
             )
