@@ -13,7 +13,6 @@ class AppDB {
   static Future<DatabaseHelper> init() async {
     AppDB.db = DatabaseHelper();
     AppDB.db.setDatabasePath(await AppDirectories.getDatabasesDir());
-
     AppDB.db.setDebug(false);
 
     await AppDB.db.openTable(AppDB.tbKv);

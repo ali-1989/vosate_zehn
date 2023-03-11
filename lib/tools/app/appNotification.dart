@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:flutter/material.dart';
+import 'package:app/tools/app/appColors.dart';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:iris_tools/api/generator.dart';
@@ -91,7 +91,7 @@ class AppNotification {
 			ledOffMs: 500,
 		);
 
-		///* resource://drawable/app_icon
+		///* resource://drawable/notif
 		AwesomeNotifications().initialize(
 			'resource://drawable/ic_stat_app_icon',
 			[nc1,],
@@ -135,12 +135,16 @@ class AppNotification {
 	}
 
 	static void startListenTap() {
-	/*AwesomeNotifications().setListeners(
-				onActionReceivedMethod: onActionReceivedMethod,
-				onNotificationCreatedMethod:onNotificationCreatedMethod,
-				onNotificationDisplayedMethod: onNotificationDisplayedMethod,
-				onDismissActionReceivedMethod: onDismissActionReceivedMethod
-		);*/
+		listener(ReceivedNotification receivedNotification){
+			if(receivedNotification.payload is Map){
+				final key = receivedNotification.payload!['key'];
+				if(key == 'message'){
+					//AppBroadcast.layoutPageKey.currentState?.gotoPage(3);
+				}
+			}
+		}
+
+		AwesomeNotifications().actionStream.listen(listener);
 	}
 
 	static void removeChannel(String channelKey) {
@@ -167,16 +171,17 @@ class AppNotification {
 		AwesomeNotifications().showNotificationConfigPage();
 	}
 
-	static void sendNotification(String? title, String text, {int? id}) {
+	static void sendNotification(String? title, String text, {int? id, Map<String, String>? payload}) {
 		final n = NotificationContent(
 			id: id ?? Generator.generateIntId(5),
 			channelKey: fetchChannelKey()?? '',
 			title: title,
 			body: text,
 			autoDismissible: true,
-			color: Colors.orange,
+			color: AppColors.orange,
 			category: NotificationCategory.Message,
 			notificationLayout: NotificationLayout.Default,
+			payload: payload,
 		);
 
 		AwesomeNotifications().createNotification(

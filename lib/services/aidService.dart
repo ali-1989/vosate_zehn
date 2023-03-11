@@ -22,8 +22,9 @@ class AidService {
     AppRoute.pushPage(AppRoute.getLastContext()!, AidPage());
   }
 
-  static void gotoZarinpalPage() async {
+  static Future<bool> gotoZarinpalPage() async {
     AppRoute.pushPage(AppRoute.getLastContext()!, PayWebPage(url: 'https://zarinp.al/vosatezehn.ir'));
+    return false;
   }
 
   static void showAidDialog(){
@@ -94,7 +95,7 @@ class AidService {
     }
 
     if(lastTime == null
-        || DateHelper.isPastOf(lastTimeDt, Duration(days: SystemParameterManager.systemParameters.aidRepeatDays?? 30))){
+        || DateHelper.isPastOf(lastTimeDt, Duration(days: SystemParameterManager.systemParameters.aidRepeatDays))){
       showAidDialog();
     }
   }

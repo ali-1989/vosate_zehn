@@ -174,7 +174,6 @@ class Session {
 
 		if(user != null) {
 			user.matchBy(res);
-
 			return user;
 		}
 

@@ -101,10 +101,12 @@ abstract class StateBase<W extends StatefulWidget> extends State<W> {
 		return AppLocale.appLocalize;
 	}
 	///-------------------------------------------------------
-	void addPostOrCall({required Function() fn, BuildContext? subContext}){
+	void addPostOrCall({required Function() fn, BuildContext? subContext}) async {
 		if(!mounted){
 			return;
 		}
+
+		await Future.delayed(Duration(milliseconds: 10), (){});
 
 		final status = ((subContext?? context) as Element).dirty;
 

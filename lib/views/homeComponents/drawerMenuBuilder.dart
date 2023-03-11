@@ -242,8 +242,9 @@ class DrawerMenuBuilder {
       return;
     }
 
-    void yesFn(){
+    bool yesFn(){
       LoginService.forceLogoff(Session.getLastLoginUser()!.userId);
+      return false;
     }
 
     AppDialogIris.instance.showYesNoDialog(

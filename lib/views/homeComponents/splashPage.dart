@@ -99,21 +99,24 @@ class SplashScreenState extends StateBase<SplashPage> {
   }
 
   void connectToServer() async {
-    /*final serverData = await LoginService.requestOnSplash();
+    /*final serverData = await SystemParameterManager.requestSystemParameters();
 
     if(serverData == null){
       AppSheet.showSheetOneAction(
         AppRoute.materialContext!,
-        AppMessages.errorCommunicatingServer, (){
-        AppBroadcast.gotoSplash(2000);
-        connectToServer();
-      },
-          buttonText: AppMessages.tryAgain,
-          isDismissible: false,
+        AppMessages.errorCommunicatingServer,
+         (){
+          AppBroadcast.gotoSplash(2000);
+
+          connectToServer();
+        },
+        buttonText: AppMessages.tryAgain,
+        isDismissible: false,
       );
     }
     else {
       _isConnectToServer = true;
+      Session.fetchLoginUsers();
       callState();
     }*/
   }

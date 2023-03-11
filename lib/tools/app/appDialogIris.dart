@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/helpers/colorHelper.dart';
@@ -8,6 +10,8 @@ import 'package:app/tools/app/appIcons.dart';
 import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appSizes.dart';
 import '/tools/app/appThemes.dart';
+
+typedef OnButtonCallback = FutureOr<bool>? Function();
 
 class AppDialogIris {
 	static final _instance = AppDialogIris._();
@@ -78,7 +82,7 @@ class AppDialogIris {
 				String? yesText,
 				Widget? descView,
 				Widget? icon,
-				Function? yesFn,
+				OnButtonCallback? yesFn,
 				bool dismissOnButtons = true,
 				IrisDialogDecoration?	decoration,
 			}) {
@@ -100,9 +104,9 @@ class AppDialogIris {
 				String? desc,
 				Widget? descView,
 				String? yesText,
-				Function? yesFn,
 				String? noText,
-				Function? noFn,
+				OnButtonCallback? yesFn,
+				OnButtonCallback? noFn,
 				String? title,
 				Widget? icon,
 				bool dismissOnButtons = true,
@@ -119,8 +123,8 @@ class AppDialogIris {
 			decoration: decoration?? AppDialogIris.instance.dialogDecoration,
 			icon: icon,
 			dismissOnButtons: dismissOnButtons,
-			positivePress: (ctx)=> yesFn?.call(),
-			negativePress: (ctx)=> noFn?.call(),
+			positivePress: (ctx) => yesFn?.call(),
+			negativePress: (ctx) => noFn?.call(),
 		);
 	}
 
@@ -128,11 +132,11 @@ class AppDialogIris {
 			BuildContext context, {
 				required Widget descView,
 				String? yesText,
-				required Function(String txt) yesFn,
+				required bool? Function(String txt) yesFn,
 				Function(String txt)? onChange,
 				String? noText,
 				String? initValue,
-				Function? noFn,
+				OnButtonCallback? noFn,
 				String? title,
 				Widget? icon,
 				bool canDismiss = true,
@@ -146,9 +150,9 @@ class AppDialogIris {
 			ctr.text = initValue;
 		}
 
-		onPosClick(){
+		bool onPosClick(){
 			final txt = ctr.text;
-			yesFn.call(txt);
+			return yesFn.call(txt)?? false;
 		}
 
 		final rejectView = Column(

@@ -91,8 +91,9 @@ class VersionManager {
   static void showUpdateDialog(BuildContext context, VersionModel vm) {
     final msg = vm.description?? AppMessages.newAppVersionIsOk;
 
-    void closeApp(){
+    bool closeApp(){
       System.exitApp();
+      return false;
     }
 
     final decoration = AppDialogIris.instance.dialogDecoration.copy();
@@ -106,6 +107,7 @@ class VersionManager {
       noText: vm.restricted ? AppMessages.exit : AppMessages.later,
       yesFn: (){
         UrlHelper.launchLink(vm.link?? '');
+        return false;
       },
       noFn: vm.restricted ? closeApp: null,
     );
