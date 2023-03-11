@@ -169,7 +169,7 @@ void onErrorCatch(FlutterErrorDetails errorDetails) {
 void zonedGuardedCatch(error, sTrace) {
   var txt = 'ZONED-GUARDED CAUGHT AN ERROR:: ${error.toString()}';
 
-  if(!kIsWeb && !kDebugMode) {
+  if(!kDebugMode/* && !kIsWeb*/) {
     txt += '\n STACK TRACE:: $sTrace';
   }
 
