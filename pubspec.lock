@@ -699,10 +699,12 @@ packages:
   iris_tools:
     dependency: "direct main"
     description:
-      path: "../IrisTools"
-      relative: true
-    source: path
-    version: "0.0.33+3"
+      path: "."
+      ref: HEAD
+      resolved-ref: d24104f4893eb45a407bfd31f24a0f4ee50540f2
+      url: "https://github.com/ali-1989/IrisTools.git"
+    source: git
+    version: "0.0.33+4"
   iris_websocket:
     dependency: "direct main"
     description:

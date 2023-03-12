@@ -9,7 +9,7 @@ homepage: https://iris.ir
 
 publish_to: 'none'
 
-version: 5.2.11+19
+version: 5.2.12+20
 
 
 environment:
@@ -74,8 +74,8 @@ dependencies:
 
 
   iris_tools:
-    path: ../IrisTools
-    #git: https://github.com/ali-1989/IrisTools.git
+    #path: ../IrisTools
+    git: https://github.com/ali-1989/IrisTools.git
   iris_db:
 #    path: ../../DartProjects/IrisDB
     git: https://github.com/ali-1989/IrisDB.git
