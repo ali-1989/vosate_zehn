@@ -16,7 +16,7 @@ import 'package:app/pages/levels/content_view_page.dart';
 import 'package:app/pages/levels/video_player_page.dart';
 import 'package:app/services/lastSeenService.dart';
 import 'package:app/structures/enums/enums.dart';
-import 'package:app/structures/middleWare/requester.dart';
+import 'package:app/structures/middleWares/requester.dart';
 import 'package:app/structures/models/advModel.dart';
 import 'package:app/structures/models/subBuketModel.dart';
 import 'package:app/system/keys.dart';

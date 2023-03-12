@@ -153,20 +153,17 @@ class ApplicationInitial {
       EventDispatcherService.attachFunction(EventDispatcher.userLogin, LoginService.onLoginObservable);
       EventDispatcherService.attachFunction(EventDispatcher.userLogoff, LoginService.onLogoffObservable);
 
-      if (System.isWeb()) {
+      /*if (System.isWeb()) {
         void onSizeCheng(oldW, oldH, newW, newH) {
           AppDialogIris.prepareDialogDecoration();
         }
 
         AppSizes.instance.addMetricListener(onSizeCheng);
-      }
+      }*/
 
       EventDispatcherService.attachFunction(EventDispatcher.firebaseTokenReceived, ({data}) {
         FireBaseService.subscribeToTopic(PublicAccess.fcmTopic);
       });
-
-      await FireBaseService.init();
-      FireBaseService.getToken();
 
       MediaManager.loadAllRecords();
 
@@ -176,6 +173,9 @@ class ApplicationInitial {
 
         VersionManager.checkAppHasNewVersion(AppRoute.getLastContext()!);
       }
+
+      await FireBaseService.init();
+      FireBaseService.getToken();
 
       //DailyTextService.checkShowDialog();
     }

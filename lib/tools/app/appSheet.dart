@@ -88,7 +88,7 @@ class AppSheet {
         double elevation = 1.0,
         ShapeBorder? shape,
         String routeName = 'ModalBottomSheet',
-        bool useRootNavigator = true,
+        bool useRootNavigator = false,
         bool isDismissible = true,
         /** isScrollControlled:
           if false: on small sheet show elevation to center page
@@ -368,6 +368,7 @@ class AppSheet {
       String routeName, {
         Color? backgroundColor,
         bool isDismissible = true,
+        bool useRootNavigator = false,
         EdgeInsets? padding,
       }) {
 
@@ -402,6 +403,7 @@ class AppSheet {
       backgroundColor: backgroundColor ?? Colors.transparent,
       elevation: 0,
       isDismissible: isDismissible,
+      useRootNavigator: useRootNavigator,
     );
   }
 

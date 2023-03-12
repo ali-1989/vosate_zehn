@@ -7,7 +7,7 @@ import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 import 'package:app/structures/abstract/stateBase.dart';
-import 'package:app/structures/middleWare/requester.dart';
+import 'package:app/structures/middleWares/requester.dart';
 import 'package:app/structures/models/countryModel.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/session.dart';

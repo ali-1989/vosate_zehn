@@ -55,6 +55,10 @@ class FireBaseService {
   FireBaseService._();
 
   static Future init() async {
+    if(!(await FirebaseMessaging.instance.isSupported())){
+      return;
+    }
+
     var firebaseOptions = FirebaseOptions(
       appId: '1:731359726004:android:fbbd8cd236c4fc31b20ae1',
       apiKey: 'AIzaSyBVuGcqQFjUl1t5mIUJ04rfr9EKkDRqYxM',
@@ -65,17 +69,18 @@ class FireBaseService {
 
     if(kIsWeb){
       firebaseOptions = FirebaseOptions(
-      appId: '1:731359726004:web:7b371dd04042f69cb20ae1',
-      apiKey: 'AIzaSyC2gsyD1HYpP6LwXws6hZc_PTFoK68rl8c',
-      projectId: 'vosate-zehn-7d8fe',
-      messagingSenderId: '731359726004',
+        appId: '1:731359726004:web:7b371dd04042f69cb20ae1',
+        apiKey: 'AIzaSyC2gsyD1HYpP6LwXws6hZc_PTFoK68rl8c',
+        projectId: 'vosate-zehn-7d8fe',
+        messagingSenderId: '731359726004',
         measurementId: 'G-8ZKZGGLXRW',
-    );
+      );
     }
 
-    await Firebase.initializeApp(options: firebaseOptions);
 
     try {
+      await Firebase.initializeApp(options: firebaseOptions);
+
       await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
         alert: true,
         badge: true,
@@ -92,7 +97,7 @@ class FireBaseService {
       /// https://firebase.google.com/docs/cloud-messaging/flutter/client#prevent-auto-init
       //FirebaseMessaging.instance.setAutoInitEnabled(false);
     }
-    catch (e){}
+    catch (e){/**/}
 
     setListening();
   }

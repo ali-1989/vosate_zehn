@@ -9,7 +9,6 @@ import 'package:app/managers/settingsManager.dart';
 import 'package:app/services/google_service.dart';
 import 'package:app/structures/models/countryModel.dart';
 import 'package:app/structures/models/userModel.dart';
-import 'package:app/system/httpCodes.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/publicAccess.dart';
 import 'package:app/system/session.dart';
@@ -20,6 +19,7 @@ import 'package:app/tools/app/appRoute.dart';
 import 'package:app/tools/app/appSheet.dart';
 import 'package:app/tools/app/appToast.dart';
 import 'package:app/tools/deviceInfoTools.dart';
+import 'package:iris_tools/models/twoStateReturn.dart';
 
 class LoginService {
   LoginService._();
@@ -148,9 +148,9 @@ class LoginService {
     return result.future;
   }
 
-  static Future<LoginResultWrapper> requestVerifyOtp({required CountryModel countryModel, required String phoneNumber, required String code}) async {
+  static Future<TwoStateReturn<Map, Exception>> requestVerifyOtp({required CountryModel countryModel, required String phoneNumber, required String code}) async {
     final http = HttpItem();
-    final result = Completer<LoginResultWrapper>();
+    final result = Completer<TwoStateReturn<Map, Exception>>();
 
     final js = {};
     js[Keys.requestZone] = 'verify_otp';
@@ -165,51 +165,30 @@ class LoginService {
     http.setBodyJson(js);
 
     final request = AppHttpDio.send(http);
-    final loginWrapper = LoginResultWrapper();
 
     var f = request.response.catchError((e){
-      loginWrapper.connectionError = true;
-      result.complete(loginWrapper);
+      result.complete(TwoStateReturn(r2: e));
 
       return null;
     });
 
     f = f.then((Response? response){
       if(response == null || !request.isOk) {
-        loginWrapper.connectionError = true;
-        result.complete(loginWrapper);
+        result.complete(TwoStateReturn(r2: Exception()));
         return;
       }
 
       final resJs = request.getBodyAsJson()!;
-      final status = resJs[Keys.status];
-      loginWrapper.causeCode = resJs[Keys.causeCode]?? 0;
-      loginWrapper.jsResult = resJs;
-
-      if(status == Keys.error){
-        loginWrapper.hasError = true;
-
-        if(loginWrapper.causeCode == HttpCodes.error_dataNotExist){
-          /**/
-        }
-        else if(loginWrapper.causeCode == HttpCodes.error_userIsBlocked){
-          loginWrapper.isBlock = true;
-        }
-      }
-      else {
-        loginWrapper.isVerify = true;
-      }
-
-      result.complete(loginWrapper);
+      result.complete(TwoStateReturn(r1: resJs));
       return null;
     });
 
     return result.future;
   }
 
-  static Future<LoginResultWrapper> requestVerifyEmail({required String email}) async {
+  static Future<TwoStateReturn<Map, Exception>> requestVerifyEmail({required String email}) async {
     final http = HttpItem();
-    final result = Completer<LoginResultWrapper>();
+    final result = Completer<TwoStateReturn<Map, Exception>>();
 
     final js = {};
     js[Keys.requestZone] = 'verify_email';
@@ -222,43 +201,22 @@ class LoginService {
     http.setBodyJson(js);
 
     final request = AppHttpDio.send(http);
-    final loginWrapper = LoginResultWrapper();
 
     var f = request.response.catchError((e){
-      loginWrapper.connectionError = true;
-      result.complete(loginWrapper);
+      result.complete(TwoStateReturn(r2: e));
 
       return null;
     });
 
     f = f.then((Response? response){
       if(response == null || !request.isOk) {
-        loginWrapper.connectionError = true;
-        result.complete(loginWrapper);
+        result.complete(TwoStateReturn(r2: Exception()));
         return;
       }
 
-
       final resJs = request.getBodyAsJson()!;
-      final status = resJs[Keys.status];
-      loginWrapper.causeCode = resJs[Keys.causeCode]?? 0;
-      loginWrapper.jsResult = resJs;
 
-      if(status == Keys.error){
-        loginWrapper.hasError = true;
-
-        if(loginWrapper.causeCode == HttpCodes.error_dataNotExist){
-          /**/
-        }
-        else if(loginWrapper.causeCode == HttpCodes.error_userIsBlocked){
-          loginWrapper.isBlock = true;
-        }
-      }
-      else {
-        loginWrapper.isVerify = true;
-      }
-
-      result.complete(loginWrapper);
+      result.complete(TwoStateReturn(r1: resJs));
       return null;
     });
 
@@ -305,13 +263,4 @@ class LoginService {
       AppSheet.showSheet$OperationFailed(context);
     }
   }
-}
-///============================================================================
-class LoginResultWrapper {
-  Map? jsResult;
-  bool isVerify = false;
-  bool isBlock = false;
-  bool hasError = false;
-  bool connectionError = false;
-  int causeCode = 0;
 }

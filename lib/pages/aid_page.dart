@@ -7,7 +7,7 @@ import 'package:iris_tools/widgets/maxWidth.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:app/structures/abstract/stateBase.dart';
-import 'package:app/structures/middleWare/requester.dart';
+import 'package:app/structures/middleWares/requester.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/session.dart';
 import 'package:app/tools/app/appMessages.dart';

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app/system/httpCodes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flip_card/flip_card.dart';
@@ -323,39 +324,47 @@ class _LoginPageState extends StateBase<LoginPage> {
       AppSheet.showSheet$OperationFailed(context);
     }
     else {
-      final result = await LoginService.requestVerifyEmail(email: googleResult.email);
+      final twoState = await LoginService.requestVerifyEmail(email: googleResult.email);
       AppLoading.instance.cancel(context);
 
-      if(result.connectionError){
-        AppSheet.showSheet$ErrorCommunicatingServer(context);
-        return;
-      }
+      if(twoState.hasResult1()){
+        final status = twoState.result1![Keys.status];
+        final causeCode = twoState.result1![Keys.causeCode]?? 0;
 
-      if(result.isBlock){
-        AppSheet.showSheet$AccountIsBlock(context);
-        return;
-      }
-
-      if(result.isVerify) {
-        final userId = result.jsResult![Keys.userId];
-
-        if (userId == null) {
-          final injectData = RegisterPageInjectData();
-          injectData.email = googleResult.email;
-
-          AppRoute.pushPage(context, RegisterPage(injectData: injectData));
+        if(status == Keys.error){
+          if(causeCode == HttpCodes.error_dataNotExist){
+            /**/
+          }
+          else if(causeCode == HttpCodes.error_userIsBlocked){
+            AppSheet.showSheet$AccountIsBlock(context);
+            return;
+          }
         }
         else {
-          final userModel = await Session.login$newProfileData(result.jsResult!);
+          final userId = twoState.result1![Keys.userId];
 
-          if(userModel != null) {
-            //AppRoute.pushPage(context, LayoutPage(key: AppBroadcast.layoutPageKey));
-            AppBroadcast.reBuildMaterial();
+          if (userId == null) {
+            final injectData = RegisterPageInjectData();
+            injectData.email = googleResult.email;
+
+            AppRoute.pushPage(context, RegisterPage(injectData: injectData));
           }
           else {
-            AppSheet.showSheet$OperationFailed(context);
+            final userModel = await Session.login$newProfileData(twoState.result1!);
+
+            if(userModel != null) {
+              //AppRoute.pushPage(context, LayoutPage(key: AppBroadcast.layoutPageKey));
+              AppBroadcast.reBuildMaterial();
+            }
+            else {
+              AppSheet.showSheet$OperationFailed(context);
+            }
           }
         }
+      }
+      else {
+        AppSheet.showSheet$ErrorCommunicatingServer(context);
+        return;
       }
     }
   }
@@ -444,40 +453,44 @@ class _LoginPageState extends StateBase<LoginPage> {
     injectData.countryModel = countryModel;
     injectData.mobileNumber = phoneNumber;
 
-    final result = await LoginService.requestVerifyOtp(countryModel: countryModel, phoneNumber: phoneNumber, code: pinCode);
+    final twoState = await LoginService.requestVerifyOtp(countryModel: countryModel, phoneNumber: phoneNumber, code: pinCode);
 
-    if(result.connectionError){
-      AppSheet.showSheet$ErrorCommunicatingServer(context);
-      return;
-    }
+    if(twoState.hasResult1()){
+      final status = twoState.result1![Keys.status];
 
-    if(result.isBlock){
-      AppSheet.showSheet$AccountIsBlock(context);
-      return;
-    }
+      if(status == Keys.error){
+        final causeCode = twoState.result1![Keys.causeCode]?? 0;
 
-    if(!result.isVerify){
-      AppSheet.showSheetOk(context, AppMessages.otpCodeIsInvalid);
-      return;
-    }
-
-    if(result.isVerify) {
-      final userId = result.jsResult![Keys.userId];
-
-      if (userId == null) {
-        AppRoute.pushPage(context, RegisterPage(injectData: injectData));
+        if(causeCode == HttpCodes.error_dataNotExist){
+          /**/
+        }
+        else if(causeCode == HttpCodes.error_userIsBlocked){
+          AppSheet.showSheet$AccountIsBlock(context);
+          return;
+        }
       }
       else {
-        final userModel = await Session.login$newProfileData(result.jsResult!);
+        final userId = twoState.result1![Keys.userId];
 
-        if(userModel != null) {
-          //AppRoute.pushPage(context, LayoutPage(key: AppBroadcast.layoutPageKey));
-          AppBroadcast.reBuildMaterial();
+        if (userId == null) {
+          AppRoute.pushPage(context, RegisterPage(injectData: injectData));
         }
         else {
-          AppSheet.showSheet$OperationFailed(context);
+          final userModel = await Session.login$newProfileData(twoState.result1!);
+
+          if(userModel != null) {
+            //AppRoute.pushPage(context, LayoutPage(key: AppBroadcast.layoutPageKey));
+            AppBroadcast.reBuildMaterial();
+          }
+          else {
+            AppSheet.showSheet$OperationFailed(context);
+          }
         }
       }
+    }
+    else {
+      AppSheet.showSheet$ErrorCommunicatingServer(context);
+      return;
     }
   }
 }
