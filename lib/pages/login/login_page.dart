@@ -124,14 +124,6 @@ class _LoginPageState extends StateBase<LoginPage> {
                   frontWidget: buildFrontFlip(),
                   backWidget: buildBackFlip()
               )
-
-              /*FlipCard(
-                controller: flipCardController,
-                fill: Fill.fillBack,
-                flipOnTouch: false,
-                front: buildFrontFlip(),
-                back: buildBackFlip(),
-              )*/,
             ),
           ),
         ),
