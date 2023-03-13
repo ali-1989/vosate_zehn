@@ -1,9 +1,9 @@
 import 'dart:async';
 
+import 'package:app/services/firebase_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:iris_tools/api/system.dart';
@@ -26,21 +26,25 @@ import 'package:app/views/homeComponents/splashPage.dart';
 
 ///================ call on any hot restart
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  if (defaultTargetPlatform != TargetPlatform.linux && defaultTargetPlatform != TargetPlatform.windows) {
+    WidgetsFlutterBinding.ensureInitialized();
+  }
+
   final initOk = await ApplicationInitial.prepareDirectoriesAndLogger();
 
   if(!initOk){
     runApp(const MyErrorApp());
+    return;
   }
-  else {
-    runZonedGuarded(() async {
-      await mainInitialize();
 
-      runApp(
-          StreamBuilder<bool>(
-              initialData: false,
-              stream: AppBroadcast.viewUpdaterStream.stream,
-              builder: (context, snapshot) {
+  await mainInitialize();
+
+  zone() {
+    runApp(
+        StreamBuilder<bool>(
+            initialData: false,
+            stream: AppBroadcast.viewUpdaterStream.stream,
+            builder: (context, snapshot) {
               return MaxWidth(
                 maxWidth: AppSizes.webMaxWidthSize,
                 apply: kIsWeb,
@@ -52,27 +56,31 @@ Future<void> main() async {
                       style: AppThemes.instance.themeData.textTheme.bodyMedium?? TextStyle(),
                       child: OrientationBuilder( /// detect orientation change and rotate screen
                           builder: (context, orientation) {
-                          return Toaster(
-                            child: MyApp(),
-                          );
-                        }
+                            return Toaster(
+                              child: MyApp(),
+                            );
+                          }
                       ),
                     ),
                   ),
                 ),
               );
             }
-          )
+        )
     );
-    }, zonedGuardedCatch);
   }
+
+  //runZonedGuarded(zone, zonedGuardedCatch);
+  zone();
 }
 
 Future<void> mainInitialize() async {
-  SchedulerBinding.instance.ensureVisualUpdate();
-  SchedulerBinding.instance.window.scheduleFrame();
-
+  //SchedulerBinding.instance.ensureVisualUpdate();
+  //SchedulerBinding.instance.window.scheduleFrame();
+  PlatformDispatcher.instance.onError = maiIsolateError;
   FlutterError.onError = onErrorCatch;
+  await FireBaseService.initializeApp();
+
   usePathUrlStrategy();
 
   if(System.isAndroid()) {
@@ -164,6 +172,19 @@ void onErrorCatch(FlutterErrorDetails errorDetails) {
   txt += '\n**************************************** [END CATCH]';
 
   PublicAccess.logger.logToAll(txt);
+}
+///==============================================================================================
+bool maiIsolateError(error, sTrace) {
+  var txt = 'main-isolate CAUGHT AN ERROR:: ${error.toString()}';
+
+  if(!kDebugMode/* && !kIsWeb*/) {
+    txt += '\n STACK TRACE:: $sTrace';
+  }
+
+  txt += '\n**************************************** [END MAIN-ISOLATE]';
+  PublicAccess.logger.logToAll(txt);
+
+  return true;
 }
 ///==============================================================================================
 void zonedGuardedCatch(error, sTrace) {

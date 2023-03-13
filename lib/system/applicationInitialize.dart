@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/logger/logger.dart';
 import 'package:iris_tools/api/logger/reporter.dart';
-import 'package:iris_tools/api/system.dart';
 import 'package:iris_tools/net/netManager.dart';
 import 'package:iris_tools/net/trustSsl.dart';
 
@@ -26,13 +25,11 @@ import 'package:app/system/applicationLifeCycle.dart';
 import 'package:app/system/publicAccess.dart';
 import 'package:app/tools/app/appCache.dart';
 import 'package:app/tools/app/appDb.dart';
-import 'package:app/tools/app/appDialogIris.dart';
 import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appLocale.dart';
 import 'package:app/tools/app/appNotification.dart';
 import 'package:app/tools/app/appRoute.dart';
-import 'package:app/tools/app/appSizes.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/deviceInfoTools.dart';
 import 'package:app/tools/netListenerTools.dart';
@@ -174,8 +171,11 @@ class ApplicationInitial {
         VersionManager.checkAppHasNewVersion(AppRoute.getLastContext()!);
       }
 
-      await FireBaseService.init();
-      FireBaseService.getToken();
+      await FireBaseService.prepare();
+
+      Future.delayed(Duration(seconds: 3), (){
+        FireBaseService.getToken();
+      });
 
       //DailyTextService.checkShowDialog();
     }

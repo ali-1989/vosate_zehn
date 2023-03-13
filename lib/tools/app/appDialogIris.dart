@@ -93,7 +93,7 @@ class AppDialogIris {
       positiveButtonText: yesText,
 			title: title,
 			icon: icon,
-			positivePress: (ctx)=> yesFn?.call(),
+			positivePress: (ctx) => yesFn?.call(),
 			dismissOnButtons: dismissOnButtons,
 			decoration: decoration ?? AppDialogIris.instance.dialogDecoration,
 		);
