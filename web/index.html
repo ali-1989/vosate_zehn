@@ -48,7 +48,7 @@
         .loader {
           border: 12px solid #f3f3f3;
           border-radius: 50%;
-          border: 11px solid ;
+          border: 11px solid;
           border-top: 12px solid #e77212;
           border-right: 12px solid white;
           border-bottom: 12px solid #e77212;
@@ -85,15 +85,17 @@
 
   <script src="flutter.js" defer></script>
 </head>
-<body>
 
-	<!--<div class='centered'>
-	&lt;!&ndash; <img src="loading.gif" alt="loading-image"> &ndash;&gt;
+<body>
+	<div id="loading" class='centered'>
+	<!--<img src="loading.gif" alt="loading-image">-->
       <div class="loader"></div>
-    </div>-->
+    </div>
 
     <script>
         window.addEventListener('load', function () {
+            var loading = document.getElementById('loading');
+
             _flutter.loader.loadEntrypoint({
                 serviceWorker: {
                     serviceWorkerVersion: serviceWorkerVersion,
@@ -104,7 +106,7 @@
                 return appRunner.runApp();
             }).then(function (app) {
                 window.setTimeout(function () {
-                    /*loading.remove();*/
+                    loading.remove();
                 }, 200);
             });
         });

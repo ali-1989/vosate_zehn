@@ -51,7 +51,6 @@ dependencies:
   popover: ^0.2.8+2
   google_sign_in: ^6.0.2
   #sign_in_with_apple: ^4.0.0
-  flip_card: ^0.7.0
   pin_code_fields: ^7.4.0
   stop_watch_timer: ^2.0.0
   toggle_switch: ^2.0.1
@@ -70,6 +69,7 @@ dependencies:
   wakelock: ^0.6.2
   url_launcher: any
   carousel_slider: ^4.2.1
+  flutter_flip_card: ^0.0.4
   permission_handler: ^10.2.0            # NoWeb
 
 

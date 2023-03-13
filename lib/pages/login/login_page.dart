@@ -3,8 +3,7 @@ import 'dart:async';
 import 'package:app/system/httpCodes.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flip_card/flip_card.dart';
-import 'package:flip_card/flip_card_controller.dart';
+
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:iris_tools/api/helpers/localeHelper.dart';
 import 'package:iris_tools/api/helpers/mathHelper.dart';
@@ -32,6 +31,7 @@ import 'package:app/tools/app/appToast.dart';
 import 'package:app/tools/countryTools.dart';
 import 'package:app/views/components/countrySelect.dart';
 import 'package:app/views/components/phoneNumberInput.dart';
+import 'package:flutter_flip_card/flutter_flip_card.dart';
 
 class LoginPage extends StatefulWidget{
 
@@ -117,12 +117,21 @@ class _LoginPageState extends StateBase<LoginPage> {
             padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10),
             child: Align(
               child: FlipCard(
+                  rotateSide: RotateSide.bottom,
+                  onTapFlipping: false,
+                  axis: FlipAxis.horizontal,
+                  controller: flipCardController,
+                  frontWidget: buildFrontFlip(),
+                  backWidget: buildBackFlip()
+              )
+
+              /*FlipCard(
                 controller: flipCardController,
                 fill: Fill.fillBack,
                 flipOnTouch: false,
                 front: buildFrontFlip(),
                 back: buildBackFlip(),
-              ),
+              )*/,
             ),
           ),
         ),
@@ -371,7 +380,7 @@ class _LoginPageState extends StateBase<LoginPage> {
 
   void onChangeNumberCall() async {
     pinCode = '';
-    flipCardController.toggleCard();
+    flipCardController.flipcard();
   }
 
   void resetTimer(){
@@ -435,7 +444,7 @@ class _LoginPageState extends StateBase<LoginPage> {
       }
     });
 
-    flipCardController.toggleCard();
+    flipCardController.flipcard();
   }
 
   void reSendOtpCodeCall() async {

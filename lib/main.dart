@@ -77,7 +77,7 @@ Future<void> main() async {
 Future<void> mainInitialize() async {
   //SchedulerBinding.instance.ensureVisualUpdate();
   //SchedulerBinding.instance.window.scheduleFrame();
-  PlatformDispatcher.instance.onError = maiIsolateError;
+  PlatformDispatcher.instance.onError = mainIsolateError;
   FlutterError.onError = onErrorCatch;
   await FireBaseService.initializeApp();
 
@@ -174,7 +174,7 @@ void onErrorCatch(FlutterErrorDetails errorDetails) {
   PublicAccess.logger.logToAll(txt);
 }
 ///==============================================================================================
-bool maiIsolateError(error, sTrace) {
+bool mainIsolateError(error, sTrace) {
   var txt = 'main-isolate CAUGHT AN ERROR:: ${error.toString()}';
 
   if(!kDebugMode/* && !kIsWeb*/) {
