@@ -162,7 +162,7 @@ class _LoginPageState extends StateBase<LoginPage> {
           ElevatedButton(
               style: ElevatedButton.styleFrom(shape: const StadiumBorder()),
               onPressed: onSendClick,
-              child: Text(AppMessages.select)
+              child: Text(AppMessages.send)
           ),
           /*SizedBox(
             width: double.maxFinite,

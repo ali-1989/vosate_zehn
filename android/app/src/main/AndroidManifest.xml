@@ -75,10 +75,10 @@
     -->
 
     <!-- ..........................  Call SMS -->
-    <!--
+    <!-- Google play sensitive
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
     <uses-permission android:name="android.permission.SEND_SMS"/>
-    <uses-permission android:name="android.permission.READ_CALL_LOG" />
+    <uses-permission android:name="android.permission.READ_CALL_LOG"/>
     <uses-permission android:name="android.permission.MANAGE_OWN_CALLS"/>
     <uses-permission android:name="android.permission.NEW_OUTGOING_CALL"/>
     <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>

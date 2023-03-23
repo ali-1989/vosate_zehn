@@ -118,10 +118,16 @@ class _SentencesPageState extends StateBase<SentencesPage> {
               }
 
               return AppinioSwiper(
-                cards: cards,
+                cardsCount: cards.length,
+                cardsBuilder: (BuildContext context, int index) {
+                  return cards[index];
+                },
                 padding: EdgeInsets.symmetric(horizontal: 25, vertical: 40),
+                direction: AppinioSwiperDirection.right,
+                swipeOptions: AppinioSwipeOptions.allDirections,
                 allowUnswipe: true,
                 unlimitedUnswipe: false,
+                loop: true,
               );
             },
           ),
@@ -131,7 +137,7 @@ class _SentencesPageState extends StateBase<SentencesPage> {
   }
 
   void prepareCards() {
-    PublicAccess.sortList(dailyList, true);
+    PublicAccess.sortList(dailyList, false);
 
     final list = dailyList.map((t) {
       return Card(
@@ -228,14 +234,18 @@ class _SentencesPageState extends StateBase<SentencesPage> {
       final List tList = data[Keys.dataList]?? [];
 
       for(final m in tList){
-        dailyList.add(DailyTextModel.fromMap(m));
+        final msg = DailyTextModel.fromMap(m);
+
+        if(dailyList.firstWhereSafe((element) => element.date == msg.date) == null) {
+          dailyList.add(msg);
+        }
       }
 
       prepareCards();
       assistCtr.clearStates();
       assistCtr.updateHead();
 
-      if(AppCache.timeoutCache.addTimeout(Keys.setting$textOfDayGetPreMonth, Duration(minutes: 5))){
+      if(AppCache.timeoutCache.addTimeout(Keys.setting$textOfDayGetPreMonth, Duration(minutes: 2))){
         var now = GregorianDate();
         now.changeTime(0, 0, 0, 0);
         final pre = now.addMonth(-1);
