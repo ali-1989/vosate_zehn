@@ -67,7 +67,6 @@
     <uses-permission android:name="com.sec.android.provider.badge.permission.READ"/>
     <uses-permission android:name="com.sec.android.provider.badge.permission.WRITE"/>
     <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE"/>
-    <uses-permission android:name="android.permission.RECEIVE_WAP_PUSH"/>
 
     <!-- ..........................  uses-permission Location -->
     <!--
@@ -82,6 +81,7 @@
     <uses-permission android:name="android.permission.MANAGE_OWN_CALLS"/>
     <uses-permission android:name="android.permission.NEW_OUTGOING_CALL"/>
     <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
+    <uses-permission android:name="android.permission.RECEIVE_WAP_PUSH"/>
     -->
 
     <!-- ..........................  others -->
