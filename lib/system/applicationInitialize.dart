@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:app/managers/systemParameterManager.dart';
-import 'package:app/structures/enums/appEvents.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:iris_notifier/iris_notifier.dart';
 
+import 'package:iris_notifier/iris_notifier.dart';
 import 'package:iris_tools/api/logger/logger.dart';
 import 'package:iris_tools/api/logger/reporter.dart';
 import 'package:iris_tools/net/netManager.dart';
@@ -16,6 +14,7 @@ import 'package:app/constants.dart';
 import 'package:app/managers/advertisingManager.dart';
 import 'package:app/managers/mediaManager.dart';
 import 'package:app/managers/settingsManager.dart';
+import 'package:app/managers/systemParameterManager.dart';
 import 'package:app/managers/versionManager.dart';
 import 'package:app/services/aidService.dart';
 import 'package:app/services/cron_task.dart';
@@ -23,6 +22,7 @@ import 'package:app/services/download_upload_service.dart';
 import 'package:app/services/firebase_service.dart';
 import 'package:app/services/login_service.dart';
 import 'package:app/services/websocket_service.dart';
+import 'package:app/structures/enums/appEvents.dart';
 import 'package:app/system/applicationLifeCycle.dart';
 import 'package:app/system/publicAccess.dart';
 import 'package:app/tools/app/appCache.dart';
@@ -31,10 +31,10 @@ import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appLocale.dart';
 import 'package:app/tools/app/appNotification.dart';
-import 'package:app/tools/routeTools.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/deviceInfoTools.dart';
 import 'package:app/tools/netListenerTools.dart';
+import 'package:app/tools/routeTools.dart';
 
 class ApplicationInitial {
   ApplicationInitial._();

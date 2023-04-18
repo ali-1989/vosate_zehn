@@ -1,12 +1,11 @@
-import 'package:app/structures/enums/appEvents.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:iris_notifier/iris_notifier.dart';
 
 import 'package:app/managers/advertisingManager.dart';
 import 'package:app/managers/systemParameterManager.dart';
-
+import 'package:app/structures/enums/appEvents.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appCache.dart';
-import 'package:iris_notifier/iris_notifier.dart';
 
 class NetListenerTools {
   NetListenerTools._();

@@ -1,10 +1,9 @@
 import 'dart:io';
 
-import 'package:app/structures/enums/appEvents.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:iris_notifier/iris_notifier.dart';
 
+import 'package:iris_notifier/iris_notifier.dart';
 import 'package:iris_tools/api/helpers/colorHelper.dart';
 import 'package:iris_tools/api/helpers/fileHelper.dart';
 import 'package:iris_tools/api/helpers/mathHelper.dart';
@@ -20,6 +19,7 @@ import 'package:app/pages/sentences_page.dart';
 import 'package:app/services/aidService.dart';
 import 'package:app/services/download_upload_service.dart';
 import 'package:app/services/login_service.dart';
+import 'package:app/structures/enums/appEvents.dart';
 import 'package:app/structures/enums/enums.dart';
 import 'package:app/structures/models/userModel.dart';
 import 'package:app/system/extensions.dart';
@@ -30,8 +30,8 @@ import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/app/appIcons.dart';
 import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appMessages.dart';
-import 'package:app/tools/routeTools.dart';
 import 'package:app/tools/app/appSizes.dart';
+import 'package:app/tools/routeTools.dart';
 
 class DrawerMenuBuilder {
   DrawerMenuBuilder._();

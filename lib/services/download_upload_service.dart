@@ -1,10 +1,10 @@
-import 'package:app/structures/enums/appEvents.dart';
 import 'package:iris_download_manager/downloadManager/downloadManager.dart';
 import 'package:iris_download_manager/uploadManager/uploadManager.dart';
 import 'package:iris_notifier/iris_notifier.dart';
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
 
 import 'package:app/constants.dart';
+import 'package:app/structures/enums/appEvents.dart';
 
 class DownloadUploadService {
   DownloadUploadService._();

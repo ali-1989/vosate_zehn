@@ -1,4 +1,3 @@
-import 'package:app/structures/enums/appEvents.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -7,6 +6,7 @@ import 'package:iris_notifier/iris_notifier.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
 
 import 'package:app/managers/settingsManager.dart';
+import 'package:app/structures/enums/appEvents.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/appDb.dart';
 import 'package:app/tools/app/appNotification.dart';

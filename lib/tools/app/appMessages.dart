@@ -1,7 +1,7 @@
-import 'package:app/tools/routeTools.dart';
 import 'package:flutter/material.dart';
 
 import 'package:app/system/extensions.dart';
+import 'package:app/tools/routeTools.dart';
 
 class AppMessages {
   AppMessages._();

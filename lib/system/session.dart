@@ -1,9 +1,9 @@
-import 'package:app/structures/enums/appEvents.dart';
 import 'package:iris_db/iris_db.dart';
 import 'package:iris_notifier/iris_notifier.dart';
 import 'package:iris_tools/api/checker.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
 
+import 'package:app/structures/enums/appEvents.dart';
 import 'package:app/structures/enums/userType.dart';
 import 'package:app/structures/models/userModel.dart';
 import 'package:app/tools/app/appDb.dart';

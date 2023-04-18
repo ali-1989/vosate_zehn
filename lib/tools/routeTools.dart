@@ -1,8 +1,13 @@
+import 'package:flutter/material.dart';
+
+import 'package:iris_route/iris_route.dart';
+
 import 'package:app/pages/about_us_page.dart';
 import 'package:app/pages/aid_page.dart';
 import 'package:app/pages/contact_us_page.dart';
 import 'package:app/pages/e404_page.dart';
 import 'package:app/pages/favorites_page.dart';
+import 'package:app/pages/home_page.dart';
 import 'package:app/pages/image_full_screen.dart';
 import 'package:app/pages/last_seen_page.dart';
 import 'package:app/pages/layout_page.dart';
@@ -15,11 +20,8 @@ import 'package:app/pages/login/login_page.dart';
 import 'package:app/pages/login/register_page.dart';
 import 'package:app/pages/pay_web_page.dart';
 import 'package:app/pages/profile/profile_page.dart';
-import 'package:app/pages/home_page.dart';
 import 'package:app/pages/term_page.dart';
-import 'package:flutter/material.dart';
 import 'package:app/tools/app/appNavigator.dart';
-import 'package:iris_route/iris_route.dart';
 
 class RouteTools {
   static BuildContext? materialContext;

@@ -1,13 +1,12 @@
 import 'dart:typed_data';
 
-import 'package:app/tools/app/appColors.dart';
-
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:iris_tools/api/generator.dart';
 
 import 'package:app/constants.dart';
 import 'package:app/structures/models/statusBarNotificationModel.dart';
 import 'package:app/system/keys.dart';
+import 'package:app/tools/app/appColors.dart';
 import 'package:app/tools/app/appDb.dart';
 
 // icon generator:

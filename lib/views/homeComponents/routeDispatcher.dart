@@ -5,7 +5,6 @@ import 'package:app/pages/login/login_page.dart';
 import 'package:app/system/session.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 
-
 class RouteDispatcher {
   RouteDispatcher._();
 

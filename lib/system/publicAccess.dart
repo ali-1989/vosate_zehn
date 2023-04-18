@@ -20,8 +20,8 @@ import 'package:app/structures/models/upperLower.dart';
 import 'package:app/structures/models/userModel.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/session.dart';
-import 'package:app/tools/routeTools.dart';
 import 'package:app/tools/deviceInfoTools.dart';
+import 'package:app/tools/routeTools.dart';
 
 class PublicAccess {
   PublicAccess._();

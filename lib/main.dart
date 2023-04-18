@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:app/services/firebase_service.dart';
-import 'package:app/tools/routeTools.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +11,7 @@ import 'package:iris_tools/widgets/maxWidth.dart';
 
 import 'package:app/constants.dart';
 import 'package:app/managers/settingsManager.dart';
+import 'package:app/services/firebase_service.dart';
 import 'package:app/services/native_call_service.dart';
 import 'package:app/structures/models/settingsModel.dart';
 import 'package:app/system/applicationInitialize.dart';
@@ -22,6 +21,7 @@ import 'package:app/tools/app/appLocale.dart';
 import 'package:app/tools/app/appSizes.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/app/appToast.dart';
+import 'package:app/tools/routeTools.dart';
 import 'package:app/views/homeComponents/splashPage.dart';
 
 ///================ call on any hot restart
