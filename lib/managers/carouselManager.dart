@@ -19,7 +19,7 @@ import 'package:app/structures/models/advModel.dart';
 import 'package:app/structures/models/subBuketModel.dart';
 import 'package:app/tools/app/appDialogIris.dart';
 import 'package:app/tools/app/appDirectories.dart';
-import 'package:app/tools/app/appRoute.dart';
+import 'package:app/tools/routeTools.dart';
 
 class CarouselManager {
   CarouselManager._();
@@ -134,7 +134,7 @@ class CarouselManager {
     }
 
     else if(itm.type == 'text'){
-      AppDialogIris.instance.showIrisDialog(AppRoute.getLastContext()!,
+      AppDialogIris.instance.showIrisDialog(RouteTools.getTopContext()!,
           desc: itm.clickUrl!,
         yesText: 'بله'
       );
@@ -149,7 +149,7 @@ class CarouselManager {
       inject.srcAddress = itm.mediaModel!.url!;
       inject.videoSourceType = VideoSourceType.network;
 
-      AppRoute.pushPage(AppRoute.getLastContext()!, VideoPlayerPage(injectData: inject));
+      RouteTools.pushPage(RouteTools.getTopContext()!, VideoPlayerPage(injectData: inject));
       return;
     }
 
@@ -160,7 +160,7 @@ class CarouselManager {
       inject.title = '';//bucketModel?.title;
       inject.subTitle = itm.title;
 
-      AppRoute.pushPage(AppRoute.getLastContext()!, AudioPlayerPage(injectData: inject));
+      RouteTools.pushPage(RouteTools.getTopContext()!, AudioPlayerPage(injectData: inject));
       return;
     }
 
@@ -168,7 +168,7 @@ class CarouselManager {
       final inject = ContentViewPageInjectData();
       inject.subBucket = itm;
 
-      AppRoute.pushPage(AppRoute.getLastContext()!, ContentViewPage(injectData: inject));
+      RouteTools.pushPage(RouteTools.getTopContext()!, ContentViewPage(injectData: inject));
       return;
     }
   }

@@ -14,7 +14,7 @@ import 'package:app/structures/abstract/stateBase.dart';
 import 'package:app/structures/enums/enums.dart';
 import 'package:app/tools/app/appIcons.dart';
 import 'package:app/tools/app/appMessages.dart';
-import 'package:app/tools/app/appRoute.dart';
+import 'package:app/tools/routeTools.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/views/homeComponents/appBarBuilder.dart';
 import 'package:app/views/homeComponents/drawerMenuBuilder.dart';
@@ -113,7 +113,7 @@ class LayoutPageState extends StateBase<LayoutPage> {
 
         IconButton(
             onPressed: (){
-              AppRoute.pushPage(context, SearchPage());
+              RouteTools.pushPage(context, SearchPage());
             },
             icon: Icon(AppIcons.search)
         ),

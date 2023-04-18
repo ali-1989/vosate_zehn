@@ -35,7 +35,7 @@ class SettingsManager {
 	}
 
 	static void notify({BuildContext? context}){
-		//context ??= AppRoute.getContext();
+		//context ??= RouteTools.getContext();
 		Future((){
 			for(final fun in _settingsChangeListeners){
 				try{

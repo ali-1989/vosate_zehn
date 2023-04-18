@@ -10,7 +10,7 @@ import 'package:material_dialogs/widgets/dialogs/dialog_widget.dart';
 
 import 'package:app/tools/app/appIcons.dart';
 import 'package:app/tools/app/appMessages.dart';
-import 'package:app/tools/app/appRoute.dart';
+import 'package:app/tools/routeTools.dart';
 import 'package:app/tools/app/appSizes.dart';
 import 'package:app/tools/app/appThemes.dart';
 import '/system/extensions.dart';
@@ -130,7 +130,7 @@ class AppSheet {
     final theme = _genTheme();
 
     void close() {
-      AppRoute.popTopView(context: context);
+      RouteTools.popTopView(context: context);
       fn?.call();
     }
 
@@ -194,12 +194,12 @@ class AppSheet {
     final theme = _genTheme();
 
     void posClose() {
-      AppRoute.popTopView(context: context);
+      RouteTools.popTopView(context: context);
       posFn?.call();
     }
 
     void negClose() {
-      AppRoute.popTopView(context: context);
+      RouteTools.popTopView(context: context);
       negFn?.call();
     }
 
@@ -438,7 +438,7 @@ class AppSheet {
                         materialColor: AppThemes.instance.currentTheme.primaryColor.withAlpha(70),
                         padding: const EdgeInsets.all(4),
                         onTapDelay: () {
-                          AppRoute.popTopView(context: context);
+                          RouteTools.popTopView(context: context);
                         }
                     ),
                 ],
@@ -570,7 +570,7 @@ final items = <Map>[];
       'icon': IconList.delete,
       'fn': (){
         yesFn(){
-        AppRoute.pop();
+        RouteTools.pop();
           deleteFood();
         }
 

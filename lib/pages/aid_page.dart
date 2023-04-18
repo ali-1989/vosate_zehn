@@ -157,12 +157,12 @@ class _AidPageState extends StateBase<AidPage> {
   }
 
   void onPayIranCall() async {
-    //AppRoute.pushNamed(context, PayWebPage.route.name!, extra: 'https://zarinp.al/vosatezehn.ir');
+    //RouteTools.pushNamed(context, PayWebPage.route.name!, extra: 'https://zarinp.al/vosatezehn.ir');
     UrlHelper.launchLink('https://zarinp.al/vosatezehn.ir', mode: LaunchMode.externalApplication);
   }
 
   void onPayPalCall() async {
-    //AppRoute.pushNamed(context, PayWebPage.route.name!, extra: 'https://www.paypal.com/donate/?hosted_button_id=K75F6ZADA3YCW');
+    //RouteTools.pushNamed(context, PayWebPage.route.name!, extra: 'https://www.paypal.com/donate/?hosted_button_id=K75F6ZADA3YCW');
     UrlHelper.launchLink('https://www.paypal.com/donate/?hosted_button_id=K75F6ZADA3YCW', mode: LaunchMode.externalApplication);
   }
 }

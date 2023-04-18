@@ -15,7 +15,7 @@ import 'package:app/system/session.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appHttpDio.dart';
 import 'package:app/tools/app/appMessages.dart';
-import 'package:app/tools/app/appRoute.dart';
+import 'package:app/tools/routeTools.dart';
 import 'package:app/tools/app/appSheet.dart';
 import 'package:app/tools/app/appToast.dart';
 import 'package:app/tools/deviceInfoTools.dart';
@@ -63,7 +63,7 @@ class LoginService {
         await google.signOut();
 
         if(await google.isSignIn()){
-          AppToast.showToast(AppRoute.getLastContext()!, AppMessages.inEmailSignOutError);
+          AppToast.showToast(RouteTools.getTopContext()!, AppMessages.inEmailSignOutError);
           return;
         }
 
@@ -76,8 +76,8 @@ class LoginService {
       AppBroadcast.drawerMenuRefresher.update();
       AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
 
-      if (isCurrent && AppRoute.materialContext != null) {
-        AppRoute.backToRoot(AppRoute.getLastContext()!);
+      if (isCurrent && RouteTools.materialContext != null) {
+        RouteTools.backToRoot(RouteTools.getTopContext()!);
 
         Future.delayed(Duration(milliseconds: 400), (){
           AppBroadcast.reBuildMaterial();
@@ -103,12 +103,12 @@ class LoginService {
     AppBroadcast.drawerMenuRefresher.update();
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
 
-    if (AppRoute.materialContext != null) {
-      AppRoute.backToRoot(AppRoute.getLastContext()!);
+    if (RouteTools.materialContext != null) {
+      RouteTools.backToRoot(RouteTools.getTopContext()!);
 
       Future.delayed(Duration(milliseconds: 400), (){
         AppBroadcast.reBuildMaterial();
-        //AppRoute.pushReplacePage(AppRoute.getLastContext()!, LoginPage());
+        //RouteTools.pushReplacePage(RouteTools.getTopContext()!, LoginPage());
       });
     }
   }

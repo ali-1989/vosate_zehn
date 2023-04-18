@@ -16,7 +16,7 @@ import 'package:app/system/publicAccess.dart';
 import 'package:app/system/session.dart';
 import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/app/appImages.dart';
-import 'package:app/tools/app/appRoute.dart';
+import 'package:app/tools/routeTools.dart';
 import 'package:app/tools/searchFilterTool.dart';
 import 'package:app/views/states/emptyData.dart';
 import 'package:app/views/states/errorOccur.dart';
@@ -177,7 +177,7 @@ class _BucketPageState extends StateBase<BucketPage> {
   }
 
   void onItemClick(BucketModel itm) {
-    AppRoute.pushPage(context, SubBucketPage(injectData: SubBucketPageInjectData()..bucketModel = itm));
+    RouteTools.pushPage(context, SubBucketPage(injectData: SubBucketPageInjectData()..bucketModel = itm));
   }
 
   void requestData() async {

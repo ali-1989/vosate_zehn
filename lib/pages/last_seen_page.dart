@@ -17,7 +17,7 @@ import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/app/appIcons.dart';
 import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appMessages.dart';
-import 'package:app/tools/app/appRoute.dart';
+import 'package:app/tools/routeTools.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/app/appToast.dart';
 import 'package:app/views/homeComponents/appBarBuilder.dart';
@@ -233,7 +233,7 @@ class _LastSeenPageState extends StateBase<LastSeenPage> {
       inject.srcAddress = itm.mediaModel!.url!;
       inject.videoSourceType = VideoSourceType.network;
 
-      AppRoute.pushPage(context, VideoPlayerPage(injectData: inject));
+      RouteTools.pushPage(context, VideoPlayerPage(injectData: inject));
       return;
     }
 
@@ -244,7 +244,7 @@ class _LastSeenPageState extends StateBase<LastSeenPage> {
       inject.title = '';//widget.injectData.level1model?.title;
       inject.subTitle = itm.title;
 
-      AppRoute.pushPage(context, AudioPlayerPage(injectData: inject));
+      RouteTools.pushPage(context, AudioPlayerPage(injectData: inject));
       return;
     }
 
@@ -252,7 +252,7 @@ class _LastSeenPageState extends StateBase<LastSeenPage> {
       final inject = ContentViewPageInjectData();
       inject.subBucket = itm;
 
-      AppRoute.pushPage(context, ContentViewPage(injectData: inject));
+      RouteTools.pushPage(context, ContentViewPage(injectData: inject));
       return;
     }
   }

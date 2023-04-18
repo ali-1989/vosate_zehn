@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:app/system/httpCodes.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 
@@ -23,7 +24,7 @@ import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appLoading.dart';
 import 'package:app/tools/app/appMessages.dart';
-import 'package:app/tools/app/appRoute.dart';
+import 'package:app/tools/routeTools.dart';
 import 'package:app/tools/app/appSheet.dart';
 import 'package:app/tools/app/appSnack.dart';
 import 'package:app/tools/app/appThemes.dart';
@@ -301,7 +302,7 @@ class _LoginPageState extends StateBase<LoginPage> {
     AppLoading.instance.showWaiting(context);
     GoogleSignInAccount? googleResult;
 
-    final timer = Timer(Duration(seconds: 60), (){
+    final timer = Timer(Duration(seconds: kIsWeb? 300: 60), (){
       AppLoading.instance.hideLoading(context);
       AppSheet.showSheet$OperationFailed(context);
       return;
@@ -348,13 +349,13 @@ class _LoginPageState extends StateBase<LoginPage> {
             final injectData = RegisterPageInjectData();
             injectData.email = googleResult.email;
 
-            AppRoute.pushPage(context, RegisterPage(injectData: injectData));
+            RouteTools.pushPage(context, RegisterPage(injectData: injectData));
           }
           else {
             final userModel = await Session.login$newProfileData(twoState.result1!);
 
             if(userModel != null) {
-              //AppRoute.pushPage(context, LayoutPage(key: AppBroadcast.layoutPageKey));
+              //RouteTools.pushPage(context, LayoutPage(key: AppBroadcast.layoutPageKey));
               AppBroadcast.reBuildMaterial();
             }
             else {
@@ -389,7 +390,7 @@ class _LoginPageState extends StateBase<LoginPage> {
   }
 
   void onTapCountryArrow() async {
-    final value = await AppRoute.pushPage(context, CountrySelectScreen());
+    final value = await RouteTools.pushPage(context, CountrySelectScreen());
 
     if(value is CountryModel){
       countryModel = value;
@@ -398,7 +399,7 @@ class _LoginPageState extends StateBase<LoginPage> {
   }
 
   void gotoTermPage(){
-    AppRoute.pushPage(context, TermPage());
+    RouteTools.pushPage(context, TermPage());
   }
 
   void onSendClick(){
@@ -474,13 +475,13 @@ class _LoginPageState extends StateBase<LoginPage> {
         final userId = twoState.result1![Keys.userId];
 
         if (userId == null) {
-          AppRoute.pushPage(context, RegisterPage(injectData: injectData));
+          RouteTools.pushPage(context, RegisterPage(injectData: injectData));
         }
         else {
           final userModel = await Session.login$newProfileData(twoState.result1!);
 
           if(userModel != null) {
-            //AppRoute.pushPage(context, LayoutPage(key: AppBroadcast.layoutPageKey));
+            //RouteTools.pushPage(context, LayoutPage(key: AppBroadcast.layoutPageKey));
             AppBroadcast.reBuildMaterial();
           }
           else {

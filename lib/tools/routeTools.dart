@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 import 'package:app/pages/about_us_page.dart';
 import 'package:app/pages/aid_page.dart';
 import 'package:app/pages/contact_us_page.dart';
@@ -17,67 +15,75 @@ import 'package:app/pages/login/login_page.dart';
 import 'package:app/pages/login/register_page.dart';
 import 'package:app/pages/pay_web_page.dart';
 import 'package:app/pages/profile/profile_page.dart';
+import 'package:app/pages/home_page.dart';
 import 'package:app/pages/term_page.dart';
-import 'package:app/system/keys.dart';
-import 'package:app/tools/app/appDb.dart';
+import 'package:flutter/material.dart';
 import 'package:app/tools/app/appNavigator.dart';
+import 'package:iris_route/iris_route.dart';
 
-import 'package:app/tools/app/appRouteNoneWeb.dart'
- if (dart.library.html) 'package:app/tools/app/appRouteWeb.dart' as web;
-
-class AppRoute {
+class RouteTools {
   static BuildContext? materialContext;
-  static bool _isInit = false;
 
-  static final Map<Type, String?> webRoutes = {};
+  RouteTools._();
 
-  AppRoute._();
+  static prepareWebRoute(){
+    final aboutPage = WebRoute.by((ProfilePage).toString(), ProfilePage());
+    final homePage = WebRoute.by((HomePage).toString(), HomePage());
+    final supportPage = WebRoute.by((LoginPage).toString(), LoginPage());
+    final walletPage = WebRoute.by((LayoutPage).toString(), LayoutPage());
+    final aboutUsPage = WebRoute.by((AboutUsPage).toString(), AboutUsPage());
+    final aidPage = WebRoute.by((AidPage).toString(), AidPage());
+    final contactUsPage = WebRoute.by((ContactUsPage).toString(), ContactUsPage());
+    final favoritesPage = WebRoute.by((FavoritesPage).toString(), FavoritesPage());
+    final lastSeenPage = WebRoute.by((LastSeenPage).toString(), LastSeenPage());
+    //final payWebPage = WebRoute.by((PayWebPage).toString(), PayWebPage());
+    final termPage = WebRoute.by((TermPage).toString(), TermPage());
+    final e404Page = WebRoute.by((E404Page).toString(), E404Page());
+    //final imageFullScreen = WebRoute.by((ImageFullScreen).toString(), ImageFullScreen());
+    //final videoPlayerPage = WebRoute.by((VideoPlayerPage).toString(), VideoPlayerPage());
+    //final contentViewPage = WebRoute.by((ContentViewPage).toString(), ContentViewPage());
+    //final bucketPage = WebRoute.by((BucketPage).toString(), BucketPage());
+    //final subBucketPage = WebRoute.by((SubBucketPage).toString(), SubBucketPage());
+    //final registerPage = WebRoute.by((RegisterPage).toString(), RegisterPage());
+    //final audioPlayerPage = WebRoute.by((AudioPlayerPage).toString(), AudioPlayerPage());
 
-  static void init() {
-    if(_isInit){
-      return;
-    }
+    //final registerFormPage = WebRoute.by((RegisterFormPage).toString(), RegisterFormPage());
+    //final profilePage = WebRoute.by((ProfilePage).toString(), ProfilePage());
 
-    webRoutes[ProfilePage] = null;
-    webRoutes[LoginPage] = null;
-    webRoutes[LayoutPage] = null;
-    webRoutes[RegisterPage] = null;
-    webRoutes[AudioPlayerPage] = null;
-    webRoutes[SubBucketPage] = null;
-    webRoutes[BucketPage] = null;
-    webRoutes[ContentViewPage] = null;
-    webRoutes[VideoPlayerPage] = null;
-    webRoutes[AboutUsPage] = null;
-    webRoutes[AidPage] = null;
-    webRoutes[ContactUsPage] = null;
-    webRoutes[E404Page] = null;
-    webRoutes[FavoritesPage] = null;
-    webRoutes[ImageFullScreen] = null;
-    webRoutes[LastSeenPage] = null;
-    webRoutes[PayWebPage] = null;
-    webRoutes[TermPage] = null;
+    IrisNavigatorObserver.webRoutes.add(aboutPage);
+    IrisNavigatorObserver.webRoutes.add(homePage);
+    IrisNavigatorObserver.webRoutes.add(supportPage);
+    IrisNavigatorObserver.webRoutes.add(walletPage);
+    IrisNavigatorObserver.webRoutes.add(aboutUsPage);
+    IrisNavigatorObserver.webRoutes.add(aidPage);
+    IrisNavigatorObserver.webRoutes.add(contactUsPage);
+    IrisNavigatorObserver.webRoutes.add(favoritesPage);
+    IrisNavigatorObserver.webRoutes.add(lastSeenPage);
+    IrisNavigatorObserver.webRoutes.add(termPage);
+    IrisNavigatorObserver.webRoutes.add(e404Page);
+    //IrisNavigatorObserver.webRoutes.add(registerPage);
+    //IrisNavigatorObserver.webRoutes.add(audioPlayerPage);
 
-    _isInit = true;
+    IrisNavigatorObserver.homeName = homePage.routeName;
   }
 
-  static BuildContext? getLastContext() {
+  static BuildContext? getTopContext() {
     var res = WidgetsBinding.instance.focusManager.rootScope.focusedChild?.context;//deep: 50,66
 
     Navigator? nav1 = res?.findAncestorWidgetOfExactType();
 
     if(res == null || nav1 == null) {
-      //res = WidgetsBinding.instance.focusManager.primaryFocus?.context; //deep: 71
-      res = WidgetsBinding.instance.focusManager.rootScope.context;
+      res = AppNavigator.getTopBuildContext();//WidgetsBinding.instance.focusManager.rootScope.context;
     }
 
     return res?? getBaseContext();
   }
 
   static BuildContext? getBaseContext() {
-    return materialContext;
+    return materialContext?? AppNavigator.getDeepBuildContext();
   }
 
-  static Future<bool> saveRouteName(String routeName) async {
+  /*static Future<bool> saveRouteName(String routeName) async {
     final int res = await AppDB.setReplaceKv(Keys.setting$lastRouteName, routeName);
 
     return res > 0;
@@ -85,16 +91,14 @@ class AppRoute {
 
   static String? fetchLastRouteName() {
     return AppDB.fetchKv(Keys.setting$lastRouteName);
-  }
+  }*/
   ///------------------------------------------------------------
   static void backRoute() {
-    final lastCtx = AppNavigator.getLastRouteContext(getLastContext()!);
+    final lastCtx = getTopContext()!;
     AppNavigator.backRoute(lastCtx);
   }
 
   static void backToRoot(BuildContext context) {
-    //AppNavigator.popRoutesUntilRoot(AppRoute.getContext());
-
     while(canPop(context)){
       popTopView(context: context);
     }
@@ -104,15 +108,10 @@ class AppRoute {
     return AppNavigator.canPop(context);
   }
 
+  /// popPage
   static void popTopView({BuildContext? context, dynamic data}) {
-    if(canPop(context?? getLastContext()!)) {
-      AppNavigator.pop(context?? getLastContext()!, result: data);
-    }
-  }
-
-  static void popPage(BuildContext context, {dynamic data}) {
-    if(canPop(context)) {
-      AppNavigator.pop(context, result: data);
+    if(canPop(context?? getTopContext()!)) {
+      AppNavigator.pop(context?? getTopContext()!, result: data);
     }
   }
 
@@ -136,7 +135,6 @@ class AppRoute {
         settings: RouteSettings(name: n, arguments: args)
     );
 
-    web.changeAddressBar(n);
     return Navigator.of(context).push(r);
   }
 
@@ -148,7 +146,6 @@ class AppRoute {
         settings: RouteSettings(name: n, arguments: args)
     );
 
-    web.changeAddressBar(n);
     return Navigator.of(context).pushReplacement(r);
   }
 }

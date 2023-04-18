@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:app/managers/systemParameterManager.dart';
+import 'package:app/structures/enums/appEvents.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:iris_notifier/iris_notifier.dart';
 
 import 'package:iris_tools/api/logger/logger.dart';
 import 'package:iris_tools/api/logger/reporter.dart';
@@ -17,7 +20,6 @@ import 'package:app/managers/versionManager.dart';
 import 'package:app/services/aidService.dart';
 import 'package:app/services/cron_task.dart';
 import 'package:app/services/download_upload_service.dart';
-import 'package:app/services/event_dispatcher_service.dart';
 import 'package:app/services/firebase_service.dart';
 import 'package:app/services/login_service.dart';
 import 'package:app/services/websocket_service.dart';
@@ -29,7 +31,7 @@ import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appLocale.dart';
 import 'package:app/tools/app/appNotification.dart';
-import 'package:app/tools/app/appRoute.dart';
+import 'package:app/tools/routeTools.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/deviceInfoTools.dart';
 import 'package:app/tools/netListenerTools.dart';
@@ -103,7 +105,7 @@ class ApplicationInitial {
   }
 
   static Future<void> inSplashInitWithContext(BuildContext context) async {
-    AppRoute.init();
+    RouteTools.prepareWebRoute();
     AppCache.screenBack = const AssetImage(AppImages.background);
     await precacheImage(AppCache.screenBack!, context);
   }
@@ -147,8 +149,8 @@ class ApplicationInitial {
       DownloadUploadService.init();
 
       /// login & logoff
-      EventDispatcherService.attachFunction(EventDispatcher.userLogin, LoginService.onLoginObservable);
-      EventDispatcherService.attachFunction(EventDispatcher.userLogoff, LoginService.onLogoffObservable);
+      EventNotifierService.addListener(AppEvents.userLogin, LoginService.onLoginObservable);
+      EventNotifierService.addListener(AppEvents.userLogoff, LoginService.onLogoffObservable);
 
       /*if (System.isWeb()) {
         void onSizeCheng(oldW, oldH, newW, newH) {
@@ -158,26 +160,25 @@ class ApplicationInitial {
         AppSizes.instance.addMetricListener(onSizeCheng);
       }*/
 
-      EventDispatcherService.attachFunction(EventDispatcher.firebaseTokenReceived, ({data}) {
+      SystemParameterManager.requestParameters();
+      MediaManager.loadAllRecords();
+      AdvertisingManager.init();
+      AdvertisingManager.check();
+
+      if(RouteTools.materialContext != null) {
+        AidService.checkShowDialog();
+        VersionManager.checkAppHasNewVersion(RouteTools.getTopContext()!);
+      }
+
+      EventNotifierService.addListener(AppEvents.firebaseTokenReceived, ({data}) {
         FireBaseService.subscribeToTopic(PublicAccess.fcmTopic);
       });
-
-      MediaManager.loadAllRecords();
-
-      if(AppRoute.materialContext != null) {
-        AdvertisingManager.init();
-        AidService.checkShowDialog();
-
-        VersionManager.checkAppHasNewVersion(AppRoute.getLastContext()!);
-      }
 
       await FireBaseService.prepare();
 
       Future.delayed(Duration(seconds: 3), (){
         FireBaseService.getToken();
       });
-
-      //DailyTextService.checkShowDialog();
     }
     catch (e){
       _callLazyInit = false;

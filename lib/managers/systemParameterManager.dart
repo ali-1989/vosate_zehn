@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:app/structures/middleWares/requester.dart';
 import 'package:app/structures/models/systemParameterModel.dart';
 import 'package:app/system/keys.dart';
+import 'package:app/tools/app/appCache.dart';
 
 class SystemParameterManager {
   static SystemParameterModel systemParameters = SystemParameterModel();
@@ -10,6 +11,10 @@ class SystemParameterManager {
   SystemParameterManager._();
 
   static Future<SystemParameterModel?> requestParameters() async {
+    if(!AppCache.canCallMethodAgain('requestParameters')){
+      return systemParameters;
+    }
+
     final res = Completer<SystemParameterModel?>();
     final requester = Requester();
 

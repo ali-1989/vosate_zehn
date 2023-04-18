@@ -1,30 +1,30 @@
+import 'package:app/structures/enums/appEvents.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
 import 'package:app/managers/advertisingManager.dart';
 import 'package:app/managers/systemParameterManager.dart';
-import 'package:app/services/event_dispatcher_service.dart';
-import 'package:app/system/session.dart';
+
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appCache.dart';
+import 'package:iris_notifier/iris_notifier.dart';
 
 class NetListenerTools {
   NetListenerTools._();
 
-  /// this fn call on app launch: if (wifi/cell data) is on.
+  /// this fn call on app launch: if (wifi/cell data) is on. on Web not call
   static void onNetListener(ConnectivityResult connectivityResult) async {
-    EventDispatcherService.notify(EventDispatcher.networkStateChange);
+    EventNotifierService.notify(AppEvents.networkStateChange);
 
     if(connectivityResult != ConnectivityResult.none) {
       AppBroadcast.isNetConnected = true;
-      EventDispatcherService.notify(EventDispatcher.networkConnected);
+      EventNotifierService.notify(AppEvents.networkConnected);
       //await ServerTimeTools.requestUtcTimeOfServer();
       SystemParameterManager.requestParameters();
       AdvertisingManager.check();
-
     }
     else {
       AppBroadcast.isNetConnected = false;
-      EventDispatcherService.notify(EventDispatcher.networkDisConnected);
+      EventNotifierService.notify(AppEvents.networkDisConnected);
 
       AppCache.clearDownloading();
     }
@@ -32,12 +32,12 @@ class NetListenerTools {
 
   static void onWsConnectedListener(){
     AppBroadcast.isWsConnected = true;
-    EventDispatcherService.notify(EventDispatcher.webSocketStateChange);
-    EventDispatcherService.notify(EventDispatcher.webSocketConnected);
+    EventNotifierService.notify(AppEvents.webSocketStateChange);
+    EventNotifierService.notify(AppEvents.webSocketConnected);
   }
 
   static void onWsDisConnectedListener(){
     AppBroadcast.isWsConnected = false;
-    EventDispatcherService.notify(EventDispatcher.webSocketDisConnected);
+    EventNotifierService.notify(AppEvents.webSocketDisConnected);
   }
 }

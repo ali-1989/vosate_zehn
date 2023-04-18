@@ -11,7 +11,7 @@ import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appDb.dart';
 import 'package:app/tools/app/appDialogIris.dart';
 import 'package:app/tools/app/appMessages.dart';
-import 'package:app/tools/app/appRoute.dart';
+import 'package:app/tools/routeTools.dart';
 import 'package:app/tools/app/appThemes.dart';
 
 class AidService {
@@ -19,11 +19,11 @@ class AidService {
 
   static void gotoAidPage(){
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    AppRoute.pushPage(AppRoute.getLastContext()!, AidPage());
+    RouteTools.pushPage(RouteTools.getTopContext()!, AidPage());
   }
 
   static Future<bool> gotoZarinpalPage() async {
-    AppRoute.pushPage(AppRoute.getLastContext()!, PayWebPage(url: 'https://zarinp.al/vosatezehn.ir'));
+    RouteTools.pushPage(RouteTools.getTopContext()!, PayWebPage(url: 'https://zarinp.al/vosatezehn.ir'));
     return false;
   }
 
@@ -46,7 +46,7 @@ class AidService {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
                   onPressed: (){
-                    AppRoute.popTopView();
+                    RouteTools.popTopView();
                     gotoZarinpalPage();
                   },
                   child: Text(AppMessages.aid)
@@ -56,7 +56,7 @@ class AidService {
             SizedBox(width: 30),
             TextButton(
                 onPressed: (){
-                  AppRoute.popTopView();
+                  RouteTools.popTopView();
                 },
                 child: Text(AppMessages.later)
             )
@@ -66,7 +66,7 @@ class AidService {
     );
 
     AppDialogIris.instance.showIrisDialog(
-        AppRoute.getLastContext()!,
+        RouteTools.getTopContext()!,
        title: AppMessages.aidUs,
       yesFn: gotoZarinpalPage,
       //desc: msg,
@@ -77,7 +77,7 @@ class AidService {
   }
 
   static void checkShowDialog() async {
-    await Future.delayed(Duration(seconds: 20), (){});
+    await Future.delayed(Duration(seconds: 15), (){});
 
     if(!Session.hasAnyLogin()){
       return;

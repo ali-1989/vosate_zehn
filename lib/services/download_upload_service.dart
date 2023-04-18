@@ -1,9 +1,10 @@
+import 'package:app/structures/enums/appEvents.dart';
 import 'package:iris_download_manager/downloadManager/downloadManager.dart';
 import 'package:iris_download_manager/uploadManager/uploadManager.dart';
+import 'package:iris_notifier/iris_notifier.dart';
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
 
 import 'package:app/constants.dart';
-import 'package:app/services/event_dispatcher_service.dart';
 
 class DownloadUploadService {
   DownloadUploadService._();
@@ -22,7 +23,7 @@ class DownloadUploadService {
   static void commonDownloadListener(DownloadItem di) async {
     if(di.isComplete()) {
       if(di.isInCategory(DownloadCategory.userProfile)){
-        EventDispatcherService.notify(EventDispatcher.userProfileChange);
+        EventNotifierService.notify(AppEvents.userProfileChange);
       }
     }
   }

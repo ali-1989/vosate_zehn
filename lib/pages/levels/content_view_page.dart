@@ -1,3 +1,4 @@
+import 'package:app/structures/enums/appAssistKeys.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/modules/stateManagers/assist.dart';
@@ -21,7 +22,7 @@ import 'package:app/system/session.dart';
 import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appMessages.dart';
-import 'package:app/tools/app/appRoute.dart';
+import 'package:app/tools/routeTools.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/app/appToast.dart';
 import 'package:app/views/homeComponents/appBarBuilder.dart';
@@ -72,6 +73,7 @@ class _LevelPageState extends StateBase<ContentViewPage> {
   Widget build(BuildContext context) {
     return Assist(
         controller: assistCtr,
+        groupIds: [AppAssistKeys.updateAudioSeen],
         builder: (context, ctr, data) {
           return Scaffold(
             appBar: AppBarCustom(
@@ -351,7 +353,7 @@ class _LevelPageState extends StateBase<ContentViewPage> {
       inject.videoSourceType = VideoSourceType.network;
       inject.onFullTimePlay = (){onFullTimePlay(media);};
 
-      AppRoute.pushPage(context, VideoPlayerPage(injectData: inject));
+      RouteTools.pushPage(context, VideoPlayerPage(injectData: inject));
     }
     else if(type == SubBucketTypes.audio){
       final inject = AudioPlayerPageInjectData();
@@ -360,7 +362,7 @@ class _LevelPageState extends StateBase<ContentViewPage> {
       inject.title = media.title;
       inject.onFullTimePlay = (){onFullTimePlay(media);};
 
-      AppRoute.pushPage(context, AudioPlayerPage(injectData: inject));
+      RouteTools.pushPage(context, AudioPlayerPage(injectData: inject));
     }
   }
 
@@ -445,6 +447,7 @@ class _LevelPageState extends StateBase<ContentViewPage> {
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
       media.isSee = true;
+      AssistController.updateGroupGlobal(AppAssistKeys.updateAudioSeen);
     };
 
     requester.bodyJson = js;

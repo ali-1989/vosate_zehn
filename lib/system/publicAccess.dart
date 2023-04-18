@@ -20,7 +20,7 @@ import 'package:app/structures/models/upperLower.dart';
 import 'package:app/structures/models/userModel.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/session.dart';
-import 'package:app/tools/app/appRoute.dart';
+import 'package:app/tools/routeTools.dart';
 import 'package:app/tools/deviceInfoTools.dart';
 
 class PublicAccess {
@@ -39,7 +39,7 @@ class PublicAccess {
   );
 
   static Map addLanguageIso(Map src, [BuildContext? ctx]) {
-    src[Keys.languageIso] = System.getLocalizationsLanguageCode(ctx ?? AppRoute.getLastContext()!);
+    src[Keys.languageIso] = System.getLocalizationsLanguageCode(ctx ?? RouteTools.getTopContext()!);
 
     return src;
   }
@@ -143,8 +143,8 @@ class PublicAccess {
     heart['fcm_token'] = FireBaseService.token;
     heart[Keys.deviceId] = DeviceInfoTools.deviceId;
 
-    if(AppRoute.materialContext != null) {
-      heart[Keys.languageIso] = System.getLocalizationsLanguageCode(AppRoute.getLastContext()!);
+    if(RouteTools.materialContext != null) {
+      heart[Keys.languageIso] = System.getLocalizationsLanguageCode(RouteTools.getTopContext()!);
     }
     else {
       heart[Keys.languageIso] = SettingsManager.settingsModel.appLocale.languageCode;

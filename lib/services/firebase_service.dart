@@ -1,11 +1,12 @@
+import 'package:app/structures/enums/appEvents.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:iris_notifier/iris_notifier.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
 
 import 'package:app/managers/settingsManager.dart';
-import 'package:app/services/event_dispatcher_service.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/appDb.dart';
 import 'package:app/tools/app/appNotification.dart';
@@ -117,7 +118,7 @@ class FireBaseService {
 
     FirebaseMessaging.instance.onTokenRefresh.listen((fcmToken) {
       token = fcmToken;
-      EventDispatcherService.notify(EventDispatcher.firebaseTokenReceived);
+      EventNotifierService.notify(AppEvents.firebaseTokenReceived);
     });
 
     /// it's fire when be click on Fcm notification. (no notification by app)
@@ -140,12 +141,12 @@ class FireBaseService {
 
     if(token != null) {
       lastUpdateToken = DateHelper.getNow();
-      EventDispatcherService.notify(EventDispatcher.firebaseTokenReceived);
+      EventNotifierService.notify(AppEvents.firebaseTokenReceived);
 
       return token;
     }
     else {
-      EventDispatcherService.attachFunction(EventDispatcher.networkConnected, _onNetConnected);
+      EventNotifierService.addListener(AppEvents.networkConnected, _onNetConnected);
       return null;
     }
   }
@@ -190,7 +191,7 @@ class FireBaseService {
   }
 
   static void _onNetConnected({data}) {
-    EventDispatcherService.deAttachFunction(EventDispatcher.networkConnected, _onNetConnected);
+    EventNotifierService.removeListener(AppEvents.networkConnected, _onNetConnected);
     getTokenForce();
   }
 }

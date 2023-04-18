@@ -1,8 +1,9 @@
+import 'package:app/structures/enums/appEvents.dart';
 import 'package:iris_db/iris_db.dart';
+import 'package:iris_notifier/iris_notifier.dart';
 import 'package:iris_tools/api/checker.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
 
-import 'package:app/services/event_dispatcher_service.dart';
 import 'package:app/structures/enums/userType.dart';
 import 'package:app/structures/models/userModel.dart';
 import 'package:app/tools/app/appDb.dart';
@@ -115,7 +116,7 @@ class Session {
 				wasLoginUser.matchBy(newUser);
 				_setLastLoginUser(wasLoginUser);
 
-				EventDispatcherService.notify(EventDispatcher.userProfileChange, data: wasLoginUser);
+				EventNotifierService.notify(AppEvents.userProfileChange, data: wasLoginUser);
 
 				return wasLoginUser;
 			}
@@ -123,7 +124,7 @@ class Session {
 				currentLoginList.add(newUser);
 				_setLastLoginUser(newUser);
 
-				EventDispatcherService.notify(EventDispatcher.userLogin, data: newUser);
+				EventNotifierService.notify(AppEvents.userLogin, data: newUser);
 
 				return newUser;
 			}
@@ -164,7 +165,7 @@ class Session {
 				//final oldMap = wasLoginUser.toMap();
 				wasLoginUser.matchBy(newUser);
 
-				EventDispatcherService.notify(EventDispatcher.userProfileChange, data: wasLoginUser);
+				EventNotifierService.notify(AppEvents.userProfileChange, data: wasLoginUser);
 			}
 		}
 	}
@@ -213,7 +214,7 @@ class Session {
 				Conditions().add(Condition()..key = Keys.userId..value = user.userId));
 
 		if(res > 0) {
-			EventDispatcherService.notify(EventDispatcher.userProfileChange, data: user);
+			EventNotifierService.notify(AppEvents.userProfileChange, data: user);
 			return true;
 		}
 
@@ -241,7 +242,7 @@ class Session {
 		  _setLastLoginUser(null);
 		}
 
-		EventDispatcherService.notify(EventDispatcher.userLogoff, data: user);
+		EventNotifierService.notify(AppEvents.userLogoff, data: user);
 
 		return true;
 	}
@@ -264,7 +265,7 @@ class Session {
 		await AppDB.db.update(AppDB.tbUsers, val, con);
 
 		for(var u in currentLoginList){
-			EventDispatcherService.notify(EventDispatcher.userLogoff, data: u);
+			EventNotifierService.notify(AppEvents.userLogoff, data: u);
 		}
 
 		currentLoginList.clear();

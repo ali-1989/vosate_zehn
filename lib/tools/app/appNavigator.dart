@@ -4,99 +4,161 @@ import 'package:flutter/scheduler.dart';
 class AppNavigator {
   AppNavigator._();
 
-  static NavigatorState? getRootNavigator(){
+  static final String _modalScopeRunType = '_ModalScopeStatus';
+
+  static bool canTouchContext(BuildContext context){
+    try {
+      /// for avoid: ErrorSummary("Looking up a deactivated widget's ancestor is unsafe.") in framework.dart
+      if (context is StatefulElement) {
+        /// no need use: || context.dirty
+        if (!context.state.mounted) {
+          return false;
+        }
+      }
+
+      if (context is StatelessElement) {
+        if (!(context.renderObject?.attached ?? false)) {
+          return false;
+        }
+      }
+    }
+    catch (e){
+      return false;
+    }
+
+    return true;
+  }
+
+  static BuildContext? getBuildContextFromFocusManager(){
+    //var ctx = WidgetsBinding.instance.focusManager.rootScope.context;
     var ctx = FocusManager.instance.rootScope.context;
+    ctx ??= FocusManager.instance.rootScope.focusedChild?.context;
+    return ctx ?? FocusManager.instance.primaryFocus?.context;
+  }
+
+  static BuildContext? getBuildContextFromNavigator(NavigatorState navigator){
+    return navigator.context; // navigator.focusNode.context
+  }
+
+  static BuildContext? getContextFromRoute(ModalRoute route){
+    return getBuildContextFromNavigator(route.navigator!);
+  }
+
+  static BuildContext? getDeepBuildContext(){
+    var ctx = getBuildContextFromFocusManager();
+    int? dep;
 
     if(ctx == null){
       final children = FocusManager.instance.rootScope.children;
-      var dep = 100;
 
-      for (var element in children) {
+      for (final element in children) {
         final context = element.context;
 
-        if(context != null){
-          final elm = context as Element;
+        if(context != null && canTouchContext(context)){
+          final element = context as Element;
 
-          if(elm.depth < dep){
-            dep = elm.depth;
+          if(dep == null || element.depth < dep){
+            dep = element.depth;
             ctx = context;
           }
         }
       }
     }
 
-    late BuildContext navigatorCtx;
+    if(ctx != null){
+      dep = (ctx as Element).depth;
 
-    touchChildren(ctx!, (elem) {
-      if(elem.widget is Navigator){
-        navigatorCtx = elem;
-        return false;
-      }
+      touchAncestorsToRoot(ctx, (element) {
+        if(element.depth < dep!){
+          dep = element.depth;
+          ctx = element;
+        }
 
-      return true;
-    });
+        return true;
+      });
+    }
 
-    return Navigator.maybeOf(navigatorCtx, rootNavigator: false);
+    return ctx;
   }
 
-  static NavigatorState? getRootNavigatorBy(BuildContext context) {
-    /// no need use: context.dirty
+  static BuildContext? getTopBuildContext(){
+    var ctx = getBuildContextFromFocusManager();
+    var dep = 1;
 
-    try {
-      /// for avoid: ErrorSummary("Looking up a deactivated widget's ancestor is unsafe.") in framework.dart
-      if (context is StatefulElement) {
-        if (!context.state.mounted) {
-          return null;
-        }
-      }
+    if(ctx == null){
+      final children = FocusManager.instance.rootScope.children;
 
-      if (context is StatelessElement) {
-        if (!(context.renderObject?.attached ?? false)) {
-          return null;
+      for (final element in children) {
+        final context = element.context;
+
+        if(context != null && canTouchContext(context)){
+          final element = context as Element;
+
+          if(element.depth > dep){
+            dep = element.depth;
+            ctx = context;
+          }
         }
       }
     }
+
+    if(ctx != null){
+      dep = (ctx as Element).depth;
+
+      touchChildren(ctx, (element) {
+        if(!canTouchContext(element)){
+          return true;
+        }
+
+        if(element.depth > dep){
+          dep = element.depth;
+          ctx = element;
+        }
+
+        return true;
+      });
+    }
+
+    return ctx;
+  }
+
+  static NavigatorState? getRootNavigator$(){
+    final ctx = getTopBuildContext()!;
+
+    try{
+      return Navigator.maybeOf(ctx, rootNavigator: true);
+    }
     catch (e){
+      return ctx.findAncestorWidgetOfExactType() as NavigatorState?;
+    }
+  }
+
+  static NavigatorState? getRootNavigator(BuildContext context) {
+    if(!canTouchContext(context)){
       return null;
     }
 
-    return Navigator.maybeOf(context, rootNavigator: true); // rootNavigator[true]: continue until root /
+    return Navigator.maybeOf(context, rootNavigator: true); // rootNavigator:true >> continue until first Navigator
   }
 
-  // nearest Upwards Navigator
+  // nearest Top Navigator
   static NavigatorState? getNearestNavigator(BuildContext context){
-    if (context is StatefulElement) {
-      if (!context.state.mounted) { // || context.dirty
-        return null;
-      }
-    }
-
-    if (context is StatelessElement) {
-      if (!(context.renderObject?.attached ?? false)) {
-        return null;
-      }
+    if(!canTouchContext(context)){
+      return null;
     }
 
     return Navigator.maybeOf(context, rootNavigator: false);
   }
 
-  static BuildContext getStableContext(BuildContext context) {
+  static BuildContext getFirstRoutContext(BuildContext context) {
     final m = findRouteByName(getAllModalRoutes(context: context), '/');
 
-    return m!.subtreeContext!;
+    return getContextFromRoute(m!)!;
   }
 
-  static ModalRoute? getModalRouteOfOld(BuildContext context){
-    if (context is StatefulElement) {
-      if (!context.state.mounted || context.dirty) {
-        return null;
-      }
-    }
-
-    if (context is StatelessElement) {
-      if (!(context.renderObject?.attached ?? false) || context.dirty) {
-        return null;
-      }
+  static ModalRoute? getModalRouteOf$Old(BuildContext context){
+    if(!canTouchContext(context)){
+      return null;
     }
 
     return ModalRoute.of(context);
@@ -106,7 +168,7 @@ class AppNavigator {
     final element = context as Element;
     final runType = element.widget.runtimeType.toString();
 
-    if(runType == '_ModalScopeStatus'){
+    if(runType == _modalScopeRunType){
       final dynamic d = element.widget;
 
       return d.route as ModalRoute;
@@ -117,7 +179,7 @@ class AppNavigator {
     touchAncestorsToRoot(context, (elem){
       final runType = elem.widget.runtimeType.toString();
 
-      if(runType == '_ModalScopeStatus'){
+      if(runType == _modalScopeRunType){
         final dynamic d = elem.widget;
 
         result = d.route as ModalRoute;
@@ -130,7 +192,7 @@ class AppNavigator {
     return result;
   }
 
-  static Future<List<Widget>> getAllChildren(BuildContext context) async {
+  static Future<List<Widget>> getAllChildrenWidget(BuildContext context) async {
     final res = <Widget>[];
 
     void func(BuildContext ctx) {
@@ -150,9 +212,9 @@ class AppNavigator {
   }
 
   /// *** it is work else in initState, is best
-  static List<ModalRoute> getAllModalRoutesByFocusScope({BuildContext? context, bool onlyActives = true}) {
-    final nav = getRootNavigator();
-    final res = <ModalRoute>[];
+  static List<MapEntry<ModalRoute, BuildContext>> getAllModalRoutesByFocusScope({BuildContext? context, bool onlyActives = true}) {
+    final nav = getRootNavigator$();
+    final res = <MapEntry<ModalRoute, BuildContext>>[];
 
     if(nav == null) {
       return res;
@@ -162,28 +224,28 @@ class AppNavigator {
     //dep final List children = nav.focusScopeNode.children.toList();
     final List children = nav.focusNode.children.toList();
 
-    for(FocusNode f in children) {
-      final m = getModalRouteOf(f.context!);
+    for(FocusNode fNode in children) {
+      final mRoute = getModalRouteOf(fNode.context!);
 
-      if(m == null) {
+      if(mRoute == null) {
         continue;
       }
 
       if (onlyActives){
-        if (m.isActive) {
-          res.add(m);
+        if(mRoute.isActive) {
+          res.add(MapEntry(mRoute, fNode.context!));
         }
       }
       else {
-        res.add(m);
+        res.add(MapEntry(mRoute, fNode.context!));
       }
     }
 
     return res;
   }
 
-  static List<ModalRoute> getAllModalRoutesByAncestor({BuildContext? context, bool onlyActives = true}) {
-    final nav = getRootNavigator();
+  static List<ModalRoute> getAllModalRoutes$({BuildContext? context, bool onlyActives = true}) {
+    final nav = getRootNavigator$();
     final elements = <Element>[];
     final res = <ModalRoute>[];
 
@@ -200,10 +262,10 @@ class AppNavigator {
         try {
           final runType = element.widget.runtimeType.toString();
 
-          if(runType == '_ModalScopeStatus') {// if add this: take error [Duplicate GlobalKeys]
+          if(runType == _modalScopeRunType) {// if add this: take error [Duplicate GlobalKeys]
             beforeModalScopeStatus = true;
           }
-          else if(beforeModalScopeStatus && runType == 'Offstage') {
+          else if(runType == 'Offstage' && beforeModalScopeStatus) {
             elements.add(element);
           }
           else {
@@ -223,20 +285,20 @@ class AppNavigator {
       rethrow;
     }
 
-    for(var w in elements) {
-      final m = getModalRouteOf(w);
+    for(final elm in elements) {
+      final mRoute = getModalRouteOf(elm);
 
-      if(m == null) {
+      if(mRoute == null) {
         continue;
       }
 
       if (onlyActives){
-        if (m.isActive) {
-          res.add(m);
+        if(mRoute.isActive) {
+          res.add(mRoute);
         }
       }
       else {
-        res.add(m);
+        res.add(mRoute);
       }
     }
 
@@ -244,7 +306,7 @@ class AppNavigator {
   }
 
   static List<ModalRoute> getAllModalRoutes({BuildContext? context, bool onlyActives = true}) {
-    final nav = getRootNavigator();
+    final nav = getRootNavigator$();
     final res = <ModalRoute>[];
 
     if(nav == null) {
@@ -258,26 +320,24 @@ class AppNavigator {
         try {
           final runType = element.widget.runtimeType.toString();
 
-          if(runType == '_ModalScopeStatus') {// if add this: take error [Duplicate GlobalKeys]
-            final dynamic d = element.widget;
+          if(runType == _modalScopeRunType) {// if add this: take error [Duplicate GlobalKeys]
+            final dynamic maybeModalWidget = element.widget;
 
-            final m = d.route as ModalRoute?;
+            final mRoute = maybeModalWidget.route as ModalRoute?;
 
-            if(m != null) {
+            if(mRoute != null) {
               if (onlyActives){
-                if (m.isActive) {
-                  res.add(m);
+                if(mRoute.isActive) {
+                  res.add(mRoute);
                 }
               }
               else {
-                res.add(m);
+                res.add(mRoute);
               }
             }
           }
         }
-        catch (e){
-          //rint('$e');
-        }
+        catch (e){/**/}
 
         func(element);
       });
@@ -297,7 +357,7 @@ class AppNavigator {
   static ModalRoute? findRouteByName(List<ModalRoute> list, String name) {
     ModalRoute? res;
 
-    for(var m in list){
+    for(final m in list){
       if(m.settings.name == name) {
         res = m;
         break;
@@ -307,18 +367,7 @@ class AppNavigator {
     return res;
   }
 
-  static List<BuildContext> getAllModalRoutesContext(BuildContext context, {bool onlyActives = true}) {
-    final list = getAllModalRoutes(context: context, onlyActives: onlyActives);
-    final res = <BuildContext>[];
-
-    for(var m in list){
-      res.add(m.subtreeContext!);
-    }
-
-    return res;
-  }
-
-  static BuildContext findEndChildContext(BuildContext context){
+  static BuildContext findTopChildContext(BuildContext context){
     var last = context;
     var maxDepth = -1;
 
@@ -334,31 +383,6 @@ class AppNavigator {
     (context as Element).visitChildren(fn);
 
     return last;
-  }
-
-  static T? findAncestorWidgetOfExactType<T extends Widget>(BuildContext context, {bool onlyActives = true, bool onAllPages = true}){
-    final list = getAllModalRoutesContext(context, onlyActives: onlyActives);
-    BuildContext ctx;
-    T? cas;
-
-    if(onAllPages) {
-      for (var i = list.length; i > 0; i--) {
-        ctx = list[i - 1];
-        ctx = findEndChildContext(ctx);
-        cas = ctx.findAncestorWidgetOfExactType();
-
-        if (cas != null) {
-          break;
-        }
-      }
-    }
-    else {
-      ctx = list.last;
-      ctx = findEndChildContext(ctx);
-      cas = ctx.findAncestorWidgetOfExactType();
-    }
-
-    return cas;
   }
 
   static void touchAncestorsToRoot(BuildContext context, bool Function(Element elem) onParent) {
@@ -387,7 +411,34 @@ class AppNavigator {
     e.visitChildren(fn);
   }
 
-  static ModalRoute findBefore(List<ModalRoute> list, ModalRoute current) {
+  static bool existRouteByName(BuildContext context, String name){
+    final list = getAllModalRoutes(context: context);
+    return findRouteByName(list, name) != null;
+  }
+
+  static T? findWidgetIn<T extends Widget>(ModalRoute route){
+    BuildContext ctx;
+    T? cas;
+
+    ctx = getContextFromRoute(route)!;
+    ctx = findTopChildContext(ctx);
+    cas = ctx.findAncestorWidgetOfExactType();
+
+    return cas;
+  }
+
+  static T? findStateIn<T extends State>(ModalRoute route){
+    BuildContext ctx;
+    T? cas;
+
+    ctx = getContextFromRoute(route)!;
+    ctx = findTopChildContext(ctx);
+    cas = ctx.findAncestorWidgetOfExactType();
+
+    return cas;
+  }
+
+  static ModalRoute findBeforeRoute(List<ModalRoute> list, ModalRoute current) {
     var before = list.first;
 
     for(var m in list){
@@ -401,95 +452,7 @@ class AppNavigator {
     return before;
   }
 
-  static ModalRoute? findRouteByWidget<T extends Widget>(List<ModalRoute> list, T widget) {
-    ModalRoute? res;
-
-    for(var route in list){
-      final elm = (route.subtreeContext as Element);
-
-      final type = elm.findAncestorWidgetOfExactType();
-
-      if(type != null) {
-        res = route;
-        break;
-      }
-    }
-
-    if(res != null) {
-      return res;
-    }
-
-    // in children -----------------------------------
-    for(var route in list){
-      final elm = (route.subtreeContext as Element);
-      var lastHash = 0;
-
-      if(res != null) {
-        break;
-      }
-
-      void fn(element) {
-        while(lastHash != element.hashCode){
-          lastHash = element.hashCode;
-
-          if(res != null) {
-            break;
-          }
-
-          //if(element.toStringShort() == widget.toStringShort()){
-          if(element.runtimeType == widget.runtimeType){
-            res = route;
-            break;
-          }
-
-          element.visitChildElements(fn);
-        }
-      }
-
-      elm.visitChildren(fn);
-    }
-
-    return res;
-  }
-
-  static bool existRouteByName(BuildContext context, String name){
-    final list = getAllModalRoutes(context: context);
-    return findRouteByName(list, name) != null;
-  }
-
-  static BuildContext getLastRouteContext(BuildContext context){
-    final list = getAllModalRoutesContext(context);
-    return list.last;
-  }
-
-  static T? findWidgetIn<T extends Widget>(ModalRoute route){
-    BuildContext ctx;
-    T? cas;
-
-    ctx = route.subtreeContext!;
-    ctx = findEndChildContext(ctx);
-    cas = ctx.findAncestorWidgetOfExactType();
-
-    return cas;
-  }
-
-  static T? findStateIn<T extends State>(ModalRoute route){
-    BuildContext ctx;
-    T? cas;
-
-    ctx = route.subtreeContext!;
-    ctx = findEndChildContext(ctx);
-    cas = ctx.findAncestorWidgetOfExactType();
-
-    return cas;
-  }
-
-  static ModalRoute? accessModalRouteByWidget<T extends Widget>(BuildContext context, T widget, {bool onlyActives = false}){
-    final list = getAllModalRoutes(context: context, onlyActives: onlyActives);
-    return findRouteByWidget<T>(list, widget);
-  }
-
-  static ModalRoute? getPreviousModalRoute(BuildContext context){
+  static ModalRoute? getPreviousRoute(BuildContext context){
     final list = getAllModalRoutes(context: context);
     final ModalRoute? current = ModalRoute.of(context);
 
@@ -497,7 +460,7 @@ class AppNavigator {
       return null;
     }
 
-    return findBefore(list, current);
+    return findBeforeRoute(list, current);
   }
 
   static bool isMountedPage(BuildContext context){
@@ -514,11 +477,7 @@ class AppNavigator {
     return nav.overlay;
   }
 
-  ///usage in build(context) no in initState()
-  static dynamic getPassedData(BuildContext context){
-    return ModalRoute.of(context)?.settings.arguments;
-  }
-
+  ///PassedData ,   usage in build(context) no in initState()
   static Object? getArgumentsOf(BuildContext context){
     return ModalRoute.of(context)?.settings.arguments;
   }
@@ -557,7 +516,7 @@ class AppNavigator {
     return MediaQuery.of(context).disableAnimations;
   }
 
-  static void setHide(BuildContext context, bool offstage){
+  static void hideRoute(BuildContext context, bool offstage){
     ModalRoute.of(context)?.offstage = offstage;
   }
 
@@ -601,53 +560,6 @@ class AppNavigator {
     return Overlay.of(context)..insert(entry);
   }
   ///--------------------------------------------------------------------------------------------------
-  static Future pushNextPageIfNotExist(BuildContext context, Widget next, {required String name, dynamic arguments, bool maintainState = true}) {
-    final list = getAllModalRoutes(context: context);
-    var find = false;
-
-    /// find by type ---------------------------------------------
-    for(var m in list){
-      var lastHash = 0;
-
-      if(find) {
-        break;
-      }
-
-      final elm = (m.subtreeContext as Element);
-
-      void fn(element) {
-        while(lastHash != element.hashCode){
-          lastHash = element.hashCode;
-
-          if(find) {
-            break;
-          }
-
-          //if(element.toStringShort() == next.toStringShort()){
-          if(element.runtimeType == next.runtimeType){
-            find = true;
-            break;
-          }
-
-          element.visitChildElements(fn);
-        }
-      }
-
-      elm.visitChildren(fn);
-    }
-
-    /// find bu name ---------------------------------------------
-    if(!find){
-      find = findRouteByName(list, name) != null;
-    }
-
-    if(find) {
-      return Future.value(null);
-    }
-
-    return pushNextPage(context, next, name: name, arguments: arguments, maintainState: maintainState);
-  }
-
   static Future pushNextPageIfNotCurrent<T extends Widget>(BuildContext context, T next,
       {required String name, dynamic arguments, bool maintainState = true}) {
 
@@ -721,10 +633,6 @@ class AppNavigator {
     //return Navigator.pushAndRemoveUntil(context, mpr, ModalRoute.withName('/'));
   }
 
-  static void popRoutesUntilRoot(BuildContext context) {
-    Navigator.of(context).popUntil((route) => route.settings.name == '/');
-  }
-
   static void popRoutesUntil(BuildContext context, ModalRoute? keep) {
     if(keep == null) {
       return;
@@ -738,7 +646,7 @@ class AppNavigator {
     popRoutesUntil(context, m);
   }
 
-  static Future pushNextWithRoute(BuildContext context, PageRoute route){
+  static Future pushNextRoute(BuildContext context, PageRoute route){
     return Navigator.push(context, route); // same: Navigator.of(context).push(route)
   }
 
@@ -755,7 +663,7 @@ class AppNavigator {
     return Navigator.of(context).maybePop(result);
   }
 
-  static bool popByRouteNameForce(BuildContext context, String routeName, {dynamic result}){
+  static bool popOrRemove(BuildContext context, String routeName, {dynamic result}){
     final route = accessModalRouteByRouteName(context, routeName);
 
     if(route == null) {
@@ -792,7 +700,7 @@ class AppNavigator {
         return;
       }
 
-      final before = findBefore(list, myPage);
+      final before = findBeforeRoute(list, myPage);
       Navigator.of(curPageContext).popUntil((route) => route == before);
     }
 
@@ -800,43 +708,6 @@ class AppNavigator {
       run();
     } else{
       Future.delayed(delay, run);
-    }
-  }
-
-  static void backSimulate(BuildContext context) async{
-    BuildContext lastCtx;
-    BuildContext stableCtx;
-
-    lastCtx = getLastRouteContext(context);
-    stableCtx = getStableContext(lastCtx);
-
-    final ScaffoldState? scaffoldState = findEndChildContext(lastCtx).findAncestorStateOfType();
-    final ModalRoute? myPage = ModalRoute.of(lastCtx);
-
-    if(myPage == null) {
-      return;
-    }
-
-    if(scaffoldState != null){
-      ScaffoldMessenger.of(lastCtx).removeCurrentSnackBar();
-      //old: scaffoldState.removeCurrentSnackBar();
-
-      if(scaffoldState.isDrawerOpen) {
-        Navigator.pop(scaffoldState.context);
-        await Future.delayed(const Duration(milliseconds: 200), (){});
-      }
-    }
-
-    /// if is opened dialog, page, ...
-    while (!myPage.isCurrent && Navigator.of(stableCtx).canPop()) {
-      Navigator.pop(stableCtx);
-      await Future.delayed(const Duration(milliseconds: 200), () {});
-      //ctx = findLastContextA(ctx);
-    }
-
-    if(Navigator.of(stableCtx).canPop()) {
-      Navigator.pop(stableCtx);
-      Navigator.of(stableCtx).finalizeRoute(myPage);
     }
   }
 
@@ -956,3 +827,103 @@ Widget buildPage(BuildContext context, Animation<double> animation, Animation<do
 
 //============================================================================================
 }
+
+
+/*   not work  ------------------
+
+
+
+  static ModalRoute? findRouteByWidget<T extends Widget>(List<ModalRoute> list, T widget) {
+    ModalRoute? res;
+
+    for(var route in list){
+      final elm = (route.subtreeContext as Element);
+
+      final type = elm.findAncestorWidgetOfExactType();
+
+      if(type != null) {
+        res = route;
+        break;
+      }
+    }
+
+    if(res != null) {
+      return res;
+    }
+
+    // in children -----------------------------------
+    for(var route in list){
+      final elm = (route.subtreeContext as Element);
+      var lastHash = 0;
+
+      if(res != null) {
+        break;
+      }
+
+      void fn(element) {
+        while(lastHash != element.hashCode){
+          lastHash = element.hashCode;
+
+          if(res != null) {
+            break;
+          }
+
+          //if(element.toStringShort() == widget.toStringShort()){
+          if(element.runtimeType == widget.runtimeType){
+            res = route;
+            break;
+          }
+
+          element.visitChildElements(fn);
+        }
+      }
+
+      elm.visitChildren(fn);
+    }
+
+    return res;
+  }
+-----------------------------------------------------------
+static T? findAncestorWidgetOfExactType<T extends Widget>(BuildContext context, {bool onlyActives = true, bool onAllPages = true}){
+    final list = getAllModalRoutesContext(context, onlyActives: onlyActives);
+    BuildContext ctx;
+    T? cas;
+
+    if(onAllPages) {
+      for (var i = list.length; i > 0; i--) {
+        ctx = list[i - 1];
+        ctx = findTopChildContext(ctx);
+        cas = ctx.findAncestorWidgetOfExactType();
+
+        if (cas != null) {
+          break;
+        }
+      }
+    }
+    else {
+      ctx = list.last;
+      ctx = findTopChildContext(ctx);
+      cas = ctx.findAncestorWidgetOfExactType();
+    }
+
+    return cas;
+  }
+
+-----------------------------------------------------------
+static List<BuildContext> getAllModalRoutesContext(BuildContext context, {bool onlyActives = true}) {
+    final list = getAllModalRoutes(context: context, onlyActives: onlyActives);
+    final res = <BuildContext>[];
+
+    for(final m in list){
+      res.add(m.subtreeContext!);
+    }
+
+    return res;
+  }
+-----------------------------------------------------------
+static ModalRoute? accessModalRouteByWidget<T extends Widget>(BuildContext context, T widget, {bool onlyActives = false}){
+    final list = getAllModalRoutes(context: context, onlyActives: onlyActives);
+    return findRouteByWidget<T>(list, widget);
+  }
+-----------------------------------------------------------
+ */

@@ -103,7 +103,7 @@ class SplashScreenState extends StateBase<SplashPage> {
 
     if(serverData == null){
       AppSheet.showSheetOneAction(
-        AppRoute.materialContext!,
+        RouteTools.materialContext!,
         AppMessages.errorCommunicatingServer,
          (){
           AppBroadcast.gotoSplash(2000);

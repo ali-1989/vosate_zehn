@@ -18,7 +18,7 @@ import 'package:app/tools/app/appDb.dart';
 import 'package:app/tools/app/appDialogIris.dart';
 import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appNotification.dart';
-import 'package:app/tools/app/appRoute.dart';
+import 'package:app/tools/routeTools.dart';
 import 'package:app/tools/deviceInfoTools.dart';
 import 'package:app/tools/netListenerTools.dart';
 
@@ -232,8 +232,8 @@ class WebsocketService {
 		final ids = AppDB.fetchAsList(Keys.setting$userMessageIds);
 
 		if(!ids.contains(messageId)) {
-			if(AppRoute.materialContext != null) {
-				_promptDialog(AppRoute.getLastContext()!, message);
+			if(RouteTools.materialContext != null) {
+				_promptDialog(RouteTools.getTopContext()!, message);
 				AppDB.addToList(Keys.setting$userMessageIds, messageId);
 			}
 		}

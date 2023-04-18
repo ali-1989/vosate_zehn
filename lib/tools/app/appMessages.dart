@@ -1,7 +1,7 @@
+import 'package:app/tools/routeTools.dart';
 import 'package:flutter/material.dart';
 
-import 'package:app/tools/app/appRoute.dart';
-import '/system/extensions.dart';
+import 'package:app/system/extensions.dart';
 
 class AppMessages {
   AppMessages._();
@@ -9,7 +9,7 @@ class AppMessages {
   static const _noText = 'NaT';
 
   static BuildContext _getContext(){
-    return AppRoute.getLastContext()!;
+    return RouteTools.getTopContext()!;
   }
   
   static String httpMessage(String? cause) {

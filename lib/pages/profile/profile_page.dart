@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:app/structures/enums/appEvents.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -8,6 +9,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:glowstone/glowstone.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:iris_notifier/iris_notifier.dart';
 import 'package:iris_pic_editor/picEditor/models/edit_options.dart';
 import 'package:iris_pic_editor/picEditor/picEditor.dart';
 import 'package:iris_tools/api/generator.dart';
@@ -22,7 +24,6 @@ import 'package:iris_tools/models/dataModels/mediaModel.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import 'package:app/services/event_dispatcher_service.dart';
 import 'package:app/structures/abstract/stateBase.dart';
 import 'package:app/structures/enums/enums.dart';
 import 'package:app/structures/middleWares/requester.dart';
@@ -36,7 +37,7 @@ import 'package:app/tools/app/appIcons.dart';
 import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appOverlay.dart';
-import 'package:app/tools/app/appRoute.dart';
+import 'package:app/tools/routeTools.dart';
 import 'package:app/tools/app/appSheet.dart';
 import 'package:app/tools/app/appSizes.dart';
 import 'package:app/tools/app/appSnack.dart';
@@ -44,7 +45,7 @@ import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/app/appToast.dart';
 import 'package:app/tools/permissionTools.dart';
 import 'package:app/views/components/changeNameFamilyView.dart';
-import 'package:app/views/components/dateViews/selectDateCalendarView.dart';
+import 'package:app/views/components/dateComponents/selectDateCalendarView.dart';
 import 'package:app/views/components/selectGenderView.dart';
 import 'package:app/views/homeComponents/appBarBuilder.dart';
 
@@ -127,7 +128,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
                                 height: 120,
                                 width: 120,
                                 child: StreamBuilder(
-                                  stream: EventDispatcherService.getStream(EventDispatcher.userProfileChange),
+                                  stream: EventNotifierService.getStream(AppEvents.userProfileChange),
                                   builder: (ctx, data) {
                                     if(user.profileModel?.url != null){
                                       if(kIsWeb){
@@ -287,7 +288,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
             title: 'تاریخ تولد',
             currentDate: user.birthDate,
             onSelect: (dt){
-              AppRoute.popTopView(context: context);
+              RouteTools.popTopView(context: context);
               uploadBirthdate(dt);
             },
           );
@@ -304,7 +305,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
             title: 'جنسیت',
             genderType: user.sex == 1? GenderType.man: (user.sex == 2 ? GenderType.woman: GenderType.other),
             onSelect: (gender){
-              AppRoute.popTopView(context: context);
+              RouteTools.popTopView(context: context);
               uploadGender(gender == GenderType.man? 1: 2);
             },
           );
@@ -504,7 +505,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
 
     if(kIsWeb){
       await Session.sinkUserInfo(user);
-      EventDispatcherService.notify(EventDispatcher.userProfileChange);
+      EventNotifierService.notify(AppEvents.userProfileChange);
       return;
     }
 
@@ -517,7 +518,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
     AppSnack.showSnack$operationSuccess(context);
 
     await Session.sinkUserInfo(user);
-    EventDispatcherService.notify(EventDispatcher.userProfileChange);
+    EventNotifierService.notify(AppEvents.userProfileChange);
   }
 
   void uploadAvatar(String filePath) {
@@ -570,7 +571,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
     requester.httpRequestEvents.onStatusOk = (req, data) async {
       user.profileModel = null;
 
-      EventDispatcherService.notify(EventDispatcher.userProfileChange);
+      EventNotifierService.notify(AppEvents.userProfileChange);
       Session.sinkUserInfo(user);
     };
 
@@ -604,7 +605,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
       assistCtr.updateHead();
       await Session.sinkUserInfo(user);
       AppOverlay.hideDialog(context);
-      EventDispatcherService.notify(EventDispatcher.userProfileChange);
+      EventNotifierService.notify(AppEvents.userProfileChange);
     };
 
     showLoading(canBack: false);
@@ -634,7 +635,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
 
       assistCtr.updateHead();
       await Session.sinkUserInfo(user);
-      EventDispatcherService.notify(EventDispatcher.userProfileChange);
+      EventNotifierService.notify(AppEvents.userProfileChange);
     };
 
     showLoading(canBack: false);
@@ -664,7 +665,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
 
       assistCtr.updateHead();
       await Session.sinkUserInfo(user);
-      EventDispatcherService.notify(EventDispatcher.userProfileChange);
+      EventNotifierService.notify(AppEvents.userProfileChange);
     };
 
     showLoading(canBack: false);

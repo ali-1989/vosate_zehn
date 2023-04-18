@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:app/structures/enums/appEvents.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:iris_notifier/iris_notifier.dart';
 
 import 'package:iris_tools/api/helpers/colorHelper.dart';
 import 'package:iris_tools/api/helpers/fileHelper.dart';
@@ -17,7 +19,6 @@ import 'package:app/pages/profile/profile_page.dart';
 import 'package:app/pages/sentences_page.dart';
 import 'package:app/services/aidService.dart';
 import 'package:app/services/download_upload_service.dart';
-import 'package:app/services/event_dispatcher_service.dart';
 import 'package:app/services/login_service.dart';
 import 'package:app/structures/enums/enums.dart';
 import 'package:app/structures/models/userModel.dart';
@@ -29,7 +30,7 @@ import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/app/appIcons.dart';
 import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appMessages.dart';
-import 'package:app/tools/app/appRoute.dart';
+import 'package:app/tools/routeTools.dart';
 import 'package:app/tools/app/appSizes.dart';
 
 class DrawerMenuBuilder {
@@ -124,7 +125,7 @@ class DrawerMenuBuilder {
         child: Column(
           children: [
             StreamBuilder(
-              stream: EventDispatcherService.getStream(EventDispatcher.userProfileChange),
+              stream: EventNotifierService.getStream(AppEvents.userProfileChange),
               builder: (ctx, data) {
                 return Builder(
                   builder: (ctx){
@@ -200,12 +201,12 @@ class DrawerMenuBuilder {
 
   static void gotoFavoritesPage(){
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    AppRoute.pushPage(AppRoute.getLastContext()!, FavoritesPage());
+    RouteTools.pushPage(RouteTools.getTopContext()!, FavoritesPage());
   }
 
   static void gotoLastSeenPage(){
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    AppRoute.pushPage(AppRoute.getLastContext()!, LastSeenPage());
+    RouteTools.pushPage(RouteTools.getTopContext()!, LastSeenPage());
   }
 
   static void gotoAidPage(){
@@ -214,17 +215,17 @@ class DrawerMenuBuilder {
 
   static void gotoContactUsPage(){
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    AppRoute.pushPage(AppRoute.getLastContext()!, ContactUsPage());
+    RouteTools.pushPage(RouteTools.getTopContext()!, ContactUsPage());
   }
 
   static void gotoSentencePage(){
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    AppRoute.pushPage(AppRoute.getLastContext()!, SentencesPage());
+    RouteTools.pushPage(RouteTools.getTopContext()!, SentencesPage());
   }
 
   static void gotoAboutUsPage(){
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    AppRoute.pushPage(AppRoute.getLastContext()!, AboutUsPage());
+    RouteTools.pushPage(RouteTools.getTopContext()!, AboutUsPage());
   }
 
   static void gotoProfilePage(){
@@ -233,7 +234,7 @@ class DrawerMenuBuilder {
     }
 
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    AppRoute.pushPage(AppRoute.getLastContext()!, ProfilePage());
+    RouteTools.pushPage(RouteTools.getTopContext()!, ProfilePage());
   }
 
   static void onLogoffCall(){
@@ -243,12 +244,12 @@ class DrawerMenuBuilder {
     }
 
     void yesFn(){
-      //AppRoute.popTopView();
+      //RouteTools.popTopView();
       LoginService.forceLogoff(Session.getLastLoginUser()!.userId);
     }
 
     AppDialogIris.instance.showYesNoDialog(
-      AppRoute.getLastContext()!,
+      RouteTools.getTopContext()!,
       desc: AppMessages.doYouWantLogoutYourAccount,
       dismissOnButtons: true,
       yesText: AppMessages.yes,

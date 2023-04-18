@@ -3,7 +3,7 @@
           package="ir.vosatezehn.com"
           android:installLocation="auto">
     <!-- ================================
-      installLocation: auto| preferExternal
+      installLocation: auto | preferExternal
        ============================================== -->
 
     <!--

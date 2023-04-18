@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:core';
 
+import 'package:app/tools/app/appCache.dart';
 import 'package:iris_db/iris_db.dart';
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
 import 'package:iris_tools/api/helpers/urlHelper.dart';
@@ -23,7 +24,7 @@ import 'package:app/system/keys.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appDb.dart';
 import 'package:app/tools/app/appDialogIris.dart';
-import 'package:app/tools/app/appRoute.dart';
+import 'package:app/tools/routeTools.dart';
 
 class AdvertisingManager {
   AdvertisingManager._();
@@ -50,6 +51,10 @@ class AdvertisingManager {
   }
 
   static void check() async {
+    if(!AppCache.canCallMethodAgain('checkAdvertising')){
+      return;
+    }
+
     await Future.delayed(Duration(seconds: 8), (){}); // for avoid call fast after init
     if(lastRequest == null || DateHelper.isPastOf(lastRequest, Duration(minutes: 29))){
       requestAdvertising();
@@ -229,7 +234,7 @@ class AdvertisingManager {
     }
 
     else if(adv.type == 'text'){
-      AppDialogIris.instance.showIrisDialog(AppRoute.getLastContext()!,
+      AppDialogIris.instance.showIrisDialog(RouteTools.getTopContext()!,
           desc: adv.clickUrl!,
           yesText: 'بله'
       );
@@ -244,7 +249,7 @@ class AdvertisingManager {
       inject.srcAddress = itm.mediaModel!.url!;
       inject.videoSourceType = VideoSourceType.network;
 
-      AppRoute.pushPage(AppRoute.getLastContext()!, VideoPlayerPage(injectData: inject));
+      RouteTools.pushPage(RouteTools.getTopContext()!, VideoPlayerPage(injectData: inject));
       return;
     }
 
@@ -255,7 +260,7 @@ class AdvertisingManager {
       inject.title = '';//bucketModel?.title;
       inject.subTitle = itm.title;
 
-      AppRoute.pushPage(AppRoute.getLastContext()!, AudioPlayerPage(injectData: inject));
+      RouteTools.pushPage(RouteTools.getTopContext()!, AudioPlayerPage(injectData: inject));
       return;
     }
 
@@ -263,7 +268,7 @@ class AdvertisingManager {
       final inject = ContentViewPageInjectData();
       inject.subBucket = itm;
 
-      AppRoute.pushPage(AppRoute.getLastContext()!, ContentViewPage(injectData: inject));
+      RouteTools.pushPage(RouteTools.getTopContext()!, ContentViewPage(injectData: inject));
       return;
     }
   }

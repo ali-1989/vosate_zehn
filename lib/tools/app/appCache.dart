@@ -27,5 +27,9 @@ class AppCache {
   static void removeDownloading(String tag){
     downloadingCache.deleteTimeout(tag);
   }
+
+  static bool canCallMethodAgain(String key){
+    return AppCache.timeoutCache.addTimeout(key, Duration(seconds: 8));
+  }
   //---------- | Download ------------------------------------------------------------------------------
 }

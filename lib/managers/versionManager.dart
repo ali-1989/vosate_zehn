@@ -89,12 +89,12 @@ class VersionManager {
   }*/
 
   static void showUpdateDialog(BuildContext context, VersionModel vm) {
-    final msg = vm.description?? AppMessages.newAppVersionIsOk;
-
-    bool closeApp(){
+    
+    void closeApp(){
       System.exitApp();
-      return false;
     }
+
+    final msg = vm.description?? AppMessages.newAppVersionIsOk;
 
     final decoration = AppDialogIris.instance.dialogDecoration.copy();
     decoration.positiveButtonBackColor = Colors.blue;
@@ -107,7 +107,6 @@ class VersionManager {
       noText: vm.restricted ? AppMessages.exit : AppMessages.later,
       yesFn: (){
         UrlHelper.launchLink(vm.link?? '');
-        return false;
       },
       noFn: vm.restricted ? closeApp: null,
     );
