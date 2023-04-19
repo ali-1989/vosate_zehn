@@ -111,54 +111,57 @@ class AudioPlayerPageState extends StateBase<AudioPlayerPage> {
 
               Positioned(
                   top: MathHelper.percent(AppSizes.instance.appHeight, 25),
-                  left: MathHelper.percent(AppSizes.instance.appWidth, 10),
-                  right: MathHelper.percent(AppSizes.instance.appWidth, 10),
-                  child: Column(
-                    children: [
-                      Text(widget.injectData.title?? '').bold().fsR(5).color(Colors.white),
+                  left: MathHelper.percent(AppSizes.instance.appWidthRelateWeb, 10),
+                  right: MathHelper.percent(AppSizes.instance.appWidthRelateWeb, 10),
+                  child: ColoredBox(
+                    color: Colors.yellow,
+                    child: Column(
+                      children: [
+                        Text(widget.injectData.title?? '').bold().fsR(5).color(Colors.white),
 
-                      SizedBox(height: 5,),
-                      Text(widget.injectData.subTitle?? '').bold().fsR(4).color(Colors.white).subFont(),
+                        SizedBox(height: 5,),
+                        Text(widget.injectData.subTitle?? '').bold().fsR(4).color(Colors.white).subFont(),
 
-                      SizedBox(height: 20,),
-                      Directionality(
-                        textDirection: TextDirection.ltr,
-                          child: PlayBarSlider(durationStreamCtr.stream, (pos){
-                            currentTime = pos;
+                        SizedBox(height: 20,),
+                        Directionality(
+                          textDirection: TextDirection.ltr,
+                            child: PlayBarSlider(durationStreamCtr.stream, (pos){
+                              currentTime = pos;
 
-                            durationStreamCtr.add(
-                                PlaybackDisposition(PlaybackDispositionState.loaded, duration: totalTime, position: pos)
-                            );
+                              durationStreamCtr.add(
+                                  PlaybackDisposition(PlaybackDispositionState.loaded, duration: totalTime, position: pos)
+                              );
 
-                            audioPlayer.seek(pos);
-                          })
-                      ),
-
-                      SizedBox(height: 10,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(DurationFormatter.duration(totalTime, showSuffix: false)).color(Colors.white),
-                          Text(DurationFormatter.duration(currentTime, showSuffix: false)).color(Colors.white),
-                        ],
-                      ),
-
-                      SizedBox(height: 40,),
-
-                      GestureDetector(
-                        onTap: playPauseButton,
-                        child: Material(
-                          color: Colors.white.withAlpha(50),
-                            type: MaterialType.circle,
-                            child: Icon(
-                              audioPlayer.playing?
-                              AppIcons.pause : AppIcons.playArrow,
-                              color: Colors.white,
-                              size: 40,
-                            ),
+                              audioPlayer.seek(pos);
+                            })
                         ),
-                      ),
-                    ],
+
+                        SizedBox(height: 10,),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(DurationFormatter.duration(totalTime, showSuffix: false)).color(Colors.white),
+                            Text(DurationFormatter.duration(currentTime, showSuffix: false)).color(Colors.white),
+                          ],
+                        ),
+
+                        SizedBox(height: 40,),
+
+                        GestureDetector(
+                          onTap: playPauseButton,
+                          child: Material(
+                            color: Colors.white.withAlpha(50),
+                              type: MaterialType.circle,
+                              child: Icon(
+                                audioPlayer.playing?
+                                AppIcons.pause : AppIcons.playArrow,
+                                color: Colors.white,
+                                size: 40,
+                              ),
+                          ),
+                        ),
+                      ],
+                    ),
                   )
               ),
             ]
@@ -166,12 +169,6 @@ class AudioPlayerPageState extends StateBase<AudioPlayerPage> {
         );
       }
     );
-  }
-
-  void update(){
-    if(mounted){
-      setState(() {});
-    }
   }
 
   void playPauseButton(){
@@ -249,6 +246,7 @@ class AudioPlayerPageState extends StateBase<AudioPlayerPage> {
   void startTimerForSeeFull(){
     if(seeToEndTimer == null || !seeToEndTimer!.isActive) {
       var per = 20 / 100 * totalTime.inMilliseconds;
+      widget.injectData.onFullTimePlay?.call(); //hack
 
       seeToEndTimer = Timer(Duration(milliseconds: per.toInt()), () { //totalTime - Duration(seconds: 4)
         widget.injectData.onFullTimePlay?.call();

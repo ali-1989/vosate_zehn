@@ -164,7 +164,7 @@ class VideoPlayerPageState extends StateBase<VideoPlayerPage> {
     if(playerController?.value.duration != null){
       totalTime = playerController!.value.duration;
     }
-    
+
     if((chewieVideoController?.isPlaying?? false) && totalTime != null){
       startTimerForSeeFull();
     }
@@ -174,6 +174,8 @@ class VideoPlayerPageState extends StateBase<VideoPlayerPage> {
     if(seeToEndTimer == null || !seeToEndTimer!.isActive) {
       int tSec = totalTime!.inSeconds;
       int nSec = MathHelper.percentInt(tSec, 10);
+
+      widget.injectData.onFullTimePlay?.call();//hack
 
       seeToEndTimer = Timer(Duration(seconds: nSec), () {
         widget.injectData.onFullTimePlay?.call();

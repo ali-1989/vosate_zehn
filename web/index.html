@@ -100,6 +100,9 @@
       <div class="loader"></div>
     </div>
 
+    <script src="https://apis.google.com/js/platform.js" async defer>
+    </script>
+
     <script type="module">
         // https://dit-gis-test.web.app/#/
         // https://firebase.google.com/docs/web/setup#available-libraries
@@ -121,7 +124,7 @@
 
         const app = initializeApp(firebaseConfig);
         //const storage = getStorage(app);
-        //const fcirestore = getFirestore(app);
+        //const store = getFirestore(app);
         //const auth = getAuth(app);
         //const analytics = getAnalytics(app);
     </script>
@@ -140,7 +143,6 @@
                 return appRunner.runApp();
             }).then(function (app) {
                 window.setTimeout(function () {
-                    console.log('-----------------serviceWorker ' + navigator.serviceWorker);
                     loading.remove();
                 }, 200);
             });

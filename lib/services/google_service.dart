@@ -14,6 +14,7 @@ class GoogleService {
         signInOption: SignInOption.standard,
         scopes: [
           'https://www.googleapis.com/auth/userinfo.email',
+          //'https://accounts.google.com/o/oauth2/auth',
         ],
       );
     }
@@ -33,7 +34,7 @@ class GoogleService {
   Future<GoogleSignInAccount?> signIn() async {
     try {
       if(kIsWeb){
-        _googleUser = await signObj.signInSilently().timeout(const Duration(seconds: 20));
+        //_googleUser = await signObj.signInSilently().timeout(const Duration(seconds: 20));
         _googleUser ??= await signObj.signIn().timeout(const Duration(minutes: 5));
       }
       else {

@@ -101,6 +101,8 @@ class AppSizes {
   void removeMetricListener(Function lis){
     onMetricListeners.remove(lis);
   }
+
+  double get appWidthRelateWeb => webMaxWidthSize;
   ///●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●
   static ui.FlutterWindow getWindow(){
     return ui.window;

@@ -49,8 +49,8 @@ dependencies:
   pull_to_refresh: ^2.0.0
   image_picker: ^0.8.7+3
   toggle_switch: ^2.0.1
-  firebase_messaging: ^14.4.0                   # old: 14.2.2
-  firebase_core: ^2.9.0                         # old: 2.5.0
+  firebase_messaging: ^14.4.1                   # old: 14.2.2
+  firebase_core: ^2.10.0                         # old: 2.5.0
   lottie: ^2.3.2
   file_picker: ^5.2.9
   connectivity_plus: ^3.0.4
@@ -112,7 +112,7 @@ dependency_overrides:
   ffi: 2.0.1
   collection: 1.17.1
   image: 4.0.15
-  intl: 0.18.0
+  intl: ^0.18.1
 
 
 

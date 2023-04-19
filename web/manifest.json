@@ -1,11 +1,11 @@
 {
-    "name": "vosate_zehn",
-    "short_name": "vosate_zehn",
-    "start_url": ".",
+    "name": "vosate zehn",
+    "short_name": "vosate zehn",
+    "start_url": "./public",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "Vosate Zehn",
+    "description": "Vosate Zehn: meditation",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
