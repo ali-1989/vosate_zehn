@@ -289,7 +289,7 @@ class AppThemes {
 			inactiveTrackColor: th.inactiveBackColor, // selectedBar before seek
 			activeTickMarkColor: th.buttonBackColor,// selectedBar dot,
 			disabledActiveTickMarkColor: th.buttonBackColor,// unSelectedBar dot,
-			overlayColor: th.errorColor,
+			overlayColor: kIsWeb? Colors.transparent : th.errorColor,
 			valueIndicatorColor: th.infoColor,
 		);
 

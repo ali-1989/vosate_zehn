@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:app/pages/levels/playback_disposition.dart';
@@ -43,6 +44,7 @@ class PlayBarSliderState extends State<PlayBarSlider> {
     return SliderTheme(
         data: SliderTheme.of(context).copyWith(
             thumbShape: RoundSliderThumbShape(enabledThumbRadius: 6.0),
+            overlayColor: kIsWeb? Colors.transparent : null,
             //inactiveTrackColor: Colors.blueGrey
         ),
         child: StreamBuilder<PlaybackDisposition>(
