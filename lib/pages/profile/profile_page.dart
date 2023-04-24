@@ -104,8 +104,8 @@ class _ProfilePageState extends StateBase<ProfilePage> {
 
         Positioned(
           top: MathHelper.percent(AppSizes.instance.appHeight, 25),
-            left: MathHelper.percent(AppSizes.instance.appWidth, 10),
-            right: MathHelper.percent(AppSizes.instance.appWidth, 16),
+            left: MathHelper.percent(AppSizes.instance.appWidthRelateWeb, 10),
+            right: MathHelper.percent(AppSizes.instance.appWidthRelateWeb, 16),
             child: Column(
               children: [
                 Glowstone(
@@ -114,7 +114,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
                   //color: ColorHelper.textToColor(user.nameFamily),
                   color: AppThemes.instance.currentTheme.accentColor,
                   child: SizedBox(
-                    height: 120,
+                    height: kIsWeb? 150: 120,
                     child: Card(
                       clipBehavior: Clip.none,
                       child: Row(
@@ -122,37 +122,39 @@ class _ProfilePageState extends StateBase<ProfilePage> {
                         children: [
                           Transform.translate(
                             offset: Offset(40, 0),
-                            child: ClipPath(
-                              clipper: OctagonalClipper(),
-                              child: SizedBox(
-                                height: 120,
-                                width: 120,
-                                child: StreamBuilder(
-                                  stream: EventNotifierService.getStream(AppEvents.userProfileChange),
-                                  builder: (ctx, data) {
-                                    if(user.profileModel?.url != null){
-                                      if(kIsWeb){
-                                        return CircleAvatar(
-                                          backgroundImage: NetworkImage(user.profileModel!.url!),
-                                          radius: 30,
+                            child: StreamBuilder(
+                                stream: EventNotifierService.getStream(AppEvents.userProfileChange),
+                                builder: (ctx, data) {
+                                  if(user.profileModel?.url == null){
+                                    return ColoredBox(color: AppThemes.instance.currentTheme.accentColor);
+                                  }
+
+                                  if(kIsWeb){
+                                    return CircleAvatar(
+                                      backgroundImage: NetworkImage(user.profileModel!.url!),
+                                      radius: 75,
+                                    );
+                                  }
+                                  else {
+                                    final path = AppDirectories.getSavePathUri(user.profileModel!.url?? '', SavePathType.userProfile, user.avatarFileName);
+                                    final img = FileHelper.getFile(path);
+
+                                    if(img.existsSync()) {
+                                      if (user.profileModel!.volume == null || img.lengthSync() == user.profileModel!.volume) {
+                                        return ClipPath(
+                                          clipper: OctagonalClipper(),
+                                          child: SizedBox(
+                                            height: 120,
+                                            width: 120,
+                                            child: Image.file(img, width:  120, height: 120, fit: BoxFit.fill),
+                                          ),
                                         );
                                       }
-                                      else {
-                                        final path = AppDirectories.getSavePathUri(user.profileModel!.url?? '', SavePathType.userProfile, user.avatarFileName);
-                                        final img = FileHelper.getFile(path);
-
-                                        if(img.existsSync()) {
-                                          if (user.profileModel!.volume == null || img.lengthSync() == user.profileModel!.volume) {
-                                            return Image.file(img, width: 120, height: 120, fit: BoxFit.fill);
-                                          }
-                                        }
-                                      }
                                     }
+                                  }
 
-                                    return ColoredBox(color: AppThemes.instance.currentTheme.accentColor);
-                                  },
-                                ),
-                              ),
+                                  return ColoredBox(color: AppThemes.instance.currentTheme.accentColor);
+                              }
                             ),
                           ),
 
@@ -196,7 +198,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
                                               visualDensity: VisualDensity.compact,
                                             ),
                                             onPressed: changeNameFamilyClick,
-                                            child: Icon(AppIcons.edit, size: 15,)
+                                            child: Icon(AppIcons.edit, size: 15)
                                         ),
                                       ],
                                     ),

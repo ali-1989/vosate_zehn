@@ -177,46 +177,45 @@ class AppThemes {
 		final raw = FontManager.instance.rawThemeData;
 
 		final primaryTextTheme = TextTheme(
-				//fontSize: raw.textTheme.bodyText1.fontSize + fontSize
 			bodyLarge: raw.textTheme.bodyLarge!.copyWith(
-				fontFamily: baseFamily, color: th.textColor, fontSize: fontSize, height: height,
+				fontFamily: baseFamily, color: th.textColor, fontSize: fontSize +2, height: height,
 			),
 			bodyMedium: raw.textTheme.bodyMedium!.copyWith(
 				fontFamily: baseFamily, color: th.textColor, fontSize: fontSize, height: height,
 			),
 			bodySmall: raw.textTheme.bodySmall!.copyWith(
-				fontFamily: subFamily, color: th.textColor, fontSize: fontSize, height: height,
+				fontFamily: subFamily, color: th.textColor, fontSize: fontSize -1, height: height,
 			),
 			titleMedium: raw.textTheme.titleMedium!.copyWith(
-				fontFamily: baseFamily, color: th.textColor, fontSize: fontSize, height: height,
+				fontFamily: baseFamily, color: th.textColor, fontSize: fontSize +1, height: height,
 			),
 			titleSmall: raw.textTheme.titleSmall!.copyWith(
-				fontFamily: subFamily, color: th.textColor, fontSize: fontSize-1, height: height,
+				fontFamily: subFamily, color: th.textColor, fontSize: fontSize -1, height: height,
 			),
 			labelSmall: raw.textTheme.labelSmall!.copyWith(
 				fontFamily: subFamily, color: th.textColor, fontSize: fontSize, height: height,
 			),
 			displayLarge: raw.textTheme.displayLarge!.copyWith(
-				fontFamily: boldFamily, color: th.textColor, fontSize: fontSize + 6, height: height,
+				fontFamily: boldFamily, color: th.textColor, fontSize: fontSize +2, height: height,
 			),
 			displayMedium: raw.textTheme.displayMedium!.copyWith(
-				fontFamily: boldFamily, color: th.textColor, fontSize: fontSize + 5, height: height,
+				fontFamily: boldFamily, color: th.textColor, fontSize: fontSize +1, height: height,
 			),
 			displaySmall: raw.textTheme.displaySmall!.copyWith(
-				fontFamily: boldFamily, color: th.textColor, fontSize: fontSize + 4, height: height,
+				fontFamily: boldFamily, color: th.textColor, fontSize: fontSize, height: height,
 			),
 			headlineMedium: raw.textTheme.headlineMedium!.copyWith(
-				fontFamily: baseFamily, color: th.textColor, fontSize: fontSize + 3, height: height,
+				fontFamily: baseFamily, color: th.textColor, fontSize: fontSize +1, height: height,
 			),
 			headlineSmall: raw.textTheme.headlineSmall!.copyWith(
-				fontFamily: baseFamily, color: th.textColor, fontSize: fontSize + 2, height: height,
+				fontFamily: baseFamily, color: th.textColor, fontSize: fontSize, height: height,
 			),
 			titleLarge: raw.textTheme.titleLarge!.copyWith(
-				fontFamily: baseFamily, color: th.appBarItemColor, fontSize: fontSize + 1,
+				fontFamily: baseFamily, color: th.appBarItemColor, fontSize: fontSize +2,
 				fontWeight: FontWeight.bold, height: height,
 			),
 			labelLarge: raw.textTheme.labelLarge!.copyWith(
-				fontFamily: boldFamily, color: th.buttonTextColor, fontSize: fontSize, height: height,
+				fontFamily: boldFamily, color: th.buttonTextColor, fontSize: fontSize +1, height: height,
 			),
 		);
 
@@ -324,14 +323,13 @@ class AppThemes {
 
 		final iconButtonTheme = IconButtonThemeData(
 			style: ButtonStyle(
-				minimumSize: kIsWeb? MaterialStateProperty.all(Size(20, 45)): null,
+				//minimumSize: kIsWeb? MaterialStateProperty.all(Size(20, 45)): null,
 			),
 		);
 
 		final elevatedButtonTheme = ElevatedButtonThemeData(
 			style: ButtonStyle(
 					tapTargetSize: MaterialTapTargetSize.padded,
-				minimumSize: kIsWeb? MaterialStateProperty.all(Size(20, 45)) : null,// default: 28
 				//backgroundColor: MaterialStateProperty.all(th.buttonBackColor),
 				foregroundColor: MaterialStateProperty.all(th.buttonTextColor),
 				backgroundColor: MaterialStateProperty.resolveWith<Color>(

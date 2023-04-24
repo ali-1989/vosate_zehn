@@ -87,7 +87,7 @@ class SplashScreenState extends StateBase<SplashPage> {
 
     if (settingsLoad) {
       await Session.fetchLoginUsers();
-      await VersionManager.checkInstallVersion();
+      await VersionManager.checkVersionOnLaunch();
       connectToServer();
 
       ApplicationInitial.appLazyInit();

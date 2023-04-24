@@ -191,7 +191,7 @@ class FontManager {
     final c2 = Colors.blue.shade700;
 
     _rawTextTheme = TextTheme(
-      /// Drawer {textColor}  [emphasizing text]
+      /// Drawer > ListTile {textColor}  [emphasizing text]
       bodyLarge: temp.textTheme.bodyLarge!.copyWith(fontSize: fs, color: c1, decorationColor: c2),
       ///default for Material
       bodyMedium: temp.textTheme.bodyMedium!.copyWith(fontSize: fs, color: c1, decorationColor: c2),
@@ -348,7 +348,7 @@ class Font {
     }
     else {
       final appHeight = (isLandscape ? realPixelWidth : realPixelHeight) / pixelRatio;
-      return (appHeight / 100 /* ~6 */) + 5;    // ~11,  this is relative to any fonts
+      return (appHeight / 100 /* ~6 */) + 4;    //  this is relative to any fonts
     }
   }
 }

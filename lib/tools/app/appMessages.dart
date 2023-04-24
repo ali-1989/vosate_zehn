@@ -120,6 +120,10 @@ class AppMessages {
     return _getContext().t('update')?? _noText;
   }
 
+  static String get downloadNewVersion {
+    return _getContext().t('downloadNewVersion')?? _noText;
+  }
+
   static String get validation {
     return _getContext().tInMap('loginSection', 'validation')?? _noText;
   }

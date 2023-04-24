@@ -1,5 +1,8 @@
 import 'dart:io';
 
+import 'package:app/constants.dart';
+import 'package:app/managers/versionManager.dart';
+import 'package:app/tools/app/appThemes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -7,6 +10,7 @@ import 'package:iris_notifier/iris_notifier.dart';
 import 'package:iris_tools/api/helpers/colorHelper.dart';
 import 'package:iris_tools/api/helpers/fileHelper.dart';
 import 'package:iris_tools/api/helpers/mathHelper.dart';
+import 'package:iris_tools/api/helpers/urlHelper.dart';
 import 'package:iris_tools/modules/stateManagers/refresh.dart';
 import 'package:share_extend/share_extend.dart';
 
@@ -51,64 +55,120 @@ class DrawerMenuBuilder {
     return SizedBox(
       width: MathHelper.minDouble(400, MathHelper.percent(AppSizes.instance.appWidth, 60)),
       child: Drawer(
-        child: ListView(
+        child: Column(
           children: [
-            SizedBox(height: 32),
+            Expanded(
+              child: Theme(
+                data: AppThemes.instance.themeData.copyWith(
+                    textTheme: TextTheme(bodyLarge: TextStyle(fontSize: 10, color: Colors.black))
+                ),
+                child: ListView(
+                  children: [
+                    SizedBox(height: 32),
 
-            _buildProfileSection(),
+                    _buildProfileSection(),
 
-            SizedBox(height: 10),
+                    SizedBox(height: 10),
 
-            if(Session.hasAnyLogin())
-              ListTile(
-                title: Text(Session.isGuestCurrent()? AppMessages.registerTitle :AppMessages.logout).color(Colors.redAccent),
-                leading: Icon(AppIcons.logout, size: 18, color: Colors.redAccent),
-                onTap: onLogoffCall,
+                    if(Session.hasAnyLogin())
+                      ListTile(
+                        title: Text(Session.isGuestCurrent()? AppMessages.registerTitle :AppMessages.logout).color(Colors.redAccent),
+                        leading: Icon(AppIcons.logout, size: 18, color: Colors.redAccent),
+                        onTap: onLogoffCall,
+                        dense: true,
+                      ),
+
+                    ListTile(
+                      title: Text(AppMessages.favorites),
+                      leading: Icon(AppIcons.heart),
+                      onTap: gotoFavoritesPage,
+                      dense: true,
+                    ),
+
+                    ListTile(
+                      title: Text(AppMessages.lastSeenItem),
+                      leading: Icon(AppIcons.history),
+                      onTap: gotoLastSeenPage,
+                      dense: true,
+                    ),
+
+                    Visibility(
+                      visible: !kIsWeb,
+                      child: ListTile(
+                        title: Text(AppMessages.shareApp),
+                        leading: Icon(AppIcons.share),
+                        onTap: shareAppCall,
+                        dense: true,
+                      ),
+                    ),
+
+                    ListTile(
+                      title: Text(AppMessages.sentencesTitle),
+                      leading: Icon(AppIcons.report2),
+                      onTap: gotoSentencePage,
+                      dense: true,
+                    ),
+
+                    ListTile(
+                      title: Text(AppMessages.aidUs),
+                      leading: Icon(AppIcons.cashMultiple),
+                      onTap: gotoAidPage,
+                      dense: true,
+                    ),
+
+                    ListTile(
+                      title: Text(AppMessages.contactUs),
+                      leading: Icon(AppIcons.message),
+                      onTap: gotoContactUsPage,
+                      dense: true,
+                    ),
+
+                    ListTile(
+                      title: Text(AppMessages.aboutUs),
+                      leading: Icon(AppIcons.infoCircle),
+                      onTap: gotoAboutUsPage,
+                      dense: true,
+                    ),
+
+                    Builder(
+                      builder: (context) {
+                        if(VersionManager.existNewVersion){
+                          return Column(
+                            children: [
+                              ColoredBox(
+                                color: Colors.cyan.withAlpha(80),
+                                child: ListTile(
+                                  title: Text(AppMessages.downloadNewVersion),
+                                  leading: Icon(AppIcons.downloadFile),
+                                  onTap: downloadNewVersion,
+                                  dense: true,
+                                ),
+                              ),
+
+                              SizedBox(height: 50),
+                            ],
+                          );
+                        }
+
+                        return SizedBox();
+                      },
+
+                    ),
+                  ],
+                ),
               ),
-
-            ListTile(
-              title: Text(AppMessages.favorites),
-              leading: Icon(AppIcons.heart),
-              onTap: gotoFavoritesPage,
             ),
 
-            ListTile(
-              title: Text(AppMessages.lastSeenItem),
-              leading: Icon(AppIcons.history),
-              onTap: gotoLastSeenPage,
-            ),
-
-            Visibility(
-              visible: !kIsWeb,
-              child: ListTile(
-                title: Text(AppMessages.shareApp),
-                leading: Icon(AppIcons.share),
-                onTap: shareAppCall,
+            ColoredBox(
+              color: Colors.amberAccent.shade200,
+              child: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4.0),
+                    child: Text('نسخه ی ${Constants.appVersionName}'),
+                  ),
+                ],
               ),
-            ),
-
-            ListTile(
-              title: Text(AppMessages.sentencesTitle),
-              leading: Icon(AppIcons.report2),
-              onTap: gotoSentencePage,
-            ),
-
-            ListTile(
-              title: Text(AppMessages.aidUs),
-              leading: Icon(AppIcons.cashMultiple),
-              onTap: gotoAidPage,
-            ),
-
-            ListTile(
-              title: Text(AppMessages.contactUs),
-              leading: Icon(AppIcons.message),
-              onTap: gotoContactUsPage,
-            ),
-
-            ListTile(
-              title: Text(AppMessages.aboutUs),
-              leading: Icon(AppIcons.infoCircle),
-              onTap: gotoAboutUsPage,
             ),
           ],
         ),
@@ -226,6 +286,10 @@ class DrawerMenuBuilder {
   static void gotoAboutUsPage(){
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
     RouteTools.pushPage(RouteTools.getTopContext()!, AboutUsPage());
+  }
+
+  static void downloadNewVersion(){
+    UrlHelper.launchLink(VersionManager.newVersionModel?.link?? '');
   }
 
   static void gotoProfilePage(){

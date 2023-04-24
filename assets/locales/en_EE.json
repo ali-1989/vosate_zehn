@@ -203,6 +203,7 @@
   "thisAddressIsInvalid" : "این آدرس نامعتبر است",
   "yourProfileIsIncomplete": "پروفایل شما کامل نیست، لطفا آن را کامل کنید.",
   "newAppVersionIsOk": "نسخه ی جدید برنامه آماده شده، لطفا بروز رسانی کنید.",
+  "downloadNewVersion": "دانلود نسخه ی جدید",
 
 
   "httpCodes" : {

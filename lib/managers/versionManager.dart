@@ -18,6 +18,9 @@ import 'package:app/tools/deviceInfoTools.dart';
 class VersionManager {
   VersionManager._();
 
+  static bool existNewVersion = false;
+  static VersionModel? newVersionModel;
+
   static Future<void> onFirstInstall() async {
     SettingsManager.settingsModel.currentVersion = Constants.appVersionCode;
 
@@ -26,23 +29,23 @@ class VersionManager {
     SettingsManager.saveSettings();
   }
 
-  static Future<void> onUpdateInstall() async {
+  static Future<void> onReInstall() async {
     SettingsManager.settingsModel.currentVersion = Constants.appVersionCode;
     SettingsManager.saveSettings();
   }
 
-  static Future<void> checkInstallVersion() async {
+  static Future<void> checkVersionOnLaunch() async {
     final oldVersion = SettingsManager.settingsModel.currentVersion;
 
     if (oldVersion == null) {
       onFirstInstall();
     }
     else if (oldVersion < Constants.appVersionCode) {
-      onUpdateInstall();
+      onReInstall();
     }
   }
 
-  static Future<VersionModel?> requestCheckVersion(BuildContext context, Map<String, dynamic> data) async {
+  static Future<VersionModel?> requestGetLastVersion(BuildContext context, Map<String, dynamic> data) async {
     final res = Completer<VersionModel?>();
 
     final requester = Requester();
@@ -56,9 +59,9 @@ class VersionManager {
     };
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
-      final version = VersionModel.fromMap(data);
+      newVersionModel = VersionModel.fromMap(data);
 
-      res.complete(version);
+      res.complete(newVersionModel);
     };
 
     requester.bodyJson = data;
@@ -70,10 +73,11 @@ class VersionManager {
   static void checkAppHasNewVersion(BuildContext context) async {
     final deviceInfo = DeviceInfoTools.getDeviceInfo();
 
-    final vm = await requestCheckVersion(context, deviceInfo);
+    final vm = await requestGetLastVersion(context, deviceInfo);
 
     if(vm != null){
       if(vm.newVersionCode > Constants.appVersionCode){
+        existNewVersion = true;
         showUpdateDialog(context, vm);
       }
     }
@@ -84,6 +88,7 @@ class VersionManager {
     v = v.replaceAll('.', '');
 
     if(MathHelper.toInt(v) > Constants.appVersionCode){
+      existNewVersion = true;
       showUpdateDialog(context, serverVersion);
     }
   }*/

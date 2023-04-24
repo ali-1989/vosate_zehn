@@ -162,123 +162,126 @@ class _SearchPageState extends StateBase<SearchPage> {
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.black26),
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black26),
+              borderRadius: BorderRadius.circular(10),
+            ),
+
+            child: Padding(
+              padding: const EdgeInsets.all(1.0),
+              child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
-              ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Stack(
+                      children: [
+                        Builder(
+                          builder: (ctx){
+                            if(itm.imageModel?.url != null){
+                              return IrisImageView(
+                                width: 120,
+                                height: 120,
+                                fit: BoxFit.fill,
+                                url: itm.imageModel!.url!,
+                                imagePath: AppDirectories.getSavePathMedia(itm.imageModel, SavePathType.anyOnInternal, null),
+                              );
+                            }
 
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Stack(
-                    children: [
-                      Builder(
-                        builder: (ctx){
-                          if(itm.imageModel?.url != null){
-                            return IrisImageView(
-                              width: 120,
-                              height: 120,
-                              fit: BoxFit.fill,
-                              url: itm.imageModel!.url!,
-                              imagePath: AppDirectories.getSavePathMedia(itm.imageModel, SavePathType.anyOnInternal, null),
-                            );
-                          }
+                            return Image.asset(AppImages.appIcon, width: 120, height: 120, fit: BoxFit.contain);
+                          },
+                        ),
 
-                          return Image.asset(AppImages.appIcon, width: 120, height: 120, fit: BoxFit.contain);
-                        },
-                      ),
+                        Positioned(
+                            top: 0,
+                            right: 0,
+                            child: Builder(
+                                builder: (context) {
+                                  IconData? icon;
 
-                      Positioned(
-                          top: 0,
-                          right: 0,
-                          child: Builder(
-                              builder: (context) {
-                                IconData? icon;
+                                  if(itm.type == SubBucketTypes.video.id()){
+                                    icon = AppIcons.videoCamera;
+                                  }
 
-                                if(itm.type == SubBucketTypes.video.id()){
-                                  icon = AppIcons.videoCamera;
-                                }
+                                  if(itm.type == SubBucketTypes.audio.id()){
+                                    icon = AppIcons.headset;
+                                  }
 
-                                if(itm.type == SubBucketTypes.audio.id()){
-                                  icon = AppIcons.headset;
-                                }
-
-                                if(icon != null){
-                                  return Theme(
-                                    data: chipTheme,
-                                    child: Chip(
-                                      backgroundColor: Colors.grey.withAlpha(160),
-                                      shadowColor: Colors.transparent,
-                                      visualDensity: VisualDensity.compact,
-                                      elevation: 0,
-                                      label: Icon(icon, size: 15, color: Colors.white),
-                                    ),
-                                  );
-                                }
-
-                                return SizedBox();
-                              }
-                          )
-                      ),
-                    ],
-                  ),
-
-                  SizedBox(width: 12),
-
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical:8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(itm.title, maxLines: 2).bold().fsR(1),
-
-                          Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Builder(
-                                builder: (ctx){
-                                  if(itm.duration > 0){
-                                    final dur = Duration(milliseconds: itm.duration);
-                                    return Text('${DurationFormatter.duration(dur, showSuffix: false)} ثانیه').alpha().subFont();
+                                  if(icon != null){
+                                    return Theme(
+                                      data: chipTheme,
+                                      child: Chip(
+                                        backgroundColor: Colors.grey.withAlpha(160),
+                                        shadowColor: Colors.transparent,
+                                        visualDensity: VisualDensity.compact,
+                                        elevation: 0,
+                                        label: Icon(icon, size: 15, color: Colors.white),
+                                      ),
+                                    );
                                   }
 
                                   return SizedBox();
-                                },
-                              ),
-
-
-                              IconButton(
-                                  constraints: BoxConstraints.tightFor(),
-                                  padding: EdgeInsets.all(4),
-                                  splashRadius: 20,
-                                  visualDensity: VisualDensity.compact,
-                                  iconSize: 20,
-                                  onPressed: () async {
-                                    final res = await FavoriteService.addFavorite(itm);
-
-                                    if(res){
-                                      itm.isFavorite = true;
-                                      assistCtr.updateHead();
-                                    }
-                                  },
-                                  icon: Icon(itm.isFavorite ? AppIcons.heartSolid: AppIcons.heart,
-                                    size: 20,
-                                    color: itm.isFavorite ? Colors.red: Colors.black,
-                                  )
-                              )
-                            ],
-                          )
-                        ],
-                      ),
+                                }
+                            )
+                        ),
+                      ],
                     ),
-                  )
-                ],
+
+                    SizedBox(width: 12),
+
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical:8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(itm.title, maxLines: 2).bold().fsR(1),
+
+                            Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Builder(
+                                  builder: (ctx){
+                                    if(itm.duration > 0){
+                                      final dur = Duration(milliseconds: itm.duration);
+                                      return Text('${DurationFormatter.duration(dur, showSuffix: false)} ثانیه').alpha().subFont();
+                                    }
+
+                                    return SizedBox();
+                                  },
+                                ),
+
+
+                                IconButton(
+                                    constraints: BoxConstraints.tightFor(),
+                                    padding: EdgeInsets.all(4),
+                                    splashRadius: 20,
+                                    visualDensity: VisualDensity.compact,
+                                    iconSize: 20,
+                                    onPressed: () async {
+                                      final res = await FavoriteService.addFavorite(itm);
+
+                                      if(res){
+                                        itm.isFavorite = true;
+                                        assistCtr.updateHead();
+                                      }
+                                    },
+                                    icon: Icon(itm.isFavorite ? AppIcons.heartSolid: AppIcons.heart,
+                                      size: 20,
+                                      color: itm.isFavorite ? Colors.red: Colors.black,
+                                    )
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
