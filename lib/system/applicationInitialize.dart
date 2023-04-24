@@ -167,7 +167,7 @@ class ApplicationInitial {
 
       if(RouteTools.materialContext != null) {
         AidService.checkShowDialog();
-        VersionManager.checkAppHasNewVersion(RouteTools.getTopContext()!);
+        VersionManager.checkAppHasNewVersion(RouteTools.getBaseContext()!);
       }
 
       EventNotifierService.addListener(AppEvents.firebaseTokenReceived, ({data}) {

@@ -10,7 +10,6 @@ import 'package:iris_notifier/iris_notifier.dart';
 import 'package:iris_tools/api/helpers/colorHelper.dart';
 import 'package:iris_tools/api/helpers/fileHelper.dart';
 import 'package:iris_tools/api/helpers/mathHelper.dart';
-import 'package:iris_tools/api/helpers/urlHelper.dart';
 import 'package:iris_tools/modules/stateManagers/refresh.dart';
 import 'package:share_extend/share_extend.dart';
 
@@ -289,7 +288,7 @@ class DrawerMenuBuilder {
   }
 
   static void downloadNewVersion(){
-    UrlHelper.launchLink(VersionManager.newVersionModel?.link?? '');
+    VersionManager.showUpdateDialog(RouteTools.getBaseContext()!, VersionManager.newVersionModel!);
   }
 
   static void gotoProfilePage(){

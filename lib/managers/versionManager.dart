@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/helpers/urlHelper.dart';
@@ -47,7 +48,6 @@ class VersionManager {
 
   static Future<VersionModel?> requestGetLastVersion(BuildContext context, Map<String, dynamic> data) async {
     final res = Completer<VersionModel?>();
-
     final requester = Requester();
 
     requester.httpRequestEvents.onAnyState = (req) async {
@@ -55,7 +55,14 @@ class VersionManager {
     };
 
     requester.httpRequestEvents.onFailState = (req, response) async {
-      res.complete(null);
+      newVersionModel = VersionModel();
+      newVersionModel!.directLink = 'www.google.com';
+      newVersionModel!.description = 'نسخه ی جدید اپلیکیشن رسید. \n\n ویژگی ها:\n\n 1(پاهر جدید\n2( کلاس کلاس کلاس کلاس کلاس کلاس کلاس کلاس هست کلاس نیست دانلودپد لل\n یبل للا';
+      newVersionModel!.newVersionCode = 100;
+      newVersionModel!.newVersionName = '1.1.1';
+      newVersionModel!.restricted = false;
+
+      res.complete(newVersionModel);
     };
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
@@ -76,8 +83,10 @@ class VersionManager {
     final vm = await requestGetLastVersion(context, deviceInfo);
 
     if(vm != null){
-      if(vm.newVersionCode > Constants.appVersionCode){
+      if(true/*vm.newVersionCode > Constants.appVersionCode*/){
         existNewVersion = true;
+
+        await Future.delayed(Duration(seconds: 4));
         showUpdateDialog(context, vm);
       }
     }
@@ -99,21 +108,71 @@ class VersionManager {
       System.exitApp();
     }
 
+    final decoration = AppDialogIris.instance.dialogDecoration.copy();
+    decoration.positiveButtonBackColor = Colors.grey;
+
+    AppDialogIris.instance.showIrisDialog(
+      context,
+      descView: _buildView(vm),
+      decoration: decoration,
+      yesText: vm.restricted ? AppMessages.exit : AppMessages.later,
+      yesFn: vm.restricted ? closeApp: null,
+    );
+  }
+
+  static Widget _buildView(VersionModel vm){
     final msg = vm.description?? AppMessages.newAppVersionIsOk;
 
-    final decoration = AppDialogIris.instance.dialogDecoration.copy();
-    decoration.positiveButtonBackColor = Colors.blue;
+    void onDirectClick(){
+      UrlHelper.launchLink(vm.directLink?? '');
+    }
 
-    AppDialogIris.instance.showYesNoDialog(
-      context,
-      desc: msg,
-      decoration: decoration,
-      yesText: AppMessages.update,
-      noText: vm.restricted ? AppMessages.exit : AppMessages.later,
-      yesFn: (){
-        UrlHelper.launchLink(vm.link?? '');
-      },
-      noFn: vm.restricted ? closeApp: null,
+    return Column(
+      children: [
+        Text(msg),
+        SizedBox(height: 20),
+
+        Builder(
+            builder: (_){
+              if(vm.directLink != null){
+                return RichText(
+                    text: TextSpan(
+                      text: AppMessages.directDownload,
+                      style: TextStyle(color: Colors.blue),
+                      recognizer: TapGestureRecognizer()..onTap = onDirectClick,
+                    ),
+                );
+              }
+
+              return SizedBox();
+            }
+        ),
+
+        Builder(
+            builder: (_){
+              print('hhhhh B');
+              if(vm.markets.isNotEmpty){
+                print('hhhhh B2');
+                final list = vm.markets.entries.toList();
+
+                return Column(
+                  children: List.generate(vm.markets.length, (index) {
+                    final itm = list.elementAt(index);
+
+                    return RichText(
+                        text: TextSpan(
+                        text: itm.key,
+                        recognizer: TapGestureRecognizer()..onTap = (){UrlHelper.launchLink(itm.value);},
+                      )
+                    );
+                  }),
+                );
+              }
+
+              return SizedBox();
+            }
+        ),
+      ],
     );
   }
 }

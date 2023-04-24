@@ -124,6 +124,10 @@ class AppMessages {
     return _getContext().t('downloadNewVersion')?? _noText;
   }
 
+  static String get directDownload {
+    return _getContext().t('directDownload')?? _noText;
+  }
+
   static String get validation {
     return _getContext().tInMap('loginSection', 'validation')?? _noText;
   }
