@@ -1,5 +1,8 @@
 import 'dart:async';
 
+import 'package:app/system/keys.dart';
+import 'package:app/tools/app/appIcons.dart';
+import 'package:app/tools/routeTools.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +18,7 @@ import 'package:app/tools/app/appDialogIris.dart';
 import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/deviceInfoTools.dart';
+import 'package:iris_tools/widgets/customCard.dart';
 
 class VersionManager {
   VersionManager._();
@@ -55,14 +59,7 @@ class VersionManager {
     };
 
     requester.httpRequestEvents.onFailState = (req, response) async {
-      newVersionModel = VersionModel();
-      newVersionModel!.directLink = 'www.google.com';
-      newVersionModel!.description = 'نسخه ی جدید اپلیکیشن رسید. \n\n ویژگی ها:\n\n 1(پاهر جدید\n2( کلاس کلاس کلاس کلاس کلاس کلاس کلاس کلاس هست کلاس نیست دانلودپد لل\n یبل للا';
-      newVersionModel!.newVersionCode = 100;
-      newVersionModel!.newVersionName = '1.1.1';
-      newVersionModel!.restricted = false;
-
-      res.complete(newVersionModel);
+      res.complete(null);
     };
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
@@ -71,9 +68,12 @@ class VersionManager {
       res.complete(newVersionModel);
     };
 
+    data[Keys.requestZone] = 'last_version';
+
     requester.bodyJson = data;
     requester.prepareUrl();
     requester.request(context, false);
+
     return res.future;
   }
 
@@ -83,8 +83,13 @@ class VersionManager {
     final vm = await requestGetLastVersion(context, deviceInfo);
 
     if(vm != null){
-      if(true/*vm.newVersionCode > Constants.appVersionCode*/){
+      if(vm.newVersionCode > Constants.appVersionCode){
+        if(!vm.restricted && AppDB.fetchKv('promptVersion_${vm.newVersionCode}') != null){
+          return;
+        }
+
         existNewVersion = true;
+        AppDB.setReplaceKv('promptVersion_${vm.newVersionCode}', true);
 
         await Future.delayed(Duration(seconds: 4));
         showUpdateDialog(context, vm);
@@ -109,7 +114,13 @@ class VersionManager {
     }
 
     final decoration = AppDialogIris.instance.dialogDecoration.copy();
-    decoration.positiveButtonBackColor = Colors.grey;
+
+    if(vm.restricted) {
+      decoration.positiveButtonBackColor = Colors.orange;
+    }
+    else {
+      decoration.positiveButtonBackColor = Colors.grey;
+    }
 
     AppDialogIris.instance.showIrisDialog(
       context,
@@ -125,54 +136,89 @@ class VersionManager {
 
     void onDirectClick(){
       UrlHelper.launchLink(vm.directLink?? '');
+
+      if(!vm.restricted){
+        Navigator.of(RouteTools.getBaseContext()!).pop();
+      }
+    }
+
+    final views = <Widget>[];
+
+    views.add(
+        Align(
+          alignment: Alignment.topLeft,
+          child: CustomCard(
+            padding: EdgeInsets.symmetric(horizontal: 4),
+            color: Colors.green,
+            radius: 12,
+            child: Text('version: ${vm.newVersionName}', style: TextStyle(color: Colors.white),),
+          ),
+        )
+    );
+
+    views.add(Text(msg));
+
+    if (vm.directLink != null) {
+      views.add(SizedBox(height: 20));
+
+      views.add(
+          RichText(
+            text: TextSpan(
+              children: [
+                WidgetSpan(
+                    child: Icon(AppIcons.downloadFile, size: 20, color: Colors.red,)
+                ),
+
+                TextSpan(
+                  text: AppMessages.directDownload,
+                  style: TextStyle(color: Colors.blue),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = onDirectClick,
+                ),
+              ],
+              style: TextStyle(color: Colors.blue),
+              recognizer: TapGestureRecognizer()
+                ..onTap = onDirectClick,
+            ),
+          ),
+      );
+    }
+
+    if (vm.directLink != null) {
+      views.add(SizedBox(height: 5));
+
+      for(final market in vm.markets.entries){
+        views.add(
+            RichText(
+                text: TextSpan(
+                  text: market.key,
+                  style: TextStyle(color: Colors.blue),
+                  recognizer: TapGestureRecognizer()..onTap = (){
+                    UrlHelper.launchLink(market.value);
+
+                    if(!vm.restricted){
+                      Navigator.of(RouteTools.getBaseContext()!).pop();
+                    }
+                    },
+                )
+            )
+        );
+      }
     }
 
     return Column(
-      children: [
-        Text(msg),
-        SizedBox(height: 20),
-
-        Builder(
-            builder: (_){
-              if(vm.directLink != null){
-                return RichText(
-                    text: TextSpan(
-                      text: AppMessages.directDownload,
-                      style: TextStyle(color: Colors.blue),
-                      recognizer: TapGestureRecognizer()..onTap = onDirectClick,
-                    ),
-                );
-              }
-
-              return SizedBox();
-            }
-        ),
-
-        Builder(
-            builder: (_){
-              print('hhhhh B');
-              if(vm.markets.isNotEmpty){
-                print('hhhhh B2');
-                final list = vm.markets.entries.toList();
-
-                return Column(
-                  children: List.generate(vm.markets.length, (index) {
-                    final itm = list.elementAt(index);
-
-                    return RichText(
-                        text: TextSpan(
-                        text: itm.key,
-                        recognizer: TapGestureRecognizer()..onTap = (){UrlHelper.launchLink(itm.value);},
-                      )
-                    );
-                  }),
-                );
-              }
-
-              return SizedBox();
-            }
-        ),
-      ],
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: views,
     );
   }
 }
+
+/*
+newVersionModel = VersionModel();
+      newVersionModel!.directLink = 'http://www.google.com';
+      newVersionModel!.description = 'نسخه ی جدید اپلیکیشن رسید. \n\n ویژگی ها:\n\n 1(پاهر جدید\n2( کلاس کلاس کلاس کلاس کلاس کلاس کلاس کلاس هست کلاس نیست دانلودپد لل\n یبل للا';
+      newVersionModel!.newVersionCode = 100;
+      newVersionModel!.newVersionName = '1.1.1';
+      newVersionModel!.restricted = true;
+      newVersionModel!.markets = {'دانلود از مایکت':'http://x.com', 'دانلود از بازار':'http://y.com'};
+ */
