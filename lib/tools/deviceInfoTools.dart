@@ -61,7 +61,7 @@ class DeviceInfoTools {
 
         if(deviceId == null) {
           final vendor = webDeviceInfo?.vendor ?? '';
-          deviceId = 'web_${Generator.hashMd5('$vendor.${Generator.generateKey(25)}')}';
+          deviceId = 'web_${Generator.hashMd5('$vendor.${Generator.generateKey(25)}')}'; // 40 char
 
           AppDB.setReplaceKv(Keys.setting$webDeviceId, deviceId);
         }
