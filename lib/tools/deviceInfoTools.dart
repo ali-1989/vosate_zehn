@@ -19,6 +19,9 @@ class DeviceInfoTools {
   static AndroidDeviceInfo? androidDeviceInfo;
   static IosDeviceInfo? iosDeviceInfo;
   static WebBrowserInfo? webDeviceInfo;
+  static WindowsDeviceInfo? windowInfo;
+  static LinuxDeviceInfo? linuxInfo;
+  static MacOsDeviceInfo? macOsInfo;
 
   static Future<void> prepareDeviceInfo() async {
     final deviceInfoPlugin = DeviceInfoPlugin();
@@ -31,6 +34,15 @@ class DeviceInfoTools {
     }
     else if (Platform.isIOS) {
       iosDeviceInfo = await deviceInfoPlugin.iosInfo;
+    }
+    else if (Platform.isWindows) {
+      windowInfo = await deviceInfoPlugin.windowsInfo;
+    }
+    else if (Platform.isLinux) {
+      linuxInfo = await deviceInfoPlugin.linuxInfo;
+    }
+    else if (Platform.isMacOS) {
+      macOsInfo = await deviceInfoPlugin.macOsInfo;
     }
   }
 
@@ -49,20 +61,26 @@ class DeviceInfoTools {
 
         if(deviceId == null) {
           final vendor = webDeviceInfo?.vendor ?? '';
-          deviceId = 'web_${Generator.hashMd5('$vendor ${Generator.generateKey(10)}')}';
+          deviceId = 'web_${Generator.hashMd5('$vendor.${Generator.generateKey(25)}')}';
 
           AppDB.setReplaceKv(Keys.setting$webDeviceId, deviceId);
         }
       }
-      /*else if() {
-        deviceId = '${androidDeviceInfo?.brand}:${androidDeviceInfo?.id}';
-      }*/
+      else if (Platform.isWindows) {
+        deviceId = windowInfo?.deviceId;
+      }
+      else if (Platform.isLinux) {
+        deviceId = linuxInfo?.machineId;
+      }
+      else if (Platform.isMacOS) {
+        deviceId = macOsInfo?.systemGUID;
+      }
       else {
         deviceId = await PlatformDeviceId.getDeviceId;
       }
     }
     on PlatformException {
-      deviceId = 'Failed:${Generator.generateDateIsoId(4)}';
+      deviceId = 'unKnow_${Generator.generateDateIsoId(4)}';
     }
 
     return SynchronousFuture<String>(deviceId!);
@@ -72,11 +90,11 @@ class DeviceInfoTools {
     final js = <String, dynamic>{};
 
     if(kIsWeb){
-      final br = webDeviceInfo?.userAgent;
+      final uAgent = webDeviceInfo?.userAgent;
 
       js['device_type'] = 'Web';
       js['model'] = webDeviceInfo?.appName;
-      js['brand'] = br?.substring(0, min(50, br.length));
+      js['brand'] = uAgent?.substring(0, min(50, uAgent.length));
       js['api'] = webDeviceInfo?.platform;
 
       return js;
