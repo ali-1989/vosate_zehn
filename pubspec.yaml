@@ -29,14 +29,14 @@ dependencies:
 
   #device_preview: ^1.1.0
   cupertino_icons: ^1.0.5
-  url_launcher: ^6.1.10
+  url_launcher: ^6.1.11
   community_material_icon: ^5.9.55      # https://materialdesignicons.com/
   device_info_plus: ^8.2.2
   platform_device_id: ^1.0.1
   permission_handler: ^10.2.0            # NoWeb
   flutter_spinkit: ^5.2.0
   video_player: ^2.6.1
-  chewie: ^1.4.0
+  chewie: ^1.4.1
   http: ^0.13.6
   dio: ^5.1.1
   material_dialogs: ^1.1.4
@@ -73,6 +73,7 @@ dependencies:
   wakelock: ^0.6.2
   carousel_slider: ^4.2.1
   flutter_flip_card: ^0.0.4
+  audioplayers: ^4.0.1
 
 
   iris_tools:
