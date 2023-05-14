@@ -157,7 +157,7 @@ class UserModel {
 
   @override
   String toString(){
-    return '$userId _ name: $name _ family: $family _ mobile: $mobile _ sex: $sex | token: ${token?.token} , refresh Token: ${token?.refreshToken} ';
+    return '$userId _ userName: $userName _ name: $name _ family: $family _ mobile: $mobile _ sex: $sex | token: ${token?.token} , refresh Token: ${token?.refreshToken} ';
   }
 }
 ///=======================================================================================================

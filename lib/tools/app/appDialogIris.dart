@@ -159,7 +159,7 @@ class AppDialogIris {
 			mainAxisSize: MainAxisSize.min,
 			children: [
 				descView,
-				const SizedBox(height: 15,),
+				const SizedBox(height: 15),
 				AutoDirection(
 						builder: (context, dCtr){
 							return TextField(
@@ -200,25 +200,25 @@ class AppDialogIris {
 
 	void showSuccessDialog(BuildContext context, String? title, String desc) {//shield-check, sticker-check, thump-up
 		showIrisDialog(context, title: title, desc: desc,
-				icon: const Icon(AppIcons.eye, size: 48, color: Colors.green,)
+				icon: const Icon(AppIcons.eye, size: 48, color: Colors.green)
 		);
 	}
 
 	void showWarningDialog(BuildContext context, String? title, String desc) {
 		showIrisDialog(context, title: title, desc: desc, icon:
-		const Icon(AppIcons.eye, size: 48, color: Colors.orange,)
+		const Icon(AppIcons.eye, size: 48, color: Colors.orange)
 		);
 	}
 
 	void showInfoDialog(BuildContext context, String? title, String desc) { //library
 		showIrisDialog(context, title: title, desc: desc,
-				icon: const Icon(AppIcons.eye, size: 48, color: Colors.blue,)
+				icon: const Icon(AppIcons.eye, size: 48, color: Colors.blue)
 		);
 	}
 
 	Future showErrorDialog(BuildContext context, String? title, String desc) { //alert, minus-circle
 		return showIrisDialog(context, title: title, desc: desc,
-				icon: const Icon(AppIcons.eye, size: 48, color: Colors.redAccent,)
+				icon: const Icon(AppIcons.eye, size: 48, color: Colors.redAccent)
 		);
 	}
 	///============================================================================================================
@@ -244,6 +244,7 @@ class AppDialogIris {
 			decoration: AppDialogIris.instance.dialogDecoration,
 			positivePress: (ctx){
 				return true;
+				//Navigator.of(context).pop<bool>(true);
 			},
 			negativePress: (ctx)=> false,
 		);

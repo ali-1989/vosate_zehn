@@ -307,7 +307,8 @@ class AppHttpDio {
 		  return null;
 		}
 
-		return uri.replaceAll(RegExp('/{2,}'), '/').replaceFirst(':/', '://');
+		return uri.replaceAll(RegExp('/{2,}'), '/').replaceFirst(':\/', ':\/\/');
+		//return uri.replaceAll(RegExp('(?<!:)(/{2,})'), '/');
 	}
 }
 ///========================================================================================================
