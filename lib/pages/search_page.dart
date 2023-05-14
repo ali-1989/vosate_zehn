@@ -4,7 +4,7 @@ import 'package:iris_tools/api/duration/durationFormatter.dart';
 import 'package:iris_tools/api/helpers/focusHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:iris_tools/widgets/irisImageView.dart';
-import 'package:iris_tools/widgets/searchBar.dart';
+import 'package:iris_tools/widgets/searchBar.dart' as s;
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:app/managers/mediaManager.dart';
@@ -84,7 +84,7 @@ class _SearchPageState extends StateBase<SearchPage> {
         SizedBox(height: 20),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 14.0),
-          child: SearchBar(
+          child: s.SearchBar(
             onChangeEvent: (txt){
               if(txt.length > 2 && searchFilter.searchText != txt){
                 searchFilter.searchText = txt;

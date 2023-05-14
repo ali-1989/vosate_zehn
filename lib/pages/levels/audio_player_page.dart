@@ -1,12 +1,13 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/duration/durationFormatter.dart';
 import 'package:iris_tools/api/generator.dart';
 import 'package:iris_tools/api/helpers/mathHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
-import 'package:just_audio/just_audio.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 import 'package:app/pages/levels/playback_disposition.dart';
 import 'package:app/pages/levels/slider.dart';
@@ -31,6 +32,7 @@ enum AudioSourceType {
 class AudioPlayerPageInjectData {
   late AudioSourceType audioSourceType;
   late String srcAddress;
+  Uint8List? bytes;
   String? pageTitle;
   String? title;
   String? subTitle;
@@ -117,10 +119,10 @@ class AudioPlayerPageState extends StateBase<AudioPlayerPage> {
                     children: [
                       Text(widget.injectData.title?? '').bold().fsR(5).color(Colors.white),
 
-                      SizedBox(height: 5,),
+                      SizedBox(height: 5),
                       Text(widget.injectData.subTitle?? '').bold().fsR(4).color(Colors.white).subFont(),
 
-                      SizedBox(height: 20,),
+                      SizedBox(height: 20),
                       Directionality(
                         textDirection: TextDirection.ltr,
                           child: PlayBarSlider(durationStreamCtr.stream, (pos){
@@ -134,7 +136,7 @@ class AudioPlayerPageState extends StateBase<AudioPlayerPage> {
                           })
                       ),
 
-                      SizedBox(height: 10,),
+                      SizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -143,16 +145,14 @@ class AudioPlayerPageState extends StateBase<AudioPlayerPage> {
                         ],
                       ),
 
-                      SizedBox(height: 40,),
+                      SizedBox(height: 40),
 
                       GestureDetector(
                         onTap: playPauseButton,
                         child: Material(
                           color: Colors.white.withAlpha(50),
                             type: MaterialType.circle,
-                            child: Icon(
-                              audioPlayer.playing?
-                              AppIcons.pause : AppIcons.playArrow,
+                            child: Icon(isPlaying() ? AppIcons.pause : AppIcons.playArrow,
                               color: Colors.white,
                               size: 40,
                             ),
@@ -170,11 +170,11 @@ class AudioPlayerPageState extends StateBase<AudioPlayerPage> {
 
   void playPauseButton(){
     if(isAudioInit){
-      if(audioPlayer.playing){
+      if(isPlaying()){
         audioPlayer.pause();
       }
       else {
-        audioPlayer.play();
+        audioPlayer.resume();
       }
     }
   }
@@ -182,33 +182,35 @@ class AudioPlayerPageState extends StateBase<AudioPlayerPage> {
   void _initAudio(){
     Future? fu;
 
-    audioPlayer.playbackEventStream.listen(eventListener, onError: errorListener);
-    audioPlayer.playerStateStream.listen(stateListener, onError: errorListener);
-    audioPlayer.positionStream.listen(positionListener, onError: errorListener);
+    audioPlayer.onDurationChanged.listen(durationListener);
+    audioPlayer.onPositionChanged.listen(positionListener);
+    audioPlayer.onPlayerStateChanged.listen(stateListener);
+    audioPlayer.eventStream.listen(eventListener);
 
     switch(widget.injectData.audioSourceType){
       case AudioSourceType.file:
-        fu = audioPlayer.setFilePath(widget.injectData.srcAddress);
+        fu = audioPlayer.setSourceDeviceFile(widget.injectData.srcAddress);
         break;
       case AudioSourceType.network:
-        fu = audioPlayer.setUrl(widget.injectData.srcAddress);
+        fu = audioPlayer.setSourceUrl(widget.injectData.srcAddress);
         break;
       case AudioSourceType.bytes:
+        fu = audioPlayer.setSourceBytes(widget.injectData.bytes!);
         break;
       case AudioSourceType.asset:
-        fu = audioPlayer.setAsset(widget.injectData.srcAddress);
+        fu = audioPlayer.setSourceAsset(widget.injectData.srcAddress);
         break;
     }
 
-    fu!.then((duration) {
+    fu.then((s) {
       isAudioInit = true;
 
-      audioPlayer.play();
+      audioPlayer.resume();
     });
   }
 
-  void eventListener(PlaybackEvent event){
-    if(event.duration != null){
+  void eventListener(AudioEvent event){
+    if(event.eventType == AudioEventType.duration){
       totalTime = event.duration!;
 
       startTimerForSeeFull();
@@ -217,27 +219,34 @@ class AudioPlayerPageState extends StateBase<AudioPlayerPage> {
     assistCtr.updateHead();
   }
 
-  void stateListener(PlayerState state){
-    //if(state.playing){
+  void stateListener(PlayerState event){
+    if(event == PlayerState.playing){
+      startTimerForSeeFull();
+    }
+
+    assistCtr.updateHead();
+  }
+
+  bool isPlaying(){
+    return audioPlayer.state == PlayerState.playing;
+  }
+
+  void durationListener(Duration total) {
+    totalTime = total;
+    assistCtr.updateHead();
   }
 
   void positionListener(Duration dur) {
     currentTime = dur;
     assistCtr.updateHead();
 
-    if(audioPlayer.processingState == ProcessingState.ready){
-      durationStreamCtr.add(
-          PlaybackDisposition(
-            PlaybackDispositionState.playing,
-            position: dur,
-            duration: audioPlayer.duration?? dur,
-          )
-      );
-    }
-  }
-
-  void errorListener(Object e, StackTrace st){
-    //rint('error: ${e.toString()}');
+    durationStreamCtr.add(
+        PlaybackDisposition(
+          PlaybackDispositionState.playing,
+          position: dur,
+          duration: totalTime,
+        )
+    );
   }
 
   void startTimerForSeeFull(){

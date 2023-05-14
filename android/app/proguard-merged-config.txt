@@ -270,6 +270,35 @@
 }
 
 # End of content from C:\Users\Nicode2\.gradle\caches\transforms-3\f60180115d937b9a711c41ed6e72c4d2\transformed\jetified-lifecycle-viewmodel-savedstate-2.5.1\proguard.txt
+# The proguard configuration file for the following section is C:\Users\Nicode2\.gradle\caches\transforms-3\f049237555bf5136f22f432f56bf2b3e\transformed\rules\lib\META-INF\com.android.tools\r8\coroutines.pro
+# When editing this file, update the following files as well:
+# - META-INF/proguard/coroutines.pro
+# - META-INF/com.android.tools/proguard/coroutines.pro
+
+# Most of volatile fields are updated with AFU and should not be mangled
+-keepclassmembers class kotlinx.coroutines.** {
+    volatile <fields>;
+}
+
+# Same story for the standard library's SafeContinuation that also uses AtomicReferenceFieldUpdater
+-keepclassmembers class kotlin.coroutines.SafeContinuation {
+    volatile <fields>;
+}
+
+# These classes are only required by kotlinx.coroutines.debug.AgentPremain, which is only loaded when
+# kotlinx-coroutines-core is used as a Java agent, so these are not needed in contexts where ProGuard is used.
+-dontwarn java.lang.instrument.ClassFileTransformer
+-dontwarn sun.misc.SignalHandler
+-dontwarn java.lang.instrument.Instrumentation
+-dontwarn sun.misc.Signal
+
+# Only used in `kotlinx.coroutines.internal.ExceptionsConstructor`.
+# The case when it is not available is hidden in a `try`-`catch`, as well as a check for Android.
+-dontwarn java.lang.ClassValue
+
+# An annotation used for build tooling, won't be directly accessed.
+-dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
+# End of content from C:\Users\Nicode2\.gradle\caches\transforms-3\f049237555bf5136f22f432f56bf2b3e\transformed\rules\lib\META-INF\com.android.tools\r8\coroutines.pro
 # The proguard configuration file for the following section is C:\Users\Nicode2\.gradle\caches\transforms-3\d38c6244c98bef6a4061b02ebe797207\transformed\jetified-window-1.0.0-beta04\proguard.txt
 # Copyright (C) 2020 The Android Open Source Project
 #
@@ -304,36 +333,7 @@
 
 
 # End of content from C:\Users\Nicode2\.gradle\caches\transforms-3\d38c6244c98bef6a4061b02ebe797207\transformed\jetified-window-1.0.0-beta04\proguard.txt
-# The proguard configuration file for the following section is C:\Users\Nicode2\.gradle\caches\transforms-3\3dfaa34d3ee1a55b74bccc3a7e509170\transformed\rules\lib\META-INF\com.android.tools\r8\coroutines.pro
-# When editing this file, update the following files as well:
-# - META-INF/proguard/coroutines.pro
-# - META-INF/com.android.tools/proguard/coroutines.pro
-
-# Most of volatile fields are updated with AFU and should not be mangled
--keepclassmembers class kotlinx.coroutines.** {
-    volatile <fields>;
-}
-
-# Same story for the standard library's SafeContinuation that also uses AtomicReferenceFieldUpdater
--keepclassmembers class kotlin.coroutines.SafeContinuation {
-    volatile <fields>;
-}
-
-# These classes are only required by kotlinx.coroutines.debug.AgentPremain, which is only loaded when
-# kotlinx-coroutines-core is used as a Java agent, so these are not needed in contexts where ProGuard is used.
--dontwarn java.lang.instrument.ClassFileTransformer
--dontwarn sun.misc.SignalHandler
--dontwarn java.lang.instrument.Instrumentation
--dontwarn sun.misc.Signal
-
-# Only used in `kotlinx.coroutines.internal.ExceptionsConstructor`.
-# The case when it is not available is hidden in a `try`-`catch`, as well as a check for Android.
--dontwarn java.lang.ClassValue
-
-# An annotation used for build tooling, won't be directly accessed.
--dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
-# End of content from C:\Users\Nicode2\.gradle\caches\transforms-3\3dfaa34d3ee1a55b74bccc3a7e509170\transformed\rules\lib\META-INF\com.android.tools\r8\coroutines.pro
-# The proguard configuration file for the following section is C:\Users\Nicode2\.gradle\caches\transforms-3\34407b44016c00979766d900a628a711\transformed\rules\lib\META-INF\com.android.tools\r8-from-1.6.0\coroutines.pro
+# The proguard configuration file for the following section is C:\Users\Nicode2\.gradle\caches\transforms-3\92d4e507876e7a39ab58b4092ad4838c\transformed\rules\lib\META-INF\com.android.tools\r8-from-1.6.0\coroutines.pro
 # Allow R8 to optimize away the FastServiceLoader.
 # Together with ServiceLoader optimization in R8
 # this results in direct instantiation when loading Dispatchers.Main
@@ -344,8 +344,6 @@
 -assumenosideeffects class kotlinx.coroutines.internal.FastServiceLoaderKt {
     boolean ANDROID_DETECTED return true;
 }
-
--keep class kotlinx.coroutines.android.AndroidDispatcherFactory {*;}
 
 # Disable support for "Missing Main Dispatcher", since we always have Android main dispatcher
 -assumenosideeffects class kotlinx.coroutines.internal.MainDispatchersKt {
@@ -358,7 +356,8 @@
     boolean getDEBUG() return false;
     boolean getRECOVER_STACK_TRACES() return false;
 }
-# End of content from C:\Users\Nicode2\.gradle\caches\transforms-3\34407b44016c00979766d900a628a711\transformed\rules\lib\META-INF\com.android.tools\r8-from-1.6.0\coroutines.pro
+
+# End of content from C:\Users\Nicode2\.gradle\caches\transforms-3\92d4e507876e7a39ab58b4092ad4838c\transformed\rules\lib\META-INF\com.android.tools\r8-from-1.6.0\coroutines.pro
 # The proguard configuration file for the following section is C:\Users\Nicode2\.gradle\caches\transforms-3\19f60c6aa2f8c66b878b309b5b4ed446\transformed\jetified-transport-backend-cct-3.1.8\proguard.txt
 -dontwarn com.google.auto.value.AutoValue
 -dontwarn com.google.auto.value.AutoValue$Builder
@@ -537,7 +536,7 @@
     public static final android.os.Parcelable$Creator *;
 }
 # End of content from C:\Users\Nicode2\.gradle\caches\transforms-3\ca57895d9fe133210bbf693f7024007d\transformed\media-1.4.1\proguard.txt
-# The proguard configuration file for the following section is C:\Users\Nicode2\.gradle\caches\transforms-3\1199647928602796f46e74769107629a\transformed\core-1.9.0\proguard.txt
+# The proguard configuration file for the following section is C:\Users\Nicode2\.gradle\caches\transforms-3\4710c0a4274667159a19da865dd6e672\transformed\core-1.10.1\proguard.txt
 # Never inline methods, but allow shrinking and obfuscation.
 -keepclassmembernames,allowobfuscation,allowshrinking class androidx.core.view.ViewCompat$Api* {
   <methods>;
@@ -555,7 +554,7 @@
   <methods>;
 }
 
-# End of content from C:\Users\Nicode2\.gradle\caches\transforms-3\1199647928602796f46e74769107629a\transformed\core-1.9.0\proguard.txt
+# End of content from C:\Users\Nicode2\.gradle\caches\transforms-3\4710c0a4274667159a19da865dd6e672\transformed\core-1.10.1\proguard.txt
 # The proguard configuration file for the following section is C:\Users\Nicode2\.gradle\caches\transforms-3\da1b1bab61f93ad271a1728da25cc7c5\transformed\jetified-startup-runtime-1.0.0\proguard.txt
 # This Proguard rule ensures that ComponentInitializers are are neither shrunk nor obfuscated.
 # This is because they are discovered and instantiated during application initialization.
@@ -575,13 +574,6 @@
 -keep,allowshrinking interface com.google.firebase.components.ComponentRegistrar
 
 # End of content from C:\Users\Nicode2\.gradle\caches\transforms-3\e18e8bd04393375bba57870e61c2aee1\transformed\jetified-firebase-components-17.1.0\proguard.txt
-# The proguard configuration file for the following section is C:\Users\Nicode2\.gradle\caches\transforms-3\9753178b36c852b5e6f8a000d89b58d5\transformed\versionedparcelable-1.1.1\proguard.txt
--keep class * implements androidx.versionedparcelable.VersionedParcelable
--keep public class android.support.**Parcelizer { *; }
--keep public class androidx.**Parcelizer { *; }
--keep public class androidx.versionedparcelable.ParcelImpl
-
-# End of content from C:\Users\Nicode2\.gradle\caches\transforms-3\9753178b36c852b5e6f8a000d89b58d5\transformed\versionedparcelable-1.1.1\proguard.txt
 # The proguard configuration file for the following section is C:\Users\Nicode2\.gradle\caches\transforms-3\d2856b11853130323a77a9f39a73f005\transformed\jetified-lifecycle-process-2.2.0\proguard.txt
 # this rule is need to work properly when app is compiled with api 28, see b/142778206
 -keepclassmembers class * extends androidx.lifecycle.EmptyActivityLifecycleCallbacks { *; }
@@ -700,7 +692,26 @@
 -dontwarn androidx.room.paging.**
 
 # End of content from C:\Users\Nicode2\.gradle\caches\transforms-3\afe22f43d6a903bdafe401c2586293b7\transformed\room-runtime-2.2.5\proguard.txt
-# The proguard configuration file for the following section is C:\Users\Nicode2\.gradle\caches\transforms-3\ffbb6fcc48e420ec3471b5123d8d26af\transformed\rules\lib\META-INF\proguard\androidx-annotations.pro
+# The proguard configuration file for the following section is C:\Users\Nicode2\.gradle\caches\transforms-3\9753178b36c852b5e6f8a000d89b58d5\transformed\versionedparcelable-1.1.1\proguard.txt
+-keep class * implements androidx.versionedparcelable.VersionedParcelable
+-keep public class android.support.**Parcelizer { *; }
+-keep public class androidx.**Parcelizer { *; }
+-keep public class androidx.versionedparcelable.ParcelImpl
+
+# End of content from C:\Users\Nicode2\.gradle\caches\transforms-3\9753178b36c852b5e6f8a000d89b58d5\transformed\versionedparcelable-1.1.1\proguard.txt
+# The proguard configuration file for the following section is C:\Users\Nicode2\.gradle\caches\transforms-3\8f6aceed7fda735d316e2b9905bafaaa\transformed\jetified-ShortcutBadger-1.1.22\proguard.txt
+#https://github.com/leolin310148/ShortcutBadger/issues/46
+-keep class me.leolin.shortcutbadger.impl.AdwHomeBadger { <init>(...); }
+-keep class me.leolin.shortcutbadger.impl.ApexHomeBadger { <init>(...); }
+-keep class me.leolin.shortcutbadger.impl.AsusHomeLauncher { <init>(...); }
+-keep class me.leolin.shortcutbadger.impl.DefaultBadger { <init>(...); }
+-keep class me.leolin.shortcutbadger.impl.NewHtcHomeBadger { <init>(...); }
+-keep class me.leolin.shortcutbadger.impl.NovaHomeBadger { <init>(...); }
+-keep class me.leolin.shortcutbadger.impl.SolidHomeBadger { <init>(...); }
+-keep class me.leolin.shortcutbadger.impl.SonyHomeBadger { <init>(...); }
+-keep class me.leolin.shortcutbadger.impl.XiaomiHomeBadger { <init>(...); }
+# End of content from C:\Users\Nicode2\.gradle\caches\transforms-3\8f6aceed7fda735d316e2b9905bafaaa\transformed\jetified-ShortcutBadger-1.1.22\proguard.txt
+# The proguard configuration file for the following section is C:\Users\Nicode2\.gradle\caches\transforms-3\dab2ff1b6f6be754519694e7b2748162\transformed\rules\lib\META-INF\proguard\androidx-annotations.pro
 -keep,allowobfuscation @interface androidx.annotation.Keep
 -keep @androidx.annotation.Keep class * {*;}
 
@@ -720,19 +731,7 @@
   @androidx.annotation.DoNotInline <methods>;
 }
 
-# End of content from C:\Users\Nicode2\.gradle\caches\transforms-3\ffbb6fcc48e420ec3471b5123d8d26af\transformed\rules\lib\META-INF\proguard\androidx-annotations.pro
-# The proguard configuration file for the following section is C:\Users\Nicode2\.gradle\caches\transforms-3\8f6aceed7fda735d316e2b9905bafaaa\transformed\jetified-ShortcutBadger-1.1.22\proguard.txt
-#https://github.com/leolin310148/ShortcutBadger/issues/46
--keep class me.leolin.shortcutbadger.impl.AdwHomeBadger { <init>(...); }
--keep class me.leolin.shortcutbadger.impl.ApexHomeBadger { <init>(...); }
--keep class me.leolin.shortcutbadger.impl.AsusHomeLauncher { <init>(...); }
--keep class me.leolin.shortcutbadger.impl.DefaultBadger { <init>(...); }
--keep class me.leolin.shortcutbadger.impl.NewHtcHomeBadger { <init>(...); }
--keep class me.leolin.shortcutbadger.impl.NovaHomeBadger { <init>(...); }
--keep class me.leolin.shortcutbadger.impl.SolidHomeBadger { <init>(...); }
--keep class me.leolin.shortcutbadger.impl.SonyHomeBadger { <init>(...); }
--keep class me.leolin.shortcutbadger.impl.XiaomiHomeBadger { <init>(...); }
-# End of content from C:\Users\Nicode2\.gradle\caches\transforms-3\8f6aceed7fda735d316e2b9905bafaaa\transformed\jetified-ShortcutBadger-1.1.22\proguard.txt
+# End of content from C:\Users\Nicode2\.gradle\caches\transforms-3\dab2ff1b6f6be754519694e7b2748162\transformed\rules\lib\META-INF\proguard\androidx-annotations.pro
 # The proguard configuration file for the following section is <unknown>
 -ignorewarnings
 # End of content from <unknown>
