@@ -112,7 +112,6 @@ class MyApp extends StatelessWidget {
       navigatorKey: AppBroadcast.rootNavigatorKey,
       scaffoldMessengerKey: AppBroadcast.rootScaffoldMessengerKey,
       debugShowCheckedModeBanner: false,
-      useInheritedMediaQuery: true,
       title: Constants.appTitle,
       themeMode: AppThemes.instance.currentThemeMode,
       theme: AppThemes.instance.themeData,

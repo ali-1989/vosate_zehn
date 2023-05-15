@@ -134,16 +134,25 @@ class AppNotification {
 	}
 
 	static void startListenTap() {
-		listener(ReceivedNotification receivedNotification){
-			if(receivedNotification.payload is Map){
-				final key = receivedNotification.payload!['key'];
+		Future<void> listener(ReceivedAction action){
+			if(action.payload is Map){
+				final key = action.payload!['key'];
 				if(key == 'message'){
 					//AppBroadcast.layoutPageKey.currentState?.gotoPage(3);
 				}
 			}
+
+			return Future.value();
 		}
 
-		AwesomeNotifications().actionStream.listen(listener);
+		//AwesomeNotifications().actionStream.listen(listener);
+
+		AwesomeNotifications().setListeners(
+				onActionReceivedMethod: listener,
+				//onNotificationCreatedMethod: ,
+				//onNotificationDisplayedMethod: ,
+				//onDismissActionReceivedMethod:
+		);
 	}
 
 	static void removeChannel(String channelKey) {

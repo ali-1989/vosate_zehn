@@ -35,8 +35,6 @@ class AppSizes {
     return _instance;
   }
 
-
-
   void _prepareSizes() {
     realPixelWidth = PlatformDispatcher.instance.implicitView!.physicalSize.width;
     realPixelHeight = PlatformDispatcher.instance.implicitView!.physicalSize.height;
