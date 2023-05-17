@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -21,6 +23,7 @@ class AppSizes {
   double textMultiplier = 6; // Tecno: ~6.4
   double imageMultiplier = 1;
   double heightMultiplier = 1;
+  ViewPadding? rootPadding;
   List<Function> onMetricListeners = [];
   Function? _systemMetricFunc;
 
@@ -39,6 +42,7 @@ class AppSizes {
     realPixelWidth = PlatformDispatcher.instance.implicitView!.physicalSize.width;
     realPixelHeight = PlatformDispatcher.instance.implicitView!.physicalSize.height;
     pixelRatio = PlatformDispatcher.instance.implicitView!.devicePixelRatio;
+    rootPadding = PlatformDispatcher.instance.implicitView!.padding;
     final isLandscape = realPixelWidth! > realPixelHeight!;
 
     if(kIsWeb) {
@@ -98,8 +102,12 @@ class AppSizes {
 
   double get appWidthRelateWeb => webMaxWidthSize;
   ///●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●
+  static FlutterView? getWindow(){
+    return PlatformDispatcher.instance.implicitView;
+  }
+
   static Size getWindowSize(){
-    return PlatformDispatcher.instance.implicitView!.physicalSize;
+    return getWindow()!.physicalSize;
   }
 
   static bool isBigWidth(){

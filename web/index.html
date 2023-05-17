@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <base href="/">
-    <!-- <base href="$FLUTTER_BASE_HREF"> -->
+<head>
+    <!--<base href="/admin/"> -->                      <!-- need for build -->
+    <base href="$FLUTTER_BASE_HREF">     <!-- need for run -->
 
     <meta charset="UTF-8">
     <meta content="IE=Edge" http-equiv="X-UA-Compatible">
@@ -27,142 +27,146 @@
     <title>وسعت ذهن</title>
     <link rel="manifest" href="manifest.json">
 
-  <style>
-		body {
-		height: 100%;
-		width: 100%;
-		background-color: #eeeeee;
-		}
-  
-		.centered {
-		top: 50%;
-		left: 50%;
-		transform: translate(-50% , -50%);
-		position: absolute;
-	}
+    <!-- unpkg : use the latest version of Video.js -->
+    <link href="https://unpkg.com/video.js/dist/video-js.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/video.js/dist/video.min.js"></script>
+
+    <style>
+        body {
+            height: 100%;
+            width: 100%;
+            background-color: #eeeeee;
+        }
+
+        .centered {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            position: absolute;
+        }
 
         .loading {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          margin: 0;
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          -ms-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
         }
 
         .loader {
-          border: 12px solid #f3f3f3;
-          border-radius: 50%;
-          border: 11px solid;
-          border-top: 12px solid #e77212;
-          border-right: 12px solid white;
-          border-bottom: 12px solid #e77212;
-          border-left: 12px solid white;
-          width: 50px;
-          height: 50px;
-          -webkit-animation: spin 2s linear infinite;
-          animation: spin 2s linear infinite;
+            border: 12px solid #f3f3f3;
+            border-radius: 50%;
+            border: 11px solid;
+            border-top: 12px solid #e77212;
+            border-right: 12px solid white;
+            border-bottom: 12px solid #e77212;
+            border-left: 12px solid white;
+            width: 50px;
+            height: 50px;
+            -webkit-animation: spin 2s linear infinite;
+            animation: spin 2s linear infinite;
         }
 
         @-webkit-keyframes spin {
-          0% {
-            -webkit-transform: rotate(0deg);
-          }
-          100% {
-            -webkit-transform: rotate(360deg);
-          }
+            0% {
+                -webkit-transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+            }
         }
 
         @keyframes spin {
-          0% {
-            transform: rotate(0deg);
-          }
-          100% {
-            transform: rotate(360deg);
-          }
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
         }
-  </style>
-  
-  <script>
-    //window.flutterWebRenderer = "html";
-    var serviceWorkerVersion = null;
-  </script>
+    </style>
 
-  <script src="flutter.js" defer></script>
+    <script>
+        //window.flutterWebRenderer = "html";
+        var serviceWorkerVersion = null;
+    </script>
+
+    <script src="flutter.js" defer></script>
 </head>
 
 <body>
-	<div id="loading" class='centered'>
-	<!--<img src="loading.gif" alt="loading-image">-->
-      <div class="loader"></div>
-    </div>
+<div id="loading" class='centered'>
+    <!--<img src="loading.gif" alt="loading-image">-->
+    <div class="loader"></div>
+</div>
 
-    <script src="https://apis.google.com/js/platform.js" async defer>
-    </script>
+<script src="https://apis.google.com/js/platform.js" async defer>
+</script>
 
-    <script type="module">
-        // https://dit-gis-test.web.app/#/
-        // https://firebase.google.com/docs/web/setup#available-libraries
+<script type="module">
+    // https://dit-gis-test.web.app/#/
+    // https://firebase.google.com/docs/web/setup#available-libraries
 
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-app.js";
-        //import { getAuth, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-auth.js";
-        //import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-analytics.js";
-        //import { getFirestore } from 'https://www.gstatic.com/firebasejs/9.19.1/firebase-firestore.js'
+    import {initializeApp} from "https://www.gstatic.com/firebasejs/9.19.1/firebase-app.js";
+    //import { getAuth, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-auth.js";
+    //import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-analytics.js";
+    //import { getFirestore } from 'https://www.gstatic.com/firebasejs/9.19.1/firebase-firestore.js'
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyC2gsyD1HYpP6LwXws6hZc_PTFoK68rl8c",
-            authDomain: "vosate-zehn-7d8fe.firebaseapp.com",
-            projectId: "vosate-zehn-7d8fe",
-            storageBucket: "vosate-zehn-7d8fe.appspot.com",
-            messagingSenderId: "731359726004",
-            appId: "1:731359726004:web:7b371dd04042f69cb20ae1",
-            measurementId: "G-8ZKZGGLXRW"
-        };
+    const firebaseConfig = {
+        apiKey: "AIzaSyC2gsyD1HYpP6LwXws6hZc_PTFoK68rl8c",
+        authDomain: "vosate-zehn-7d8fe.firebaseapp.com",
+        projectId: "vosate-zehn-7d8fe",
+        storageBucket: "vosate-zehn-7d8fe.appspot.com",
+        messagingSenderId: "731359726004",
+        appId: "1:731359726004:web:7b371dd04042f69cb20ae1",
+        measurementId: "G-8ZKZGGLXRW"
+    };
 
-        const app = initializeApp(firebaseConfig);
-        //const storage = getStorage(app);
-        //const store = getFirestore(app);
-        //const auth = getAuth(app);
-        //const analytics = getAnalytics(app);
-    </script>
+    const app = initializeApp(firebaseConfig);
+    //const storage = getStorage(app);
+    //const store = getFirestore(app);
+    //const auth = getAuth(app);
+    //const analytics = getAnalytics(app);
+</script>
 
-    <script>
-        window.addEventListener('load', function () {
-            const loading = document.getElementById('loading');
+<script>
+    window.addEventListener('load', function () {
+        const loading = document.getElementById('loading');
 
-            _flutter.loader.loadEntrypoint({
-                serviceWorker: {
-                    serviceWorkerVersion: serviceWorkerVersion,
-                }
-            }).then(function (engineInitializer) {
-                return engineInitializer.initializeEngine();
-            }).then(function (appRunner) {
-                return appRunner.runApp();
-            }).then(function (app) {
-                window.setTimeout(function () {
-                    loading.remove();
-                }, 200);
-            });
-        });
-    </script>
-
-    <!--<script>
-      window.addEventListener('load', function(ev) {
-        // Download main.dart.js
         _flutter.loader.loadEntrypoint({
-          serviceWorker: {
-            serviceWorkerVersion: serviceWorkerVersion,
-          },
-          onEntrypointLoaded: function(engineInitializer) {
-            engineInitializer.initializeEngine().then(function(appRunner) {
-              appRunner.runApp();
-            });
-          }
+            serviceWorker: {
+                serviceWorkerVersion: serviceWorkerVersion,
+            }
+        }).then(function (engineInitializer) {
+            return engineInitializer.initializeEngine();
+        }).then(function (appRunner) {
+            return appRunner.runApp();
+        }).then(function (app) {
+            window.setTimeout(function () {
+                loading.remove();
+            }, 200);
         });
-      });
-    </script>-->
+    });
+</script>
+
+<!--<script>
+  window.addEventListener('load', function(ev) {
+    // Download main.dart.js
+    _flutter.loader.loadEntrypoint({
+      serviceWorker: {
+        serviceWorkerVersion: serviceWorkerVersion,
+      },
+      onEntrypointLoaded: function(engineInitializer) {
+        engineInitializer.initializeEngine().then(function(appRunner) {
+          appRunner.runApp();
+        });
+      }
+    });
+  });
+</script>-->
 </body>
 </html>

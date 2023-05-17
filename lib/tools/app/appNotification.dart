@@ -33,6 +33,20 @@ Future <void> onActionReceivedMethod(ReceivedAction receivedAction) async {
 
 }*/
 
+@pragma('vm:entry-point')
+Future<void> awesomeTapListener(ReceivedAction action){
+	if(action.payload is Map){
+		final key = action.payload!['key'];
+
+		if(key == 'message'){ // send from firebase-service
+			//AppBroadcast.layoutPageKey.currentState?.gotoPage(3);
+			//RouteTools.backToRoot(RouteTools.getBaseContext()!);
+		}
+	}
+
+	return Future.value();
+}
+
 ///=======================================================================================
 class AppNotification {
 	AppNotification._();
@@ -93,7 +107,7 @@ class AppNotification {
 		///* resource://drawable/notif
 		AwesomeNotifications().initialize(
 			'resource://drawable/ic_stat_app_icon',
-			[nc1,],
+			[nc1],
 			debug: false,
 		);
 
@@ -134,21 +148,10 @@ class AppNotification {
 	}
 
 	static void startListenTap() {
-		Future<void> listener(ReceivedAction action){
-			if(action.payload is Map){
-				final key = action.payload!['key'];
-				if(key == 'message'){
-					//AppBroadcast.layoutPageKey.currentState?.gotoPage(3);
-				}
-			}
-
-			return Future.value();
-		}
-
-		//AwesomeNotifications().actionStream.listen(listener);
+		//AwesomeNotifications().actionStream.listen(awesomeTapListener);
 
 		AwesomeNotifications().setListeners(
-				onActionReceivedMethod: listener,
+				onActionReceivedMethod: awesomeTapListener,
 				//onNotificationCreatedMethod: ,
 				//onNotificationDisplayedMethod: ,
 				//onDismissActionReceivedMethod:

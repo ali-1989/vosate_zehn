@@ -13,20 +13,18 @@ import 'package:app/structures/enums/enums.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/views/homeComponents/appBarBuilder.dart';
 
+
 class VideoPlayerPageInjectData {
   late VideoSourceType videoSourceType;
   late String srcAddress;
   String? heroTag;
   Color? backColor;
   OnFullTimePlay? onFullTimePlay;
-  //String? info;
-  //TextStyle? infoStyle;
 }
 ///---------------------------------------------------------------------------------
 typedef OnFullTimePlay = void Function();
 ///---------------------------------------------------------------------------------
-class VideoPlayerPage extends StatefulWidget{
-
+class VideoPlayerPage extends StatefulWidget {
   final VideoPlayerPageInjectData injectData;
 
   VideoPlayerPage({
@@ -84,9 +82,23 @@ class VideoPlayerPageState extends StateBase<VideoPlayerPage> {
           Center(
             child: Hero(
                 tag: widget.injectData.heroTag?? '',
-                child: isVideoInit?
-                    Chewie(controller: chewieVideoController!)
-                    : Center(child: CircularProgressIndicator())
+                child: Builder(
+                  builder: (_){
+                    /*if(kIsWeb){
+                      return VideoJsWidget(
+                        videoJsController: videoJsController,
+                        height: sh,
+                        width: sw,
+                      );
+                    }*/
+
+                    if(isVideoInit){
+                      return Chewie(controller: chewieVideoController!);
+                    }
+
+                    return Center(child: CircularProgressIndicator());
+                  },
+                ),
             ),
           ),
         ]
@@ -105,9 +117,35 @@ class VideoPlayerPageState extends StateBase<VideoPlayerPage> {
   }
 
   void _initVideo(){
-    //rint('@@@@@@@@@@${widget.injectData.srcAddress}');
+    /*if(kIsWeb){
+      final op = VideoJsOptions(
+          language: 'en',
+          controls: true,
+          loop: false,
+          muted: false,
+          fluid: false,
+          liveui: false,
+          preferFullWindow: false,
+          responsive: false,
+        suppressNotSupportedError: false,
+        //poster: 'https://file-examples-com.github.io/uploads/2017/10/file_example_JPG_100kB.jpg',
+        //aspectRatio: '16:9',
+        notSupportedMessage: 'متاسفانه قابل پخش نیست',
+          playbackRates: [1, 2],
+          sources: [Source(widget.injectData.srcAddress, 'video/mp4')],
+
+      );
+
+      videoJsController = VideoJsController(
+          'videoId',
+          videoJsOptions: op,
+      );
+
+      return;
+    } */
+
     //widget.injectData.srcAddress = widget.injectData.srcAddress.replaceFirst('vosatezehn.com', '162.223.90.121');
-    switch(widget.injectData.videoSourceType){
+    switch (widget.injectData.videoSourceType) {
       case VideoSourceType.file:
         playerController = VideoPlayerController.file(File(widget.injectData.srcAddress));
         break;
