@@ -44,7 +44,7 @@ dependencies:
   awesome_notifications: ^0.7.4+1                 # can not upgrade to new, occur error, 0.6.21
   popover: ^0.2.8+2
   stop_watch_timer: ^2.0.0
-  iris_notifier: ^0.0.3
+  iris_notifier: ^0.0.4
   numberpicker: ^2.1.2
   pull_to_refresh: ^2.0.0
   image_picker: ^0.8.7+5
