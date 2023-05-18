@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/modules/stateManagers/assist.dart';
@@ -34,7 +35,6 @@ class ContentViewPageInjectData {
 }
 ///---------------------------------------------------------------------------------
 class ContentViewPage extends StatefulWidget{
-
   final ContentViewPageInjectData injectData;
 
   ContentViewPage({
@@ -375,6 +375,17 @@ class _LevelPageState extends StateBase<ContentViewPage> {
     //AppToast.showToast(context, 'جلسه بعدی باز شد');
   }
 
+  MediaModelWrapForContent getNextMedia(MediaModelWrapForContent current){
+    int idx = mediaList.indexWhere((element) => element.id == current.id);
+
+    try{
+      return mediaList[idx+1];
+    }
+    catch (e){
+      return mediaList[0];
+    }
+  }
+
   void requestData() async {
     final js = <String, dynamic>{};
     js[Keys.requestZone] = 'get_bucket_content_data';
@@ -431,6 +442,7 @@ class _LevelPageState extends StateBase<ContentViewPage> {
 
     if(user == null || user.userId == '0'){
       media.isSee = true;
+      AssistController.updateGroupGlobal(AppAssistKeys.updateAudioSeen);
       return;
     }
 
@@ -442,7 +454,15 @@ class _LevelPageState extends StateBase<ContentViewPage> {
     js['media_id'] = media.id;
 
     requester.httpRequestEvents.onFailState = (req, data) async {
-      AppToast.showToast(context, 'خطا در باز کردن جلسه');
+      if(kIsWeb){
+        media.isSee = true;
+        AssistController.updateGroupGlobal(AppAssistKeys.updateAudioSeen);
+      }
+
+      print('@@@@@@@@@@@@@@dd@@@@@@@@@');
+      print(data);
+      print('@@@@@@@@@@@@@@@@@@@@@@@');
+      //AppToast.showToast(context, 'خطا در باز کردن جلسه');
     };
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {

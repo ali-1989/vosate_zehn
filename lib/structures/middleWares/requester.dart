@@ -119,7 +119,7 @@ class Requester {
     });
 
     f = f.then((val) async {
-      if(kDebugMode) {
+      if(kDebugMode && !kIsWeb) {
         Tools.verbosePrint('@@@>> [${_httpRequester.requestOptions?.uri}]  response ======= [${_httpRequester.responseData?.statusCode}] $val');
       }
 
