@@ -8,7 +8,7 @@ class Constants {
   static String appTitle = 'vosate zehn';
   static final _major = 5;
   static final _minor = 3;
-  static final _patch = 0;
+  static final _patch = 1;
 
   static String appVersionName = '$_major.$_minor.$_patch';
   static int appVersionCode = _major *10000 + _minor *100 + _patch;

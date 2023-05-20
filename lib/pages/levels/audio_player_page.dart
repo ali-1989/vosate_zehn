@@ -220,9 +220,9 @@ class AudioPlayerPageState extends StateBase<AudioPlayerPage> {
   }
 
   void stateListener(PlayerState event){
-    if(event == PlayerState.playing){
+    /*if(event == PlayerState.playing){
       startTimerForSeeFull();
-    }
+    }*/
 
     assistCtr.updateHead();
   }
@@ -250,8 +250,8 @@ class AudioPlayerPageState extends StateBase<AudioPlayerPage> {
   }
 
   void startTimerForSeeFull(){
-    if(seeToEndTimer == null || !seeToEndTimer!.isActive) {
-      var per = 20 / 100 * totalTime.inMilliseconds;
+    if((seeToEndTimer == null || !seeToEndTimer!.isActive) && totalTime.inMilliseconds > 10) {
+      var per = 20 * totalTime.inMilliseconds / 100;
       widget.injectData.onFullTimePlay?.call(); //hack
 
       seeToEndTimer = Timer(Duration(milliseconds: per.toInt()), () { //totalTime - Duration(seconds: 4)

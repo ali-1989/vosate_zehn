@@ -1,3 +1,4 @@
+import 'package:app/tools/app/appCache.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -438,6 +439,10 @@ class _LevelPageState extends StateBase<ContentViewPage> {
   }
 
   void requestRegisterSeenContent(MediaModelWrapForContent media) async {
+    if(!AppCache.canCallMethodAgain('requestRegisterSeenContent')){
+      return;
+    }
+
     final user = Session.getLastLoginUser();
 
     if(user == null || user.userId == '0'){
@@ -459,10 +464,7 @@ class _LevelPageState extends StateBase<ContentViewPage> {
         AssistController.updateGroupGlobal(AppAssistKeys.updateAudioSeen);
       }
 
-      print('@@@@@@@@@@@@@@dd@@@@@@@@@');
-      print(data);
-      print('@@@@@@@@@@@@@@@@@@@@@@@');
-      //AppToast.showToast(context, 'خطا در باز کردن جلسه');
+      AppToast.showToast(context, 'خطا در باز کردن جلسه');
     };
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
