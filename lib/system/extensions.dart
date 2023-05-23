@@ -1037,6 +1037,448 @@ extension TextExtension on Text {
   }
 }
 ///==========================================================================================================
+extension SelectableTextExtension on SelectableText {
+  SelectableText whiteOrAppBarItemOn(Color color) {
+    Color replace;
+
+    if(ColorHelper.isNearColors(color, [Colors.white, Colors.grey[200]!])) {
+      replace = AppThemes.instance.currentTheme.appBarItemColor;
+    } else {
+      replace = Colors.white;
+    }
+
+    var ts = style ?? AppThemes.instance.currentTheme.baseTextStyle;
+    ts = ts.copyWith(color: replace);
+
+    return SelectableText(
+      data!,
+      key: key,
+      style: ts,
+      strutStyle: strutStyle,
+      textAlign: textAlign,
+      maxLines: maxLines,
+      semanticsLabel: semanticsLabel,
+      textDirection: textDirection,
+      textHeightBehavior: textHeightBehavior,
+      textScaleFactor: textScaleFactor,
+      textWidthBasis: textWidthBasis,
+    );
+  }
+
+  SelectableText whiteOrAppBarItemOnPrimary() {
+    Color replace;
+
+    if(ColorHelper.isNearColors(AppThemes.instance.currentTheme.primaryColor,
+        [Colors.grey[900]!, Colors.white, Colors.grey[600]!])) {
+      replace = AppThemes.instance.currentTheme.appBarItemColor;
+    } else {
+      replace = Colors.white;
+    }
+
+    var ts = style ?? AppThemes.instance.currentTheme.baseTextStyle;
+    ts = ts.copyWith(color: replace);
+
+    return SelectableText(
+      data!,
+      key: key,
+      style: ts,
+      strutStyle: strutStyle,
+      textAlign: textAlign,
+      maxLines: maxLines,
+      semanticsLabel: semanticsLabel,
+      textDirection: textDirection,
+      textHeightBehavior: textHeightBehavior,
+      textScaleFactor: textScaleFactor,
+      textWidthBasis: textWidthBasis,
+    );
+  }
+
+  SelectableText whiteOrDifferentOnPrimary() {
+    Color replace;
+
+    if(ColorHelper.isNearColors(AppThemes.instance.currentTheme.primaryColor,
+        [Colors.grey[900]!, Colors.white, Colors.grey[600]!])) {
+      replace = AppThemes.instance.currentTheme.differentColor;
+    } else {
+      replace = Colors.white;
+    }
+
+    var ts = style ?? AppThemes.instance.currentTheme.baseTextStyle;
+    ts = ts.copyWith(color: replace);
+
+    return SelectableText(
+      data!,
+      key: key,
+      style: ts,
+      strutStyle: strutStyle,
+      textAlign: textAlign,
+      maxLines: maxLines,
+      semanticsLabel: semanticsLabel,
+      textDirection: textDirection,
+      textHeightBehavior: textHeightBehavior,
+      textScaleFactor: textScaleFactor,
+      textWidthBasis: textWidthBasis,
+    );
+  }
+
+  SelectableText whiteOrDifferentOnBackColor() {
+    Color replace;
+
+    if(ColorHelper.isNearColors(AppThemes.instance.currentTheme.backgroundColor,
+        [Colors.black, Colors.white, Colors.grey[200]!, Colors.grey[900]!])) {
+      replace = AppThemes.instance.currentTheme.differentColor;
+    } else {
+      replace = Colors.white;
+    }
+
+    var ts = style ?? AppThemes.instance.currentTheme.baseTextStyle;
+    ts = ts.copyWith(color: replace);
+
+    return SelectableText(
+      data!,
+      key: key,
+      style: ts,
+      strutStyle: strutStyle,
+      textAlign: textAlign,
+      maxLines: maxLines,
+      semanticsLabel: semanticsLabel,
+      textDirection: textDirection,
+      textHeightBehavior: textHeightBehavior,
+      textScaleFactor: textScaleFactor,
+      textWidthBasis: textWidthBasis,
+    );
+  }
+
+  SelectableText primaryOrAppBarItemOnBackColor({Color? backColor}) {
+    backColor ??= AppThemes.instance.currentTheme.backgroundColor;
+    Color replace;
+
+    if (ColorHelper.isNearColors(backColor, [AppThemes.instance.currentTheme.primaryColor])) {
+      replace = AppThemes.instance.currentTheme.appBarItemColor;
+    } else {
+      replace = AppThemes.instance.currentTheme.primaryColor;
+    }
+
+    var ts = style ?? AppThemes.instance.currentTheme.baseTextStyle;
+    ts = ts.copyWith(color: replace);
+
+    return SelectableText(
+      data!,
+      key: key,
+      style: ts,
+      strutStyle: strutStyle,
+      textAlign: textAlign,
+      maxLines: maxLines,
+      semanticsLabel: semanticsLabel,
+      textDirection: textDirection,
+      textHeightBehavior: textHeightBehavior,
+      textScaleFactor: textScaleFactor,
+      textWidthBasis: textWidthBasis,
+    );
+  }
+
+  SelectableText infoColor() {
+    var ts = style ?? AppThemes.instance.currentTheme.baseTextStyle;
+    ts = ts.copyWith(color: AppThemes.instance.currentTheme.infoTextColor);
+
+    return SelectableText(
+      data!,
+      key: key,
+      style: ts,
+      strutStyle: strutStyle,
+      textAlign: textAlign,
+      maxLines: maxLines,
+      semanticsLabel: semanticsLabel,
+      textDirection: textDirection,
+      textHeightBehavior: textHeightBehavior,
+      textScaleFactor: textScaleFactor,
+      textWidthBasis: textWidthBasis,
+    );
+  }
+
+  SelectableText ltr() {
+    return SelectableText(
+      data!,
+      key: key,
+      style: style,
+      strutStyle: strutStyle,
+      textAlign: textAlign,
+      maxLines: maxLines,
+      semanticsLabel: semanticsLabel,
+      textDirection: TextDirection.ltr,
+      textHeightBehavior: textHeightBehavior,
+      textScaleFactor: textScaleFactor,
+      textWidthBasis: textWidthBasis,
+    );
+  }
+
+  SelectableText oneLineOverflow$Start({
+    TextOverflow textOverflow = TextOverflow.fade,
+    TextAlign textAlign = TextAlign.start,
+    }) {
+
+    return SelectableText(
+      data!,
+      key: key,
+      style: style,
+      strutStyle: strutStyle,
+      textAlign: textAlign,
+      maxLines: 1,
+      semanticsLabel: semanticsLabel,
+      textDirection: textDirection,
+      textHeightBehavior: textHeightBehavior,
+      textScaleFactor: textScaleFactor,
+      textWidthBasis: textWidthBasis,
+    );
+  }
+
+  SelectableText oneLineOverflow$End({
+    TextOverflow textOverflow = TextOverflow.fade,
+    TextAlign textAlign = TextAlign.end,
+    }) {
+
+    return SelectableText(
+      data!,
+      key: key,
+      style: style,
+      strutStyle: strutStyle,
+      textAlign: textAlign,
+      maxLines: 1,
+      semanticsLabel: semanticsLabel,
+      textDirection: textDirection,
+      textHeightBehavior: textHeightBehavior,
+      textScaleFactor: textScaleFactor,
+      textWidthBasis: textWidthBasis,
+    );
+  }
+
+  SelectableText bold({FontWeight? weight = FontWeight.bold}) {
+    var ts = style ?? AppThemes.instance.currentTheme.baseTextStyle;
+    ts = ts.copyWith(fontWeight: weight); // FontWeight.w900 is bigger then FontWeight.bold
+
+    return SelectableText(
+      data!,
+      key: key,
+      style: ts,
+      strutStyle: strutStyle,
+      textAlign: textAlign,
+      maxLines: maxLines,
+      semanticsLabel: semanticsLabel,
+      textDirection: textDirection,
+      textHeightBehavior: textHeightBehavior,
+      textScaleFactor: textScaleFactor,
+      textWidthBasis: textWidthBasis,
+    );
+  }
+
+  SelectableText subAlpha([int alpha = 160]) {
+    var ts = style ?? AppThemes.instance.currentTheme.baseTextStyle;
+
+    ts = ts.copyWith(
+        //fontWeight: FontWeight.bold,
+        color: ts.color?.withAlpha(alpha)
+    );
+
+    return SelectableText(
+      data!,
+      key: key,
+      style: ts,
+      strutStyle: strutStyle,
+      textAlign: textAlign,
+      //textAlign: center ? TextAlign.center : textAlign,
+      maxLines: maxLines,
+      semanticsLabel: semanticsLabel,
+      textDirection: textDirection,
+      textHeightBehavior: textHeightBehavior,
+      textScaleFactor: textScaleFactor,
+      textWidthBasis: textWidthBasis,
+    );
+  }
+
+  SelectableText subFont() {
+    var ts = style ?? AppThemes.instance.currentTheme.baseTextStyle;
+
+    ts = ts.copyWith(
+        fontFamily: AppThemes.instance.currentTheme.subTextStyle.fontFamily,
+    );
+
+    return SelectableText(
+      data!,
+      key: key,
+      style: ts,
+      strutStyle: strutStyle,
+      textAlign: textAlign,
+      maxLines: maxLines,
+      semanticsLabel: semanticsLabel,
+      textDirection: textDirection,
+      textHeightBehavior: textHeightBehavior,
+      textScaleFactor: textScaleFactor,
+      textWidthBasis: textWidthBasis,
+    );
+  }
+
+  SelectableText boldFont() {
+    var ts = style ?? AppThemes.instance.currentTheme.baseTextStyle;
+
+    ts = ts.copyWith(
+        fontFamily: AppThemes.instance.currentTheme.boldTextStyle.fontFamily,
+    );
+
+    return SelectableText(
+      data!,
+      key: key,
+      style: ts,
+      strutStyle: strutStyle,
+      textAlign: textAlign,
+      maxLines: maxLines,
+      semanticsLabel: semanticsLabel,
+      textDirection: textDirection,
+      textHeightBehavior: textHeightBehavior,
+      textScaleFactor: textScaleFactor,
+      textWidthBasis: textWidthBasis,
+    );
+  }
+
+  SelectableText defFont() {
+    var ts = style ?? AppThemes.instance.currentTheme.baseTextStyle;
+
+    ts = ts.copyWith(
+        fontFamily: FontManager.instance.getPlatformFont().family!,
+    );
+
+    return SelectableText(
+      data!,
+      key: key,
+      style: ts,
+      strutStyle: strutStyle,
+      textAlign: textAlign,
+      maxLines: maxLines,
+      semanticsLabel: semanticsLabel,
+      textDirection: textDirection,
+      textHeightBehavior: textHeightBehavior,
+      textScaleFactor: textScaleFactor,
+      textWidthBasis: textWidthBasis,
+    );
+  }
+
+  SelectableText englishFont() {
+    var ts = style ?? AppThemes.instance.currentTheme.baseTextStyle;
+
+    ts = ts.copyWith(
+        fontFamily: FontManager.instance.getEnglishFont()!.family!,
+    );
+
+    return SelectableText(
+      data!,
+      key: key,
+      style: ts,
+      strutStyle: strutStyle,
+      textAlign: textAlign,
+      maxLines: maxLines,
+      semanticsLabel: semanticsLabel,
+      textDirection: textDirection,
+      textHeightBehavior: textHeightBehavior,
+      textScaleFactor: textScaleFactor,
+      textWidthBasis: textWidthBasis,
+    );
+  }
+
+  SelectableText underLineClickable() {
+    return bold()
+        .fsR(4)// fs(18)
+        .color(AppThemes.instance.currentTheme.underLineDecorationColor);
+  }
+
+  SelectableText fs(double size) {
+    var ts = style ?? AppThemes.instance.currentTheme.baseTextStyle;
+    ts = ts.copyWith(fontSize: size);
+
+    return SelectableText(
+      data!,
+      key: key,
+      style: ts,
+      strutStyle: strutStyle,
+      textAlign: textAlign,
+      maxLines: maxLines,
+      semanticsLabel: semanticsLabel,
+      textDirection: textDirection,
+      textHeightBehavior: textHeightBehavior,
+      textScaleFactor: textScaleFactor,
+      textWidthBasis: textWidthBasis,
+    );
+  }
+
+  SelectableText fsR(double size, {double? max /*20*/}) {
+    var siz = style?.fontSize;
+    siz ??= AppThemes.instance.currentTheme.baseTextStyle.fontSize;
+
+    siz = siz! + size;
+
+    if (max != null) {
+      siz = MathHelper.minDouble(siz, max);
+    }
+
+    return fs(siz);
+  }
+
+  SelectableText alpha({int alpha = 160}) {
+    var ts = style ?? AppThemes.instance.currentTheme.baseTextStyle;
+    ts = ts.copyWith(color: ts.color!.withAlpha(alpha));
+
+    return SelectableText(
+      data!,
+      key: key,
+      style: ts,
+      strutStyle: strutStyle,
+      textAlign: textAlign,
+      maxLines: maxLines,
+      semanticsLabel: semanticsLabel,
+      textDirection: textDirection,
+      textHeightBehavior: textHeightBehavior,
+      textScaleFactor: textScaleFactor,
+      textWidthBasis: textWidthBasis,
+    );
+  }
+
+  SelectableText color(Color v) {
+    var ts = style ?? AppThemes.instance.currentTheme.baseTextStyle;
+    ts = ts.copyWith(color: v);
+
+    return SelectableText(
+      data!,
+      key: key,
+      style: ts,
+      strutStyle: strutStyle,
+      textAlign: textAlign,
+      maxLines: maxLines,
+      semanticsLabel: semanticsLabel,
+      textDirection: textDirection,
+      textHeightBehavior: textHeightBehavior,
+      textScaleFactor: textScaleFactor,
+      textWidthBasis: textWidthBasis,
+    );
+  }
+
+  SelectableText lineHeight(double v) {
+    var ts = style ?? AppThemes.instance.currentTheme.baseTextStyle;
+    ts = ts.copyWith(height: v);
+
+    return SelectableText(
+      data!,
+      key: key,
+      style: ts,
+      strutStyle: strutStyle,
+      textAlign: textAlign,
+      maxLines: maxLines,
+      semanticsLabel: semanticsLabel,
+      textDirection: textDirection,
+      textHeightBehavior: textHeightBehavior,
+      textScaleFactor: textScaleFactor,
+      textWidthBasis: textWidthBasis,
+    );
+  }
+}
+///==========================================================================================================
 extension TextFieldExtension on TextField {
   TextField intelliWhite() {
     Color replace;

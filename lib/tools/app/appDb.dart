@@ -12,8 +12,14 @@ class AppDB {
 
   static Future<DatabaseHelper> init() async {
     AppDB.db = DatabaseHelper();
-    AppDB.db.setDatabasePath(await AppDirectories.getDatabasesDir());
     AppDB.db.setDebug(false);
+
+    if(kIsWeb){
+      AppDB.db.setDatabasePath('${await AppDirectories.getDatabasesDir()}/${Constants.appName}');
+    }
+    else {
+      AppDB.db.setDatabasePath(await AppDirectories.getDatabasesDir());
+    }
 
     await AppDB.db.openTable(AppDB.tbKv);
     await AppDB.db.openTable(AppDB.tbLanguages);
