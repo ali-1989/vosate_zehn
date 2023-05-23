@@ -20,7 +20,7 @@ import 'package:app/structures/models/speakerModel.dart';
 import 'package:app/structures/models/subBuketModel.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/system/session.dart';
+import 'package:app/services/session_service.dart';
 import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appMessages.dart';
@@ -390,7 +390,7 @@ class _LevelPageState extends StateBase<ContentViewPage> {
   void requestData() async {
     final js = <String, dynamic>{};
     js[Keys.requestZone] = 'get_bucket_content_data';
-    js[Keys.requesterId] = Session.getLastLoginUser()?.userId;
+    js[Keys.requesterId] = SessionService.getLastLoginUser()?.userId;
     js[Keys.id] = widget.injectData.subBucket.id;
 
     requester.bodyJson = js;
@@ -443,7 +443,7 @@ class _LevelPageState extends StateBase<ContentViewPage> {
       return;
     }
 
-    final user = Session.getLastLoginUser();
+    final user = SessionService.getLastLoginUser();
 
     if(user == null || user.userId == '0'){
       media.isSee = true;

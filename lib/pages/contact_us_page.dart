@@ -8,7 +8,7 @@ import 'package:app/structures/abstract/stateBase.dart';
 import 'package:app/structures/middleWares/requester.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/system/session.dart';
+import 'package:app/services/session_service.dart';
 import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appSheet.dart';
 import 'package:app/tools/app/appSnack.dart';
@@ -109,7 +109,7 @@ class _ContactUsPageState extends StateBase<ContactUsPage> {
 
     final js = <String, dynamic>{};
     js[Keys.requestZone] = 'send_ticket_data';
-    js[Keys.requesterId] = Session.getLastLoginUser()?.userId;
+    js[Keys.requesterId] = SessionService.getLastLoginUser()?.userId;
     js[Keys.data] = txt;
 
     requester.bodyJson = js;

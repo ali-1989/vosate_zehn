@@ -19,7 +19,7 @@ import 'package:app/structures/models/subBuketModel.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/publicAccess.dart';
-import 'package:app/system/session.dart';
+import 'package:app/services/session_service.dart';
 import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/app/appIcons.dart';
 import 'package:app/tools/app/appImages.dart';
@@ -327,7 +327,7 @@ class _SubBucketPageState extends StateBase<SubBucketPage> {
 
     final js = <String, dynamic>{};
     js[Keys.requestZone] = 'get_sub_bucket_data';
-    js[Keys.requesterId] = Session.getLastLoginUser()?.userId;
+    js[Keys.requesterId] = SessionService.getLastLoginUser()?.userId;
     js[Keys.id] = widget.injectData.bucketModel!.id?? 1;
     js[Keys.searchFilter] = searchFilter.toMap();
 

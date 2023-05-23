@@ -12,7 +12,7 @@ import 'package:app/structures/models/countryModel.dart';
 import 'package:app/structures/models/userModel.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/publicAccess.dart';
-import 'package:app/system/session.dart';
+import 'package:app/services/session_service.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appHttpDio.dart';
 import 'package:app/tools/app/appMessages.dart';
@@ -53,7 +53,7 @@ class LoginService {
   }
 
   static Future forceLogoff(String userId) async {
-    final lastUser = Session.getLastLoginUser();
+    final lastUser = SessionService.getLastLoginUser();
 
     if(lastUser != null) {
       final isCurrent = lastUser.userId == userId;
@@ -67,10 +67,10 @@ class LoginService {
           return;
         }
 
-        await Session.logoff(userId);
+        await SessionService.logoff(userId);
       }
       else {
-        await Session.logoff(userId);
+        await SessionService.logoff(userId);
       }
 
       AppBroadcast.drawerMenuRefresher.update();
@@ -87,8 +87,8 @@ class LoginService {
   }
 
   static Future forceLogoffAll() async {
-    while(Session.hasAnyLogin()){
-      final lastUser = Session.getLastLoginUser();
+    while(SessionService.hasAnyLogin()){
+      final lastUser = SessionService.getLastLoginUser();
 
       if(lastUser != null) {
         if (lastUser.email != null) {
@@ -98,7 +98,7 @@ class LoginService {
       }
     }
 
-    await Session.logoffAll();
+    await SessionService.logoffAll();
 
     AppBroadcast.drawerMenuRefresher.update();
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
@@ -253,8 +253,8 @@ class LoginService {
   }
 
   static loginGuestUser(BuildContext context) async {
-    final gUser = Session.getGuestUser();
-    final userModel = await Session.login$newProfileData(gUser.toMap());
+    final gUser = SessionService.getGuestUser();
+    final userModel = await SessionService.login$newProfileData(gUser.toMap());
 
     if(userModel != null) {
       AppBroadcast.reBuildMaterial();

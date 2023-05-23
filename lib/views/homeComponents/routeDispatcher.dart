@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:app/pages/layout_page.dart';
 import 'package:app/pages/login/login_page.dart';
-import 'package:app/system/session.dart';
+import 'package:app/services/session_service.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 
 class RouteDispatcher {
@@ -10,7 +10,7 @@ class RouteDispatcher {
 
   static Widget dispatch(){
 
-    if(!Session.hasAnyLogin()){
+    if(!SessionService.hasAnyLogin()){
       return LoginPage();
     }
 

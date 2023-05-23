@@ -10,7 +10,7 @@ import 'package:app/structures/abstract/stateBase.dart';
 import 'package:app/structures/middleWares/requester.dart';
 import 'package:app/structures/models/countryModel.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/system/session.dart';
+import 'package:app/services/session_service.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appMessages.dart';
@@ -252,7 +252,7 @@ class _RegisterPageState extends StateBase<RegisterPage> {
     };*/
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
-      final userModel = await Session.login$newProfileData(data);
+      final userModel = await SessionService.login$newProfileData(data);
 
       if(userModel != null) {
         AppToast.showToast(context, AppMessages.welcome);

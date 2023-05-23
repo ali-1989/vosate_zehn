@@ -19,7 +19,7 @@ import 'package:app/structures/mixins/dateFieldMixin.dart';
 import 'package:app/structures/models/upperLower.dart';
 import 'package:app/structures/models/userModel.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/system/session.dart';
+import 'package:app/services/session_service.dart';
 import 'package:app/tools/deviceInfoTools.dart';
 import 'package:app/tools/routeTools.dart';
 
@@ -45,7 +45,7 @@ class PublicAccess {
   }
 
   static Map addAppInfo(Map src, {UserModel? curUser}) {
-    final token = curUser?.token ?? Session.getLastLoginUser()?.token;
+    final token = curUser?.token ?? SessionService.getLastLoginUser()?.token;
 
     src.addAll(getAppInfo());
 
@@ -152,7 +152,7 @@ class PublicAccess {
 
     final users = [];
 
-    for(var um in Session.currentLoginList) {
+    for(var um in SessionService.currentLoginList) {
       users.add(um.userId);
     }
 

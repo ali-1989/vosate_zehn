@@ -7,7 +7,7 @@ import 'package:app/managers/settingsManager.dart';
 import 'package:app/managers/versionManager.dart';
 import 'package:app/structures/abstract/stateBase.dart';
 import 'package:app/system/applicationInitialize.dart';
-import 'package:app/system/session.dart';
+import 'package:app/services/session_service.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/views/homeComponents/routeDispatcher.dart';
 import 'package:app/views/homeComponents/splashScreen.dart';
@@ -86,7 +86,7 @@ class SplashScreenState extends StateBase<SplashPage> {
     final settingsLoad = SettingsManager.loadSettings();
 
     if (settingsLoad) {
-      await Session.fetchLoginUsers();
+      await SessionService.fetchLoginUsers();
       await VersionManager.checkVersionOnLaunch();
       connectToServer();
 

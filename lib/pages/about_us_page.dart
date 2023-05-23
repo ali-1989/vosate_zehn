@@ -6,7 +6,7 @@ import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:app/structures/abstract/stateBase.dart';
 import 'package:app/structures/middleWares/requester.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/system/session.dart';
+import 'package:app/services/session_service.dart';
 import 'package:app/tools/app/appMessages.dart';
 import 'package:app/views/homeComponents/appBarBuilder.dart';
 import 'package:app/views/states/errorOccur.dart';
@@ -87,7 +87,7 @@ class _AboutUsPageState extends StateBase<AboutUsPage> {
   void requestAboutUs() async {
     final js = <String, dynamic>{};
     js[Keys.requestZone] = 'get_about_us_data';
-    js[Keys.requesterId] = Session.getLastLoginUser()?.userId;
+    js[Keys.requesterId] = SessionService.getLastLoginUser()?.userId;
 
     requester.bodyJson = js;
 

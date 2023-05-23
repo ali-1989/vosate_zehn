@@ -7,7 +7,7 @@ import 'package:iris_tools/dateSection/dateHelper.dart';
 import 'package:app/structures/middleWares/requester.dart';
 import 'package:app/structures/models/dailyTextModel.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/system/session.dart';
+import 'package:app/services/session_service.dart';
 import 'package:app/tools/app/appDb.dart';
 import 'package:app/tools/app/appDialogIris.dart';
 import 'package:app/tools/app/appIcons.dart';
@@ -20,7 +20,7 @@ class DailyTextService {
   static void checkShowDialog(BuildContext context) async {
     await Future.delayed(Duration(seconds: 10), (){});
 
-    if(!Session.hasAnyLogin()){
+    if(!SessionService.hasAnyLogin()){
       return;
     }
 
@@ -77,7 +77,7 @@ class DailyTextService {
   static Future<List<DailyTextModel>?> _requestData() async {
     final js = <String, dynamic>{};
     js[Keys.requestZone] = 'get_daily_text_data';
-    js[Keys.requesterId] = Session.getLastLoginUser()?.userId;
+    js[Keys.requesterId] = SessionService.getLastLoginUser()?.userId;
 
     final List<DailyTextModel> result = [];
     final comp = Completer<List<DailyTextModel>?>();

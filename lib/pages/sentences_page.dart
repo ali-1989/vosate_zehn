@@ -15,7 +15,7 @@ import 'package:app/structures/models/dailyTextModel.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/publicAccess.dart';
-import 'package:app/system/session.dart';
+import 'package:app/services/session_service.dart';
 import 'package:app/tools/app/appCache.dart';
 import 'package:app/tools/app/appIcons.dart';
 import 'package:app/tools/app/appImages.dart';
@@ -256,7 +256,7 @@ class _SentencesPageState extends StateBase<SentencesPage> {
 
     final js = <String, dynamic>{};
     js[Keys.requestZone] = 'get_daily_text_data';
-    js[Keys.requesterId] = Session.getLastLoginUser()?.userId;
+    js[Keys.requesterId] = SessionService.getLastLoginUser()?.userId;
     js[Keys.date] = DateHelper.toTimestamp(dateTime);
     js['end_date'] = DateHelper.toTimestamp(DateTime.now());
 

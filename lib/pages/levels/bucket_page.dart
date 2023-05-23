@@ -13,7 +13,7 @@ import 'package:app/structures/models/bucketModel.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/publicAccess.dart';
-import 'package:app/system/session.dart';
+import 'package:app/services/session_service.dart';
 import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/routeTools.dart';
@@ -188,7 +188,7 @@ class _BucketPageState extends StateBase<BucketPage> {
 
     final js = <String, dynamic>{};
     js[Keys.requestZone] = 'get_bucket_data';
-    js[Keys.requesterId] = Session.getLastLoginUser()?.userId;
+    js[Keys.requesterId] = SessionService.getLastLoginUser()?.userId;
     js[Keys.key] = widget.injectData.bucketTypes.id();
     js[Keys.searchFilter] = searchFilter.toMap();
 

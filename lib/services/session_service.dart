@@ -12,8 +12,8 @@ import '/managers/settingsManager.dart';
 import '/system/extensions.dart';
 import '/system/keys.dart';
 
-class Session {
-	Session._();
+class SessionService {
+	SessionService._();
 
 	static UserModel? _lastLoginUser;
 	static List<UserModel> currentLoginList = [];

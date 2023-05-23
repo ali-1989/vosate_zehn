@@ -19,7 +19,7 @@ import 'package:app/structures/abstract/stateBase.dart';
 import 'package:app/structures/models/countryModel.dart';
 import 'package:app/system/httpCodes.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/system/session.dart';
+import 'package:app/services/session_service.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appLoading.dart';
@@ -351,7 +351,7 @@ class _LoginPageState extends StateBase<LoginPage> {
             RouteTools.pushPage(context, RegisterPage(injectData: injectData));
           }
           else {
-            final userModel = await Session.login$newProfileData(twoState.result1!);
+            final userModel = await SessionService.login$newProfileData(twoState.result1!);
 
             if(userModel != null) {
               //RouteTools.pushPage(context, LayoutPage(key: AppBroadcast.layoutPageKey));
@@ -477,7 +477,7 @@ class _LoginPageState extends StateBase<LoginPage> {
           RouteTools.pushPage(context, RegisterPage(injectData: injectData));
         }
         else {
-          final userModel = await Session.login$newProfileData(twoState.result1!);
+          final userModel = await SessionService.login$newProfileData(twoState.result1!);
 
           if(userModel != null) {
             //RouteTools.pushPage(context, LayoutPage(key: AppBroadcast.layoutPageKey));

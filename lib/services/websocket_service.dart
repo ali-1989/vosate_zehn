@@ -12,7 +12,7 @@ import 'package:app/structures/models/settingsModel.dart';
 import 'package:app/system/httpCodes.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/publicAccess.dart';
-import 'package:app/system/session.dart';
+import 'package:app/services/session_service.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appDb.dart';
 import 'package:app/tools/app/appDialogIris.dart';
@@ -215,7 +215,7 @@ class WebsocketService {
 	static void userDataSection(String command, Map<String, dynamic> data, int userId, Map js) async {
 		/// new profile =======================
 		if(command == HttpCodes.com_updateProfileSettings) {
-			await Session.newProfileData(data);
+			await SessionService.newProfileData(data);
 		}
 	}
 
@@ -225,7 +225,7 @@ class WebsocketService {
 		final message = data['message'];
 		final messageId = data['message_id'];
 
-		if(userId != null && userId != Session.getLastLoginUser()?.userId){
+		if(userId != null && userId != SessionService.getLastLoginUser()?.userId){
 			return;
 		}
 

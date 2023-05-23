@@ -26,7 +26,7 @@ import 'package:app/structures/enums/appEvents.dart';
 import 'package:app/structures/enums/enums.dart';
 import 'package:app/structures/models/userModel.dart';
 import 'package:app/system/extensions.dart';
-import 'package:app/system/session.dart';
+import 'package:app/services/session_service.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appDialogIris.dart';
 import 'package:app/tools/app/appDirectories.dart';
@@ -69,9 +69,9 @@ class DrawerMenuBuilder {
 
                     SizedBox(height: 10),
 
-                    if(Session.hasAnyLogin())
+                    if(SessionService.hasAnyLogin())
                       ListTile(
-                        title: Text(Session.isGuestCurrent()? AppMessages.registerTitle :AppMessages.logout).color(Colors.redAccent),
+                        title: Text(SessionService.isGuestCurrent()? AppMessages.registerTitle :AppMessages.logout).color(Colors.redAccent),
                         leading: Icon(AppIcons.logout, size: 18, color: Colors.redAccent),
                         onTap: onLogoffCall,
                         dense: true,
@@ -176,8 +176,8 @@ class DrawerMenuBuilder {
   }
 
   static Widget _buildProfileSection(){
-    if(Session.hasAnyLogin()){
-      final user = Session.getLastLoginUser()!;
+    if(SessionService.hasAnyLogin()){
+      final user = SessionService.getLastLoginUser()!;
 
       return GestureDetector(
         onTap: gotoProfilePage,
@@ -292,7 +292,7 @@ class DrawerMenuBuilder {
   }
 
   static void gotoProfilePage(){
-    if(Session.isGuestCurrent()){
+    if(SessionService.isGuestCurrent()){
       return;
     }
 
@@ -301,14 +301,14 @@ class DrawerMenuBuilder {
   }
 
   static void onLogoffCall(){
-    if(Session.isGuestCurrent()){
-      LoginService.forceLogoff(Session.getLastLoginUser()!.userId);
+    if(SessionService.isGuestCurrent()){
+      LoginService.forceLogoff(SessionService.getLastLoginUser()!.userId);
       return;
     }
 
     void yesFn(){
       //RouteTools.popTopView();
-      LoginService.forceLogoff(Session.getLastLoginUser()!.userId);
+      LoginService.forceLogoff(SessionService.getLastLoginUser()!.userId);
     }
 
     AppDialogIris.instance.showYesNoDialog(

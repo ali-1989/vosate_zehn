@@ -31,7 +31,7 @@ import 'package:app/structures/models/userModel.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/system/publicAccess.dart';
-import 'package:app/system/session.dart';
+import 'package:app/services/session_service.dart';
 import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/app/appIcons.dart';
 import 'package:app/tools/app/appImages.dart';
@@ -59,7 +59,7 @@ class ProfilePage extends StatefulWidget{
 ///==================================================================================
 class _ProfilePageState extends StateBase<ProfilePage> {
   Requester requester = Requester();
-  UserModel user = Session.getLastLoginUser()!;
+  UserModel user = SessionService.getLastLoginUser()!;
 
   @override
   void initState(){
@@ -442,6 +442,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
     final hasPermission = await PermissionTools.requestCameraPermission();
 
     if(hasPermission != PermissionStatus.granted) {
+      AppToast.showToast(context, 'لطفا مجوز استفاده از دوربین را فعال کنید');
       return null;
     }
 
@@ -506,7 +507,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
     user.profileModel = MediaModel()..url = url.. id = Generator.generateIntId(5);
 
     if(kIsWeb){
-      await Session.sinkUserInfo(user);
+      await SessionService.sinkUserInfo(user);
       EventNotifierService.notify(AppEvents.userProfileChange);
       return;
     }
@@ -519,7 +520,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
     hideLoading();
     AppSnack.showSnack$operationSuccess(context);
 
-    await Session.sinkUserInfo(user);
+    await SessionService.sinkUserInfo(user);
     EventNotifierService.notify(AppEvents.userProfileChange);
   }
 
@@ -574,7 +575,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
       user.profileModel = null;
 
       EventNotifierService.notify(AppEvents.userProfileChange);
-      Session.sinkUserInfo(user);
+      SessionService.sinkUserInfo(user);
     };
 
     showLoading();
@@ -605,7 +606,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
       user.family = family;
 
       assistCtr.updateHead();
-      await Session.sinkUserInfo(user);
+      await SessionService.sinkUserInfo(user);
       AppOverlay.hideDialog(context);
       EventNotifierService.notify(AppEvents.userProfileChange);
     };
@@ -636,7 +637,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
       user.sex = gender;
 
       assistCtr.updateHead();
-      await Session.sinkUserInfo(user);
+      await SessionService.sinkUserInfo(user);
       EventNotifierService.notify(AppEvents.userProfileChange);
     };
 
@@ -666,7 +667,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
       user.birthDate = dt;
 
       assistCtr.updateHead();
-      await Session.sinkUserInfo(user);
+      await SessionService.sinkUserInfo(user);
       EventNotifierService.notify(AppEvents.userProfileChange);
     };
 
@@ -678,7 +679,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
   }
 
   void requestProfileData() async {
-    final user = Session.getLastLoginUser();
+    final user = SessionService.getLastLoginUser();
 
     if(user == null || user.userId == '0'){
       return;
@@ -695,7 +696,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
     };
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
-      await Session.newProfileData(data as Map<String, dynamic>);
+      await SessionService.newProfileData(data as Map<String, dynamic>);
 
       assistCtr.updateHead();
     };

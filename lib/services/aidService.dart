@@ -6,7 +6,7 @@ import 'package:app/managers/systemParameterManager.dart';
 import 'package:app/pages/aid_page.dart';
 import 'package:app/pages/pay_web_page.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/system/session.dart';
+import 'package:app/services/session_service.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appDb.dart';
 import 'package:app/tools/app/appDialogIris.dart';
@@ -79,7 +79,7 @@ class AidService {
   static void checkShowDialog() async {
     await Future.delayed(Duration(seconds: 15), (){});
 
-    if(!Session.hasAnyLogin()){
+    if(!SessionService.hasAnyLogin()){
       return;
     }
 

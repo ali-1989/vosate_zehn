@@ -21,7 +21,7 @@ import 'package:app/structures/middleWares/requester.dart';
 import 'package:app/structures/models/subBuketModel.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/system/session.dart';
+import 'package:app/services/session_service.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/app/appIcons.dart';
@@ -585,7 +585,7 @@ class _HomePageState extends StateBase<HomePage> {
   void requestData() async {
     final js = <String, dynamic>{};
     js[Keys.requestZone] = 'get_home_page_data';
-    js[Keys.requesterId] = Session.getLastLoginUser()?.userId;
+    js[Keys.requesterId] = SessionService.getLastLoginUser()?.userId;
 
     requester.httpRequestEvents.onFailState = (req, r) async {
       isInFetchData = false;
