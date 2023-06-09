@@ -369,7 +369,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
         ),
       );
 
-      widgets.add(v);
+      //widgets.add(v); todo:temp-action
     }
 
     widgets.add(
@@ -474,7 +474,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
   Future<String?> editImage(String imgPath) async {
     final comp = Completer<String?>();
 
-    final editOptions = EditOptions.byPath(imgPath);
+    final editOptions = EditOptions.byFile(imgPath);
     editOptions.cropBoxInitSize = const Size(200, 170);
 
     void onOk(EditOptions op) async {
