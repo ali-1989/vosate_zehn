@@ -52,9 +52,9 @@ Future<void> main() async {
                 child: Directionality(
                   textDirection: AppThemes.instance.textDirection,
                   child: DefaultTextHeightBehavior(
-                    textHeightBehavior: TextHeightBehavior(applyHeightToFirstAscent: false, applyHeightToLastDescent: false),
+                    textHeightBehavior: const TextHeightBehavior(applyHeightToFirstAscent: false, applyHeightToLastDescent: false),
                     child: DefaultTextStyle(
-                      style: AppThemes.instance.themeData.textTheme.bodyMedium?? TextStyle(),
+                      style: AppThemes.instance.themeData.textTheme.bodyMedium?? const TextStyle(),
                       child: OrientationBuilder( /// detect orientation change and rotate screen
                           builder: (context, orientation) {
                             return Toaster(
@@ -169,7 +169,7 @@ class MyErrorApp extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Error in app initialization'),
+                const Text('Error in app initialization'),
                 Text(ApplicationInitial.errorInInit),
               ],
             ),

@@ -30,7 +30,7 @@ class ApplicationLifeCycle {
       return;
     }
 
-    EventNotifierService.notify(AppEvents.appDeatach);
+    EventNotifierService.notify(AppEvents.appDeAttach);
   }
 
   static void onResume() {

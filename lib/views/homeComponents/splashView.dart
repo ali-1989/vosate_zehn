@@ -5,14 +5,14 @@ import 'package:lottie/lottie.dart';
 
 import 'package:app/tools/app/appImages.dart';
 
-class SplashScreen extends StatelessWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+class SplashView extends StatelessWidget {
+  const SplashView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox.expand(
       child: DecoratedBox(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
             image: DecorationImage(
               image: AssetImage(AppImages.logoSplash),
               fit: BoxFit.fill,

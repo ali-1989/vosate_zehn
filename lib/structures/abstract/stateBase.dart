@@ -106,7 +106,7 @@ abstract class StateBase<W extends StatefulWidget> extends State<W> {
 			return;
 		}
 
-		await Future.delayed(Duration(milliseconds: 10), (){});
+		await Future.delayed(const Duration(milliseconds: 10), (){});
 
 		final status = ((subContext?? context) as Element).dirty;
 

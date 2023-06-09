@@ -10,7 +10,7 @@ import 'package:app/system/applicationInitialize.dart';
 import 'package:app/services/session_service.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/views/homeComponents/routeDispatcher.dart';
-import 'package:app/views/homeComponents/splashScreen.dart';
+import 'package:app/views/homeComponents/splashView.dart';
 import 'package:app/views/states/waitToLoad.dart';
 
 bool _isInit = false;
@@ -48,7 +48,7 @@ class SplashScreenState extends StateBase<SplashPage> {
       return const WaitToLoad();
     }
 
-    return SplashScreen();
+    return SplashView();
   }
   ///==================================================================================================
   Widget getFirstPage(){

@@ -12,7 +12,7 @@ enum AppEvents implements EventImplement {
   userLogoff(112),
   appResume(115),
   appPause(116),
-  appDeatach(117),
+  appDeAttach(117),
   firebaseTokenReceived(120),
   languageLevelChanged(130);
 
