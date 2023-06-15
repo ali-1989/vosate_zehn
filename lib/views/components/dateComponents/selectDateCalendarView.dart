@@ -5,7 +5,7 @@ import 'package:iris_tools/dateSection/ADateStructure.dart';
 import 'package:iris_tools/dateSection/calendarTools.dart';
 import 'package:numberpicker/numberpicker.dart';
 
-import 'package:app/managers/settingsManager.dart';
+import 'package:app/managers/settings_manager.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/tools/app/appSizes.dart';
 import 'package:app/tools/app/appSnack.dart';
@@ -159,7 +159,7 @@ class SelectDateCalendarViewState extends State<SelectDateCalendarView> {
                             child: DropdownButton(
                               //borderRadius: BorderRadius.circular(10),
                               dropdownColor: Colors.grey[400],
-                              value: SettingsManager.settingsModel.calendarType,
+                              value: SettingsManager.localSettings.calendarType,
                               onChanged: (newValue) {
                                 changeCalendar(newValue as CalendarType);
 

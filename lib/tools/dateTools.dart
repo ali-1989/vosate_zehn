@@ -8,7 +8,7 @@ import 'package:iris_tools/dateSection/calendarTools.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
 
 import 'package:app/system/extensions.dart';
-import '/managers/settingsManager.dart';
+import '/managers/settings_manager.dart';
 
 enum DateFormat {
   yyyyMmDd('YYYY/MM/DD'),
@@ -62,10 +62,10 @@ class DateTools {
       return '';
     }
 
-    format ??= SettingsManager.settingsModel.dateFormat;
+    format ??= SettingsManager.localSettings.dateFormat;
     ADateStructure mDate;
 
-    if(SettingsManager.settingsModel.calendarType == CalendarType.solarHijri){
+    if(SettingsManager.localSettings.calendarType == CalendarType.solarHijri){
       mDate = SolarHijriDate.from(date);
     }
     else {
@@ -95,7 +95,7 @@ class DateTools {
 
     ADateStructure mDate;
 
-    if(SettingsManager.settingsModel.calendarType == CalendarType.solarHijri){
+    if(SettingsManager.localSettings.calendarType == CalendarType.solarHijri){
       mDate = SolarHijriDate.from(date);
     }
     else {
@@ -107,7 +107,7 @@ class DateTools {
       mDate.moveUtcToLocal();
     }
 
-    return LocaleHelper.overrideLtr(mDate.format('${SettingsManager.settingsModel.dateFormat} HH:mm', 'en')
+    return LocaleHelper.overrideLtr(mDate.format('${SettingsManager.localSettings.dateFormat} HH:mm', 'en')
         .localeNum());
   }
 
@@ -122,7 +122,7 @@ class DateTools {
 
     ADateStructure mDate;
 
-    if(SettingsManager.settingsModel.calendarType == CalendarType.solarHijri){
+    if(SettingsManager.localSettings.calendarType == CalendarType.solarHijri){
       mDate = SolarHijriDate.from(date);
     }
     else {
@@ -144,7 +144,7 @@ class DateTools {
 
     ADateStructure mDate;
 
-    if(SettingsManager.settingsModel.calendarType == CalendarType.solarHijri){
+    if(SettingsManager.localSettings.calendarType == CalendarType.solarHijri){
       mDate = SolarHijriDate.from(date);
     }
     else {
@@ -164,7 +164,7 @@ class DateTools {
   }
   ///---------------------------------------------------------------------------------------
   static Future saveAppCalendar(CalendarType calendarType, {BuildContext? context}) {
-    SettingsManager.settingsModel.calendarType = calendarType;
+    SettingsManager.localSettings.calendarType = calendarType;
     return SettingsManager.saveSettings(context: context);
   }
 
@@ -178,7 +178,7 @@ class DateTools {
   }
 
   static ADateStructure? getADateByCalendar(int year, int month, int day, {int hour = 0, int minutes = 0, CalendarType? calendarType}){
-    switch(calendarType?? SettingsManager.settingsModel.calendarType){
+    switch(calendarType?? SettingsManager.localSettings.calendarType){
       case CalendarType.gregorian:
         return GregorianDate.hm(year, month, day, hour, minutes);
       case CalendarType.solarHijri:
@@ -191,7 +191,7 @@ class DateTools {
   static int calMaxMonthDay(int year, int month, {CalendarType? calendarType}){
     ADateStructure? ad;
 
-    switch(calendarType?? SettingsManager.settingsModel.calendarType){
+    switch(calendarType?? SettingsManager.localSettings.calendarType){
       case CalendarType.gregorian:
         ad = GregorianDate();
         break;
@@ -206,7 +206,7 @@ class DateTools {
   }
 
   static ADateStructure? convertToADateByCalendar(DateTime date, {CalendarType? calendarType}){
-    switch(calendarType?? SettingsManager.settingsModel.calendarType){
+    switch(calendarType?? SettingsManager.localSettings.calendarType){
       case CalendarType.gregorian:
         return GregorianDate.from(date);
       case CalendarType.solarHijri:
@@ -219,7 +219,7 @@ class DateTools {
   static List<int> splitDateByCalendar(DateTime date, {CalendarType? calendarType}){
     final res = <int>[0,0,0];
 
-    if((calendarType?? SettingsManager.settingsModel.calendarType) == CalendarType.gregorian) {
+    if((calendarType?? SettingsManager.localSettings.calendarType) == CalendarType.gregorian) {
       res[0] = date.year;
       res[1] = date.month;
       res[2] = date.day;
@@ -234,7 +234,7 @@ class DateTools {
   }
   ///---------------------------------------------------------------------------------------
   static int calMinBirthdateYear({CalendarType? calendarType}){
-    switch(calendarType?? SettingsManager.settingsModel.calendarType){
+    switch(calendarType?? SettingsManager.localSettings.calendarType){
       case CalendarType.gregorian:
         return DateTime.now().year-90;
       case CalendarType.solarHijri:
@@ -245,7 +245,7 @@ class DateTools {
   }
 
   static int calMaxBirthdateYear({CalendarType? calendarType}){
-    switch(calendarType?? SettingsManager.settingsModel.calendarType){
+    switch(calendarType?? SettingsManager.localSettings.calendarType){
       case CalendarType.gregorian:
         return DateTime.now().year-7;
       case CalendarType.solarHijri:

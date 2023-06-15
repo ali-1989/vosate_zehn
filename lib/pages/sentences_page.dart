@@ -1,3 +1,4 @@
+import 'package:app/tools/app_tools.dart';
 import 'package:flutter/material.dart';
 
 import 'package:appinio_swiper/appinio_swiper.dart';
@@ -8,13 +9,12 @@ import 'package:iris_tools/features/overlayDialog.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:iris_tools/widgets/optionsRow/checkRow.dart';
 
-import 'package:app/managers/settingsManager.dart';
+import 'package:app/managers/settings_manager.dart';
 import 'package:app/structures/abstract/stateBase.dart';
 import 'package:app/structures/middleWares/requester.dart';
 import 'package:app/structures/models/dailyTextModel.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/system/publicAccess.dart';
 import 'package:app/services/session_service.dart';
 import 'package:app/tools/app/appCache.dart';
 import 'package:app/tools/app/appIcons.dart';
@@ -137,7 +137,7 @@ class _SentencesPageState extends StateBase<SentencesPage> {
   }
 
   void prepareCards() {
-    PublicAccess.sortList(dailyList, false);
+    AppTools.sortList(dailyList, false);
 
     final list = dailyList.map((t) {
       return Card(
@@ -194,10 +194,10 @@ class _SentencesPageState extends StateBase<SentencesPage> {
                         ),
 
                         CheckBoxRow(
-                            value: SettingsManager.settingsModel.notificationDailyText,
+                            value: SettingsManager.localSettings.notificationDailyText,
                             description: Text('نمایش جملات روز به صورت نوتیفیکیشن'),
                             onChanged: (v){
-                              SettingsManager.settingsModel.notificationDailyText = v;
+                              SettingsManager.localSettings.notificationDailyText = v;
                               ctr.updateSelf();
                               SettingsManager.saveSettings();
                             }

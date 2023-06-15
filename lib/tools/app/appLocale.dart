@@ -5,7 +5,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:iris_tools/api/helpers/localeHelper.dart';
 
 import 'package:app/system/localizations.dart';
-import '/managers/settingsManager.dart';
+import '/managers/settings_manager.dart';
 import '/tools/app/appThemes.dart';
 
 class AppLocale {
@@ -72,7 +72,7 @@ class AppLocale {
 
     }, orElse: () => const Locale('en', 'US'));
 
-    SettingsManager.settingsModel.appLocale = l;
+    SettingsManager.localSettings.appLocale = l;
     await localeDelegate().load(l);
     detectLocaleDirection(l);
     SettingsManager.saveSettings();
@@ -100,11 +100,11 @@ class AppLocale {
     final farsiList = <String>['fa', 'ps', 'ur'];
     final arabicList = <String>['ar'];
 
-    if(farsiList.contains(SettingsManager.settingsModel.appLocale.languageCode)) {
+    if(farsiList.contains(SettingsManager.localSettings.appLocale.languageCode)) {
       return LocaleHelper.numberToFarsi(text);
     }
 
-    if(arabicList.contains(SettingsManager.settingsModel.appLocale.languageCode)) {
+    if(arabicList.contains(SettingsManager.localSettings.appLocale.languageCode)) {
       return LocaleHelper.numberToArabic(text);
     }
 

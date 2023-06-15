@@ -1,8 +1,8 @@
+import 'package:app/managers/settings_manager.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/dateSection/dateHelper.dart';
 
-import 'package:app/managers/systemParameterManager.dart';
 import 'package:app/pages/aid_page.dart';
 import 'package:app/pages/pay_web_page.dart';
 import 'package:app/system/keys.dart';
@@ -22,13 +22,13 @@ class AidService {
     RouteTools.pushPage(RouteTools.getTopContext()!, AidPage());
   }
 
-  static Future<bool> gotoZarinpalPage() async {
-    RouteTools.pushPage(RouteTools.getTopContext()!, PayWebPage(url: 'https://zarinp.al/vosatezehn.ir'));
+  static Future<bool> gotoZarinpalPage(BuildContext ctx) async {
+    RouteTools.pushPage(ctx, PayWebPage(url: 'https://zarinp.al/vosatezehn.ir'));
     return false;
   }
 
   static void showAidDialog(){
-    final msg = SystemParameterManager.systemParameters.aidPopMessage;
+    final msg = SettingsManager.globalSettings.aidPopMessage;
 
     if(msg == null){
       return;
@@ -47,7 +47,7 @@ class AidService {
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
                   onPressed: (){
                     RouteTools.popTopView();
-                    gotoZarinpalPage();
+                    gotoZarinpalPage(RouteTools.getTopContext()!);
                   },
                   child: Text(AppMessages.aid)
               ),
@@ -95,7 +95,7 @@ class AidService {
     }
 
     if(lastTime == null
-        || DateHelper.isPastOf(lastTimeDt, Duration(days: SystemParameterManager.systemParameters.aidRepeatDays))){
+        || DateHelper.isPastOf(lastTimeDt, Duration(days: SettingsManager.globalSettings.aidRepeatDays))){
       showAidDialog();
     }
   }

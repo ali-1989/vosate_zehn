@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:app/managers/api_manager.dart';
+import 'package:app/managers/version_manager.dart';
+import 'package:app/tools/log_tools.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -13,9 +16,7 @@ import 'package:iris_tools/net/trustSsl.dart';
 import 'package:app/constants.dart';
 import 'package:app/managers/advertisingManager.dart';
 import 'package:app/managers/mediaManager.dart';
-import 'package:app/managers/settingsManager.dart';
-import 'package:app/managers/systemParameterManager.dart';
-import 'package:app/managers/versionManager.dart';
+import 'package:app/managers/settings_manager.dart';
 import 'package:app/services/aidService.dart';
 import 'package:app/services/cron_task.dart';
 import 'package:app/services/download_upload_service.dart';
@@ -24,7 +25,6 @@ import 'package:app/services/login_service.dart';
 import 'package:app/services/websocket_service.dart';
 import 'package:app/structures/enums/appEvents.dart';
 import 'package:app/system/applicationLifeCycle.dart';
-import 'package:app/system/publicAccess.dart';
 import 'package:app/tools/app/appCache.dart';
 import 'package:app/tools/app/appDb.dart';
 import 'package:app/tools/app/appDirectories.dart';
@@ -59,10 +59,10 @@ class ApplicationInitial {
 
       if (!kIsWeb) {
         await AppDirectories.prepareStoragePaths(Constants.appName);
-        PublicAccess.reporter = Reporter(AppDirectories.getAppFolderInExternalStorage(), 'report');
+        LogTools.reporter = Reporter(AppDirectories.getAppFolderInExternalStorage(), 'report');
       }
 
-      PublicAccess.logger = Logger('${AppDirectories.getTempDir$ex()}/logs');
+      LogTools.logger = Logger('${AppDirectories.getExternalTempDir()}/logs');
 
       return true;
     }
@@ -98,7 +98,7 @@ class ApplicationInitial {
       _isInitialOk = true;
     }
     catch (e){
-      PublicAccess.logger.logToAll('error in inSplashInit >> $e');
+      LogTools.logger.logToAll('error in inSplashInit >> $e');
     }
 
     return;
@@ -140,7 +140,7 @@ class ApplicationInitial {
 
       /// net & websocket
       NetManager.addChangeListener(NetListenerTools.onNetListener);
-      WebsocketService.prepareWebSocket(SettingsManager.settingsModel.wsAddress);
+      WebsocketService.prepareWebSocket(SettingsManager.localSettings.wsAddress);
 
       /// life cycle
       ApplicationLifeCycle.init();
@@ -160,7 +160,7 @@ class ApplicationInitial {
         AppSizes.instance.addMetricListener(onSizeCheng);
       }*/
 
-      SystemParameterManager.requestParameters();
+      SettingsManager.requestGlobalSettings();
       MediaManager.loadAllRecords();
       AdvertisingManager.init();
       AdvertisingManager.check();
@@ -171,7 +171,7 @@ class ApplicationInitial {
       }
 
       EventNotifierService.addListener(AppEvents.firebaseTokenReceived, ({data}) {
-        FireBaseService.subscribeToTopic(PublicAccess.fcmTopic);
+        FireBaseService.subscribeToTopic(ApiManager.fcmTopic);
       });
 
       await FireBaseService.prepare();
@@ -182,7 +182,7 @@ class ApplicationInitial {
     }
     catch (e){
       _callLazyInit = false;
-      PublicAccess.logger.logToAll('error in lazyInitCommands >> $e');
+      LogTools.logger.logToAll('error in lazyInitCommands >> $e');
     }
   }
 }

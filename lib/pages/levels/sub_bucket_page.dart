@@ -1,3 +1,4 @@
+import 'package:app/tools/app_tools.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/duration/durationFormatter.dart';
@@ -18,7 +19,6 @@ import 'package:app/structures/models/bucketModel.dart';
 import 'package:app/structures/models/subBuketModel.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/system/publicAccess.dart';
 import 'package:app/services/session_service.dart';
 import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/app/appIcons.dart';
@@ -105,7 +105,7 @@ class _SubBucketPageState extends StateBase<SubBucketPage> {
 
     return RefreshConfiguration(
       headerBuilder: () => MaterialClassicHeader(),
-      footerBuilder:  () => PublicAccess.classicFooter,
+      footerBuilder:  () => AppTools.classicFooter,
       //headerTriggerDistance: 80.0,
       //maxOverScrollExtent :100,
       //maxUnderScrollExtent:0,
@@ -321,7 +321,7 @@ class _SubBucketPageState extends StateBase<SubBucketPage> {
   }
 
   void requestData() async {
-    final ul = PublicAccess.findUpperLower(listItems, searchFilter.ascOrder);
+    final ul = AppTools.findUpperLower(listItems, searchFilter.ascOrder);
     searchFilter.upper = ul.upperAsTS;
     searchFilter.lower = ul.lowerAsTS;
 

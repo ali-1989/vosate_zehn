@@ -1,10 +1,10 @@
 import 'dart:async';
 
+import 'package:app/managers/version_manager.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:app/managers/settingsManager.dart';
-import 'package:app/managers/versionManager.dart';
+import 'package:app/managers/settings_manager.dart';
 import 'package:app/structures/abstract/stateBase.dart';
 import 'package:app/system/applicationInitialize.dart';
 import 'package:app/services/session_service.dart';

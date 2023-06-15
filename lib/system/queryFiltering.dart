@@ -446,67 +446,23 @@ class SortKeys {
   SortKeys._();
 
   static const registrationKey = 'registration';
-  static const showDateKey = 'show_date';
-  static const messageDateKey = 'message_date';
-  static const orderNumberKey = 'order_number';
-  static const ageKey = 'age';
 }
 
 class SearchKeys {
   SearchKeys._();
 
   static const global = 'global';
-  static const userNameKey = 'user_name';
-  static const name = 'name';
-  static const family = 'family';
-  static const mobile = 'mobile';
-  static const titleKey = 'title';
-  static const descriptionKey = 'description';
-  static const contentKey = 'content';
-  static const tagKey = 'tag';
-  static const typeKey = 'type';
-  static const sameWordKey = 'same_words';
 }
 
 class FilterKeys {
   FilterKeys._();
 
   static const byVisibleState = 'by_visible_capability';
-  static const byType = 'by_type';
-  static const byGender = 'by_gender';
-  static const byBlocked = 'by_blocked';
-  static const byDeleted = 'by_deleted';
-  static const byClosed = 'by_closed';
-  static const byAge = 'by_age';
-  static const byPrice = 'by_price';
-  static const byExerciseMode = 'by_exercise_has';
-  static const byFoodMode = 'by_food_has';
-  static const byInActivePupilMode = 'by_in_active_pupil';
-  static const byTrainerUser = 'by_pupil_user';
-  static const byPupilUser = 'by_trainer_user';
-
-  static const isVisibleOp = 'is_visible';
-  static const isNotVisibleOp = 'is_not_visible';
 
   static const maleOp = 'male';
   static const femaleOp = 'female';
 
-  static const blockedOp = 'blocked';
-  static const noneBlockedOp = 'none_blocked';
 
-  static const deletedOp = 'deleted';
-  static const noneDeletedOp = 'none_deleted';
-
-  static const closedOp = 'closed';
-  static const noneCloseOp = 'none_closed';
-
-  static const matterOp = 'matter_type';
-  static const complementOp = 'complement_type';
-  static const herbalTeaOp = 'herbal_tea_type';
-
-  static const pendingRequestOp = 'pending_request';
-  static const acceptedRequestOp = 'accepted_request';
-  static const rejectedRequestOp = 'rejected_request';
 }
 
 

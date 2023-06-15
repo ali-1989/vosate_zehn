@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:app/tools/deviceInfoTools.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -30,7 +31,6 @@ import 'package:app/structures/middleWares/requester.dart';
 import 'package:app/structures/models/userModel.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/system/publicAccess.dart';
 import 'package:app/services/session_service.dart';
 import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/app/appIcons.dart';
@@ -534,7 +534,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
     js[Keys.forUserId] = user.userId;
     js[Keys.fileName] = fileName;
     js[Keys.partName] = partName;
-    PublicAccess.addAppInfo(js);
+    DeviceInfoTools.addAppInfo(js);
 
     requester.httpRequestEvents.onFailState = (req, r) async {
       await hideLoading();

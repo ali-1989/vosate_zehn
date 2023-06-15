@@ -2,13 +2,13 @@ import 'package:iris_tools/api/helpers/pathHelper.dart';
 import 'package:iris_tools/api/helpers/urlHelper.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '/managers/settingsManager.dart';
+import '/managers/settings_manager.dart';
 
 class UriTools {
   UriTools._();
 
   static bool isInternalLink(String? link){
-    return link != null && (link.startsWith('/') || link.contains(SettingsManager.settingsModel.httpAddress));
+    return link != null && (link.startsWith('/') || link.contains(SettingsManager.localSettings.httpAddress));
   }
 
   static String addHttpIfNeed(String? path){
@@ -25,10 +25,10 @@ class UriTools {
 
   static String correctIfIsInternalUrl(String? path){
     if(path == null) {
-      return SettingsManager.settingsModel.httpAddress;
+      return SettingsManager.localSettings.httpAddress;
     }
 
-    if(path.startsWith(RegExp(SettingsManager.settingsModel.httpAddress))) {
+    if(path.startsWith(RegExp(SettingsManager.localSettings.httpAddress))) {
       return path;
     }
 
@@ -37,10 +37,10 @@ class UriTools {
     }
 
     if(path.startsWith('/')) {
-      return SettingsManager.settingsModel.httpAddress + path;
+      return SettingsManager.localSettings.httpAddress + path;
     }
 
-    return '${SettingsManager.settingsModel.httpAddress}/$path';
+    return '${SettingsManager.localSettings.httpAddress}/$path';
   }
 
   static String? correctAppUrl(String? url, {String? domain}) {
@@ -48,7 +48,7 @@ class UriTools {
       return null;
     }
 
-    domain ??= SettingsManager.settingsModel.httpAddress;
+    domain ??= SettingsManager.localSettings.httpAddress;
     url = UrlHelper.decodePathFromDataBase(url)!;
 
     if(!url.startsWith('http')) {

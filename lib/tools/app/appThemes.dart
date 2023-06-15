@@ -1,3 +1,4 @@
+import 'package:app/tools/app/appDecoration.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,7 +7,7 @@ import 'package:iris_tools/api/helpers/colorHelper.dart';
 import 'package:iris_tools/api/system.dart';
 
 import 'package:app/structures/models/colorTheme.dart';
-import '/managers/fontManager.dart';
+import '/managers/font_manager.dart';
 
 /// hlp:
 /// https://htmlcolorcodes.com/
@@ -78,7 +79,9 @@ class AppThemes {
 		_instance.themeList.clear();
 
 		{
-			final mainTheme = ColorTheme(Colors.amber, Colors.orange, const Color(0xFFFF006E), Colors.black);
+			final mainTheme = ColorTheme(
+					AppDecoration.mainColor, AppDecoration.secondColor,
+					AppDecoration.differentColor, Colors.black);
 			//primary: ^1976D2, 1060A0 | dif: (FF006E|d81b60), ^F77F00
 
 			mainTheme.themeName = 'Amber';
@@ -318,10 +321,10 @@ class AppThemes {
 
 		/// https://flutter.dev/docs/release/breaking-changes/buttons
 
-		final buttonTheme = ButtonThemeData(
+		const buttonTheme = ButtonThemeData(
 		);
 
-		final iconButtonTheme = IconButtonThemeData(
+		const iconButtonTheme = IconButtonThemeData(
 			style: ButtonStyle(
 				//minimumSize: kIsWeb? MaterialStateProperty.all(Size(20, 45)): null,
 			),

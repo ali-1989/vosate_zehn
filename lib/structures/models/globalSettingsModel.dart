@@ -1,11 +1,11 @@
 
-class SystemParameterModel {
+class GlobalSettingsModel {
   String? aidPopMessage;
   int aidRepeatDays = 30;
 
-  SystemParameterModel();
+  GlobalSettingsModel();
 
-  SystemParameterModel.fromMap(Map map) {
+  GlobalSettingsModel.fromMap(Map map) {
     aidPopMessage = map['aid_pop_message'];
     aidRepeatDays = map['aid_pop_repeat_days']?? 30;
   }
@@ -17,5 +17,10 @@ class SystemParameterModel {
     map['aid_pop_repeat_days'] = aidRepeatDays;
 
     return map;
+  }
+
+  void matchBy(GlobalSettingsModel others){
+    aidPopMessage = others.aidPopMessage;
+    aidRepeatDays = others.aidRepeatDays;
   }
 }

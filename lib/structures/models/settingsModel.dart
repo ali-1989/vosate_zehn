@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:iris_tools/dateSection/calendarTools.dart';
 
-import 'package:app/managers/fontManager.dart';
+import 'package:app/managers/font_manager.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/dateTools.dart';
@@ -12,24 +12,17 @@ class SettingsModel {
   static const defaultWsAddress = 'ws://vosatezehn.com:7438/ws';
   static const defaultProxyAddress = '95.174.67.50:18080';
   static const Locale defaultAppLocale = Locale('fa', 'IR');
-  static final CalendarType defaultCalendarType = CalendarType.solarHijri;
+  static const CalendarType defaultCalendarType = CalendarType.solarHijri;
   static final defaultDateFormat = DateFormat.yyyyMmDd.format();
   static int webSocketPeriodicHeartMinutes = 3;
   static int drawerMenuTimeMill = 350;
-  static int maxCoverWidth = 180;
-  static int maxCoverHeightL = 120;
-  static int maxCoverHeightP = 240;
-  static int maxViewWidth = 380;
-  static int maxViewHeightL = 200;
-  static int maxViewHeightP = 460;
+  
 
   String? lastUserId;
-  //String? currentRouteScreen;
   Locale appLocale = defaultAppLocale;
   CalendarType calendarType = defaultCalendarType;
   String dateFormat = defaultDateFormat;
   String? colorTheme;
-  String? appPatternKey;
   String? lastToBackgroundTs;
   bool confirmOnExit = true;
   String httpAddress = defaultHttpAddress;
@@ -40,9 +33,7 @@ class SettingsModel {
   bool notificationDailyText = true;
 
 
-  SettingsModel(){
-    //currentRouteScreen = RoutesName.homePage;
-  }
+  SettingsModel();
 
   SettingsModel.fromMap(Map map){
     final localeMap = map['app_locale'];
@@ -55,7 +46,6 @@ class SettingsModel {
     calendarType = CalendarTypeHelper.calendarTypeFrom(map['calendar_type_name']);
     dateFormat = map['date_format']?? defaultDateFormat;
     colorTheme = map[Keys.setting$colorThemeName];
-    appPatternKey = map[Keys.setting$patternKey];
     lastToBackgroundTs = map[Keys.setting$toBackgroundTs];
     confirmOnExit = map[Keys.setting$confirmOnExit]?? true;
     httpAddress = map['http_address']?? defaultHttpAddress;
@@ -75,7 +65,6 @@ class SettingsModel {
     map['calendar_type_name'] = calendarType.name;
     map['date_format'] = dateFormat;
     map[Keys.setting$colorThemeName] = colorTheme;
-    map[Keys.setting$patternKey] = appPatternKey;
     map[Keys.setting$toBackgroundTs] = lastToBackgroundTs;
     map[Keys.setting$confirmOnExit] = confirmOnExit;
     map[Keys.setting$currentVersion] = currentVersion;
@@ -94,7 +83,6 @@ class SettingsModel {
     dateFormat = other.dateFormat;
     colorTheme = other.colorTheme;
     confirmOnExit = other.confirmOnExit;
-    appPatternKey = other.appPatternKey;
     lastToBackgroundTs = other.lastToBackgroundTs;
     httpAddress = other.httpAddress;
     wsAddress = other.wsAddress;
@@ -103,8 +91,6 @@ class SettingsModel {
   }
 
   void _prepareSettings() {
-    //final locale = System.getCurrentLocalizationsLocale(context);
-    //settingsModel.lastUserId ??= Session.getLastLoginUser()?.id;
     colorTheme ??= AppThemes.instance.currentTheme.themeName;
 
     FontManager.fetchFontThemeData(appLocale.languageCode);

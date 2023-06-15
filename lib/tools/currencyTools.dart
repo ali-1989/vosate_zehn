@@ -1,12 +1,17 @@
-//import 'package:intl/intl.dart';
+import 'package:app/managers/settings_manager.dart';
+import 'package:app/structures/models/countryModel.dart';
+import 'package:app/system/extensions.dart';
+import 'package:app/tools/countryTools.dart';
+import 'package:intl/intl.dart';
+import 'package:iris_tools/api/helpers/mathHelper.dart';
 //import 'package:currency_formatter/currency_formatter.dart';
 
 class CurrencyTools {
   CurrencyTools._();
 
-  /*static String formatCurrency(num cur, {String name = '', String? symbol}){
+  static String formatCurrency(num cur, {String name = '', String? symbol}){
     final format = NumberFormat.currency(
-      locale: SettingsManager.settingsModel.appLocale.languageCode,
+      locale: SettingsManager.localSettings.appLocale.languageCode,
       name: name,
       symbol: symbol,
       decimalDigits: 0,
@@ -47,7 +52,7 @@ class CurrencyTools {
     });
 
     return res;
-  }*/
+  }
 }
 
 

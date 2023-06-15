@@ -1,8 +1,8 @@
+import 'package:app/managers/settings_manager.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:iris_notifier/iris_notifier.dart';
 
 import 'package:app/managers/advertisingManager.dart';
-import 'package:app/managers/systemParameterManager.dart';
 import 'package:app/structures/enums/appEvents.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appCache.dart';
@@ -18,7 +18,7 @@ class NetListenerTools {
       AppBroadcast.isNetConnected = true;
       EventNotifierService.notify(AppEvents.networkConnected);
       //await ServerTimeTools.requestUtcTimeOfServer();
-      SystemParameterManager.requestParameters();
+      SettingsManager.requestGlobalSettings();
       AdvertisingManager.check();
     }
     else {

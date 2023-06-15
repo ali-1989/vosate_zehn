@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 typedef TryAgain = void Function(State state);
 typedef TryLogin = void Function(State state);
 ///=============================================================================================
-///=============================================================================================
 ///typedef void VoidCallback();
 /// typedef ValueChanged<T> = void Function(T value);
 /// typedef ValueSetter<T> = void Function(T value);

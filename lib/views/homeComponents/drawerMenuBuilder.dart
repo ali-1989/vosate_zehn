@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:app/constants.dart';
-import 'package:app/managers/versionManager.dart';
+import 'package:app/managers/version_manager.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -306,7 +306,7 @@ class DrawerMenuBuilder {
       return;
     }
 
-    void yesFn(){
+    void yesFn(_){
       //RouteTools.popTopView();
       LoginService.forceLogoff(SessionService.getLastLoginUser()!.userId);
     }

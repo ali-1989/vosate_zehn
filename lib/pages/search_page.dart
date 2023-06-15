@@ -1,3 +1,4 @@
+import 'package:app/tools/app_tools.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/duration/durationFormatter.dart';
@@ -18,7 +19,6 @@ import 'package:app/structures/middleWares/requester.dart';
 import 'package:app/structures/models/subBuketModel.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/system/publicAccess.dart';
 import 'package:app/services/session_service.dart';
 import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/app/appIcons.dart';
@@ -124,7 +124,7 @@ class _SearchPageState extends StateBase<SearchPage> {
 
                 return RefreshConfiguration(
                   headerBuilder: () => MaterialClassicHeader(),
-                  footerBuilder:  () => PublicAccess.classicFooter,
+                  footerBuilder:  () => AppTools.classicFooter,
                   enableScrollWhenRefreshCompleted: true,
                   enableLoadingWhenFailed : true,
                   hideFooterWhenNotFull: true,
@@ -346,7 +346,7 @@ class _SearchPageState extends StateBase<SearchPage> {
   }
 
   void requestData() async {
-    final ul = PublicAccess.findUpperLower(foundList, searchFilter.ascOrder);
+    final ul = AppTools.findUpperLower(foundList, searchFilter.ascOrder);
     searchFilter.upper = ul.upperAsTS;
     searchFilter.lower = ul.lowerAsTS;
 

@@ -11,7 +11,7 @@ import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appSizes.dart';
 import '/tools/app/appThemes.dart';
 
-typedef OnButtonCallback = FutureOr Function();
+typedef OnButtonCallback = FutureOr Function(BuildContext context);
 
 class AppDialogIris {
 	static final _instance = AppDialogIris._();
@@ -93,7 +93,7 @@ class AppDialogIris {
       positiveButtonText: yesText,
 			title: title,
 			icon: icon,
-			positivePress: (ctx) => yesFn?.call(),
+			positivePress: (ctx) => yesFn?.call(ctx),
 			dismissOnButtons: dismissOnButtons,
 			decoration: decoration ?? AppDialogIris.instance.dialogDecoration,
 		);
@@ -123,8 +123,8 @@ class AppDialogIris {
 			decoration: decoration?? AppDialogIris.instance.dialogDecoration,
 			icon: icon,
 			dismissOnButtons: dismissOnButtons,
-			positivePress: (ctx) => yesFn?.call(),
-			negativePress: (ctx) => noFn?.call(),
+			positivePress: (ctx) => yesFn?.call(ctx),
+			negativePress: (ctx) => noFn?.call(ctx),
 		);
 	}
 
@@ -132,7 +132,7 @@ class AppDialogIris {
 			BuildContext context, {
 				required Widget descView,
 				String? yesText,
-				required bool? Function(String txt) yesFn,
+				required bool? Function(BuildContext context, String txt) yesFn,
 				Function(String txt)? onChange,
 				String? noText,
 				String? initValue,
@@ -141,18 +141,20 @@ class AppDialogIris {
 				Widget? icon,
 				bool canDismiss = true,
 				TextInputType textInputType = TextInputType.text,
+				InputDecoration? inputDecoration,
+				TextEditingController? textEditingController,
 				IrisDialogDecoration?	decoration,
 		}){
 
-		final ctr = TextEditingController();
+		final ctr = textEditingController?? TextEditingController();
 
 		if(initValue != null){
 			ctr.text = initValue;
 		}
 
-		bool onPosClick(){
+		bool onPosClick(BuildContext ctx){
 			final txt = ctr.text;
-			return yesFn.call(txt)?? false;
+			return yesFn.call(ctx, txt)?? false;
 		}
 
 		final rejectView = Column(
@@ -169,6 +171,7 @@ class AppDialogIris {
 								keyboardType: textInputType,
 								maxLines: 1,
 								expands: false,
+								decoration: inputDecoration,
 								onChanged: (t){
 									dCtr.onChangeText(t);
 									onChange?.call(t);
@@ -193,8 +196,8 @@ class AppDialogIris {
 			icon: icon,
 			canDismissible: canDismiss,
 			dismissOnButtons: false,
-			positivePress: (ctx)=> onPosClick.call(),
-			negativePress: noFn != null? (ctx)=> noFn.call() : null,
+			positivePress: (ctx) => onPosClick.call(ctx),
+			negativePress: noFn != null? (ctx) => noFn.call(ctx) : null,
 		);
 	}
 

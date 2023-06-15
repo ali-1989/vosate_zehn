@@ -5,7 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:iris_notifier/iris_notifier.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
 
-import 'package:app/managers/settingsManager.dart';
+import 'package:app/managers/settings_manager.dart';
 import 'package:app/structures/enums/appEvents.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/appDb.dart';
@@ -38,7 +38,7 @@ Future<void> _onNewNotification(RemoteMessage message) async {
     final ids = AppDB.fetchAsList(Keys.setting$dailyTextIds);
 
     if(!ids.contains(id)) {
-      if (SettingsManager.settingsModel.notificationDailyText) {
+      if (SettingsManager.localSettings.notificationDailyText) {
         AppNotification.sendNotification(message.notification!.title, message.notification!.body!);
       }
 

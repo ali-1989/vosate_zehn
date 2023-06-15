@@ -1,3 +1,4 @@
+import 'package:app/tools/deviceInfoTools.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
@@ -6,10 +7,9 @@ import 'package:iris_tools/api/helpers/jsonHelper.dart';
 import 'package:iris_tools/api/logger/logger.dart';
 import 'package:iris_tools/api/tools.dart';
 
-import 'package:app/managers/settingsManager.dart';
+import 'package:app/managers/settings_manager.dart';
 import 'package:app/system/httpProcess.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/system/publicAccess.dart';
 import 'package:app/tools/app/appHttpDio.dart';
 import 'package:app/tools/app/appSheet.dart';
 
@@ -51,14 +51,14 @@ class Requester {
     _bodyJs = js;
 
     if(js != null) {
-      PublicAccess.addAppInfo(_bodyJs!);
+      DeviceInfoTools.addAppInfo(_bodyJs!);
     }
   }
 
   void _prepareHttp(){
     _http = HttpItem();
     _http.setResponseIsPlain();
-    _http.fullUrl = SettingsManager.settingsModel.httpAddress;
+    _http.fullUrl = SettingsManager.localSettings.httpAddress;
   }
 
   void prepareUrl({String? fullUrl, String? pathUrl}){
@@ -69,7 +69,7 @@ class Requester {
 
     pathUrl ??= '/graph-v1';
 
-    _http.fullUrl = SettingsManager.settingsModel.httpAddress + pathUrl;
+    _http.fullUrl = SettingsManager.localSettings.httpAddress + pathUrl;
   }
 
   void request([BuildContext? context, bool promptErrors = true]){
@@ -120,7 +120,20 @@ class Requester {
 
     f = f.then((val) async {
       if(kDebugMode && !kIsWeb) {
-        Tools.verbosePrint('@@@>> [${_httpRequester.requestOptions?.uri}]  response ======= [${_httpRequester.responseData?.statusCode}] $val');
+        final url = _httpRequester.requestOptions?.uri;
+        var request = '';
+
+        if (_httpRequester.requestOptions?.data is String){
+          final str = _httpRequester.requestOptions!.data as String;
+
+          if(str.contains(Keys.requestZone)) {
+            int start = str.indexOf(Keys.requestZone)+15;
+
+            request = str.substring(start, start+15);
+          }
+        }
+
+        Tools.verbosePrint('@@@>> [$url] [$request]  response ======= [${_httpRequester.responseData?.statusCode}] $val');
       }
 
       /*if(_httpRequester.responseData?.statusCode == 401 && Session.getLastLoginUser() != null){
@@ -177,7 +190,7 @@ class Requester {
       else {
         await httpRequestEvents.onFailState?.call(_httpRequester, val);
 
-        if(context != null) {
+        if(context != null && context.mounted) {
           if (promptErrors && !HttpProcess.processCommonRequestError(context, js)) {
             await AppSheet.showSheet$ServerNotRespondProperly(context);
           }

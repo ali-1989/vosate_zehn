@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:app/managers/api_manager.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/checker.dart';
@@ -11,7 +12,6 @@ import 'package:app/services/login_service.dart';
 import 'package:app/structures/models/settingsModel.dart';
 import 'package:app/system/httpCodes.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/system/publicAccess.dart';
 import 'package:app/services/session_service.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appDb.dart';
@@ -132,7 +132,7 @@ class WebsocketService {
 		//await PublicAccess.logger.logToAll('@@@@@@@@@ ws: is ok:$isConnected');//todo
 		reconnectInterval = const Duration(seconds: 6);
 
-		sendData(JsonHelper.mapToJson(PublicAccess.getHeartMap()));
+		sendData(JsonHelper.mapToJson(ApiManager.getHeartMap()));
 		NetListenerTools.onWsConnectedListener();
 
 		periodicHeartTimer?.cancel();
@@ -142,7 +142,7 @@ class WebsocketService {
 	}
 	///------------ heart every 3 min ---------------------------------------------------
 	static void sendHeartAndUsers() {
-		final heart = PublicAccess.getHeartMap();
+		final heart = ApiManager.getHeartMap();
 
 		try {
 			sendData(JsonHelper.mapToJson(heart));
@@ -190,7 +190,7 @@ class WebsocketService {
 						LoginService.forceLogoffAll();
 						break;
 					case HttpCodes.com_talkMeWho:
-						sendData(JsonHelper.mapToJson(PublicAccess.getHeartMap()));
+						sendData(JsonHelper.mapToJson(ApiManager.getHeartMap()));
 						break;
 					case HttpCodes.com_sendDeviceInfo:
 						sendData(JsonHelper.mapToJson(DeviceInfoTools.getDeviceInfo()));

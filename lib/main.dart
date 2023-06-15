@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app/tools/log_tools.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -10,12 +11,11 @@ import 'package:iris_tools/api/system.dart';
 import 'package:iris_tools/widgets/maxWidth.dart';
 
 import 'package:app/constants.dart';
-import 'package:app/managers/settingsManager.dart';
+import 'package:app/managers/settings_manager.dart';
 import 'package:app/services/firebase_service.dart';
 import 'package:app/services/native_call_service.dart';
 import 'package:app/structures/models/settingsModel.dart';
 import 'package:app/system/applicationInitialize.dart';
-import 'package:app/system/publicAccess.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appLocale.dart';
 import 'package:app/tools/app/appSizes.dart';
@@ -58,7 +58,7 @@ Future<void> main() async {
                       child: OrientationBuilder( /// detect orientation change and rotate screen
                           builder: (context, orientation) {
                             return Toaster(
-                              child: MyApp(),
+                              child: const MyApp(),
                             );
                           }
                       ),
@@ -125,7 +125,7 @@ class MyApp extends StatelessWidget {
           PointerDeviceKind.touch,
         },
       ),
-      locale: ApplicationInitial.isInit()? SettingsManager.settingsModel.appLocale : SettingsModel.defaultAppLocale,
+      locale: ApplicationInitial.isInit()? SettingsManager.localSettings.appLocale : SettingsModel.defaultAppLocale,
       supportedLocales: AppLocale.getAssetSupportedLocales(),
       localizationsDelegates: AppLocale.getLocaleDelegates(), // this do correct Rtl/Ltr
       /*localeResolutionCallback: (deviceLocale, supportedLocales) {
@@ -189,7 +189,7 @@ void onErrorCatch(FlutterErrorDetails errorDetails) {
 
   txt += '\n**************************************** [END CATCH]';
 
-  PublicAccess.logger.logToAll(txt);
+  LogTools.logger.logToAll(txt);
 }
 ///==============================================================================================
 bool mainIsolateError(error, sTrace) {
@@ -200,7 +200,7 @@ bool mainIsolateError(error, sTrace) {
   }
 
   txt += '\n**************************************** [END MAIN-ISOLATE]';
-  PublicAccess.logger.logToAll(txt);
+  LogTools.logger.logToAll(txt);
 
   if(kDebugMode) {
     return false;
@@ -217,7 +217,7 @@ void zonedGuardedCatch(error, sTrace) {
   }
 
   txt += '\n**************************************** [END ZONED-GUARDED]';
-  PublicAccess.logger.logToAll(txt);
+  LogTools.logger.logToAll(txt);
 
   if(kDebugMode) {
     throw error;

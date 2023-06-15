@@ -66,7 +66,6 @@ class Keys {
   static const setting$appSettings = 'app_settings';
   static const setting$fontThemeData = 'font_theme_data';
   static const setting$colorThemeName = 'color_theme_name';
-  static const setting$patternKey = 'lock_pattern';
   static const setting$toBackgroundTs = 'to_background_ts';
   static const setting$confirmOnExit = 'confirm_on_exit';
   static const setting$notificationChanelKey = 'notification_chanel_key';
@@ -75,7 +74,7 @@ class Keys {
   static const setting$currentVersion = 'current_version';
   static const setting$webDeviceId = 'web_device_id';
   static const setting$userMessageIds = 'user_messages_ids';
-  //----- app settings key -----------------------------------------------------------------
+  //----- app key -----------------------------------------------------------------
   static const setting$bucketType = 'bucket_type';
   static const setting$textOfDayGetPreMonth = 'text_of_day_get_pre_month';
   static const setting$lastAidDialogShowTime = 'last_aid_dialog_show_time';
@@ -83,7 +82,4 @@ class Keys {
   static const setting$notificationDailyText = 'notification_daily_text';
   static const setting$dailyTextIds = 'daily_text_ids';
 
-  static String genDownloadKey_userAvatar(int userId) {
-    return 'downloadUserAvatar_$userId';
-  }
 }

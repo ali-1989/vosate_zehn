@@ -3,10 +3,9 @@ import 'package:flutter/foundation.dart';
 import 'package:workmanager/workmanager.dart';
 
 import 'package:app/constants.dart';
-import 'package:app/services/firebase_service.dart';
 import 'package:app/services/native_call_service.dart';
 import 'package:app/system/applicationInitialize.dart';
-import 'package:app/system/publicAccess.dart';
+
 
 ///--------------------------------------------------------------------------------------------
 Future<bool> _callbackWorkManager(task, inputData) async {
