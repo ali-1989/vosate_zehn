@@ -2,6 +2,7 @@ import 'dart:convert' as system_convert;
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:app/tools/log_tools.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:dio/dio.dart';
@@ -12,14 +13,12 @@ import 'package:iris_tools/api/converter.dart';
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
 import 'package:iris_tools/api/helpers/listHelper.dart';
 
-import 'package:app/system/publicAccess.dart';
-
 class AppHttpDio {
 	AppHttpDio._();
 
 	static BaseOptions _genOptions(){
 		return BaseOptions(
-			connectTimeout: Duration(seconds: 15),
+			connectTimeout: const Duration(seconds: 15),
 		);
 	}
 
@@ -33,7 +32,7 @@ class AppHttpDio {
 				txt += 'Body: ${item.body} \n------------------------- End';
 			}
 
-			PublicAccess.logger.logToAll(txt);
+			LogTools.logger.logToAll(txt);
 		}
 
 		item.prepareMultiParts();
@@ -48,7 +47,9 @@ class AppHttpDio {
 
 			///  add proxy
 			if(item.useProxy && item.proxyAddress != null) {
-				(dio.httpClientAdapter as IOHttpClientAdapter).onHttpClientCreate = (client) {
+				(dio.httpClientAdapter as IOHttpClientAdapter).createHttpClient = () {
+					final client = HttpClient();
+
 					client.findProxy = (uri) {
 						return 'PROXY ${item.proxyAddress}';
 					};
@@ -82,7 +83,7 @@ class AppHttpDio {
 									 txt += 'statusCode:  ${res.statusCode}\n';
 									 txt += 'response.data: ${res.data}\n----------------------- End Debug';
 
-									 PublicAccess.logger.logToAll(txt);
+									 LogTools.logger.logToAll(txt);
 								 }
 
 								itemRes._response = res;
@@ -95,21 +96,21 @@ class AppHttpDio {
 									handler.next(res);
 								}
 							},
-							onError: (DioError err, ErrorInterceptorHandler handler) async {
+							onError: (DioException err, ErrorInterceptorHandler handler) async {
 								if(item.debugMode) {
 									var txt = '\n----------------- http Debug [onError]\n';
 									txt += 'statusCode: ${err.response?.statusCode}\n';
 									txt += 'response.data: ${err.response?.data}\n';
 									txt += 'error: ${err.error} \n--------------------------- End Debug';
 
-									PublicAccess.logger.logToAll(txt);
+									LogTools.logger.logToAll(txt);
 								}
 
 								final ro = RequestOptions(path: uri);
 								final res = Response<dynamic>(
 										requestOptions: ro,
 										statusCode: err.response?.statusCode,
-										data: err.response ?? DioError(requestOptions: ro, error: err.error, type: DioErrorType.connectionError)
+										data: err.response ?? DioException(requestOptions: ro, error: err.error, type: DioExceptionType.connectionError)
 								);
 
 								/*itemRes._response = res;
@@ -145,7 +146,7 @@ class AppHttpDio {
 
 	static HttpRequester download(HttpItem item, String savePath, {BaseOptions? options}){
 		if(item.debugMode && !kIsWeb) {
-			PublicAccess.logger.logToAll('==== Stack Trace : ${StackTrace.current.toString()}');
+			LogTools.logger.logToAll('==== Stack Trace : ${StackTrace.current.toString()}');
 		}
 
 		final itemRes = HttpRequester();
@@ -157,7 +158,8 @@ class AppHttpDio {
 			final uri = correctUri(item.fullUrl)!;
 
 			if(item.useProxy && item.proxyAddress != null) {
-				(dio.httpClientAdapter as IOHttpClientAdapter).onHttpClientCreate = (client) {
+				(dio.httpClientAdapter as IOHttpClientAdapter).createHttpClient = () {
+					final client = HttpClient();
 					client.findProxy = (uri) {
 						return 'PROXY ${item.proxyAddress}';
 					};
@@ -191,7 +193,7 @@ class AppHttpDio {
 								handler.next(res);
 							},
 
-							onError: (DioError err, ErrorInterceptorHandler handler) {
+							onError: (DioException err, ErrorInterceptorHandler handler) {
 								final ro = RequestOptions(path: uri);
 								final Response res = Response<ResponseBody>(requestOptions: ro, data: ResponseBody.fromBytes([], 404));
 								//Response res = Response<ResponseBody>(requestOptions: ro, data: ResponseBody.fromString('$err', 404));
@@ -307,7 +309,7 @@ class AppHttpDio {
 		  return null;
 		}
 
-		return uri.replaceAll(RegExp('/{2,}'), '/').replaceFirst(':\/', ':\/\/');
+		return uri.replaceAll(RegExp('/{2,}'), '/').replaceFirst(':/', '://');
 		//return uri.replaceAll(RegExp('(?<!:)(/{2,})'), '/');
 	}
 }
@@ -445,11 +447,11 @@ class HttpRequester {
 	}
 
 	bool get isDioCancelError {
-		return _response is DioError && (_response as DioError).message == 'my';
+		return _response is DioException && (_response as DioException).message == 'my';
 	}
 
 	bool isCancelError(dynamic e) {
-		return e is DioError && e.message == 'my';
+		return e is DioException && e.message == 'my';
 	}
 
 	Response emptyResponse = Response<ResponseBody>(

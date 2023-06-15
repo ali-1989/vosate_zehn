@@ -120,6 +120,18 @@ class AppMessages {
     return _getContext().t('update')?? _noText;
   }
 
+  static String get register {
+    return _getContext().t('register')?? _noText;
+  }
+
+  static String get save {
+    return _getContext().t('save')?? _noText;
+  }
+
+  static String get next {
+    return _getContext().t('next')?? _noText;
+  }
+
   static String get downloadNewVersion {
     return _getContext().t('downloadNewVersion')?? _noText;
   }

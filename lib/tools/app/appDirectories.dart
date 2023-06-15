@@ -170,9 +170,9 @@ class AppDirectories {
     name ??= Generator.generateDateMillWithKey(4);
 
     if(extension != null) {
-      return '${getTempDir$ex()}${PathHelper.getSeparator()}$name.$extension';
+      return '${getExternalTempDir()}${PathHelper.getSeparator()}$name.$extension';
     } else {
-      return getTempDir$ex()+ PathHelper.getSeparator() + name;
+      return getExternalTempDir()+ PathHelper.getSeparator() + name;
     }
   }
 
@@ -187,7 +187,7 @@ class AppDirectories {
   }
   ///================================================================================================
   // /storage/emulated/0/appName/tmp
-  static String getTempDir$ex(){
+  static String getExternalTempDir(){
     return '${getAppFolderInExternalStorage()}${PathHelper.getSeparator()}tmp';
   }
 
@@ -230,7 +230,7 @@ class AppDirectories {
       return false;
     }
 
-    final tmpDir = getTempDir$ex();
+    final tmpDir = getExternalTempDir();
     var f = FileHelper.getFile('$tmpDir${PathHelper.getSeparator()}.nomedia');
     await f.create(recursive: true);
 

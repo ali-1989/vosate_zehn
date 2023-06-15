@@ -163,6 +163,46 @@ class AppDialog {
 		);
 	}
 
+	Future showCustomDialog(
+			BuildContext context,
+			Widget view, {
+				String? yesText,
+				Function? yesFn,
+				bool barrierDismissible = true,
+				DialogDecoration? decoration,
+				List<Widget>? actions,
+			}) {
+
+		decoration ??= AppDialog.instance.dialogDecoration;
+
+		if(yesText != null){
+			actions ??= [];
+
+			actions.add(ElevatedButton(
+					onPressed: (){
+						if(yesFn != null) {
+							yesFn.call();
+						}
+						else {
+							RouteTools.popTopView(context: context);
+						}
+					},
+					child: Text(yesText)
+			));
+		}
+
+		return Dialogs.materialDialog(
+				color: decoration.backgroundColor,
+				barrierColor: decoration.dimColor,
+				context: context,
+				barrierDismissible: barrierDismissible,
+				customView: view,
+				actions: [
+					...?actions
+				]
+		);
+	}
+
 	void showSuccessDialog(BuildContext context, String? title, String desc) {//shield-check, sticker-check, thump-up
 		showDialog(context, title: title, desc: desc, yesText: AppMessages.ok,
 				icon: Icon(AppIcons.downloadDone, size: 48, color: AppThemes.instance.currentTheme.successColor,)
