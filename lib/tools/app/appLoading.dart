@@ -12,6 +12,7 @@ import 'package:app/tools/app/appOverlay.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/views/widgets/overlay/overlayContainer.dart';
 import 'package:app/views/widgets/progressBarPrompt.dart';
+import 'package:lottie/lottie.dart';
 
 class AppLoading {
   AppLoading._();
@@ -163,7 +164,28 @@ class AppLoading {
                 radius: 0.9,
               ),
             ),
-            child: SizedBox()
+            child: Center(
+              child: Lottie.asset(
+                AppImages.loadingLottie,
+                width: 200,
+                height: 200,
+                reverse: false,
+                animate: true,
+                fit: BoxFit.fill,
+                delegates: LottieDelegates(
+                  values: [
+                    ValueDelegate.strokeColor(
+                      ['heartStroke', '**'],
+                      value: lottieColor,
+                    ),
+                    ValueDelegate.color(
+                      ['heartFill', 'Group 1', '**'],
+                      value: lottieColor,
+                    ),
+                  ],
+                ),
+              ),
+            )
         )
     );
   }
