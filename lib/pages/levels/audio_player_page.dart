@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:iris_tools/api/duration/durationFormatter.dart';
 import 'package:iris_tools/api/generator.dart';
 import 'package:iris_tools/api/helpers/mathHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
-import 'package:audioplayers/audioplayers.dart';
 
 import 'package:app/pages/levels/playback_disposition.dart';
 import 'package:app/pages/levels/slider.dart';

@@ -101,7 +101,7 @@ extension ContextExtension on BuildContext {
   }
   //--------------------------------------------------
   Map<String, dynamic>? tAsMap(String key) {
-    return AppLocale.appLocalize.translateMap(key);
+    return AppLocale.appLocalize.translateAsMap(key);
   }
 
   Map<String, String>? tAsStringMap(String key, String subMapKey) {

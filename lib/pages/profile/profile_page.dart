@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:app/tools/deviceInfoTools.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -24,6 +23,7 @@ import 'package:iris_tools/models/dataModels/mediaModel.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import 'package:app/services/session_service.dart';
 import 'package:app/structures/abstract/stateBase.dart';
 import 'package:app/structures/enums/appEvents.dart';
 import 'package:app/structures/enums/enums.dart';
@@ -31,7 +31,6 @@ import 'package:app/structures/middleWares/requester.dart';
 import 'package:app/structures/models/userModel.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/services/session_service.dart';
 import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/app/appIcons.dart';
 import 'package:app/tools/app/appImages.dart';
@@ -42,6 +41,7 @@ import 'package:app/tools/app/appSizes.dart';
 import 'package:app/tools/app/appSnack.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/app/appToast.dart';
+import 'package:app/tools/deviceInfoTools.dart';
 import 'package:app/tools/permissionTools.dart';
 import 'package:app/tools/routeTools.dart';
 import 'package:app/views/components/changeNameFamilyView.dart';
@@ -534,7 +534,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
     js[Keys.forUserId] = user.userId;
     js[Keys.fileName] = fileName;
     js[Keys.partName] = partName;
-    DeviceInfoTools.addAppInfo(js);
+    DeviceInfoTools.attachApplicationInfo(js);
 
     requester.httpRequestEvents.onFailState = (req, r) async {
       await hideLoading();

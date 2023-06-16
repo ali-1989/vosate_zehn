@@ -1,4 +1,3 @@
-import 'package:app/tools/deviceInfoTools.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
@@ -12,6 +11,7 @@ import 'package:app/system/httpProcess.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/appHttpDio.dart';
 import 'package:app/tools/app/appSheet.dart';
+import 'package:app/tools/deviceInfoTools.dart';
 
 ///=============================================================================================
 enum MethodType {
@@ -51,7 +51,7 @@ class Requester {
     _bodyJs = js;
 
     if(js != null) {
-      DeviceInfoTools.addAppInfo(_bodyJs!);
+      DeviceInfoTools.attachApplicationInfo(_bodyJs!);
     }
   }
 

@@ -1,4 +1,3 @@
-import 'package:app/tools/app_tools.dart';
 import 'package:flutter/material.dart';
 
 import 'package:appinio_swiper/appinio_swiper.dart';
@@ -10,17 +9,18 @@ import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:iris_tools/widgets/optionsRow/checkRow.dart';
 
 import 'package:app/managers/settings_manager.dart';
+import 'package:app/services/session_service.dart';
 import 'package:app/structures/abstract/stateBase.dart';
 import 'package:app/structures/middleWares/requester.dart';
 import 'package:app/structures/models/dailyTextModel.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/services/session_service.dart';
 import 'package:app/tools/app/appCache.dart';
 import 'package:app/tools/app/appIcons.dart';
 import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appOverlay.dart';
+import 'package:app/tools/app_tools.dart';
 import 'package:app/tools/dateTools.dart';
 import 'package:app/views/homeComponents/appBarBuilder.dart';
 import 'package:app/views/states/emptyData.dart';

@@ -1,7 +1,5 @@
 import 'dart:async';
 
-
-import 'package:app/services/firebase_service.dart';
 import 'package:dio/dio.dart';
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
 import 'package:iris_tools/api/system.dart';
@@ -9,6 +7,7 @@ import 'package:iris_tools/models/twoStateReturn.dart';
 
 import 'package:app/constants.dart';
 import 'package:app/managers/settings_manager.dart';
+import 'package:app/services/firebase_service.dart';
 import 'package:app/services/session_service.dart';
 import 'package:app/structures/middleWares/requester.dart';
 import 'package:app/system/keys.dart';

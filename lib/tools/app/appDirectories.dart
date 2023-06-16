@@ -134,7 +134,7 @@ class AppDirectories {
     return _documentDir;
   }
 
-  static String getAppFolderInExternalStorage() {
+  static String getExternalAppFolder() {
     if(System.isWeb()) {
       return '/$_appName';
     }
@@ -188,7 +188,7 @@ class AppDirectories {
   ///================================================================================================
   // /storage/emulated/0/appName/tmp
   static String getExternalTempDir(){
-    return '${getAppFolderInExternalStorage()}${PathHelper.getSeparator()}tmp';
+    return '${getExternalAppFolder()}${PathHelper.getSeparator()}tmp';
   }
 
   static String getAvatarDir$ex() {
@@ -200,7 +200,7 @@ class AppDirectories {
   }
 
   static String getMediaDir$ex() {
-    return '${getAppFolderInExternalStorage()}${PathHelper.getSeparator()}media';
+    return '${getExternalAppFolder()}${PathHelper.getSeparator()}media';
   }
 
   static String getAudioDir$ex() {

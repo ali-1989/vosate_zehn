@@ -1,11 +1,10 @@
-
-import 'package:app/structures/models/upperLower.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/dateSection/dateHelper.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:app/structures/mixins/dateFieldMixin.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:app/structures/models/upperLower.dart';
 
 class AppTools {
   AppTools._();

@@ -1,10 +1,6 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:app/constants.dart';
-import 'package:app/services/firebase_service.dart';
-import 'package:app/services/session_service.dart';
-import 'package:app/structures/models/userModel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
@@ -13,6 +9,10 @@ import 'package:iris_tools/api/generator.dart';
 import 'package:iris_tools/api/system.dart';
 import 'package:platform_device_id/platform_device_id.dart';
 
+import 'package:app/constants.dart';
+import 'package:app/services/firebase_service.dart';
+import 'package:app/services/session_service.dart';
+import 'package:app/structures/models/userModel.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/appDb.dart';
 
@@ -90,7 +90,7 @@ class DeviceInfoTools {
     return SynchronousFuture<String>(deviceId!);
   }
 
-  static Map<String, dynamic> getDeviceInfo() {
+  static Map<String, dynamic> mapDeviceInfo() {
     final js = <String, dynamic>{};
 
     if(kIsWeb){
@@ -123,10 +123,20 @@ class DeviceInfoTools {
     return js;
   }
 
-  static Map addAppInfo(Map src, {UserModel? curUser}) {
+  static Map<String, dynamic> mapApplicationInfo() {
+    final res = <String, dynamic>{};
+    res[Keys.deviceId] = deviceId;
+    res[Keys.appName] = Constants.appName;
+    res['app_version_code'] = Constants.appVersionCode;
+    res['app_version_name'] = Constants.appVersionName;
+
+    return res;
+  }
+
+  static Map attachApplicationInfo(Map src, {UserModel? curUser}) {
     final token = curUser?.token ?? SessionService.getLastLoginUser()?.token;
 
-    src.addAll(getAppInfo());
+    src.addAll(mapApplicationInfo());
 
     if (token?.token != null) {
       src[Keys.token] = token?.token;
@@ -134,15 +144,5 @@ class DeviceInfoTools {
     }
 
     return src;
-  }
-
-  static Map<String, dynamic> getAppInfo() {
-    final res = <String, dynamic>{};
-    res[Keys.deviceId] = DeviceInfoTools.deviceId;
-    res[Keys.appName] = Constants.appName;
-    res['app_version_code'] = Constants.appVersionCode;
-    res['app_version_name'] = Constants.appVersionName;
-
-    return res;
   }
 }

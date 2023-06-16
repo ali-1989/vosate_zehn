@@ -3,25 +3,33 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:iris_tools/api/helpers/localeHelper.dart';
+import 'package:iris_tools/api/system.dart';
+import 'package:iris_tools/modules/irisLocalizations.dart';
 
-import 'package:app/system/localizations.dart';
+import 'package:app/system/keys.dart';
+import 'package:app/tools/routeTools.dart';
 import '/managers/settings_manager.dart';
 import '/tools/app/appThemes.dart';
 
 class AppLocale {
   AppLocale._();
 
-  static final IrisLocaleDelegate _localeDelegate = _prepare();
-
-  static IrisLocaleDelegate localeDelegate() => _localeDelegate;
+  static late final IrisLocaleDelegate localeDelegate;
+  static const Locale englishLocal = Locale('en', 'US');
+  static bool _isInit = false;
 
   static IrisLocalizations get appLocalize {
-    return localeDelegate().getLocalization();
+    return localeDelegate.getLocalization();
   }
 
-  static IrisLocaleDelegate _prepare() {
+  static Future<void> init() async {
     //rint('@@ this line must log once');
-    return IrisLocaleDelegate((locale) => _isLocaleSupported(locale));
+    if(!_isInit) {
+      _isInit = true;
+      localeDelegate = IrisLocaleDelegate((locale) => _isLocaleSupported(locale));
+    }
+
+    await localeDelegate.getLocalization().setFallbackByLocale(const Locale('en', 'EE'));
   }
 
   static bool _isLocaleSupported(Locale l) {
@@ -41,15 +49,17 @@ class AppLocale {
 
     //getSupportedLocales().forEach((element) {
     //});
-    res.putIfAbsent('en', () => {'name': 'English', 'locale_name': 'English'});
-    res.putIfAbsent('fa', () => {'name': 'Persian', 'locale_name': 'فارسی'});
+    res.putIfAbsent('en', () => {'name': 'English', 'local_name': 'English'});
+    res.putIfAbsent('fa', () => {'name': 'Persian', 'local_name': 'فارسی'});
 
     return res;
   }
 
   static List<LocalizationsDelegate<dynamic>> getLocaleDelegates() {
+    init();
+
     return <LocalizationsDelegate<dynamic>>[
-      localeDelegate(),
+      localeDelegate,
       DefaultMaterialLocalizations.delegate,
       DefaultCupertinoLocalizations.delegate,
       GlobalMaterialLocalizations.delegate,
@@ -59,7 +69,7 @@ class AppLocale {
     // https://flutter.dev/docs/development/accessibility-and-localization/internationalization
   }
 
-  static Future changeApplicationLanguage(String languageCode, {String? countryCode}) async {
+  static Future<void> changeApplicationLanguage(String languageCode, {String? countryCode}) async {
     final list = getAssetSupportedLocales();
 
     final l = list.firstWhere((element) {
@@ -70,44 +80,61 @@ class AppLocale {
         return element.languageCode == languageCode && element.countryCode == countryCode;
       }
 
-    }, orElse: () => const Locale('en', 'US'));
+    }, orElse: () => englishLocal);
 
+    await localeDelegate.load(l);
     SettingsManager.localSettings.appLocale = l;
-    await localeDelegate().load(l);
-    detectLocaleDirection(l);
+    AppThemes.instance.textDirection = detectLocaleDirection(l);
     SettingsManager.saveSettings();
   }
   ///------------------------------------------------------------------------------------
-  static void detectLocaleDirection(Locale locale){
+  static TextDirection detectLocaleDirection(Locale locale){
     if(LocaleHelper.rtlLanguageCode.contains(locale.languageCode)) {
-      AppThemes.instance.textDirection = TextDirection.rtl;
-    } else {
-      AppThemes.instance.textDirection = TextDirection.ltr;
+      return TextDirection.rtl;
     }
+
+    return TextDirection.ltr;
   }
 
   static Widget genDifferentLocale(BuildContext context, Locale locale, Widget child) {
     return IrisLocalizations.getCustomLocalization(context, locale, child);
   }
 
-  static String? numberRelative(dynamic input){
+  static String? numberRelative(String? input){
     if(input == null) {
       return null;
     }
-
-    final text = input.toString();
 
     final farsiList = <String>['fa', 'ps', 'ur'];
     final arabicList = <String>['ar'];
 
     if(farsiList.contains(SettingsManager.localSettings.appLocale.languageCode)) {
-      return LocaleHelper.numberToFarsi(text);
+      return LocaleHelper.numberToFarsi(input);
     }
 
     if(arabicList.contains(SettingsManager.localSettings.appLocale.languageCode)) {
-      return LocaleHelper.numberToArabic(text);
+      return LocaleHelper.numberToArabic(input);
     }
 
-    return text;
+    return LocaleHelper.numberToEnglish(input);
+  }
+
+  static String getLanguageLocalName() {
+    final lanCode = SettingsManager.localSettings.appLocale.languageCode;
+    final languages = AppLocale.getAssetSupportedLanguages();
+
+    for(var L in languages.entries){
+      if(L.key == lanCode){
+        return L.value['local_name']?? '-';
+      }
+    }
+
+    return 'English!';
+  }
+
+  static Map attachLanguageIso(Map src, {BuildContext? context}) {
+    src[Keys.languageIso] = System.getLocalizationsLanguageCode(context ?? RouteTools.getTopContext()!);
+
+    return src;
   }
 }

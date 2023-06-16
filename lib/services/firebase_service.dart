@@ -5,6 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:iris_notifier/iris_notifier.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
 
+import 'package:app/managers/api_manager.dart';
 import 'package:app/managers/settings_manager.dart';
 import 'package:app/structures/enums/appEvents.dart';
 import 'package:app/system/keys.dart';
@@ -82,7 +83,7 @@ class FireBaseService {
     catch (e){/**/}
   }
 
-  static Future prepare() async {
+  static Future start() async {
     //FirebaseMessaging.instance.isSupported()
 
     try {
@@ -103,6 +104,14 @@ class FireBaseService {
       //FirebaseMessaging.instance.setAutoInitEnabled(false);
 
       setListening();
+
+      Future.delayed(Duration(seconds: 3), (){
+        getToken();
+      });
+
+      EventNotifierService.addListener(AppEvents.firebaseTokenReceived, ({data}) {
+        FireBaseService.subscribeToTopic(ApiManager.fcmTopic);
+      });
     }
     catch (e){/**/}
   }

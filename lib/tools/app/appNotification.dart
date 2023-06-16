@@ -6,8 +6,8 @@ import 'package:iris_tools/api/generator.dart';
 import 'package:app/constants.dart';
 import 'package:app/structures/models/statusBarNotificationModel.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/tools/app/appDecoration.dart';
 import 'package:app/tools/app/appDb.dart';
+import 'package:app/tools/app/appDecoration.dart';
 
 // icon generator:
 // https://romannurik.github.io/AndroidAssetStudio/icons-notification.html#source.type=image&source.space.trim=1&source.space.pad=0&name=notif

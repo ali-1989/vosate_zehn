@@ -132,7 +132,7 @@ class AppDialogIris {
 			BuildContext context, {
 				required Widget descView,
 				String? mainButtonText,
-				required bool? Function(BuildContext context, String txt) mainButton,
+				required dynamic Function(BuildContext context, String txt) mainButton,
 				Function(String txt)? onChange,
 				String? noText,
 				String? initValue,

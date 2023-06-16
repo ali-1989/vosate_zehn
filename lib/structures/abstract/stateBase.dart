@@ -2,9 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/managers/orientationManager.dart';
+import 'package:iris_tools/modules/irisLocalizations.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 
-import 'package:app/system/localizations.dart';
 import 'package:app/tools/app/appLoading.dart';
 import 'package:app/tools/app/appLocale.dart';
 import 'package:app/tools/app/appSizes.dart';
@@ -90,7 +90,7 @@ abstract class StateBase<W extends StatefulWidget> extends State<W> {
 	}
 	//------------------------------------------------------
 	Map<String, dynamic>? tAsMap(String key) {
-		return AppLocale.appLocalize.translateMap(key);
+		return AppLocale.appLocalize.translateAsMap(key);
 	}
 
 	String? tInMap(String key, String subKey) {

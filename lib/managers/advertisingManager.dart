@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:core';
 
 import 'package:iris_db/iris_db.dart';
+import 'package:iris_notifier/iris_notifier.dart';
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
 import 'package:iris_tools/api/helpers/urlHelper.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
@@ -15,6 +16,7 @@ import 'package:app/pages/levels/audio_player_page.dart';
 import 'package:app/pages/levels/content_view_page.dart';
 import 'package:app/pages/levels/video_player_page.dart';
 import 'package:app/services/lastSeenService.dart';
+import 'package:app/structures/enums/appEvents.dart';
 import 'package:app/structures/enums/enums.dart';
 import 'package:app/structures/middleWares/requester.dart';
 import 'package:app/structures/models/advModel.dart';
@@ -43,11 +45,15 @@ class AdvertisingManager {
   static void init() async {
     timer ??= Timer(Duration(minutes: 30), _onTimer);
 
-    //_fetch();
+    EventNotifierService.addListener(AppEvents.networkConnected, _listener);
 
     if(lastRequest == null){
       requestAdvertising();
     }
+  }
+
+  static void _listener({data}) {
+    check();
   }
 
   static void check() async {

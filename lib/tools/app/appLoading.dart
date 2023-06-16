@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:iris_tools/api/helpers/colorHelper.dart';
 import 'package:iris_tools/features/overlayDialog.dart';
-import 'package:lottie/lottie.dart';
 
 import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appMessages.dart';
@@ -164,28 +163,7 @@ class AppLoading {
                 radius: 0.9,
               ),
             ),
-            child: Center(
-              child: Lottie.asset(
-                AppImages.loadingLottie,
-                width: 200,
-                height: 200,
-                reverse: false,
-                animate: true,
-                fit: BoxFit.fill,
-                delegates: LottieDelegates(
-                  values: [
-                    ValueDelegate.strokeColor(
-                      ['heartStroke', '**'],
-                      value: lottieColor,
-                    ),
-                    ValueDelegate.color(
-                      ['heartFill', 'Group 1', '**'],
-                      value: lottieColor,
-                    ),
-                  ],
-                ),
-              ),
-            )
+            child: SizedBox()
         )
     );
   }

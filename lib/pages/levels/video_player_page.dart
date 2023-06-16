@@ -13,7 +13,6 @@ import 'package:app/structures/enums/enums.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/views/homeComponents/appBarBuilder.dart';
 
-
 class VideoPlayerPageInjectData {
   late VideoSourceType videoSourceType;
   late String srcAddress;

@@ -1,18 +1,20 @@
 import 'dart:async';
 
-import 'package:app/managers/api_manager.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:dio/dio.dart';
+import 'package:iris_notifier/iris_notifier.dart';
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
 import 'package:iris_tools/models/twoStateReturn.dart';
 
+import 'package:app/managers/api_manager.dart';
 import 'package:app/managers/settings_manager.dart';
 import 'package:app/services/google_service.dart';
+import 'package:app/services/session_service.dart';
+import 'package:app/structures/enums/appEvents.dart';
 import 'package:app/structures/models/countryModel.dart';
 import 'package:app/structures/models/userModel.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/services/session_service.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appHttpDio.dart';
 import 'package:app/tools/app/appMessages.dart';
@@ -23,6 +25,11 @@ import 'package:app/tools/routeTools.dart';
 
 class LoginService {
   LoginService._();
+
+  static void init(){
+    EventNotifierService.addListener(AppEvents.userLogin, onLoginObservable);
+    EventNotifierService.addListener(AppEvents.userLogoff, onLogoffObservable);
+  }
 
   static void onLoginObservable({dynamic data}){
   }
@@ -40,7 +47,7 @@ class LoginService {
       reqJs[Keys.requesterId] = user.userId;
       reqJs[Keys.forUserId] = user.userId;
 
-      DeviceInfoTools.addAppInfo(reqJs, curUser: user);
+      DeviceInfoTools.attachApplicationInfo(reqJs, curUser: user);
 
       final info = HttpItem();
       info.fullUrl = '${SettingsManager.localSettings.httpAddress}/graph-v1';
@@ -121,7 +128,7 @@ class LoginService {
     js[Keys.requestZone] = 'send_otp';
     js[Keys.mobileNumber] = phoneNumber;
     js.addAll(countryModel.toMap());
-    DeviceInfoTools.addAppInfo(js);
+    DeviceInfoTools.attachApplicationInfo(js);
 
     http.fullUrl = ApiManager.graphApi;
     http.method = 'POST';
@@ -157,8 +164,8 @@ class LoginService {
     js[Keys.mobileNumber] = phoneNumber;
     js['code'] = code;
     js.addAll(countryModel.toMap());
-    js.addAll(DeviceInfoTools.getDeviceInfo());
-    DeviceInfoTools.addAppInfo(js);
+    js.addAll(DeviceInfoTools.mapDeviceInfo());
+    DeviceInfoTools.attachApplicationInfo(js);
 
     http.fullUrl = ApiManager.graphApi;
     http.method = 'POST';
@@ -193,8 +200,8 @@ class LoginService {
     final js = {};
     js[Keys.requestZone] = 'verify_email';
     js['email'] = email;
-    js.addAll(DeviceInfoTools.getDeviceInfo());
-    DeviceInfoTools.addAppInfo(js);
+    js.addAll(DeviceInfoTools.mapDeviceInfo());
+    DeviceInfoTools.attachApplicationInfo(js);
 
     http.fullUrl = ApiManager.graphApi;
     http.method = 'POST';

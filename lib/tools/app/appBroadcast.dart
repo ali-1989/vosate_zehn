@@ -43,9 +43,8 @@ class AppBroadcast {
     viewUpdaterStream.sink.add(true);
   }
 
-  static void gotoSplash(int waitingInSplashMil) {
-    isInSplashTimer = true;
-    splashWaitingMil = waitingInSplashMil;
+  static void gotoSplash() {
+    mustWaitToSplashTimer = true;
     reBuildMaterial();
   }
 }

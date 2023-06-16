@@ -10,7 +10,6 @@ import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/countryTools.dart';
 import 'package:app/tools/routeTools.dart';
 
-
 class CountrySelectScreen extends StatefulWidget {
 
   const CountrySelectScreen({Key? key}) : super(key: key);

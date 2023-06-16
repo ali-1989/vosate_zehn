@@ -4,12 +4,10 @@ import 'package:workmanager/workmanager.dart';
 
 import 'package:app/constants.dart';
 import 'package:app/services/native_call_service.dart';
-import 'package:app/system/applicationInitialize.dart';
-
 
 ///--------------------------------------------------------------------------------------------
 Future<bool> _callbackWorkManager(task, inputData) async {
-  await ApplicationInitial.prepareDirectoriesAndLogger();
+  //await ApplicationInitial.prepareDirectoriesAndLogger();
   //await PublicAccess.logger.logToAll('@@@@@@@-@@@@@');//todo
   var isAppRun = false;
 
@@ -25,8 +23,8 @@ Future<bool> _callbackWorkManager(task, inputData) async {
 
   //await PublicAccess.logger.logToAll('@@@@@@@@@ app was closed'); //todo
   try {
-    await ApplicationInitial.inSplashInit();
-    await ApplicationInitial.appLazyInit();
+    //await ApplicationInitial.inSplashInit();
+    //await ApplicationInitial.appLazyInit();
 
     /*switch (task) {
       case Workmanager.iOSBackgroundTask:

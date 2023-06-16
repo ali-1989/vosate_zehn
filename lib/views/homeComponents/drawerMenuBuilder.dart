@@ -1,8 +1,5 @@
 import 'dart:io';
 
-import 'package:app/constants.dart';
-import 'package:app/managers/version_manager.dart';
-import 'package:app/tools/app/appThemes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -13,6 +10,8 @@ import 'package:iris_tools/api/helpers/mathHelper.dart';
 import 'package:iris_tools/modules/stateManagers/refresh.dart';
 import 'package:share_extend/share_extend.dart';
 
+import 'package:app/constants.dart';
+import 'package:app/managers/version_manager.dart';
 import 'package:app/pages/about_us_page.dart';
 import 'package:app/pages/contact_us_page.dart';
 import 'package:app/pages/favorites_page.dart';
@@ -22,11 +21,11 @@ import 'package:app/pages/sentences_page.dart';
 import 'package:app/services/aidService.dart';
 import 'package:app/services/download_upload_service.dart';
 import 'package:app/services/login_service.dart';
+import 'package:app/services/session_service.dart';
 import 'package:app/structures/enums/appEvents.dart';
 import 'package:app/structures/enums/enums.dart';
 import 'package:app/structures/models/userModel.dart';
 import 'package:app/system/extensions.dart';
-import 'package:app/services/session_service.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appDialogIris.dart';
 import 'package:app/tools/app/appDirectories.dart';
@@ -34,6 +33,7 @@ import 'package:app/tools/app/appIcons.dart';
 import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appSizes.dart';
+import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/routeTools.dart';
 
 class DrawerMenuBuilder {

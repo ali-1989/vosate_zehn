@@ -1,12 +1,11 @@
 import 'dart:ui';
 
-import 'package:app/tools/log_tools.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import 'package:iris_tools/api/system.dart';
 
-import 'package:app/system/applicationInitialize.dart';
+import 'package:app/tools/log_tools.dart';
 
 class NativeCallService {
   static MethodChannel? nativeChannel;
@@ -56,7 +55,7 @@ class NativeCallService {
 @pragma('vm:entry-point')
 void bootCallbackHandler() async {
   try {
-    await ApplicationInitial.prepareDirectoriesAndLogger();
+    //await ApplicationInitial.prepareDirectoriesAndLogger();
     await LogTools.logger.logToAll('--->> appJavaCallback call ---');//todo
     /*
     DartPluginRegistrant.ensureInitialized(); //must not calling in root isolate

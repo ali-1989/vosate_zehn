@@ -1,9 +1,11 @@
+import 'package:intl/intl.dart';
+import 'package:iris_tools/api/helpers/mathHelper.dart';
+
 import 'package:app/managers/settings_manager.dart';
 import 'package:app/structures/models/countryModel.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/tools/countryTools.dart';
-import 'package:intl/intl.dart';
-import 'package:iris_tools/api/helpers/mathHelper.dart';
+
 //import 'package:currency_formatter/currency_formatter.dart';
 
 class CurrencyTools {

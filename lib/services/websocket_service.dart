@@ -1,25 +1,25 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:app/managers/api_manager.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/checker.dart';
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
 import 'package:iris_websocket/iris_websocket.dart';
 
+import 'package:app/managers/api_manager.dart';
 import 'package:app/services/login_service.dart';
+import 'package:app/services/session_service.dart';
 import 'package:app/structures/models/settingsModel.dart';
+import 'package:app/system/applicationSignal.dart';
 import 'package:app/system/httpCodes.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/services/session_service.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appDb.dart';
 import 'package:app/tools/app/appDialogIris.dart';
 import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appNotification.dart';
 import 'package:app/tools/deviceInfoTools.dart';
-import 'package:app/tools/netListenerTools.dart';
 import 'package:app/tools/routeTools.dart';
 
 class WebsocketService {
@@ -122,7 +122,7 @@ class WebsocketService {
 		//await PublicAccess.logger.logToAll('@@@@@@@@@ ws: is ok:$isConnected');//todo
 		periodicHeartTimer?.cancel();
 
-		NetListenerTools.onWsDisConnectedListener();
+		ApplicationSignal.onWsDisConnectedListener();
 
 		_reconnect();
 	}
@@ -133,7 +133,7 @@ class WebsocketService {
 		reconnectInterval = const Duration(seconds: 6);
 
 		sendData(JsonHelper.mapToJson(ApiManager.getHeartMap()));
-		NetListenerTools.onWsConnectedListener();
+		ApplicationSignal.onWsConnectedListener();
 
 		periodicHeartTimer?.cancel();
 		periodicHeartTimer = Timer.periodic(Duration(minutes: SettingsModel.webSocketPeriodicHeartMinutes), (timer) {
@@ -193,7 +193,7 @@ class WebsocketService {
 						sendData(JsonHelper.mapToJson(ApiManager.getHeartMap()));
 						break;
 					case HttpCodes.com_sendDeviceInfo:
-						sendData(JsonHelper.mapToJson(DeviceInfoTools.getDeviceInfo()));
+						sendData(JsonHelper.mapToJson(DeviceInfoTools.mapDeviceInfo()));
 						break;
 				}
 			}
