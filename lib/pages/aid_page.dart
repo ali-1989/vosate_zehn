@@ -12,7 +12,7 @@ import 'package:app/structures/middleWares/requester.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appThemes.dart';
-import 'package:app/views/homeComponents/appBarBuilder.dart';
+import 'package:app/views/baseComponents/appBarBuilder.dart';
 import 'package:app/views/states/errorOccur.dart';
 import 'package:app/views/states/waitToLoad.dart';
 

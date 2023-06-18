@@ -5,7 +5,7 @@ import 'package:webviewx/webviewx.dart';
 
 import 'package:app/structures/abstract/stateBase.dart';
 import 'package:app/tools/app/appMessages.dart';
-import 'package:app/views/homeComponents/appBarBuilder.dart';
+import 'package:app/views/baseComponents/appBarBuilder.dart';
 import 'package:app/views/states/waitToLoad.dart';
 
 class PayWebPage extends StatefulWidget{

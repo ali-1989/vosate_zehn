@@ -13,7 +13,7 @@ import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appSheet.dart';
 import 'package:app/tools/app/appSnack.dart';
 import 'package:app/tools/routeTools.dart';
-import 'package:app/views/homeComponents/appBarBuilder.dart';
+import 'package:app/views/baseComponents/appBarBuilder.dart';
 
 class ContactUsPage extends StatefulWidget{
 

@@ -16,7 +16,7 @@ import 'package:app/system/extensions.dart';
 import 'package:app/tools/app/appIcons.dart';
 import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appSizes.dart';
-import 'package:app/views/homeComponents/appBarBuilder.dart';
+import 'package:app/views/baseComponents/appBarBuilder.dart';
 
 /// for iOS: must visit page and add code to Info.plist
 

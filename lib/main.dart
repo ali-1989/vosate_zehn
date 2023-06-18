@@ -21,7 +21,7 @@ import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/app/appToast.dart';
 import 'package:app/tools/log_tools.dart';
 import 'package:app/tools/routeTools.dart';
-import 'package:app/views/homeComponents/splashPage.dart';
+import 'package:app/views/baseComponents/splashPage.dart';
 
 ///================ call on any hot restart
 Future<void> main() async {

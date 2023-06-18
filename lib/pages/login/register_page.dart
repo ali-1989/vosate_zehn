@@ -17,7 +17,7 @@ import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appSheet.dart';
 import 'package:app/tools/app/appToast.dart';
 import 'package:app/views/components/dateComponents/selectDateCalendarView.dart';
-import 'package:app/views/homeComponents/appBarBuilder.dart';
+import 'package:app/views/baseComponents/appBarBuilder.dart';
 
 class RegisterPageInjectData {
   String? email;

@@ -28,8 +28,8 @@ import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/deviceInfoTools.dart';
 import 'package:app/tools/log_tools.dart';
 import 'package:app/tools/routeTools.dart';
-import 'package:app/views/homeComponents/routeDispatcher.dart';
-import 'package:app/views/homeComponents/splashView.dart';
+import 'package:app/views/baseComponents/routeDispatcher.dart';
+import 'package:app/views/baseComponents/splashView.dart';
 import 'package:app/views/states/waitToLoad.dart';
 
 bool isInitialOk = false;

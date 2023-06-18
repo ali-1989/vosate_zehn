@@ -47,7 +47,7 @@ import 'package:app/tools/routeTools.dart';
 import 'package:app/views/components/changeNameFamilyView.dart';
 import 'package:app/views/components/dateComponents/selectDateCalendarView.dart';
 import 'package:app/views/components/selectGenderView.dart';
-import 'package:app/views/homeComponents/appBarBuilder.dart';
+import 'package:app/views/baseComponents/appBarBuilder.dart';
 
 class ProfilePage extends StatefulWidget{
 

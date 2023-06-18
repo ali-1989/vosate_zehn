@@ -11,7 +11,7 @@ import 'package:wakelock/wakelock.dart';
 import 'package:app/structures/abstract/stateBase.dart';
 import 'package:app/structures/enums/enums.dart';
 import 'package:app/tools/app/appThemes.dart';
-import 'package:app/views/homeComponents/appBarBuilder.dart';
+import 'package:app/views/baseComponents/appBarBuilder.dart';
 
 class VideoPlayerPageInjectData {
   late VideoSourceType videoSourceType;
