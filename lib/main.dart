@@ -56,7 +56,7 @@ Future<void> main() async {
                       child: OrientationBuilder( /// detect orientation change and rotate screen
                           builder: (context, orientation) {
                             return Toaster(
-                              child: const MyApp(),
+                              child: MyApp(),
                             );
                           }
                       ),
@@ -100,7 +100,7 @@ Future<(bool, String?)> prepareDirectoriesAndLogger() async {
 }
 ///==============================================================================================
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  MyApp({Key? key}) : super(key: key);
 
   ///============ call on any hot reload
   @override
@@ -112,7 +112,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         color: Colors.transparent,
         builder: (ctx, home){
-            return const SplashPage();
+            return SplashPage();
         },
       );
     }
@@ -138,7 +138,7 @@ class MyApp extends StatelessWidget {
       supportedLocales: AppLocale.getAssetSupportedLocales(),
       localizationsDelegates: AppLocale.getLocaleDelegates(), // this do correct Rtl/Ltr
       /*localeResolutionCallback: (deviceLocale, supportedLocales) {
-            return SettingsManager.settingsModel.appLocale;
+            return SettingsManager.localSettings.appLocale;
           },*/
 
       home: materialHomeBuilder(),
@@ -153,7 +153,7 @@ class MyApp extends StatelessWidget {
 
         return MediaQuery(
             data: MediaQuery.of(localContext).copyWith(textScaleFactor: 1),
-            child: const SplashPage()
+            child: SplashPage()
         );
       },
     );

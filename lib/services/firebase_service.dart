@@ -58,7 +58,7 @@ class FireBaseService {
   static Future<void> initializeApp() async {
     try {
       if(kIsWeb){
-        final firebaseOptions = FirebaseOptions(
+        final firebaseOptions = const FirebaseOptions(
           appId: '1:731359726004:web:7b371dd04042f69cb20ae1',
           apiKey: 'AIzaSyC2gsyD1HYpP6LwXws6hZc_PTFoK68rl8c',
           projectId: 'vosate-zehn-7d8fe',
@@ -70,7 +70,7 @@ class FireBaseService {
         return;
       }
 
-      final firebaseOptions = FirebaseOptions(
+      final firebaseOptions = const FirebaseOptions(
         appId: '1:731359726004:android:fbbd8cd236c4fc31b20ae1',
         apiKey: 'AIzaSyBVuGcqQFjUl1t5mIUJ04rfr9EKkDRqYxM',
         projectId: 'vosate-zehn-7d8fe',
@@ -105,12 +105,8 @@ class FireBaseService {
 
       setListening();
 
-      Future.delayed(Duration(seconds: 3), (){
+      Future.delayed(const Duration(seconds: 3), (){
         getToken();
-      });
-
-      EventNotifierService.addListener(AppEvents.firebaseTokenReceived, ({data}) {
-        FireBaseService.subscribeToTopic(ApiManager.fcmTopic);
       });
     }
     catch (e){/**/}
@@ -128,6 +124,7 @@ class FireBaseService {
     FirebaseMessaging.instance.onTokenRefresh.listen((fcmToken) {
       token = fcmToken;
       EventNotifierService.notify(AppEvents.firebaseTokenReceived);
+      subscribeToTopic(ApiManager.fcmTopic);
     });
 
     /// it's fire when be click on Fcm notification. (no notification by app)
@@ -165,7 +162,7 @@ class FireBaseService {
       return getTokenForce();
     }
 
-    if(DateHelper.isPastOf(lastUpdateToken, Duration(hours: 2))){
+    if(DateHelper.isPastOf(lastUpdateToken, const Duration(hours: 2))){
       return getTokenForce();
     }
 

@@ -1,3 +1,4 @@
+import 'package:app/tools/app/appDecoration.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/modules/stateManagers/assist.dart';
@@ -77,7 +78,7 @@ class _BucketPageState extends StateBase<BucketPage> {
 
   Widget buildBody(){
     if(isInFetchData) {
-      return WaitToLoad();
+      return const WaitToLoad();
     }
 
     if(!assistCtr.hasState(state$fetchData)){
@@ -85,12 +86,12 @@ class _BucketPageState extends StateBase<BucketPage> {
     }
 
     if(listItems.isEmpty){
-      return EmptyData();
+      return const EmptyData();
     }
 
     return RefreshConfiguration(
-      headerBuilder: () => MaterialClassicHeader(),
-      footerBuilder:  () => AppTools.classicFooter,
+      headerBuilder: () => const MaterialClassicHeader(),
+      footerBuilder:  () => AppDecoration.classicFooter,
       //headerTriggerDistance: 80.0,
       //maxOverScrollExtent :100,
       //maxUnderScrollExtent:0,
@@ -126,7 +127,7 @@ class _BucketPageState extends StateBase<BucketPage> {
           onItemClick(itm);
         },
         child: Card(
-          margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
           child: Row(
             children: [
               Builder(
@@ -146,15 +147,15 @@ class _BucketPageState extends StateBase<BucketPage> {
                 },
               ),
 
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(itm.title, maxLines: 1,).bold().fsR(1),
 
-                    SizedBox(height: 8,),
-                    Text('${itm.description}').alpha().subFont(),
+                    const SizedBox(height: 8,),
+                    Text('${itm.description}').alpha().thinFont(),
                   ],
                 ),
               ),

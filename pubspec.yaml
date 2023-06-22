@@ -76,7 +76,6 @@ dependencies:
 
 
   iris_tools:
-    #path: ../IrisTools
     git: https://github.com/ali-1989/IrisTools.git
   iris_db:
     git: https://github.com/ali-1989/IrisDB.git
@@ -161,6 +160,7 @@ import_sorter:
   # https://pub.dev/packages/awesome_notifications#-configuring-ios
   # https://pub.dev/packages/video_player#ios
   # https://pub.dev/packages/image_picker#ios
+  # https://pub.dev/packages/flutter_local_auth_invisible#ios-integration
 
   # ** packages that for Android needs additional code:
   # https://pub.dev/packages/url_launcher#android

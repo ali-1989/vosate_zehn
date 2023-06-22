@@ -13,6 +13,9 @@ import '/managers/font_manager.dart';
 /// https://htmlcolorcodes.com/
 /// https://colorhunt.co/
 
+/// notes:
+/// material library's theme is only supported by the material library widgets and not by RichText. use Text.rich.
+
 class AppThemes {
 	AppThemes._();
 
@@ -82,9 +85,8 @@ class AppThemes {
 			final mainTheme = ColorTheme(
 					AppDecoration.mainColor, AppDecoration.secondColor,
 					AppDecoration.differentColor, Colors.black);
-			//primary: ^1976D2, 1060A0 | dif: (FF006E|d81b60), ^F77F00
 
-			mainTheme.themeName = 'Amber';
+			mainTheme.themeName = 'Main';
 			mainTheme.appBarItemColor = Colors.black.withAlpha(180);
 
 			AppThemes._instance.themeList[mainTheme.themeName] = mainTheme;
@@ -330,8 +332,11 @@ class AppThemes {
 			),
 		);
 
+		final buttonBorder = MaterialStateProperty.all(const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))));
+
 		final elevatedButtonTheme = ElevatedButtonThemeData(
 			style: ButtonStyle(
+				//shape: buttonBorder,
 					tapTargetSize: MaterialTapTargetSize.padded,
 				//backgroundColor: MaterialStateProperty.all(th.buttonBackColor),
 				foregroundColor: MaterialStateProperty.all(th.buttonTextColor),
@@ -388,6 +393,7 @@ class AppThemes {
 				tapTargetSize: MaterialTapTargetSize.shrinkWrap,
 				//backgroundColor: MaterialStateProperty.all(th.buttonBackColor),
 				foregroundColor: MaterialStateProperty.all(th.textColor),
+				//shape: buttonBorder,
 			),
 		);
 

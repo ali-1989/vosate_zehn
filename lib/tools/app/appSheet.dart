@@ -117,8 +117,8 @@ class AppSheet {
   /// T: is returned value from Navigator.Pop()
   static Future<T?> showSheetOneAction<T>(
       BuildContext context,
-      String message,
-      VoidCallback? fn, {
+      String message, {
+        VoidCallback? onButton,
         String? title,
         String? buttonText,
         bool dismissOnAction = true,
@@ -131,13 +131,13 @@ class AppSheet {
 
     void close() {
       RouteTools.popTopView(context: context);
-      fn?.call();
+      onButton?.call();
     }
 
     final txtStyle = AppThemes.relativeSheetTextStyle();
 
     final posBtn = TextButton(
-        onPressed: dismissOnAction ? close : fn,
+        onPressed: dismissOnAction ? close : onButton,
         child: Text(buttonText, style: txtStyle)
     );
     //TextButton.icon(onPressed: fn, label: Text(btnText,), icon: Icon(icon, color: textColor,),);
@@ -171,11 +171,11 @@ class AppSheet {
   }
 
   static Future<T?> showSheetOk<T>(BuildContext context, String msg, {bool isDismissible = true,}) {
-    return showSheetOneAction(context, msg, null, isDismissible: isDismissible);
+    return showSheetOneAction(context, msg, isDismissible: isDismissible);
   }
 
   static Future<T?> showSheetNotice<T>(BuildContext context, String msg, {bool isDismissible = true}) {
-    return showSheetOneAction(context, msg, null, title: AppMessages.notice, isDismissible: isDismissible);
+    return showSheetOneAction(context, msg, title: AppMessages.notice, isDismissible: isDismissible);
   }
 
   static Future<T?> showSheetYesNo<T>(
@@ -321,7 +321,7 @@ class AppSheet {
                           fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.start,
-                        child: title?? SizedBox(),
+                        child: title?? const SizedBox(),
                     ),
                   ),
 
@@ -454,47 +454,47 @@ class AppSheet {
 
   ///=======================================================================================================
   static Future<T?> showSheet$NetDisconnected<T>(BuildContext context) {
-    return showSheetOneAction<T>(context, AppMessages.netConnectionIsDisconnect, null);
+    return showSheetOneAction<T>(context, AppMessages.netConnectionIsDisconnect);
   }
 
   static Future<T?> showSheet$ErrorCommunicatingServer<T>(BuildContext context) {
-    return showSheetOneAction<T>(context, AppMessages.errorCommunicatingServer, null);
+    return showSheetOneAction<T>(context, AppMessages.errorCommunicatingServer);
   }
 
   static Future<T?> showSheet$ServerNotRespondProperly<T>(BuildContext context) {
-    return showSheetOneAction<T>(context, AppMessages.serverNotRespondProperly, null);
+    return showSheetOneAction<T>(context, AppMessages.serverNotRespondProperly);
   }
 
   static Future<T?> showSheet$OperationCannotBePerformed<T>(BuildContext context) {
-    return showSheetOneAction<T>(context, AppMessages.operationCannotBePerformed, null);
+    return showSheetOneAction<T>(context, AppMessages.operationCannotBePerformed);
   }
 
   static Future<T?> showSheet$SuccessOperation<T>(BuildContext context, {VoidCallback? onBtn}) {
-    return showSheetOneAction<T>(context, AppMessages.operationSuccess, onBtn);
+    return showSheetOneAction<T>(context, AppMessages.operationSuccess, onButton: onBtn);
   }
 
   static Future<T?> showSheet$OperationFailed<T>(BuildContext context) {
-    return showSheetOneAction<T>(context, AppMessages.operationFailed, null);
+    return showSheetOneAction<T>(context, AppMessages.operationFailed);
   }
 
   static Future<T?> showSheet$OperationFailedTryAgain<T>(BuildContext context) {
-    return showSheetOneAction<T>(context, AppMessages.operationFailedTryAgain, null);
+    return showSheetOneAction<T>(context, AppMessages.operationFailedTryAgain);
   }
 
   static Future<T?> showSheet$OperationCanceled<T>(BuildContext context) {
-    return showSheetOneAction<T>(context, AppMessages.operationCanceled, null);
+    return showSheetOneAction<T>(context, AppMessages.operationCanceled);
   }
 
   static Future<T?> showSheet$AccountIsBlock<T>(BuildContext context) {
-    return showSheetOneAction<T>(context, AppMessages.accountIsBlock, null);
+    return showSheetOneAction<T>(context, AppMessages.accountIsBlock);
   }
 
   static Future<T?> showSheet$YouDoNotHaveAccess<T>(BuildContext context) {
-    return showSheetOneAction<T>(context, AppMessages.sorryYouDoNotHaveAccess, null);
+    return showSheetOneAction<T>(context, AppMessages.sorryYouDoNotHaveAccess);
   }
 
   static Future<T?> showSheet$ThereAreNoResults<T>(BuildContext context) {
-    return showSheetOneAction<T>(context, AppMessages.thereAreNoResults, null);
+    return showSheetOneAction<T>(context, AppMessages.thereAreNoResults);
   }
   ///======== third party package ===============================================================================
   static void showSheetDialog(

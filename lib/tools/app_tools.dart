@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/dateSection/dateHelper.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:app/structures/mixins/dateFieldMixin.dart';
 import 'package:app/structures/models/upperLower.dart';
@@ -24,14 +23,6 @@ class AppTools {
   static WidgetsBinding getAppWidgetsBinding() {
     return WidgetsBinding.instance;
   }
-
-  static ClassicFooter classicFooter = const ClassicFooter(
-    loadingText: '',
-    idleText: '',
-    noDataText: '',
-    failedText: '',
-    loadStyle: LoadStyle.ShowWhenLoading,
-  );
 
   static UpperLower findUpperLower(List<DateFieldMixin> list, bool isAsc){
     final res = UpperLower();

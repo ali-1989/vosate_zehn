@@ -37,7 +37,7 @@ bool mustWaitToSplashTimer = true;
 
 class SplashPage extends StatefulWidget {
 
-  const SplashPage({super.key});
+  SplashPage({super.key});
 
   @override
   SplashPageState createState() => SplashPageState();
@@ -118,14 +118,14 @@ class SplashPageState extends StateBase<SplashPage> {
   }
 
   void connectToServer() async {
-    /*final serverData = await SettingsManager.requestSystemParameters();
+    /*final serverData = await SettingsManager.requestGlobalSettings();
 
-    if(serverData == null){
+    if (serverData == null) {
       AppSheet.showSheetOneAction(
         RouteTools.materialContext!,
         AppMessages.errorCommunicatingServer,
-         (){
-          AppBroadcast.gotoSplash(2000);
+            () {
+          AppBroadcast.gotoSplash();
 
           connectToServer();
         },
@@ -135,7 +135,7 @@ class SplashPageState extends StateBase<SplashPage> {
     }
     else {
       _isConnectToServer = true;
-      Session.fetchLoginUsers();
+      SessionService.fetchLoginUsers();
       callState();
     }*/
   }
@@ -207,9 +207,9 @@ class SplashPageState extends StateBase<SplashPage> {
       WebsocketService.prepareWebSocket(SettingsManager.localSettings.wsAddress);
 
       ApplicationSignal.start();
+      SettingsManager.init();
       LoginService.init();
       DownloadUploadService.init();
-      SettingsManager.init();
       SettingsManager.requestGlobalSettings();
       MediaManager.loadAllRecords();
       AdvertisingManager.init();

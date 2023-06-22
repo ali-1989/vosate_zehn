@@ -86,7 +86,7 @@ class _HomePageState extends StateBase<HomePage> {
 
   Widget buildBody(){
     if(isInFetchData) {
-      return WaitToLoad();
+      return const WaitToLoad();
     }
 
     if(!assistCtr.hasState(state$fetchData)){
@@ -94,7 +94,7 @@ class _HomePageState extends StateBase<HomePage> {
     }
 
     if(newItems.isEmpty || meditationItems.isEmpty){
-      return EmptyData();
+      return const EmptyData();
     }
 
     return ListView(
@@ -117,15 +117,15 @@ class _HomePageState extends StateBase<HomePage> {
           final sliders = CarouselManager.getCarousel();
 
           if(sliders.isEmpty){
-            return SizedBox();
+            return const SizedBox();
           }
 
           return CarouselSlider(
             options: CarouselOptions(
                 height: 180.0,
               autoPlay: true,
-              autoPlayAnimationDuration: Duration(seconds: 2),
-              autoPlayInterval: Duration(seconds: 8),
+              autoPlayAnimationDuration: const Duration(seconds: 2),
+              autoPlayInterval: const Duration(seconds: 8),
               reverse: true,
               viewportFraction: 1.0,
             ),
@@ -143,7 +143,7 @@ class _HomePageState extends StateBase<HomePage> {
           final adv = AdvertisingManager.getAdv1();
 
           if(adv == null || adv.mediaModel == null){
-            return SizedBox();
+            return const SizedBox();
           }
 
           return GestureDetector(
@@ -169,7 +169,7 @@ class _HomePageState extends StateBase<HomePage> {
           final adv = AdvertisingManager.getAdv2();
 
           if(adv == null || adv.mediaModel == null){
-            return SizedBox();
+            return const SizedBox();
           }
           return GestureDetector(
             onTap: (){
@@ -218,12 +218,12 @@ class _HomePageState extends StateBase<HomePage> {
     return Builder(
       builder: (ctx){
         if(newItems.isEmpty){
-          return SizedBox();
+          return const SizedBox();
         }
 
         return Column(
           children: [
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -232,13 +232,13 @@ class _HomePageState extends StateBase<HomePage> {
                   padding: const EdgeInsets.symmetric(horizontal:10.0),
                   child: Chip(
                     backgroundColor: AppThemes.instance.currentTheme.differentColor,
-                      label: Text('جدیدترین ها').bold().boldFont().color(Colors.white)
+                      label: const Text('جدیدترین ها').bold().boldFont().color(Colors.white)
                   ),
                 ),
               ],
             ),
 
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             SizedBox(
               height: 172,
               child: ListView.builder(
@@ -253,7 +253,7 @@ class _HomePageState extends StateBase<HomePage> {
               ),
             ),
 
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
           ],
         );
       },
@@ -264,14 +264,14 @@ class _HomePageState extends StateBase<HomePage> {
     return Builder(
       builder: (ctx){
         if(meditationItems.isEmpty){
-          return SizedBox();
+          return const SizedBox();
         }
 
         return Column(
           mainAxisSize: MainAxisSize.min,
 
           children: [
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -279,12 +279,12 @@ class _HomePageState extends StateBase<HomePage> {
                   padding: const EdgeInsets.symmetric(horizontal:10.0),
                   child: Chip(
                       backgroundColor: AppThemes.instance.currentTheme.differentColor,
-                      label: Text('مدیتیشن').bold().boldFont().color(Colors.white)
+                      label: const Text('مدیتیشن').bold().boldFont().color(Colors.white)
                   ),
                 ),
                 TextButton(
                   onPressed: moreMeditation,
-                  child: Text('بیشتر').fsR(1).color(Colors.lightBlue),
+                  child: const Text('بیشتر').fsR(1).color(Colors.lightBlue),
                 ),
               ],
             ),
@@ -303,7 +303,7 @@ class _HomePageState extends StateBase<HomePage> {
               ),
             ),
 
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
           ],
         );
       },
@@ -314,13 +314,13 @@ class _HomePageState extends StateBase<HomePage> {
     return Builder(
       builder: (ctx){
         if(videoItems.isEmpty){
-          return SizedBox();
+          return const SizedBox();
         }
 
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -329,12 +329,12 @@ class _HomePageState extends StateBase<HomePage> {
                   padding: const EdgeInsets.symmetric(horizontal:10.0),
                   child: Chip(
                       backgroundColor: AppThemes.instance.currentTheme.differentColor,
-                      label: Text('ویدئو').bold().boldFont().color(Colors.white)
+                      label: const Text('ویدئو').bold().boldFont().color(Colors.white)
                   ),
                 ),
                 TextButton(
                   onPressed: moreVideo,
-                  child: Text('بیشتر').fsR(1).color(Colors.lightBlue),
+                  child: const Text('بیشتر').fsR(1).color(Colors.lightBlue),
                 ),
               ],
             ),
@@ -353,7 +353,7 @@ class _HomePageState extends StateBase<HomePage> {
               ),
             ),
 
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
           ],
         );
       },
@@ -413,7 +413,7 @@ class _HomePageState extends StateBase<HomePage> {
                                           shadowColor: Colors.transparent,
                                           visualDensity: VisualDensity.compact,
                                           elevation: 0,
-                                          label: Icon(AppIcons.videoCamera, size: 15, color: Colors.white),
+                                          label: const Icon(AppIcons.videoCamera, size: 15, color: Colors.white),
                                         ),
                                       );
                                     }
@@ -424,25 +424,25 @@ class _HomePageState extends StateBase<HomePage> {
                                         shadowColor: Colors.transparent,
                                         visualDensity: VisualDensity.compact,
                                         elevation: 0,
-                                        label: Icon(AppIcons.headset, size: 15, color: Colors.white),
+                                        label: const Icon(AppIcons.headset, size: 15, color: Colors.white),
                                       );
                                     }
 
-                                    return SizedBox();
+                                    return const SizedBox();
                                   }
                               )
                           ),
                         ],
                       ),
 
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
 
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: Text(itm.title, maxLines: 1).bold(),
                       ),
 
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
 
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 7.0),
@@ -453,16 +453,16 @@ class _HomePageState extends StateBase<HomePage> {
                               builder: (ctx){
                                 if(itm.duration > 0){
                                   final dur = Duration(milliseconds: itm.duration);
-                                  return Text('${DurationFormatter.duration(dur, showSuffix: false)} ثانیه').alpha().subFont();
+                                  return Text('${DurationFormatter.duration(dur, showSuffix: false)} ثانیه').alpha().thinFont();
                                 }
 
-                                return SizedBox();
+                                return const SizedBox();
                               },
                             ),
 
                             IconButton(
-                                constraints: BoxConstraints.tightFor(),
-                                padding: EdgeInsets.all(4),
+                                constraints: const BoxConstraints.tightFor(),
+                                padding: const EdgeInsets.all(4),
                                 splashRadius: 20,
                                 visualDensity: VisualDensity.compact,
                                 iconSize: 20,

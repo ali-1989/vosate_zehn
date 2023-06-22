@@ -186,6 +186,8 @@ class DateTools {
       case CalendarType.unKnow:
         return null;
     }
+
+    return null;
   }
 
   static int calMaxMonthDay(int year, int month, {CalendarType? calendarType}){
@@ -214,6 +216,8 @@ class DateTools {
       case CalendarType.unKnow:
         return null;
     }
+
+    return null;
   }
 
   static List<int> splitDateByCalendar(DateTime date, {CalendarType? calendarType}){

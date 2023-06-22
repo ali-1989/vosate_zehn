@@ -1,3 +1,4 @@
+import 'package:app/tools/app/appDecoration.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/duration/durationFormatter.dart';
@@ -92,7 +93,7 @@ class _SubBucketPageState extends StateBase<SubBucketPage> {
 
   Widget buildBody(){
     if(isInFetchData) {
-      return WaitToLoad();
+      return const WaitToLoad();
     }
 
     if(!assistCtr.hasState(state$fetchData)){
@@ -100,12 +101,12 @@ class _SubBucketPageState extends StateBase<SubBucketPage> {
     }
 
     if(listItems.isEmpty){
-      return EmptyData();
+      return const EmptyData();
     }
 
     return RefreshConfiguration(
-      headerBuilder: () => MaterialClassicHeader(),
-      footerBuilder:  () => AppTools.classicFooter,
+      headerBuilder: () => const MaterialClassicHeader(),
+      footerBuilder:  () => AppDecoration.classicFooter,
       //headerTriggerDistance: 80.0,
       //maxOverScrollExtent :100,
       //maxUnderScrollExtent:0,
@@ -123,7 +124,7 @@ class _SubBucketPageState extends StateBase<SubBucketPage> {
         onLoading: onLoadingMoreCall,
         child: GridView.builder(
             itemCount: listItems.length,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisExtent: 220),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisExtent: 220),
             itemBuilder: (ctx, idx){
               return buildListItem(idx);
             },
@@ -184,7 +185,7 @@ class _SubBucketPageState extends StateBase<SubBucketPage> {
                                       shadowColor: Colors.transparent,
                                       visualDensity: VisualDensity.compact,
                                       elevation: 0,
-                                      label: Icon(AppIcons.videoCamera, size: 15, color: Colors.white),
+                                      label: const Icon(AppIcons.videoCamera, size: 15, color: Colors.white),
                                     ),
                                   );
                                 }
@@ -195,22 +196,22 @@ class _SubBucketPageState extends StateBase<SubBucketPage> {
                                     shadowColor: Colors.transparent,
                                     visualDensity: VisualDensity.compact,
                                     elevation: 0,
-                                    label: Icon(AppIcons.headset, size: 15, color: Colors.white),
+                                    label: const Icon(AppIcons.headset, size: 15, color: Colors.white),
                                   );
                                 }
 
-                                return SizedBox();
+                                return const SizedBox();
                               }
                           )
                       ),
                     ],
                   ),
 
-                  SizedBox(height: 12),
+                  const SizedBox(height: 12),
 
                   Text(itm.title, maxLines: 1).bold().fsR(1),
 
-                  SizedBox(height: 12,),
+                  const SizedBox(height: 12,),
 
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 7.0),
@@ -221,16 +222,16 @@ class _SubBucketPageState extends StateBase<SubBucketPage> {
                           builder: (ctx){
                             if(itm.duration > 0){
                               final dur = Duration(milliseconds: itm.duration);
-                              return Text('${DurationFormatter.duration(dur, showSuffix: false)} ثانیه').alpha().subFont();
+                              return Text('${DurationFormatter.duration(dur, showSuffix: false)} ثانیه').alpha().thinFont();
                             }
 
-                            return SizedBox();
+                            return const SizedBox();
                           },
                         ),
 
                         IconButton(
-                            constraints: BoxConstraints.tightFor(),
-                            padding: EdgeInsets.all(4),
+                            constraints: const BoxConstraints.tightFor(),
+                            padding: const EdgeInsets.all(4),
                             splashRadius: 20,
                             visualDensity: VisualDensity.compact,
                             iconSize: 20,

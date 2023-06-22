@@ -6,6 +6,7 @@
 -keep class io.flutter.**  { *; }
 -keep class io.flutter.plugins.**  { *; }
 -dontwarn io.flutter.embedding.**
+-keep class androidx.lifecycle.** { *; }
 
 ## Gson rules
 # Gson uses generic type information stored in a class file when working with fields. Proguard

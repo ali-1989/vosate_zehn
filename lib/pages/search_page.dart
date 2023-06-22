@@ -1,3 +1,4 @@
+import 'package:app/tools/app/appDecoration.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/duration/durationFormatter.dart';
@@ -81,7 +82,7 @@ class _SearchPageState extends StateBase<SearchPage> {
   Widget buildBody(){
     return Column(
       children: [
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 14.0),
           child: IrisSearchBar(
@@ -106,7 +107,7 @@ class _SearchPageState extends StateBase<SearchPage> {
           ),
         ),
 
-        SizedBox(height: 30),
+        const SizedBox(height: 30),
         Expanded(
             child: Builder(
               builder: (context) {
@@ -115,16 +116,16 @@ class _SearchPageState extends StateBase<SearchPage> {
                 }
 
                 if(assistCtr.hasState(AssistController.state$loading)) {
-                  return WaitToLoad();
+                  return const WaitToLoad();
                 }
 
                 if(foundList.isEmpty){
-                  return EmptyData();
+                  return const EmptyData();
                 }
 
                 return RefreshConfiguration(
-                  headerBuilder: () => MaterialClassicHeader(),
-                  footerBuilder:  () => AppTools.classicFooter,
+                  headerBuilder: () => const MaterialClassicHeader(),
+                  footerBuilder:  () => AppDecoration.classicFooter,
                   enableScrollWhenRefreshCompleted: true,
                   enableLoadingWhenFailed : true,
                   hideFooterWhenNotFull: true,
@@ -221,14 +222,14 @@ class _SearchPageState extends StateBase<SearchPage> {
                                     );
                                   }
 
-                                  return SizedBox();
+                                  return const SizedBox();
                                 }
                             )
                         ),
                       ],
                     ),
 
-                    SizedBox(width: 12),
+                    const SizedBox(width: 12),
 
                     Expanded(
                       child: Padding(
@@ -247,17 +248,17 @@ class _SearchPageState extends StateBase<SearchPage> {
                                   builder: (ctx){
                                     if(itm.duration > 0){
                                       final dur = Duration(milliseconds: itm.duration);
-                                      return Text('${DurationFormatter.duration(dur, showSuffix: false)} ثانیه').alpha().subFont();
+                                      return Text('${DurationFormatter.duration(dur, showSuffix: false)} ثانیه').alpha().thinFont();
                                     }
 
-                                    return SizedBox();
+                                    return const SizedBox();
                                   },
                                 ),
 
 
                                 IconButton(
-                                    constraints: BoxConstraints.tightFor(),
-                                    padding: EdgeInsets.all(4),
+                                    constraints: const BoxConstraints.tightFor(),
+                                    padding: const EdgeInsets.all(4),
                                     splashRadius: 20,
                                     visualDensity: VisualDensity.compact,
                                     iconSize: 20,

@@ -65,11 +65,11 @@ class _LastSeenPageState extends StateBase<LastSeenPage> {
 
   Widget buildBody(){
     if(assistCtr.hasState(AssistController.state$loading)) {
-      return WaitToLoad();
+      return const WaitToLoad();
     }
 
     if(listItems.isEmpty) {
-      return EmptyData();
+      return const EmptyData();
     }
 
     return ListView.builder(
@@ -150,7 +150,7 @@ class _LastSeenPageState extends StateBase<LastSeenPage> {
                                       );
                                     }
 
-                                    return SizedBox();
+                                    return const SizedBox();
                                   }
                               )
                           ),
@@ -158,7 +158,7 @@ class _LastSeenPageState extends StateBase<LastSeenPage> {
                       ),
                     ),
 
-                    SizedBox(width: 12),
+                    const SizedBox(width: 12),
 
                     Expanded(
                       child: Padding(
@@ -177,17 +177,17 @@ class _LastSeenPageState extends StateBase<LastSeenPage> {
                                   builder: (ctx){
                                     if(itm.duration > 0){
                                       final dur = Duration(milliseconds: itm.duration);
-                                      return Text('${DurationFormatter.duration(dur, showSuffix: false)} ثانیه').alpha().subFont();
+                                      return Text('${DurationFormatter.duration(dur, showSuffix: false)} ثانیه').alpha().thinFont();
                                     }
 
-                                    return SizedBox();
+                                    return const SizedBox();
                                   },
                                 ),
 
 
                                 IconButton(
-                                    constraints: BoxConstraints.tightFor(),
-                                    padding: EdgeInsets.all(4),
+                                    constraints: const BoxConstraints.tightFor(),
+                                    padding: const EdgeInsets.all(4),
                                     splashRadius: 20,
                                     visualDensity: VisualDensity.compact,
                                     iconSize: 20,

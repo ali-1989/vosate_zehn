@@ -9,9 +9,7 @@
 .history
 .svn/
 migrate_working_dir/
-/android//app/build
-/android/app/build.gradle
-/android/gradle.properties
+
 # IntelliJ related
 *.iml
 *.ipr
@@ -33,8 +31,10 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
+/android/app/build/
 
 # Web related
+lib/generated_plugin_registrant.dart
 
 # Symbolication related
 app.*.symbols

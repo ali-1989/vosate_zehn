@@ -267,7 +267,9 @@ class LoginService {
       AppBroadcast.reBuildMaterial();
     }
     else {
-      AppSheet.showSheet$OperationFailed(context);
+      if(context.mounted) {
+        AppSheet.showSheet$OperationFailed(context);
+      }
     }
   }
 }

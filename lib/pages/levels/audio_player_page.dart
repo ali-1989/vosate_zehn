@@ -62,8 +62,8 @@ class AudioPlayerPageState extends StateBase<AudioPlayerPage> {
   String background = '';
   AudioPlayer audioPlayer = AudioPlayer();
   List<String> backgrounds = [];
-  Duration totalTime = Duration();
-  Duration currentTime = Duration();
+  Duration totalTime = const Duration();
+  Duration currentTime = const Duration();
   late StreamController<PlaybackDisposition> durationStreamCtr;
   Timer? seeToEndTimer;
 
@@ -103,7 +103,7 @@ class AudioPlayerPageState extends StateBase<AudioPlayerPage> {
           appBar: AppBarCustom(
             backgroundColor: Colors.transparent,
             elevation: 0,
-            iconTheme: IconThemeData(color: Colors.white),
+            iconTheme: const IconThemeData(color: Colors.white),
           ),
           extendBodyBehindAppBar: true,
           body: Stack(
@@ -119,10 +119,10 @@ class AudioPlayerPageState extends StateBase<AudioPlayerPage> {
                     children: [
                       Text(widget.injectData.title?? '').bold().fsR(5).color(Colors.white),
 
-                      SizedBox(height: 5),
-                      Text(widget.injectData.subTitle?? '').bold().fsR(4).color(Colors.white).subFont(),
+                      const SizedBox(height: 5),
+                      Text(widget.injectData.subTitle?? '').bold().fsR(4).color(Colors.white).thinFont(),
 
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       Directionality(
                         textDirection: TextDirection.ltr,
                           child: PlayBarSlider(durationStreamCtr.stream, (pos){
@@ -136,7 +136,7 @@ class AudioPlayerPageState extends StateBase<AudioPlayerPage> {
                           })
                       ),
 
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -145,7 +145,7 @@ class AudioPlayerPageState extends StateBase<AudioPlayerPage> {
                         ],
                       ),
 
-                      SizedBox(height: 40),
+                      const SizedBox(height: 40),
 
                       GestureDetector(
                         onTap: playPauseButton,
