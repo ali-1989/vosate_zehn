@@ -93,7 +93,7 @@ class _SentencesPageState extends StateBase<SentencesPage> {
           top: 80,
           left: 5,
           child: IconButton(
-            icon: Icon(AppIcons.settings, color: Colors.white),
+            icon: const Icon(AppIcons.settings, color: Colors.white),
             onPressed: showSettingDialog,
           ),
         ),
@@ -110,11 +110,11 @@ class _SentencesPageState extends StateBase<SentencesPage> {
               }
 
               if(assistCtr.hasState(AssistController.state$loading)){
-                return WaitToLoad();
+                return const WaitToLoad();
               }
 
               if(cards.isEmpty){
-                return EmptyData(textStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 18),);
+                return const EmptyData(textStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 18),);
               }
 
               return AppinioSwiper(
@@ -122,9 +122,9 @@ class _SentencesPageState extends StateBase<SentencesPage> {
                 cardsBuilder: (BuildContext context, int index) {
                   return cards[index];
                 },
-                padding: EdgeInsets.symmetric(horizontal: 25, vertical: 40),
+                padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 40),
                 direction: AppinioSwiperDirection.right,
-                swipeOptions: AppinioSwipeOptions.allDirections,
+                swipeOptions: const AppinioSwipeOptions.all(),
                 allowUnswipe: true,
                 unlimitedUnswipe: false,
                 loop: true,
@@ -146,9 +146,9 @@ class _SentencesPageState extends StateBase<SentencesPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(DateTools.dateOnlyRelative(t.date), style: TextStyle(color: Colors.grey),),
-              SizedBox(height: 12),
-              Text(t.text, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
+              Text(DateTools.dateOnlyRelative(t.date), style: const TextStyle(color: Colors.grey),),
+              const SizedBox(height: 12),
+              Text(t.text, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
             ],
           ),
         ),
@@ -175,9 +175,9 @@ class _SentencesPageState extends StateBase<SentencesPage> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Center(child: Text('تنظیمات').bold()),
+                        Center(child: const Text('تنظیمات').bold()),
 
-                        SizedBox(
+                        const SizedBox(
                           height: 8,
                         ),
 
@@ -189,13 +189,13 @@ class _SentencesPageState extends StateBase<SentencesPage> {
                           ),
                         ),
 
-                        SizedBox(
+                        const SizedBox(
                           height: 8,
                         ),
 
                         CheckBoxRow(
                             value: SettingsManager.localSettings.notificationDailyText,
-                            description: Text('نمایش جملات روز به صورت نوتیفیکیشن'),
+                            description: const Text('نمایش جملات روز به صورت نوتیفیکیشن'),
                             onChanged: (v){
                               SettingsManager.localSettings.notificationDailyText = v;
                               ctr.updateSelf();
@@ -206,7 +206,7 @@ class _SentencesPageState extends StateBase<SentencesPage> {
                     ),
                   ),
 
-                  Positioned(
+                  const Positioned(
                     top: 0,
                       left: 0,
                       child: CloseButton()
@@ -245,7 +245,7 @@ class _SentencesPageState extends StateBase<SentencesPage> {
       assistCtr.clearStates();
       assistCtr.updateHead();
 
-      if(AppCache.timeoutCache.addTimeout(Keys.setting$textOfDayGetPreMonth, Duration(minutes: 2))){
+      if(AppCache.timeoutCache.addTimeout(Keys.setting$textOfDayGetPreMonth, const Duration(minutes: 2))){
         var now = GregorianDate();
         now.changeTime(0, 0, 0, 0);
         final pre = now.addMonth(-1);

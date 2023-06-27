@@ -59,34 +59,34 @@ class DrawerMenuBuilder {
             Expanded(
               child: Theme(
                 data: AppThemes.instance.themeData.copyWith(
-                    textTheme: TextTheme(bodyLarge: TextStyle(fontSize: 10, color: Colors.black))
+                    textTheme: const TextTheme(bodyLarge: TextStyle(fontSize: 10, color: Colors.black))
                 ),
                 child: ListView(
                   children: [
-                    SizedBox(height: 32),
+                    const SizedBox(height: 32),
 
                     _buildProfileSection(),
 
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
 
                     if(SessionService.hasAnyLogin())
                       ListTile(
                         title: Text(SessionService.isGuestCurrent()? AppMessages.registerTitle :AppMessages.logout).color(Colors.redAccent),
-                        leading: Icon(AppIcons.logout, size: 18, color: Colors.redAccent),
+                        leading: const Icon(AppIcons.logout, size: 18, color: Colors.redAccent),
                         onTap: onLogoffCall,
                         dense: true,
                       ),
 
                     ListTile(
                       title: Text(AppMessages.favorites),
-                      leading: Icon(AppIcons.heart),
+                      leading: const Icon(AppIcons.heart),
                       onTap: gotoFavoritesPage,
                       dense: true,
                     ),
 
                     ListTile(
                       title: Text(AppMessages.lastSeenItem),
-                      leading: Icon(AppIcons.history),
+                      leading: const Icon(AppIcons.history),
                       onTap: gotoLastSeenPage,
                       dense: true,
                     ),
@@ -95,7 +95,7 @@ class DrawerMenuBuilder {
                       visible: !kIsWeb,
                       child: ListTile(
                         title: Text(AppMessages.shareApp),
-                        leading: Icon(AppIcons.share),
+                        leading: const Icon(AppIcons.share),
                         onTap: shareAppCall,
                         dense: true,
                       ),
@@ -103,28 +103,28 @@ class DrawerMenuBuilder {
 
                     ListTile(
                       title: Text(AppMessages.sentencesTitle),
-                      leading: Icon(AppIcons.report2),
+                      leading: const Icon(AppIcons.report2),
                       onTap: gotoSentencePage,
                       dense: true,
                     ),
 
                     ListTile(
                       title: Text(AppMessages.aidUs),
-                      leading: Icon(AppIcons.cashMultiple),
+                      leading: const Icon(AppIcons.cashMultiple),
                       onTap: gotoAidPage,
                       dense: true,
                     ),
 
                     ListTile(
                       title: Text(AppMessages.contactUs),
-                      leading: Icon(AppIcons.message),
+                      leading: const Icon(AppIcons.message),
                       onTap: gotoContactUsPage,
                       dense: true,
                     ),
 
                     ListTile(
                       title: Text(AppMessages.aboutUs),
-                      leading: Icon(AppIcons.infoCircle),
+                      leading: const Icon(AppIcons.infoCircle),
                       onTap: gotoAboutUsPage,
                       dense: true,
                     ),
@@ -138,18 +138,18 @@ class DrawerMenuBuilder {
                                 color: Colors.cyan.withAlpha(80),
                                 child: ListTile(
                                   title: Text(AppMessages.downloadNewVersion),
-                                  leading: Icon(AppIcons.downloadFile),
+                                  leading: const Icon(AppIcons.downloadFile),
                                   onTap: downloadNewVersion,
                                   dense: true,
                                 ),
                               ),
 
-                              SizedBox(height: 50),
+                              const SizedBox(height: 50),
                             ],
                           );
                         }
 
-                        return SizedBox();
+                        return const SizedBox();
                       },
 
                     ),
@@ -221,7 +221,7 @@ class DrawerMenuBuilder {
               },
             ),
 
-            SizedBox(height: 8,),
+            const SizedBox(height: 8,),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12.0),
               child: Row(
@@ -260,12 +260,12 @@ class DrawerMenuBuilder {
 
   static void gotoFavoritesPage(){
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    RouteTools.pushPage(RouteTools.getTopContext()!, FavoritesPage());
+    RouteTools.pushPage(RouteTools.getTopContext()!, const FavoritesPage());
   }
 
   static void gotoLastSeenPage(){
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    RouteTools.pushPage(RouteTools.getTopContext()!, LastSeenPage());
+    RouteTools.pushPage(RouteTools.getTopContext()!, const LastSeenPage());
   }
 
   static void gotoAidPage(){
@@ -274,17 +274,17 @@ class DrawerMenuBuilder {
 
   static void gotoContactUsPage(){
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    RouteTools.pushPage(RouteTools.getTopContext()!, ContactUsPage());
+    RouteTools.pushPage(RouteTools.getTopContext()!, const ContactUsPage());
   }
 
   static void gotoSentencePage(){
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    RouteTools.pushPage(RouteTools.getTopContext()!, SentencesPage());
+    RouteTools.pushPage(RouteTools.getTopContext()!, const SentencesPage());
   }
 
   static void gotoAboutUsPage(){
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    RouteTools.pushPage(RouteTools.getTopContext()!, AboutUsPage());
+    RouteTools.pushPage(RouteTools.getTopContext()!, const AboutUsPage());
   }
 
   static void downloadNewVersion(){
@@ -297,7 +297,7 @@ class DrawerMenuBuilder {
     }
 
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    RouteTools.pushPage(RouteTools.getTopContext()!, ProfilePage());
+    RouteTools.pushPage(RouteTools.getTopContext()!, const ProfilePage());
   }
 
   static void onLogoffCall(){

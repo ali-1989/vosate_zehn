@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:app/pages/login/register_page.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:dio/dio.dart';
 import 'package:iris_notifier/iris_notifier.dart';
+import 'package:iris_route/iris_route.dart';
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
 import 'package:iris_tools/models/twoStateReturn.dart';
 
@@ -86,7 +88,7 @@ class LoginService {
       if (isCurrent && RouteTools.materialContext != null) {
         RouteTools.backToRoot(RouteTools.getTopContext()!);
 
-        Future.delayed(Duration(milliseconds: 400), (){
+        Future.delayed(const Duration(milliseconds: 400), (){
           AppBroadcast.reBuildMaterial();
         });
       }
@@ -113,7 +115,7 @@ class LoginService {
     if (RouteTools.materialContext != null) {
       RouteTools.backToRoot(RouteTools.getTopContext()!);
 
-      Future.delayed(Duration(milliseconds: 400), (){
+      Future.delayed(const Duration(milliseconds: 400), (){
         AppBroadcast.reBuildMaterial();
         //RouteTools.pushReplacePage(RouteTools.getTopContext()!, LoginPage());
       });
@@ -193,7 +195,7 @@ class LoginService {
     return result.future;
   }
 
-  static Future<TwoStateReturn<Map, Exception>> requestVerifyEmail({required String email}) async {
+  static Future<TwoStateReturn<Map, Exception>> requestVerifyGmail({required String email}) async {
     final http = HttpItem();
     final result = Completer<TwoStateReturn<Map, Exception>>();
 
@@ -217,7 +219,10 @@ class LoginService {
 
     f = f.then((Response? response){
       if(response == null || !request.isOk) {
-        result.complete(TwoStateReturn(r2: Exception()));
+        if(!result.isCompleted){
+          result.complete(TwoStateReturn(r2: Exception()));
+        }
+
         return;
       }
 
@@ -229,34 +234,68 @@ class LoginService {
 
     return result.future;
   }
-  
-  static Future<HttpRequester?> requestOnSplash() async {
-    final http = HttpItem();
-    final result = Completer<HttpRequester?>();
 
-    http.fullUrl = '';
-    http.method = 'GET';
-    //http.setBodyJson(js);
+  static Future<void> requestVerifyEmail({required String code}) async {
+    final http = HttpItem();
+
+    final js = {};
+    js[Keys.requestZone] = 'verify_any_email';
+    js['code'] = code;
+    js.addAll(DeviceInfoTools.mapDeviceInfo());
+    DeviceInfoTools.attachApplicationInfo(js);
+
+    http.fullUrl = ApiManager.graphApi;
+    http.method = 'POST';
+    http.setBodyJson(js);
 
     final request = AppHttpDio.send(http);
 
     var f = request.response.catchError((e){
-      result.complete(null);
-
       return null;
     });
 
-    f = f.then((Response? response){
-      if(response == null || response.statusCode == null) {
-        result.complete(null);
+    f = f.then((Response? response) async {
+      if(response == null || !request.isOk) {
         return;
       }
 
-      result.complete(request);
-      return null;
+      final resJs = request.getBodyAsJson()!;
+      final context = RouteTools.materialContext!;
+
+      final status = resJs[Keys.status];
+      //final causeCode = resJs[Keys.causeCode]?? 0;
+      IrisNavigatorObserver.setAddressBar(IrisNavigatorObserver.appBaseUrl());
+
+      if(status == Keys.error){
+        AppSheet.showSheetOk(context, 'فرایند تایید به درستی انجام نشد، لطفا دوباره وارد بشوید').then((value) {
+          AppBroadcast.reBuildMaterial();
+        });
+      }
+      else {
+        final userId = resJs[Keys.userId];
+
+        if (userId == null) {
+          final injectData = RegisterPageInjectData();
+          injectData.email = resJs['email'];
+
+          RouteTools.pushPage(context, RegisterPage(injectData: injectData));
+        }
+        else {
+          final userModel = await SessionService.login$newProfileData(resJs);
+
+          if(userModel != null) {
+            AppBroadcast.reBuildMaterial();
+          }
+          else {
+            if(context.mounted){
+              AppSheet.showSheet$OperationFailed(context);
+            }
+          }
+        }
+      }
     });
 
-    return result.future;
+    return;
   }
 
   static loginGuestUser(BuildContext context) async {

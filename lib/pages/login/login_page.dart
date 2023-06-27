@@ -185,7 +185,7 @@ class _LoginPageState extends StateBase<LoginPage> {
           ),
 
           TextButton(
-            child: Text('ورود مهمان'),
+            child: const Text('ورود مهمان'),
             onPressed: (){
               LoginService.loginGuestUser(context);
             },
@@ -258,7 +258,7 @@ class _LoginPageState extends StateBase<LoginPage> {
                     visible: showResendOtpButton,
                       child: TextButton(
                         onPressed: resetTimer,
-                          child: Text(AppMessages.resendOtpCode, style: TextStyle(color: Colors.red))
+                          child: Text(AppMessages.resendOtpCode, style: const TextStyle(color: Colors.red))
                       )
                   ),
 
@@ -301,7 +301,7 @@ class _LoginPageState extends StateBase<LoginPage> {
     AppLoading.instance.showWaiting(context);
     GoogleSignInAccount? googleResult;
 
-    final timer = Timer(Duration(seconds: kIsWeb? 300: 60), (){
+    final timer = Timer(const Duration(seconds: kIsWeb? 300: 60), (){
       AppLoading.instance.hideLoading(context);
       AppSheet.showSheet$OperationFailed(context);
       return;
@@ -325,7 +325,7 @@ class _LoginPageState extends StateBase<LoginPage> {
       AppSheet.showSheet$OperationFailed(context);
     }
     else {
-      final twoState = await LoginService.requestVerifyEmail(email: googleResult.email);
+      final twoState = await LoginService.requestVerifyGmail(email: googleResult.email);
       AppLoading.instance.cancel(context);
 
       if(twoState.hasResult1()){
@@ -389,7 +389,7 @@ class _LoginPageState extends StateBase<LoginPage> {
   }
 
   void onTapCountryArrow() async {
-    final value = await RouteTools.pushPage(context, CountrySelectScreen());
+    final value = await RouteTools.pushPage(context, const CountrySelectScreen());
 
     if(value is CountryModel){
       countryModel = value;
@@ -398,7 +398,7 @@ class _LoginPageState extends StateBase<LoginPage> {
   }
 
   void gotoTermPage(){
-    RouteTools.pushPage(context, TermPage());
+    RouteTools.pushPage(context, const TermPage());
   }
 
   void onSendClick(){
