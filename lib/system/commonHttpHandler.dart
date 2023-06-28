@@ -1,22 +1,21 @@
+import 'package:app/system/keys.dart';
 import 'package:flutter/material.dart';
 
 import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appSheet.dart';
 import 'package:app/tools/app/appSnack.dart';
-import '/system/httpCodes.dart';
-import '/system/keys.dart';
 
-class HttpProcess {
-  HttpProcess._();
+class CommonHttpHandler {
+  CommonHttpHandler._();
 
-  static bool processCommonRequestError(BuildContext context, Map json) {
+  static bool handler(BuildContext context, Map json) {
     final int causeCode = json[Keys.causeCode] ?? 0;
     final String cause = json[Keys.cause] ?? Keys.error;
 
-    return processCommonRequestErrors(context, causeCode, cause, json);
+    return handlerWithCause(context, causeCode, cause, json);
   }
 
-  static bool processCommonRequestErrors(BuildContext context, int causeCode, String? cause, Map json){
+  static bool handlerWithCause(BuildContext context, int causeCode, String? cause, Map json){
     if(causeCode == HttpCodes.error_zoneKeyNotFound){
       AppSnack.showError(context, AppMessages.requestKeyNotExist);
       return true;
@@ -89,4 +88,42 @@ class HttpProcess {
 
     return false;
   }
+}
+///=============================================================================
+class HttpCodes {
+  HttpCodes._();
+
+  static int error_zoneKeyNotFound = 10;
+  static int error_requestNotDefined = 15;
+  static int error_userIsBlocked = 20;
+  static int error_userNotFound = 25;
+  static int error_parametersNotCorrect = 30;
+  static int error_mustSendRequesterUserId = 33;
+  static int error_databaseError = 35;
+  static int error_internalError = 40;
+  static int error_isNotJson = 45;
+  static int error_dataNotExist = 50;
+  static int error_tokenNotCorrect = 55;
+  static int error_existThis = 60;
+  static int error_canNotAccess = 65;
+  static int error_youMustRegisterForThis = 66;
+  static int error_operationCannotBePerformed = 70;
+  static int error_notUpload = 75;
+  static int error_userNamePassIncorrect = 80;
+  static int error_userMessage = 85;
+  static int error_translateMessage = 86;
+  static int error_spacialError = 90;
+
+  //------------ sections -----------------------------------------------------
+  static const sec_command = 'command';
+  static const sec_userData = 'UserData';
+  //static const sec_ticketData = 'TicketData';
+  //------------ commands -----------------------------------------------------
+  static const com_forceLogOff = 'ForceLogOff';
+  static const com_forceLogOffAll = 'ForceLogOffAll';
+  static const com_talkMeWho = 'TalkMeWho';
+  static const com_sendDeviceInfo = 'SendDeviceInfo';
+  static const com_messageForUser = 'messageForUser';
+  static const com_dailyText = 'dailyText';
+  static const com_updateProfileSettings = 'UpdateProfileSettings';
 }

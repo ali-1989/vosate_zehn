@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:app/system/commonHttpHandler.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/checker.dart';
@@ -12,7 +13,6 @@ import 'package:app/services/login_service.dart';
 import 'package:app/services/session_service.dart';
 import 'package:app/structures/models/settingsModel.dart';
 import 'package:app/system/applicationSignal.dart';
-import 'package:app/system/httpCodes.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appDb.dart';
@@ -54,7 +54,7 @@ class WebsocketService {
 	static Future<void> prepareWebSocket(String uri) async{
 		_uri = uri;
 		_isConnected = false;
-		//await PublicAccess.logger.logToAll('@@@@@@@@@ ws: isConnected:$isConnected');//todo
+		//await PublicAccess.logger.logToAll('@@@@@@@@@ ws: isConnected:$isConnected');//todo.
 
 		try {
 				_ws?.close(1000); //status.normalClosure
@@ -119,7 +119,7 @@ class WebsocketService {
 	///-------------- on disConnect -----------------------------------------------------------
 	static void _onDisConnected() async{
 		_isConnected = false;
-		//await PublicAccess.logger.logToAll('@@@@@@@@@ ws: is ok:$isConnected');//todo
+		//await PublicAccess.logger.logToAll('@@@@@@@@@ ws: is ok:$isConnected');//todo.
 		periodicHeartTimer?.cancel();
 
 		ApplicationSignal.onWsDisConnectedListener();
@@ -129,7 +129,7 @@ class WebsocketService {
 	///-------------- on new Connect -----------------------------------------------------------
 	static void _onConnected() async {
 		_isConnected = true;
-		//await PublicAccess.logger.logToAll('@@@@@@@@@ ws: is ok:$isConnected');//todo
+		//await PublicAccess.logger.logToAll('@@@@@@@@@ ws: is ok:$isConnected');//todo.
 		reconnectInterval = const Duration(seconds: 6);
 
 		sendData(JsonHelper.mapToJson(ApiManager.getHeartMap()));

@@ -49,7 +49,6 @@ class _RegisterPageState extends StateBase<RegisterPage> {
   void initState(){
     super.initState();
 
-    print('=============== registr: ${widget.injectData.email}');
     nameCtr = TextEditingController();
     familyCtr = TextEditingController();
     requester = Requester();
@@ -253,7 +252,6 @@ class _RegisterPageState extends StateBase<RegisterPage> {
     };*/
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
-      print(data);
       final userModel = await SessionService.login$newProfileData(data);
 
       if(userModel != null) {

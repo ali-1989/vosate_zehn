@@ -20,7 +20,7 @@ import 'package:app/views/baseComponents/appBarBuilder.dart';
 
 /// for iOS: must visit page and add code to Info.plist
 
-//todo: add assist for time display, and list of subscriptions
+//todo. add assist for time display, and list of subscriptions
 
 enum AudioSourceType {
   file,

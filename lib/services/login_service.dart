@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:app/pages/login/register_page.dart';
+import 'package:app/system/commonHttpHandler.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:dio/dio.dart';
@@ -260,7 +261,6 @@ class LoginService {
     });
 
     f = f.then((Response? response) async {
-
       if(response == null || !request.isOk) {
         res.complete();
         await System.wait(const Duration(milliseconds: 300));
@@ -270,12 +270,14 @@ class LoginService {
 
       final resJs = request.getBodyAsJson()!;
       final status = resJs[Keys.status];
-      //final causeCode = resJs[Keys.causeCode]?? 0;
 
       if(status == Keys.error){
         res.complete();
         await System.wait(const Duration(milliseconds: 300));
-        AppSheet.showSheet$OperationFailedTryAgain(context);
+
+        if(!CommonHttpHandler.handler(context, resJs)){
+          AppSheet.showSheet$OperationFailedTryAgain(context);
+        }
       }
       else {
         res.complete();
@@ -295,7 +297,7 @@ class LoginService {
           }
         }
         else {
-          final isVerify = resJs['is_verify'];
+          final isVerify = resJs['is_verify']?? false;
 
           if(isVerify){
             final injectData = RegisterPageInjectData();
@@ -315,7 +317,7 @@ class LoginService {
     return res.future;
   }
 
-  static Future<void> requestVerifyEmail({required String code}) async {
+  static Future<void> requestCanRegisterWithEmail({required String code}) async {
     final http = HttpItem();
 
     final js = {};

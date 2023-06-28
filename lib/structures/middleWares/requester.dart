@@ -7,7 +7,7 @@ import 'package:iris_tools/api/helpers/jsonHelper.dart';
 import 'package:iris_tools/api/logger/logger.dart';
 import 'package:iris_tools/api/tools.dart';
 
-import 'package:app/system/httpProcess.dart';
+import 'package:app/system/commonHttpHandler.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/appHttpDio.dart';
 import 'package:app/tools/app/appSheet.dart';
@@ -191,7 +191,7 @@ class Requester {
         await httpRequestEvents.onFailState?.call(_httpRequester, val);
 
         if(context != null && context.mounted) {
-          if (promptErrors && !HttpProcess.processCommonRequestError(context, js)) {
+          if (promptErrors && !CommonHttpHandler.handler(context, js)) {
             await AppSheet.showSheet$ServerNotRespondProperly(context);
           }
         }

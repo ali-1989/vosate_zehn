@@ -8,12 +8,12 @@ import 'package:app/services/native_call_service.dart';
 ///--------------------------------------------------------------------------------------------
 Future<bool> _callbackWorkManager(task, inputData) async {
   //await ApplicationInitial.prepareDirectoriesAndLogger();
-  //await PublicAccess.logger.logToAll('@@@@@@@-@@@@@');//todo
+  //await PublicAccess.logger.logToAll('@@@@@@@-@@@@@');//todo.
   var isAppRun = false;
 
   try {
     isAppRun = await NativeCallService.invokeMethod('isAppRun');
-    //await PublicAccess.logger.logToAll('@@@@@@@@@@@@ isAppRun: $isAppRun'); //todo
+    //await PublicAccess.logger.logToAll('@@@@@@@@@@@@ isAppRun: $isAppRun'); //todo.
   }
   catch (e) {}
 
@@ -21,7 +21,7 @@ Future<bool> _callbackWorkManager(task, inputData) async {
     return true;
   }
 
-  //await PublicAccess.logger.logToAll('@@@@@@@@@ app was closed'); //todo
+  //await PublicAccess.logger.logToAll('@@@@@@@@@ app was closed'); //todo.
   try {
     //await ApplicationInitial.inSplashInit();
     //await ApplicationInitial.appLazyInit();

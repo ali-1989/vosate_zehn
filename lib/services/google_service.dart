@@ -45,7 +45,7 @@ class GoogleService {
       return null;
     }
     catch (e) {
-      print('eeeeeeeeeeeeeeeeeeeeeeeee 2> $e');
+
     }
 
     return _googleUser;

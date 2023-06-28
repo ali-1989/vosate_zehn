@@ -56,7 +56,7 @@ class NativeCallService {
 void bootCallbackHandler() async {
   try {
     //await ApplicationInitial.prepareDirectoriesAndLogger();
-    await LogTools.logger.logToAll('--->> appJavaCallback call ---');//todo
+    await LogTools.logger.logToAll('--->> appJavaCallback call ---');//todo.
     /*
     DartPluginRegistrant.ensureInitialized(); //must not calling in root isolate
     await InitialApplication.inSplashInit();

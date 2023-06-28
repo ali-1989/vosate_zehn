@@ -9,7 +9,6 @@ import 'package:app/pages/login/login_page.dart';
 import 'package:app/services/session_service.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:iris_route/iris_route.dart';
-import 'package:iris_tools/api/cache/timeoutCache.dart';
 
 class RouteDispatcher {
   RouteDispatcher._();
@@ -18,17 +17,13 @@ class RouteDispatcher {
 
     if(!SessionService.hasAnyLogin()){
       if(kIsWeb){
-        print('cur path:> ${IrisNavigatorObserver.currentPath()}');
-        print('query: ${IrisNavigatorObserver.getPathQuery(IrisNavigatorObserver.currentUrl())}');
-
         final query = IrisNavigatorObserver.getPathQuery(IrisNavigatorObserver.currentUrl());
-        bool contain = query.contains('verify=');
+        bool contain = query.contains('register=');
 
         if(contain){
-          if(AppCache.canCallMethodAgain('request_verify_email')){
-            final code = query.substring(7);
-            print(code);
-            LoginService.requestVerifyEmail(code: code);
+          if(AppCache.canCallMethodAgain('request_is_verify_email')){
+            final code = query.substring(9);
+            LoginService.requestCanRegisterWithEmail(code: code);
           }
 
           return const WaitToLoad();

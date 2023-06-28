@@ -205,7 +205,7 @@ class AppMessages {
   }
 
   static String get pleaseEnterEmailToSendVerifyEmail {
-    return 'لطفا آدرس ایمیل خود را جهت ارسال ایمیل تایید وارد کنید';
+    return 'لطفا آدرس ایمیل خود را جهت ورود یا ثبت نام وارد کنید';
   }
 
   static String get errorOccur {
