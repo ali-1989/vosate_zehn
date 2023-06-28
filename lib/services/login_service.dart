@@ -6,7 +6,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:dio/dio.dart';
 import 'package:iris_notifier/iris_notifier.dart';
 import 'package:iris_route/iris_route.dart';
+import 'package:iris_tools/api/generator.dart';
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
+import 'package:iris_tools/api/system.dart';
 import 'package:iris_tools/models/twoStateReturn.dart';
 
 import 'package:app/managers/api_manager.dart';
@@ -235,11 +237,89 @@ class LoginService {
     return result.future;
   }
 
+  static Future<void> requestCheckEmailAndSendVerify({required String email, required String password}) async {
+    final Completer<void> res = Completer();
+    final http = HttpItem();
+
+    final js = {};
+    js[Keys.requestZone] = 'send_verify_email';
+    js['email'] = email;
+    js['hash_password'] = Generator.generateMd5(password);
+    js.addAll(DeviceInfoTools.mapDeviceInfo());
+    DeviceInfoTools.attachApplicationInfo(js);
+
+    http.fullUrl = ApiManager.graphApi;
+    http.method = 'POST';
+    http.setBodyJson(js);
+
+    final context = RouteTools.materialContext!;
+    final request = AppHttpDio.send(http);
+
+    var f = request.response.catchError((e){
+      return null;
+    });
+
+    f = f.then((Response? response) async {
+
+      if(response == null || !request.isOk) {
+        res.complete();
+        await System.wait(const Duration(milliseconds: 300));
+        AppSheet.showSheet$OperationFailedTryAgain(context);
+        return;
+      }
+
+      final resJs = request.getBodyAsJson()!;
+      final status = resJs[Keys.status];
+      //final causeCode = resJs[Keys.causeCode]?? 0;
+
+      if(status == Keys.error){
+        res.complete();
+        await System.wait(const Duration(milliseconds: 300));
+        AppSheet.showSheet$OperationFailedTryAgain(context);
+      }
+      else {
+        res.complete();
+        await System.wait(const Duration(milliseconds: 300));
+        final userId = resJs[Keys.userId];
+
+        if (userId != null) {
+          final userModel = await SessionService.login$newProfileData(resJs);
+
+          if(userModel != null) {
+            AppBroadcast.reBuildMaterial();
+          }
+          else {
+            if(context.mounted){
+              AppSheet.showSheet$OperationFailed(context);
+            }
+          }
+        }
+        else {
+          final isVerify = resJs['is_verify'];
+
+          if(isVerify){
+            final injectData = RegisterPageInjectData();
+            injectData.email = resJs['email'];
+
+            RouteTools.pushPage(context, RegisterPage(injectData: injectData));
+          }
+          else {
+            AppSheet.showSheetOk(context, 'ایمیلی جهت فعال ساری برای شما ارسال شد، لطفا روی لینک فعال سازی کلیک کنید.');
+          }
+        }
+      }
+
+      return null;
+    });
+
+    return res.future;
+  }
+
   static Future<void> requestVerifyEmail({required String code}) async {
     final http = HttpItem();
 
     final js = {};
-    js[Keys.requestZone] = 'verify_any_email';
+    js[Keys.requestZone] = 'is_email_verify';
     js['code'] = code;
     js.addAll(DeviceInfoTools.mapDeviceInfo());
     DeviceInfoTools.attachApplicationInfo(js);
@@ -261,13 +341,13 @@ class LoginService {
 
       final resJs = request.getBodyAsJson()!;
       final context = RouteTools.materialContext!;
-
       final status = resJs[Keys.status];
       //final causeCode = resJs[Keys.causeCode]?? 0;
       IrisNavigatorObserver.setAddressBar(IrisNavigatorObserver.appBaseUrl());
+      await System.wait(const Duration(milliseconds: 250));
 
       if(status == Keys.error){
-        AppSheet.showSheetOk(context, 'فرایند تایید به درستی انجام نشد، لطفا دوباره وارد بشوید').then((value) {
+        AppSheet.showSheetOk(context, 'فرایند تایید به درستی انجام نشد، لطفا دوباره وارد شوید').then((value) {
           AppBroadcast.reBuildMaterial();
         });
       }
@@ -293,6 +373,8 @@ class LoginService {
           }
         }
       }
+
+      return null;
     });
 
     return;

@@ -1,19 +1,19 @@
+import 'dart:async';
 
-import 'package:app/system/extensions.dart';
-import 'package:app/tools/app/appDecoration.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_flip_card/flutter_flip_card.dart';
-import 'package:iris_tools/api/checker.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:iris_tools/api/helpers/localeHelper.dart';
 import 'package:iris_tools/api/helpers/mathHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
-import 'package:iris_tools/widgets/text/autoDirection.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 import 'package:app/pages/login/register_page.dart';
 import 'package:app/pages/term_page.dart';
+import 'package:app/services/google_service.dart';
 import 'package:app/services/login_service.dart';
 import 'package:app/services/session_service.dart';
 import 'package:app/structures/abstract/stateBase.dart';
@@ -22,6 +22,7 @@ import 'package:app/system/httpCodes.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appImages.dart';
+import 'package:app/tools/app/appLoading.dart';
 import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appSheet.dart';
 import 'package:app/tools/app/appSnack.dart';
@@ -42,8 +43,6 @@ class LoginPage extends StatefulWidget{
 ///=================================================================================================
 class _LoginPageState extends StateBase<LoginPage> {
   TextEditingController pinCodeCtr = TextEditingController();
-  TextEditingController emailCtr = TextEditingController();
-  TextEditingController passwordCtr = TextEditingController();
   late PhoneNumberInputController phoneNumberController;
   late FlipCardController flipCardController;
   late final StopWatchTimer stopWatchTimer;
@@ -52,7 +51,6 @@ class _LoginPageState extends StateBase<LoginPage> {
   String pinCode = '';
   int timerValueSec = 60;
   bool showResendOtpButton = false;
-  bool loginByMobile = true;
 
 
   @override
@@ -82,9 +80,6 @@ class _LoginPageState extends StateBase<LoginPage> {
   @override
   void dispose(){
     stopWatchTimer.dispose();
-    emailCtr.dispose();
-    passwordCtr.dispose();
-    pinCodeCtr.dispose();
 
     super.dispose();
   }
@@ -95,6 +90,9 @@ class _LoginPageState extends StateBase<LoginPage> {
       controller: assistCtr,
       builder: (context, ctr, data) {
         return Scaffold(
+          /*appBar: GenAppBar(
+            title: Text(AppMessages.loginTitle),
+          ),*/
           backgroundColor: AppThemes.instance.currentTheme.primaryColor,
           body: SafeArea(
               child: buildBody()
@@ -108,7 +106,7 @@ class _LoginPageState extends StateBase<LoginPage> {
     return Column(
       children: [
         SizedBox(
-          height: MathHelper.percent(sh, 30),
+          height: MathHelper.percent(MediaQuery.of(context).size.height, 30),
           child: Center(
             child: Image.asset(AppImages.appIcon, width: 100, height: 100,),
           ),
@@ -134,14 +132,6 @@ class _LoginPageState extends StateBase<LoginPage> {
   }
 
   Widget buildFrontFlip() {
-    if(loginByMobile){
-      return buildFrontFlipWithMobile();
-    }
-
-    return buildFrontFlipWithEmail();
-  }
-
-  Widget buildFrontFlipWithMobile() {
     return Card(
       color: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
@@ -161,13 +151,13 @@ class _LoginPageState extends StateBase<LoginPage> {
             numberHint: AppMessages.mobileNumber,
           ),
 
-          const SizedBox(height: 25),
+          const SizedBox(height: 30,),
           TextButton(
               onPressed: gotoTermPage,
-              child: Text(AppMessages.terms).fsR(-3)
+              child: Text(AppMessages.terms)
           ),
 
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
 
           ElevatedButton(
               style: ElevatedButton.styleFrom(shape: const StadiumBorder()),
@@ -181,99 +171,16 @@ class _LoginPageState extends StateBase<LoginPage> {
 
           const SizedBox(height: 10),
           UnconstrainedBox(
-            child: ElevatedButton(
+            child: ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   shape: const StadiumBorder(),
                   backgroundColor: AppThemes.instance.currentTheme.differentColor,
                 ),
                 onPressed: (){
-                  signWithEmailClick();
+                  signWithGoogleClick();
                 },
-                child: const Text('ورود با ایمیل')
-            ),
-          ),
-
-          TextButton(
-            child: const Text('ورود مهمان'),
-            onPressed: (){
-              LoginService.loginGuestUser(context);
-            },
-          ),
-
-          const SizedBox(height: 32,),
-        ],
-      ),
-    );
-  }
-
-  Widget buildFrontFlipWithEmail() {
-    return Card(
-      color: Colors.white,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-      child: ListView(
-        shrinkWrap: true,
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        children: [
-          const SizedBox(height: 30),
-          Text(AppMessages.pleaseEnterEmailToSendVerifyEmail,
-            style: const TextStyle(fontWeight: FontWeight.bold)
-          ),
-
-          const SizedBox(height: 30),
-          TextField(
-            controller: emailCtr,
-            decoration: AppDecoration.inputBorder.copyWith(
-              hintText: 'ایمیل',
-            ),
-            keyboardType: TextInputType.emailAddress,
-            textDirection: TextDirection.ltr,
-          ),
-
-          const SizedBox(height: 8),
-
-          AutoDirection(
-            builder: (BuildContext context, AutoDirectionController direction) {
-              return TextField(
-                controller: passwordCtr,
-                decoration: AppDecoration.inputBorder.copyWith(
-                  hintText: 'رمز عبور',
-                ),
-                keyboardType: TextInputType.text,
-                textDirection: direction.getTextDirection(passwordCtr.text),
-                onChanged: (v){
-                  direction.onChangeText(v);
-                },
-              );
-            },
-          ),
-
-          const SizedBox(height: 25),
-          TextButton(
-              onPressed: gotoTermPage,
-              child: Text(AppMessages.terms).fsR(-3)
-          ),
-
-          const SizedBox(height: 10),
-
-          ElevatedButton(
-              style: ElevatedButton.styleFrom(shape: const StadiumBorder()),
-              onPressed: onSendClick,
-              child: Text(AppMessages.send)
-          ),
-          /*SizedBox(
-            width: double.maxFinite,
-            child: ,
-          ),*/
-
-          const SizedBox(height: 10),
-          UnconstrainedBox(
-            child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  shape: const StadiumBorder(),
-                  backgroundColor: AppThemes.instance.currentTheme.differentColor,
-                ),
-                onPressed: signWithMobileClick,
-                child: const Text('ورود با موبایل')
+                icon: Image.asset(AppImages.googleIco, width: 20, height: 20,),
+                label: Text(AppMessages.loginWithGoogle)
             ),
           ),
 
@@ -388,14 +295,79 @@ class _LoginPageState extends StateBase<LoginPage> {
     );
   }
 
-  void signWithEmailClick() {
-    loginByMobile = false;
-    assistCtr.updateHead();
-  }
+  void signWithGoogleClick() async {
+    final google = GoogleService();
 
-  void signWithMobileClick() {
-    loginByMobile = true;
-    assistCtr.updateHead();
+    AppLoading.instance.showWaiting(context);
+    GoogleSignInAccount? googleResult;
+
+    final timer = Timer(const Duration(seconds: kIsWeb? 300: 60), (){
+      AppLoading.instance.hideLoading(context);
+      AppSheet.showSheet$OperationFailed(context);
+      return;
+    });
+
+    try {
+      googleResult = await google.signIn();
+
+      if(timer.isActive){
+        timer.cancel();
+      }
+    }
+    catch(e){
+      AppLoading.instance.hideLoading(context);
+      AppSheet.showSheet$OperationFailed(context);
+      return;
+    }
+
+    if(googleResult == null){
+      AppLoading.instance.hideLoading(context);
+      AppSheet.showSheet$OperationFailed(context);
+    }
+    else {
+      final twoState = await LoginService.requestVerifyGmail(email: googleResult.email);
+      AppLoading.instance.cancel(context);
+
+      if(twoState.hasResult1()){
+        final status = twoState.result1![Keys.status];
+        final causeCode = twoState.result1![Keys.causeCode]?? 0;
+
+        if(status == Keys.error){
+          if(causeCode == HttpCodes.error_dataNotExist){
+            /**/
+          }
+          else if(causeCode == HttpCodes.error_userIsBlocked){
+            AppSheet.showSheet$AccountIsBlock(context);
+            return;
+          }
+        }
+        else {
+          final userId = twoState.result1![Keys.userId];
+
+          if (userId == null) {
+            final injectData = RegisterPageInjectData();
+            injectData.email = googleResult.email;
+
+            RouteTools.pushPage(context, RegisterPage(injectData: injectData));
+          }
+          else {
+            final userModel = await SessionService.login$newProfileData(twoState.result1!);
+
+            if(userModel != null) {
+              //RouteTools.pushPage(context, LayoutPage(key: AppBroadcast.layoutPageKey));
+              AppBroadcast.reBuildMaterial();
+            }
+            else {
+              AppSheet.showSheet$OperationFailed(context);
+            }
+          }
+        }
+      }
+      else {
+        AppSheet.showSheet$ErrorCommunicatingServer(context);
+        return;
+      }
+    }
   }
 
   void onChangeNumberCall() async {
@@ -430,15 +402,6 @@ class _LoginPageState extends StateBase<LoginPage> {
   }
 
   void onSendClick(){
-    if(loginByMobile){
-      prepareSendOtp();
-    }
-    else {
-      prepareSndVerifyEmail();
-    }
-  }
-
-  void prepareSendOtp(){
     countryModel.countryPhoneCode = phoneNumberController.getCountryCode()!;
     phoneNumber = phoneNumberController.getPhoneNumber()!;
 
@@ -474,25 +437,6 @@ class _LoginPageState extends StateBase<LoginPage> {
     });
 
     flipCardController.flipcard();
-  }
-
-  void prepareSndVerifyEmail() async {
-    final email = emailCtr.text.trim();
-    final password = passwordCtr.text.trim();
-
-    if(!Checker.isValidEmail(email)){
-      AppSnack.showInfo(context, 'ایمیل وارد شده صحیح نیست');
-      return;
-    }
-
-    if(password.length < 4 || password.length > 12){
-      AppSnack.showInfo(context, 'طول روز عبور بین 4 تا 12 حرف می باشد');
-      return;
-    }
-
-    showLoading();
-    await LoginService.requestCheckEmailAndSendVerify(email: email, password: password);
-    hideLoading();
   }
 
   void reSendOtpCodeCall() async {

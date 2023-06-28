@@ -204,6 +204,10 @@ class AppMessages {
     return 'لطفا شماره موبایل خود را جهت ارسال کد وارد کنید';
   }
 
+  static String get pleaseEnterEmailToSendVerifyEmail {
+    return 'لطفا آدرس ایمیل خود را جهت ارسال ایمیل تایید وارد کنید';
+  }
+
   static String get errorOccur {
     return _getContext().t('errorOccur')?? _noText;
   }

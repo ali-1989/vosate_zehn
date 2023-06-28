@@ -18,8 +18,7 @@ class RouteDispatcher {
 
     if(!SessionService.hasAnyLogin()){
       if(kIsWeb){
-        print('=============*==========================');
-        print('cur path: ${IrisNavigatorObserver.currentPath()}');
+        print('cur path:> ${IrisNavigatorObserver.currentPath()}');
         print('query: ${IrisNavigatorObserver.getPathQuery(IrisNavigatorObserver.currentUrl())}');
 
         final query = IrisNavigatorObserver.getPathQuery(IrisNavigatorObserver.currentUrl());
@@ -34,13 +33,6 @@ class RouteDispatcher {
 
           return const WaitToLoad();
         }
-      }
-
-      final segments = IrisNavigatorObserver.pathSegments();
-      final routes = IrisNavigatorObserver.currentRoutes();
-
-      if(segments.isEmpty && routes.length == 1 && routes[0].startsWith('?email_login=')){
-
       }
 
       return LoginPage();

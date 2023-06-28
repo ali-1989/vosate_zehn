@@ -49,11 +49,12 @@ class _RegisterPageState extends StateBase<RegisterPage> {
   void initState(){
     super.initState();
 
+    print('=============== registr: ${widget.injectData.email}');
     nameCtr = TextEditingController();
     familyCtr = TextEditingController();
     requester = Requester();
 
-    inputDecor = InputDecoration(
+    inputDecor = const InputDecoration(
       isDense: true,
       border: OutlineInputBorder(),
       enabledBorder: OutlineInputBorder(),
@@ -112,7 +113,7 @@ class _RegisterPageState extends StateBase<RegisterPage> {
                 ),
               ),
 
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               TextField(
                 controller: familyCtr,
@@ -123,10 +124,10 @@ class _RegisterPageState extends StateBase<RegisterPage> {
                 ),
               ),
 
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Text('${AppMessages.gender}:'),
 
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Row(
                 children: [
                   ToggleSwitch(
@@ -145,12 +146,12 @@ class _RegisterPageState extends StateBase<RegisterPage> {
                 ],
               ),
 
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Row(
                 children: [
                   Text('${AppMessages.age}:'),
 
-                  SizedBox(width: 7),
+                  const SizedBox(width: 7),
                   TextButton(
                     onPressed: (){
                       onSelectDateCall();
@@ -160,7 +161,7 @@ class _RegisterPageState extends StateBase<RegisterPage> {
                 ],
               ),
 
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                   onPressed: onRegisterCall,
                   child: Text(AppMessages.registerTitle),
@@ -212,7 +213,7 @@ class _RegisterPageState extends StateBase<RegisterPage> {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal:10.0),
                 child: Text('${AppMessages.age}: ${DateHelper.calculateAge(dt)}',
-                  style: TextStyle(fontWeight: FontWeight.w400),
+                  style: const TextStyle(fontWeight: FontWeight.w400),
                 ),
               );
             },
@@ -252,6 +253,7 @@ class _RegisterPageState extends StateBase<RegisterPage> {
     };*/
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
+      print(data);
       final userModel = await SessionService.login$newProfileData(data);
 
       if(userModel != null) {

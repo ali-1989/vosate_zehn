@@ -9,6 +9,14 @@ class AppDecoration {
   static Color differentColor = const Color(0xFFFF006E);
   static Color orange = const Color(0xFFFF006E);
 
+  static InputDecoration inputBorder = const InputDecoration(
+    border: OutlineInputBorder(),
+    disabledBorder: OutlineInputBorder(),
+    focusedBorder: OutlineInputBorder(),
+    enabledBorder: OutlineInputBorder(),
+    errorBorder: OutlineInputBorder(),
+  );
+
   static ClassicFooter classicFooter = const ClassicFooter(
     loadingText: '',
     idleText: '',

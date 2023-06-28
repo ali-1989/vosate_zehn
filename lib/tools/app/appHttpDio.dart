@@ -347,7 +347,13 @@ class HttpRequester {
 		}
 
 		final receive = _response?.data.toString();
-		return JsonHelper.jsonToMap<String, dynamic>(receive);
+
+		try {
+			return JsonHelper.jsonToMap<String, dynamic>(receive);
+		}
+		catch (e){
+			return {};
+		}
 	}
 
 	Map<String, dynamic>? getPartByJsonName(){
