@@ -67,7 +67,7 @@ class _AidPageState extends StateBase<AidPage> {
 
   Widget buildBody(){
     if(isInFetchData) {
-      return WaitToLoad();
+      return const WaitToLoad();
     }
 
     if(!assistCtr.hasState(state$fetchData)){
@@ -86,7 +86,7 @@ class _AidPageState extends StateBase<AidPage> {
             ),
           ),
 
-          SizedBox(height: 100,),
+          const SizedBox(height: 100,),
 
           MaxWidth(
             maxWidth: 300,
@@ -103,7 +103,7 @@ class _AidPageState extends StateBase<AidPage> {
             ),
           ),
 
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
 
           /// for bazar:comment
           MaxWidth(
@@ -121,7 +121,7 @@ class _AidPageState extends StateBase<AidPage> {
             ),
           ),
 
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
         ],
       ),
     );
