@@ -84,6 +84,7 @@ class AppDialogIris {
 				Widget? icon,
 				OnButtonCallback? yesFn,
 				bool dismissOnButtons = true,
+				bool canDismissible = false,
 				IrisDialogDecoration?	decoration,
 			}) {
 		return IrisDialog.show(
@@ -93,6 +94,7 @@ class AppDialogIris {
       positiveButtonText: yesText,
 			title: title,
 			icon: icon,
+			canDismissible: canDismissible,
 			positivePress: (ctx) => yesFn?.call(ctx),
 			dismissOnButtons: dismissOnButtons,
 			decoration: decoration ?? AppDialogIris.instance.dialogDecoration,
@@ -110,6 +112,7 @@ class AppDialogIris {
 				String? title,
 				Widget? icon,
 				bool dismissOnButtons = true,
+				bool canDismissible = false,
 				IrisDialogDecoration?	decoration,
 		}){
 
@@ -123,6 +126,7 @@ class AppDialogIris {
 			decoration: decoration?? AppDialogIris.instance.dialogDecoration,
 			icon: icon,
 			dismissOnButtons: dismissOnButtons,
+			canDismissible: canDismissible,
 			positivePress: (ctx) => yesFn?.call(ctx),
 			negativePress: (ctx) => noFn?.call(ctx),
 		);

@@ -52,7 +52,7 @@ class LoginService {
       reqJs[Keys.requesterId] = user.userId;
       reqJs[Keys.forUserId] = user.userId;
 
-      DeviceInfoTools.attachApplicationInfo(reqJs, curUser: user);
+      DeviceInfoTools.attachDeviceInfo(reqJs, curUser: user);
 
       final info = HttpItem();
       info.fullUrl = '${SettingsManager.localSettings.httpAddress}/graph-v1';
@@ -133,7 +133,7 @@ class LoginService {
     js[Keys.requestZone] = 'send_otp';
     js[Keys.mobileNumber] = phoneNumber;
     js.addAll(countryModel.toMap());
-    DeviceInfoTools.attachApplicationInfo(js);
+    DeviceInfoTools.attachDeviceInfo(js);
 
     http.fullUrl = ApiManager.graphApi;
     http.method = 'POST';
@@ -170,7 +170,7 @@ class LoginService {
     js['code'] = code;
     js.addAll(countryModel.toMap());
     js.addAll(DeviceInfoTools.mapDeviceInfo());
-    DeviceInfoTools.attachApplicationInfo(js);
+    DeviceInfoTools.attachDeviceInfo(js);
 
     http.fullUrl = ApiManager.graphApi;
     http.method = 'POST';
@@ -206,7 +206,7 @@ class LoginService {
     js[Keys.requestZone] = 'verify_email';
     js['email'] = email;
     js.addAll(DeviceInfoTools.mapDeviceInfo());
-    DeviceInfoTools.attachApplicationInfo(js);
+    DeviceInfoTools.attachDeviceInfo(js);
 
     http.fullUrl = ApiManager.graphApi;
     http.method = 'POST';
@@ -247,7 +247,7 @@ class LoginService {
     js['email'] = email;
     js['hash_password'] = Generator.generateMd5(password);
     js.addAll(DeviceInfoTools.mapDeviceInfo());
-    DeviceInfoTools.attachApplicationInfo(js);
+    DeviceInfoTools.attachDeviceInfo(js);
 
     http.fullUrl = ApiManager.graphApi;
     http.method = 'POST';
@@ -324,7 +324,7 @@ class LoginService {
     js[Keys.requestZone] = 'is_email_verify';
     js['code'] = code;
     js.addAll(DeviceInfoTools.mapDeviceInfo());
-    DeviceInfoTools.attachApplicationInfo(js);
+    DeviceInfoTools.attachDeviceInfo(js);
 
     http.fullUrl = ApiManager.graphApi;
     http.method = 'POST';

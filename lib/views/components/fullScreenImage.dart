@@ -6,12 +6,11 @@ import 'package:photo_view/photo_view.dart';
 import 'package:app/structures/enums/enums.dart';
 
 /// Usage:
-/// final view = FullScreenImageComponent();
+/// final view = FullScreenImage();
 /// AppRoute.pushPage(context, view);
 
 ///===============================================================================================================
-class FullScreenImageComponent extends StatefulWidget {
-  static const screenName = 'ImageFullScreen';
+class FullScreenImage extends StatefulWidget {
   late final ImageType imageType;
   late final dynamic imageObj;
   final String? heroTag;
@@ -19,7 +18,7 @@ class FullScreenImageComponent extends StatefulWidget {
   final Color? appBarColor;
   final TextStyle? infoStyle;
 
-  FullScreenImageComponent({
+  FullScreenImage({
     Key? key,
     required this.imageType,
     required this.imageObj,
@@ -32,11 +31,11 @@ class FullScreenImageComponent extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return FullScreenImageComponentState();
+    return FullScreenImageState();
   }
 }
 ///===============================================================================================================
-class FullScreenImageComponentState extends State<FullScreenImageComponent> {
+class FullScreenImageState extends State<FullScreenImage> {
   ImageProvider? pic;
   TextStyle? infoStyle;
 

@@ -3,6 +3,8 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'package:iris_tools/api/helpers/mathHelper.dart';
+
 /// realWidth: 1080.0, realHeight: 2274.0, pixelRatio: 2.625, Padding(left: 0, top: 83, right: 0, bottom: 0)
 /// realWidth: 720, realHeight: 1280.0, pixelRatio: 2.0, Padding(left: 0, top: 48, right: 0, bottom: 0)
 
@@ -20,9 +22,6 @@ class AppSizes {
   double? pixelRatio;
   double appWidth = 0;    //Tecno: 360.0  Web: 1200
   double appHeight = 0;  //Tecno: 640.0  Web: 620
-  double textMultiplier = 6; // Tecno: ~6.4
-  double imageMultiplier = 1;
-  double heightMultiplier = 1;
   ViewPadding? rootPadding;
   List<Function> onMetricListeners = [];
   Function? _systemMetricFunc;
@@ -48,16 +47,10 @@ class AppSizes {
     if(kIsWeb) {
       appWidth = realPixelWidth! / pixelRatio!;
       appHeight = realPixelHeight! / pixelRatio!;
-      imageMultiplier = 3.6;
-      textMultiplier = 6.2;
-      heightMultiplier = 6.2;
     }
     else {
       appWidth = (isLandscape ? realPixelHeight : realPixelWidth)! / pixelRatio!;
       appHeight = (isLandscape ? realPixelWidth : realPixelHeight)! / pixelRatio!;
-      imageMultiplier = appWidth / 100;
-      textMultiplier = appHeight / 100; // ~6.3
-      heightMultiplier = appHeight / 100;
     }
   }
 
@@ -101,6 +94,8 @@ class AppSizes {
   }
 
   double get appWidthRelateWeb => webMaxWidthSize;
+
+  double get powerHeight => MathHelper.between(1.0, 750, 0.86, 570, appHeight);
   ///●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●
   static FlutterView? getWindow(){
     return PlatformDispatcher.instance.implicitView;

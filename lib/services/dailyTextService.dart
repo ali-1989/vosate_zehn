@@ -18,7 +18,7 @@ class DailyTextService {
   DailyTextService._();
 
   static void checkShowDialog(BuildContext context) async {
-    await Future.delayed(Duration(seconds: 10), (){});
+    await Future.delayed(const Duration(seconds: 10), (){});
 
     if(!SessionService.hasAnyLogin()){
       return;
@@ -51,16 +51,16 @@ class DailyTextService {
               onPressed: (){
                 RouteTools.popTopView(context: context);
               },
-              icon: Icon(AppIcons.close)
+              icon: const Icon(AppIcons.close)
           ),
         ),
 
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical:8.0),
-          child: Text(msg, style: AppThemes.bodyTextStyle()!.copyWith(fontSize: 14, fontWeight: FontWeight.bold)),
+          child: Text(msg, style: AppThemes.baseTextStyle().copyWith(fontSize: 14, fontWeight: FontWeight.bold)),
         ),
 
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
       ],
     );
 

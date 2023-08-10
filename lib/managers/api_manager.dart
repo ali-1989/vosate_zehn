@@ -18,6 +18,7 @@ class ApiManager {
   ApiManager._();
 
   static String graphApi = '${SettingsManager.localSettings.httpAddress}/graph-v1';
+  static String errorReportApi = '${SettingsManager.localSettings.httpAddress}/errors/add';
   static String fcmTopic = 'daily_text';
 
   static Future<TwoStateReturn<Map, Response>> publicApiCaller(String url, MethodType methodType, Map<String, dynamic>? body){

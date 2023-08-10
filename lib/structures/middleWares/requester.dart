@@ -51,7 +51,7 @@ class Requester {
     _bodyJs = js;
 
     if(js != null) {
-      DeviceInfoTools.attachApplicationInfo(_bodyJs!);
+      DeviceInfoTools.attachDeviceInfo(_bodyJs!);
     }
   }
 
@@ -96,8 +96,8 @@ class Requester {
 
     AppHttpDio.cancelAndClose(_httpRequester);
 
-    /*if(Session.hasAnyLogin()) {
-      _http.headers.addAll({'authorization': 'Bearer ${Session.getLastLoginUser()!.token?.token}'});
+    /*if(SessionService.hasAnyLogin()) {
+      _http.headers.addAll({'authorization': 'Bearer ${SessionService.getLastLoginUser()!.token?.token}'});
     }*/
 
     _httpRequester = AppHttpDio.send(_http);
@@ -133,7 +133,7 @@ class Requester {
           }
         }
 
-        Tools.verbosePrint('@@@>> [$url] [$request]  response ======= [${_httpRequester.responseData?.statusCode}] $val');
+        Tools.verbosePrint('@@@ API CALLED >>> url:[$url]  request:[$request]  response ====>>  status:[${_httpRequester.responseData?.statusCode}] data:$val');
       }
 
       /*if(_httpRequester.responseData?.statusCode == 401 && Session.getLastLoginUser() != null){

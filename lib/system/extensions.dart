@@ -1,17 +1,14 @@
-// ignore_for_file: empty_catches
-
-import 'package:app/tools/app/appLocale.dart';
 import 'package:flutter/material.dart';
 
-import 'package:iris_tools/api/helpers/colorHelper.dart';
 import 'package:iris_tools/api/helpers/focusHelper.dart';
 import 'package:iris_tools/api/helpers/mathHelper.dart';
 import 'package:iris_tools/widgets/border/dottedBorder.dart';
 
 import 'package:app/managers/font_manager.dart';
+import 'package:app/tools/app/appDecoration.dart';
+import 'package:app/tools/app/appLocale.dart';
 import 'package:app/tools/app/appThemes.dart';
 
-// usage: import 'package:common_version/tools/centers/extensions.dart';
 ///==========================================================================================================
 extension StringExtension on String {
   String get L {
@@ -133,7 +130,7 @@ extension ContextExtension on BuildContext {
         return element.key == subKey;
       });
     }
-    catch (e){}
+    catch (e){/**/}
 
     if(find != null) {
       return find.value;
@@ -536,6 +533,33 @@ extension TextExtension on Text {
     );
   }
 
+  Text font(String family, {bool baseStyle = false}) {
+    var ts = style ?? (baseStyle ? AppThemes.instance.currentTheme.baseTextStyle : const TextStyle());
+    final font = FontManager.instance.fontByFamily(family) ?? FontManager.instance.getPlatformFont();
+
+    ts = ts.copyWith(
+      fontFamily: font.family,
+      height: style?.height ?? font.height,
+    );
+
+    return Text(
+      data!,
+      key: key,
+      style: ts,
+      strutStyle: strutStyle,
+      textAlign: textAlign,
+      locale: locale,
+      maxLines: maxLines,
+      overflow: overflow,
+      semanticsLabel: semanticsLabel,
+      softWrap: softWrap,
+      textDirection: textDirection,
+      textHeightBehavior: textHeightBehavior,
+      textScaleFactor: textScaleFactor,
+      textWidthBasis: textWidthBasis,
+    );
+  }
+
   Text thinFont({bool baseStyle = false}) {
     var ts = style ?? (baseStyle ? AppThemes.instance.currentTheme.baseTextStyle : const TextStyle());
 
@@ -586,7 +610,7 @@ extension TextExtension on Text {
     );
   }
 
-  Text defFont() {
+  Text platformFont() {
     var ts = style ?? AppThemes.instance.currentTheme.baseTextStyle;
 
     ts = ts.copyWith(
@@ -660,7 +684,7 @@ extension TextExtension on Text {
 
   Text fsR(double size, {double? max /*20*/}) {
     var siz = style?.fontSize?? AppThemes.instance.currentTheme.baseTextStyle.fontSize;
-    siz = siz! + size;
+    siz = (siz?? FontManager.deviceFontSize) + size;
 
     if (max != null) {
       siz = MathHelper.minDouble(siz, max);
@@ -712,6 +736,76 @@ extension TextExtension on Text {
       textHeightBehavior: textHeightBehavior,
       textScaleFactor: textScaleFactor,
       textWidthBasis: textWidthBasis,
+    );
+  }
+
+  Widget fitWidthOverflow({double? maxWidth}) {
+    return LayoutBuilder(
+      builder: (context, size){
+        final defaultTextStyle = DefaultTextStyle.of(context);
+
+        var myStyle = style;
+        if (style == null || style!.inherit) {
+          myStyle = defaultTextStyle.style.merge(style);
+        }
+
+        if (myStyle!.fontSize == null) {
+          myStyle = myStyle.copyWith(fontSize: FontManager.defaultFontSize);
+        }
+
+        var tp = TextPainter(
+          maxLines: maxLines,
+          textAlign: textAlign?? AppThemes.getTextAlign(),
+          textDirection: textDirection?? AppThemes.instance.textDirection,
+          textHeightBehavior: textHeightBehavior,
+          strutStyle: strutStyle,
+          locale: locale,
+          textScaleFactor: textScaleFactor?? MediaQuery.of(context).textScaleFactor,
+          textWidthBasis: textWidthBasis?? TextWidthBasis.parent,
+          text: TextSpan(text: data, style: myStyle),
+        );
+
+        tp.layout(maxWidth: double.infinity);
+        bool exceeded = tp.didExceedMaxLines || tp.width > (maxWidth?? size.maxWidth);
+        double fontSize = myStyle.fontSize!;
+
+        while(exceeded){
+          fontSize = fontSize -.5;
+          myStyle = myStyle!.copyWith(fontSize: fontSize);
+
+          tp = TextPainter(
+            maxLines: maxLines,
+            textAlign: textAlign?? AppThemes.getTextAlign(),
+            textDirection: textDirection?? AppThemes.instance.textDirection,
+            textHeightBehavior: textHeightBehavior,
+            strutStyle: strutStyle,
+            locale: locale,
+            textScaleFactor: textScaleFactor?? MediaQuery.of(context).textScaleFactor,
+            textWidthBasis: textWidthBasis?? TextWidthBasis.parent,
+            text: TextSpan(text: data, style: myStyle),
+          );
+
+          tp.layout(maxWidth: double.infinity);
+          exceeded = tp.didExceedMaxLines || tp.width > (maxWidth?? size.maxWidth);
+        }
+
+        return Text(
+          data!,
+          key: key,
+          style: myStyle,
+          strutStyle: strutStyle,
+          textAlign: textAlign,
+          locale: locale,
+          maxLines: maxLines,
+          overflow: overflow,
+          semanticsLabel: semanticsLabel,
+          softWrap: softWrap,
+          textDirection: textDirection,
+          textHeightBehavior: textHeightBehavior,
+          textScaleFactor: textScaleFactor,
+          textWidthBasis: textWidthBasis,
+        );
+      },
     );
   }
 
@@ -884,7 +978,7 @@ extension SelectableTextExtension on SelectableText {
     );
   }
 
-  SelectableText defFont() {
+  SelectableText platformFont() {
     var ts = style ?? AppThemes.instance.currentTheme.baseTextStyle;
 
     ts = ts.copyWith(
@@ -952,7 +1046,7 @@ extension SelectableTextExtension on SelectableText {
     var siz = style?.fontSize;
     siz ??= AppThemes.instance.currentTheme.baseTextStyle.fontSize;
 
-    siz = siz! + size;
+    siz = (siz?? FontManager.deviceFontSize) + size;
 
     if (max != null) {
       siz = MathHelper.minDouble(siz, max);
@@ -1034,17 +1128,12 @@ extension DropdownButtonExtension on DropdownButton {
     double radius = 5,
     Color? backColor,
     Color? arrowColor,
+    EdgeInsets? padding,
   }) {
 
-    if(ColorHelper.isNearColors(AppThemes.instance.currentTheme.primaryColor,
-        [Colors.grey[900]!, Colors.white, Colors.grey[600]!])) {
-      arrowColor ??= AppThemes.instance.currentTheme.appBarItemColor;
-    }
-    else {
-      arrowColor ??= Colors.white;
-    }
-
-    final back = backColor?? ColorHelper.changeLight(AppThemes.instance.themeData.colorScheme.secondary); //primaryColor
+    arrowColor ??= AppDecoration.dropdownArrowColor();
+    backColor ??= AppDecoration.dropdownBackColor();
+    padding ??= const EdgeInsets.symmetric(horizontal: 4, vertical: 0);
 
     void fn(){
       FocusHelper.unFocus(context);
@@ -1055,10 +1144,10 @@ extension DropdownButtonExtension on DropdownButton {
 
     return Container(
       width: width,
-      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
-      decoration: AppThemes.dropdownDecoration(color: back, radius: radius),
+      padding: padding,
+      decoration: AppDecoration.dropdownDecoration(color: backColor, radius: radius),
       child: Theme(
-        data: AppThemes.dropdownTheme(context, color: back),
+        data: AppDecoration.dropdownTheme(context, color: backColor),
         child: DropdownButton(
           items: items,
           value: value,

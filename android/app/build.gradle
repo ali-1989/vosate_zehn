@@ -86,7 +86,7 @@ android {
 
         multiDexEnabled false
         dexOptions {
-            javaMaxHeapSize "2g"
+            javaMaxHeapSize "3g"
             keepRuntimeAnnotatedClasses false //false: if do not use reflection and need more space in their main dex
             preDexLibraries = false
             incremental false

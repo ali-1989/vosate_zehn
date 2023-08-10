@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths xmlns:android="http://schemas.android.com/apk/res/android">
     <external-path
-        name="External_data"
+        name="external_data"
         path="Android/data/${applicationId}/"/>
+
+    <external-path
+        name="external_data"
+        path="."/>
 
     <files-path
         name="AppFolder"
         path="${AppFolderName}" />
 
-
     <external-path
-        name="external-path"
+        name="external_path"
         path="."/>
 
     <external-cache-path
-        name="external-cache-path"
+        name="external_cache_path"
         path="."/>
 
     <external-files-path
-        name="external-files-path"
+        name="external_files_path"
         path="."/>
 
     <files-path
@@ -26,11 +29,11 @@
         path="."/>
 
     <cache-path
-        name="cache-path"
+        name="cache_path"
         path="."/>
 
     <root-path
-        name="name"
+        name="root"
         path="."/>
 </paths>
 

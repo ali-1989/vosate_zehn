@@ -14,14 +14,16 @@ import 'package:app/pages/login/login_page.dart';
 import 'package:app/pages/profile/profile_page.dart';
 import 'package:app/pages/term_page.dart';
 import 'package:app/tools/app/appNavigator.dart';
+import 'package:iris_tools/api/stackList.dart';
 
 class RouteTools {
   static BuildContext? materialContext;
+  static final StackList<State> widgetStateStack = StackList();
 
   RouteTools._();
 
-  static prepareWebRoute(){
-    final aboutPage = IrisPageRoute.by((ProfilePage).toString(), const ProfilePage());
+  static prepareRoutes(){
+    final aboutPage = IrisPageRoute.by((ProfilePage).toString(), ProfilePage());
     final homePage = IrisPageRoute.by((HomePage).toString(), HomePage());
     final supportPage = IrisPageRoute.by((LoginPage).toString(), LoginPage());
     final walletPage = IrisPageRoute.by((LayoutPage).toString(), const LayoutPage());
@@ -60,6 +62,18 @@ class RouteTools {
     //IrisNavigatorObserver.allAppRoutes.add(audioPlayerPage);
 
     IrisNavigatorObserver.homeName = homePage.routeName;
+  }
+
+  static void addWidgetState(State state){
+    return widgetStateStack.push(state);
+  }
+
+  static State removeWidgetState(){
+    return widgetStateStack.pop();
+  }
+
+  static State getTopWidgetState(){
+    return widgetStateStack.top();
   }
 
   static BuildContext? getTopContext() {

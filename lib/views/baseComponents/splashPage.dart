@@ -50,6 +50,7 @@ class SplashPageState extends StateBase<SplashPage> {
   static bool _isInLoadingSettings = true;
   bool _isConnectToServer = true;
   int splashWaitingMil = 4000;
+  Timer? timer;
 
   @override
   Widget build(BuildContext context) {
@@ -86,10 +87,9 @@ class SplashPageState extends StateBase<SplashPage> {
   }
 
   void splashWaitTimer() async {
-    if(mustWaitToSplashTimer){
-      mustWaitToSplashTimer = false;
-
-      Timer(Duration(milliseconds: splashWaitingMil), (){
+    if(mustWaitToSplashTimer || timer == null){
+      timer = Timer(Duration(milliseconds: splashWaitingMil), (){
+        mustWaitToSplashTimer = false;
         callState();
       });
     }
@@ -112,7 +112,6 @@ class SplashPageState extends StateBase<SplashPage> {
 
       appLazyInit();
       _isInLoadingSettings = false;
-
       AppBroadcast.reBuildMaterialBySetTheme();
     }
   }
@@ -124,9 +123,8 @@ class SplashPageState extends StateBase<SplashPage> {
       AppSheet.showSheetOneAction(
         RouteTools.materialContext!,
         AppMessages.errorCommunicatingServer,
-            () {
+        onButton: () {
           AppBroadcast.gotoSplash();
-
           connectToServer();
         },
         buttonText: AppMessages.tryAgain,
@@ -135,6 +133,7 @@ class SplashPageState extends StateBase<SplashPage> {
     }
     else {
       _isConnectToServer = true;
+
       SessionService.fetchLoginUsers();
       callState();
     }*/
@@ -162,7 +161,7 @@ class SplashPageState extends StateBase<SplashPage> {
       }
 
       if(context != null && context.mounted){
-        RouteTools.prepareWebRoute();
+        RouteTools.prepareRoutes();
         AppCache.screenBack = const AssetImage(AppImages.background);
         await precacheImage(AppCache.screenBack!, context);
       }

@@ -23,36 +23,34 @@ class AppHttpDio {
 		);
 	}
 
-	static HttpRequester send(HttpItem item, {BaseOptions? options}){
-		if(item.debugMode) {
+	static HttpRequester send(HttpItem httpItem, {BaseOptions? options}){
+		if(httpItem.debugMode) {
 			var txt = '\n-------------------------http debug\n';
-			txt += 'url: ${item.fullUrl}\n';
-			txt += 'Method: ${item.method}\n';
+			txt += 'url: ${httpItem.fullUrl}\n';
+			txt += 'Method: ${httpItem.method}\n';
 
-			if(item.body is String) {
-				txt += 'Body: ${item.body} \n------------------------- End';
+			if(httpItem.body is String) {
+				txt += 'Body: ${httpItem.body} \n------------------------- End';
 			}
 
 			LogTools.logger.logToAll(txt);
 		}
 
-		item.prepareMultiParts();
+		httpItem.prepareMultiParts();
 		final itemRes = HttpRequester();
-		Dio dio;
 
 		try {
-			dio = Dio(options ?? _genOptions());
+			Dio dio = Dio(options ?? _genOptions());
 
-			//dio.options.baseUrl = baseUri;
-			final uri = correctUri(item.fullUrl)!;
+			final uri = correctUri(httpItem.fullUrl)!;
 
 			///  add proxy
-			if(item.useProxy && item.proxyAddress != null) {
+			if(httpItem.useProxy && httpItem.proxyAddress != null) {
 				(dio.httpClientAdapter as IOHttpClientAdapter).createHttpClient = () {
 					final client = HttpClient();
 
 					client.findProxy = (uri) {
-						return 'PROXY ${item.proxyAddress}';
+						return 'PROXY ${httpItem.proxyAddress}';
 					};
 
 					client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
@@ -61,68 +59,67 @@ class AppHttpDio {
 				};
 			}
 
-			dio.interceptors.add(
-					InterceptorsWrapper(
-							onRequest: (RequestOptions options, RequestInterceptorHandler handler) {
-								if(!kIsWeb) {
-									options.headers['Connection'] = 'close';
-								}
+			final inter = InterceptorsWrapper(
+					onRequest: (RequestOptions options, RequestInterceptorHandler handler) {
+						itemRes.requestOptions = options;
 
-								if(item.headers.isNotEmpty){
-									options.headers.addAll(item.headers);
-								}
+						if(!kIsWeb) {
+							options.headers['Connection'] = 'close';
+						}
 
-								itemRes.requestOptions = options;
+						if(httpItem.headers.isNotEmpty){
+							options.headers.addAll(httpItem.headers);
+						}
 
-								return handler.next(options);
-								//return handler.resolve(response);
-								//return handler.reject(dioError);
-							},
-							 onResponse: (Response<dynamic> res, ResponseInterceptorHandler handler) {
-								 if(item.debugMode) {
-									 var txt = '\n----------------- http Debug [onResponse]\n';
-									 txt += 'statusCode:  ${res.statusCode}\n';
-									 txt += 'response.data: ${res.data}\n----------------------- End Debug';
+						return handler.next(options);
+						//return handler.resolve(response);
+						//return handler.reject(dioError);
+					},
+					onResponse: (Response<dynamic> res, ResponseInterceptorHandler handler) {
+						if(httpItem.debugMode) {
+							var txt = '\n----------------- http Debug [onResponse]\n';
+							txt += 'statusCode:  ${res.statusCode}\n';
+							txt += 'response.data: ${res.data}\n----------------------- End Debug';
 
-									 LogTools.logger.logToAll(txt);
-								 }
+							LogTools.logger.logToAll(txt);
+						}
 
-								itemRes._response = res;
-								itemRes.isOk = !(res is Error
-										|| res is Exception
-										|| res.statusCode != 200
-										|| res.data == null);
+						itemRes._response = res;
+						itemRes.isOk = !(res is Error
+								|| res is Exception
+								|| res.statusCode != 200
+								|| res.data == null);
 
-								if(item.onResponseCall?.call(res)?? true) {
-									handler.next(res);
-								}
-							},
-							onError: (DioException err, ErrorInterceptorHandler handler) async {
-								if(item.debugMode) {
-									var txt = '\n----------------- http Debug [onError]\n';
-									txt += 'statusCode: ${err.response?.statusCode}\n';
-									txt += 'response.data: ${err.response?.data}\n';
-									txt += 'error: ${err.error} \n--------------------------- End Debug';
+						if(httpItem.onResponseCall?.call(res)?? true) {
+							handler.next(res);
+						}
+					},
+					onError: (DioException err, ErrorInterceptorHandler handler) async {
+						if(httpItem.debugMode) {
+							var txt = '\n----------------- http Debug [onError]\n';
+							txt += 'statusCode: ${err.response?.statusCode}\n';
+							txt += 'response.data: ${err.response?.data}\n';
+							txt += 'error: ${err.error} \n--------------------------- End Debug';
 
-									LogTools.logger.logToAll(txt);
-								}
+							LogTools.logger.logToAll(txt);
+						}
 
-								final ro = RequestOptions(path: uri);
-								final res = Response<dynamic>(
-										requestOptions: ro,
-										statusCode: err.response?.statusCode,
-										data: err.response ?? DioException(requestOptions: ro, error: err.error, type: DioExceptionType.connectionError)
-								);
+						final ro = RequestOptions(path: uri);
+						itemRes.requestOptions = ro;
 
-								/*itemRes._response = res;
-								err.response = res;*/
+						final res = Response<dynamic>(
+								requestOptions: ro,
+								statusCode: err.response?.statusCode,
+								data: err.response ?? DioException(requestOptions: ro, error: err.error, type: DioExceptionType.unknown)
+						);
 
-								itemRes._response = err.response;
+						itemRes._response = err.response?? res;
 
-								handler.resolve(err.response?? res);
-							}
-					)
+						handler.resolve(itemRes._response!);
+					}
 			);
+
+			dio.interceptors.add(inter);
 
 			final cancelToken = CancelToken();
 			itemRes.dio = dio;
@@ -131,11 +128,11 @@ class AppHttpDio {
 			itemRes._responseAsync = dio.request<dynamic>(
 				uri,
 				cancelToken: cancelToken,
-				options: item.options,
-				queryParameters: item.queries,
-				data: item.body,
-				onReceiveProgress: item.onReceiveProgress,
-				onSendProgress: item.onSendProgress,
+				options: httpItem.options,
+				queryParameters: httpItem.queries,
+				data: httpItem.body,
+				onReceiveProgress: httpItem.onReceiveProgress,
+				onSendProgress: httpItem.onSendProgress,
 			);
 		}
 		catch (e) {
@@ -171,42 +168,41 @@ class AppHttpDio {
 				};
 			}
 
-			dio.interceptors.add(
-					InterceptorsWrapper(
-							onRequest: (RequestOptions options, RequestInterceptorHandler handler) {
-								if(!kIsWeb) {
-									options.headers['Connection'] = 'close';
-								}
+			final downloadInter = InterceptorsWrapper(
+					onRequest: (RequestOptions options, RequestInterceptorHandler handler) {
+						if(!kIsWeb) {
+							options.headers['Connection'] = 'close';
+						}
 
-								itemRes.requestOptions = options;
+						itemRes.requestOptions = options;
 
-								handler.next(options);
-							},
+						handler.next(options);
+					},
 
-							onResponse: (Response<dynamic> res, ResponseInterceptorHandler handler) {
-								itemRes._response = res;
+					onResponse: (Response<dynamic> res, ResponseInterceptorHandler handler) {
+						itemRes._response = res;
 
-								itemRes.isOk = !(res is Error
-										|| res is Exception
-										|| (res.statusCode != 200 && res.statusCode != 206)
-										|| res.data == null);
+						itemRes.isOk = !(res is Error
+								|| res is Exception
+								|| (res.statusCode != 200 && res.statusCode != 206)
+								|| res.data == null);
 
-								handler.next(res);
-							},
+						handler.next(res);
+					},
 
-							onError: (DioException err, ErrorInterceptorHandler handler) {
-								final ro = RequestOptions(path: uri);
-								final Response res = Response<ResponseBody>(requestOptions: ro, data: ResponseBody.fromBytes([], 404));
-								//Response res = Response<ResponseBody>(requestOptions: ro, data: ResponseBody.fromString('$err', 404));
-								//Response res = Response<DioError>(requestOptions: ro, data: DioError(requestOptions: ro));
-								itemRes._response = res;
-								itemRes.isOk = false;
+					onError: (DioException err, ErrorInterceptorHandler handler) {
+						final ro = RequestOptions(path: uri);
+						final Response res = Response<ResponseBody>(requestOptions: ro, data: ResponseBody.fromBytes([], 404));
+						//Response res = Response<ResponseBody>(requestOptions: ro, data: ResponseBody.fromString('$err', 404));
+						//Response res = Response<DioError>(requestOptions: ro, data: DioError(requestOptions: ro));
+						itemRes._response = res;
+						itemRes.isOk = false;
 
-								//handler.next(err);   < this take log error
-								//handler.reject(err); < this take log error
-								handler.resolve(res);
-						})
-			);
+						//handler.next(err);   < this take log error
+						//handler.reject(err); < this take log error
+						handler.resolve(res);
+					});
+			dio.interceptors.add(downloadInter);
 
 			final cancelToken = CancelToken();
 			itemRes.dio = dio;
@@ -462,11 +458,11 @@ class HttpRequester {
 	}
 
 	Response emptyResponse = Response<ResponseBody>(
-			requestOptions: RequestOptions(path: ''),
+			requestOptions: RequestOptions(path: '-empty-'),
 			data: null,
 	);//ResponseBody.fromString('non', 404)
 }
-///===================================================================================================
+///========================================================================================================
 class HttpItem {
 	String fullUrl = '';
 	String? proxyAddress;
@@ -601,11 +597,11 @@ class HttpItem {
 		}
 
 		final newBody = FormData();
-		final oldBody = body as FormData;
+		//final oldBody = body as FormData;
 
-		for(final f in oldBody.fields){
+		/*for(final f in oldBody.fields){
 			newBody.fields.add(f);
-		}
+		}*/
 
 		for(final fd in formDataItems){
 			if(fd.filePath != null){
@@ -617,7 +613,7 @@ class HttpItem {
 				newBody.files.add(MapEntry(fd.partName, m));
 			}
 			else {
-				final m = MultipartFile(fd.stream!, fd.streamSize!, filename: fd.fileName, contentType: fd.contentType);
+				final m = MultipartFile.fromStream(() => fd.stream!, fd.streamSize!, filename: fd.fileName, contentType: fd.contentType);
 				newBody.files.add(MapEntry(fd.partName, m));
 			}
 		}
@@ -625,7 +621,7 @@ class HttpItem {
 		body = newBody;
 	}
 }
-///=======================================================================================================
+///========================================================================================================
 class FormDataItem {
 	late String partName;
 	late String fileName;

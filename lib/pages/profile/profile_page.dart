@@ -121,7 +121,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Transform.translate(
-                            offset: Offset(40, 0),
+                            offset: const Offset(40, 0),
                             child: StreamBuilder(
                                 stream: EventNotifierService.getStream(AppEvents.userProfileChange),
                                 builder: (ctx, data) {
@@ -165,9 +165,9 @@ class _ProfilePageState extends StateBase<ProfilePage> {
                                   Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      SizedBox(height: 8,),
+                                      const SizedBox(height: 8,),
                                       Text(user.nameFamily, maxLines: 1,).bold().fsR(5),
-                                      SizedBox(height: 10,),
+                                      const SizedBox(height: 10,),
                                       Text('${user.userId}_${user.userName}', maxLines: 1,).fsR(-2).alpha(),
                                     ],
                                   ),
@@ -180,25 +180,25 @@ class _ProfilePageState extends StateBase<ProfilePage> {
                                         ElevatedButton(
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor: AppThemes.instance.currentTheme.differentColor,
-                                            shape: CircleBorder(),
+                                            shape: const CircleBorder(),
                                             padding: EdgeInsets.zero,
                                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                             visualDensity: VisualDensity.compact,
                                           ),
                                             onPressed: changeAvatarClick,
-                                            child: Icon(AppIcons.picture, size: 15)
+                                            child: const Icon(AppIcons.picture, size: 15)
                                         ),
 
                                         ElevatedButton(
                                             style: ElevatedButton.styleFrom(
                                               backgroundColor: AppThemes.instance.currentTheme.differentColor,
-                                              shape: CircleBorder(),
+                                              shape: const CircleBorder(),
                                               padding: EdgeInsets.zero,
                                               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                               visualDensity: VisualDensity.compact,
                                             ),
                                             onPressed: changeNameFamilyClick,
-                                            child: Icon(AppIcons.edit, size: 15)
+                                            child: const Icon(AppIcons.edit, size: 15)
                                         ),
                                       ],
                                     ),
@@ -212,10 +212,10 @@ class _ProfilePageState extends StateBase<ProfilePage> {
                   ),
                 ),
 
-                SizedBox(height: 80,),
+                const SizedBox(height: 80,),
 
                 FlipInX(
-                  delay: Duration(milliseconds: 500),
+                  delay: const Duration(milliseconds: 500),
                   child: Card(
                     //color: ColorHelper.textToColor(user.nameFamily,),
                     color: AppThemes.instance.currentTheme.accentColor,
@@ -242,7 +242,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
                               ],
                             ),
 
-                          SizedBox(height: 15,),
+                          const SizedBox(height: 15,),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -255,7 +255,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
                             ],
                           ),
 
-                          SizedBox(height: 15),
+                          const SizedBox(height: 15),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -361,9 +361,9 @@ class _ProfilePageState extends StateBase<ProfilePage> {
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           child: Row(
             children: [
-              Icon(AppIcons.camera, size: 20),
-              SizedBox(width: 12),
-              Text('دوربین').bold(),
+              const Icon(AppIcons.camera, size: 20),
+              const SizedBox(width: 12),
+              const Text('دوربین').bold(),
             ],
           ),
         ),
@@ -382,9 +382,9 @@ class _ProfilePageState extends StateBase<ProfilePage> {
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: Row(
               children: [
-                Icon(AppIcons.picture, size:20),
-                SizedBox(width: 12),
-                Text('گالری').bold(),
+                const Icon(AppIcons.picture, size:20),
+                const SizedBox(width: 12),
+                const Text('گالری').bold(),
               ],
             ),
           ),
@@ -399,9 +399,9 @@ class _ProfilePageState extends StateBase<ProfilePage> {
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               child: Row(
                 children: [
-                  Icon(AppIcons.delete, size: 20),
-                  SizedBox(width: 12),
-                  Text('حذف').bold(),
+                  const Icon(AppIcons.delete, size: 20),
+                  const SizedBox(width: 12),
+                  const Text('حذف').bold(),
                 ],
               ),
             ),
@@ -534,7 +534,7 @@ class _ProfilePageState extends StateBase<ProfilePage> {
     js[Keys.forUserId] = user.userId;
     js[Keys.fileName] = fileName;
     js[Keys.partName] = partName;
-    DeviceInfoTools.attachApplicationInfo(js);
+    DeviceInfoTools.attachDeviceInfo(js);
 
     requester.httpRequestEvents.onFailState = (req, r) async {
       await hideLoading();

@@ -4,6 +4,7 @@ import 'package:iris_tools/widgets/irisSearchBar.dart';
 
 import 'package:app/structures/abstract/stateBase.dart';
 import 'package:app/structures/models/countryModel.dart';
+import 'package:app/tools/app/appDecoration.dart';
 import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appSizes.dart';
 import 'package:app/tools/app/appThemes.dart';
@@ -94,7 +95,7 @@ class CountrySelectScreenState extends StateBase<CountrySelectScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
             child: IrisSearchBar(
-              iconColor: AppThemes.checkPrimaryByWB(AppThemes.instance.currentTheme.primaryColor, AppThemes.instance.currentTheme.textColor),
+              iconColor: AppDecoration.checkPrimaryByWB(AppThemes.instance.currentTheme.primaryColor, AppThemes.instance.currentTheme.textColor),
               hint: t('selectCountry'),
               onChangeEvent: (t){
                 searchText = t;

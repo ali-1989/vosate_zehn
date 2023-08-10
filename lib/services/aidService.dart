@@ -19,11 +19,11 @@ class AidService {
 
   static void gotoAidPage(){
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    RouteTools.pushPage(RouteTools.getTopContext()!, AidPage());
+    RouteTools.pushPage(RouteTools.getTopContext()!, const AidPage());
   }
 
   static Future<bool> gotoZarinpalPage(BuildContext ctx) async {
-    RouteTools.pushPage(ctx, PayWebPage(url: 'https://zarinp.al/vosatezehn.ir'));
+    RouteTools.pushPage(ctx, const PayWebPage(url: 'https://zarinp.al/vosatezehn.ir'));
     return false;
   }
 
@@ -36,9 +36,9 @@ class AidService {
 
     final body = Column(
       children: [
-        Text(msg, style: AppThemes.bodyTextStyle()!.copyWith(fontSize: 14, fontWeight: FontWeight.bold)),
+        Text(msg, style: AppThemes.baseTextStyle().copyWith(fontSize: 14, fontWeight: FontWeight.bold)),
 
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         Row(
           children: [
             SizedBox(
@@ -53,7 +53,7 @@ class AidService {
               ),
             ),
 
-            SizedBox(width: 30),
+            const SizedBox(width: 30),
             TextButton(
                 onPressed: (){
                   RouteTools.popTopView();
@@ -77,7 +77,7 @@ class AidService {
   }
 
   static void checkShowDialog() async {
-    await Future.delayed(Duration(seconds: 15), (){});
+    await Future.delayed(const Duration(seconds: 15), (){});
 
     if(!SessionService.hasAnyLogin()){
       return;

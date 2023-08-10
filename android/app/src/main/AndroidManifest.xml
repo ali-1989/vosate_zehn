@@ -80,6 +80,8 @@
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.READ_PROFILE"/>
     <uses-permission android:name="android.permission.SEND_RESPOND_VIA_MESSAGE_SMS"/>
     <uses-permission android:name="android.permission.READ_PROFILE"/>
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
@@ -126,14 +128,14 @@
             android:required="false"/>
 
     <!-- 
-          android:name="io.flutter.app.FlutterApplication"
-
-           android:appCategory="productivity"
+            android:name="io.flutter.app.FlutterApplication"
+            android:name="${applicationName}"
+            android:appCategory="productivity"
            -->
 
     <application
         android:label="وسعت ذهن"
-        android:name="${applicationName}"
+        android:name=".MyApplication"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher"
         android:hardwareAccelerated="false"
@@ -149,7 +151,8 @@
         android:usesCleartextTraffic="true"
         android:requestLegacyExternalStorage="true"
         android:exported="true"
-        tools:ignore="GoogleAppIndexingWarning">
+        tools:ignore="GoogleAppIndexingWarning"
+        tools:replace="android:name">
 
 
         <activity
@@ -184,7 +187,17 @@
             </intent-filter>
         </activity>
 
-
+        <!-- for open/launch app files -->
+        <!-- old: android.support.v4.content.FileProvider -->
+        <provider
+                android:name="androidx.core.content.FileProvider"
+                android:authorities="${applicationId}.provider"
+                android:exported="false"
+                android:grantUriPermissions="true">
+            <meta-data
+                    android:name="android.support.FILE_PROVIDER_PATHS"
+                    android:resource="@xml/provider_paths"/>
+        </provider>
 
         <meta-data
             android:name="flutterEmbedding"

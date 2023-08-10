@@ -99,7 +99,7 @@ class DeviceInfoTools {
       js['device_type'] = 'Web';
       js['model'] = webDeviceInfo?.appName;
       js['brand'] = uAgent?.substring(0, min(50, uAgent.length));
-      js['api'] = webDeviceInfo?.platform;
+      js['SDK'] = webDeviceInfo?.platform;
 
       return js;
     }
@@ -108,39 +108,33 @@ class DeviceInfoTools {
       js['device_type'] = 'Android';
       js['model'] = androidDeviceInfo?.model;
       js['brand'] = androidDeviceInfo?.brand;
-      js['api'] = androidDeviceInfo?.version.sdkInt.toString();
+      js['SDK'] = androidDeviceInfo?.version.sdkInt.toString();
     }
     else if (System.isIOS()) {
       js['device_type'] = 'iOS';
       js['model'] = iosDeviceInfo?.model; //utsname.machine
       js['brand'] = iosDeviceInfo?.systemName;
-      js['api'] = iosDeviceInfo?.utsname.version.toString();
+      js['SDK'] = iosDeviceInfo?.utsname.version.toString();
     }
     else {
       js['device_type'] = 'unKnow';
     }
 
+    js['app_name'] = Constants.appName;
+    js['app_version_name'] = Constants.appVersionName;
+    js['app_version_code'] = Constants.appVersionCode;
+    js[Keys.deviceId] = deviceId;
+    js['fcm_token'] = FireBaseService.token;
+
     return js;
   }
+  static Map attachDeviceInfo(Map src, {UserModel? curUser}) {
+    src.addAll(mapDeviceInfo());
 
-  static Map<String, dynamic> mapApplicationInfo() {
-    final res = <String, dynamic>{};
-    res[Keys.deviceId] = deviceId;
-    res[Keys.appName] = Constants.appName;
-    res['app_version_code'] = Constants.appVersionCode;
-    res['app_version_name'] = Constants.appVersionName;
-
-    return res;
-  }
-
-  static Map attachApplicationInfo(Map src, {UserModel? curUser}) {
     final token = curUser?.token ?? SessionService.getLastLoginUser()?.token;
-
-    src.addAll(mapApplicationInfo());
 
     if (token?.token != null) {
       src[Keys.token] = token?.token;
-      src['fcm_token'] = FireBaseService.token;
     }
 
     return src;
