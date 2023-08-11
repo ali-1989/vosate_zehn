@@ -92,10 +92,13 @@ class VideoPlayerPageState extends StateBase<VideoPlayerPage> {
                     }*/
 
                     if(isVideoInit){
-                      return Chewie(controller: chewieVideoController!);
+                      return Directionality(
+                        textDirection: TextDirection.ltr,
+                          child: Chewie(controller: chewieVideoController!)
+                      );
                     }
 
-                    return Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   },
                 ),
             ),
@@ -149,7 +152,7 @@ class VideoPlayerPageState extends StateBase<VideoPlayerPage> {
         playerController = VideoPlayerController.file(File(widget.injectData.srcAddress));
         break;
       case VideoSourceType.network:
-        playerController = VideoPlayerController.network(widget.injectData.srcAddress);
+        playerController = VideoPlayerController.networkUrl(Uri.parse(widget.injectData.srcAddress));
         break;
       case VideoSourceType.bytes:
         break;
@@ -181,7 +184,7 @@ class VideoPlayerPageState extends StateBase<VideoPlayerPage> {
       showControlsOnInitialize: true,
       showOptions: true,
       playbackSpeeds: [1, 1.5, 2],
-      placeholder: Center(child: CircularProgressIndicator()),
+      placeholder: const Center(child: CircularProgressIndicator()),
       materialProgressColors: ChewieProgressColors(
           handleColor: AppThemes.instance.currentTheme.differentColor,
           playedColor: AppThemes.instance.currentTheme.differentColor,

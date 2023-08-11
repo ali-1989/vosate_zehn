@@ -299,7 +299,7 @@ class _LoginPageState extends StateBase<LoginPage> {
         padding: const EdgeInsets.symmetric(horizontal: 20),
         children: [
           const SizedBox(height: 30),
-          Text(AppMessages.enterVerifyCode.replaceFirst('#', LocaleHelper.embedLtr('${countryModel.countryPhoneCode} $phoneNumber')),
+          Text(AppMessages.enterVerifyCode.replaceFirst('#', LocaleHelper.overrideLtr('${countryModel.countryPhoneCode} $phoneNumber')),
             style: const TextStyle(fontWeight: FontWeight.bold),),
 
           const SizedBox(height: 10,),

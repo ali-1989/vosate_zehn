@@ -100,11 +100,8 @@ class DeviceInfoTools {
       js['model'] = webDeviceInfo?.appName;
       js['brand'] = uAgent?.substring(0, min(50, uAgent.length));
       js['SDK'] = webDeviceInfo?.platform;
-
-      return js;
     }
-
-    if (System.isAndroid()) {
+    else if (System.isAndroid()) {
       js['device_type'] = 'Android';
       js['model'] = androidDeviceInfo?.model;
       js['brand'] = androidDeviceInfo?.brand;
@@ -128,6 +125,7 @@ class DeviceInfoTools {
 
     return js;
   }
+
   static Map attachDeviceInfo(Map src, {UserModel? curUser}) {
     src.addAll(mapDeviceInfo());
 

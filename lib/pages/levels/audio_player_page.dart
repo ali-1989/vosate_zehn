@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:iris_tools/api/duration/durationFormatter.dart';
 import 'package:iris_tools/api/generator.dart';
+import 'package:iris_tools/api/helpers/localeHelper.dart';
 import 'package:iris_tools/api/helpers/mathHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 
@@ -138,10 +139,11 @@ class AudioPlayerPageState extends StateBase<AudioPlayerPage> {
 
                       const SizedBox(height: 10),
                       Row(
+                        textDirection: TextDirection.ltr,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          Text(LocaleHelper.overrideLtr(DurationFormatter.duration(currentTime, showSuffix: false))).color(Colors.white),
                           Text(DurationFormatter.duration(totalTime, showSuffix: false)).color(Colors.white),
-                          Text(DurationFormatter.duration(currentTime, showSuffix: false)).color(Colors.white),
                         ],
                       ),
 
@@ -154,7 +156,7 @@ class AudioPlayerPageState extends StateBase<AudioPlayerPage> {
                             type: MaterialType.circle,
                             child: Icon(isPlaying() ? AppIcons.pause : AppIcons.playArrow,
                               color: Colors.white,
-                              size: 40,
+                              size: 40 *pw,
                             ),
                         ),
                       ),
