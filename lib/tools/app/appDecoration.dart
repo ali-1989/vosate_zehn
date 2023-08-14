@@ -1,10 +1,12 @@
+import 'package:flutter/material.dart';
+
+import 'package:iris_tools/api/helpers/colorHelper.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+
 import 'package:app/managers/font_manager.dart';
 import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appSizes.dart';
 import 'package:app/tools/app/appThemes.dart';
-import 'package:flutter/material.dart';
-import 'package:iris_tools/api/helpers/colorHelper.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class AppDecoration {
   AppDecoration._();
@@ -14,13 +16,7 @@ class AppDecoration {
   static Color differentColor = const Color(0xFFFF006E);
   static Color orange = const Color(0xFFFF006E);
 
-  static InputDecoration inputBorder = const InputDecoration(
-    border: OutlineInputBorder(),
-    disabledBorder: OutlineInputBorder(),
-    focusedBorder: OutlineInputBorder(),
-    enabledBorder: OutlineInputBorder(),
-    errorBorder: OutlineInputBorder(),
-  );
+  
 
   static ClassicFooter classicFooter = const ClassicFooter(
     loadingText: '',

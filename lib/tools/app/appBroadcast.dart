@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:iris_tools/api/notifiers/extendValueNotifier.dart';
 import 'package:iris_tools/modules/stateManagers/refresh.dart';
 
-import 'package:app/pages/layout_page.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/views/baseComponents/splashPage.dart';
+import 'package:app/views/pages/layout_page.dart';
 
 class AppBroadcast {
   AppBroadcast._();
@@ -17,6 +17,7 @@ class AppBroadcast {
   static final RefreshController drawerMenuRefresher = RefreshController();
   static final ExtendValueNotifier<int> newAdvNotifier = ExtendValueNotifier<int>(0);
   static final ExtendValueNotifier<int> changeFavoriteNotifier = ExtendValueNotifier<int>(0);
+
   //---------------------- keys
   static LocalKey materialAppKey = UniqueKey();
   static final rootScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
@@ -41,10 +42,5 @@ class AppBroadcast {
     }
 
     viewUpdaterStream.sink.add(true);
-  }
-
-  static void gotoSplash() {
-    mustWaitToSplashTimer = true;
-    reBuildMaterial();
   }
 }

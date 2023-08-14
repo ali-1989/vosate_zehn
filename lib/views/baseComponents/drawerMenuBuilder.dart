@@ -12,12 +12,6 @@ import 'package:share_extend/share_extend.dart';
 
 import 'package:app/constants.dart';
 import 'package:app/managers/version_manager.dart';
-import 'package:app/pages/about_us_page.dart';
-import 'package:app/pages/contact_us_page.dart';
-import 'package:app/pages/favorites_page.dart';
-import 'package:app/pages/last_seen_page.dart';
-import 'package:app/pages/profile/profile_page.dart';
-import 'package:app/pages/sentences_page.dart';
 import 'package:app/services/aidService.dart';
 import 'package:app/services/download_upload_service.dart';
 import 'package:app/services/login_service.dart';
@@ -35,6 +29,12 @@ import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appSizes.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/routeTools.dart';
+import 'package:app/views/pages/about_us_page.dart';
+import 'package:app/views/pages/contact_us_page.dart';
+import 'package:app/views/pages/favorites_page.dart';
+import 'package:app/views/pages/last_seen_page.dart';
+import 'package:app/views/pages/profile/profile_page.dart';
+import 'package:app/views/pages/sentences_page.dart';
 
 class DrawerMenuBuilder {
   DrawerMenuBuilder._();

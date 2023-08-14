@@ -4,6 +4,7 @@ import 'package:iris_tools/models/dataModels/mediaModel.dart';
 import 'package:app/structures/enums/userType.dart';
 import 'package:app/structures/models/countryModel.dart';
 import 'package:app/system/keys.dart';
+import 'package:app/tools/app/appLocale.dart';
 import 'package:app/tools/uriTools.dart';
 
 class UserModel {
@@ -136,6 +137,27 @@ class UserModel {
     }
 
     return DateHelper.calculateAge(birthDate!);
+  }
+
+  String getSexEquivalent({int? sexNum}){
+    sexNum?? sex;
+
+    if(sexNum == null) {
+      return AppLocale.appLocalize.translate('unknown')!;
+    }
+
+    switch(sexNum){
+      case 0:
+        return AppLocale.appLocalize.translate('unknown')!;
+      case 1:
+        return AppLocale.appLocalize.translate('man')!;
+      case 2:
+        return AppLocale.appLocalize.translate('woman')!;
+      case 5:
+        return AppLocale.appLocalize.translate('bisexual')!;
+    }
+
+    return AppLocale.appLocalize.translate('unknown')!;
   }
 
   /*String get countryName {

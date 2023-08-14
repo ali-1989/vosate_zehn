@@ -12,6 +12,7 @@ import 'package:iris_tools/widgets/maxWidth.dart';
 import 'package:app/constants.dart';
 import 'package:app/managers/font_manager.dart';
 import 'package:app/managers/settings_manager.dart';
+import 'package:app/managers/splash_manager.dart';
 import 'package:app/services/firebase_service.dart';
 import 'package:app/structures/models/settingsModel.dart';
 import 'package:app/tools/app/appBroadcast.dart';
@@ -26,7 +27,7 @@ import 'package:app/tools/routeTools.dart';
 import 'package:app/views/baseComponents/splashPage.dart';
 
 ///================ call on any hot restart
-Future<void> main() async {
+void main() {
   PlatformDispatcher.instance.onError = mainIsolateError;
   FlutterError.onError = onErrorCatch;
 
@@ -111,7 +112,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     RouteTools.materialContext = context;
 
-    if(kIsWeb && !isInitialOk){
+    if(kIsWeb && !SplashManager.isFullInitialOk){
       return WidgetsApp(
         debugShowCheckedModeBanner: false,
         color: Colors.transparent,
@@ -138,13 +139,12 @@ class MyApp extends StatelessWidget {
           PointerDeviceKind.touch,
         },
       ),
-      locale: isInitialOk? SettingsManager.localSettings.appLocale : SettingsModel.defaultAppLocale,
+      locale: SplashManager.isFullInitialOk? SettingsManager.localSettings.appLocale : SettingsModel.defaultAppLocale,
       supportedLocales: AppLocale.getAssetSupportedLocales(),
-      localizationsDelegates: AppLocale.getLocaleDelegates(), // this do correct Rtl/Ltr
+      localizationsDelegates: AppLocale.getLocaleDelegates(), /// this do correct Rtl/Ltr
       /*localeResolutionCallback: (deviceLocale, supportedLocales) {
             return SettingsManager.localSettings.appLocale;
           },*/
-
       home: materialHomeBuilder(),
     );
   }

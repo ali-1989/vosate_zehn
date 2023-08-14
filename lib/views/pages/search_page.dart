@@ -1,4 +1,3 @@
-import 'package:app/tools/app/appDecoration.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/duration/durationFormatter.dart';
@@ -9,9 +8,6 @@ import 'package:iris_tools/widgets/irisSearchBar.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:app/managers/mediaManager.dart';
-import 'package:app/pages/levels/audio_player_page.dart';
-import 'package:app/pages/levels/content_view_page.dart';
-import 'package:app/pages/levels/video_player_page.dart';
 import 'package:app/services/favoriteService.dart';
 import 'package:app/services/session_service.dart';
 import 'package:app/structures/abstract/stateBase.dart';
@@ -20,6 +16,7 @@ import 'package:app/structures/middleWares/requester.dart';
 import 'package:app/structures/models/subBuketModel.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
+import 'package:app/tools/app/appDecoration.dart';
 import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/app/appIcons.dart';
 import 'package:app/tools/app/appImages.dart';
@@ -29,6 +26,9 @@ import 'package:app/tools/app_tools.dart';
 import 'package:app/tools/routeTools.dart';
 import 'package:app/tools/searchFilterTool.dart';
 import 'package:app/views/baseComponents/appBarBuilder.dart';
+import 'package:app/views/pages/levels/audio_player_page.dart';
+import 'package:app/views/pages/levels/content_view_page.dart';
+import 'package:app/views/pages/levels/video_player_page.dart';
 import 'package:app/views/states/emptyData.dart';
 import 'package:app/views/states/errorOccur.dart';
 import 'package:app/views/states/waitToLoad.dart';

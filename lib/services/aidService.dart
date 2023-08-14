@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
 
 import 'package:app/managers/settings_manager.dart';
-import 'package:app/pages/aid_page.dart';
-import 'package:app/pages/pay_web_page.dart';
 import 'package:app/services/session_service.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/appBroadcast.dart';
@@ -13,6 +11,8 @@ import 'package:app/tools/app/appDialogIris.dart';
 import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/routeTools.dart';
+import 'package:app/views/pages/aid_page.dart';
+import 'package:app/views/pages/pay_web_page.dart';
 
 class AidService {
   AidService._();

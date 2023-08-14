@@ -7,8 +7,6 @@ import 'package:iris_tools/widgets/irisImageView.dart';
 import 'package:iris_tools/widgets/sizePosition/sizeInInfinity.dart';
 
 import 'package:app/managers/mediaManager.dart';
-import 'package:app/pages/levels/audio_player_page.dart';
-import 'package:app/pages/levels/video_player_page.dart';
 import 'package:app/services/session_service.dart';
 import 'package:app/structures/abstract/stateBase.dart';
 import 'package:app/structures/enums/appAssistKeys.dart';
@@ -28,6 +26,8 @@ import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/app/appToast.dart';
 import 'package:app/tools/routeTools.dart';
 import 'package:app/views/baseComponents/appBarBuilder.dart';
+import 'package:app/views/pages/levels/audio_player_page.dart';
+import 'package:app/views/pages/levels/video_player_page.dart';
 import 'package:app/views/states/errorOccur.dart';
 import 'package:app/views/states/waitToLoad.dart';
 

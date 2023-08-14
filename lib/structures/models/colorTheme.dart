@@ -6,8 +6,6 @@ import 'package:iris_tools/api/helpers/colorHelper.dart';
 
 class ColorTheme {
   String themeName = 'theme_${Random().nextInt(1000)}';
-  double fontSize = 12;
-  double buttonIconSize = 20;
   late HSLColor primaryHsl; // in Init
   late MaterialColor primarySwatch;
   Color primaryColor = Colors.blue;
@@ -180,14 +178,6 @@ class ColorTheme {
     }
   }
 
-  Color whiteOrAppBarItemOnDifferent() {
-    if (ColorHelper.isNearColors(differentColor, [Colors.white, Colors.grey[200]!])) {
-      return appBarItemColor;
-    } else {
-      return Colors.white;
-    }
-  }
-
   Color primaryOrDifferentOn(Color back) {
     if (ColorHelper.isNearColor(primaryColor, back)) {
       return differentColor;
@@ -216,37 +206,8 @@ class ColorTheme {
     }
   }
 
-  TextStyle get dialogButtonsTextStyle {
-    return baseTextStyle.copyWith(fontSize: fontSize + 2, color: ColorHelper.darkPlus(primaryColor));
-  }
-
   Color get dialogButtonsColor => Colors.transparent;
   Color get dialogSelectedButtonColor => primaryColor;
-
-  ShapeBorder get dialogButtonsShape {
-    return RoundedRectangleBorder(side: BorderSide(color: primaryColor, width: 1)
-    , borderRadius: BorderRadius.circular(6.0)
-    );
-    //return StadiumBorder();
-  }
-  ///---------- static --------------------------------------------------------------------------
-  static InputDecoration noneBordersInputDecoration = const InputDecoration(
-    border: InputBorder.none,
-    enabledBorder: InputBorder.none,
-    focusedBorder: InputBorder.none,
-    focusedErrorBorder: InputBorder.none,
-    disabledBorder: InputBorder.none,
-    errorBorder: InputBorder.none,
-  );
-
-  static InputDecoration outlineBordersInputDecoration = const InputDecoration(
-    border: OutlineInputBorder(),
-    enabledBorder: OutlineInputBorder(),
-    focusedBorder: OutlineInputBorder(),
-    focusedErrorBorder: OutlineInputBorder(),
-    disabledBorder: OutlineInputBorder(),
-    errorBorder: OutlineInputBorder(),
-  );
 
   static ThemeData getThemeData(BuildContext context) {
     return Theme.of(context);

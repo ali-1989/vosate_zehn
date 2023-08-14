@@ -91,6 +91,7 @@ class SettingsModel {
   }
 
   void _prepareSettings() {
+    //final locale = System.getCurrentLocalizationsLocale(context);
     colorTheme ??= AppThemes.instance.currentTheme.themeName;
 
     FontManager.fetchFontThemeData(appLocale.languageCode);

@@ -63,14 +63,14 @@ android {
 
     signingConfigs {
         debug {
-            storeFile file('E:\\Programming\\Projects\\FlutterProjects\\VosateZehn\\VosateZehn\\android\\app\\key.keystore')
+            storeFile file('E:\\Programming\\Projects\\FlutterProjects\\VosateZehn\\VosateZehn\\android\\vz.keystore')
             keyAlias 'b4a'
             keyPassword 'a6987@7896b'
             storePassword 'a6987@7896b'
         }
 
         release {
-            storeFile file('E:\\Programming\\Projects\\FlutterProjects\\VosateZehn\\VosateZehn\\android\\app\\key.keystore')
+            storeFile file('E:\\Programming\\Projects\\FlutterProjects\\VosateZehn\\VosateZehn\\android\\vz.keystore')
             keyAlias 'b4a'
             keyPassword 'a6987@7896b'
             storePassword 'a6987@7896b'

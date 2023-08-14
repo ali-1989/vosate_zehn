@@ -44,10 +44,10 @@ import 'package:app/tools/app/appToast.dart';
 import 'package:app/tools/deviceInfoTools.dart';
 import 'package:app/tools/permissionTools.dart';
 import 'package:app/tools/routeTools.dart';
+import 'package:app/views/baseComponents/appBarBuilder.dart';
 import 'package:app/views/components/changeNameFamilyView.dart';
 import 'package:app/views/components/dateComponents/selectDateCalendarView.dart';
 import 'package:app/views/components/selectGenderView.dart';
-import 'package:app/views/baseComponents/appBarBuilder.dart';
 
 class ProfilePage extends StatefulWidget{
 

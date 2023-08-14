@@ -7,7 +7,6 @@ import 'package:numberpicker/numberpicker.dart';
 
 import 'package:app/managers/settings_manager.dart';
 import 'package:app/system/extensions.dart';
-import 'package:app/tools/app/appSizes.dart';
 import 'package:app/tools/app/appSnack.dart';
 import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/dateTools.dart';
@@ -193,7 +192,7 @@ class SelectDateTimeCalendarViewState extends State<SelectDateTimeCalendarView> 
                 Directionality(
                   textDirection: TextDirection.ltr,
                   child: SizedBox(
-                    height: AppSizes.webFontSize(120),
+                    height: 120,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -209,11 +208,11 @@ class SelectDateTimeCalendarViewState extends State<SelectDateTimeCalendarView> 
                             itemWidth: 50,
                             itemHeight: 40,
                             textStyle: AppThemes.baseTextStyle().copyWith(
-                              fontSize: AppSizes.webFontSize(16),
+                              fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
                             selectedTextStyle: TextStyle(
-                              fontSize: AppSizes.webFontSize(16),
+                              fontSize: 16,
                               fontWeight: FontWeight.bold,
                               color: AppThemes.instance.currentTheme.activeItemColor,
                             ),
@@ -249,11 +248,11 @@ class SelectDateTimeCalendarViewState extends State<SelectDateTimeCalendarView> 
                             itemWidth: 40,
                             itemHeight: 40,
                             textStyle: AppThemes.baseTextStyle().copyWith(
-                              fontSize: AppSizes.webFontSize(15),
+                              fontSize: 15,
                               fontWeight: FontWeight.bold,
                             ),
                             selectedTextStyle: TextStyle(
-                              fontSize: AppSizes.webFontSize(16),
+                              fontSize: 16,
                               fontWeight: FontWeight.bold,
                               color: AppThemes.instance.currentTheme.activeItemColor,//AppThemes.checkPrimaryByWB(AppThemes.currentTheme.primaryColor, AppThemes.currentTheme.differentColor),
                             ),
@@ -288,11 +287,11 @@ class SelectDateTimeCalendarViewState extends State<SelectDateTimeCalendarView> 
                             itemWidth: 40,
                             itemHeight: 40,
                             textStyle: AppThemes.baseTextStyle().copyWith(
-                              fontSize: AppSizes.webFontSize(15),
+                              fontSize: 15,
                               fontWeight: FontWeight.bold,
                             ),
                             selectedTextStyle: TextStyle(
-                              fontSize: AppSizes.webFontSize(16),
+                              fontSize: 16,
                               fontWeight: FontWeight.bold,
                               color: AppThemes.instance.currentTheme.activeItemColor,
                             ),
@@ -322,11 +321,11 @@ class SelectDateTimeCalendarViewState extends State<SelectDateTimeCalendarView> 
                               itemWidth: 30,
                               itemHeight: 40,
                               textStyle: AppThemes.baseTextStyle().copyWith(
-                                fontSize: AppSizes.webFontSize(15),
+                                fontSize: 15,
                                 fontWeight: FontWeight.bold,
                               ),
                               selectedTextStyle: TextStyle(
-                                fontSize: AppSizes.webFontSize(16),
+                                fontSize: 16,
                                 fontWeight: FontWeight.bold,
                                 color: AppThemes.instance.currentTheme.activeItemColor,
                               ),
@@ -359,11 +358,11 @@ class SelectDateTimeCalendarViewState extends State<SelectDateTimeCalendarView> 
                               itemWidth: 30,
                               itemHeight: 40,
                               textStyle: AppThemes.baseTextStyle().copyWith(
-                                fontSize: AppSizes.webFontSize(15),
+                                fontSize: 15,
                                 fontWeight: FontWeight.bold,
                               ),
                               selectedTextStyle: TextStyle(
-                                fontSize: AppSizes.webFontSize(16),
+                                fontSize: 16,
                                 fontWeight: FontWeight.bold,
                                 color: AppThemes.instance.currentTheme.activeItemColor,
                               ),

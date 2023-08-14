@@ -109,14 +109,6 @@ class AppSizes {
     return instance.appWidth > sizeOfBigScreen;
   }
 
-  static double webFontSize(double size){
-    if(kIsWeb) {
-      return size * 1.1;
-    }
-
-    return size;
-  }
-
   double? getPixelRatio(){
     return pixelRatio;
   }

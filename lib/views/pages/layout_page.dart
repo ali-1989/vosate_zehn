@@ -6,9 +6,6 @@ import 'package:shaped_bottom_bar/models/shaped_item_object.dart';
 import 'package:shaped_bottom_bar/shaped_bottom_bar.dart';
 import 'package:shaped_bottom_bar/utils/arrays.dart';
 
-import 'package:app/pages/home_page.dart';
-import 'package:app/pages/levels/bucket_page.dart';
-import 'package:app/pages/search_page.dart';
 import 'package:app/services/aidService.dart';
 import 'package:app/structures/abstract/stateBase.dart';
 import 'package:app/structures/enums/enums.dart';
@@ -18,6 +15,9 @@ import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/routeTools.dart';
 import 'package:app/views/baseComponents/appBarBuilder.dart';
 import 'package:app/views/baseComponents/drawerMenuBuilder.dart';
+import 'package:app/views/pages/home_page.dart';
+import 'package:app/views/pages/levels/bucket_page.dart';
+import 'package:app/views/pages/search_page.dart';
 
 class LayoutPage extends StatefulWidget{
 

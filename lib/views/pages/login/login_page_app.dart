@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:app/system/commonHttpHandler.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -12,13 +11,12 @@ import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
-import 'package:app/pages/login/register_page.dart';
-import 'package:app/pages/term_page.dart';
 import 'package:app/services/google_service.dart';
 import 'package:app/services/login_service.dart';
 import 'package:app/services/session_service.dart';
 import 'package:app/structures/abstract/stateBase.dart';
 import 'package:app/structures/models/countryModel.dart';
+import 'package:app/system/commonHttpHandler.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appImages.dart';
@@ -32,6 +30,8 @@ import 'package:app/tools/countryTools.dart';
 import 'package:app/tools/routeTools.dart';
 import 'package:app/views/components/countrySelect.dart';
 import 'package:app/views/components/phoneNumberInput.dart';
+import 'package:app/views/pages/login/register_page.dart';
+import 'package:app/views/pages/term_page.dart';
 
 class LoginPage extends StatefulWidget{
 

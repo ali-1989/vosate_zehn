@@ -1,14 +1,15 @@
-import 'package:app/services/login_service.dart';
-import 'package:app/tools/app/appCache.dart';
-import 'package:app/views/states/waitToLoad.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:app/pages/layout_page.dart';
-import 'package:app/pages/login/login_page.dart';
+import 'package:iris_route/iris_route.dart';
+
+import 'package:app/services/login_service.dart';
 import 'package:app/services/session_service.dart';
 import 'package:app/tools/app/appBroadcast.dart';
-import 'package:iris_route/iris_route.dart';
+import 'package:app/tools/app/appCache.dart';
+import 'package:app/views/pages/layout_page.dart';
+import 'package:app/views/pages/login/login_page.dart';
+import 'package:app/views/states/waitToLoad.dart';
 
 class RouteDispatcher {
   RouteDispatcher._();

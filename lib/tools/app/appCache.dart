@@ -28,8 +28,7 @@ class AppCache {
     downloadingCache.deleteTimeout(tag);
   }
 
-  static bool canCallMethodAgain(String key, {Duration dur = const Duration(seconds: 8)}){
+  static bool canCallMethodAgain(String key, {Duration dur = const Duration(seconds: 6)}){
     return AppCache.timeoutCache.addTimeout(key, dur);
   }
-  
 }

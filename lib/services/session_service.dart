@@ -7,7 +7,6 @@ import 'package:app/structures/enums/appEvents.dart';
 import 'package:app/structures/enums/userType.dart';
 import 'package:app/structures/models/userModel.dart';
 import 'package:app/tools/app/appDb.dart';
-import 'package:app/tools/app/appLocale.dart';
 import '/managers/settings_manager.dart';
 import '/system/extensions.dart';
 import '/system/keys.dart';
@@ -279,25 +278,6 @@ class SessionService {
 				Conditions().add(Condition()..key = Keys.userId..value = userId));
 
 		return res > 0;
-	}
-
-	static String getSexEquivalent(int? sex){
-		if(sex == null) {
-		  return AppLocale.appLocalize.translate('unknown')!;
-		}
-
-		switch(sex){
-			case 0:
-				return AppLocale.appLocalize.translate('unknown')!;
-			case 1:
-				return AppLocale.appLocalize.translate('man')!;
-			case 2:
-				return AppLocale.appLocalize.translate('woman')!;
-			case 5:
-				return AppLocale.appLocalize.translate('bisexual')!;
-		}
-
-		return AppLocale.appLocalize.translate('unknown')!;
 	}
 
 	static UserModel getGuestUser(){

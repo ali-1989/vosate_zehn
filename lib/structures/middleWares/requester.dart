@@ -1,4 +1,3 @@
-import 'package:app/managers/api_manager.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
@@ -7,6 +6,7 @@ import 'package:iris_tools/api/helpers/jsonHelper.dart';
 import 'package:iris_tools/api/logger/logger.dart';
 import 'package:iris_tools/api/tools.dart';
 
+import 'package:app/managers/api_manager.dart';
 import 'package:app/system/commonHttpHandler.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/appHttpDio.dart';

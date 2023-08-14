@@ -739,7 +739,7 @@ extension TextExtension on Text {
     );
   }
 
-  Widget fitWidthOverflow({double? maxWidth}) {
+  Widget fitWidthOverflow({double? maxWidth, double? minOfFontSize}) {
     return LayoutBuilder(
       builder: (context, size){
         final defaultTextStyle = DefaultTextStyle.of(context);
@@ -772,6 +772,10 @@ extension TextExtension on Text {
         while(exceeded){
           fontSize = fontSize -.5;
           myStyle = myStyle!.copyWith(fontSize: fontSize);
+
+          if(minOfFontSize != null && fontSize < minOfFontSize){
+            break;
+          }
 
           tp = TextPainter(
             maxLines: maxLines,

@@ -9,18 +9,18 @@ import 'package:iris_tools/api/generator.dart';
 import 'package:iris_tools/api/helpers/localeHelper.dart';
 import 'package:iris_tools/api/helpers/mathHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
+import 'package:iris_tools/widgets/circle_container.dart';
 
-import 'package:app/pages/levels/playback_disposition.dart';
-import 'package:app/pages/levels/slider.dart';
 import 'package:app/structures/abstract/stateBase.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/tools/app/appIcons.dart';
 import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appSizes.dart';
 import 'package:app/views/baseComponents/appBarBuilder.dart';
+import 'package:app/views/pages/levels/playback_disposition.dart';
+import 'package:app/views/pages/levels/slider.dart';
 
-/// for iOS: must visit page and add code to Info.plist
-
+/// todo. for iOS: must visit page and add code to Info.plist
 //todo. add assist for time display, and list of subscriptions
 
 enum AudioSourceType {
@@ -151,9 +151,10 @@ class AudioPlayerPageState extends StateBase<AudioPlayerPage> {
 
                       GestureDetector(
                         onTap: playPauseButton,
-                        child: Material(
-                          color: Colors.white.withAlpha(50),
-                            type: MaterialType.circle,
+                        child: CircleContainer(
+                          backColor: Colors.white.withAlpha(50),
+                            size: 50*pw,
+                            border: Border.all(style: BorderStyle.none, width: 0),
                             child: Icon(isPlaying() ? AppIcons.pause : AppIcons.playArrow,
                               color: Colors.white,
                               size: 40 *pw,

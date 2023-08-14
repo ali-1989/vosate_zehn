@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:app/pages/login/register_page.dart';
-import 'package:app/system/commonHttpHandler.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:dio/dio.dart';
@@ -19,6 +17,7 @@ import 'package:app/services/session_service.dart';
 import 'package:app/structures/enums/appEvents.dart';
 import 'package:app/structures/models/countryModel.dart';
 import 'package:app/structures/models/userModel.dart';
+import 'package:app/system/commonHttpHandler.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appHttpDio.dart';
@@ -27,6 +26,7 @@ import 'package:app/tools/app/appSheet.dart';
 import 'package:app/tools/app/appToast.dart';
 import 'package:app/tools/deviceInfoTools.dart';
 import 'package:app/tools/routeTools.dart';
+import 'package:app/views/pages/login/register_page.dart';
 
 class LoginService {
   LoginService._();

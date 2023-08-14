@@ -10,9 +10,6 @@ import 'package:iris_tools/widgets/irisImageView.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:app/managers/mediaManager.dart';
-import 'package:app/pages/levels/audio_player_page.dart';
-import 'package:app/pages/levels/content_view_page.dart';
-import 'package:app/pages/levels/video_player_page.dart';
 import 'package:app/services/lastSeenService.dart';
 import 'package:app/structures/enums/enums.dart';
 import 'package:app/structures/models/advModel.dart';
@@ -20,6 +17,9 @@ import 'package:app/structures/models/subBuketModel.dart';
 import 'package:app/tools/app/appDialogIris.dart';
 import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/routeTools.dart';
+import 'package:app/views/pages/levels/audio_player_page.dart';
+import 'package:app/views/pages/levels/content_view_page.dart';
+import 'package:app/views/pages/levels/video_player_page.dart';
 
 class CarouselManager {
   CarouselManager._();

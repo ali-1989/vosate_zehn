@@ -95,14 +95,20 @@
 
     <!-- ..........................  others -->
     <!--
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     -->
     <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.SENSORS"/>
     <!--
+    // Android Q+, notificationBuilder.setFullScreenIntent(pendingIntent), for(incoming phone call/alarm clock)
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT"/>
+
+    // Android 13+, for (notifications/create chanel)
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
+    // RECEIVE_BOOT_COMPLETED: show AutoStart switch in app info, allow auto boot like alarm, must enable by user
     -->
     <!-- ============================== uses-feature ============================================== -->
     <uses-feature
@@ -128,9 +134,11 @@
             android:required="false"/>
 
     <!-- 
-            android:name="io.flutter.app.FlutterApplication"
-            android:name="${applicationName}"
+            android:name="${applicationName}" or ".MyApplication" or "io.flutter.app.FlutterApplication"
             android:appCategory="productivity"
+            allowBackup: for (adb backup and adb restore)
+            persistent: system app flag. useful for platform developers or hardware vendors. prevents app from being automatically killed
+
            -->
 
     <application
@@ -138,7 +146,7 @@
         android:name=".MyApplication"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher"
-        android:hardwareAccelerated="false"
+        android:hardwareAccelerated="true"
         android:allowBackup="true"
         android:allowClearUserData="false"
         android:excludeFromRecents="false"
@@ -147,7 +155,6 @@
         android:largeHeap="false"
         android:supportsRtl="true"
         android:layoutDirection="rtl"
-        android:persistent="true"
         android:usesCleartextTraffic="true"
         android:requestLegacyExternalStorage="true"
         android:exported="true"
@@ -161,7 +168,6 @@
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
-            android:hardwareAccelerated="true"
             android:showWhenLocked="true"
             android:showOnLockScreen="true"
             android:turnScreenOn="true"

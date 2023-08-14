@@ -4,9 +4,6 @@ import 'package:iris_tools/api/duration/durationFormatter.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:iris_tools/widgets/irisImageView.dart';
 
-import 'package:app/pages/levels/audio_player_page.dart';
-import 'package:app/pages/levels/content_view_page.dart';
-import 'package:app/pages/levels/video_player_page.dart';
 import 'package:app/services/favoriteService.dart';
 import 'package:app/services/lastSeenService.dart';
 import 'package:app/structures/abstract/stateBase.dart';
@@ -21,6 +18,9 @@ import 'package:app/tools/app/appThemes.dart';
 import 'package:app/tools/app/appToast.dart';
 import 'package:app/tools/routeTools.dart';
 import 'package:app/views/baseComponents/appBarBuilder.dart';
+import 'package:app/views/pages/levels/audio_player_page.dart';
+import 'package:app/views/pages/levels/content_view_page.dart';
+import 'package:app/views/pages/levels/video_player_page.dart';
 import 'package:app/views/states/emptyData.dart';
 import 'package:app/views/states/waitToLoad.dart';
 
