@@ -131,4 +131,5 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:31.2.2')
     //implementation 'androidx.annotation:annotation:1.4.0'
     //implementation 'androidx.multidex:multidex:2.0.1'
+    //implementation fileTree(dir: 'E:\\Programming\\.gradle\\caches\\modules-2\\files-2.1\\io.flutter\\flutter_embedding_debug\\1.0.0-d44b5a94c976fbb65815374f61ab5392a220b084\\5ad0fb193f143c1352aef2c48ca10a99b3eadd1e', include: ['*.aar', '*.jar'], exclude: [])
 }

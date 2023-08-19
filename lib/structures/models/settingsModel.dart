@@ -46,13 +46,20 @@ class SettingsModel {
     calendarType = CalendarTypeHelper.calendarTypeFrom(map['calendar_type_name']);
     dateFormat = map['date_format']?? defaultDateFormat;
     colorTheme = map[Keys.setting$colorThemeName];
-    lastToBackgroundTs = map[Keys.setting$toBackgroundTs];
     confirmOnExit = map[Keys.setting$confirmOnExit]?? true;
     httpAddress = map['http_address']?? defaultHttpAddress;
     wsAddress = map['ws_address']?? defaultWsAddress;
     proxyAddress = map['proxy_address']?? defaultProxyAddress;
     currentVersion = map[Keys.setting$currentVersion];
     notificationDailyText = map[Keys.setting$notificationDailyText]?? true;
+    ///-- Lock
+    {
+      //lockApp = map[Keys.setting$lockApp] ?? false;
+      //unLockByBiometric = map[Keys.setting$unLockByBiometric] ?? false;
+      //unLockByNumber = map[Keys.setting$unLockByNumber] ?? false;
+      //appNumberLock = map[Keys.setting$numberLock];
+      lastToBackgroundTs = map[Keys.setting$toBackgroundTs];
+    }
 
     _prepareSettings();
   }

@@ -15,12 +15,25 @@ import 'package:app/services/session_service.dart';
 import 'package:app/tools/app/appDirectories.dart';
 import 'package:app/tools/deviceInfoTools.dart';
 
+
+
+Future onBridgeCall(call) async {
+  if(call.method == 'report_error') {
+    LogTools.reportError(call.arguments);
+  }
+  else {
+    print('::::::::::::::: ${call.method}');
+  }
+
+  return null;
+}
+///=============================================================================
 class LogTools {
   LogTools._();
 
   static late Logger logger;
   static late Reporter reporter;
-  static JavaBridge? _errorBridge;
+  static JavaBridge? androidBridge;
   static JavaBridge? assistanceBridge;
   static List avoidReport = <String>[];
 
@@ -42,7 +55,7 @@ class LogTools {
   }
 
   static void initErrorReport(){
-    if(_errorBridge != null){
+    if(androidBridge != null){
       return;
     }
 
@@ -50,21 +63,14 @@ class LogTools {
     avoidReport.add('has a negative minimum');
     avoidReport.add('slot == null');
     avoidReport.add('FIS_AUTH_ERROR'); // firebase
+    avoidReport.add('RenderFlex overflowed by');
 
-    _errorBridge = JavaBridge();
+    androidBridge = JavaBridge();
     assistanceBridge = JavaBridge();
 
-    _errorBridge!.init('error_handler', (call) async {
-      if(call.method == 'report_error') {
-        reportError(call.arguments);
-      }
-
-      return null;
-    });
+    androidBridge!.init('my_android_channel', onBridgeCall);
 
     assistanceBridge!.init('assistance', (call) async {
-      /**/
-
       return null;
     });
   }
@@ -110,7 +116,7 @@ class LogTools {
 /*
 echo
 echo_arg
-throw_error   'throw_error', [{'delay': 15000}]
+throw_error   'throw_error', [{'delay': 5000}]
 set_kv
 get_kv
 setAppIsRun
