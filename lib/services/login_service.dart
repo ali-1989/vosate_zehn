@@ -395,4 +395,24 @@ class LoginService {
       }
     }
   }
+
+  static Future<String> findCountryWithIP() async {
+    final url = 'https://api.country.is';
+
+    HttpItem http = HttpItem(fullUrl: url);
+    http.method = 'GET';
+
+    final res = AppHttpDio.send(http);
+
+    return res.response
+        .then((value) {
+          print(value);
+          if(res.isOk){
+            return res.getBodyAsJson()!['country'] as String;
+          }
+
+          return '-';
+    })
+    .onError((error, stackTrace) => '-e-');
+  }
 }

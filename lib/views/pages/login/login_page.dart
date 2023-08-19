@@ -61,6 +61,12 @@ class _LoginPageState extends StateBase<LoginPage> {
     super.initState();
 
     isIran = countryIso == 'IR';
+
+    LoginService.findCountryWithIP().then((value) {
+      countryIso = value;
+      isIran = countryIso == 'IR';
+    });
+
     flipCardController = FlipCardController();
     phoneNumberController = PhoneNumberInputController();
     phoneNumberController.setOnTapCountryArrow(onTapCountryArrow);
@@ -324,7 +330,7 @@ class _LoginPageState extends StateBase<LoginPage> {
               textDirection: TextDirection.ltr,
               child: PinCodeTextField(
                 controller: pinCodeCtr,
-                //key: pinCodeKey,
+                autoDisposeControllers: false,
                 appContext: context,
                 length: 4,
                 obscureText: false,
@@ -346,7 +352,7 @@ class _LoginPageState extends StateBase<LoginPage> {
                   pinCode = value;
                 },
                 beforeTextPaste: (text) {
-                 //if return true then it will show the paste confirmation dialog. Otherwise nothing will happen.
+                  //if return true then it will show the paste confirmation dialog. Otherwise nothing will happen.
                   return true;
                 },
               ),
@@ -490,7 +496,6 @@ class _LoginPageState extends StateBase<LoginPage> {
     stopWatchTimer.onResetTimer();
     stopWatchTimer.onStartTimer();
 
-    //pinCodeKey = ValueKey(Generator.generateKey(2));
     callState();
 
     LoginService.requestSendOtp(countryModel: countryModel, phoneNumber: phoneNumber).then((value) {
@@ -499,6 +504,7 @@ class _LoginPageState extends StateBase<LoginPage> {
       }
     });
 
+    pinCodeCtr.text = '';
     flipCardController.flipcard();
   }
 
