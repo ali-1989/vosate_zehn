@@ -348,6 +348,14 @@ class AppMessages {
     return 'شماره موبایل خود را وارد کنید';
   }
 
+  static String get notCorrectMobileInfo {
+    return 'شماره موبایل پذیرفته نیست';
+  }
+
+  static String get mustLiveInIran {
+    return 'فقط برای کاربران داخل ایران';
+  }
+
   static String get pleaseEnterVerifyCode {
     return 'لطفا کد ارسال شده را وارد کنید';
   }

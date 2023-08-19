@@ -1,11 +1,9 @@
-import 'package:app/tools/log_tools.dart';
 import 'package:flutter/material.dart';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:iris_tools/api/duration/durationFormatter.dart';
 import 'package:iris_tools/api/helpers/urlHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
-import 'package:iris_tools/plugins/javaBridge.dart';
 import 'package:iris_tools/widgets/irisImageView.dart';
 import 'package:iris_tools/widgets/keepAliveWrap.dart';
 
@@ -530,14 +528,6 @@ class _HomePageState extends StateBase<HomePage> {
   }
 
   void setFavorite(SubBucketModel itm) async {
-    print('xxxxxxxxxxxx setFavorite xxxxxxxxxxxx>');
-    LogTools.androidBridge!.invokeMethod('echo').then((value) => print(value));
-    //LogTools.assistanceBridge!.invokeMethod('echo').then((value) => print(value));
-    LogTools.assistanceBridge!.invokeMethodByArgs('throw_error', [{'delay': 5000}]).then((value) => print(value));
-
-  }
-
-  void setFavorite2(SubBucketModel itm) async {
     itm.isFavorite = !itm.isFavorite;
     bool res;
 

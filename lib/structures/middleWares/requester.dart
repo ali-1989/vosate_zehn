@@ -126,11 +126,11 @@ class Requester {
         if (_httpRequester.requestOptions?.data is String){
           final str = _httpRequester.requestOptions!.data as String;
 
-          if(str.contains(Keys.requestZone)) {
+          /*if(str.contains(Keys.requestZone)) {
             int start = str.indexOf(Keys.requestZone)+15;
 
             request = str.substring(start, start+15);
-          }
+          }*/
         }
 
         Tools.verbosePrint('@@@ API CALLED >>> url:[$url]  request:[$request]  response ====>>  status:[${_httpRequester.responseData?.statusCode}] data:$val');

@@ -237,8 +237,8 @@ class _ProfilePageState extends StateBase<ProfilePage> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('${AppMessages.email}:').color(Colors.white),
-                                Text(user.email??'').color(Colors.white).bold(),
+                                Text('${AppMessages.email}:  ').color(Colors.white),
+                                Flexible(child: Text(user.email??'', maxLines: 1,).color(Colors.white).bold()),
                               ],
                             ),
 

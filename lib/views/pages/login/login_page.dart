@@ -52,12 +52,15 @@ class _LoginPageState extends StateBase<LoginPage> {
   int timerValueSec = 60;
   bool showResendOtpButton = false;
   bool loginByMobile = true;
+  String countryIso = WidgetsBinding.instance.platformDispatcher.locale.countryCode?? 'IR';
+  late bool isIran;
 
 
   @override
   void initState(){
     super.initState();
 
+    isIran = countryIso == 'IR';
     flipCardController = FlipCardController();
     phoneNumberController = PhoneNumberInputController();
     phoneNumberController.setOnTapCountryArrow(onTapCountryArrow);
@@ -114,10 +117,9 @@ class _LoginPageState extends StateBase<LoginPage> {
             ),
           ),
 
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10),
-              child: Align(
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10),
+            child: Align(
                 child: FlipCard(
                     rotateSide: RotateSide.bottom,
                     onTapFlipping: false,
@@ -126,7 +128,6 @@ class _LoginPageState extends StateBase<LoginPage> {
                     frontWidget: buildFrontFlip(),
                     backWidget: buildBackFlip()
                 )
-              ),
             ),
           ),
         ],
@@ -135,7 +136,7 @@ class _LoginPageState extends StateBase<LoginPage> {
   }
 
   Widget buildFrontFlip() {
-    if(loginByMobile){
+    if(loginByMobile && isIran){
       return buildFrontFlipWithMobile();
     }
 
@@ -154,14 +155,16 @@ class _LoginPageState extends StateBase<LoginPage> {
           children: [
             const SizedBox(height: 30),
             Text(AppMessages.pleaseEnterMobileToSendCode,
-              style: const TextStyle(fontWeight: FontWeight.bold),),
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
 
             const SizedBox(height: 30),
 
             PhoneNumberInput(
               controller: phoneNumberController,
-              countryCode: countryModel.countryPhoneCode,
+              countryCode: countryIso == 'IR'? countryModel.countryPhoneCode : '',
               numberHint: AppMessages.mobileNumber,
+              showCountrySection: countryIso == 'IR',
             ),
 
             const SizedBox(height: 25),
@@ -172,10 +175,13 @@ class _LoginPageState extends StateBase<LoginPage> {
 
             const SizedBox(height: 10),
 
-            ElevatedButton(
-                style: ElevatedButton.styleFrom(shape: const StadiumBorder()),
-                onPressed: onSendClick,
-                child: Text(AppMessages.send)
+            SizedBox(
+              width: 200,
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(shape: const StadiumBorder()),
+                  onPressed: onSendClick,
+                  child: Text(AppMessages.loginBtn)
+              ),
             ),
             /*SizedBox(
               width: double.maxFinite,
@@ -217,8 +223,6 @@ class _LoginPageState extends StateBase<LoginPage> {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
-          //shrinkWrap: true,
-          //padding: const EdgeInsets.symmetric(horizontal: 20),
           children: [
             const SizedBox(height: 30),
             Text(AppMessages.pleaseEnterEmailToSendVerifyEmail,
@@ -261,10 +265,13 @@ class _LoginPageState extends StateBase<LoginPage> {
 
             const SizedBox(height: 10),
 
-            ElevatedButton(
-                style: ElevatedButton.styleFrom(shape: const StadiumBorder()),
-                onPressed: onSendClick,
-                child: Text(AppMessages.send)
+            SizedBox(
+              width: 200,
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(shape: const StadiumBorder()),
+                  onPressed: onSendClick,
+                  child: Text(AppMessages.loginBtn)
+              ),
             ),
             /*SizedBox(
               width: double.maxFinite,
@@ -406,6 +413,10 @@ class _LoginPageState extends StateBase<LoginPage> {
   void signWithMobileClick() {
     loginByMobile = true;
     assistCtr.updateHead();
+
+    if(! isIran){
+      AppToast.showToast(context, AppMessages.mustLiveInIran);
+    }
   }
 
   void onChangeNumberCall() async {
@@ -452,10 +463,10 @@ class _LoginPageState extends StateBase<LoginPage> {
     countryModel.countryPhoneCode = phoneNumberController.getCountryCode()!;
     phoneNumber = phoneNumberController.getPhoneNumber()!;
 
-    if(countryModel.countryPhoneCode!.isEmpty){
+    /*if(countryModel.countryPhoneCode!.isEmpty){
       AppSnack.showInfo(context, AppMessages.enterCountryCode);
       return;
-    }
+    }*/
 
     if(phoneNumber.isEmpty){
       AppSnack.showInfo(context, AppMessages.enterPhoneNumber);
@@ -468,6 +479,11 @@ class _LoginPageState extends StateBase<LoginPage> {
 
     if(phoneNumber.startsWith('0')){
       phoneNumber = phoneNumber.substring(1);
+    }
+
+    if(phoneNumber.startsWith('+')){
+      AppSnack.showInfo(context, AppMessages.notCorrectMobileInfo);
+      return;
     }
 
     showResendOtpButton = false;

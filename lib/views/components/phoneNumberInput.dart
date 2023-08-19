@@ -10,10 +10,12 @@ class PhoneNumberInput extends StatefulWidget {
   final BoxDecoration? countryDecoration;
   final BoxDecoration? numberDecoration;
   final EdgeInsets? padding;
+  final bool showCountrySection;
 
   const PhoneNumberInput({
     Key? key,
     required this.controller,
+    this.showCountrySection = true,
     this.countryCode,
     this.numberHint,
     this.widgetDecoration,
@@ -77,40 +79,44 @@ class PhoneNumberInputState extends State<PhoneNumberInput> {
           padding: widget.padding?? const EdgeInsets.all(0),
           child: Row(
             children: [
-              DecoratedBox(
-                  decoration: countryDecoration,
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 35,
-                    child: TextField(
-                      controller: countryCtr,
-                      keyboardType: TextInputType.phone,
-                      onChanged: controller.onCountryTyping,
-                      decoration: inputDecoration,
-                    ),
-                  ),
 
-                  GestureDetector(
-                    behavior: HitTestBehavior.translucent,
-                    onTap: controller.onTapCountryArrow,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 12, top: 10, bottom: 10),
-                      child: Baseline(
-                        baselineType: TextBaseline.ideographic,
-                        baseline: 5,
-                        child: RotatedBox(
-                            quarterTurns: 3,
-                            child: Icon(AppIcons.arrowLeftIos,
-                              size: 14,
-                              color: theme.textTheme.bodyText1!.color!.withAlpha(180),
-                            )
+              Visibility(
+                visible: widget.showCountrySection,
+                child: DecoratedBox(
+                  decoration: countryDecoration,
+                  child: Row(
+                  children: [
+                    SizedBox(
+                      width: 35,
+                      child: TextField(
+                        controller: countryCtr,
+                        keyboardType: TextInputType.phone,
+                        onChanged: controller.onCountryTyping,
+                        decoration: inputDecoration,
+                      ),
+                    ),
+
+                    GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: controller.onTapCountryArrow,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 12, top: 10, bottom: 10),
+                        child: Baseline(
+                          baselineType: TextBaseline.ideographic,
+                          baseline: 5,
+                          child: RotatedBox(
+                              quarterTurns: 3,
+                              child: Icon(AppIcons.arrowLeftIos,
+                                size: 14,
+                                color: theme.textTheme.bodyLarge!.color!.withAlpha(180),
+                              )
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
+                ),
               ),
 
               const SizedBox(width: 10,),

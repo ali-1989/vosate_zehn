@@ -137,7 +137,6 @@ class LoginService {
 
     http.fullUrl = ApiManager.graphApi;
     http.method = 'POST';
-    http.debugMode = true;
     http.setBodyJson(js);
 
     final request = AppHttpDio.send(http);
