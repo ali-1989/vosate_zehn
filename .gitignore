@@ -37,7 +37,6 @@ migrate_working_dir/
 #/android/gradle.properties
 
 # Web related
-lib/generated_plugin_registrant.dart
 
 # Symbolication related
 app.*.symbols

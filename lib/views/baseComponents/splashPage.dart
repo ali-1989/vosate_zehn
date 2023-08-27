@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app/services/native_call_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +12,7 @@ import 'package:app/managers/settings_manager.dart';
 import 'package:app/managers/splash_manager.dart';
 import 'package:app/managers/version_manager.dart';
 import 'package:app/services/aidService.dart';
-import 'package:app/services/cron_task.dart';
+import 'package:app/services/wakeup_service.dart';
 import 'package:app/services/download_upload_service.dart';
 import 'package:app/services/firebase_service.dart';
 import 'package:app/services/login_service.dart';
@@ -188,7 +189,8 @@ class SplashPageState extends StateBase<SplashPage> {
 
   static Future<void> _lazyInitCommands() async {
     try {
-      CronTask.init();
+      WakeupService.init();
+      NativeCallService.init();
 
       WebsocketService.prepareWebSocket(SettingsManager.localSettings.wsAddress);
 

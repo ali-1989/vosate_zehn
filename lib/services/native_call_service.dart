@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
@@ -6,54 +7,11 @@ import 'package:flutter/services.dart';
 import 'package:iris_tools/api/system.dart';
 
 import 'package:app/tools/log_tools.dart';
+import 'package:iris_tools/plugins/javaBridge.dart';
 
-class NativeCallService {
-  static MethodChannel? nativeChannel;
 
-  NativeCallService._();
-
-  static void init() async {
-    if(kIsWeb || !System.isAndroid()){
-      return;
-    }
-
-    if(nativeChannel == null) {
-      nativeChannel = MethodChannel('my_channel');
-      nativeChannel!.setMethodCallHandler(methodCallHandler);
-    }
-
-    setBootCallbackHandler();
-  }
-
-  static Future<void> setBootCallbackHandler() async {
-    if(kIsWeb || !System.isAndroid()){
-      return;
-    }
-
-    final callback = PluginUtilities.getCallbackHandle(bootCallbackHandler);
-
-    if (callback != null) {
-      final int handle = callback.toRawHandle();
-      await invokeMethod('set_dart_handler', data: {'handle_id': handle});
-    }
-  }
-
-  static Future<T?> invokeMethod<T>(String method, {Map? data}) async {
-    if(nativeChannel == null){
-      init();
-    }
-
-    try {
-      return nativeChannel?.invokeMethod<T>(method, data);
-    }
-    catch (e){
-      return null;
-    }
-  }
-}
-///===================================================================================
 @pragma('vm:entry-point')
-void bootCallbackHandler() async {
+void callbackHandler() async {
   try {
     //await ApplicationInitial.prepareDirectoriesAndLogger();
     await LogTools.logger.logToAll('--->> appJavaCallback call ---');//todo.
@@ -66,6 +24,62 @@ void bootCallbackHandler() async {
   }
   catch (e){/**/}
 }
+
+@pragma('vm:entry-point')
+Future onBridgeCall(call) async {
+  if(call.method == 'report_error') {
+    LogTools.reportError(call.arguments);
+  }
+  else {
+    print('::::::::::::::: ${call.method}');
+  }
+
+  return null;
+}
+///===================================================================================
+class NativeCallService {
+  static JavaBridge? androidAppBridge;
+  static JavaBridge? assistanceBridge;
+
+  NativeCallService._();
+
+  static void init() async {
+    if(System.isAndroid()){
+      _initAndroid();
+      setBootCallbackHandler();
+    }
+  }
+
+  static void _initAndroid(){
+    if(androidAppBridge != null){
+      return;
+    }
+
+    androidAppBridge = JavaBridge();
+    assistanceBridge = JavaBridge();
+
+    androidAppBridge!.init('my_android_channel', onBridgeCall);
+
+    assistanceBridge!.init('assistance', (call) async {
+      return null;
+    });
+
+    assistanceBridge!.invokeMethod('setAppIsRun');
+  }
+
+  static Future<void> setBootCallbackHandler() async {
+    if(kIsWeb || !System.isAndroid()){
+      return;
+    }
+
+    final callback = PluginUtilities.getCallbackHandle(callbackHandler);
+
+    if (callback != null) {
+      //final int handle = callback.toRawHandle();
+      //await invokeMethod('set_dart_handler', data: {'handle_id': handle});
+    }
+  }
+}
 ///===================================================================================
 Future methodCallHandler(MethodCall methodCall) async {
   try {
@@ -75,3 +89,17 @@ Future methodCallHandler(MethodCall methodCall) async {
     return false;
   }
 }
+
+
+
+/*
+echo
+echo_arg
+throw_error   'throw_error', [{'delay': 5000}]
+set_kv
+get_kv
+setAppIsRun
+isAppRun
+dismiss_notification
+move_app_to_back
+ */

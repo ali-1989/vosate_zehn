@@ -34,7 +34,7 @@ public class MyApplication extends FlutterApplication {
         Thread.setDefaultUncaughtExceptionHandler(this::handleUncaughtException);
         flutterEngine = new FlutterEngine(this);
 
-        //prepareAndroidChannel();
+        prepareAndroidChannel();
 
         // this is call main() method in dart
         //flutterEngine.getDartExecutor().executeDartEntrypoint(DartExecutor.DartEntrypoint.createDefault());
@@ -72,7 +72,7 @@ public class MyApplication extends FlutterApplication {
             report.put("error", e.toString());
 
             Log.i("▄▀▄ Err >>>>>>", txt);
-            //passDataToFlutter(report);
+            passDataToFlutter(report);
         }
         catch (Exception ignored) {}
     }
@@ -142,6 +142,7 @@ public class MyApplication extends FlutterApplication {
         Ringtone ringtone = RingtoneManager.getRingtone(context, alarmUri);
         ringtone.play();
     }
+
     private static void wakeup(Context context, Map<String, ?> arg){
         boolean repeat = (boolean) arg.get("repeat");
         int year = (int) arg.get("year");
@@ -149,9 +150,18 @@ public class MyApplication extends FlutterApplication {
         int day = (int) arg.get("day");
         int hour = (int) arg.get("hour");
         int min = (int) arg.get("min");
+        String intervalStr = (String) arg.get("interval");
+        Long interval;
+
+        if(intervalStr != null){
+            interval = Long.valueOf(intervalStr);
+        }
+        else {
+            interval = 1000L * 60 * 20;
+        }
 
         Intent intent = new Intent(context, BootReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         long time;
         Calendar calendar = Calendar.getInstance();
@@ -171,7 +181,7 @@ public class MyApplication extends FlutterApplication {
         }
 
         if(repeat) {
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, time, 10000, pendingIntent);
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, time, interval, pendingIntent);
         }
         else {
             alarmManager.setExact(AlarmManager.RTC_WAKEUP,  time, pendingIntent);

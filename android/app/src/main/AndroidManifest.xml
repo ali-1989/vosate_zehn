@@ -1,10 +1,12 @@
+<!--
+     installLocation: auto | preferExternal
+-->
+
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
           package="ir.vosatezehn.com"
           android:installLocation="auto">
-    <!-- ================================
-      installLocation: auto | preferExternal
-       ============================================== -->
 
     <!--
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
@@ -17,6 +19,7 @@
     <uses-permission android:name="android.permission.BROADCAST_STICKY"/>
 
     <!-- ..........................  not kill app -->
+    <!-- RECEIVE_BOOT_COMPLETED: show AutoStart switch in app info, allow auto boot like alarm, must enable by user -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
@@ -101,14 +104,15 @@
     <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.SENSORS"/>
+
+    <!-- Android Q+, notificationBuilder.setFullScreenIntent(pendingIntent), for(incoming phone call/alarm clock) -->
     <!--
-    // Android Q+, notificationBuilder.setFullScreenIntent(pendingIntent), for(incoming phone call/alarm clock)
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT"/>
-
-    // Android 13+, for (notifications/create chanel)
+    -->
+    
+    <!-- Android 13+, for (notifications/create chanel) -->
+    <!--
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
-
-    // RECEIVE_BOOT_COMPLETED: show AutoStart switch in app info, allow auto boot like alarm, must enable by user
     -->
     <!-- ============================== uses-feature ============================================== -->
     <uses-feature
@@ -177,6 +181,7 @@
               android:resource="@style/NormalTheme"
               />
 
+            <!--  launching App with a URI -->
             <meta-data
                     android:name="flutter_deeplinking_enabled"
                     android:value="true" />
@@ -187,18 +192,30 @@
             </intent-filter>
 
             <intent-filter>
-                <action android:name="FLUTTER_NOTIFICATION_CLICK" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="FLUTTER_NOTIFICATION_CLICK"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
+
+            <!--
+            <intent-filter
+                    android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data android:scheme="appName" android:host="com.companyName.appName"/>
+            </intent-filter>
+            -->
         </activity>
 
-        <!-- for open/launch app files -->
+        <!-- for open app files by others -->
         <!-- old: android.support.v4.content.FileProvider -->
         <provider
                 android:name="androidx.core.content.FileProvider"
                 android:authorities="${applicationId}.provider"
                 android:exported="false"
                 android:grantUriPermissions="true">
+
             <meta-data
                     android:name="android.support.FILE_PROVIDER_PATHS"
                     android:resource="@xml/provider_paths"/>
@@ -220,26 +237,27 @@
                 android:name="com.google.firebase.messaging.default_notification_channel_id"
                 android:value="@string/default_notification_channel_id"/>
         
-	<!-- .......................... BOOT RECEIVER -->
+        <!-- .......................... BOOT RECEIVER -->
         <receiver
                 android:name=".BootReceiver"
                 android:exported="true"
                 android:enabled="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
                 <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
-                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
                 <action android:name="android.intent.action.PACKAGE_REPLACED"/>
                 <action android:name="android.intent.action.USER_PRESENT"/>
                 <action android:name="android.intent.action.USER_UNLOCKED"/>
-                <action android:name="android.intent.action.EXTERNAL_APPLICATIONS_AVAILABLE"/>
                 <action android:name="android.intent.action.MEDIA_BAD_REMOVAL"/>
                 <action android:name="android.intent.action.MEDIA_EJECT"/>
                 <action android:name="android.intent.action.MEDIA_MOUNTED"/>
                 <action android:name="android.intent.action.MEDIA_REMOVED"/>
                 <action android:name="android.intent.action.MEDIA_SHARED"/>
                 <action android:name="android.intent.action.MEDIA_UNMOUNTED"/>
+                <action android:name="android.intent.action.EXTERNAL_APPLICATIONS_AVAILABLE"/>
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
             </intent-filter>
         </receiver>
     </application>

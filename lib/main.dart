@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:iris_route/iris_route.dart';
-import 'package:iris_tools/api/system.dart';
 import 'package:iris_tools/widgets/maxWidth.dart';
 
 import 'package:app/constants.dart';
@@ -83,10 +82,6 @@ Future<void> mainInitialize() async {
   await FireBaseService.initializeApp();
 
   usePathUrlStrategy();
-
-  if(System.isAndroid()) {
-    LogTools.assistanceBridge!.invokeMethod('setAppIsRun');
-  }
 }
 
 Future<(bool, String?)> prepareDirectoriesAndLogger() async {
@@ -150,14 +145,20 @@ class MyApp extends StatelessWidget {
   }
 
   Widget materialHomeBuilder(){
-    double factor = PlatformDispatcher.instance.textScaleFactor.clamp(0.85, 1.7);
+    double factor = PlatformDispatcher.instance.textScaleFactor.clamp(0.85, 1.3);
 
     return Builder(
       builder: (context) {
         FontManager.instance.detectDeviceFontSize(context);
 
-        if(factor == 1.0 && FontManager.useFlutterFontSize && FontManager.deviceFontSize > FontManager.maxDeviceFontSize){
-          factor = 0.94;
+        if(FontManager.useFlutterFontSize && FontManager.deviceFontSize > FontManager.maxDeviceFontSize){
+          factor = 1.0;
+        }
+
+        if(factor > 1.0){
+          while(factor > 1.0 && (FontManager.deviceFontSize * factor) > FontManager.maxDeviceFontSize){
+            factor = factor - 0.09;
+          }
         }
 
         return MediaQuery(

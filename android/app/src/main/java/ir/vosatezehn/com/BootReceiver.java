@@ -76,16 +76,16 @@ public class BootReceiver extends BroadcastReceiver {
         //---------------------------------------
         //MethodChannel channel = new MethodChannel(executor, "boot_completed");
         MethodChannel channel = new MethodChannel(flutterEngine.getDartExecutor(), "my_android_channel");
-        channel.invokeMethod("bootCompleted", "boot");
+        channel.invokeMethod("bootCompletedHandler", "boot");
         prompt(context, "channel invoke");
-        //playRing(context);
+        playRing(context);
     }
 
     private static void prompt(Context context, String msg){
         Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-        //vibrator.vibrate(1000);
+        vibrator.vibrate(500L);
 
-        //Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
     }
 
     private static void playRing(Context context){
@@ -152,4 +152,9 @@ channel.invokeMethod("bootCompletedHandler", null, new MethodChannel.Result() {
             public void notImplemented() {}
         });
 -------------------------------------------------------
+if(Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
+            Intent activityIntent = new Intent(context, MainActivity.class);
+            activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(activityIntent);
+        }
 */

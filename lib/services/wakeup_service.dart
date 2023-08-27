@@ -1,3 +1,5 @@
+import 'package:app/main.dart';
+import 'package:app/tools/log_tools.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:workmanager/workmanager.dart';
@@ -5,15 +7,15 @@ import 'package:workmanager/workmanager.dart';
 import 'package:app/constants.dart';
 import 'package:app/services/native_call_service.dart';
 
-///--------------------------------------------------------------------------------------------
+@pragma('vm:entry-point')
 Future<bool> _callbackWorkManager(task, inputData) async {
-  //await ApplicationInitial.prepareDirectoriesAndLogger();
-  //await PublicAccess.logger.logToAll('@@@@@@@-@@@@@');//todo.
+  await prepareDirectoriesAndLogger();
+  await LogTools.logger.logToAll('@@@@@@@-@@@@@ work manager');//todo.
   var isAppRun = false;
 
   try {
-    isAppRun = await NativeCallService.invokeMethod('isAppRun');
-    //await PublicAccess.logger.logToAll('@@@@@@@@@@@@ isAppRun: $isAppRun'); //todo.
+    isAppRun = (await NativeCallService.androidAppBridge!.invokeMethod('isAppRun')).$1;
+    await LogTools.logger.logToAll('@@@@@@@@@@@@ isAppRun: $isAppRun'); //todo.
   }
   catch (e) {}
 
@@ -21,11 +23,9 @@ Future<bool> _callbackWorkManager(task, inputData) async {
     return true;
   }
 
-  //await PublicAccess.logger.logToAll('@@@@@@@@@ app was closed'); //todo.
-  try {
-    //await ApplicationInitial.inSplashInit();
-    //await ApplicationInitial.appLazyInit();
+  await LogTools.logger.logToAll('@@@@@@@@@ app was closed'); //todo.
 
+  try {
     /*switch (task) {
       case Workmanager.iOSBackgroundTask:
         break;
@@ -38,12 +38,13 @@ Future<bool> _callbackWorkManager(task, inputData) async {
   }
 }
 
+@pragma('vm:entry-point')
 void callbackWorkManager() {
   Workmanager().executeTask(_callbackWorkManager);
 }
 ///============================================================================================
-class CronTask {
-  CronTask._();
+class WakeupService {
+  WakeupService._();
 
   static void init() {
     if(kIsWeb){
@@ -58,9 +59,9 @@ class CronTask {
     Workmanager().registerPeriodicTask(
       'WorkManager-task-${Constants.appName}',
       'periodic-${Constants.appName}',
-      frequency: Duration(hours: 3),
-      initialDelay: Duration(milliseconds: 30),
-      backoffPolicyDelay: Duration(minutes: 5),
+      frequency: const Duration(hours: 4),
+      initialDelay: const Duration(milliseconds: 30),
+      backoffPolicyDelay: const Duration(minutes: 5),
       existingWorkPolicy: ExistingWorkPolicy.keep,
       backoffPolicy: BackoffPolicy.linear,
       constraints: Constraints(
