@@ -1,9 +1,6 @@
 import 'dart:async';
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
-
 import 'package:iris_tools/api/system.dart';
 
 import 'package:app/tools/log_tools.dart';
@@ -46,7 +43,7 @@ class NativeCallService {
   static void init() async {
     if(System.isAndroid()){
       _initAndroid();
-      setBootCallbackHandler();
+      _setBootCallbackHandler();
     }
   }
 
@@ -67,26 +64,13 @@ class NativeCallService {
     assistanceBridge!.invokeMethod('setAppIsRun');
   }
 
-  static Future<void> setBootCallbackHandler() async {
-    if(kIsWeb || !System.isAndroid()){
-      return;
-    }
-
+  static Future<void> _setBootCallbackHandler() async {
     final callback = PluginUtilities.getCallbackHandle(callbackHandler);
 
     if (callback != null) {
       //final int handle = callback.toRawHandle();
       //await invokeMethod('set_dart_handler', data: {'handle_id': handle});
     }
-  }
-}
-///===================================================================================
-Future methodCallHandler(MethodCall methodCall) async {
-  try {
-    return true;
-  }
-  catch (e){
-    return false;
   }
 }
 

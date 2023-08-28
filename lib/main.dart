@@ -84,6 +84,7 @@ Future<void> mainInitialize() async {
   usePathUrlStrategy();
 }
 
+@pragma('vm:entry-point')
 Future<(bool, String?)> prepareDirectoriesAndLogger() async {
   try {
     if (!kIsWeb) {

@@ -1,15 +1,22 @@
 package ir.vosatezehn.com;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Vibrator;
 import android.widget.Toast;
+
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.embedding.engine.dart.DartExecutor;
@@ -23,7 +30,17 @@ public class BootReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        run(context, intent);
+        String appName = context.getPackageName();
+
+        if(Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
+            createNotificationChannel(context, "channel_" + appName, "N_" + appName);
+            sendNotification(context, "channel_" + appName, "boot", "Hi");
+        }
+        else {
+            createNotificationChannel(context, "channel_" + appName, "N_" + appName);
+            sendNotification(context, "channel_" + appName, "unBoot", "Hi user");
+            run(context, intent);
+        }
     }
 
     private static void run(Context context, Intent intent){
@@ -97,6 +114,37 @@ public class BootReceiver extends BroadcastReceiver {
 
         Ringtone ringtone = RingtoneManager.getRingtone(context, alarmUri);
         ringtone.play();
+    }
+
+    static void createNotificationChannel(Context context, String channelId, String channelName) {
+        NotificationManagerCompat manager = NotificationManagerCompat.from(context);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(channelId, channelName, importance);
+            channel.setDescription("channel");
+            channel.enableVibration(true);
+            channel.enableLights(true);
+
+            manager.createNotificationChannel(channel);
+        }
+    }
+
+    static void sendNotification(Context context, String channelId, String title, String message){
+        Intent intent = new Intent(context, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 1010120, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, channelId)
+                //.setSmallIcon(R.mipmap.ic_launcher_round)
+                //.setContentTitle(getString(R.string.app_name)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setAutoCancel(false)
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                .setContentIntent(pendingIntent);
+
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(100, notificationBuilder.build());
     }
 }
 

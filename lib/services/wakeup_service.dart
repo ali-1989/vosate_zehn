@@ -10,20 +10,22 @@ import 'package:app/services/native_call_service.dart';
 @pragma('vm:entry-point')
 Future<bool> _callbackWorkManager(task, inputData) async {
   await prepareDirectoriesAndLogger();
-  await LogTools.logger.logToAll('@@@@@@@-@@@@@ work manager');//todo.
+  await LogTools.logger.logToAll('@@@@@@@-@@@@@ work manager callback: ${DateTime.now()}');//todo.
   var isAppRun = false;
 
   try {
     isAppRun = (await NativeCallService.androidAppBridge!.invokeMethod('isAppRun')).$1;
     await LogTools.logger.logToAll('@@@@@@@@@@@@ isAppRun: $isAppRun'); //todo.
   }
-  catch (e) {}
+  catch (e) {
+    LogTools.logger.logToAll('@@@@@@@@@@@@ err: ${e.toString()}'); //todo.
+  }
 
   if (isAppRun) {
     return true;
   }
 
-  await LogTools.logger.logToAll('@@@@@@@@@ app was closed'); //todo.
+  await LogTools.logger.logToAll('@@@@@@@@@ app is closed'); //todo.
 
   try {
     /*switch (task) {
