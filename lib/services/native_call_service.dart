@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:iris_tools/api/system.dart';
 
@@ -8,32 +7,19 @@ import 'package:iris_tools/plugins/javaBridge.dart';
 
 
 @pragma('vm:entry-point')
-void callbackHandler() async {
-  try {
-    //await ApplicationInitial.prepareDirectoriesAndLogger();
-    await LogTools.logger.logToAll('--->> appJavaCallback call ---');//todo.
-    /*
-    DartPluginRegistrant.ensureInitialized(); //must not calling in root isolate
-    await InitialApplication.inSplashInit();
-    await InitialApplication.appLazyInit();
-
-    JavaCallService.init();*/
-  }
-  catch (e){/**/}
-}
-
-@pragma('vm:entry-point')
 Future onBridgeCall(call) async {
   if(call.method == 'report_error') {
     LogTools.reportError(call.arguments);
   }
-  else {
-    print('::::::::::::::: ${call.method}');
+  else if(call.method == 'androidReceiverIsCall') {
+    //await AppNotification.initial();
+    //AppNotification.sendMessagesNotification('t1', 'ali', 'Thanks God');
   }
 
   return null;
 }
 ///===================================================================================
+@pragma('vm:entry-point')
 class NativeCallService {
   static JavaBridge? androidAppBridge;
   static JavaBridge? assistanceBridge;
@@ -60,23 +46,22 @@ class NativeCallService {
     assistanceBridge!.init('assistance', (call) async {
       return null;
     });
-
-    assistanceBridge!.invokeMethod('setAppIsRun');
   }
 
   static Future<void> _setBootCallbackHandler() async {
-    final callback = PluginUtilities.getCallbackHandle(callbackHandler);
+    /*final callback = PluginUtilities.getCallbackHandle(callbackHandler);
 
     if (callback != null) {
-      //final int handle = callback.toRawHandle();
-      //await invokeMethod('set_dart_handler', data: {'handle_id': handle});
-    }
+      final int handle = callback.toRawHandle();
+      await invokeMethod('set_dart_handler', data: {'handle_id': handle});
+    }*/
   }
 }
 
 
 
 /*
+==== assistance:
 echo
 echo_arg
 throw_error   'throw_error', [{'delay': 5000}]

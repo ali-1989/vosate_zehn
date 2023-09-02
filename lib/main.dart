@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app/services/native_call_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -82,6 +83,13 @@ Future<void> mainInitialize() async {
   await FireBaseService.initializeApp();
 
   usePathUrlStrategy();
+}
+
+@pragma('vm:entry-point')
+void dartFunction() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await prepareDirectoriesAndLogger();
+  NativeCallService.init();
 }
 
 @pragma('vm:entry-point')

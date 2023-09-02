@@ -114,6 +114,10 @@
     <!--
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     -->
+
+    <!-- need for launch app from services -->
+    <uses-permission  android:name="android.permission.GET_TASKS"/>
+
     <!-- ============================== uses-feature ============================================== -->
     <uses-feature
             android:name="android.hardware.fingerprint"

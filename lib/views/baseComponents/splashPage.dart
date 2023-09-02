@@ -191,6 +191,7 @@ class SplashPageState extends StateBase<SplashPage> {
     try {
       WakeupService.init();
       NativeCallService.init();
+      NativeCallService.assistanceBridge!.invokeMethod('setAppIsRun');
 
       WebsocketService.prepareWebSocket(SettingsManager.localSettings.wsAddress);
 

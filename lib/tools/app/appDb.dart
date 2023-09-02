@@ -11,11 +11,17 @@ import 'package:app/tools/app/appDirectories.dart';
 class AppDB {
   AppDB._();
 
+  static bool _isInit = false;
   static late final DatabaseHelper db;
 
   static Future<DatabaseHelper> init() async {
+    if(_isInit){
+      return db;
+    }
+
     AppDB.db = DatabaseHelper();
     AppDB.db.setDebug(false);
+    _isInit = true;
 
     if(kIsWeb){
       AppDB.db.setDatabasePath('${await AppDirectories.getDatabasesDir()}/${Constants.appName}');

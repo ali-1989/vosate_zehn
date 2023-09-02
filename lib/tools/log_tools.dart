@@ -76,7 +76,7 @@ class LogTools {
 
 
     runZonedGuarded(fn, (error, stack) {
-      LogTools.logger.logToAll('::::::::::::: report ::::::::::: ${error.toString()}');
+      LogTools.logger.logToAll('::::::::::::: report is failed ::::::::::: ${error.toString()}');
     });
   }
 

@@ -1,7 +1,9 @@
 package ir.vosatezehn.com;
 
+import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -186,6 +188,44 @@ public class MyApplication extends FlutterApplication {
         else {
             alarmManager.setExact(AlarmManager.RTC_WAKEUP,  time, pendingIntent);
         }
+    }
+
+    static void launchApp(Context context){
+        if(isActivityRunning(context, MainActivity.class)){
+            Intent intent = new Intent(context, MainActivity.class);
+            //intent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+            PendingIntent contentIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            try{
+                contentIntent.send();
+            }
+            catch (Exception ignored){}
+        }
+        else {
+            Intent intent = new Intent(context, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
+            context.startActivity(intent);
+        }
+    }
+
+    static Boolean isActivityRunning(Context context, Class<?> activityClass) {
+        ActivityManager activityManager = (ActivityManager) (context.getSystemService(Context.ACTIVITY_SERVICE));
+        List<ActivityManager.RunningTaskInfo> tasks = activityManager.getRunningTasks(Integer.MAX_VALUE);
+
+        for (ActivityManager.RunningTaskInfo taskInfo : tasks) {
+            ComponentName componentName = taskInfo.baseActivity;
+            ComponentName componentName2 = taskInfo.baseActivity;
+
+            if (componentName != null && componentName.getClassName().equals(activityClass.getCanonicalName())) {
+                return true;
+            }
+
+            if (componentName2 != null && componentName2.getClassName().equals(activityClass.getCanonicalName())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
 

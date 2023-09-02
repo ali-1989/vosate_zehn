@@ -10,8 +10,6 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Handler;
-import android.os.Looper;
 import android.os.Vibrator;
 import android.widget.Toast;
 
@@ -24,78 +22,43 @@ import io.flutter.embedding.engine.dart.DartExecutor.DartEntrypoint;
 import io.flutter.embedding.engine.loader.FlutterLoader;
 import io.flutter.plugin.common.MethodChannel;
 
-//https://github.com/firebase/flutterfire/blob/master/packages/firebase_messaging/firebase_messaging/android/src/main/java/io/flutter/plugins/firebase/messaging/FlutterFirebaseMessagingBackgroundExecutor.java
-
 public class BootReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        String appName = context.getPackageName();
+        //String appName = context.getPackageName();
 
-        if(Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
-            createNotificationChannel(context, "channel_" + appName, "N_" + appName);
-            sendNotification(context, "channel_" + appName, "boot", "Hi");
-        }
-        else {
-            createNotificationChannel(context, "channel_" + appName, "N_" + appName);
-            sendNotification(context, "channel_" + appName, "unBoot", "Hi user");
-            run(context, intent);
-        }
+        //if(Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {}
+        //createNotificationChannel(context, "channel_" + appName, "N_" + appName);
+        //sendNotification(context, "channel_" + appName, "unBoot", "Hi user");
+
+        run(context, intent);
     }
 
     private static void run(Context context, Intent intent){
-        prompt(context, "boot call");
-        /*FlutterLoader loader = new FlutterLoader();
-        loader.startInitialization(context.getApplicationContext());
-        prompt(context, "startInitialization");
-        loader.ensureInitializationComplete(context, null);
-        prompt(context, "ensureInitializationComplete");*/
         startEngin(context);
     }
 
-    private static void run_(Context context, Intent intent){
+    private static void startEngin(Context context){
         FlutterLoader loader = new FlutterLoader();
-        Handler handler = new Handler(Looper.getMainLooper());
-        Runnable starter = new Runnable() {
-            @Override
-            public void run() {
-                startEngin(context);
-            }
-        };
 
         if(!loader.initialized()) {
             loader.startInitialization(context.getApplicationContext());
-            loader.ensureInitializationCompleteAsync(
-                    context.getApplicationContext(),
-                    null,
-                    handler,
-                    starter
-            );
+            loader.ensureInitializationComplete(context, null/*new String[0]*/);
         }
-        else {
-            handler.post(starter);
-        }
-    }
-
-    private static void startEngin(Context context){
-        //DartEntrypoint entryPoint = DartEntrypoint.createDefault();
-        //DartEntrypoint entryPoint = new DartEntrypoint(loader.findAppBundlePath(), "bootCompletedHandler");
-        DartEntrypoint entryPoint = DartExecutor.DartEntrypoint.createDefault();
-        //---------------------------------------
-        /*FlutterJNI flutterJNI = new FlutterJNI();
-        DartExecutor executor = new DartExecutor(flutterJNI, context.getAssets());
-
-        executor.executeDartEntrypoint(entryPoint);*/
-        //---------------------------------------
+        //----- run dart function ----------------------------------
+        DartEntrypoint entryPoint = new DartExecutor.DartEntrypoint("lib/main.dart", "dartFunction");
+        //DartExecutor.DartEntrypoint.createDefault();
+        //DartEntrypoint.createDefault();
+        //new DartExecutor.DartEntrypoint(loader.findAppBundlePath(), "dartFunction");
+        //-------- FlutterEngine
         FlutterEngine flutterEngine = new FlutterEngine(context.getApplicationContext());
         flutterEngine.getDartExecutor().executeDartEntrypoint(entryPoint);
-        prompt(context, "dart start");
-        //---------------------------------------
-        //MethodChannel channel = new MethodChannel(executor, "boot_completed");
+        //-------- invoke channel -------------------------------
         MethodChannel channel = new MethodChannel(flutterEngine.getDartExecutor(), "my_android_channel");
-        channel.invokeMethod("bootCompletedHandler", "boot");
-        prompt(context, "channel invoke");
-        playRing(context);
+        channel.invokeMethod("androidReceiverIsCall", null);
+
+        MyApplication.launchApp(context);
     }
 
     private static void prompt(Context context, String msg){
@@ -135,11 +98,11 @@ public class BootReceiver extends BroadcastReceiver {
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 1010120, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, channelId)
-                //.setSmallIcon(R.mipmap.ic_launcher_round)
+                .setSmallIcon(R.mipmap.ic_launcher)
                 //.setContentTitle(getString(R.string.app_name)
                 .setContentTitle(title)
                 .setContentText(message)
-                .setAutoCancel(false)
+                .setAutoCancel(true)
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .setContentIntent(pendingIntent);
 
@@ -149,13 +112,10 @@ public class BootReceiver extends BroadcastReceiver {
 }
 
 
-
-//======================================================================================
 /*
-FlutterMain.ensureInitializationComplete(context, null);
--------------------------------------------------------
+======================================================================================
 DartEntrypoint entrypoint = DartEntrypoint.createDefault();
-DartEntrypoint entryPoint = new DartEntrypoint(loader.findAppBundlePath(), "bootCompletedHandler");
+DartEntrypoint entryPoint = new DartEntrypoint(loader.findAppBundlePath(), "dartFunction");
 -------------------------------------------------------
 FlutterLoader loader = new FlutterLoader();
 loader.startInitialization(context.getApplicationContext());
@@ -205,4 +165,28 @@ if(Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
             activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(activityIntent);
         }
+==================================================================================
+private static void run(Context context, Intent intent){
+    FlutterLoader loader = new FlutterLoader();
+    Handler handler = new Handler(Looper.getMainLooper());
+    Runnable starter = new Runnable() {
+        @Override
+        public void run() {
+            startEngin(context);
+        }
+    };
+
+    if(!loader.initialized()) {
+        loader.startInitialization(context.getApplicationContext());
+        loader.ensureInitializationCompleteAsync(
+                context.getApplicationContext(),
+                null,
+                handler,
+                starter
+        );
+    }
+    else {
+        handler.post(starter);
+    }
+}
 */

@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:app/main.dart';
 import 'package:app/tools/log_tools.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 import 'package:workmanager/workmanager.dart';
 
@@ -9,23 +12,21 @@ import 'package:app/services/native_call_service.dart';
 
 @pragma('vm:entry-point')
 Future<bool> _callbackWorkManager(task, inputData) async {
+  WidgetsFlutterBinding.ensureInitialized();
   await prepareDirectoriesAndLogger();
-  await LogTools.logger.logToAll('@@@@@@@-@@@@@ work manager callback: ${DateTime.now()}');//todo.
+  NativeCallService.init();
+
   var isAppRun = false;
 
   try {
-    isAppRun = (await NativeCallService.androidAppBridge!.invokeMethod('isAppRun')).$1;
-    await LogTools.logger.logToAll('@@@@@@@@@@@@ isAppRun: $isAppRun'); //todo.
+    isAppRun = (await NativeCallService.assistanceBridge!.invokeMethod('isAppRun')).$1;
+    await LogTools.logger.logToAll('@@@@@@@@@: isAppRun: $isAppRun'); //todo.
   }
-  catch (e) {
-    LogTools.logger.logToAll('@@@@@@@@@@@@ err: ${e.toString()}'); //todo.
-  }
+  catch (e) {/**/}
 
   if (isAppRun) {
     return true;
   }
-
-  await LogTools.logger.logToAll('@@@@@@@@@ app is closed'); //todo.
 
   try {
     /*switch (task) {
@@ -33,6 +34,25 @@ Future<bool> _callbackWorkManager(task, inputData) async {
         break;
     }*/
 
+    int count = 0;
+    Timer? t;
+    Completer c = Completer();
+
+    t = Timer.periodic(Duration(seconds: 1), (timer) {
+      if(count < 100){
+        count++;
+        LogTools.logger.logToAll('@@@@@@@@@: count: $count'); //todo.
+      }
+      else {
+        t!.cancel();
+        c.complete(null);
+      }
+    });
+
+    await c.future;
+
+    main();
+    LogTools.logger.logToAll('@@@@@@@@@: main start'); //todo.
     return true;
   }
   catch (e) {
@@ -61,7 +81,7 @@ class WakeupService {
     Workmanager().registerPeriodicTask(
       'WorkManager-task-${Constants.appName}',
       'periodic-${Constants.appName}',
-      frequency: const Duration(hours: 4),
+      frequency: const Duration(hours: 1),
       initialDelay: const Duration(milliseconds: 30),
       backoffPolicyDelay: const Duration(minutes: 5),
       existingWorkPolicy: ExistingWorkPolicy.keep,
