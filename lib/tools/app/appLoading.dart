@@ -11,8 +11,8 @@ import 'package:app/tools/app/appImages.dart';
 import 'package:app/tools/app/appMessages.dart';
 import 'package:app/tools/app/appOverlay.dart';
 import 'package:app/tools/app/appThemes.dart';
-import 'package:app/views/widgets/overlay/overlayContainer.dart';
-import 'package:app/views/widgets/progressBarPrompt.dart';
+import 'package:app/views/components/overlay/overlayContainer.dart';
+
 
 class AppLoading {
   AppLoading._();
@@ -115,28 +115,6 @@ class AppLoading {
   Future<void> hideLoading(BuildContext context) async {
     //AppOverlay.hideIgnoreScreen(context);
     AppOverlay.hideDialog(context);
-  }
-  //---------------------------------------------------------------------------------
-  Future<void> showProgress(BuildContext context, Stream<double> stream, {
-    String? message,
-    String? buttonText,
-    VoidCallback? buttonEvent,
-  }){
-    final over = OverlayScreenView(
-      content: SizedBox.expand(
-        child: Center(
-          child: ProgressBarPrompt(
-            stream: stream,
-            message: message,
-            buttonEvent: buttonEvent,
-            buttonText: buttonText,
-          ),
-        ),
-      ),
-      backgroundColor: Colors.black26,
-    );
-
-    return AppOverlay.showDialogScreen(context, over, canBack: false);
   }
 
   Widget _getLoadingView(){

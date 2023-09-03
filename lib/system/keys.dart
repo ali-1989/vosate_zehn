@@ -1,4 +1,3 @@
-// ignore_for_file: non_constant_identifier_names
 
 class Keys {
   Keys._();
@@ -62,7 +61,6 @@ class Keys {
   static const toast = 'toast';
   //----- common settings key -----------------------------------------------------------------
   static const setting$lastLoginDate = 'last_login_date';
-  static const setting$lastRouteName = 'Last_route_name';
   static const setting$appSettings = 'app_settings';
   static const setting$fontThemeData = 'font_theme_data';
   static const setting$colorThemeName = 'color_theme_name';
@@ -81,5 +79,4 @@ class Keys {
   static const setting$dailyIdsList = 'daily_ids_show';
   static const setting$notificationDailyText = 'notification_daily_text';
   static const setting$dailyTextIds = 'daily_text_ids';
-
 }

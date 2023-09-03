@@ -79,5 +79,4 @@ class LogTools {
       LogTools.logger.logToAll('::::::::::::: report is failed ::::::::::: ${error.toString()}');
     });
   }
-
 }
