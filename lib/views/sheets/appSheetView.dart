@@ -40,8 +40,8 @@ class _AppSheetViewState extends State<AppSheetView> {
             else {
               fixHeight = null;
             }
-
           });
+
           return ColoredBox(
             color: widget.contentColor,
             child: Padding(

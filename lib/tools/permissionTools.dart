@@ -130,7 +130,7 @@ class PermissionTools {
 		  return Future<PermissionStatus>.value(PermissionStatus.granted);
 		}
 
-		streamFn(String key, StreamController streamCtr) async {
+		void streamFn(String key, StreamController streamCtr) async {
 			if (await Permission.storage.isPermanentlyDenied) {
 				// ignore: unawaited_futures
 				openAppSettings();
