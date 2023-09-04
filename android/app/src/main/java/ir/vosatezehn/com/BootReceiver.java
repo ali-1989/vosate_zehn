@@ -58,7 +58,7 @@ public class BootReceiver extends BroadcastReceiver {
         MethodChannel channel = new MethodChannel(flutterEngine.getDartExecutor(), "my_android_channel");
         channel.invokeMethod("androidReceiverIsCall", null);
 
-        MyApplication.launchApp(context);
+        //MyApplication.launchApp(context);
     }
 
     private static void prompt(Context context, String msg){

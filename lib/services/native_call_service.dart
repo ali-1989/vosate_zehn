@@ -14,6 +14,24 @@ Future onBridgeCall(call) async {
   else if(call.method == 'androidReceiverIsCall') {
     //await AppNotification.initial();
     //AppNotification.sendMessagesNotification('t1', 'ali', 'Thanks God');
+    int count = 0;
+    Timer? t;
+    Completer c = Completer();
+
+    t = Timer.periodic(Duration(minutes: 1), (timer) {
+      if(count < 5){
+        count++;
+        LogTools.logger.logToAll('@@@@@@@@@: service: $count'); //todo.
+      }
+      else {
+        t!.cancel();
+        c.complete(null);
+      }
+    });
+
+    //FireBaseService.initializeApp();
+    //FireBaseService.start();
+    await c.future;
   }
 
   return null;

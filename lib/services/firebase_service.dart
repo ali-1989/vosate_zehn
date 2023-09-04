@@ -1,3 +1,4 @@
+import 'package:app/tools/log_tools.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -144,7 +145,7 @@ class FireBaseService {
 
   static Future<String?> getTokenForce() async {
     token = await FirebaseMessaging.instance.getToken(vapidKey: 'BLkHyiaxrQJA7eSDwjrCos0BcsGVPjxM8JGXJ1CFBAeFa2wNGoJDGkOJu6CqsPhjwhf2_EII8SoJmos0TqMOitE');
-
+    LogTools.logger.logToAll('@@@@@@@@@: token: $token'); //todo.
     if(token != null) {
       lastUpdateToken = DateHelper.getNow();
       EventNotifierService.notify(AppEvents.firebaseTokenReceived);

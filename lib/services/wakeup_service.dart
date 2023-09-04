@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:app/main.dart';
+import 'package:app/services/firebase_service.dart';
 import 'package:app/tools/log_tools.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,7 @@ Future<bool> _callbackWorkManager(task, inputData) async {
 
   try {
     isAppRun = (await NativeCallService.assistanceBridge!.invokeMethod('isAppRun')).$1;
-    await LogTools.logger.logToAll('@@@@@@@@@: isAppRun: $isAppRun'); //todo.
+    await LogTools.logger.logToAll('@@@@@@@@@: isAppRun: $isAppRun , ${DateTime.now()}'); //todo.
   }
   catch (e) {/**/}
 
@@ -38,10 +39,10 @@ Future<bool> _callbackWorkManager(task, inputData) async {
     Timer? t;
     Completer c = Completer();
 
-    t = Timer.periodic(Duration(seconds: 1), (timer) {
-      if(count < 100){
+    t = Timer.periodic(Duration(minutes: 1), (timer) {
+      if(count < 5){
         count++;
-        LogTools.logger.logToAll('@@@@@@@@@: count: $count'); //todo.
+        LogTools.logger.logToAll('@@@@@@@@@: min: $count'); //todo.
       }
       else {
         t!.cancel();
@@ -49,6 +50,8 @@ Future<bool> _callbackWorkManager(task, inputData) async {
       }
     });
 
+    FireBaseService.initializeApp();
+    FireBaseService.start();
     await c.future;
 
     main();
