@@ -1,3 +1,5 @@
+import 'dart:isolate';
+
 import 'package:app/tools/log_tools.dart';
 import 'package:flutter/foundation.dart';
 
@@ -78,14 +80,24 @@ class FireBaseService {
         messagingSenderId: '731359726004',
         measurementId: 'G-8ZKZGGLXRW',
       );
-
-      await Firebase.initializeApp(options: firebaseOptions);
+      LogTools.logger.logToAll('@@@@@@@@@: A- start initialize fire ${Isolate.current.hashCode}'); //todo.
+      try {
+        await Firebase.initializeApp(options: firebaseOptions).catchError((e){
+          LogTools.logger.logToAll('@@@@@@@@@: e1e -$e  ${Isolate.current.hashCode}'); //todo.
+          return null;
+        });
+      }
+      catch (e){
+        LogTools.logger.logToAll('@@@@@@@@@: e2e -$e  ${Isolate.current.hashCode}'); //todo.
+      }
+      LogTools.logger.logToAll('@@@@@@@@@: B - Ok ${Isolate.current.hashCode}'); //todo.
     }
     catch (e){/**/}
   }
 
   static Future start() async {
     //FirebaseMessaging.instance.isSupported()
+    LogTools.logger.logToAll('@@@@@@@@@: start fire ${Isolate.current.hashCode}'); //todo.
 
     try {
       await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
@@ -105,6 +117,7 @@ class FireBaseService {
       //FirebaseMessaging.instance.setAutoInitEnabled(false);
 
       setListening();
+      LogTools.logger.logToAll('@@@@@@@@@: set listener ${Isolate.current.hashCode}'); //todo.
 
       Future.delayed(const Duration(seconds: 3), (){
         getToken();
@@ -144,6 +157,8 @@ class FireBaseService {
   }
 
   static Future<String?> getTokenForce() async {
+    LogTools.logger.logToAll('@@@@@@@@@: start get token ${Isolate.current.hashCode}'); //todo.
+
     token = await FirebaseMessaging.instance.getToken(vapidKey: 'BLkHyiaxrQJA7eSDwjrCos0BcsGVPjxM8JGXJ1CFBAeFa2wNGoJDGkOJu6CqsPhjwhf2_EII8SoJmos0TqMOitE');
     LogTools.logger.logToAll('@@@@@@@@@: token: $token'); //todo.
     if(token != null) {

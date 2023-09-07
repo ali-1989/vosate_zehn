@@ -205,7 +205,15 @@ class AppMessages {
   }
 
   static String get pleaseEnterEmailToSendVerifyEmail {
-    return 'لطفا آدرس ایمیل خود را جهت ورود یا ثبت نام وارد کنید';
+    return 'لطفا آدرس ایمیل خود را جهت ورود وارد کنید';
+  }
+
+  static String get pleaseEnterEmailToRegistering {
+    return 'لطفا آدرس ایمیل خود را جهت ثبت نام وارد کنید';
+  }
+
+  static String get pleaseEnterAPassword {
+    return 'لطفا یک رمز ورود انتخاب کنید';
   }
 
   static String get errorOccur {

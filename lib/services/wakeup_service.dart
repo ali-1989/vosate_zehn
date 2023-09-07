@@ -21,7 +21,6 @@ Future<bool> _callbackWorkManager(task, inputData) async {
 
   try {
     isAppRun = (await NativeCallService.assistanceBridge!.invokeMethod('isAppRun')).$1;
-    await LogTools.logger.logToAll('@@@@@@@@@: isAppRun: $isAppRun , ${DateTime.now()}'); //todo.
   }
   catch (e) {/**/}
 
@@ -35,14 +34,14 @@ Future<bool> _callbackWorkManager(task, inputData) async {
         break;
     }*/
 
-    int count = 0;
+    /*int count = 0;
     Timer? t;
     Completer c = Completer();
 
-    t = Timer.periodic(Duration(minutes: 1), (timer) {
+    t = Timer.periodic(Duration(seconds: 20), (timer) {
       if(count < 5){
         count++;
-        LogTools.logger.logToAll('@@@@@@@@@: min: $count'); //todo.
+        LogTools.logger.logToAll('@@@@@@@@@: wakeup (20sec): $count'); //todo.
       }
       else {
         t!.cancel();
@@ -50,12 +49,11 @@ Future<bool> _callbackWorkManager(task, inputData) async {
       }
     });
 
-    FireBaseService.initializeApp();
-    FireBaseService.start();
     await c.future;
 
-    main();
-    LogTools.logger.logToAll('@@@@@@@@@: main start'); //todo.
+    await FireBaseService.initializeApp();
+    await FireBaseService.start();*/
+
     return true;
   }
   catch (e) {

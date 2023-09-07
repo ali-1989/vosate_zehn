@@ -51,7 +51,8 @@ class _LoginPageState extends StateBase<LoginPage> {
   String pinCode = '';
   int timerValueSec = 60;
   bool showResendOtpButton = false;
-  bool loginByMobile = true;
+  bool mustLoginByMobileNumber = false;
+  bool inRegisterEmailMode = false;
   String countryIso = WidgetsBinding.instance.platformDispatcher.locale.countryCode?? 'IR';
   late bool isIran;
 
@@ -65,6 +66,7 @@ class _LoginPageState extends StateBase<LoginPage> {
     LoginService.findCountryWithIP().then((value) {
       countryIso = value;
       isIran = countryIso == 'IR';
+      assistCtr.updateHead();
     });
 
     flipCardController = FlipCardController();
@@ -142,7 +144,11 @@ class _LoginPageState extends StateBase<LoginPage> {
   }
 
   Widget buildFrontFlip() {
-    if(loginByMobile && isIran){
+    if(inRegisterEmailMode){
+      return buildFrontFlipForRegister();
+    }
+
+    if(mustLoginByMobileNumber && isIran){
       return buildFrontFlipWithMobile();
     }
 
@@ -292,16 +298,120 @@ class _LoginPageState extends StateBase<LoginPage> {
                     backgroundColor: AppThemes.instance.currentTheme.differentColor,
                   ),
                   onPressed: signWithMobileClick,
-                  child: const Text('ورود با موبایل')
+                  child: const Text('ورود با شماره موبایل')
               ),
             ),
 
-            TextButton(
-              child: const Text('ورود مهمان'),
-              onPressed: (){
-                LoginService.loginGuestUser(context);
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
+                  child: const Text('ورود مهمان'),
+                  onPressed: (){
+                    LoginService.loginGuestUser(context);
+                  },
+                ),
+
+                Visibility(
+                  visible: !mustLoginByMobileNumber,
+                    child: Row(
+                      children: [
+                        Text('  /  '),
+
+                        TextButton(
+                          child: const Text('ثبت نام'),
+                          onPressed: (){
+                            inRegisterEmailMode = true;
+                            assistCtr.updateHead();
+                          },
+                        ),
+                      ],
+                    )
+                )
+              ],
+            ),
+
+            const SizedBox(height: 32,),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildFrontFlipForRegister() {
+    return Card(
+      color: Colors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          children: [
+            const SizedBox(height: 30),
+            Text(AppMessages.pleaseEnterEmailToRegistering,
+              style: const TextStyle(fontWeight: FontWeight.bold)
+            ),
+
+            const SizedBox(height: 30),
+            TextField(
+              controller: emailCtr,
+              decoration: AppDecoration.outlineBordersInputDecoration.copyWith(
+                hintText: 'ایمیل',
+              ),
+              keyboardType: TextInputType.emailAddress,
+              textDirection: TextDirection.ltr,
+            ),
+
+            const SizedBox(height: 20),
+
+            Align(
+              alignment: Alignment.topRight,
+                child: Text(AppMessages.pleaseEnterAPassword, style: const TextStyle(fontWeight: FontWeight.bold))),
+
+            const SizedBox(height: 8),
+
+            AutoDirection(
+              builder: (BuildContext context, AutoDirectionController direction) {
+                return TextField(
+                  controller: passwordCtr,
+                  decoration: AppDecoration.outlineBordersInputDecoration.copyWith(
+                    hintText: 'رمز عبور',
+                  ),
+                  keyboardType: TextInputType.text,
+                  textDirection: direction.getTextDirection(passwordCtr.text),
+                  onChanged: (v){
+                    direction.onChangeText(v);
+                  },
+                );
               },
             ),
+
+            const SizedBox(height: 25),
+            TextButton(
+                onPressed: gotoTermPage,
+                child: Text(AppMessages.terms).fsR(-3)
+            ),
+
+            const SizedBox(height: 10),
+
+            SizedBox(
+              width: 200,
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(shape: const StadiumBorder()),
+                  onPressed: onRegisterEmailClick,
+                  child: Text(AppMessages.register)
+              ),
+            ),
+            const SizedBox(height: 10),
+            UnconstrainedBox(
+              child: TextButton(
+                  onPressed: (){
+                    inRegisterEmailMode = false;
+                    assistCtr.updateHead();
+                  },
+                  child: const Text('ورود')
+              ),
+            ),
+
 
             const SizedBox(height: 32,),
           ],
@@ -412,17 +522,17 @@ class _LoginPageState extends StateBase<LoginPage> {
   }
 
   void signWithEmailClick() {
-    loginByMobile = false;
+    mustLoginByMobileNumber = false;
     assistCtr.updateHead();
   }
 
   void signWithMobileClick() {
-    loginByMobile = true;
-    assistCtr.updateHead();
-
-    if(! isIran){
+    if(!isIran){
       AppToast.showToast(context, AppMessages.mustLiveInIran);
     }
+
+    mustLoginByMobileNumber = true;
+    assistCtr.updateHead();
   }
 
   void onChangeNumberCall() async {
@@ -457,11 +567,11 @@ class _LoginPageState extends StateBase<LoginPage> {
   }
 
   void onSendClick(){
-    if(loginByMobile){
+    if(mustLoginByMobileNumber){
       prepareSendOtp();
     }
     else {
-      prepareSndVerifyEmail();
+      loginWithEmail();
     }
   }
 
@@ -508,7 +618,7 @@ class _LoginPageState extends StateBase<LoginPage> {
     flipCardController.flipcard();
   }
 
-  void prepareSndVerifyEmail() async {
+  void loginWithEmail() async {
     final email = emailCtr.text.trim();
     final password = passwordCtr.text.trim();
 
@@ -523,7 +633,7 @@ class _LoginPageState extends StateBase<LoginPage> {
     }
 
     showLoading();
-    await LoginService.requestCheckEmailAndSendVerify(email: email, password: password);
+    //await LoginService.requestCheckEmailAndSendVerify(email: email, password: password);
     hideLoading();
   }
 
@@ -581,5 +691,24 @@ class _LoginPageState extends StateBase<LoginPage> {
       AppSheet.showSheet$ErrorCommunicatingServer(context);
       return;
     }
+  }
+
+  void onRegisterEmailClick() async {
+    final email = emailCtr.text.trim();
+    final password = passwordCtr.text.trim();
+
+    if(!Checker.isValidEmail(email)){
+      AppSnack.showInfo(context, 'ایمیل وارد شده صحیح نیست');
+      return;
+    }
+
+    if(password.length < 4 || password.length > 12){
+      AppSnack.showInfo(context, 'طول روز عبور بین 4 تا 12 حرف می باشد');
+      return;
+    }
+
+    showLoading();
+    await LoginService.requestCheckEmailAndSendVerify(email: email, password: password);
+    hideLoading();
   }
 }

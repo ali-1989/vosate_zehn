@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app/services/firebase_service.dart';
 import 'package:iris_tools/api/system.dart';
 
 import 'package:app/tools/log_tools.dart';
@@ -14,24 +15,9 @@ Future onBridgeCall(call) async {
   else if(call.method == 'androidReceiverIsCall') {
     //await AppNotification.initial();
     //AppNotification.sendMessagesNotification('t1', 'ali', 'Thanks God');
-    int count = 0;
-    Timer? t;
-    Completer c = Completer();
 
-    t = Timer.periodic(Duration(minutes: 1), (timer) {
-      if(count < 5){
-        count++;
-        LogTools.logger.logToAll('@@@@@@@@@: service: $count'); //todo.
-      }
-      else {
-        t!.cancel();
-        c.complete(null);
-      }
-    });
-
-    //FireBaseService.initializeApp();
-    //FireBaseService.start();
-    await c.future;
+    await FireBaseService.initializeApp();
+    await FireBaseService.start();
   }
 
   return null;
