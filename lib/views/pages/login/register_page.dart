@@ -1,3 +1,4 @@
+import 'package:app/tools/routeTools.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/helpers/mathHelper.dart';
@@ -257,6 +258,8 @@ class _RegisterPageState extends StateBase<RegisterPage> {
       if(userModel != null) {
         AppToast.showToast(context, AppMessages.welcome);
         AppBroadcast.reBuildMaterial();
+
+        RouteTools.popIfCan(context);
       }
       else {
         AppSheet.showSheet$OperationFailed(context);

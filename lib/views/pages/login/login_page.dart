@@ -4,6 +4,7 @@ import 'package:flutter_flip_card/flutter_flip_card.dart';
 import 'package:iris_tools/api/checker.dart';
 import 'package:iris_tools/api/helpers/localeHelper.dart';
 import 'package:iris_tools/api/helpers/mathHelper.dart';
+import 'package:iris_tools/api/system.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:iris_tools/widgets/text/autoDirection.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -618,25 +619,6 @@ class _LoginPageState extends StateBase<LoginPage> {
     flipCardController.flipcard();
   }
 
-  void loginWithEmail() async {
-    final email = emailCtr.text.trim();
-    final password = passwordCtr.text.trim();
-
-    if(!Checker.isValidEmail(email)){
-      AppSnack.showInfo(context, 'ایمیل وارد شده صحیح نیست');
-      return;
-    }
-
-    if(password.length < 4 || password.length > 12){
-      AppSnack.showInfo(context, 'طول روز عبور بین 4 تا 12 حرف می باشد');
-      return;
-    }
-
-    showLoading();
-    //await LoginService.requestCheckEmailAndSendVerify(email: email, password: password);
-    hideLoading();
-  }
-
   void reSendOtpCodeCall() async {
     LoginService.requestSendOtp(countryModel: countryModel, phoneNumber: phoneNumber);
     AppToast.showToast(context, AppMessages.otpCodeIsResend);
@@ -703,12 +685,72 @@ class _LoginPageState extends StateBase<LoginPage> {
     }
 
     if(password.length < 4 || password.length > 12){
-      AppSnack.showInfo(context, 'طول روز عبور بین 4 تا 12 حرف می باشد');
+      AppSnack.showInfo(context, 'طول رمز عبور بین 4 تا 12 حرف می باشد');
       return;
     }
 
     showLoading();
-    await LoginService.requestCheckEmailAndSendVerify(email: email, password: password);
-    hideLoading();
+    final (state, mEmail) = await LoginService.requestCheckEmailAndSendVerify(email: email, password: password);
+    await hideLoading();
+    await System.wait(const Duration(milliseconds: 300));
+
+    if(state == EmailVerifyStatus.error){
+      AppSheet.showSheet$OperationFailedTryAgain(context);
+      return;
+    }
+
+    if(state == EmailVerifyStatus.mustLogin) {
+      inRegisterEmailMode = false;
+      assistCtr.updateHead();
+      AppSheet.showSheetOk(context, 'این ایمیل وجود دارد، اطفا وارد شوید');
+    }
+    else if(state == EmailVerifyStatus.mustRegister){
+      final injectData = RegisterPageInjectData();
+      injectData.email = email;
+
+      RouteTools.pushPage(context, RegisterPage(injectData: injectData));
+    }
+    else if(state == EmailVerifyStatus.waitToVerify){
+      AppSheet.showSheetOk(context, 'ایمیلی جهت فعال ساری برای شما ارسال شد، لطفا روی لینک فعال سازی کلیک کنید.');
+      inRegisterEmailMode = false;
+      assistCtr.updateHead();
+    }
   }
+
+  void loginWithEmail() async {
+    final email = emailCtr.text.trim();
+    final password = passwordCtr.text.trim();
+
+    if(!Checker.isValidEmail(email)){
+      AppSnack.showInfo(context, 'ایمیل وارد شده صحیح نیست');
+      return;
+    }
+
+    if(password.length < 4 || password.length > 12){
+      AppSnack.showInfo(context, 'طول رمز عبور بین 4 تا 12 حرف می باشد');
+      return;
+    }
+
+    showLoading();
+    final (status, txt) = await LoginService.requestLoginWithEmail(email: email, password: password);
+    await hideLoading();
+    await System.wait(const Duration(milliseconds: 300));
+
+    if(status == EmailLoginStatus.error){
+      AppSheet.showSheet$OperationFailedTryAgain(context);
+    }
+    else if(status == EmailLoginStatus.inCorrectUserPass) {
+      AppSheet.showSheetOk(context, 'ایمیل یا رمز اشتباه است');
+    }
+    else if(status == EmailLoginStatus.mustRegister){
+      final injectData = RegisterPageInjectData();
+      injectData.email = email;
+
+      RouteTools.pushPage(context, RegisterPage(injectData: injectData));
+    }
+    else if(status == EmailLoginStatus.waitToVerify){
+      AppSheet.showSheetOk(context, 'ایمیلی جهت فعال ساری برای شما ارسال شد، لطفا روی لینک فعال سازی کلیک کنید.');
+    }
+  }
+
 }

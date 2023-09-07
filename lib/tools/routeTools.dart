@@ -107,6 +107,12 @@ class RouteTools {
     AppNavigator.backRoute(lastCtx);
   }
 
+  static void popIfCan(BuildContext context) {
+    if(canPop(context)){
+      popTopView(context: context);
+    }
+  }
+
   static void backToRoot(BuildContext context) {
     while(canPop(context)){
       popTopView(context: context);

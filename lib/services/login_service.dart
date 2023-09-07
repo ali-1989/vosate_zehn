@@ -19,7 +19,6 @@ import 'package:app/services/session_service.dart';
 import 'package:app/structures/enums/appEvents.dart';
 import 'package:app/structures/models/countryModel.dart';
 import 'package:app/structures/models/userModel.dart';
-import 'package:app/system/commonHttpHandler.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/appBroadcast.dart';
 import 'package:app/tools/app/appHttpDio.dart';
@@ -30,6 +29,21 @@ import 'package:app/tools/deviceInfoTools.dart';
 import 'package:app/tools/routeTools.dart';
 import 'package:app/views/pages/login/register_page.dart';
 
+enum EmailVerifyStatus {
+  error,
+  mustLogin,
+  mustRegister,
+  waitToVerify;
+}
+
+enum EmailLoginStatus {
+  error,
+  inCorrectUserPass,
+  mustRegister,
+  waitToVerify,
+  ok;
+}
+///=============================================================================
 class LoginService {
   LoginService._();
 
@@ -240,8 +254,8 @@ class LoginService {
     return result.future;
   }
 
-  static Future<void> requestCheckEmailAndSendVerify({required String email, required String password}) async {
-    final Completer<void> res = Completer();
+  static Future<(EmailVerifyStatus, String?)> requestCheckEmailAndSendVerify({required String email, required String password}) async {
+    final Completer<(EmailVerifyStatus, String?)> res = Completer();
     final http = HttpItem();
 
     final js = {};
@@ -255,7 +269,6 @@ class LoginService {
     http.method = 'POST';
     http.setBodyJson(js);
 
-    final context = RouteTools.materialContext!;
     final request = AppHttpDio.send(http);
 
     var f = request.response.catchError((e){
@@ -264,9 +277,7 @@ class LoginService {
 
     f = f.then((Response? response) async {
       if(response == null || !request.isOk) {
-        res.complete();
-        await System.wait(const Duration(milliseconds: 300));
-        AppSheet.showSheet$OperationFailedTryAgain(context);
+        res.complete((EmailVerifyStatus.error, null));
         return;
       }
 
@@ -274,42 +285,94 @@ class LoginService {
       final status = resJs[Keys.status];
 
       if(status == Keys.error){
-        res.complete();
-        await System.wait(const Duration(milliseconds: 300));
+        res.complete((EmailVerifyStatus.error, null));
+      }
+      else {
+        final mustRegister = resJs['must_register']?? false;
+        final mustLogin = resJs['must_login']?? false;
+        final mustVerify = resJs['must_verify']?? false;
 
-        if(!CommonHttpHandler.handler(context, resJs)){
-          AppSheet.showSheet$OperationFailedTryAgain(context);
+        if(mustLogin) {
+          res.complete((EmailVerifyStatus.mustLogin, email));
+        }
+        else if(mustRegister) {
+          res.complete((EmailVerifyStatus.mustRegister, email));
+        }
+        else if(mustVerify) {
+          res.complete((EmailVerifyStatus.waitToVerify, email));
+        }
+        else {
+          res.complete((EmailVerifyStatus.error, email));
+        }
+      }
+
+      return null;
+    });
+
+    return res.future;
+  }
+
+  static Future<(EmailLoginStatus, String?)> requestLoginWithEmail({required String email, required String password}) async {
+    final Completer<(EmailLoginStatus, String?)> res = Completer();
+    final http = HttpItem();
+
+    final js = {};
+    js[Keys.requestZone] = 'login_with_email';
+    js['email'] = email;
+    js['hash_password'] = Generator.generateMd5(password);
+    js.addAll(DeviceInfoTools.mapDeviceInfo());
+    DeviceInfoTools.attachDeviceInfo(js);
+
+    http.fullUrl = ApiManager.graphApi;
+    http.method = 'POST';
+    http.setBodyJson(js);
+
+    final request = AppHttpDio.send(http);
+
+    var f = request.response.catchError((e){
+      return null;
+    });
+
+    f = f.then((Response? response) async {
+      if(response == null || !request.isOk) {
+        res.complete((EmailLoginStatus.error, null));
+        return;
+      }
+
+      final resJs = request.getBodyAsJson()!;
+      final status = resJs[Keys.status];
+      final causeCode = resJs[Keys.causeCode]?? 0;
+
+      if(status == Keys.error){
+        if(causeCode == 80 || causeCode == 25) {
+          res.complete((EmailLoginStatus.inCorrectUserPass, null));
+        }
+        else {
+          res.complete((EmailLoginStatus.error, null));
         }
       }
       else {
-        res.complete();
-        await System.wait(const Duration(milliseconds: 300));
         final userId = resJs[Keys.userId];
+        final mustRegister = resJs['must_register']?? false;
+        final mustVerify = resJs['must_verify']?? false;
 
         if (userId != null) {
           final userModel = await SessionService.login$newProfileData(resJs);
 
           if(userModel != null) {
             AppBroadcast.reBuildMaterial();
+            res.complete((EmailLoginStatus.ok, null));
           }
           else {
-            if(context.mounted){
-              AppSheet.showSheet$OperationFailed(context);
-            }
+            res.complete((EmailLoginStatus.error, null));
           }
         }
-        else {
-          final isVerify = resJs['is_verify']?? false;
 
-          if(isVerify){
-            final injectData = RegisterPageInjectData();
-            injectData.email = resJs['email'];
-
-            RouteTools.pushPage(context, RegisterPage(injectData: injectData));
-          }
-          else {
-            AppSheet.showSheetOk(context, 'ایمیلی جهت فعال ساری برای شما ارسال شد، لطفا روی لینک فعال سازی کلیک کنید.');
-          }
+        if(mustRegister) {
+          res.complete((EmailLoginStatus.mustRegister, email));
+        }
+        else if(mustVerify) {
+          res.complete((EmailLoginStatus.waitToVerify, email));
         }
       }
 
