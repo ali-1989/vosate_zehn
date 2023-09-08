@@ -155,7 +155,7 @@ class MyApp extends StatelessWidget {
 
   Widget materialHomeBuilder(){
     double factor = PlatformDispatcher.instance.textScaleFactor.clamp(0.85, 1.3);
-
+print('============== $factor');
     return Builder(
       builder: (context) {
         FontManager.instance.detectDeviceFontSize(context);
@@ -169,7 +169,7 @@ class MyApp extends StatelessWidget {
             factor = factor - 0.09;
           }
         }
-
+        print('==============> $factor, ${AppThemes.instance.themeData.textTheme.bodyMedium?.fontSize}');
         return MediaQuery(
             data: MediaQuery.of(context).copyWith(textScaleFactor: factor),
             child: Builder(

@@ -373,6 +373,7 @@ class Font {
       final fSize = appHeight / 52;
 
       final minNum =  max(10.5, fSize);
+      print('------------------'+min(FontManager.maxDeviceFontSize, minNum).toString());
       return min(FontManager.maxDeviceFontSize, minNum);
     }
   }

@@ -13,8 +13,8 @@ version: 5.3.4+30
 
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
-  flutter: ">=3.0.0"
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: '>=3.0.0'
 
 
 dependencies:
@@ -72,7 +72,6 @@ dependencies:
   wakelock: ^0.6.2
   carousel_slider: ^4.2.1
   flutter_flip_card: ^0.0.4
-
 
   iris_tools:
     git: https://github.com/ali-1989/IrisTools.git

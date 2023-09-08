@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app/managers/font_manager.dart';
 import 'package:app/services/native_call_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -210,7 +211,9 @@ class SplashPageState extends StateBase<SplashPage> {
 
         AppSizes.instance.addMetricListener(onSizeCheng);
       }*/
-
+      print('==============>>  ${AppThemes.instance.themeData.textTheme.bodyMedium?.fontSize}');
+      print('==============>>  ${AppThemes.instance.baseFont.size}');
+      print('==============>>  ${FontManager.defaultFontSize},  ${FontManager.deviceFontSize}');
       if(RouteTools.materialContext != null) {
         AidService.checkShowDialog();
         VersionManager.checkAppHasNewVersion(RouteTools.materialContext!);

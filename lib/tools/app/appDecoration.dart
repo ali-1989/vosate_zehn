@@ -81,6 +81,7 @@ class AppDecoration {
   static TextStyle appBarTextStyle() {
     return AppThemes.instance.themeData.appBarTheme.toolbarTextStyle!;
   }
+
   static double fontSizeRelative(double size) {
     var siz = AppThemes.instance.currentTheme.baseTextStyle.fontSize;
     return (siz?? FontManager.deviceFontSize) + size;
