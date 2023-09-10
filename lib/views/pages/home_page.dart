@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:iris_tools/api/duration/durationFormatter.dart';
-import 'package:iris_tools/api/helpers/urlHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:iris_tools/widgets/irisImageView.dart';
 import 'package:iris_tools/widgets/keepAliveWrap.dart';
@@ -173,9 +172,7 @@ class _HomePageState extends StateBase<HomePage> {
           }
           return GestureDetector(
             onTap: (){
-              if(adv.clickUrl?.isNotEmpty?? false){
-                UrlHelper.launchLink(adv.clickUrl!);
-              }
+              AdvertisingManager.onAdvertisingClick(adv);
             },
             child: IrisImageView(
               height: 170,

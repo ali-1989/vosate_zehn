@@ -15,9 +15,7 @@ class AppDecoration {
   static Color secondColor = Colors.orange;
   static Color differentColor = const Color(0xFFFF006E);
   static Color orange = const Color(0xFFFF006E);
-
-  
-
+  //--------------------------------------------------
   static ClassicFooter classicFooter = const ClassicFooter(
     loadingText: '',
     idleText: '',
@@ -207,10 +205,6 @@ class AppDecoration {
       margin: margin,
       padding: padding,
     );
-  }
-
-  static Color cardColorOnCard() {
-    return ColorHelper.changeHSLByRelativeDarkLight(AppThemes.instance.currentTheme.cardColor, 2, 0.0, 0.04);
   }
 
   static TextStyle relativeFabTextStyle() {

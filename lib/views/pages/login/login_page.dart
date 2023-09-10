@@ -1,12 +1,18 @@
-import 'package:flutter/material.dart';
+import 'dart:async';
 
-import 'package:flutter_flip_card/flutter_flip_card.dart';
+import 'package:app/services/google_service.dart';
+import 'package:app/tools/app/appLoading.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
 import 'package:iris_tools/api/checker.dart';
 import 'package:iris_tools/api/helpers/localeHelper.dart';
 import 'package:iris_tools/api/helpers/mathHelper.dart';
 import 'package:iris_tools/api/system.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:iris_tools/widgets/text/autoDirection.dart';
+import 'package:iris_tools/widgets/page_switcher.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
@@ -45,15 +51,14 @@ class _LoginPageState extends StateBase<LoginPage> {
   TextEditingController emailCtr = TextEditingController();
   TextEditingController passwordCtr = TextEditingController();
   late PhoneNumberInputController phoneNumberController;
-  late FlipCardController flipCardController;
+  PageSwitcherController pageCtr = PageSwitcherController();
   late final StopWatchTimer stopWatchTimer;
   CountryModel countryModel = CountryModel();
   String phoneNumber = '';
   String pinCode = '';
   int timerValueSec = 60;
   bool showResendOtpButton = false;
-  bool mustLoginByMobileNumber = false;
-  bool inRegisterEmailMode = false;
+  late final bool isWeb;
   String countryIso = WidgetsBinding.instance.platformDispatcher.locale.countryCode?? 'IR';
   late bool isIran;
 
@@ -62,6 +67,7 @@ class _LoginPageState extends StateBase<LoginPage> {
   void initState(){
     super.initState();
 
+    isWeb = kIsWeb;
     isIran = countryIso == 'IR';
 
     LoginService.findCountryWithIP().then((value) {
@@ -70,7 +76,6 @@ class _LoginPageState extends StateBase<LoginPage> {
       assistCtr.updateHead();
     });
 
-    flipCardController = FlipCardController();
     phoneNumberController = PhoneNumberInputController();
     phoneNumberController.setOnTapCountryArrow(onTapCountryArrow);
 
@@ -122,20 +127,22 @@ class _LoginPageState extends StateBase<LoginPage> {
           SizedBox(
             height: MathHelper.percent(sh, 30),
             child: Center(
-              child: Image.asset(AppImages.appIcon, width: 100, height: 100,),
+              child: Image.asset(AppImages.appIcon, width: 100, height: 100),
             ),
           ),
 
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10),
             child: Align(
-                child: FlipCard(
-                    rotateSide: RotateSide.bottom,
-                    onTapFlipping: false,
-                    axis: FlipAxis.horizontal,
-                    controller: flipCardController,
-                    frontWidget: buildFrontFlip(),
-                    backWidget: buildBackFlip()
+                child: PageSwitcher(
+                  controller: pageCtr,
+                  pages: [
+                    buildFirstPage(),
+                    buildEnterWithEmailForWeb(),
+                    buildRegisterEmailForWeb(),
+                    buildEnterWithMobileForWeb(),
+                    buildPinCodePage(),
+                  ],
                 )
             ),
           ),
@@ -144,19 +151,395 @@ class _LoginPageState extends StateBase<LoginPage> {
     );
   }
 
-  Widget buildFrontFlip() {
-    if(inRegisterEmailMode){
-      return buildFrontFlipForRegister();
+  Widget buildFirstPage(){
+    if(isWeb || !isIran){
+      return buildStartPageForWebOrMobileOutSideIran();
     }
 
-    if(mustLoginByMobileNumber && isIran){
-      return buildFrontFlipWithMobile();
-    }
-
-    return buildFrontFlipWithEmail();
+    return buildFirstPageForMobileInIran();
   }
 
-  Widget buildFrontFlipWithMobile() {
+  Widget buildStartPageForWebOrMobileOutSideIran() {
+    return Card(
+      color: Colors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 40),
+        child: Column(
+          children: [
+            const SizedBox(height: 30),
+            Text(AppMessages.welcome).fsR(2).bold(),
+
+            Text(AppMessages.pleaseSelectOneOption,
+                style: const TextStyle(fontWeight: FontWeight.bold)
+            ),
+
+            const SizedBox(height: 30),
+            SizedBox(
+              width: 200,
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: const StadiumBorder(),
+                  ),
+                  onPressed: onEnterWithEmailClick,
+                  child: Text('ورود با ایمیل')
+              ),
+            ),
+
+            const SizedBox(height: 8),
+            Builder(builder: (_){
+              if(canShowEnterWithMobile()){
+                return SizedBox(
+                  width: 200,
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: const StadiumBorder(),
+                      ),
+                      onPressed: onEnterWithMobileForWebClick,
+                      child: Text('ورود با شماره موبایل')
+                  ),
+                );
+              }
+
+              /// sign by Gmail
+              return SizedBox(
+                width: 200,
+                child: ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      shape: const StadiumBorder(),
+                      backgroundColor: AppThemes.instance.currentTheme.differentColor,
+                    ),
+                    onPressed: (){
+                      signWithGoogleClick();
+                    },
+                    icon: Image.asset(AppImages.googleIco, width: 20, height: 20,),
+                    label: Text(AppMessages.loginWithGoogle)
+                ),
+              );
+            }),
+
+            const SizedBox(height: 8),
+            SizedBox(
+              width: 200,
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: const StadiumBorder(),
+                    backgroundColor: AppThemes.instance.currentTheme.differentColor,
+                  ),
+                  onPressed: onEnterToRegisterEmailForWebClick,
+                  child: Text('ثبت نام با ایمیل')
+              ),
+            ),
+
+            /// enter guest
+            const SizedBox(height: 8),
+            TextButton(
+              child: const Text('ورود مهمان'),
+              onPressed: (){
+                LoginService.loginGuestUser(context);
+              },
+            ),
+
+            const SizedBox(height: 32),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildFirstPageForMobileInIran() {
+    return Card(
+      color: Colors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          //shrinkWrap: true,
+          //padding: const EdgeInsets.symmetric(horizontal: 20),
+          children: [
+            const SizedBox(height: 30),
+            Text(AppMessages.pleaseEnterMobileToSendCode,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+
+            const SizedBox(height: 30),
+
+            PhoneNumberInput(
+              controller: phoneNumberController,
+              countryCode: countryIso == 'IR'? countryModel.countryPhoneCode : '',
+              numberHint: AppMessages.mobileNumber,
+              showCountrySection: countryIso == 'IR',
+            ),
+
+            const SizedBox(height: 30),
+
+            /// send Btn
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(shape: const StadiumBorder()),
+                  onPressed: onSendBtnForPinClick,
+                  child: Text(AppMessages.send)
+              ),
+            ),
+            /*SizedBox(
+              width: double.maxFinite,
+              child: ,
+            ),*/
+
+            /// sign by Gmail
+            const SizedBox(height: 10),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    shape: const StadiumBorder(),
+                    backgroundColor: AppThemes.instance.currentTheme.differentColor,
+                  ),
+                  onPressed: (){
+                    signWithGoogleClick();
+                  },
+                  icon: Image.asset(AppImages.googleIco, width: 20, height: 20,),
+                  label: Text(AppMessages.loginWithGoogle)
+              ),
+            ),
+
+            const SizedBox(height: 20),
+            TextButton(
+                onPressed: gotoTermPage,
+                child: Text(AppMessages.terms).fsR(-3)
+            ),
+
+            /// enter guest
+            const SizedBox(height: 2),
+            TextButton(
+              child: const Text('ورود مهمان').fsR(-1),
+              onPressed: (){
+                LoginService.loginGuestUser(context);
+              },
+            ),
+
+
+            const SizedBox(height: 30),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildFirstPageForMobileOutSideIran() {
+    return Card(
+      color: Colors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          //shrinkWrap: true,
+          //padding: const EdgeInsets.symmetric(horizontal: 20),
+          children: [
+            const SizedBox(height: 30),
+            Text(AppMessages.pleaseEnterMobileToSendCode,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+
+            const SizedBox(height: 30),
+
+            PhoneNumberInput(
+              controller: phoneNumberController,
+              countryCode: countryIso == 'IR'? countryModel.countryPhoneCode : '',
+              numberHint: AppMessages.mobileNumber,
+              showCountrySection: countryIso == 'IR',
+            ),
+
+            const SizedBox(height: 10),
+
+            /// send Btn
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(shape: const StadiumBorder()),
+                  onPressed: onSendBtnForPinClick,
+                  child: Text(AppMessages.send)
+              ),
+            ),
+
+            /// sign by Gmail
+            const SizedBox(height: 10),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    shape: const StadiumBorder(),
+                    backgroundColor: AppThemes.instance.currentTheme.differentColor,
+                  ),
+                  onPressed: (){
+                    signWithGoogleClick();
+                  },
+                  icon: Image.asset(AppImages.googleIco, width: 20, height: 20,),
+                  label: Text(AppMessages.loginWithGoogle)
+              ),
+            ),
+
+            const SizedBox(height: 20),
+            TextButton(
+                onPressed: gotoTermPage,
+                child: Text(AppMessages.terms).fsR(-3)
+            ),
+
+            const SizedBox(height: 30),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildEnterWithEmailForWeb() {
+    return Card(
+      color: Colors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          children: [
+            const SizedBox(height: 30),
+            Text(AppMessages.pleaseEnterEmailToSendVerifyEmail,
+                style: const TextStyle(fontWeight: FontWeight.bold)
+            ),
+
+            const SizedBox(height: 30),
+            TextField(
+              controller: emailCtr,
+              decoration: AppDecoration.outlineBordersInputDecoration.copyWith(
+                hintText: 'ایمیل',
+              ),
+              keyboardType: TextInputType.emailAddress,
+              textDirection: TextDirection.ltr,
+            ),
+
+            const SizedBox(height: 8),
+
+            AutoDirection(
+              builder: (BuildContext context, AutoDirectionController direction) {
+                return TextField(
+                  controller: passwordCtr,
+                  decoration: AppDecoration.outlineBordersInputDecoration.copyWith(
+                    hintText: 'رمز عبور',
+                  ),
+                  keyboardType: TextInputType.text,
+                  textDirection: direction.getTextDirection(passwordCtr.text),
+                  onChanged: (v){
+                    direction.onChangeText(v);
+                  },
+                );
+              },
+            ),
+
+            const SizedBox(height: 25),
+
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(shape: const StadiumBorder()),
+                  onPressed: loginWithEmail,
+                  child: Text(AppMessages.loginBtn)
+              ),
+            ),
+
+            TextButton(
+              child: Text(AppMessages.back),
+              onPressed: (){
+                pageCtr.changePageTo(0);
+              },
+            ),
+
+            const SizedBox(height: 32),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildRegisterEmailForWeb() {
+    return Card(
+      color: Colors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          children: [
+            const SizedBox(height: 30),
+            Text(AppMessages.pleaseEnterEmailToRegistering,
+                style: const TextStyle(fontWeight: FontWeight.bold)
+            ),
+
+            const SizedBox(height: 30),
+            TextField(
+              controller: emailCtr,
+              decoration: AppDecoration.outlineBordersInputDecoration.copyWith(
+                hintText: 'ایمیل',
+              ),
+              keyboardType: TextInputType.emailAddress,
+              textDirection: TextDirection.ltr,
+            ),
+
+            const SizedBox(height: 20),
+
+            Align(
+                alignment: Alignment.topRight,
+                child: Text(AppMessages.pleaseEnterAPassword, style: const TextStyle(fontWeight: FontWeight.bold))),
+
+            const SizedBox(height: 8),
+
+            AutoDirection(
+              builder: (BuildContext context, AutoDirectionController direction) {
+                return TextField(
+                  controller: passwordCtr,
+                  decoration: AppDecoration.outlineBordersInputDecoration.copyWith(
+                    hintText: 'رمز عبور',
+                  ),
+                  keyboardType: TextInputType.text,
+                  textDirection: direction.getTextDirection(passwordCtr.text),
+                  onChanged: (v){
+                    direction.onChangeText(v);
+                  },
+                );
+              },
+            ),
+
+            const SizedBox(height: 25),
+            TextButton(
+                onPressed: gotoTermPage,
+                child: Text(AppMessages.terms).fsR(-3)
+            ),
+
+            const SizedBox(height: 10),
+
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(shape: const StadiumBorder()),
+                  onPressed: onRegisterEmailClick,
+                  child: Text(AppMessages.register)
+              ),
+            ),
+            const SizedBox(height: 10),
+            UnconstrainedBox(
+              child: TextButton(
+                  onPressed: (){
+                    pageCtr.changePageTo(0);
+                  },
+                  child: Text(AppMessages.back)
+              ),
+            ),
+
+            const SizedBox(height: 32),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildEnterWithMobileForWeb() {
     return Card(
       color: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
@@ -189,36 +572,20 @@ class _LoginPageState extends StateBase<LoginPage> {
             const SizedBox(height: 10),
 
             SizedBox(
-              width: 200,
+              width: double.infinity,
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(shape: const StadiumBorder()),
-                  onPressed: onSendClick,
-                  child: Text(AppMessages.loginBtn)
+                  onPressed: onSendBtnForPinClick,
+                  child: Text(AppMessages.send)
               ),
             ),
-            /*SizedBox(
-              width: double.maxFinite,
-              child: ,
-            ),*/
 
             const SizedBox(height: 10),
-            UnconstrainedBox(
-              child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: const StadiumBorder(),
-                    backgroundColor: AppThemes.instance.currentTheme.differentColor,
-                  ),
-                  onPressed: (){
-                    signWithEmailClick();
-                  },
-                  child: const Text('ورود با ایمیل')
-              ),
-            ),
 
             TextButton(
-              child: const Text('ورود مهمان'),
+              child: Text(AppMessages.back),
               onPressed: (){
-                LoginService.loginGuestUser(context);
+                pageCtr.changePageTo(0);
               },
             ),
 
@@ -229,199 +596,7 @@ class _LoginPageState extends StateBase<LoginPage> {
     );
   }
 
-  Widget buildFrontFlipWithEmail() {
-    return Card(
-      color: Colors.white,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          children: [
-            const SizedBox(height: 30),
-            Text(AppMessages.pleaseEnterEmailToSendVerifyEmail,
-              style: const TextStyle(fontWeight: FontWeight.bold)
-            ),
-
-            const SizedBox(height: 30),
-            TextField(
-              controller: emailCtr,
-              decoration: AppDecoration.outlineBordersInputDecoration.copyWith(
-                hintText: 'ایمیل',
-              ),
-              keyboardType: TextInputType.emailAddress,
-              textDirection: TextDirection.ltr,
-            ),
-
-            const SizedBox(height: 8),
-
-            AutoDirection(
-              builder: (BuildContext context, AutoDirectionController direction) {
-                return TextField(
-                  controller: passwordCtr,
-                  decoration: AppDecoration.outlineBordersInputDecoration.copyWith(
-                    hintText: 'رمز عبور',
-                  ),
-                  keyboardType: TextInputType.text,
-                  textDirection: direction.getTextDirection(passwordCtr.text),
-                  onChanged: (v){
-                    direction.onChangeText(v);
-                  },
-                );
-              },
-            ),
-
-            const SizedBox(height: 25),
-            TextButton(
-                onPressed: gotoTermPage,
-                child: Text(AppMessages.terms).fsR(-3)
-            ),
-
-            const SizedBox(height: 10),
-
-            SizedBox(
-              width: 200,
-              child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(shape: const StadiumBorder()),
-                  onPressed: onSendClick,
-                  child: Text(AppMessages.loginBtn)
-              ),
-            ),
-            /*SizedBox(
-              width: double.maxFinite,
-              child: ,
-            ),*/
-
-            const SizedBox(height: 10),
-            UnconstrainedBox(
-              child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: const StadiumBorder(),
-                    backgroundColor: AppThemes.instance.currentTheme.differentColor,
-                  ),
-                  onPressed: signWithMobileClick,
-                  child: const Text('ورود با شماره موبایل')
-              ),
-            ),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TextButton(
-                  child: const Text('ورود مهمان'),
-                  onPressed: (){
-                    LoginService.loginGuestUser(context);
-                  },
-                ),
-
-                Visibility(
-                  visible: !mustLoginByMobileNumber,
-                    child: Row(
-                      children: [
-                        Text('  /  '),
-
-                        TextButton(
-                          child: const Text('ثبت نام'),
-                          onPressed: (){
-                            inRegisterEmailMode = true;
-                            assistCtr.updateHead();
-                          },
-                        ),
-                      ],
-                    )
-                )
-              ],
-            ),
-
-            const SizedBox(height: 32,),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget buildFrontFlipForRegister() {
-    return Card(
-      color: Colors.white,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          children: [
-            const SizedBox(height: 30),
-            Text(AppMessages.pleaseEnterEmailToRegistering,
-              style: const TextStyle(fontWeight: FontWeight.bold)
-            ),
-
-            const SizedBox(height: 30),
-            TextField(
-              controller: emailCtr,
-              decoration: AppDecoration.outlineBordersInputDecoration.copyWith(
-                hintText: 'ایمیل',
-              ),
-              keyboardType: TextInputType.emailAddress,
-              textDirection: TextDirection.ltr,
-            ),
-
-            const SizedBox(height: 20),
-
-            Align(
-              alignment: Alignment.topRight,
-                child: Text(AppMessages.pleaseEnterAPassword, style: const TextStyle(fontWeight: FontWeight.bold))),
-
-            const SizedBox(height: 8),
-
-            AutoDirection(
-              builder: (BuildContext context, AutoDirectionController direction) {
-                return TextField(
-                  controller: passwordCtr,
-                  decoration: AppDecoration.outlineBordersInputDecoration.copyWith(
-                    hintText: 'رمز عبور',
-                  ),
-                  keyboardType: TextInputType.text,
-                  textDirection: direction.getTextDirection(passwordCtr.text),
-                  onChanged: (v){
-                    direction.onChangeText(v);
-                  },
-                );
-              },
-            ),
-
-            const SizedBox(height: 25),
-            TextButton(
-                onPressed: gotoTermPage,
-                child: Text(AppMessages.terms).fsR(-3)
-            ),
-
-            const SizedBox(height: 10),
-
-            SizedBox(
-              width: 200,
-              child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(shape: const StadiumBorder()),
-                  onPressed: onRegisterEmailClick,
-                  child: Text(AppMessages.register)
-              ),
-            ),
-            const SizedBox(height: 10),
-            UnconstrainedBox(
-              child: TextButton(
-                  onPressed: (){
-                    inRegisterEmailMode = false;
-                    assistCtr.updateHead();
-                  },
-                  child: const Text('ورود')
-              ),
-            ),
-
-
-            const SizedBox(height: 32,),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget buildBackFlip(){
+  Widget buildPinCodePage(){
     return Card(
       color: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
@@ -481,9 +656,9 @@ class _LoginPageState extends StateBase<LoginPage> {
                 Row(
                   children: [
                     Visibility(
-                      visible: showResendOtpButton,
+                        visible: showResendOtpButton,
                         child: TextButton(
-                          onPressed: resetTimer,
+                            onPressed: resetTimer,
                             child: Text(AppMessages.resendOtpCode, style: const TextStyle(color: Colors.red))
                         )
                     ),
@@ -522,23 +697,130 @@ class _LoginPageState extends StateBase<LoginPage> {
     );
   }
 
-  void signWithEmailClick() {
-    mustLoginByMobileNumber = false;
-    assistCtr.updateHead();
-  }
 
-  void signWithMobileClick() {
+  /*Widget buildFrontFlipWithEmail() {
+    return Card(
+      color: Colors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          children: [
+            const SizedBox(height: 30),
+            Text(AppMessages.pleaseEnterEmailToSendVerifyEmail,
+              style: const TextStyle(fontWeight: FontWeight.bold)
+            ),
+
+            const SizedBox(height: 30),
+            TextField(
+              controller: emailCtr,
+              decoration: AppDecoration.outlineBordersInputDecoration.copyWith(
+                hintText: 'ایمیل',
+              ),
+              keyboardType: TextInputType.emailAddress,
+              textDirection: TextDirection.ltr,
+            ),
+
+            const SizedBox(height: 8),
+
+            AutoDirection(
+              builder: (BuildContext context, AutoDirectionController direction) {
+                return TextField(
+                  controller: passwordCtr,
+                  decoration: AppDecoration.outlineBordersInputDecoration.copyWith(
+                    hintText: 'رمز عبور',
+                  ),
+                  keyboardType: TextInputType.text,
+                  textDirection: direction.getTextDirection(passwordCtr.text),
+                  onChanged: (v){
+                    direction.onChangeText(v);
+                  },
+                );
+              },
+            ),
+
+            const SizedBox(height: 25),
+            TextButton(
+                onPressed: gotoTermPage,
+                child: Text(AppMessages.terms).fsR(-3)
+            ),
+
+            const SizedBox(height: 10),
+
+            SizedBox(
+              width: 200,
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(shape: const StadiumBorder()),
+                  onPressed: onSendBtnForPinClick,
+                  child: Text(AppMessages.loginBtn)
+              ),
+            ),
+            *//*SizedBox(
+              width: double.maxFinite,
+              child: ,
+            ),*//*
+
+            const SizedBox(height: 10),
+            UnconstrainedBox(
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: const StadiumBorder(),
+                    backgroundColor: AppThemes.instance.currentTheme.differentColor,
+                  ),
+                  onPressed: signWithMobileClick,
+                  child: const Text('ورود با شماره موبایل')
+              ),
+            ),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
+                  child: const Text('ورود مهمان'),
+                  onPressed: (){
+                    LoginService.loginGuestUser(context);
+                  },
+                ),
+
+                Visibility(
+                  visible: !mustLoginByMobileNumber,
+                    child: Row(
+                      children: [
+                        Text('  /  '),
+
+                        TextButton(
+                          child: const Text('ثبت نام'),
+                          onPressed: (){
+                            inRegisterEmailMode = true;
+                            assistCtr.updateHead();
+                          },
+                        ),
+                      ],
+                    )
+                )
+              ],
+            ),
+
+            const SizedBox(height: 32,),
+          ],
+        ),
+      ),
+    );
+  }
+  */
+
+  /*void signWithMobileClick() {
     if(!isIran){
       AppToast.showToast(context, AppMessages.mustLiveInIran);
     }
 
     mustLoginByMobileNumber = true;
     assistCtr.updateHead();
-  }
+  }*/
 
   void onChangeNumberCall() async {
     pinCode = '';
-    flipCardController.flipcard();
+    pageCtr.changePageTo(0);
   }
 
   void resetTimer(){
@@ -567,13 +849,8 @@ class _LoginPageState extends StateBase<LoginPage> {
     RouteTools.pushPage(context, const TermPage());
   }
 
-  void onSendClick(){
-    if(mustLoginByMobileNumber){
-      prepareSendOtp();
-    }
-    else {
-      loginWithEmail();
-    }
+  void onSendBtnForPinClick(){
+    prepareSendOtp();
   }
 
   void prepareSendOtp(){
@@ -616,7 +893,7 @@ class _LoginPageState extends StateBase<LoginPage> {
     });
 
     pinCodeCtr.text = '';
-    flipCardController.flipcard();
+    pageCtr.changePageTo(4);
   }
 
   void reSendOtpCodeCall() async {
@@ -700,9 +977,8 @@ class _LoginPageState extends StateBase<LoginPage> {
     }
 
     if(state == EmailVerifyStatus.mustLogin) {
-      inRegisterEmailMode = false;
-      assistCtr.updateHead();
-      AppSheet.showSheetOk(context, 'این ایمیل وجود دارد، اطفا وارد شوید');
+      pageCtr.changePageTo(1);
+      AppSheet.showSheetOk(context, 'این ایمیل وجود دارد، لطفا وارد شوید');
     }
     else if(state == EmailVerifyStatus.mustRegister){
       final injectData = RegisterPageInjectData();
@@ -712,8 +988,7 @@ class _LoginPageState extends StateBase<LoginPage> {
     }
     else if(state == EmailVerifyStatus.waitToVerify){
       AppSheet.showSheetOk(context, 'ایمیلی جهت فعال ساری برای شما ارسال شد، لطفا روی لینک فعال سازی کلیک کنید.');
-      inRegisterEmailMode = false;
-      assistCtr.updateHead();
+      pageCtr.changePageTo(1);
     }
   }
 
@@ -753,4 +1028,94 @@ class _LoginPageState extends StateBase<LoginPage> {
     }
   }
 
+  void signWithGoogleClick() async {
+    final google = GoogleService();
+
+    AppLoading.instance.showWaiting(context);
+    GoogleSignInAccount? googleResult;
+
+    final timer = Timer(const Duration(seconds: kIsWeb? 300: 60), (){
+      AppLoading.instance.hideLoading(context);
+      AppSheet.showSheet$OperationFailed(context);
+      return;
+    });
+
+    try {
+      googleResult = await google.signIn();
+
+      if(timer.isActive){
+        timer.cancel();
+      }
+    }
+    catch(e){
+      AppLoading.instance.hideLoading(context);
+      AppSheet.showSheet$OperationFailed(context);
+      return;
+    }
+
+    if(googleResult == null){
+      AppLoading.instance.hideLoading(context);
+      AppSheet.showSheet$OperationFailed(context);
+    }
+    else {
+      final twoState = await LoginService.requestVerifyGmail(email: googleResult.email);
+      AppLoading.instance.cancel(context);
+
+      if(twoState.hasResult1()){
+        final status = twoState.result1![Keys.status];
+        final causeCode = twoState.result1![Keys.causeCode]?? 0;
+
+        if(status == Keys.error){
+          if(causeCode == HttpCodes.error_dataNotExist){
+            /**/
+          }
+          else if(causeCode == HttpCodes.error_userIsBlocked){
+            AppSheet.showSheet$AccountIsBlock(context);
+            return;
+          }
+        }
+        else {
+          final userId = twoState.result1![Keys.userId];
+
+          if (userId == null) {
+            final injectData = RegisterPageInjectData();
+            injectData.email = googleResult.email;
+
+            RouteTools.pushPage(context, RegisterPage(injectData: injectData));
+          }
+          else {
+            final userModel = await SessionService.login$newProfileData(twoState.result1!);
+
+            if(userModel != null) {
+              //RouteTools.pushPage(context, LayoutPage(key: AppBroadcast.layoutPageKey));
+              AppBroadcast.reBuildMaterial();
+            }
+            else {
+              AppSheet.showSheet$OperationFailed(context);
+            }
+          }
+        }
+      }
+      else {
+        AppSheet.showSheet$ErrorCommunicatingServer(context);
+        return;
+      }
+    }
+  }
+
+  bool canShowEnterWithMobile() {
+    return !isWeb || isIran;
+  }
+
+  void onEnterWithEmailClick() {
+    pageCtr.changePageTo(1);
+  }
+
+  void onEnterWithMobileForWebClick() {
+    pageCtr.changePageTo(3);
+  }
+
+  void onEnterToRegisterEmailForWebClick() {
+    pageCtr.changePageTo(2);
+  }
 }

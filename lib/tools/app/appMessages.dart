@@ -108,6 +108,10 @@ class AppMessages {
     return _getContext().t('exit')?? _noText;
   }
 
+  static String get back {
+    return _getContext().t('back')?? _noText;
+  }
+
   static String get search {
     return _getContext().t('search')?? _noText;
   }
@@ -206,6 +210,10 @@ class AppMessages {
 
   static String get pleaseEnterEmailToSendVerifyEmail {
     return 'لطفا آدرس ایمیل خود را جهت ورود وارد کنید';
+  }
+
+  static String get pleaseSelectOneOption {
+    return 'لطفا یکی از گزینه ها را انتخاب کنید';
   }
 
   static String get pleaseEnterEmailToRegistering {
