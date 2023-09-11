@@ -24,6 +24,8 @@ class AppHttpDio {
 	}
 
 	static HttpRequester send(HttpItem httpItem, {BaseOptions? options}){
+		httpItem.prepareMultiParts();
+
 		if(httpItem.debugMode) {
 			var txt = '\n-------------------------http debug\n';
 			txt += 'url: ${httpItem.fullUrl}\n';
@@ -36,7 +38,6 @@ class AppHttpDio {
 			LogTools.logger.logToAll(txt);
 		}
 
-		httpItem.prepareMultiParts();
 		final itemRes = HttpRequester();
 
 		try {
@@ -597,11 +598,11 @@ class HttpItem {
 		}
 
 		final newBody = FormData();
-		//final oldBody = body as FormData;
+		final oldBody = body as FormData;
 
-		/*for(final f in oldBody.fields){
+		for(final f in oldBody.fields){
 			newBody.fields.add(f);
-		}*/
+		}
 
 		for(final fd in formDataItems){
 			if(fd.filePath != null){

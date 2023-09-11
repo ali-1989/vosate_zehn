@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -93,7 +94,7 @@ class VersionManager {
 
         await Future.delayed(const Duration(seconds: 4));
 
-        if(context.mounted) {
+        if(context.mounted && !kIsWeb) {
           showUpdateDialog(context, vm);
         }
       }
@@ -111,7 +112,6 @@ class VersionManager {
   }*/
 
   static void showUpdateDialog(BuildContext context, VersionModel vm) {
-    
     void closeApp(ctx){
       System.exitApp();
     }
