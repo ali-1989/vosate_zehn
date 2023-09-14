@@ -4,5 +4,5 @@
     <string name="title_activity_main">VosateZehn</string>
     <string name="package_name"></string>
     <string name="custom_url_scheme"></string>-->
-    <string name="default_notification_channel_id">C_VosateZehn</string>
+    <string name="firebase_notification_channel_id">C_VosateZehn</string>
 </resources>

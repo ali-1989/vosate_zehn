@@ -1,4 +1,3 @@
-import 'package:app/tools/routeTools.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/helpers/mathHelper.dart';
@@ -8,16 +7,17 @@ import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 import 'package:app/services/session_service.dart';
-import 'package:app/structures/abstract/stateBase.dart';
+import 'package:app/structures/abstract/state_super.dart';
 import 'package:app/structures/middleWares/requester.dart';
-import 'package:app/structures/models/countryModel.dart';
+import 'package:app/structures/models/country_model.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/tools/app/appBroadcast.dart';
-import 'package:app/tools/app/appImages.dart';
-import 'package:app/tools/app/appMessages.dart';
-import 'package:app/tools/app/appSheet.dart';
-import 'package:app/tools/app/appToast.dart';
-import 'package:app/views/baseComponents/appBarBuilder.dart';
+import 'package:app/tools/app/app_broadcast.dart';
+import 'package:app/tools/app/app_images.dart';
+import 'package:app/tools/app/app_messages.dart';
+import 'package:app/tools/app/app_sheet.dart';
+import 'package:app/tools/app/app_toast.dart';
+import 'package:app/tools/route_tools.dart';
+import 'package:app/views/baseComponents/appbar_builder.dart';
 import 'package:app/views/components/dateComponents/selectDateCalendarView.dart';
 
 class RegisterPageInjectData {
@@ -38,7 +38,7 @@ class RegisterPage extends StatefulWidget {
   State<RegisterPage> createState() => _RegisterPageState();
 }
 ///=================================================================================================
-class _RegisterPageState extends StateBase<RegisterPage> {
+class _RegisterPageState extends StateSuper<RegisterPage> {
   late TextEditingController nameCtr;
   late TextEditingController familyCtr;
   DateTime? birthDate;

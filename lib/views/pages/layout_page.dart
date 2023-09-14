@@ -6,15 +6,15 @@ import 'package:shaped_bottom_bar/models/shaped_item_object.dart';
 import 'package:shaped_bottom_bar/shaped_bottom_bar.dart';
 import 'package:shaped_bottom_bar/utils/arrays.dart';
 
-import 'package:app/services/aidService.dart';
-import 'package:app/structures/abstract/stateBase.dart';
+import 'package:app/services/aid_service.dart';
+import 'package:app/structures/abstract/state_super.dart';
 import 'package:app/structures/enums/enums.dart';
-import 'package:app/tools/app/appIcons.dart';
-import 'package:app/tools/app/appMessages.dart';
-import 'package:app/tools/app/appThemes.dart';
-import 'package:app/tools/routeTools.dart';
-import 'package:app/views/baseComponents/appBarBuilder.dart';
-import 'package:app/views/baseComponents/drawerMenuBuilder.dart';
+import 'package:app/tools/app/app_icons.dart';
+import 'package:app/tools/app/app_messages.dart';
+import 'package:app/tools/app/app_themes.dart';
+import 'package:app/tools/route_tools.dart';
+import 'package:app/views/baseComponents/appbar_builder.dart';
+import 'package:app/views/baseComponents/drawer_menu_builder.dart';
 import 'package:app/views/pages/home_page.dart';
 import 'package:app/views/pages/levels/bucket_page.dart';
 import 'package:app/views/pages/search_page.dart';
@@ -27,7 +27,7 @@ class LayoutPage extends StatefulWidget{
   State<LayoutPage> createState() => LayoutPageState();
 }
 ///=================================================================================================
-class LayoutPageState extends StateBase<LayoutPage> {
+class LayoutPageState extends StateSuper<LayoutPage> {
   GlobalKey<ScaffoldState> scaffoldState = GlobalKey<ScaffoldState>();
   int selectedPage = 0;
   late PageController pageController;
@@ -35,7 +35,7 @@ class LayoutPageState extends StateBase<LayoutPage> {
 
 
   @override
-  Future<bool> onWillBack<s extends StateBase>(s state) {
+  Future<bool> onWillBack<s extends StateSuper>(s state) {
     MoveToBackground.moveTaskToBack();
 
     return Future<bool>.value(false);

@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:webviewx/webviewx.dart';
 
-import 'package:app/structures/abstract/stateBase.dart';
-import 'package:app/tools/app/appMessages.dart';
-import 'package:app/views/baseComponents/appBarBuilder.dart';
+import 'package:app/structures/abstract/state_super.dart';
+import 'package:app/tools/app/app_messages.dart';
+import 'package:app/views/baseComponents/appbar_builder.dart';
 import 'package:app/views/states/waitToLoad.dart';
 
 class PayWebPage extends StatefulWidget{
@@ -17,7 +17,7 @@ class PayWebPage extends StatefulWidget{
   State<PayWebPage> createState() => _PayWebPageState();
 }
 ///==================================================================================
-class _PayWebPageState extends StateBase<PayWebPage> {
+class _PayWebPageState extends StateSuper<PayWebPage> {
   bool isInPreparing = true;
   WebViewXController? webController;
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:app/tools/app/appMessages.dart';
+import 'package:app/tools/app/app_messages.dart';
 
 class EmptyData extends StatelessWidget {
   final TextStyle? textStyle;

@@ -1,19 +1,18 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:app/managers/api_manager.dart';
-import 'package:app/services/session_service.dart';
-import 'package:app/tools/deviceInfoTools.dart';
 import 'package:flutter/foundation.dart';
+
+import 'package:http/http.dart' as http;
 import 'package:iris_tools/api/generator.dart';
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
-
 import 'package:iris_tools/api/logger/logger.dart';
 import 'package:iris_tools/api/logger/reporter.dart';
 
-import 'package:app/tools/app/appDirectories.dart';
-import 'package:http/http.dart' as http;
-
+import 'package:app/managers/api_manager.dart';
+import 'package:app/services/session_service.dart';
+import 'package:app/tools/app/app_directories.dart';
+import 'package:app/tools/device_info_tools.dart';
 
 class LogTools {
   LogTools._();

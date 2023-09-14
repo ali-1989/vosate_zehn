@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/tools/app/appDb.dart';
-import 'package:app/tools/app/appThemes.dart';
+import 'package:app/tools/app/app_db.dart';
+import 'package:app/tools/app/app_themes.dart';
 
 class FontManager {
   FontManager._();
@@ -372,7 +372,7 @@ class Font {
       final appHeight = (isLandscape ? realPixelWidth : realPixelHeight) / pixelRatio;
       final fSize = appHeight / 52;
 
-      final minNum =  max(10.5, fSize);
+      final minNum =  max(11.0, fSize);
       print('------------------'+min(FontManager.maxDeviceFontSize, minNum).toString());
       return min(FontManager.maxDeviceFontSize, minNum);
     }

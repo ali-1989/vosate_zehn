@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:chewie/chewie.dart';
 import 'package:video_player/video_player.dart';
 
-import 'package:app/structures/abstract/stateBase.dart';
+import 'package:app/structures/abstract/state_super.dart';
 import 'package:app/structures/enums/enums.dart';
-import 'package:app/tools/app/appThemes.dart';
+import 'package:app/tools/app/app_themes.dart';
 
 /// has usage in below
 
@@ -35,7 +35,7 @@ class VideoPlayerView extends StatefulWidget {
   }
 }
 ///=========================================================================================
-class VideoPlayerViewState extends StateBase<VideoPlayerView> {
+class VideoPlayerViewState extends StateSuper<VideoPlayerView> {
   VideoPlayerController? playerController;
   ChewieController? chewieVideoController;
   bool isVideoInit = false;

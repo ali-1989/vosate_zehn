@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/modules/stateManagers/assist.dart';
-import 'package:iris_tools/widgets/irisImageView.dart';
+import 'package:iris_tools/widgets/iris_image_view.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import 'package:app/managers/mediaManager.dart';
+import 'package:app/managers/media_manager.dart';
 import 'package:app/services/session_service.dart';
-import 'package:app/structures/abstract/stateBase.dart';
+import 'package:app/structures/abstract/state_super.dart';
 import 'package:app/structures/enums/enums.dart';
 import 'package:app/structures/middleWares/requester.dart';
 import 'package:app/structures/models/bucketModel.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/tools/app/appDecoration.dart';
-import 'package:app/tools/app/appDirectories.dart';
-import 'package:app/tools/app/appImages.dart';
+import 'package:app/tools/app/app_decoration.dart';
+import 'package:app/tools/app/app_directories.dart';
+import 'package:app/tools/app/app_images.dart';
 import 'package:app/tools/app_tools.dart';
-import 'package:app/tools/routeTools.dart';
-import 'package:app/tools/searchFilterTool.dart';
+import 'package:app/tools/route_tools.dart';
+import 'package:app/tools/search_filter_tool.dart';
 import 'package:app/views/pages/levels/sub_bucket_page.dart';
 import 'package:app/views/states/emptyData.dart';
 import 'package:app/views/states/errorOccur.dart';
@@ -39,7 +39,7 @@ class BucketPage extends StatefulWidget{
   State<BucketPage> createState() => _BucketPageState();
 }
 ///==================================================================================
-class _BucketPageState extends StateBase<BucketPage> {
+class _BucketPageState extends StateSuper<BucketPage> {
   Requester requester = Requester();
   bool isInFetchData = true;
   String state$fetchData = 'state_fetchData';

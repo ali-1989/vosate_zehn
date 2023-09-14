@@ -14,20 +14,20 @@ import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:app/services/google_service.dart';
 import 'package:app/services/login_service.dart';
 import 'package:app/services/session_service.dart';
-import 'package:app/structures/abstract/stateBase.dart';
-import 'package:app/structures/models/countryModel.dart';
-import 'package:app/system/commonHttpHandler.dart';
+import 'package:app/structures/abstract/state_super.dart';
+import 'package:app/structures/models/country_model.dart';
+import 'package:app/system/common_http_handler.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/tools/app/appBroadcast.dart';
-import 'package:app/tools/app/appImages.dart';
-import 'package:app/tools/app/appLoading.dart';
-import 'package:app/tools/app/appMessages.dart';
-import 'package:app/tools/app/appSheet.dart';
-import 'package:app/tools/app/appSnack.dart';
-import 'package:app/tools/app/appThemes.dart';
-import 'package:app/tools/app/appToast.dart';
-import 'package:app/tools/countryTools.dart';
-import 'package:app/tools/routeTools.dart';
+import 'package:app/tools/app/app_broadcast.dart';
+import 'package:app/tools/app/app_images.dart';
+import 'package:app/tools/app/app_loading.dart';
+import 'package:app/tools/app/app_messages.dart';
+import 'package:app/tools/app/app_sheet.dart';
+import 'package:app/tools/app/app_snack.dart';
+import 'package:app/tools/app/app_themes.dart';
+import 'package:app/tools/app/app_toast.dart';
+import 'package:app/tools/country_tools.dart';
+import 'package:app/tools/route_tools.dart';
 import 'package:app/views/components/countrySelect.dart';
 import 'package:app/views/components/phoneNumberInput.dart';
 import 'package:app/views/pages/login/register_page.dart';
@@ -41,7 +41,7 @@ class LoginPage extends StatefulWidget{
   State<LoginPage> createState() => _LoginPageState();
 }
 ///=================================================================================================
-class _LoginPageState extends StateBase<LoginPage> {
+class _LoginPageState extends StateSuper<LoginPage> {
   TextEditingController pinCodeCtr = TextEditingController();
   late PhoneNumberInputController phoneNumberController;
   late FlipCardController flipCardController;

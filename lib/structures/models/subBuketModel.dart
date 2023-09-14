@@ -4,9 +4,9 @@ import 'package:iris_tools/dateSection/dateHelper.dart';
 import 'package:iris_tools/models/dataModels/mediaModel.dart';
 
 import 'package:app/structures/enums/enums.dart';
-import 'package:app/structures/mixins/dateFieldMixin.dart';
+import 'package:app/structures/mixins/date_field_mixin.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/tools/app/appIcons.dart';
+import 'package:app/tools/app/app_icons.dart';
 
 class SubBucketModel with DateFieldMixin {
   int? id;

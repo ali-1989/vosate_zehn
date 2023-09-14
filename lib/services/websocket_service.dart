@@ -10,17 +10,17 @@ import 'package:iris_websocket/iris_websocket.dart';
 import 'package:app/managers/api_manager.dart';
 import 'package:app/services/login_service.dart';
 import 'package:app/services/session_service.dart';
-import 'package:app/structures/models/settingsModel.dart';
-import 'package:app/system/applicationSignal.dart';
-import 'package:app/system/commonHttpHandler.dart';
+import 'package:app/structures/models/settings_model.dart';
+import 'package:app/system/application_signal.dart';
+import 'package:app/system/common_http_handler.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/tools/app/appBroadcast.dart';
-import 'package:app/tools/app/appDb.dart';
-import 'package:app/tools/app/appDialogIris.dart';
-import 'package:app/tools/app/appMessages.dart';
-import 'package:app/tools/app/appNotification.dart';
-import 'package:app/tools/deviceInfoTools.dart';
-import 'package:app/tools/routeTools.dart';
+import 'package:app/tools/app/app_broadcast.dart';
+import 'package:app/tools/app/app_db.dart';
+import 'package:app/tools/app/app_dialog_iris.dart';
+import 'package:app/tools/app/app_messages.dart';
+import 'package:app/tools/app/app_notification.dart';
+import 'package:app/tools/device_info_tools.dart';
+import 'package:app/tools/route_tools.dart';
 
 class WebsocketService {
 	WebsocketService._();

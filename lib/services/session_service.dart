@@ -3,10 +3,10 @@ import 'package:iris_notifier/iris_notifier.dart';
 import 'package:iris_tools/api/checker.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
 
-import 'package:app/structures/enums/appEvents.dart';
-import 'package:app/structures/enums/userType.dart';
-import 'package:app/structures/models/userModel.dart';
-import 'package:app/tools/app/appDb.dart';
+import 'package:app/structures/enums/app_events.dart';
+import 'package:app/structures/enums/user_type.dart';
+import 'package:app/structures/models/user_model.dart';
+import 'package:app/tools/app/app_db.dart';
 import '/managers/settings_manager.dart';
 import '/system/extensions.dart';
 import '/system/keys.dart';

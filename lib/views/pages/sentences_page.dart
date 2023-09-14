@@ -10,19 +10,19 @@ import 'package:iris_tools/widgets/optionsRow/checkRow.dart';
 
 import 'package:app/managers/settings_manager.dart';
 import 'package:app/services/session_service.dart';
-import 'package:app/structures/abstract/stateBase.dart';
+import 'package:app/structures/abstract/state_super.dart';
 import 'package:app/structures/middleWares/requester.dart';
 import 'package:app/structures/models/dailyTextModel.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/tools/app/appCache.dart';
-import 'package:app/tools/app/appIcons.dart';
-import 'package:app/tools/app/appImages.dart';
-import 'package:app/tools/app/appMessages.dart';
-import 'package:app/tools/app/appOverlay.dart';
+import 'package:app/tools/app/app_cache.dart';
+import 'package:app/tools/app/app_icons.dart';
+import 'package:app/tools/app/app_images.dart';
+import 'package:app/tools/app/app_messages.dart';
+import 'package:app/tools/app/app_overlay.dart';
 import 'package:app/tools/app_tools.dart';
-import 'package:app/tools/dateTools.dart';
-import 'package:app/views/baseComponents/appBarBuilder.dart';
+import 'package:app/tools/date_tools.dart';
+import 'package:app/views/baseComponents/appbar_builder.dart';
 import 'package:app/views/states/emptyData.dart';
 import 'package:app/views/states/errorOccur.dart';
 import 'package:app/views/states/waitToLoad.dart';
@@ -35,7 +35,7 @@ class SentencesPage extends StatefulWidget {
   State<SentencesPage> createState() => _SentencesPageState();
 }
 ///==================================================================================
-class _SentencesPageState extends StateBase<SentencesPage> {
+class _SentencesPageState extends StateSuper<SentencesPage> {
   Requester requester = Requester();
   List<String> backgrounds = [];
   String background = '';

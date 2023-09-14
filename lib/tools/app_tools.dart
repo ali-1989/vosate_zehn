@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:iris_tools/dateSection/dateHelper.dart';
 
-import 'package:app/structures/mixins/dateFieldMixin.dart';
+import 'package:app/structures/mixins/date_field_mixin.dart';
 import 'package:app/structures/models/upperLower.dart';
 
 class AppTools {

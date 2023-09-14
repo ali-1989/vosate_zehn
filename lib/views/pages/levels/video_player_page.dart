@@ -8,10 +8,10 @@ import 'package:iris_tools/api/helpers/mathHelper.dart';
 import 'package:video_player/video_player.dart';
 import 'package:wakelock/wakelock.dart';
 
-import 'package:app/structures/abstract/stateBase.dart';
+import 'package:app/structures/abstract/state_super.dart';
 import 'package:app/structures/enums/enums.dart';
-import 'package:app/tools/app/appThemes.dart';
-import 'package:app/views/baseComponents/appBarBuilder.dart';
+import 'package:app/tools/app/app_themes.dart';
+import 'package:app/views/baseComponents/appbar_builder.dart';
 
 class VideoPlayerPageInjectData {
   late VideoSourceType videoSourceType;
@@ -37,7 +37,7 @@ class VideoPlayerPage extends StatefulWidget {
   }
 }
 ///=========================================================================================
-class VideoPlayerPageState extends StateBase<VideoPlayerPage> {
+class VideoPlayerPageState extends StateSuper<VideoPlayerPage> {
   VideoPlayerController? playerController;
   ChewieController? chewieVideoController;
   bool isVideoInit = false;

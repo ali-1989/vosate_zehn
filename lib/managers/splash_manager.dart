@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-import 'package:app/tools/app/appBroadcast.dart';
+import 'package:app/tools/app/app_broadcast.dart';
 
 class SplashManager {
   SplashManager._();

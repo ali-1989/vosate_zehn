@@ -11,22 +11,23 @@ import 'package:iris_tools/api/generator.dart';
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
 import 'package:iris_tools/api/system.dart';
 import 'package:iris_tools/models/twoStateReturn.dart';
+import 'package:iris_tools/modules/stateManagers/assistState.dart';
 
 import 'package:app/managers/api_manager.dart';
 import 'package:app/managers/settings_manager.dart';
 import 'package:app/services/google_service.dart';
 import 'package:app/services/session_service.dart';
-import 'package:app/structures/enums/appEvents.dart';
-import 'package:app/structures/models/countryModel.dart';
-import 'package:app/structures/models/userModel.dart';
+import 'package:app/structures/enums/app_events.dart';
+import 'package:app/structures/models/country_model.dart';
+import 'package:app/structures/models/user_model.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/tools/app/appBroadcast.dart';
-import 'package:app/tools/app/appHttpDio.dart';
-import 'package:app/tools/app/appMessages.dart';
-import 'package:app/tools/app/appSheet.dart';
-import 'package:app/tools/app/appToast.dart';
-import 'package:app/tools/deviceInfoTools.dart';
-import 'package:app/tools/routeTools.dart';
+import 'package:app/tools/app/app_broadcast.dart';
+import 'package:app/tools/app/app_http_dio.dart';
+import 'package:app/tools/app/app_messages.dart';
+import 'package:app/tools/app/app_sheet.dart';
+import 'package:app/tools/app/app_toast.dart';
+import 'package:app/tools/device_info_tools.dart';
+import 'package:app/tools/route_tools.dart';
 import 'package:app/views/pages/login/register_page.dart';
 
 enum EmailVerifyStatus {
@@ -101,7 +102,7 @@ class LoginService {
         await SessionService.logoff(userId);
       }
 
-      AppBroadcast.drawerMenuRefresher.update();
+      AssistController.forId(AppBroadcast.drawerMenuRefresherId)?.update();
       AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
 
       if (isCurrent && RouteTools.materialContext != null) {
@@ -128,7 +129,7 @@ class LoginService {
 
     await SessionService.logoffAll();
 
-    AppBroadcast.drawerMenuRefresher.update();
+    AssistController.forId(AppBroadcast.drawerMenuRefresherId)?.update();
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
 
     if (RouteTools.materialContext != null) {

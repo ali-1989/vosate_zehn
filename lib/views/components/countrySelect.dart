@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-import 'package:iris_tools/widgets/irisSearchBar.dart';
+import 'package:iris_tools/widgets/iris_search_bar.dart';
 
-import 'package:app/structures/abstract/stateBase.dart';
-import 'package:app/structures/models/countryModel.dart';
-import 'package:app/tools/app/appDecoration.dart';
-import 'package:app/tools/app/appMessages.dart';
-import 'package:app/tools/app/appSizes.dart';
-import 'package:app/tools/app/appThemes.dart';
-import 'package:app/tools/countryTools.dart';
-import 'package:app/tools/routeTools.dart';
+import 'package:app/structures/abstract/state_super.dart';
+import 'package:app/structures/models/country_model.dart';
+import 'package:app/tools/app/app_decoration.dart';
+import 'package:app/tools/app/app_messages.dart';
+import 'package:app/tools/app/app_sizes.dart';
+import 'package:app/tools/app/app_themes.dart';
+import 'package:app/tools/country_tools.dart';
+import 'package:app/tools/route_tools.dart';
 
 class CountrySelectScreen extends StatefulWidget {
 
@@ -21,7 +21,7 @@ class CountrySelectScreen extends StatefulWidget {
   }
 }
 ///========================================================================================================
-class CountrySelectScreenState extends StateBase<CountrySelectScreen> {
+class CountrySelectScreenState extends StateSuper<CountrySelectScreen> {
   Map<String, dynamic> resultMap = {};
   CountryModel? result;
   Map<String, dynamic> countries = {};
@@ -45,7 +45,7 @@ class CountrySelectScreenState extends StateBase<CountrySelectScreen> {
   }
 
   @override
-  Future<bool> onWillBack<S extends StateBase>(S state) {
+  Future<bool> onWillBack<S extends StateSuper>(S state) {
     //CountrySelectScreenState state = state as CountrySelectScreenState;
 
     RouteTools.popTopView(context: context, data: result);

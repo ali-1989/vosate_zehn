@@ -3,29 +3,29 @@ import 'package:flutter/material.dart';
 import 'package:iris_tools/api/duration/durationFormatter.dart';
 import 'package:iris_tools/api/helpers/focusHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
-import 'package:iris_tools/widgets/irisImageView.dart';
-import 'package:iris_tools/widgets/irisSearchBar.dart';
+import 'package:iris_tools/widgets/iris_image_view.dart';
+import 'package:iris_tools/widgets/iris_search_bar.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import 'package:app/managers/mediaManager.dart';
-import 'package:app/services/favoriteService.dart';
+import 'package:app/managers/media_manager.dart';
+import 'package:app/services/favorite_service.dart';
 import 'package:app/services/session_service.dart';
-import 'package:app/structures/abstract/stateBase.dart';
+import 'package:app/structures/abstract/state_super.dart';
 import 'package:app/structures/enums/enums.dart';
 import 'package:app/structures/middleWares/requester.dart';
 import 'package:app/structures/models/subBuketModel.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/tools/app/appDecoration.dart';
-import 'package:app/tools/app/appDirectories.dart';
-import 'package:app/tools/app/appIcons.dart';
-import 'package:app/tools/app/appImages.dart';
-import 'package:app/tools/app/appMessages.dart';
-import 'package:app/tools/app/appThemes.dart';
+import 'package:app/tools/app/app_decoration.dart';
+import 'package:app/tools/app/app_directories.dart';
+import 'package:app/tools/app/app_icons.dart';
+import 'package:app/tools/app/app_images.dart';
+import 'package:app/tools/app/app_messages.dart';
+import 'package:app/tools/app/app_themes.dart';
 import 'package:app/tools/app_tools.dart';
-import 'package:app/tools/routeTools.dart';
-import 'package:app/tools/searchFilterTool.dart';
-import 'package:app/views/baseComponents/appBarBuilder.dart';
+import 'package:app/tools/route_tools.dart';
+import 'package:app/tools/search_filter_tool.dart';
+import 'package:app/views/baseComponents/appbar_builder.dart';
 import 'package:app/views/pages/levels/audio_player_page.dart';
 import 'package:app/views/pages/levels/content_view_page.dart';
 import 'package:app/views/pages/levels/video_player_page.dart';
@@ -41,7 +41,7 @@ class SearchPage extends StatefulWidget {
   State<SearchPage> createState() => _SearchPageState();
 }
 ///====================================================================================================
-class _SearchPageState extends StateBase<SearchPage> {
+class _SearchPageState extends StateSuper<SearchPage> {
   List<SubBucketModel> foundList = [];
   late ThemeData chipTheme;
   Requester requester = Requester();

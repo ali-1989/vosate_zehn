@@ -2,7 +2,7 @@ import 'package:iris_tools/api/helpers/jsonHelper.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
 import 'package:iris_tools/models/dataModels/mediaModel.dart';
 
-import 'package:app/structures/mixins/dateFieldMixin.dart';
+import 'package:app/structures/mixins/date_field_mixin.dart';
 import 'package:app/system/keys.dart';
 
 class BucketModel with DateFieldMixin {

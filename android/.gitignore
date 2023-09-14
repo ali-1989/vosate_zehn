@@ -1,8 +1,5 @@
 gradle-wrapper.jar
-/key.properties
-/big_bango.jks
-/local.properties
-/gradle.properties
+
 GeneratedPluginRegistrant.java
 
 /.gradle
@@ -12,5 +9,6 @@ GeneratedPluginRegistrant.java
 
 /app/build.gradle
 
+**/*.properties
 **/*.keystore
 **/*.jks

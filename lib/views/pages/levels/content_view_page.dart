@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:iris_tools/widgets/avatarChip.dart';
-import 'package:iris_tools/widgets/irisImageView.dart';
-import 'package:iris_tools/widgets/sizePosition/sizeInInfinity.dart';
+import 'package:iris_tools/widgets/iris_image_view.dart';
+import 'package:iris_tools/widgets/sizePosition/size_inInfinity.dart';
 
-import 'package:app/managers/mediaManager.dart';
+import 'package:app/managers/media_manager.dart';
 import 'package:app/services/session_service.dart';
-import 'package:app/structures/abstract/stateBase.dart';
-import 'package:app/structures/enums/appAssistKeys.dart';
+import 'package:app/structures/abstract/state_super.dart';
+import 'package:app/structures/enums/assist_groups.dart';
 import 'package:app/structures/enums/enums.dart';
 import 'package:app/structures/middleWares/requester.dart';
 import 'package:app/structures/models/contentModel.dart';
@@ -18,14 +18,14 @@ import 'package:app/structures/models/speakerModel.dart';
 import 'package:app/structures/models/subBuketModel.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/tools/app/appCache.dart';
-import 'package:app/tools/app/appDirectories.dart';
-import 'package:app/tools/app/appImages.dart';
-import 'package:app/tools/app/appMessages.dart';
-import 'package:app/tools/app/appThemes.dart';
-import 'package:app/tools/app/appToast.dart';
-import 'package:app/tools/routeTools.dart';
-import 'package:app/views/baseComponents/appBarBuilder.dart';
+import 'package:app/tools/app/app_cache.dart';
+import 'package:app/tools/app/app_directories.dart';
+import 'package:app/tools/app/app_images.dart';
+import 'package:app/tools/app/app_messages.dart';
+import 'package:app/tools/app/app_themes.dart';
+import 'package:app/tools/app/app_toast.dart';
+import 'package:app/tools/route_tools.dart';
+import 'package:app/views/baseComponents/appbar_builder.dart';
 import 'package:app/views/pages/levels/audio_player_page.dart';
 import 'package:app/views/pages/levels/video_player_page.dart';
 import 'package:app/views/states/errorOccur.dart';
@@ -47,7 +47,7 @@ class ContentViewPage extends StatefulWidget{
   State<ContentViewPage> createState() => _LevelPageState();
 }
 ///=================================================================================================
-class _LevelPageState extends StateBase<ContentViewPage> {
+class _LevelPageState extends StateSuper<ContentViewPage> {
   Requester requester = Requester();
   bool isInFetchData = true;
   String state$fetchData = 'state_fetchData';

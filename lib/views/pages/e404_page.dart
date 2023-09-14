@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:lottie/lottie.dart';
 
-import 'package:app/tools/app/appImages.dart';
-import 'package:app/tools/app/appMessages.dart';
-import 'package:app/tools/app/appThemes.dart';
+import 'package:app/tools/app/app_images.dart';
+import 'package:app/tools/app/app_messages.dart';
+import 'package:app/tools/app/app_themes.dart';
 
 class E404Page extends StatefulWidget{
 

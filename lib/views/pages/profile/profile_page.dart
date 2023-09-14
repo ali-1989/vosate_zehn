@@ -24,27 +24,27 @@ import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:app/services/session_service.dart';
-import 'package:app/structures/abstract/stateBase.dart';
-import 'package:app/structures/enums/appEvents.dart';
+import 'package:app/structures/abstract/state_super.dart';
+import 'package:app/structures/enums/app_events.dart';
 import 'package:app/structures/enums/enums.dart';
 import 'package:app/structures/middleWares/requester.dart';
-import 'package:app/structures/models/userModel.dart';
+import 'package:app/structures/models/user_model.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/tools/app/appDirectories.dart';
-import 'package:app/tools/app/appIcons.dart';
-import 'package:app/tools/app/appImages.dart';
-import 'package:app/tools/app/appMessages.dart';
-import 'package:app/tools/app/appOverlay.dart';
-import 'package:app/tools/app/appSheet.dart';
-import 'package:app/tools/app/appSizes.dart';
-import 'package:app/tools/app/appSnack.dart';
-import 'package:app/tools/app/appThemes.dart';
-import 'package:app/tools/app/appToast.dart';
-import 'package:app/tools/deviceInfoTools.dart';
-import 'package:app/tools/permissionTools.dart';
-import 'package:app/tools/routeTools.dart';
-import 'package:app/views/baseComponents/appBarBuilder.dart';
+import 'package:app/tools/app/app_directories.dart';
+import 'package:app/tools/app/app_icons.dart';
+import 'package:app/tools/app/app_images.dart';
+import 'package:app/tools/app/app_messages.dart';
+import 'package:app/tools/app/app_overlay.dart';
+import 'package:app/tools/app/app_sheet.dart';
+import 'package:app/tools/app/app_sizes.dart';
+import 'package:app/tools/app/app_snack.dart';
+import 'package:app/tools/app/app_themes.dart';
+import 'package:app/tools/app/app_toast.dart';
+import 'package:app/tools/device_info_tools.dart';
+import 'package:app/tools/permission_tools.dart';
+import 'package:app/tools/route_tools.dart';
+import 'package:app/views/baseComponents/appbar_builder.dart';
 import 'package:app/views/components/changeNameFamilyView.dart';
 import 'package:app/views/components/dateComponents/selectDateCalendarView.dart';
 import 'package:app/views/components/selectGenderView.dart';
@@ -57,7 +57,7 @@ class ProfilePage extends StatefulWidget{
   State<ProfilePage> createState() => _ProfilePageState();
 }
 ///==================================================================================
-class _ProfilePageState extends StateBase<ProfilePage> {
+class _ProfilePageState extends StateSuper<ProfilePage> {
   Requester requester = Requester();
   UserModel user = SessionService.getLastLoginUser()!;
 

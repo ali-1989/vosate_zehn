@@ -11,12 +11,12 @@ import 'package:iris_tools/api/helpers/mathHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:iris_tools/widgets/circle_container.dart';
 
-import 'package:app/structures/abstract/stateBase.dart';
+import 'package:app/structures/abstract/state_super.dart';
 import 'package:app/system/extensions.dart';
-import 'package:app/tools/app/appIcons.dart';
-import 'package:app/tools/app/appImages.dart';
-import 'package:app/tools/app/appSizes.dart';
-import 'package:app/views/baseComponents/appBarBuilder.dart';
+import 'package:app/tools/app/app_icons.dart';
+import 'package:app/tools/app/app_images.dart';
+import 'package:app/tools/app/app_sizes.dart';
+import 'package:app/views/baseComponents/appbar_builder.dart';
 import 'package:app/views/pages/levels/playback_disposition.dart';
 import 'package:app/views/pages/levels/slider.dart';
 
@@ -58,7 +58,7 @@ class AudioPlayerPage extends StatefulWidget{
   }
 }
 ///=========================================================================================
-class AudioPlayerPageState extends StateBase<AudioPlayerPage> {
+class AudioPlayerPageState extends StateSuper<AudioPlayerPage> {
   bool isAudioInit = false;
   String background = '';
   AudioPlayer audioPlayer = AudioPlayer();

@@ -1,6 +1,5 @@
 import 'dart:isolate';
 
-import 'package:app/tools/log_tools.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -10,10 +9,11 @@ import 'package:iris_tools/dateSection/dateHelper.dart';
 
 import 'package:app/managers/api_manager.dart';
 import 'package:app/managers/settings_manager.dart';
-import 'package:app/structures/enums/appEvents.dart';
+import 'package:app/structures/enums/app_events.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/tools/app/appDb.dart';
-import 'package:app/tools/app/appNotification.dart';
+import 'package:app/tools/app/app_db.dart';
+import 'package:app/tools/app/app_notification.dart';
+import 'package:app/tools/log_tools.dart';
 
 // https://firebase.google.com/docs/cloud-messaging/flutter/receive
 // https://firebase.google.com/docs/cloud-messaging/flutter/client

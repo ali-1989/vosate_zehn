@@ -5,15 +5,15 @@ import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:iris_tools/widgets/maxWidth.dart';
 
 import 'package:app/services/session_service.dart';
-import 'package:app/structures/abstract/stateBase.dart';
+import 'package:app/structures/abstract/state_super.dart';
 import 'package:app/structures/middleWares/requester.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/tools/app/appMessages.dart';
-import 'package:app/tools/app/appSheet.dart';
-import 'package:app/tools/app/appSnack.dart';
-import 'package:app/tools/routeTools.dart';
-import 'package:app/views/baseComponents/appBarBuilder.dart';
+import 'package:app/tools/app/app_messages.dart';
+import 'package:app/tools/app/app_sheet.dart';
+import 'package:app/tools/app/app_snack.dart';
+import 'package:app/tools/route_tools.dart';
+import 'package:app/views/baseComponents/appbar_builder.dart';
 
 class ContactUsPage extends StatefulWidget{
 
@@ -23,7 +23,7 @@ class ContactUsPage extends StatefulWidget{
   State<ContactUsPage> createState() => _ContactUsPageState();
 }
 ///==================================================================================
-class _ContactUsPageState extends StateBase<ContactUsPage> {
+class _ContactUsPageState extends StateSuper<ContactUsPage> {
   TextEditingController textCtr = TextEditingController();
   Requester requester = Requester();
 

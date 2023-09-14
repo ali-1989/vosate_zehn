@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:iris_tools/widgets/customCard.dart';
 
-import 'package:app/tools/app/appIcons.dart';
-import 'package:app/tools/app/appMessages.dart';
+import 'package:app/tools/app/app_icons.dart';
+import 'package:app/tools/app/app_messages.dart';
 
 class ErrorOccur extends StatelessWidget {
   final TextStyle? textStyle;

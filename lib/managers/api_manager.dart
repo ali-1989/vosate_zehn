@@ -5,14 +5,14 @@ import 'package:iris_tools/api/helpers/jsonHelper.dart';
 import 'package:iris_tools/api/system.dart';
 import 'package:iris_tools/models/twoStateReturn.dart';
 
-import 'package:app/constants.dart';
 import 'package:app/managers/settings_manager.dart';
 import 'package:app/services/firebase_service.dart';
 import 'package:app/services/session_service.dart';
 import 'package:app/structures/middleWares/requester.dart';
+import 'package:app/system/constants.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/tools/deviceInfoTools.dart';
-import 'package:app/tools/routeTools.dart';
+import 'package:app/tools/device_info_tools.dart';
+import 'package:app/tools/route_tools.dart';
 
 class ApiManager {
   ApiManager._();

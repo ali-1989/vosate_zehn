@@ -7,12 +7,12 @@ import 'package:iris_tools/widgets/maxWidth.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:app/services/session_service.dart';
-import 'package:app/structures/abstract/stateBase.dart';
+import 'package:app/structures/abstract/state_super.dart';
 import 'package:app/structures/middleWares/requester.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/tools/app/appMessages.dart';
-import 'package:app/tools/app/appThemes.dart';
-import 'package:app/views/baseComponents/appBarBuilder.dart';
+import 'package:app/tools/app/app_messages.dart';
+import 'package:app/tools/app/app_themes.dart';
+import 'package:app/views/baseComponents/appbar_builder.dart';
 import 'package:app/views/states/errorOccur.dart';
 import 'package:app/views/states/waitToLoad.dart';
 
@@ -27,7 +27,7 @@ class AidPage extends StatefulWidget{
   State<AidPage> createState() => _AidPageState();
 }
 ///==================================================================================
-class _AidPageState extends StateBase<AidPage> {
+class _AidPageState extends StateSuper<AidPage> {
   Requester requester = Requester();
   bool isInFetchData = true;
   String? htmlData;

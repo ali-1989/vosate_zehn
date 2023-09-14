@@ -2,22 +2,22 @@ import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/duration/durationFormatter.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
-import 'package:iris_tools/widgets/irisImageView.dart';
+import 'package:iris_tools/widgets/iris_image_view.dart';
 
-import 'package:app/services/favoriteService.dart';
-import 'package:app/services/lastSeenService.dart';
-import 'package:app/structures/abstract/stateBase.dart';
+import 'package:app/services/favorite_service.dart';
+import 'package:app/services/last_seen_service.dart';
+import 'package:app/structures/abstract/state_super.dart';
 import 'package:app/structures/enums/enums.dart';
 import 'package:app/structures/models/subBuketModel.dart';
 import 'package:app/system/extensions.dart';
-import 'package:app/tools/app/appDirectories.dart';
-import 'package:app/tools/app/appIcons.dart';
-import 'package:app/tools/app/appImages.dart';
-import 'package:app/tools/app/appMessages.dart';
-import 'package:app/tools/app/appThemes.dart';
-import 'package:app/tools/app/appToast.dart';
-import 'package:app/tools/routeTools.dart';
-import 'package:app/views/baseComponents/appBarBuilder.dart';
+import 'package:app/tools/app/app_directories.dart';
+import 'package:app/tools/app/app_icons.dart';
+import 'package:app/tools/app/app_images.dart';
+import 'package:app/tools/app/app_messages.dart';
+import 'package:app/tools/app/app_themes.dart';
+import 'package:app/tools/app/app_toast.dart';
+import 'package:app/tools/route_tools.dart';
+import 'package:app/views/baseComponents/appbar_builder.dart';
 import 'package:app/views/pages/levels/audio_player_page.dart';
 import 'package:app/views/pages/levels/content_view_page.dart';
 import 'package:app/views/pages/levels/video_player_page.dart';
@@ -32,7 +32,7 @@ class LastSeenPage extends StatefulWidget{
   State<LastSeenPage> createState() => _LastSeenPageState();
 }
 ///==================================================================================
-class _LastSeenPageState extends StateBase<LastSeenPage> {
+class _LastSeenPageState extends StateSuper<LastSeenPage> {
   List<SubBucketModel> listItems = [];
 
   @override
