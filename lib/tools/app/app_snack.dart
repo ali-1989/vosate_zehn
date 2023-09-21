@@ -56,14 +56,28 @@ class AppSnack {
   }
 
   static SnackBar buildSnackBar(String message, {SnackBarAction? action, Widget? replaceContent, int? millis}){
-    return AppDecoration.buildSnackBar(message, action: action, replaceContent: replaceContent,
-        margin: const EdgeInsets.fromLTRB(20,0,20,60), durationMillis: millis);
+    return AppDecoration.buildSnackBar(message,
+        action: action,
+        replaceContent: replaceContent,
+        margin: const EdgeInsets.fromLTRB(20,0,20,60),
+        durationMillis: millis,
+    );
   }
 
   static MaterialBanner buildBanner(String message){
     return AppDecoration.buildBanner(message);
   }
   ///---------------------------------------------------------------------------------------------------------
+  static void showSnack(BuildContext context, Widget message){
+    final snack = buildSnackBar('', replaceContent: message);
+    showFlutterSnackBar(snack);
+  }
+
+  static void showSnackText(BuildContext context, String message){
+    final snack = buildSnackBar(message);
+    showFlutterSnackBar(snack);
+  }
+
   static void showError(BuildContext context, String message){
     final v = Row(
       children: [
@@ -107,50 +121,5 @@ class AppSnack {
     final snack = buildSnackBar(AppMessages.operationCanceled, action: action);
     showFlutterSnackBar(snack);
     // ScaffoldMessenger.of(context).hideCurrentSnackBar();
-  }
-  ///--------------------------------------------------------------------------------
-  static void showSnack$errorOccur(BuildContext context) {
-    final snack = buildSnackBar(AppMessages.errorOccur);
-    showFlutterSnackBar(snack);
-  }
-
-  static void showSnack$netDisconnected(BuildContext context) {
-    final snack = buildSnackBar(AppMessages.netConnectionIsDisconnect);
-    showFlutterSnackBar(snack);
-  }
-
-  static void showSnack$errorCommunicatingServer(BuildContext context) {
-    final snack = buildSnackBar(AppMessages.errorCommunicatingServer);
-    showFlutterSnackBar(snack);
-  }
-
-  static void showSnack$serverNotRespondProperly(BuildContext context) {
-    final snack = buildSnackBar(AppMessages.serverNotRespondProperly);
-    showFlutterSnackBar(snack);
-  }
-
-  static void showSnack$operationCannotBePerformed(BuildContext context) {
-    final snack = buildSnackBar(AppMessages.operationCannotBePerformed);
-    showFlutterSnackBar(snack);
-  }
-
-  static void showSnack$operationSuccess(BuildContext context) {
-    final snack = buildSnackBar(AppMessages.operationSuccess);
-    showFlutterSnackBar(snack);
-  }
-
-  static void showSnack$OperationFailed(BuildContext context) {
-    final snack = buildSnackBar(AppMessages.operationFailed);
-    showFlutterSnackBar(snack);
-  }
-
-  static void showSnack$OperationFailedTryAgain(BuildContext context) {
-    final snack = buildSnackBar(AppMessages.operationFailedTryAgain);
-    showFlutterSnackBar(snack);
-  }
-
-  static void showSnack$operationCanceled(BuildContext context) {
-    final snack = buildSnackBar(AppMessages.operationCanceled);
-    showFlutterSnackBar(snack);
   }
 }

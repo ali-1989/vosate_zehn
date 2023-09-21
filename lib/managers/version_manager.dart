@@ -6,10 +6,11 @@ import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/helpers/urlHelper.dart';
 import 'package:iris_tools/api/system.dart';
-import 'package:iris_tools/widgets/customCard.dart';
+import 'package:iris_tools/widgets/custom_card.dart';
 
 import 'package:app/managers/settings_manager.dart';
 import 'package:app/structures/middleWares/requester.dart';
+import 'package:app/structures/models/settings_model.dart';
 import 'package:app/structures/models/version_model.dart';
 import 'package:app/system/constants.dart';
 import 'package:app/system/keys.dart';
@@ -35,8 +36,9 @@ class VersionManager {
     SettingsManager.saveSettings();
   }
 
-  static Future<void> onReInstall() async {
+  static Future<void> onInstallNewVersion() async {
     SettingsManager.localSettings.currentVersion = Constants.appVersionCode;
+    SettingsManager.localSettings.httpAddress = SettingsModel.defaultHttpAddress;
     SettingsManager.saveSettings();
   }
 
@@ -47,7 +49,7 @@ class VersionManager {
       onFirstInstall();
     }
     else if (oldVersion < Constants.appVersionCode) {
-      onReInstall();
+      onInstallNewVersion();
     }
   }
 

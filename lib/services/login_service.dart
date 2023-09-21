@@ -10,8 +10,8 @@ import 'package:iris_route/iris_route.dart';
 import 'package:iris_tools/api/generator.dart';
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
 import 'package:iris_tools/api/system.dart';
-import 'package:iris_tools/models/twoStateReturn.dart';
-import 'package:iris_tools/modules/stateManagers/assistState.dart';
+import 'package:iris_tools/models/two_state_return.dart';
+import 'package:iris_tools/modules/stateManagers/updater_state.dart';
 
 import 'package:app/managers/api_manager.dart';
 import 'package:app/managers/settings_manager.dart';
@@ -102,7 +102,7 @@ class LoginService {
         await SessionService.logoff(userId);
       }
 
-      AssistController.forId(AppBroadcast.drawerMenuRefresherId)?.update();
+      UpdaterController.forId(AppBroadcast.drawerMenuRefresherId)?.update();
       AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
 
       if (isCurrent && RouteTools.materialContext != null) {
@@ -129,7 +129,7 @@ class LoginService {
 
     await SessionService.logoffAll();
 
-    AssistController.forId(AppBroadcast.drawerMenuRefresherId)?.update();
+    UpdaterController.forId(AppBroadcast.drawerMenuRefresherId)?.update();
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
 
     if (RouteTools.materialContext != null) {
@@ -436,7 +436,7 @@ class LoginService {
           }
           else {
             if(context.mounted){
-              AppSheet.showSheet$OperationFailed(context);
+              AppSheet.showSheetOk(context, AppMessages.operationFailed);
             }
           }
         }
@@ -457,7 +457,7 @@ class LoginService {
     }
     else {
       if(context.mounted) {
-        AppSheet.showSheet$OperationFailed(context);
+        AppSheet.showSheetOk(context, AppMessages.operationFailed);
       }
     }
   }

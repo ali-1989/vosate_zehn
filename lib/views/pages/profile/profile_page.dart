@@ -19,7 +19,7 @@ import 'package:iris_tools/api/helpers/mathHelper.dart';
 import 'package:iris_tools/api/helpers/pathHelper.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
 import 'package:iris_tools/features/overlayDialog.dart';
-import 'package:iris_tools/models/dataModels/mediaModel.dart';
+import 'package:iris_tools/models/dataModels/media_model.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -518,7 +518,7 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
     user.profileModel!.path = f.path;
 
     hideLoading();
-    AppSnack.showSnack$operationSuccess(context);
+    AppSnack.showSnack(context, Text(AppMessages.operationSuccess));
 
     await SessionService.sinkUserInfo(user);
     EventNotifierService.notify(AppEvents.userProfileChange);
@@ -538,7 +538,7 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
 
     requester.httpRequestEvents.onFailState = (req, r) async {
       await hideLoading();
-      AppSnack.showSnack$errorCommunicatingServer(context);
+      AppSnack.showSnack(context, Text(AppMessages.errorCommunicatingServer));
     };
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
@@ -568,7 +568,8 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
     };
 
     requester.httpRequestEvents.onFailState = (req, r) async {
-      AppSnack.showSnack$OperationFailed(context);
+      AppSnack.showSnack(context, Text(AppMessages.operationFailed));
+
     };
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
@@ -598,7 +599,7 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
     };
 
     requester.httpRequestEvents.onFailState = (req, r) async {
-      AppSnack.showSnack$OperationFailed(context);
+      AppSnack.showSnack(context, Text(AppMessages.operationFailed));
     };
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
@@ -630,7 +631,7 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
     };
 
     requester.httpRequestEvents.onFailState = (req, r) async {
-      AppSnack.showSnack$OperationFailed(context);
+      AppSnack.showSnack(context, Text(AppMessages.operationFailed));
     };
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
@@ -660,7 +661,7 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
     };
 
     requester.httpRequestEvents.onFailState = (req, r) async {
-      AppSnack.showSnack$OperationFailed(context);
+      AppSnack.showSnack(context, Text(AppMessages.operationFailed));
     };
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {

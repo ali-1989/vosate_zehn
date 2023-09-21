@@ -205,6 +205,7 @@
   "newAppVersionIsOk": "نسخه ی جدید برنامه آماده شده، لطفا بروز رسانی کنید.",
   "downloadNewVersion": "دانلود نسخه ی جدید",
   "directDownload": "دانلود مستقیم",
+  "termPolice": "حفظ حریم خصوصی",
 
 
   "httpCodes" : {
@@ -247,7 +248,8 @@
     "otpCodeIsInvalid": "کد وارد شده صحیح نیست",
     "validation": "اعتبار سنجی",
     "resendOtpCode": "ارسال مجدد کد",
-    "sendVerifyCode": "ثبت کد تایید"
+    "sendVerifyCode": "ثبت کد تایید",
+    "loginWithGoogle": "ورود با گوگل"
   },
 
   "roleSection" : {
@@ -263,6 +265,7 @@
     "enterYourName": "لطفا نام خود را وارد کنید",
     "enterFamily": "لطفا یک نام خانوادگی وارد کنید",
     "enterMobile": "لطفا یک شماره همراه وارد کنید",
+    "otherNumber": "شماره دیگر",
     "enterMobileCorrectly": "لطفا شماره همراه را به درستی وارد کنید",
     "enterUserName": "لطفا نام کاربری را وارد کنید",
     "selectOneUsername": "لطفا یک نام کاربری انتخاب کنید",
@@ -279,7 +282,7 @@
     "thisMobileExistRestore": "شماره موبایل تکراری می باشد، اگر قبلا ثبت نام کرده اید از صفحه بازیابی رمز استفاده کنید",
     "thisMobileExistManager": "این شماره موبایل قبلا ثبت شده است، لطفا یک شماره دیگر وارد کنید",
     "thanksRegisterDescription" : "ثبت نام شما انجام شد.شما می توانید با مشخصات خود وارد شوید",
-    "validationDescription": "لطفا کد ارسال شده به شماره ی #1 را وارد کنید"
+    "validationDescription": "لطفا کد ارسال شده به شماره ی # را وارد کنید"
   },
 
   "calendarOptions": {

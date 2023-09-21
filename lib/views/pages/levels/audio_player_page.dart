@@ -153,11 +153,11 @@ class AudioPlayerPageState extends StateSuper<AudioPlayerPage> {
                         onTap: playPauseButton,
                         child: CircleContainer(
                           backColor: Colors.white.withAlpha(50),
-                            size: 50*pw,
+                            size: 50*hr,
                             border: Border.all(style: BorderStyle.none, width: 0),
                             child: Icon(isPlaying() ? AppIcons.pause : AppIcons.playArrow,
                               color: Colors.white,
-                              size: 40 *pw,
+                              size: 40 *hr,
                             ),
                         ),
                       ),

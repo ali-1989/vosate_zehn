@@ -5,7 +5,7 @@ import 'dart:core';
 import 'package:flutter/foundation.dart';
 
 import 'package:iris_db/iris_db.dart';
-import 'package:iris_tools/models/dataModels/mediaModel.dart';
+import 'package:iris_tools/models/dataModels/media_model.dart';
 
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/app_db.dart';

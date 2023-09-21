@@ -126,7 +126,7 @@ class AppThemes {
 	static void _checkTheme(ColorTheme th) {
 		th.buttonsColorScheme = ColorScheme.fromSwatch(
 			primarySwatch: th.primarySwatch,
-			primaryColorDark: ColorHelper.darkIfIsLight(th.primaryColor),
+			//primaryColorDark: ColorHelper.darkIfIsLight(th.primaryColor),
 			// buttons are use this color for btnText (accentColor)
 			accentColor: th.buttonTextColor,
 			backgroundColor: th.buttonBackColor,
@@ -351,7 +351,6 @@ class AppThemes {
 
 		final colorScheme = ColorScheme.fromSwatch(
 		primarySwatch: th.primarySwatch,
-		primaryColorDark: ColorHelper.darkIfIsLight(th.primaryColor),
 		accentColor: th.accentColor, // => is secondary
 		backgroundColor: th.backgroundColor,
 		errorColor: th.errorColor,

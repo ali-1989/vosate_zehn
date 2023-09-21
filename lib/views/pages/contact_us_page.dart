@@ -117,13 +117,13 @@ class _ContactUsPageState extends StateSuper<ContactUsPage> {
     requester.httpRequestEvents.onFailState = (req, r) async {
       hideLoading();
 
-      AppSheet.showSheet$OperationFailed(context);
+      AppSheet.showSheetOk(context, AppMessages.operationFailed);
     };
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
       hideLoading();
 
-      AppSheet.showSheet$SuccessOperation(context, onBtn: (){
+      AppSheet.showSheetOneAction(context, AppMessages.operationSuccess, onButton: (){
         RouteTools.popTopView(context: context);
       });
     };

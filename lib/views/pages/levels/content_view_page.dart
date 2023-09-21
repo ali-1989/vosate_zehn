@@ -74,7 +74,7 @@ class _LevelPageState extends StateSuper<ContentViewPage> {
   Widget build(BuildContext context) {
     return Assist(
         controller: assistCtr,
-        groupIds: [AppAssistKeys.updateAudioSeen],
+        groupIds: const [AssistGroup.updateAudioSeen],
         builder: (context, ctr, data) {
           return Scaffold(
             appBar: AppBarCustom(
@@ -90,10 +90,10 @@ class _LevelPageState extends StateSuper<ContentViewPage> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
 
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 50, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 8),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Builder(
@@ -116,11 +116,11 @@ class _LevelPageState extends StateSuper<ContentViewPage> {
           ),
 
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
             child: Text(widget.injectData.subBucket.description?? '').bold().fsR(2),
           ),
 
-          SizedBox(height: 40),
+          const SizedBox(height: 40),
 
            Builder(
               builder: (ctx){
@@ -129,12 +129,12 @@ class _LevelPageState extends StateSuper<ContentViewPage> {
                       builder: (BuildContext context, double? top, double? realHeight, double? height) {
 
                         if(height == null){
-                          return SizedBox();
+                          return const SizedBox();
                         }
 
                         return SizedBox(
                             height: height,
-                            child: WaitToLoad()
+                            child: const WaitToLoad()
                         );
                     }
                   );
@@ -145,7 +145,7 @@ class _LevelPageState extends StateSuper<ContentViewPage> {
                       builder: (BuildContext context, double? top, double? realHeight, double? height) {
 
                         if(height == null){
-                          return SizedBox();
+                          return const SizedBox();
                         }
 
                         return SizedBox(
@@ -180,7 +180,7 @@ class _LevelPageState extends StateSuper<ContentViewPage> {
                       ),
                     ),
 
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
 
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -231,7 +231,7 @@ class _LevelPageState extends StateSuper<ContentViewPage> {
                     Visibility(
                       visible: contentModel!.hasOrder || itm.title == null,
                       child: ConstrainedBox(
-                        constraints: BoxConstraints.tightFor(width: 20),
+                        constraints: const BoxConstraints.tightFor(width: 20),
                           child: Center(
                               child: Text('$i').color(Colors.white)
                           )
@@ -241,21 +241,21 @@ class _LevelPageState extends StateSuper<ContentViewPage> {
                     Builder(
                       builder: (ctx){
                         if(itm.title == null){
-                          return SizedBox();
+                          return const SizedBox();
                         }
 
                         return Row(
                           children: [
                             //SizedBox(width: 8),
 
-                            SizedBox(
+                            const SizedBox(
                               width: 2, height: 16,
                               child: ColoredBox(
                                   color: Colors.white
                               ),
                             ),
 
-                            SizedBox(width: 8),
+                            const SizedBox(width: 8),
                             Text('${itm.title}').color(Colors.white),
                           ],
                         );
@@ -447,7 +447,7 @@ class _LevelPageState extends StateSuper<ContentViewPage> {
 
     if(user == null || user.userId == '0'){
       media.isSee = true;
-      AssistController.updateGroupGlobal(AppAssistKeys.updateAudioSeen);
+      AssistController.updateGroupGlobal(AssistGroup.updateAudioSeen);
       return;
     }
 
@@ -461,7 +461,7 @@ class _LevelPageState extends StateSuper<ContentViewPage> {
     requester.httpRequestEvents.onFailState = (req, data) async {
       if(kIsWeb){
         media.isSee = true;
-        AssistController.updateGroupGlobal(AppAssistKeys.updateAudioSeen);
+        AssistController.updateGroupGlobal(AssistGroup.updateAudioSeen);
       }
 
       AppToast.showToast(context, 'خطا در باز کردن جلسه');
@@ -469,7 +469,7 @@ class _LevelPageState extends StateSuper<ContentViewPage> {
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
       media.isSee = true;
-      AssistController.updateGroupGlobal(AppAssistKeys.updateAudioSeen);
+      AssistController.updateGroupGlobal(AssistGroup.updateAudioSeen);
     };
 
     requester.bodyJson = js;

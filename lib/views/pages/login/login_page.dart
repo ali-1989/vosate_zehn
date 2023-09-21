@@ -125,7 +125,7 @@ class _LoginPageState extends StateSuper<LoginPage> {
       child: Column(
         children: [
           SizedBox(
-            height: MathHelper.percent(sh, 30),
+            height: MathHelper.percent(hs, 30),
             child: Center(
               child: Image.asset(AppImages.appIcon, width: 100, height: 100),
             ),
@@ -309,7 +309,7 @@ class _LoginPageState extends StateSuper<LoginPage> {
             const SizedBox(height: 20),
             TextButton(
                 onPressed: gotoTermPage,
-                child: Text(AppMessages.terms).fsR(-3)
+                child: Text(AppMessages.termPolice).fsR(-3)
             ),
 
             /// enter guest
@@ -385,7 +385,7 @@ class _LoginPageState extends StateSuper<LoginPage> {
             const SizedBox(height: 20),
             TextButton(
                 onPressed: gotoTermPage,
-                child: Text(AppMessages.terms).fsR(-3)
+                child: Text(AppMessages.termPolice).fsR(-3)
             ),
 
             const SizedBox(height: 30),
@@ -511,7 +511,7 @@ class _LoginPageState extends StateSuper<LoginPage> {
             const SizedBox(height: 25),
             TextButton(
                 onPressed: gotoTermPage,
-                child: Text(AppMessages.terms).fsR(-3)
+                child: Text(AppMessages.termPolice).fsR(-3)
             ),
 
             const SizedBox(height: 10),
@@ -568,7 +568,7 @@ class _LoginPageState extends StateSuper<LoginPage> {
             const SizedBox(height: 25),
             TextButton(
                 onPressed: gotoTermPage,
-                child: Text(AppMessages.terms).fsR(-3)
+                child: Text(AppMessages.termPolice).fsR(-3)
             ),
 
             const SizedBox(height: 10),
@@ -609,7 +609,7 @@ class _LoginPageState extends StateSuper<LoginPage> {
           //padding: const EdgeInsets.symmetric(horizontal: 20),
           children: [
             const SizedBox(height: 30),
-            Text(AppMessages.enterVerifyCode.replaceFirst('#', LocaleHelper.overrideLtr('${countryModel.countryPhoneCode} $phoneNumber')),
+            Text(AppMessages.enterVerifyCodeDesc.replaceFirst('#', LocaleHelper.overrideLtr('${countryModel.countryPhoneCode} $phoneNumber')),
               style: const TextStyle(fontWeight: FontWeight.bold),),
 
             const SizedBox(height: 10,),
@@ -652,7 +652,7 @@ class _LoginPageState extends StateSuper<LoginPage> {
               children: [
                 TextButton(
                     onPressed: onChangeNumberCall,
-                    child: Text(AppMessages.changeNumber)
+                    child: Text(AppMessages.otherNumber)
                 ),
 
                 Row(
@@ -804,7 +804,7 @@ class _LoginPageState extends StateSuper<LoginPage> {
           /**/
         }
         else if(causeCode == HttpCodes.error_userIsBlocked){
-          AppSheet.showSheet$AccountIsBlock(context);
+          AppSheet.showSheetOk(context, AppMessages.accountIsBlock);
           return;
         }
       }
@@ -822,13 +822,13 @@ class _LoginPageState extends StateSuper<LoginPage> {
             AppBroadcast.reBuildMaterial();
           }
           else {
-            AppSheet.showSheet$OperationFailed(context);
+            AppSheet.showSheetOk(context, AppMessages.operationFailed);
           }
         }
       }
     }
     else {
-      AppSheet.showSheet$ErrorCommunicatingServer(context);
+      AppSheet.showSheetOk(context, AppMessages.errorCommunicatingServer);
       return;
     }
   }
@@ -853,7 +853,7 @@ class _LoginPageState extends StateSuper<LoginPage> {
     await System.wait(const Duration(milliseconds: 300));
 
     if(state == EmailVerifyStatus.error){
-      AppSheet.showSheet$OperationFailedTryAgain(context);
+      AppSheet.showSheetOk(context, AppMessages.operationFailedTryAgain);
       return;
     }
 
@@ -893,7 +893,7 @@ class _LoginPageState extends StateSuper<LoginPage> {
     await System.wait(const Duration(milliseconds: 300));
 
     if(status == EmailLoginStatus.error){
-      AppSheet.showSheet$OperationFailedTryAgain(context);
+      AppSheet.showSheetOk(context, AppMessages.operationFailedTryAgain);
     }
     else if(status == EmailLoginStatus.inCorrectUserPass) {
       AppSheet.showSheetOk(context, 'ایمیل یا رمز اشتباه است');
@@ -917,7 +917,7 @@ class _LoginPageState extends StateSuper<LoginPage> {
 
     final timer = Timer(const Duration(seconds: kIsWeb? 300: 60), (){
       AppLoading.instance.hideLoading(context);
-      AppSheet.showSheet$OperationFailed(context);
+      AppSheet.showSheetOk(context, AppMessages.operationFailed);
       return;
     });
 
@@ -930,13 +930,13 @@ class _LoginPageState extends StateSuper<LoginPage> {
     }
     catch(e){
       AppLoading.instance.hideLoading(context);
-      AppSheet.showSheet$OperationFailed(context);
+      AppSheet.showSheetOk(context, AppMessages.operationFailed);
       return;
     }
 
     if(googleResult == null){
       AppLoading.instance.hideLoading(context);
-      AppSheet.showSheet$OperationFailed(context);
+      AppSheet.showSheetOk(context, AppMessages.operationFailed);
     }
     else {
       final twoState = await LoginService.requestVerifyGmail(email: googleResult.email);
@@ -951,7 +951,7 @@ class _LoginPageState extends StateSuper<LoginPage> {
             /**/
           }
           else if(causeCode == HttpCodes.error_userIsBlocked){
-            AppSheet.showSheet$AccountIsBlock(context);
+            AppSheet.showSheetOk(context, AppMessages.accountIsBlock);
             return;
           }
         }
@@ -972,13 +972,13 @@ class _LoginPageState extends StateSuper<LoginPage> {
               AppBroadcast.reBuildMaterial();
             }
             else {
-              AppSheet.showSheet$OperationFailed(context);
+              AppSheet.showSheetOk(context, AppMessages.operationFailed);
             }
           }
         }
       }
       else {
-        AppSheet.showSheet$ErrorCommunicatingServer(context);
+        AppSheet.showSheetOk(context, AppMessages.errorCommunicatingServer);
         return;
       }
     }

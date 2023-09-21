@@ -16,9 +16,9 @@ import '/managers/settings_manager.dart';
 
 abstract class StateSuper<W extends StatefulWidget> extends State<W> {
 	final AssistController assistCtr = AssistController();
-	late double sw;
-	late double sh;
-	late double pw;
+	late double ws;
+	late double hs;
+	late double hr;
 
 	@override
   void didUpdateWidget(W oldWidget) {
@@ -35,9 +35,9 @@ abstract class StateSuper<W extends StatefulWidget> extends State<W> {
 			AppSizes.instance.addMetricListener(onResize);
 		}
 
-		sw = AppSizes.instance.appWidth;
-		sh = AppSizes.instance.appHeight;
-		pw = AppSizes.instance.powerHeight;
+		ws = AppSizes.instance.appWidth;
+		hs = AppSizes.instance.appHeight;
+		hr = AppSizes.instance.heightRatio;
 	}
 
 	@override

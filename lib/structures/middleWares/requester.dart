@@ -10,6 +10,7 @@ import 'package:app/managers/api_manager.dart';
 import 'package:app/system/common_http_handler.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/app_http_dio.dart';
+import 'package:app/tools/app/app_messages.dart';
 import 'package:app/tools/app/app_sheet.dart';
 import 'package:app/tools/device_info_tools.dart';
 
@@ -19,12 +20,6 @@ enum MethodType {
   get,
   put,
   delete,
-}
-
-enum RequestPath {
-  getData,
-  setData,
-  others
 }
 ///=============================================================================================
 class Requester {
@@ -123,21 +118,37 @@ class Requester {
         final url = _httpRequester.requestOptions?.uri;
         var request = '';
 
-        if (_httpRequester.requestOptions?.data is String){
-          final str = _httpRequester.requestOptions!.data as String;
+        if(_http.method != 'GET') {
+          /*if (_httpRequester.requestOptions?.data is String){
+            final str = _httpRequester.requestOptions!.data as String;
 
-          /*if(str.contains(Keys.requestZone)) {
-            int start = str.indexOf(Keys.requestZone)+15;
+            if(str.contains(Keys.requestZone)) {
+              int start = str.indexOf(Keys.requestZone)+15;
+            }
+          }todo.*/
+	    
+          if (_http.body is String) {
+            request = _http.body as String;
+          }
 
-            request = str.substring(start, start+15);
-          }*/
+          if (_http.body is Map) {
+            request = _http.body.toString();
+          }
+
+          if (request.length > 500) {
+            request = request.substring(0, 500);
+          }
+        }
+        else {
+          request = 'GET';
         }
 
-        Tools.verbosePrint('@@@ API CALLED >>> url:[$url]  request:[$request]  response ====>>  status:[${_httpRequester.responseData?.statusCode}] data:$val');
+        Tools.verboseLog('@@@@@ API CALLED >>> url:[$url]\n\trequest:[$request]\n\tresponse ====>>  status:[${_httpRequester.responseData?.statusCode}] data:$val \n');
       }
 
-      /*if(_httpRequester.responseData?.statusCode == 401 && Session.getLastLoginUser() != null){
-        final getNewToken = await JwtService.requestNewToken(Session.getLastLoginUser()!);
+      /*if(_httpRequester.responseData?.statusCode == 401 && SessionService.getLastLoginUser() != null){
+        JwtService.stopRefreshService();
+        final getNewToken = await JwtService.requestNewToken(SessionService.getLastLoginUser()!);
 
         /// try request old api again
         if(getNewToken) {
@@ -192,7 +203,7 @@ class Requester {
 
         if(context != null && context.mounted) {
           if (promptErrors && !CommonHttpHandler.handler(context, js)) {
-            await AppSheet.showSheet$ServerNotRespondProperly(context);
+            await AppSheet.showSheetOk(context, AppMessages.serverNotRespondProperly);
           }
         }
       }

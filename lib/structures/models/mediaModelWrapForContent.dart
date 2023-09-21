@@ -1,4 +1,4 @@
-import 'package:iris_tools/models/dataModels/mediaModel.dart';
+import 'package:iris_tools/models/dataModels/media_model.dart';
 
 class MediaModelWrapForContent extends MediaModel {
   bool isSee = false;

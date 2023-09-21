@@ -78,7 +78,6 @@ class ColorTheme {
 
     buttonsColorScheme = ColorScheme.fromSwatch(
       primarySwatch: primarySwatch,
-      primaryColorDark: ColorHelper.darkIfIsLight(primaryColor),
       // buttons are use this color for btnText (accentColor)
       accentColor: buttonTextColor,
       backgroundColor: buttonBackColor,

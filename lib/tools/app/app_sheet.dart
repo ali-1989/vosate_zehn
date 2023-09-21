@@ -390,50 +390,6 @@ class AppSheet {
     );
   }
 
-  ///=======================================================================================================
-  static Future<T?> showSheet$NetDisconnected<T>(BuildContext context) {
-    return showSheetOneAction<T>(context, AppMessages.netConnectionIsDisconnect);
-  }
-
-  static Future<T?> showSheet$ErrorCommunicatingServer<T>(BuildContext context) {
-    return showSheetOneAction<T>(context, AppMessages.errorCommunicatingServer);
-  }
-
-  static Future<T?> showSheet$ServerNotRespondProperly<T>(BuildContext context) {
-    return showSheetOneAction<T>(context, AppMessages.serverNotRespondProperly);
-  }
-
-  static Future<T?> showSheet$OperationCannotBePerformed<T>(BuildContext context) {
-    return showSheetOneAction<T>(context, AppMessages.operationCannotBePerformed);
-  }
-
-  static Future<T?> showSheet$SuccessOperation<T>(BuildContext context, {VoidCallback? onBtn}) {
-    return showSheetOneAction<T>(context, AppMessages.operationSuccess, onButton: onBtn);
-  }
-
-  static Future<T?> showSheet$OperationFailed<T>(BuildContext context) {
-    return showSheetOneAction<T>(context, AppMessages.operationFailed);
-  }
-
-  static Future<T?> showSheet$OperationFailedTryAgain<T>(BuildContext context) {
-    return showSheetOneAction<T>(context, AppMessages.operationFailedTryAgain);
-  }
-
-  static Future<T?> showSheet$OperationCanceled<T>(BuildContext context) {
-    return showSheetOneAction<T>(context, AppMessages.operationCanceled);
-  }
-
-  static Future<T?> showSheet$AccountIsBlock<T>(BuildContext context) {
-    return showSheetOneAction<T>(context, AppMessages.accountIsBlock);
-  }
-
-  static Future<T?> showSheet$YouDoNotHaveAccess<T>(BuildContext context) {
-    return showSheetOneAction<T>(context, AppMessages.sorryYouDoNotHaveAccess);
-  }
-
-  static Future<T?> showSheet$ThereAreNoResults<T>(BuildContext context) {
-    return showSheetOneAction<T>(context, AppMessages.thereAreNoResults);
-  }
   ///======== third party package ===============================================================================
   static void showSheetDialog(
       BuildContext context, {

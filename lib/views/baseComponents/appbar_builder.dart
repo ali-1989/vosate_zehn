@@ -78,7 +78,7 @@ class AppBarCustom extends AppBar {
     // AppBar().preferredSize.height;
 
     if(isWeb()){
-      return Size.fromHeight(60);
+      return const Size.fromHeight(60);
     }
 
     return const Size.fromHeight(kToolbarHeight);

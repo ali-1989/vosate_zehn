@@ -7,7 +7,7 @@ import 'package:iris_tools/api/helpers/fileHelper.dart';
 import 'package:iris_tools/api/helpers/pathHelper.dart';
 import 'package:iris_tools/api/helpers/storageHelper.dart';
 import 'package:iris_tools/api/system.dart';
-import 'package:iris_tools/models/dataModels/mediaModel.dart';
+import 'package:iris_tools/models/dataModels/media_model.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:app/structures/enums/enums.dart';

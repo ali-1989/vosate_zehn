@@ -262,7 +262,7 @@ class _RegisterPageState extends StateSuper<RegisterPage> {
         RouteTools.popIfCan(context);
       }
       else {
-        AppSheet.showSheet$OperationFailed(context);
+        AppSheet.showSheetOk(context, AppMessages.operationFailed);
       }
     };
 

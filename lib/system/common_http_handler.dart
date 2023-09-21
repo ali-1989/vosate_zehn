@@ -61,7 +61,7 @@ class CommonHttpHandler {
       return true;
     }
     else if(causeCode == HttpCodes.error_canNotAccess){
-      AppSheet.showSheet$YouDoNotHaveAccess(context);
+      AppSheet.showSheetOk(context, AppMessages.sorryYouDoNotHaveAccess);
       return true;
     }
     else if(causeCode == HttpCodes.error_youMustRegisterForThis){
@@ -69,7 +69,7 @@ class CommonHttpHandler {
       return true;
     }
     else if(causeCode == HttpCodes.error_operationCannotBePerformed){
-      AppSheet.showSheet$OperationCannotBePerformed(context);
+      AppSheet.showSheetOk(context, AppMessages.operationCannotBePerformed);
       return true;
     }
     else if(causeCode == HttpCodes.error_requestNotDefined){

@@ -7,7 +7,7 @@ import 'package:iris_notifier/iris_notifier.dart';
 import 'package:iris_tools/api/helpers/colorHelper.dart';
 import 'package:iris_tools/api/helpers/fileHelper.dart';
 import 'package:iris_tools/api/helpers/mathHelper.dart';
-import 'package:iris_tools/modules/stateManagers/assistState.dart';
+import 'package:iris_tools/modules/stateManagers/updater_state.dart';
 import 'package:share_extend/share_extend.dart';
 
 import 'package:app/managers/version_manager.dart';
@@ -42,7 +42,7 @@ class DrawerMenuBuilder {
   //static Widget? _drawer;
 
   static Widget getDrawer(){
-    return AssistBuilder(
+    return UpdaterBuilder(
       id: AppBroadcast.drawerMenuRefresherId,
       builder: (ctx, ctr, data){
         return _buildDrawer();

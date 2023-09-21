@@ -95,7 +95,7 @@ class AppSizes {
 
   double get appWidthRelateWeb => webMaxWidthSize;
 
-  double get powerHeight => MathHelper.between(1.0, 750, 0.86, 570, appHeight);
+  double get heightRatio => MathHelper.between(1.0, 750, 0.86, 570, appHeight);
   ///●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●
   static FlutterView? getWindow(){
     return PlatformDispatcher.instance.implicitView;

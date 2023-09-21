@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
 import 'package:iris_tools/api/system.dart';
-import 'package:iris_tools/models/twoStateReturn.dart';
+import 'package:iris_tools/models/two_state_return.dart';
 
 import 'package:app/managers/settings_manager.dart';
 import 'package:app/services/firebase_service.dart';

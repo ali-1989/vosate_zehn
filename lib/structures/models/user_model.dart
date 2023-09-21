@@ -1,5 +1,5 @@
 import 'package:iris_tools/dateSection/dateHelper.dart';
-import 'package:iris_tools/models/dataModels/mediaModel.dart';
+import 'package:iris_tools/models/dataModels/media_model.dart';
 
 import 'package:app/structures/enums/user_type.dart';
 import 'package:app/structures/models/country_model.dart';

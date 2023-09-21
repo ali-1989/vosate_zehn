@@ -60,6 +60,16 @@ extension ContextExtension on BuildContext {
     while (FocusScope.of(this).focusedChild?.context?.widget is! EditableText);
   }
 
+  bool get isMounted {
+    try {
+      widget;
+      return true;
+    }
+    catch (e) {
+      return false;
+    }
+  }
+
   //--------------------------------------------------
   String? t(String key, {String? key2, String? key3}) {
     var res1 = AppLocale.appLocalize.translate(key);
