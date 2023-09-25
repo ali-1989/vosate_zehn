@@ -48,7 +48,7 @@ class VersionManager {
     if (oldVersion == null) {
       onFirstInstall();
     }
-    else if (oldVersion < Constants.appVersionCode) {
+    else if (oldVersion != Constants.appVersionCode) {
       onInstallNewVersion();
     }
   }

@@ -316,7 +316,7 @@ class AppMessages {
     return "'request' key not exist";
   }
 
-  static String get unkNow {
+  static String get unKnow {
     return _getContext().t('unknown')?? _noText;
   }
 

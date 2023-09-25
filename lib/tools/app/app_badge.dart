@@ -1,31 +1,26 @@
-import 'package:app/tools/app/app_broadcast.dart';
+import 'package:iris_tools/modules/stateManagers/updater_state.dart';
+
+import 'package:app/structures/enums/badge_group.dart';
 
 class AppBadge {
   AppBadge._();
 
-  static final _homePageBadges = <int, int>{};
+  static final _appBadges = <BadgesGroup, int>{};
 
-  static void setMessageBadge(int count) async {
-    _homePageBadges[3] = count;
+  static int getBadge(BadgesGroup badgesGroup) {
+    return _appBadges[badgesGroup]?? 0;
   }
 
-   static void setLeitnerBadge(int count) async {
-    _homePageBadges[1] = count;
+  static int setBadge(BadgesGroup badgesGroup, int count) {
+    return _appBadges[badgesGroup] = count;
   }
 
-  static int getMessageBadge() {
-    return getBadge(3);
+  static void setBadgeAndRefresh(BadgesGroup badgesGroup, int count) {
+    _appBadges[badgesGroup] = count;
+    refreshBadge(badgesGroup);
   }
 
-  static int getLeitnerBadge() {
-    return getBadge(1);
-  }
-
-  static refreshViews() async {
-    AppBroadcast.layoutPageKey.currentState?.assistCtr.updateHead();
-  }
-
-  static int getBadge(int itemIdx) {
-    return _homePageBadges[itemIdx]?? 0;
+  static void refreshBadge(BadgesGroup badgesGroup) async {
+    UpdaterController.updateByGroup(badgesGroup);
   }
 }
