@@ -37,7 +37,7 @@ class SubBucketModel with DateFieldMixin {
     title = map[Keys.title]?? '';
     description = map[Keys.description];
     type = map[Keys.type];
-    date = DateHelper.tsToSystemDate(map[Keys.date]);
+    date = DateHelper.timestampToSystem(map[Keys.date]);
     mediaId = map['media_id'];
     coverId = map['cover_id'];
     contentId = map['content_id'];

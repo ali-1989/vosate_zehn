@@ -12,7 +12,7 @@ class FavoriteService {
   FavoriteService._();
 
   static Future<bool> addFavorite(SubBucketModel model, {DateTime? date}) async {
-    date ??= DateHelper.getNowToUtc();
+    date ??= DateHelper.nowMinusUtcOffset();
 
     final con = Conditions();
     con.add(Condition()..key = Keys.id..value = model.id!);

@@ -126,7 +126,6 @@ class AppThemes {
 	static void _checkTheme(ColorTheme th) {
 		th.buttonsColorScheme = ColorScheme.fromSwatch(
 			primarySwatch: th.primarySwatch,
-			//primaryColorDark: ColorHelper.darkIfIsLight(th.primaryColor),
 			// buttons are use this color for btnText (accentColor)
 			accentColor: th.buttonTextColor,
 			backgroundColor: th.buttonBackColor,
@@ -180,95 +179,60 @@ class AppThemes {
 		final raw = FontManager.instance.rawThemeData;
 		TextTheme primaryTextTheme;
 
-		if(FontManager.useFlutterFontSize){
-			primaryTextTheme = TextTheme(
-				bodyLarge: raw.textTheme.bodyLarge!.copyWith(
-					fontFamily: baseFamily, color: th.textColor, height: height,
-				),
-				bodyMedium: raw.textTheme.bodyMedium!.copyWith(
-					fontFamily: baseFamily, color: th.textColor, height: height,
-				),
-				bodySmall: raw.textTheme.bodySmall!.copyWith(
-					fontFamily: subFamily, color: th.textColor, height: height,
-				),
-				titleLarge: raw.textTheme.titleLarge!.copyWith(
-					fontFamily: baseFamily, color: th.appBarItemColor, fontWeight: FontWeight.bold, height: height,
-				),
-				titleMedium: raw.textTheme.titleMedium!.copyWith(
-					fontFamily: baseFamily, color: th.textColor, height: height,
-				),
-				titleSmall: raw.textTheme.titleSmall!.copyWith(
-					fontFamily: subFamily, color: th.textColor, height: height,
-				),
-				displayLarge: raw.textTheme.displayLarge!.copyWith(
-					fontFamily: boldFamily, color: th.textColor, height: height,
-				),
-				displayMedium: raw.textTheme.displayMedium!.copyWith(
-					fontFamily: boldFamily, color: th.textColor, height: height,
-				),
-				displaySmall: raw.textTheme.displaySmall!.copyWith(
-					fontFamily: boldFamily, color: th.textColor, height: height,
-				),
-				headlineMedium: raw.textTheme.headlineMedium!.copyWith(
-					fontFamily: baseFamily, color: th.textColor, height: height,
-				),
-				headlineSmall: raw.textTheme.headlineSmall!.copyWith(
-					fontFamily: baseFamily, color: th.textColor, height: height,
-				),
-				labelLarge: raw.textTheme.labelLarge!.copyWith(
-					fontFamily: boldFamily, color: th.buttonTextColor, height: height,
-				),
-				labelSmall: raw.textTheme.labelSmall!.copyWith(
-					fontFamily: subFamily, color: th.textColor, height: height,
-				),
-			);
-		}
-		else {
-			final fontSize = _instance.baseFont.size ?? FontManager.instance.getPlatformFont().size?? FontManager.defaultFontSize;
+		double? fontSize = _instance.baseFont.size ?? FontManager.appFontSizeIfSet();
 
-			primaryTextTheme = TextTheme(
+		double? calcFontSize(int p){
+			if(fontSize == null){
+				return null;
+			}
+
+			return fontSize + p;
+		}
+
+		primaryTextTheme = TextTheme(
 				bodyLarge: raw.textTheme.bodyLarge!.copyWith(
-					fontFamily: baseFamily, color: th.textColor, fontSize: fontSize +1, height: height,
+					fontFamily: baseFamily, color: th.textColor, height: height, fontSize: calcFontSize(1),
 				),
 				bodyMedium: raw.textTheme.bodyMedium!.copyWith(
-					fontFamily: baseFamily, color: th.textColor, fontSize: fontSize, height: height,
+					fontFamily: baseFamily, color: th.textColor, height: height,fontSize: calcFontSize(0),
 				),
 				bodySmall: raw.textTheme.bodySmall!.copyWith(
-					fontFamily: subFamily, color: th.textColor, fontSize: fontSize-1, height: height,
+					fontFamily: subFamily, color: th.textColor, height: height, fontSize: calcFontSize(-1),
 				),
 				titleLarge: raw.textTheme.titleLarge!.copyWith(
-					fontFamily: baseFamily, color: th.appBarItemColor, fontSize: fontSize +3, height: height,
+					fontFamily: baseFamily, color: th.appBarItemColor, height: height, fontSize: calcFontSize(3),
 					fontWeight: FontWeight.bold,
 				),
 				titleMedium: raw.textTheme.titleMedium!.copyWith(
-					fontFamily: baseFamily, color: th.textColor, fontSize: fontSize +2, height: height,
+					fontFamily: baseFamily, color: th.textColor, height: height, fontSize: calcFontSize(2),
+					fontWeight: FontWeight.bold,
 				),
 				titleSmall: raw.textTheme.titleSmall!.copyWith(
-					fontFamily: subFamily, color: th.textColor, fontSize: fontSize +1, height: height,
+					fontFamily: subFamily, color: th.textColor, height: height, fontSize: calcFontSize(1),
+					fontWeight: FontWeight.bold,
 				),
 				displayLarge: raw.textTheme.displayLarge!.copyWith(
-					fontFamily: boldFamily, color: th.textColor, fontSize: fontSize +2, height: height,
+					fontFamily: boldFamily, color: th.textColor, height: height, fontSize: calcFontSize(2),
 				),
 				displayMedium: raw.textTheme.displayMedium!.copyWith(
-					fontFamily: boldFamily, color: th.textColor, fontSize: fontSize +1, height: height,
+					fontFamily: boldFamily, color: th.textColor, height: height, fontSize: calcFontSize(1),
 				),
 				displaySmall: raw.textTheme.displaySmall!.copyWith(
-					fontFamily: boldFamily, color: th.textColor, fontSize: fontSize, height: height,
+					fontFamily: boldFamily, color: th.textColor, height: height, fontSize: calcFontSize(0),
 				),
 				headlineMedium: raw.textTheme.headlineMedium!.copyWith(
-					fontFamily: baseFamily, color: th.textColor, fontSize: fontSize +1, height: height,
+					fontFamily: baseFamily, color: th.textColor, height: height, fontSize: calcFontSize(1),
 				),
 				headlineSmall: raw.textTheme.headlineSmall!.copyWith(
-					fontFamily: baseFamily, color: th.textColor, fontSize: fontSize, height: height,
+					fontFamily: baseFamily, color: th.textColor, height: height, fontSize: calcFontSize(0),
 				),
 				labelLarge: raw.textTheme.labelLarge!.copyWith(
-					fontFamily: boldFamily, color: th.buttonTextColor, fontSize: fontSize -1, height: height,
+					fontFamily: boldFamily, color: th.buttonTextColor, height: height, fontSize: calcFontSize(-1),
 				),
 				labelSmall: raw.textTheme.labelSmall!.copyWith(
-					fontFamily: subFamily, color: th.textColor, fontSize: fontSize -2, height: height,
-				),
-			);
-		}
+					fontFamily: subFamily, color: th.textColor, height: height, fontSize: calcFontSize(-2),
+				)
+		);
 
 
 		final chipTextColor = AppDecoration.chipTextColor();
@@ -457,7 +421,14 @@ class AppThemes {
 		);
 
 		final checkboxThemeData = CheckboxThemeData(
-			fillColor: MaterialStateProperty.all(AppDecoration.checkPrimaryByWB(th.primaryColor, th.differentColor)),
+			fillColor: MaterialStateProperty.resolveWith((Set<MaterialState> states) {
+				if(states.contains(MaterialState.selected)){
+					return th.primaryColor;
+				}
+
+				return Colors.transparent;
+			}),
+			checkColor: MaterialStateProperty.all(th.primaryColor),
 			overlayColor: MaterialStateProperty.all(th.differentColor),
 			materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
 			visualDensity: VisualDensity.comfortable,
@@ -515,7 +486,6 @@ class AppThemes {
 			textButtonTheme: textButtonTheme,
 			elevatedButtonTheme: elevatedButtonTheme,
 			outlinedButtonTheme: outlinedButtonTheme,
-			//deprecate> buttonTheme: appButtonTheme,
 			dataTableTheme: tableThemeData,
 			radioTheme: radioThemeData,
 			checkboxTheme: checkboxThemeData,
@@ -568,10 +538,6 @@ class AppThemes {
 
 	static TextStyle subTextStyle() {
 		return AppThemes._instance.currentTheme.subTextStyle;
-	}
-
-	static Color buttonBackgroundColor() {
-		return AppThemes.instance.themeData.elevatedButtonTheme.style!.backgroundColor!.resolve({MaterialState.focused})!;
 	}
 
 	static TextDirection getOppositeDirection() {

@@ -4,7 +4,7 @@ import 'package:flutter/scheduler.dart';
 class AppNavigator {
   AppNavigator._();
 
-  static final String _modalScopeRunType = '_ModalScopeStatus';
+  static const String _modalScopeRunType = '_ModalScopeStatus';
 
   static bool canTouchContext(BuildContext context){
     try {
@@ -573,7 +573,7 @@ class AppNavigator {
     return pushNextPage(context, next, name: name, arguments: arguments, maintainState: maintainState);
   }
 
-  static Future<T?> pushNextPage<T>(BuildContext context, Widget next, {required String name, dynamic arguments, bool maintainState = true}) {
+  static Future<T?> pushNextPage<T>(BuildContext context, Widget next, {String? name, dynamic arguments, bool maintainState = true}) {
     final p = MaterialPageRoute<T>(
         builder: (ctx) {return next;},
         settings: RouteSettings(name: name, arguments: arguments),
@@ -610,11 +610,11 @@ class AppNavigator {
   }
 
   // Material(type: MaterialType.transparency,)
-  static Future pushNextTransparentPage(BuildContext context, Widget next, {required String name}) {
+  static Future pushNextTransparentPage(BuildContext context, Widget page, {required String name}) {
     return Navigator.push(context,
         PageRouteBuilder(
             opaque: false,
-          pageBuilder: (ctx, ani1, anim2) {return next;},
+          pageBuilder: (ctx, ani1, anim2) {return page;},
             settings: RouteSettings(name: name))
     );
   }

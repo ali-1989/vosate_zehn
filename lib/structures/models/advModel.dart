@@ -23,7 +23,7 @@ class AdvModel with DateFieldMixin {
     tag = map['tag'];
     type = map['type'];
     clickUrl = map['url'];
-    date = DateHelper.tsToSystemDate(Keys.date);
+    date = DateHelper.timestampToSystem(Keys.date);
   }
 
   Map<String, dynamic> toMap() {

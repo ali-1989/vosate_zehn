@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors_in_immutables
+
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
@@ -6,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:iris_tools/net/trustSsl.dart';
 
 import 'package:app/managers/advertising_manager.dart';
-import 'package:app/managers/font_manager.dart';
 import 'package:app/managers/media_manager.dart';
 import 'package:app/managers/settings_manager.dart';
 import 'package:app/managers/splash_manager.dart';
@@ -41,7 +42,7 @@ class SplashPage extends StatefulWidget {
   @override
   SplashPageState createState() => SplashPageState();
 }
-///======================================================================================================
+///=============================================================================
 class SplashPageState extends StateSuper<SplashPage> {
   Timer? timer;
 
@@ -98,17 +99,14 @@ class SplashPageState extends StateSuper<SplashPage> {
     SplashManager.isFirstInitOk = true;
 
     await appInitial(context);
-    final settingsLoad = SettingsManager.loadSettings();
+    SettingsManager.init();
+    appLazyInit();
+    await SessionService.fetchLoginUsers();
+    await VersionManager.checkVersionOnLaunch();
+    connectToServer();
 
-    if (settingsLoad) {
-      appLazyInit();
-      await SessionService.fetchLoginUsers();
-      await VersionManager.checkVersionOnLaunch();
-      connectToServer();
-
-      SplashManager.isInLoadingSettings = false;
-      AppBroadcast.reBuildMaterialBySetTheme();
-    }
+    SplashManager.isInLoadingSettings = false;
+    AppBroadcast.reBuildMaterialBySetTheme();
   }
 
   void connectToServer() async {
@@ -190,12 +188,11 @@ class SplashPageState extends StateSuper<SplashPage> {
 
   static Future<void> _lazyInitCommands() async {
     try {
+      ApplicationSignal.start();
       WakeupService.init();
       NativeCallService.init();
       NativeCallService.assistanceBridge?.invokeMethod('setAppIsRun');
       WebsocketService.prepareWebSocket(SettingsManager.localSettings.wsAddress);
-      ApplicationSignal.start();
-      SettingsManager.init();
       LoginService.init();
       DownloadUploadService.init();
       SettingsManager.requestGlobalSettings();
@@ -211,9 +208,7 @@ class SplashPageState extends StateSuper<SplashPage> {
 
         AppSizes.instance.addMetricListener(onSizeCheng);
       }*/
-      print('==============>>  ${AppThemes.instance.themeData.textTheme.bodyMedium?.fontSize}');
-      print('==============>>  ${AppThemes.instance.baseFont.size}');
-      print('==============>>  ${FontManager.defaultFontSize},  ${FontManager.deviceFontSize}');
+
       if(RouteTools.materialContext != null) {
         AidService.checkShowDialog();
         VersionManager.checkAppHasNewVersion(RouteTools.materialContext!);

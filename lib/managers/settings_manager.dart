@@ -1,99 +1,113 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
-
 import 'package:iris_notifier/iris_notifier.dart';
 
+import 'package:app/managers/font_manager.dart';
 import 'package:app/structures/enums/app_events.dart';
 import 'package:app/structures/middleWares/requester.dart';
 import 'package:app/structures/models/global_settings_model.dart';
 import 'package:app/structures/models/settings_model.dart';
 import 'package:app/tools/app/app_cache.dart';
 import 'package:app/tools/app/app_db.dart';
+import 'package:app/tools/app/app_themes.dart';
 import '/system/keys.dart';
 
 class SettingsManager {
 	SettingsManager._();
 
 	static late final SettingsModel _localSettings;
-	static final GlobalSettingsModel _globalSettings = GlobalSettingsModel();
+	static late final GlobalSettingsModel _globalSettings;
 	static bool _isInit = false;
-	static final List<VoidCallback> _localSettingsListeners = [];
 
 	static void init(){
 		if(_isInit){
 			return;
 		}
 
+		_isInit = true;
 		loadSettings();
-		EventNotifierService.addListener(AppEvents.networkConnected, _listener);
+		_prepareSettings();
+		EventNotifierService.addListener(AppEvents.networkConnected, _netListener);
 	}
 
-	static void _listener({data}) {
+	static void _netListener({data}) {
 		requestGlobalSettings();
 	}
 
 	static SettingsModel get localSettings {
-		if(!_isInit){
-			loadSettings();
-		}
+		init();
 
 		return _localSettings;
 	}
 
   static GlobalSettingsModel get globalSettings {
+		init();
+
 		return _globalSettings;
 	}
 
-  static void addListeners(VoidCallback fn) {
-		if(!_localSettingsListeners.contains(fn)) {
-		  _localSettingsListeners.add(fn);
-		}
-  }
+	static void _prepareSettings() {
+		FontManager.fetchFontThemeData(_localSettings.appLocale.languageCode);
 
-	static void removeListeners(VoidCallback fn){
-		_localSettingsListeners.remove(fn);
-	}
-
-	static void notify({BuildContext? context}){
-		//context ??= RouteTools.getContext();
-		Future((){
-			for(final fun in _localSettingsListeners){
-				try{
-					fun();
+		if(AppThemes.instance.currentTheme.themeName != _localSettings.colorTheme) {
+			for (final t in AppThemes.instance.themeList.entries) {
+				if (t.key == _localSettings.colorTheme) {
+					AppThemes.applyTheme(t.value);
+					break;
 				}
-				catch(e){/**/}
-			}
-		});
-	}
-	///===================================================================================
-	static bool loadSettings() {
-		if(!_isInit) {
-			_isInit = true;
-			final res = AppDB.fetchKv(Keys.setting$appSettings);
-
-			if (res == null) {
-				_localSettings = SettingsModel();
-				saveSettings();
-			}
-			else {
-				_localSettings = SettingsModel.fromMap(res);
 			}
 		}
-
-		return true;
 	}
 
-	static Future<bool> saveSettings({BuildContext? context, bool delay = false}) async {
-		if(delay){
-			await Future.delayed(const Duration(seconds: 1));
+	static void loadSettings() {
+		_isInit = true;
+		final local = AppDB.fetchKv(Keys.setting$appSettings);
+		final global = AppDB.fetchKv(Keys.setting$globalSettings);
+
+		if (local == null) {
+			_localSettings = SettingsModel();
+			_localSettings.colorTheme ??= AppThemes.instance.currentTheme.themeName;
+			saveLocalSettingsAndNotify(notify: false);
+		}
+		else {
+			_localSettings = SettingsModel.fromMap(local);
 		}
 
-		final res = await AppDB.setReplaceKv(Keys.setting$appSettings, _localSettings.toMap());
+		if (global == null) {
+			_globalSettings = GlobalSettingsModel();
+			saveGlobalSettingsAndNotify(notify: false);
+		}
+		else {
+			_globalSettings = GlobalSettingsModel.fromMap(global);
+		}
+	}
 
-		notify(context: (context?.mounted?? false)? context : null);
+	static Future<void> saveLocalSettingsAndNotify({int delaySec = 0, bool notify = true}) async {
+		if(delaySec > 0){
+			await Future.delayed(Duration(seconds: delaySec));
+		}
 
-		return res > 0;
+		await AppDB.setReplaceKv(Keys.setting$appSettings, _localSettings.toMap());
+
+		if(notify) {
+			EventNotifierService.notify(SettingsEvents.localSettingsChange);
+		}
+
+		return;
+	}
+
+	static Future<void> saveGlobalSettingsAndNotify({int delaySec = 0, bool notify = true}) async {
+		if(delaySec > 0){
+			await Future.delayed(Duration(seconds: delaySec));
+		}
+
+		await AppDB.setReplaceKv(Keys.setting$globalSettings, _globalSettings.toMap());
+
+		if(notify) {
+			EventNotifierService.notify(SettingsEvents.globalSettingsChange);
+		}
+
+		return;
 	}
 
 	static Future<GlobalSettingsModel?> requestGlobalSettings() async {
@@ -130,3 +144,15 @@ class SettingsManager {
 	}
 }
 
+enum SettingsEvents implements EventImplement {
+	localSettingsChange(4),
+	globalSettingsChange(5);
+
+	final int _number;
+
+	const SettingsEvents(this._number);
+
+	int getNumber(){
+		return _number;
+	}
+}

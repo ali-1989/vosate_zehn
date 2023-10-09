@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app/tools/app/app_decoration.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/helpers/colorHelper.dart';
@@ -59,8 +60,8 @@ class AppDialogIris {
 		_dialogDecoration.iconBackgroundColor = Colors.black;
 		_dialogDecoration.positiveButtonTextColor = AppThemes.instance.currentTheme.buttonTextColor;
 		_dialogDecoration.negativeButtonTextColor = AppThemes.instance.currentTheme.buttonTextColor;
-		_dialogDecoration.positiveButtonBackColor = AppThemes.buttonBackgroundColor();
-		_dialogDecoration.negativeButtonBackColor = AppThemes.buttonBackgroundColor();
+		_dialogDecoration.positiveButtonBackColor = AppDecoration.buttonBackgroundColor();
+		_dialogDecoration.negativeButtonBackColor = AppDecoration.buttonBackgroundColor();
 
 		if(AppSizes.isBigWidth()) {
 			double factor = 0.8;
@@ -212,15 +213,7 @@ class AppDialogIris {
 				icon: const Icon(AppIcons.eye, size: 48, color: Colors.redAccent)
 		);
 	}
-	///============================================================================================================
-	Future showDialog$NetDisconnected(BuildContext context) {
-		return showErrorDialog(
-			context,
-			null,
-			AppMessages.netConnectionIsDisconnect,
-		);
-	}
-
+	///===========================================================================================================
 	Future<bool> showDialog$wantClose(BuildContext context, {Widget? view}) {
 		final x = IrisDialog.show<bool>(
 			context,

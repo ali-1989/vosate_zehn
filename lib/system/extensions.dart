@@ -694,7 +694,7 @@ extension TextExtension on Text {
 
   Text fsR(double size, {double? max /*20*/}) {
     var siz = style?.fontSize?? AppThemes.instance.currentTheme.baseTextStyle.fontSize;
-    siz = (siz?? FontManager.deviceFontSize) + size;
+    siz = (siz?? FontManager.appFontSize()) + size;
 
     if (max != null) {
       siz = MathHelper.minDouble(siz, max);
@@ -760,7 +760,7 @@ extension TextExtension on Text {
         }
 
         if (myStyle!.fontSize == null) {
-          myStyle = myStyle.copyWith(fontSize: FontManager.defaultFontSize);
+          myStyle = myStyle.copyWith(fontSize: FontManager.appFontSize());
         }
 
         var tp = TextPainter(
@@ -1060,7 +1060,7 @@ extension SelectableTextExtension on SelectableText {
     var siz = style?.fontSize;
     siz ??= AppThemes.instance.currentTheme.baseTextStyle.fontSize;
 
-    siz = (siz?? FontManager.deviceFontSize) + size;
+    siz = (siz?? FontManager.appFontSize()) + size;
 
     if (max != null) {
       siz = MathHelper.minDouble(siz, max);

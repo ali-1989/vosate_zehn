@@ -2,11 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/managers/orientationManager.dart';
-import 'package:iris_tools/modules/irisLocalizations.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 
 import 'package:app/tools/app/app_loading.dart';
-import 'package:app/tools/app/app_locale.dart';
 import 'package:app/tools/app/app_sizes.dart';
 import 'package:app/tools/route_tools.dart';
 import '/managers/settings_manager.dart';
@@ -78,36 +76,6 @@ abstract class StateSuper<W extends StatefulWidget> extends State<W> {
 		}
 	}
 
-	String? t(String key, {String? key2, String? key3}) {
-		var res1 = AppLocale.appLocalize.translate(key);
-
-		if(res1 == null) {
-		  return null;
-		}
-
-		if(key2 != null) {
-		  res1 += ' ${AppLocale.appLocalize.translate(key2)?? ''}';
-		}
-
-		if(key3 != null) {
-		  res1 += ' ${AppLocale.appLocalize.translate(key3)?? ''}';
-		}
-
-		return res1;
-	}
-	//------------------------------------------------------
-	Map<String, dynamic>? tAsMap(String key) {
-		return AppLocale.appLocalize.translateAsMap(key);
-	}
-
-	String? tInMap(String key, String subKey) {
-		return tAsMap(key)?[subKey];
-	}
-
-	IrisLocalizations localization() {
-		return AppLocale.appLocalize;
-	}
-	///-------------------------------------------------------
 	void addPostOrCall({required Function() fn, BuildContext? subContext}) async {
 		if(!mounted){
 			return;
@@ -150,7 +118,7 @@ abstract class StateSuper<W extends StatefulWidget> extends State<W> {
 			return Future<bool>.value(false);
 		}*/
 
-		// if true: popPage,  false: not close page
+		// true: pop,  false: not close page
 		return Future<bool>.value(true);
 	}
 
@@ -163,7 +131,7 @@ abstract class StateSuper<W extends StatefulWidget> extends State<W> {
 	## override onWillBack in children (Screen|Page):
 
 	@override
-  Future<bool> onWillBack<s extends StateBase>(s state) {
+  Future<bool> onWillBack<s extends StateSuper>(s state) {
     if (weSlideController.isOpened) {
       weSlideController.hide();
       return Future<bool>.value(false);
@@ -179,8 +147,6 @@ abstract class StateSuper<W extends StatefulWidget> extends State<W> {
 			onWillPop: () => onWillBack(this),
 			child: ...
 	)
- --------------------------------------------------------------------------------------
-
  --------------------------------------------------------------------------------------
 
 */

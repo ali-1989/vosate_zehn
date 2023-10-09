@@ -87,10 +87,6 @@ class AppDirectories {
     return pat + PathHelper.getSeparator() + fName;
   }
 
-  // status == PermissionStatus.granted
-  static Future<PermissionStatus> checkStoragePermission() async{
-    return PermissionTools.requestStoragePermission();
-  }
   ///-----------------------------------------------------------------------------------------
   static Future<String> prepareStoragePaths(String appName) async {
     _appName = appName;
@@ -224,9 +220,9 @@ class AppDirectories {
       return true;
     }
 
-    final x = await checkStoragePermission();
+    final res = await PermissionTools.requestStoragePermissionWithOsVersion();
 
-    if(x != PermissionStatus.granted) {
+    if(res != PermissionStatus.granted) {
       return false;
     }
 

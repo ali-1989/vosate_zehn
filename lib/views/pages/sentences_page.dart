@@ -199,7 +199,7 @@ class _SentencesPageState extends StateSuper<SentencesPage> {
                             onChanged: (v){
                               SettingsManager.localSettings.notificationDailyText = v;
                               ctr.updateSelf();
-                              SettingsManager.saveSettings();
+                              SettingsManager.saveLocalSettingsAndNotify();
                             }
                         )
                       ],

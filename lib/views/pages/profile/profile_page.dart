@@ -369,7 +369,7 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
         ),
       );
 
-      //widgets.add(v); todo. temp-action
+      widgets.add(v);
     }
 
     widgets.add(
@@ -443,6 +443,12 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
 
     if(hasPermission != PermissionStatus.granted) {
       AppToast.showToast(context, 'لطفا مجوز استفاده از دوربین را فعال کنید');
+      PermissionTools.requestCameraPermission().then((value) {
+        if(value == PermissionStatus.granted){
+          return selectImageFromCamera();
+        }
+      });
+
       return null;
     }
 
@@ -456,7 +462,7 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
   }
 
   Future<XFile?> selectImageFromGallery() async {
-    final hasPermission = await PermissionTools.requestStoragePermission();
+    final hasPermission = await PermissionTools.requestStoragePermissionWithOsVersion();
 
     if(hasPermission != PermissionStatus.granted) {
       return null;
@@ -712,7 +718,7 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
       final hasPermission = await PermissionTools.isGrantedStoragePermission();
 
       if(!hasPermission) {
-        final graPermission = await PermissionTools.requestStoragePermission();
+        final graPermission = await PermissionTools.requestStoragePermissionWithOsVersion();
 
         if(graPermission == PermissionStatus.granted){
           assistCtr.updateHead();

@@ -29,7 +29,7 @@ class BucketModel with DateFieldMixin {
     bucketType = map['bucket_type']?? 0;
     mediaId = map['media_id'];
     isHide = map['is_hide']?? true;
-    date = DateHelper.tsToSystemDate(map[Keys.date]);
+    date = DateHelper.timestampToSystem(map[Keys.date]);
 
     /*if(map[Keys.dataList] is List){
       for(final i in map[Keys.dataList]) {

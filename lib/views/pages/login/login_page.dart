@@ -182,7 +182,7 @@ class _LoginPageState extends StateSuper<LoginPage> {
                     shape: const StadiumBorder(),
                   ),
                   onPressed: onEnterWithEmailClick,
-                  child: Text('ورود با ایمیل')
+                  child: const Text('ورود با ایمیل')
               ),
             ),
 
@@ -197,7 +197,7 @@ class _LoginPageState extends StateSuper<LoginPage> {
                           shape: const StadiumBorder(),
                         ),
                         onPressed: onEnterWithMobileForWebClick,
-                        child: Text('ورود با شماره موبایل')
+                        child: const Text('ورود با شماره موبایل')
                     )
               )
             ),
@@ -229,7 +229,7 @@ class _LoginPageState extends StateSuper<LoginPage> {
                     backgroundColor: AppThemes.instance.currentTheme.differentColor,
                   ),
                   onPressed: onEnterToRegisterEmailForWebClick,
-                  child: Text('ثبت نام با ایمیل')
+                  child: const Text('ثبت نام با ایمیل')
               ),
             ),
 

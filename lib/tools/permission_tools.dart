@@ -3,7 +3,8 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 
-import 'package:iris_tools/api/cache/streamCach.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:iris_tools/api/cache/future_cache.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class PermissionTools {
@@ -11,6 +12,18 @@ class PermissionTools {
 
 	static bool isGranted(PermissionStatus status) {
 		return status == PermissionStatus.granted;
+	}
+
+	static Future<bool> isGrantedMicPermission() async {
+		return await Permission.microphone.isGranted;
+	}
+
+	static Future<bool> isGrantedCameraPermission() async {
+		return await Permission.camera.isGranted;
+	}
+
+	static Future<bool> isGrantedStoragePermission() async {
+		return await Permission.storage.isGranted;
 	}
 
 	static void openAppSettingsScreen() async {
@@ -79,31 +92,45 @@ class PermissionTools {
 		  return Future<PermissionStatus>.value(PermissionStatus.granted);
 		}
 
-		streamFn(String key, StreamController streamCtr) async {
-			final res = await requestPermissions([Permission.camera, Permission.storage]);
-			var allGrant = true;
+		Future<PermissionStatus> handler(String key) async {
+			final pList = [Permission.camera, Permission.storage];
 
-			for(var p in res.entries) {
+			final androidInfo = await DeviceInfoPlugin().androidInfo;
+			final sdkInt = androidInfo.version.sdkInt;
+
+			if(sdkInt > 10){
+				pList.insert(0, Permission.manageExternalStorage);
+			}
+
+			final res = await requestPermissions(pList);
+			var allGrant = true;
+			var needOpenSettings = false;
+
+			for(final p in res.entries) {
 				if (p.value != PermissionStatus.granted) {
 				  allGrant = false;
 				}
 
 				if (p.value == PermissionStatus.permanentlyDenied) {
-					// ignore: unawaited_futures
-					openAppSettings();
-					streamCtr.add(PermissionStatus.permanentlyDenied);
-					return;
+					needOpenSettings = true;
 				}
 			}
 
+			if (needOpenSettings) {
+				// ignore: unawaited_futures
+				openAppSettings();
+				return PermissionStatus.permanentlyDenied;
+			}
+
 			if(allGrant) {
-			  streamCtr.add(PermissionStatus.granted);
-			} else {
-			  streamCtr.add(PermissionStatus.denied);
+			  return PermissionStatus.granted;
+			}
+			else {
+			  return PermissionStatus.denied;
 			}
 		}
 
-		return StreamCache.get<PermissionStatus>('requestCameraStoragePermissions', streamFn).then((value){
+		return FutureCache.get<PermissionStatus>('requestCameraStoragePermissions', handler).then((value){
 			if(value != null) {
 			  return value;
 			}
@@ -112,39 +139,73 @@ class PermissionTools {
 		});
 	}
 
-	static Future<bool> isGrantedMicPermission() async {
-		return await Permission.microphone.isGranted;
-	}
+	static Future<PermissionStatus> requestStoragePermissionWithOsVersion() async {
+		if (Platform.isAndroid) {
+			final androidInfo = await DeviceInfoPlugin().androidInfo;
+			final sdkInt = androidInfo.version.sdkInt;
 
-	static Future<bool> isGrantedCameraPermission() async {
-		return await Permission.camera.isGranted;
-	}
+			if(sdkInt < 11){
+				return requestStoragePermissionOnly();
+			}
 
-	static Future<bool> isGrantedStoragePermission() async {
-		return await Permission.storage.isGranted;
+			return requestStorageAndManagerPermission();
+		}
+
+		return requestStoragePermissionOnly();
 	}
 
 	// status == PermissionStatus.granted
-	static Future<PermissionStatus> requestStoragePermission() async {
+	static Future<PermissionStatus> requestStoragePermissionOnly() async {
 		if (kIsWeb || !Platform.isAndroid || await Permission.storage.isGranted) {
 		  return Future<PermissionStatus>.value(PermissionStatus.granted);
 		}
 
-		void streamFn(String key, StreamController streamCtr) async {
+		Future<PermissionStatus> handler(String key) async {
 			if (await Permission.storage.isPermanentlyDenied) {
 				// ignore: unawaited_futures
 				openAppSettings();
-				//return Future<PermissionStatus>.value(PermissionStatus.permanentlyDenied);
-				streamCtr.add(PermissionStatus.permanentlyDenied);
+				return PermissionStatus.permanentlyDenied;
 			}
 			else {
-			  streamCtr.add(await Permission.storage.request());
+			  return (await Permission.storage.request());
 			}
 		}
 
-		return StreamCache.get<PermissionStatus>('requestStoragePermission', streamFn).then((value){
+		return FutureCache.get<PermissionStatus>('requestStoragePermission', handler).then((value){
 			if(value != null) {
 			  return value;
+			}
+
+			return PermissionStatus.granted;
+		});
+	}
+
+	static Future<PermissionStatus> requestStorageAndManagerPermission() async {
+		if (kIsWeb || !Platform.isAndroid || await Permission.storage.isGranted) {
+			return Future<PermissionStatus>.value(PermissionStatus.granted);
+		}
+
+		Future<PermissionStatus> handler(String key) async {
+			if (await Permission.storage.isPermanentlyDenied) {
+				// ignore: unawaited_futures
+				openAppSettings();
+				return PermissionStatus.permanentlyDenied;
+			}
+			else {
+				final r1 = await Permission.manageExternalStorage.request();
+				final r2 = await Permission.storage.request();
+
+				if(r1.isGranted && r2.isGranted){
+					return PermissionStatus.granted;
+				}
+
+				return PermissionStatus.denied;
+			}
+		}
+
+		return FutureCache.get<PermissionStatus>('manageExternalStorage', handler).then((value){
+			if(value != null) {
+				return value;
 			}
 
 			return PermissionStatus.granted;

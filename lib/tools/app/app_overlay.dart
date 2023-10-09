@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/features/overlayDialog.dart';
-import 'package:popover/popover.dart';
 
 class AppOverlay {
 
   AppOverlay._();
 
-  static final _ignoreScreen = OverlayScreenView(
+  static final _touchIgnoreScreen = OverlayScreenView(
     content: const IgnorePointer(
       ignoring: true,
       child: SizedBox.expand(),
@@ -44,11 +43,11 @@ class AppOverlay {
   }
   ///-------------------------------------------------------------------
   static Future showIgnoreScreen(BuildContext context){
-    return showDialogScreen(context, _ignoreScreen, canBack: false);
+    return showDialogScreen(context, _touchIgnoreScreen, canBack: false);
   }
 
   static void hideIgnoreScreen(BuildContext context){
-    hideScreenByOverlay(context, _ignoreScreen);
+    hideScreenByOverlay(context, _touchIgnoreScreen);
   }
   ///-------------------------------------------------------------------
   static Offset findPosition(BuildContext context) {
@@ -59,34 +58,12 @@ class AppOverlay {
   static void showOverlay(BuildContext context, OverlayEntry view){
     Overlay.of(context).insert(view);
   }// LayerLink()
-
-  /// must wrap widget with Builder() to get anchorContext
-  static Future<T?> showTooltip<T>(BuildContext anchorContext, Widget view, {
-    VoidCallback? onPop,
-    double arrowHeight = 15,
-    double arrowWidth = 25,
-    double? width,
-    double? height,
-  }){
-    return showPopover<T>(
-      context: anchorContext,
-      transitionDuration: const Duration(milliseconds: 200),
-      bodyBuilder: (context) => view,
-      onPop: onPop,
-      barrierDismissible: true,
-      direction: PopoverDirection.bottom,
-      width: width,
-      height: height,
-      arrowHeight: arrowHeight,
-      arrowWidth: arrowWidth,
-    );
-  }
 }
 
 
 ///*** Sample ************************************************************
 /**
-final pos = AppOverlay.findPosition(ctx);
+final pos = AppOverlay.findPosition(child_context);
 
 final t = OverlayEntry(
   builder: (ctx){

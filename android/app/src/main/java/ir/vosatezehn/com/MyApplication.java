@@ -12,6 +12,8 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -32,7 +34,8 @@ public class MyApplication extends FlutterApplication {
 
     public void onCreate () {
         super.onCreate();
-
+        Log.i("▄▀▄ Err >>>>>>", "on create");
+        Log.d("▄▀▄ Err >>>>>>", "on create B");
         Thread.setDefaultUncaughtExceptionHandler(this::handleUncaughtException);
         flutterEngine = new FlutterEngine(this);
 
@@ -81,22 +84,38 @@ public class MyApplication extends FlutterApplication {
 
     public void passDataToFlutter(Object data) {
         prepareAndroidChannel();
-        androidChannel.invokeMethod("report_error", data);
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Log.i("▄▀▄ Err >>>>>>", "invokeMethod A ");
+                    androidChannel.invokeMethod("report_error", data);
+                    Log.i("▄▀▄ Err >>>>>>", "invokeMethod B ");
+                }
+                catch (Exception e){
+                    Log.i("▄▀▄ Err >>>>>>", "helli " + e.toString());
+                }
+            }
+        };
+
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(r);
     }
 
     public void prepareAndroidChannel() {
         try{
             if(androidChannel == null) {
-                androidChannel = new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), myAndroidName);
+                androidChannel = new MethodChannel(flutterEngine.getDartExecutor(), myAndroidName);
                 androidChannel.setMethodCallHandler(this::androidHandler);
             }
         }
         catch (Exception e){
-            Log.i("▐▐▐▐▐▐▐▐▐  ", e.toString());
+            Log.i("▄▀▄ Err >>>>>>", e.toString());
         }
     }
 
     private void androidHandler(final MethodCall call, final MethodChannel.Result result) {
+        Log.i("▄▀▄ Err >>>>>>", "yesss");
         switch (call.method) {
             case "echo": {
                 result.success("<------- Echo from android channel -------->");

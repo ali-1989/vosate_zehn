@@ -85,7 +85,7 @@ class AppLocale {
     await localeDelegate.load(l);
     SettingsManager.localSettings.appLocale = l;
     AppThemes.instance.textDirection = detectLocaleDirection(l);
-    SettingsManager.saveSettings();
+    SettingsManager.saveLocalSettingsAndNotify();
   }
   ///------------------------------------------------------------------------------------
   static TextDirection detectLocaleDirection(Locale locale){

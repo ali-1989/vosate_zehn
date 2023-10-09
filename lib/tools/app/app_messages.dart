@@ -88,6 +88,10 @@ class AppMessages {
     return _getContext().t('home')?? _noText;
   }
 
+  static String get start {
+    return _getContext().t('start')?? _noText;
+  }
+
   static String get contactUs {
     return _getContext().t('contactUs')?? _noText;
   }

@@ -34,25 +34,6 @@ Future<bool> _callbackWorkManager(task, inputData) async {
         break;
     }*/
 
-    /*int count = 0;
-    Timer? t;
-    Completer c = Completer();
-
-    t = Timer.periodic(Duration(seconds: 20), (timer) {
-      if(count < 5){
-        count++;
-        LogTools.logger.logToAll('@@@@@@@@@: wakeup (20sec): $count'); //todo.
-      }
-      else {
-        t!.cancel();
-        c.complete(null);
-      }
-    });
-
-    await c.future;
-
-    await FireBaseService.initializeApp();
-    await FireBaseService.start();*/
 
     return true;
   }

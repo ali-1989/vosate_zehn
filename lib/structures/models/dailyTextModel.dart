@@ -16,7 +16,7 @@ class DailyTextModel with DateFieldMixin {
 
     id = map[Keys.id];
     text = map['text'];
-    date = DateHelper.tsToSystemDate(map[Keys.date]);
+    date = DateHelper.timestampToSystem(map[Keys.date]);
   }
 
   Map<String, dynamic> toMap(){

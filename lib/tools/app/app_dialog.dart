@@ -1,3 +1,4 @@
+import 'package:app/tools/app/app_decoration.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/helpers/colorHelper.dart';
@@ -58,8 +59,8 @@ class AppDialog {
 		_dialogTheme.iconBackgroundColor = Colors.black;
 		_dialogTheme.positiveButtonTextColor = AppThemes.instance.currentTheme.buttonTextColor;
 		_dialogTheme.negativeButtonTextColor = AppThemes.instance.currentTheme.buttonTextColor;
-		_dialogTheme.positiveButtonBackColor = AppThemes.buttonBackgroundColor();
-		_dialogTheme.negativeButtonBackColor = AppThemes.buttonBackgroundColor();
+		_dialogTheme.positiveButtonBackColor = AppDecoration.buttonBackgroundColor();
+		_dialogTheme.negativeButtonBackColor = AppDecoration.buttonBackgroundColor();
 	}
 	///============================================================================================================
 	Future showDialog(

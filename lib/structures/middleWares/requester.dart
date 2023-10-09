@@ -119,14 +119,6 @@ class Requester {
         var request = '';
 
         if(_http.method != 'GET') {
-          /*if (_httpRequester.requestOptions?.data is String){
-            final str = _httpRequester.requestOptions!.data as String;
-
-            if(str.contains(Keys.requestZone)) {
-              int start = str.indexOf(Keys.requestZone)+15;
-            }
-          }todo.*/
-	    
           if (_http.body is String) {
             request = _http.body as String;
           }
@@ -143,7 +135,7 @@ class Requester {
           request = 'GET';
         }
 
-        Tools.verboseLog('@@@@@ API CALLED >>> url:[$url]\n\trequest:[$request]\n\tresponse ====>>  status:[${_httpRequester.responseData?.statusCode}] data:$val \n');
+        Tools.verboseLog('@@@@@ API CALLED >>> url:[$url]\n\nrequest:[$request]\n\nresponse ====>>  status:[${_httpRequester.responseData?.statusCode}] data:$val \n');
       }
 
       /*if(_httpRequester.responseData?.statusCode == 401 && SessionService.getLastLoginUser() != null){

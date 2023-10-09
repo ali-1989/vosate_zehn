@@ -472,25 +472,7 @@ class LoginService {
   }
 
   static Future<String?> findCountryWithIP1() async {
-    final url = 'https://api.country.is';
-
-    HttpItem http = HttpItem(fullUrl: url);
-    http.method = 'GET';
-
-    final res = AppHttpDio.send(http);
-
-    return res.response.then((value) async {
-          if(res.isOk){
-            return res.getBodyAsJson()!['country'] as String;
-          }
-
-          return null;
-    })
-    .onError((error, stackTrace) => null);
-  }
-
-  static Future<String?> findCountryWithIP2() async {
-    final url = 'http://ip-api.com/json';
+    const url = 'http://ip-api.com/json';
 
     HttpItem http = HttpItem(fullUrl: url);
     http.method = 'GET';
@@ -507,8 +489,26 @@ class LoginService {
         .onError((error, stackTrace) => null);
   }
 
+  static Future<String?> findCountryWithIP2() async {
+    const url = 'https://api.country.is';
+
+    HttpItem http = HttpItem(fullUrl: url);
+    http.method = 'GET';
+
+    final res = AppHttpDio.send(http);
+
+    return res.response.then((value) async {
+          if(res.isOk){
+            return res.getBodyAsJson()!['country'] as String;
+          }
+
+          return null;
+    })
+    .onError((error, stackTrace) => null);
+  }
+
   static Future<String?> findCountryWithIP3() async {
-    final url = 'https://api.db-ip.com/v2/free/self';
+    const url = 'https://api.db-ip.com/v2/free/self';
 
     HttpItem http = HttpItem(fullUrl: url);
     http.method = 'GET';
@@ -526,7 +526,7 @@ class LoginService {
   }
 
   static Future<String?> findCountryWithIP4() async {
-    final url = 'https://hutils.loxal.net/whois';
+    const url = 'https://hutils.loxal.net/whois';
 
     HttpItem http = HttpItem(fullUrl: url);
     http.method = 'GET';

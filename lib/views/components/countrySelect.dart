@@ -1,3 +1,4 @@
+import 'package:app/system/extensions.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/widgets/iris_search_bar.dart';
@@ -96,7 +97,7 @@ class CountrySelectScreenState extends StateSuper<CountrySelectScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
             child: IrisSearchBar(
               iconColor: AppDecoration.checkPrimaryByWB(AppThemes.instance.currentTheme.primaryColor, AppThemes.instance.currentTheme.textColor),
-              hint: t('selectCountry'),
+              hint: context.t('selectCountry'),
               onChangeEvent: (t){
                 searchText = t;
                 callState();

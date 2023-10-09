@@ -44,6 +44,7 @@ class LogTools {
   }
 
   static void reportError(Map<String, dynamic> map) async {
+    return;
     final String txt = map['error']?? '';
 
     for(final x in avoidReport){

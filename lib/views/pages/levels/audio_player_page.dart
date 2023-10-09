@@ -20,8 +20,7 @@ import 'package:app/views/baseComponents/appbar_builder.dart';
 import 'package:app/views/pages/levels/playback_disposition.dart';
 import 'package:app/views/pages/levels/slider.dart';
 
-/// todo. for iOS: must visit page and add code to Info.plist
-//todo. add assist for time display, and list of subscriptions
+/// note: for iOS: must visit page and add code to Info.plist
 
 enum AudioSourceType {
   file,

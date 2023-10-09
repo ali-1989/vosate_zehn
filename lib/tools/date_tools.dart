@@ -81,7 +81,7 @@ class DateTools {
   }
 
   static String dateOnlyRelative$String(String date, {bool isUtc = true}){
-    return dateRelativeByAppFormat(DateHelper.tsToSystemDate(date)!, isUtc: isUtc);
+    return dateRelativeByAppFormat(DateHelper.timestampToSystem(date)!, isUtc: isUtc);
   }
 
   static String dateOnlyRelative(DateTime? date, {bool isUtc = true}){
@@ -112,7 +112,7 @@ class DateTools {
   }
 
   static String dateAndHmRelative$String(String date, {bool isUtc = true}){
-    return dateAndHmRelative(DateHelper.tsToSystemDate(date), isUtc: isUtc);
+    return dateAndHmRelative(DateHelper.timestampToSystem(date), isUtc: isUtc);
   }
 
   static String ymOnlyRelative(DateTime? date, {bool isUtc = true}){
@@ -160,12 +160,12 @@ class DateTools {
   }
 
   static String dateHmOnlyRelative$String(String? date, {bool isUtc = true}){
-    return hmOnlyRelative(DateHelper.tsToSystemDate(date), isUtc: isUtc);
+    return hmOnlyRelative(DateHelper.timestampToSystem(date), isUtc: isUtc);
   }
   ///---------------------------------------------------------------------------------------
   static Future saveAppCalendar(CalendarType calendarType, {BuildContext? context}) {
     SettingsManager.localSettings.calendarType = calendarType;
-    return SettingsManager.saveSettings(context: context);
+    return SettingsManager.saveLocalSettingsAndNotify();
   }
 
   static Future saveAppCalendarByName(String calName, {BuildContext? context}) {
@@ -186,8 +186,6 @@ class DateTools {
       case CalendarType.unKnow:
         return null;
     }
-
-    return null;
   }
 
   static int calMaxMonthDay(int year, int month, {CalendarType? calendarType}){
@@ -216,8 +214,6 @@ class DateTools {
       case CalendarType.unKnow:
         return null;
     }
-
-    return null;
   }
 
   static List<int> splitDateByCalendar(DateTime date, {CalendarType? calendarType}){

@@ -62,6 +62,7 @@ class Keys {
   //----- common settings key -----------------------------------------------------------------
   static const setting$lastLoginDate = 'last_login_date';
   static const setting$appSettings = 'app_settings';
+  static const setting$globalSettings = 'global_settings';
   static const setting$fontThemeData = 'font_theme_data';
   static const setting$colorThemeName = 'color_theme_name';
   static const setting$toBackgroundTs = 'to_background_ts';

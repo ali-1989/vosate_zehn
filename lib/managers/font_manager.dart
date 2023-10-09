@@ -12,11 +12,9 @@ class FontManager {
   FontManager._();
 
   static late final FontManager _instance;
-  static bool useFlutterFontSize = true;
-  static const double defaultFontSize = 13;
-  static const double maxDeviceFontSize = 14.2;
-  static double deviceFontSize = 13;
-
+  static double? firstFontSize;// = Font.genScreenRelativeFontSize();
+  static const double maxForFontSize = 13;
+  static const double minForFontSize = 11;
   static final List<Font> _fontList = [];
   static late Font _platformDefaultFont;
   static late final TextTheme _rawTextTheme;
@@ -46,9 +44,9 @@ class FontManager {
     return _fontList;
   }
 
-  void detectDeviceFontSize(BuildContext context){
+  double getThemeFontSizeOrRelative(BuildContext context){
     final theme = Theme.of(context);
-    deviceFontSize = theme.textTheme.bodyMedium?.fontSize?? defaultFontSize;
+    return theme.textTheme.bodyMedium?.fontSize?? firstFontSize?? Font.genScreenRelativeFontSize();
   }
 
   Font? fontByFamily(String family){
@@ -146,6 +144,19 @@ class FontManager {
     return getEnglishFont()?.family;
   }
 
+  static double? appFontSizeIfSet(){
+    if(firstFontSize != null){
+      return firstFontSize;
+    }
+
+    //final useFlutterFontSize = PlatformDispatcher.instance.implicitView!.devicePixelRatio > 2.5;
+    return null;
+  }
+
+  static double appFontSize(){
+    return appFontSizeIfSet()?? Font.genScreenRelativeFontSize();
+  }
+
   static void _prepareFontList() {
     if(_fontList.isNotEmpty){
       return;
@@ -154,7 +165,8 @@ class FontManager {
     /// family: family name in [pubspec.yaml]   *** family match is important, case insensitive
     /// fileName: asset in [pubspec.yaml]       not important
 
-    /*final atlanta = Font.bySize()
+    final fs = FontManager.appFontSizeIfSet()?? Font.genScreenRelativeFontSize();
+    /*final atlanta = Font.bySize(fs)
         ..family = 'Atlanta'
         ..fileName = 'Atlanta'
         ..defaultLanguage = 'en'
@@ -163,7 +175,7 @@ class FontManager {
 
       */
     //------------- fa -------------------------------------------------
-    final iranSans = Font.bySize()
+    final iranSans = Font.bySize(fs)
       ..family = 'IranSans'
       ..defaultLanguage = 'fa'
       ..defaultUsage = FontUsage.normal
@@ -171,13 +183,12 @@ class FontManager {
       ..textHeightBehavior = const TextHeightBehavior(applyHeightToFirstAscent: false, applyHeightToLastDescent: false)
       ..height = 1.4;
 
-    final sans = Font.bySize()
+    final sans = Font.bySize(fs)
       ..family = 'Sans'
-      ..fileName = 'Sans'
       ..defaultLanguage = 'fa'
       ..defaultUsage = FontUsage.sub;
 
-    final icomoon = Font.bySize()
+    final icomoon = Font.bySize(fs)
       ..family = 'Icomoon'
       ..fileName = 'Icomoon'
       ..defaultLanguage = 'fa'
@@ -194,7 +205,7 @@ class FontManager {
       final findIdx = _fontList.indexWhere((font) => font.family == rawDef);
 
       if (findIdx < 0) { // && rawDef != def
-        _platformDefaultFont = Font.bySize()
+        _platformDefaultFont = Font.bySize(fs)
           ..family = rawDef
           ..fileName = rawDef;
 
@@ -208,8 +219,8 @@ class FontManager {
   }
 
   static void _createThemes(){
-    useFlutterFontSize = PlatformDispatcher.instance.implicitView!.devicePixelRatio > 2.5;
-    final fs = useFlutterFontSize? null : Font.getRelativeFontSize();
+    final fs = appFontSizeIfSet();
+
     final temp = ThemeData();
     const c1 = Colors.teal;
     final c2 = Colors.blue.shade700;
@@ -245,7 +256,7 @@ class FontManager {
 
   static String _getDefaultFontFamily(){
     var ff = _rawTextTheme.bodyMedium?.fontFamily;
-    return ff ?? _rawTextTheme.bodySmall?.fontFamily?? (kIsWeb? 'Segoe UI' : 'Roboto');
+    return ff ?? (kIsWeb? 'Segoe UI' : 'Roboto');
   }
 
   static Future<bool> saveFontThemeData(String lang) async {
@@ -267,12 +278,7 @@ class FontManager {
   static Future<void> fetchFontThemeData(String lang) async {
     var res = AppDB.fetchKv(Keys.setting$fontThemeData);
 
-    if(res == null) {
-      /// can set app default font
-      //AppThemes.instance.baseFont.size = _defaultFontSize;
-      //AppThemes.instance.baseFont.family = 'Nazanin';
-    }
-    else {
+    if(res != null) {
       final Map data = res[lang] ?? <String, dynamic>{};
 
       AppThemes.instance.baseFont = Font.fromMap(data['UserBaseFont']);
@@ -293,7 +299,7 @@ class FontManager {
     }
   }
 }
-///=====================================================================================================
+///=============================================================================
 enum FontUsage {
   normal,
   sub,
@@ -309,7 +315,7 @@ enum FontUsage {
     return FontUsage.normal;
   }
 }
-///=====================================================================================================
+///=============================================================================
 class Font {
   String? family;
   String? fileName;
@@ -323,9 +329,7 @@ class Font {
 
   Font();
 
-  Font.bySize(){
-    size = FontManager.useFlutterFontSize? null: getRelativeFontSize();
-  }
+  Font.bySize(this.size);
 
   Font.fromMap(Map? map){
     if(map == null){
@@ -359,22 +363,20 @@ class Font {
     return Font.fromMap(toMap());
   }
 
-  static double getRelativeFontSize() {
+  static double genScreenRelativeFontSize() {
+    if(kIsWeb) {
+      return 13;
+    }
+
     final realPixelWidth = PlatformDispatcher.instance.implicitView!.physicalSize.width;
     final realPixelHeight = PlatformDispatcher.instance.implicitView!.physicalSize.height;
     final pixelRatio = PlatformDispatcher.instance.implicitView!.devicePixelRatio;
     final isLandscape = realPixelWidth > realPixelHeight;
 
-    if(kIsWeb) {
-      return 13;
-    }
-    else {
-      final appHeight = (isLandscape ? realPixelWidth : realPixelHeight) / pixelRatio;
-      final fSize = appHeight / 52;
+    final factor = (isLandscape ? realPixelWidth : realPixelHeight) / pixelRatio;
+    final fSize = factor / 52;
+    final minNum =  max(FontManager.minForFontSize, fSize);
 
-      final minNum =  max(11.0, fSize);
-      print('------------------'+min(FontManager.maxDeviceFontSize, minNum).toString());
-      return min(FontManager.maxDeviceFontSize, minNum);
-    }
+    return min(FontManager.maxForFontSize, minNum);
   }
 }

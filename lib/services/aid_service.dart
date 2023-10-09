@@ -73,7 +73,7 @@ class AidService {
       descView: body,
     );
 
-    AppDB.setReplaceKv(Keys.setting$lastAidDialogShowTime, DateHelper.getNowTimestampToUtc());
+    AppDB.setReplaceKv(Keys.setting$lastAidDialogShowTime, DateHelper.nowMinusUtcOffsetToTimestamp());
   }
 
   static void checkShowDialog() async {
@@ -84,13 +84,13 @@ class AidService {
     }
 
     final lastTime = AppDB.fetchKv(Keys.setting$lastAidDialogShowTime);
-    var lastTimeDt = DateHelper.tsToSystemDate(lastTime);
+    var lastTimeDt = DateHelper.timestampToSystem(lastTime);
 
     if(lastTimeDt != null){
       lastTimeDt = lastTimeDt.toUtc();
     }
     else {
-      AppDB.setReplaceKv(Keys.setting$lastAidDialogShowTime, DateHelper.getNowTimestampToUtc());
+      AppDB.setReplaceKv(Keys.setting$lastAidDialogShowTime, DateHelper.nowMinusUtcOffsetToTimestamp());
       return;
     }
 

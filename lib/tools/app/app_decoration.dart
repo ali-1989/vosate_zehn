@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/helpers/colorHelper.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:app/managers/font_manager.dart';
 import 'package:app/tools/app/app_messages.dart';
 import 'package:app/tools/app/app_sizes.dart';
 import 'package:app/tools/app/app_themes.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class AppDecoration {
   AppDecoration._();
@@ -23,7 +23,6 @@ class AppDecoration {
     failedText: '',
     loadStyle: LoadStyle.ShowWhenLoading,
   );
-  
   static TextStyle infoHeadLineTextStyle() {
     return AppThemes.instance.themeData.textTheme.headlineSmall!.copyWith(
       color: AppThemes.instance.themeData.textTheme.headlineSmall!.color!.withAlpha(150),
@@ -44,12 +43,16 @@ class AppDecoration {
   }
 
   static TextStyle? buttonTextStyle() {
-    return AppThemes.instance.themeData.textTheme.labelLarge;
+    return AppThemes.instance.themeData.textTheme.labelMedium;
     //return themeData.elevatedButtonTheme.style!.textStyle!.resolve({MaterialState.focused});
   }
 
   static Color? buttonTextColor() {
     return buttonTextStyle()?.color;
+  }
+
+  static Color buttonBackgroundColor() {
+    return AppThemes.instance.themeData.elevatedButtonTheme.style!.backgroundColor!.resolve({MaterialState.focused})!;
   }
 
   static Color? textButtonColor() {
@@ -82,7 +85,7 @@ class AppDecoration {
 
   static double fontSizeRelative(double size) {
     var siz = AppThemes.instance.currentTheme.baseTextStyle.fontSize;
-    return (siz?? FontManager.deviceFontSize) + size;
+    return (siz?? FontManager.appFontSize()) + size;
   }
   ///------------------------------------------------------------------
   static InputDecoration noneBordersInputDecoration = const InputDecoration(
@@ -235,6 +238,16 @@ class AppDecoration {
 
   static Color checkPrimaryByWB(Color ifNotNear, Color ifNear){
     return ColorHelper.ifNearColors(AppThemes.instance.currentTheme.primaryColor, [Colors.grey[900]!, Colors.grey[600]!, Colors.white],
+            ()=> ifNear, ()=> ifNotNear);
+  }
+
+  static Color checkPrimaryByWhite(Color ifNotNear, Color ifNear){
+    return ColorHelper.ifNearColors(AppThemes.instance.currentTheme.primaryColor, [Colors.grey[100]!, Colors.white],
+            ()=> ifNear, ()=> ifNotNear);
+  }
+
+  static Color checkPrimaryByBlack(Color ifNotNear, Color ifNear){
+    return ColorHelper.ifNearColors(AppThemes.instance.currentTheme.primaryColor, [Colors.grey[900]!, Colors.black],
             ()=> ifNear, ()=> ifNotNear);
   }
 }

@@ -61,7 +61,7 @@ class FireBaseService {
   static Future<void> initializeApp() async {
     try {
       if(kIsWeb){
-        final firebaseOptions = const FirebaseOptions(
+        const firebaseOptions = FirebaseOptions(
           appId: '1:731359726004:web:7b371dd04042f69cb20ae1',
           apiKey: 'AIzaSyC2gsyD1HYpP6LwXws6hZc_PTFoK68rl8c',
           projectId: 'vosate-zehn-7d8fe',
@@ -73,7 +73,7 @@ class FireBaseService {
         return;
       }
 
-      final firebaseOptions = const FirebaseOptions(
+      const firebaseOptions = FirebaseOptions(
         appId: '1:731359726004:android:fbbd8cd236c4fc31b20ae1',
         apiKey: 'AIzaSyBVuGcqQFjUl1t5mIUJ04rfr9EKkDRqYxM',
         projectId: 'vosate-zehn-7d8fe',
@@ -82,10 +82,11 @@ class FireBaseService {
       );
       LogTools.logger.logToAll('@@@@@@@@@: A- start initialize fire ${Isolate.current.hashCode}'); //todo.
       try {
-        await Firebase.initializeApp(options: firebaseOptions).catchError((e){
-          LogTools.logger.logToAll('@@@@@@@@@: e1e -$e  ${Isolate.current.hashCode}'); //todo.
-          return null;
-        });
+      await Firebase.initializeApp(options: firebaseOptions)
+          .then<FirebaseApp?>((v) => v).catchError((e){
+	  LogTools.logger.logToAll('@@@@@@@@@: e1e -$e  ${Isolate.current.hashCode}'); //todo.
+        return null;
+      });
       }
       catch (e){
         LogTools.logger.logToAll('@@@@@@@@@: e2e -$e  ${Isolate.current.hashCode}'); //todo.
@@ -107,7 +108,8 @@ class FireBaseService {
       );
 
       ///----- ios
-      NotificationSettings settings = await FirebaseMessaging.instance.requestPermission(
+      /*NotificationSettings*/
+      await FirebaseMessaging.instance.requestPermission(
         alert: true,
         badge: true,
         sound: true,
@@ -162,7 +164,7 @@ class FireBaseService {
     token = await FirebaseMessaging.instance.getToken(vapidKey: 'BLkHyiaxrQJA7eSDwjrCos0BcsGVPjxM8JGXJ1CFBAeFa2wNGoJDGkOJu6CqsPhjwhf2_EII8SoJmos0TqMOitE');
     LogTools.logger.logToAll('@@@@@@@@@: token: $token'); //todo.
     if(token != null) {
-      lastUpdateToken = DateHelper.getNow();
+      lastUpdateToken = DateHelper.now();
       EventNotifierService.notify(AppEvents.firebaseTokenReceived);
 
       return token;
@@ -194,7 +196,7 @@ class FireBaseService {
   }
 
   static Map generateMessage(String? token) {
-    final messageCount = 0;
+    const messageCount = 0;
 
     final js = {};
     js['token'] = token;

@@ -60,8 +60,6 @@ class SettingsModel {
       //appNumberLock = map[Keys.setting$numberLock];
       lastToBackgroundTs = map[Keys.setting$toBackgroundTs];
     }
-
-    _prepareSettings();
   }
 
   Map<String, dynamic> toMap(){
@@ -95,22 +93,6 @@ class SettingsModel {
     wsAddress = other.wsAddress;
     proxyAddress = other.proxyAddress;
     notificationDailyText = other.notificationDailyText;
-  }
-
-  void _prepareSettings() {
-    //final locale = System.getCurrentLocalizationsLocale(context);
-    colorTheme ??= AppThemes.instance.currentTheme.themeName;
-
-    FontManager.fetchFontThemeData(appLocale.languageCode);
-
-    if(AppThemes.instance.currentTheme.themeName != colorTheme) {
-      for (var t in AppThemes.instance.themeList.entries) {
-        if (t.key == colorTheme) {
-          AppThemes.applyTheme(t.value);
-          break;
-        }
-      }
-    }
   }
 
   @override

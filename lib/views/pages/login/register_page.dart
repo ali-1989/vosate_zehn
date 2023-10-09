@@ -233,7 +233,7 @@ class _RegisterPageState extends StateSuper<RegisterPage> {
     js[Keys.requestZone] = 'register_user';
     js[Keys.name] = name;
     js[Keys.family] = family;
-    js[Keys.birthdate] = DateHelper.toTimestampDate(birthDate!);
+    js[Keys.birthdate] = DateHelper.toTimestampDateOnly(birthDate!);
     js[Keys.sex] = gender;
 
     if(widget.injectData.countryModel != null) {
