@@ -6,7 +6,7 @@ import 'package:webviewx/webviewx.dart';
 import 'package:app/structures/abstract/state_super.dart';
 import 'package:app/tools/app/app_messages.dart';
 import 'package:app/views/baseComponents/appbar_builder.dart';
-import 'package:app/views/states/waitToLoad.dart';
+import 'package:app/views/states/wait_to_load.dart';
 
 class PayWebPage extends StatefulWidget{
   final String url;

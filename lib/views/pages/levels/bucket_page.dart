@@ -19,9 +19,9 @@ import 'package:app/tools/app_tools.dart';
 import 'package:app/tools/route_tools.dart';
 import 'package:app/tools/search_filter_tool.dart';
 import 'package:app/views/pages/levels/sub_bucket_page.dart';
-import 'package:app/views/states/emptyData.dart';
-import 'package:app/views/states/errorOccur.dart';
-import 'package:app/views/states/waitToLoad.dart';
+import 'package:app/views/states/empty_data.dart';
+import 'package:app/views/states/error_occur.dart';
+import 'package:app/views/states/wait_to_load.dart';
 
 class BucketPageInjectData {
   late BucketTypes bucketTypes;

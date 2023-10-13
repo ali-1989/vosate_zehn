@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
-import 'package:app/views/components/overlay/overlayAnimations.dart';
+import 'package:app/views/components/overlay/overlay_animations.dart';
 
 enum OverlayIndicatorType {
   fadingCircle,

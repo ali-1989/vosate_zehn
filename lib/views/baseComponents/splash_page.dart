@@ -34,7 +34,7 @@ import 'package:app/tools/log_tools.dart';
 import 'package:app/tools/route_tools.dart';
 import 'package:app/views/baseComponents/route_dispatcher.dart';
 import 'package:app/views/baseComponents/splash_widget.dart';
-import 'package:app/views/states/waitToLoad.dart';
+import 'package:app/views/states/wait_to_load.dart';
 
 class SplashPage extends StatefulWidget {
   SplashPage({super.key});

@@ -9,7 +9,7 @@ import 'package:app/tools/app/app_broadcast.dart';
 import 'package:app/tools/app/app_cache.dart';
 import 'package:app/views/pages/layout_page.dart';
 import 'package:app/views/pages/login/login_page.dart';
-import 'package:app/views/states/waitToLoad.dart';
+import 'package:app/views/states/wait_to_load.dart';
 
 class RouteDispatcher {
   RouteDispatcher._();

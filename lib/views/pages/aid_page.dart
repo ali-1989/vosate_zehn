@@ -13,8 +13,8 @@ import 'package:app/system/keys.dart';
 import 'package:app/tools/app/app_messages.dart';
 import 'package:app/tools/app/app_themes.dart';
 import 'package:app/views/baseComponents/appbar_builder.dart';
-import 'package:app/views/states/errorOccur.dart';
-import 'package:app/views/states/waitToLoad.dart';
+import 'package:app/views/states/error_occur.dart';
+import 'package:app/views/states/wait_to_load.dart';
 
 /// zone: to catch all unhandled-asynchronous-errors
 /// FlutterError.onError: to catch all unhandled-flutter-framework-errors

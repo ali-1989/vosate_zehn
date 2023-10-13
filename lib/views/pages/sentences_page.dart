@@ -23,9 +23,9 @@ import 'package:app/tools/app/app_overlay.dart';
 import 'package:app/tools/app_tools.dart';
 import 'package:app/tools/date_tools.dart';
 import 'package:app/views/baseComponents/appbar_builder.dart';
-import 'package:app/views/states/emptyData.dart';
-import 'package:app/views/states/errorOccur.dart';
-import 'package:app/views/states/waitToLoad.dart';
+import 'package:app/views/states/empty_data.dart';
+import 'package:app/views/states/error_occur.dart';
+import 'package:app/views/states/wait_to_load.dart';
 
 class SentencesPage extends StatefulWidget {
 

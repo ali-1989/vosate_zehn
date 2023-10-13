@@ -29,9 +29,9 @@ import 'package:app/views/baseComponents/appbar_builder.dart';
 import 'package:app/views/pages/levels/audio_player_page.dart';
 import 'package:app/views/pages/levels/content_view_page.dart';
 import 'package:app/views/pages/levels/video_player_page.dart';
-import 'package:app/views/states/emptyData.dart';
-import 'package:app/views/states/errorOccur.dart';
-import 'package:app/views/states/waitToLoad.dart';
+import 'package:app/views/states/empty_data.dart';
+import 'package:app/views/states/error_occur.dart';
+import 'package:app/views/states/wait_to_load.dart';
 
 class SearchPage extends StatefulWidget {
 

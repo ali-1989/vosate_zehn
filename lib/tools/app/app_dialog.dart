@@ -20,7 +20,6 @@ class AppDialog {
 		return _instance;
 	}
 
-
 	DialogDecoration get dialogDecoration => _dialogTheme;
 
 	static void _init(){

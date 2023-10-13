@@ -9,8 +9,8 @@ import 'package:app/structures/middleWares/requester.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/app_messages.dart';
 import 'package:app/views/baseComponents/appbar_builder.dart';
-import 'package:app/views/states/errorOccur.dart';
-import 'package:app/views/states/waitToLoad.dart';
+import 'package:app/views/states/error_occur.dart';
+import 'package:app/views/states/wait_to_load.dart';
 
 class TermPage extends StatefulWidget{
 

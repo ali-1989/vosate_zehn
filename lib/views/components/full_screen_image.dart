@@ -9,7 +9,7 @@ import 'package:app/structures/enums/enums.dart';
 /// final view = FullScreenImage();
 /// AppRoute.pushPage(context, view);
 
-///===============================================================================================================
+///=============================================================================
 class FullScreenImage extends StatefulWidget {
   late final ImageType imageType;
   late final dynamic imageObj;
@@ -34,7 +34,7 @@ class FullScreenImage extends StatefulWidget {
     return FullScreenImageState();
   }
 }
-///===============================================================================================================
+///=============================================================================
 class FullScreenImageState extends State<FullScreenImage> {
   ImageProvider? pic;
   TextStyle? infoStyle;
