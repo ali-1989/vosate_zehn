@@ -12,7 +12,7 @@ import 'package:app/services/login_service.dart';
 import 'package:app/services/session_service.dart';
 import 'package:app/structures/models/settings_model.dart';
 import 'package:app/system/application_signal.dart';
-import 'package:app/system/common_http_handler.dart';
+import 'package:app/tools/http_tools.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/app_broadcast.dart';
 import 'package:app/tools/app/app_db.dart';
@@ -32,24 +32,8 @@ class WebsocketService {
 	static Duration reconnectInterval = const Duration(seconds: 6);
 	static Timer? periodicHeartTimer;
 	static Timer? reconnectTimer;
-	static final List<void Function(dynamic data)> _receiverListeners = [];
-	//static StreamController _streamCtr = StreamController.broadcast();
-	//static Stream get stream => _streamCtr.stream;
-
 	static String? get address => _uri;
 	static bool get isConnected => _isConnected;
-
-	static void addMessageListener(void Function(dynamic data) fun){
-		//return stream.listen(fun);
-		if(!_receiverListeners.contains(fun)) {
-		  _receiverListeners.add(fun);
-		}
-	}
-
-	static void removeMessageListener(void Function(dynamic data) fun){
-		//return stream.listen(fun);
-		_receiverListeners.remove(fun);
-	}
 
 	static Future<void> prepareWebSocket(String uri) async{
 		_uri = uri;
@@ -201,15 +185,8 @@ class WebsocketService {
 			if(section == HttpCodes.sec_userData){
 				userDataSection(command, data, userId, js);
 			}
-
-			// ignore: unawaited_futures
-			Future((){
-				for(var f in _receiverListeners){
-					f.call(js);
-				}
-			});
 		}
-		catch(e){}
+		catch(e){/**/}
 	}
 
 	static void userDataSection(String command, Map<String, dynamic> data, int userId, Map js) async {

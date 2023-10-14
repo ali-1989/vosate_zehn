@@ -7,21 +7,21 @@ import 'package:iris_tools/api/logger/logger.dart';
 import 'package:iris_tools/api/tools.dart';
 
 import 'package:app/managers/api_manager.dart';
-import 'package:app/system/common_http_handler.dart';
+import 'package:app/tools/http_tools.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/app_http_dio.dart';
 import 'package:app/tools/app/app_messages.dart';
 import 'package:app/tools/app/app_sheet.dart';
 import 'package:app/tools/device_info_tools.dart';
 
-///=============================================================================================
+///=============================================================================
 enum MethodType {
   post,
   get,
   put,
   delete,
 }
-///=============================================================================================
+///=============================================================================
 class Requester {
   Map<String, dynamic>? _bodyJs;
   MethodType methodType = MethodType.post;
@@ -208,7 +208,7 @@ class Requester {
     AppHttpDio.cancelAndClose(_httpRequester);
   }
 }
-///================================================================================================
+///=============================================================================
 class HttpRequestEvents {
   Future Function(HttpRequester)? onAnyState;
   Future Function(HttpRequester requester, Response? response)? onFailState;

@@ -19,7 +19,7 @@ import 'package:app/services/login_service.dart';
 import 'package:app/services/session_service.dart';
 import 'package:app/structures/abstract/state_super.dart';
 import 'package:app/structures/models/country_model.dart';
-import 'package:app/system/common_http_handler.dart';
+import 'package:app/tools/http_tools.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/app_broadcast.dart';
@@ -800,10 +800,7 @@ class _LoginPageState extends StateSuper<LoginPage> {
       if(status == Keys.error){
         final causeCode = twoState.result1![Keys.causeCode]?? 0;
 
-        if(causeCode == HttpCodes.error_dataNotExist){
-          /**/
-        }
-        else if(causeCode == HttpCodes.error_userIsBlocked){
+        if(causeCode == HttpCodes.error_userIsBlocked){
           AppSheet.showSheetOk(context, AppMessages.accountIsBlock);
           return;
         }
@@ -947,10 +944,7 @@ class _LoginPageState extends StateSuper<LoginPage> {
         final causeCode = twoState.result1![Keys.causeCode]?? 0;
 
         if(status == Keys.error){
-          if(causeCode == HttpCodes.error_dataNotExist){
-            /**/
-          }
-          else if(causeCode == HttpCodes.error_userIsBlocked){
+          if(causeCode == HttpCodes.error_userIsBlocked){
             AppSheet.showSheetOk(context, AppMessages.accountIsBlock);
             return;
           }
