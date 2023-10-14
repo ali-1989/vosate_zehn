@@ -168,7 +168,6 @@ class FontManager {
     final fs = FontManager.appFontSizeIfSet()?? Font.genScreenRelativeFontSize();
     /*final atlanta = Font.bySize(fs)
         ..family = 'Atlanta'
-        ..fileName = 'Atlanta'
         ..defaultLanguage = 'en'
         ..defaultUsage = 'base'
         ..usages = ['sub'];
@@ -190,7 +189,6 @@ class FontManager {
 
     final icomoon = Font.bySize(fs)
       ..family = 'Icomoon'
-      ..fileName = 'Icomoon'
       ..defaultLanguage = 'fa'
       ..defaultUsage = FontUsage.normal
       ..usages = [FontUsage.sub, FontUsage.bold];
