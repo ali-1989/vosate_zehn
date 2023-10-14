@@ -250,7 +250,7 @@ class _Indicator extends StatelessWidget {
                 );
               }
 
-              return SizedBox();
+              return const SizedBox();
             },
           ),
 
@@ -267,7 +267,7 @@ class _Indicator extends StatelessWidget {
                 );
               }
 
-              return SizedBox();
+              return const SizedBox();
             },
           ),
         ],
@@ -343,7 +343,7 @@ class OverlayTheme {
 
   List<BoxShadow>? get boxShadow =>
       defaultLoadingStyle == OverlayStyle.custom
-          ? defaultBoxShadow ?? [BoxShadow()]
+          ? defaultBoxShadow ?? [const BoxShadow()]
           : null;
 
   Color get textColor =>

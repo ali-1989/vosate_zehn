@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 
 abstract class OverlayAnimation {
@@ -23,7 +21,7 @@ abstract class OverlayAnimation {
       AlignmentGeometry alignment,
       );
 }
-///==========================================================================================
+///=============================================================================
 class OffsetAnimation extends OverlayAnimation {
   OffsetAnimation();
 
@@ -34,13 +32,13 @@ class OffsetAnimation extends OverlayAnimation {
       AlignmentGeometry alignment,
       ) {
     Offset begin = alignment == AlignmentDirectional.topCenter
-        ? Offset(0, -1)
+        ? const Offset(0, -1)
         : alignment == AlignmentDirectional.bottomCenter
-        ? Offset(0, 1)
-        : Offset(0, 0);
+        ? const Offset(0, 1)
+        : const Offset(0, 0);
     Animation<Offset> animation = Tween(
       begin: begin,
-      end: Offset(0, 0),
+      end: const Offset(0, 0),
     ).animate(controller);
     return Opacity(
       opacity: controller.value,
@@ -51,7 +49,7 @@ class OffsetAnimation extends OverlayAnimation {
     );
   }
 }
-///==========================================================================================
+///=============================================================================
 class OpacityAnimation extends OverlayAnimation {
   OpacityAnimation();
 
@@ -67,7 +65,7 @@ class OpacityAnimation extends OverlayAnimation {
     );
   }
 }
-///==========================================================================================
+///=============================================================================
 class ScaleAnimation extends OverlayAnimation {
   ScaleAnimation();
 

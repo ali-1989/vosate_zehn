@@ -84,7 +84,7 @@ class SplashPageState extends StateSuper<SplashPage> {
         SplashManager.mustWaitToSplashTimer = false;
         timer = null;
 
-        if(context.mounted){
+        if(mounted){
           callState();
         }
       });
@@ -106,6 +106,8 @@ class SplashPageState extends StateSuper<SplashPage> {
     connectToServer();
 
     SplashManager.isInLoadingSettings = false;
+    AppThemes.instance.textDirection = AppLocale.detectLocaleDirection(SettingsManager.localSettings.appLocale);
+
     AppBroadcast.reBuildMaterialBySetTheme();
   }
 
@@ -139,7 +141,7 @@ class SplashPageState extends StateSuper<SplashPage> {
     try {
       await AppDB.init();
       AppThemes.init();
-      await AppLocale.init();
+      await AppLocale.setFallBack();
       await DeviceInfoTools.prepareDeviceInfo();
       await DeviceInfoTools.prepareDeviceId();
       TrustSsl.acceptBadCertificate();

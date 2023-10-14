@@ -10,13 +10,17 @@ import 'package:app/tools/date_tools.dart';
 class SettingsModel {
   static const defaultHttpAddress = 'http://vosatezehn.com:7436'; // http://vosatezehn.com, http://192.168.43.140, 1.103
   static const defaultWsAddress = 'ws://vosatezehn.com:7438/ws';
-  static const defaultProxyAddress = '95.174.67.50:18080';
   static const Locale defaultAppLocale = Locale('fa', 'IR');
   static const CalendarType defaultCalendarType = CalendarType.solarHijri;
   static final defaultDateFormat = DateFormat.yyyyMmDd.format();
   static int webSocketPeriodicHeartMinutes = 3;
   static int drawerMenuTimeMill = 350;
-  
+
+  /// must for any record ,create a file in assets/locales directory
+  static List<Locale> locals = [
+    SettingsModel.defaultAppLocale,
+    //const Locale('fa', 'IR'),
+  ];
 
   String? lastUserId;
   Locale appLocale = defaultAppLocale;
@@ -27,7 +31,6 @@ class SettingsModel {
   bool confirmOnExit = true;
   String httpAddress = defaultHttpAddress;
   String wsAddress = defaultWsAddress;
-  String proxyAddress = defaultProxyAddress;
   Orientation? appRotationState; // null: free
   int? currentVersion;
   bool notificationDailyText = true;
@@ -49,7 +52,6 @@ class SettingsModel {
     confirmOnExit = map[Keys.setting$confirmOnExit]?? true;
     httpAddress = map['http_address']?? defaultHttpAddress;
     wsAddress = map['ws_address']?? defaultWsAddress;
-    proxyAddress = map['proxy_address']?? defaultProxyAddress;
     currentVersion = map[Keys.setting$currentVersion];
     notificationDailyText = map[Keys.setting$notificationDailyText]?? true;
     ///-- Lock
@@ -75,7 +77,6 @@ class SettingsModel {
     map[Keys.setting$currentVersion] = currentVersion;
     map['http_address'] = httpAddress;
     map['ws_address'] = wsAddress;
-    map['proxy_address'] = proxyAddress;
     map[Keys.setting$notificationDailyText] = notificationDailyText;
 
     return map;
@@ -91,7 +92,6 @@ class SettingsModel {
     lastToBackgroundTs = other.lastToBackgroundTs;
     httpAddress = other.httpAddress;
     wsAddress = other.wsAddress;
-    proxyAddress = other.proxyAddress;
     notificationDailyText = other.notificationDailyText;
   }
 

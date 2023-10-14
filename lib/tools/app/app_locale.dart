@@ -1,3 +1,4 @@
+import 'package:app/structures/models/settings_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -22,13 +23,17 @@ class AppLocale {
     return localeDelegate.getLocalization();
   }
 
-  static Future<void> init() async {
-    //rint('@@ this line must log once');
+  static void init() {
     if(!_isInit) {
       _isInit = true;
       localeDelegate = IrisLocaleDelegate((locale) => _isLocaleSupported(locale));
     }
+  }
 
+  /// this method help when system not found a key in en_US , search key in en_EE.
+  /// note must exist en_US or fa_IR file, else take error.
+  static Future<void> setFallBack() async {
+    init();
     await localeDelegate.getLocalization().setFallbackByLocale(const Locale('en', 'EE'));
   }
 
@@ -38,17 +43,12 @@ class AppLocale {
 
   static Iterable<Locale> getAssetSupportedLocales() {
     /// must for any record ,create a file in assets/locales directory
-    return [
-      //const Locale('en', 'US'),
-      const Locale('fa', 'IR'),
-    ];
+    return SettingsModel.locals;
   }
 
   static Map<String, Map<String, String>> getAssetSupportedLanguages() {
     final res = <String, Map<String, String>>{};
 
-    //getSupportedLocales().forEach((element) {
-    //});
     res.putIfAbsent('en', () => {'name': 'English', 'local_name': 'English'});
     res.putIfAbsent('fa', () => {'name': 'Persian', 'local_name': 'فارسی'});
 
@@ -87,7 +87,7 @@ class AppLocale {
     AppThemes.instance.textDirection = detectLocaleDirection(l);
     SettingsManager.saveLocalSettingsAndNotify();
   }
-  ///------------------------------------------------------------------------------------
+  ///---------------------------------------------------------------------------
   static TextDirection detectLocaleDirection(Locale locale){
     if(LocaleHelper.rtlLanguageCode.contains(locale.languageCode)) {
       return TextDirection.rtl;

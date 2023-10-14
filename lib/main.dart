@@ -146,8 +146,8 @@ class MyApp extends StatelessWidget {
         },
       ),
       locale: SplashManager.isFullInitialOk? SettingsManager.localSettings.appLocale : SettingsModel.defaultAppLocale,
-      supportedLocales: AppLocale.getAssetSupportedLocales(),
-      localizationsDelegates: AppLocale.getLocaleDelegates(), /// this do correct Rtl/Ltr
+      supportedLocales: AppLocale.getAssetSupportedLocales(), /// this do Rtl/Ltr
+      localizationsDelegates: AppLocale.getLocaleDelegates(), /// this do Rtl/Ltr
       home: materialHomeBuilder(),
     );
   }
@@ -166,16 +166,20 @@ class MyApp extends StatelessWidget {
           }
         }
 
-        return MediaQuery(
-            data: MediaQuery.of(context).copyWith(textScaleFactor: factor),
-            child: Builder(
-                builder: (localContext){
-                  RouteTools.materialContext = localContext;
-                  testCodes(localContext);
+        return Directionality(
+          /// this line override MaterialApp auto direction. if need auto direction, remove this.
+          textDirection: AppThemes.instance.textDirection,
+          child: MediaQuery(
+              data: MediaQuery.of(context).copyWith(textScaleFactor: factor),
+              child: Builder(
+                  builder: (localContext){
+                    RouteTools.materialContext = localContext;
+                    testCodes(localContext);
 
-                  return SplashPage();
-                }
-            )
+                    return SplashPage();
+                  }
+              )
+          ),
         );
       }
     );

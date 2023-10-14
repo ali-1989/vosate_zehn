@@ -549,7 +549,7 @@ class AppThemes {
 	}
 
 	static TextAlign getTextAlign() {
-		if (AppThemes._instance.textDirection == TextDirection.rtl) {
+		if (AppThemes._instance.textDirection == TextDirection.ltr) {
 		  return TextAlign.left;
 		}
 
