@@ -17,6 +17,7 @@ abstract class StateSuper<W extends StatefulWidget> extends State<W> {
 	late double ws;
 	late double hs;
 	late double hr;
+	late double fr;
 
 	@override
   void didUpdateWidget(W oldWidget) {
@@ -36,6 +37,7 @@ abstract class StateSuper<W extends StatefulWidget> extends State<W> {
 		ws = AppSizes.instance.appWidth;
 		hs = AppSizes.instance.appHeight;
 		hr = AppSizes.instance.heightRatio;
+		fr = AppSizes.instance.fontRatio;
 	}
 
 	@override

@@ -152,7 +152,7 @@ class LoginService {
     js.addAll(countryModel.toMap());
     DeviceInfoTools.attachDeviceInfo(js);
 
-    http.fullUrl = ApiManager.graphApi;
+    http.fullUrl = ApiManager.serverApi;
     http.method = 'POST';
     http.setBodyJson(js);
 
@@ -189,7 +189,7 @@ class LoginService {
     js.addAll(DeviceInfoTools.mapDeviceInfo());
     DeviceInfoTools.attachDeviceInfo(js);
 
-    http.fullUrl = ApiManager.graphApi;
+    http.fullUrl = ApiManager.serverApi;
     http.method = 'POST';
     http.setBodyJson(js);
 
@@ -225,7 +225,7 @@ class LoginService {
     js.addAll(DeviceInfoTools.mapDeviceInfo());
     DeviceInfoTools.attachDeviceInfo(js);
 
-    http.fullUrl = ApiManager.graphApi;
+    http.fullUrl = ApiManager.serverApi;
     http.method = 'POST';
     http.setBodyJson(js);
 
@@ -266,7 +266,7 @@ class LoginService {
     js.addAll(DeviceInfoTools.mapDeviceInfo());
     DeviceInfoTools.attachDeviceInfo(js);
 
-    http.fullUrl = ApiManager.graphApi;
+    http.fullUrl = ApiManager.serverApi;
     http.method = 'POST';
     http.setBodyJson(js);
 
@@ -324,7 +324,7 @@ class LoginService {
     js.addAll(DeviceInfoTools.mapDeviceInfo());
     DeviceInfoTools.attachDeviceInfo(js);
 
-    http.fullUrl = ApiManager.graphApi;
+    http.fullUrl = ApiManager.serverApi;
     http.method = 'POST';
     http.setBodyJson(js);
 
@@ -392,7 +392,7 @@ class LoginService {
     js.addAll(DeviceInfoTools.mapDeviceInfo());
     DeviceInfoTools.attachDeviceInfo(js);
 
-    http.fullUrl = ApiManager.graphApi;
+    http.fullUrl = ApiManager.serverApi;
     http.method = 'POST';
     http.setBodyJson(js);
 

@@ -53,7 +53,7 @@ class Requester {
   void _prepareHttp(){
     _http = HttpItem();
     _http.setResponseIsPlain();
-    _http.fullUrl = ApiManager.graphApi;
+    _http.fullUrl = ApiManager.serverApi;
   }
 
   void prepareUrl({String? fullUrl, String? pathUrl}){
@@ -64,7 +64,7 @@ class Requester {
 
     pathUrl ??= '';
 
-    _http.fullUrl = ApiManager.graphApi + pathUrl;
+    _http.fullUrl = ApiManager.serverApi + pathUrl;
   }
 
   void request([BuildContext? context, bool promptErrors = true]){
