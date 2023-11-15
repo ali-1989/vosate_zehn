@@ -48,6 +48,8 @@
   "unblocking": "رفع انسداد",
   "blocked": "مسدود شده",
   "register": "ثبت نام",
+  "signUp": "ثبت نام",
+  "signIp": "ورود",
   "save&continue": "ثبت و ادامه",
   "account": "حساب کاربری",
   "verify": "تأیید",
@@ -205,8 +207,10 @@
   "newAppVersionIsOk": "نسخه ی جدید برنامه آماده شده، لطفا بروز رسانی کنید.",
   "downloadNewVersion": "دانلود نسخه ی جدید",
   "directDownload": "دانلود مستقیم",
+  "email": "ایمیل",
+  "verifyEmail": "اعتبارسنجی ایمیل",
+  "inEmailSignOutError": "هنگام خروج از ایمیل خطایی رخ داده است",
   "termPolice": "حفظ حریم خصوصی",
-
 
   "httpCodes" : {
     "tokenIsIncorrectOrExpire": "توکن صحیح نیست یا منقضی شده، لطفا دوباره وارد حساب کاربری خود شوید",
@@ -248,8 +252,7 @@
     "otpCodeIsInvalid": "کد وارد شده صحیح نیست",
     "validation": "اعتبار سنجی",
     "resendOtpCode": "ارسال مجدد کد",
-    "sendVerifyCode": "ثبت کد تایید",
-    "loginWithGoogle": "ورود با گوگل"
+    "sendVerifyCode": "ثبت کد تایید"
   },
 
   "roleSection" : {
@@ -265,7 +268,6 @@
     "enterYourName": "لطفا نام خود را وارد کنید",
     "enterFamily": "لطفا یک نام خانوادگی وارد کنید",
     "enterMobile": "لطفا یک شماره همراه وارد کنید",
-    "otherNumber": "شماره دیگر",
     "enterMobileCorrectly": "لطفا شماره همراه را به درستی وارد کنید",
     "enterUserName": "لطفا نام کاربری را وارد کنید",
     "selectOneUsername": "لطفا یک نام کاربری انتخاب کنید",

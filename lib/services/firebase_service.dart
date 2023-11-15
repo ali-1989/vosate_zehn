@@ -5,22 +5,26 @@ import 'package:flutter/foundation.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:iris_notifier/iris_notifier.dart';
+import 'package:iris_tools/api/system.dart';
 import 'package:iris_tools/dateSection/dateHelper.dart';
 
 import 'package:app/managers/api_manager.dart';
 import 'package:app/managers/settings_manager.dart';
+import 'package:app/services/firebase_options.dart';
 import 'package:app/structures/enums/app_events.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/app_db.dart';
 import 'package:app/tools/app/app_notification.dart';
 import 'package:app/tools/log_tools.dart';
+import 'package:app/tools/route_tools.dart';
+import 'package:app/views/pages/sentences_page.dart';
 
 // https://firebase.google.com/docs/cloud-messaging/flutter/receive
 // https://firebase.google.com/docs/cloud-messaging/flutter/client
 
 @pragma('vm:entry-point')
 Future<void> _fbMessagingBackgroundHandler(RemoteMessage message) async {
-  /// firebase it self sending a notification
+  /// firebase it self sending this notification. no need me.
 
   // this is runs in its own isolate outside your applications context,
   // and can, perform logic such as HTTP requests,
@@ -28,7 +32,6 @@ Future<void> _fbMessagingBackgroundHandler(RemoteMessage message) async {
   // communicate with other plugins
 
 
-  //await Firebase.initializeApp();
   //await ApplicationInitial.prepareDirectoriesAndLogger();
   //await ApplicationInitial.inSplashInit();
 }
@@ -51,7 +54,7 @@ Future<void> _onNewNotification(RemoteMessage message) async {
   }
   catch (e){/**/}
 }
-///================================================================================================
+///=============================================================================
 class FireBaseService {
   static String? token;
   static DateTime? lastUpdateToken;
@@ -60,37 +63,24 @@ class FireBaseService {
 
   static Future<void> initializeApp() async {
     try {
-      if(kIsWeb){
-        const firebaseOptions = FirebaseOptions(
-          appId: '1:731359726004:web:7b371dd04042f69cb20ae1',
-          apiKey: 'AIzaSyC2gsyD1HYpP6LwXws6hZc_PTFoK68rl8c',
-          projectId: 'vosate-zehn-7d8fe',
-          messagingSenderId: '731359726004',
-          measurementId: 'G-8ZKZGGLXRW',
-        );
+      FirebaseOptions options;
 
-        await Firebase.initializeApp(options: firebaseOptions);
-        return;
+      if(kIsWeb){
+        options = DefaultFirebaseOptions.web;
+      }
+      else if(System.isAndroid()){
+        options = DefaultFirebaseOptions.android;
+      }
+      else {
+        options = DefaultFirebaseOptions.currentPlatform;
       }
 
-      const firebaseOptions = FirebaseOptions(
-        appId: '1:731359726004:android:fbbd8cd236c4fc31b20ae1',
-        apiKey: 'AIzaSyBVuGcqQFjUl1t5mIUJ04rfr9EKkDRqYxM',
-        projectId: 'vosate-zehn-7d8fe',
-        messagingSenderId: '731359726004',
-        measurementId: 'G-8ZKZGGLXRW',
-      );
-      LogTools.logger.logToAll('@@@@@@@@@: A- start initialize fire ${Isolate.current.hashCode}'); //todo.
-      try {
-      await Firebase.initializeApp(options: firebaseOptions)
+      await Firebase.initializeApp(options: options)
           .then<FirebaseApp?>((v) => v).catchError((e){
-	  LogTools.logger.logToAll('@@@@@@@@@: e1e -$e  ${Isolate.current.hashCode}'); //todo.
+        LogTools.logger.logToAll('@@@@@@@@@: e1e -$e  ${Isolate.current.hashCode}'); //todo.
         return null;
       });
-      }
-      catch (e){
-        LogTools.logger.logToAll('@@@@@@@@@: e2e -$e  ${Isolate.current.hashCode}'); //todo.
-      }
+
       LogTools.logger.logToAll('@@@@@@@@@: B - Ok ${Isolate.current.hashCode}'); //todo.
     }
     catch (e){/**/}
@@ -119,7 +109,6 @@ class FireBaseService {
       //FirebaseMessaging.instance.setAutoInitEnabled(false);
 
       setListening();
-      LogTools.logger.logToAll('@@@@@@@@@: set listener ${Isolate.current.hashCode}'); //todo.
 
       Future.delayed(const Duration(seconds: 3), (){
         getToken();
@@ -129,6 +118,8 @@ class FireBaseService {
   }
 
   static void setListening() async {
+    FirebaseMessaging.instance.onTokenRefresh.listen(_onTokenListen);
+
     /// it's fire when app is open and is in foreground
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
      _onNewNotification(message);
@@ -137,31 +128,44 @@ class FireBaseService {
     /// it's fire when app is be in background or is was terminated
     FirebaseMessaging.onBackgroundMessage(_fbMessagingBackgroundHandler);
 
-    FirebaseMessaging.instance.onTokenRefresh.listen((fcmToken) {
-      token = fcmToken;
-      EventNotifierService.notify(AppEvents.firebaseTokenReceived);
-      subscribeToTopic(ApiManager.fcmTopic);
-    });
-
     /// it's fire when be click on Fcm notification. (no notification by app)
-    FirebaseMessaging.onMessageOpenedApp.listen(_handler);
+    FirebaseMessaging.onMessageOpenedApp.listen(_handlerTouchFcmNotification);
 
     ///When app is opened by the user touch (not by the notification), and there is a Fcm notification in the statusbar
     RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
 
     if (initialMessage != null) {
-      _handler(initialMessage);
+      _handlerOpenAppWhenExistNotification(initialMessage);
     }
   }
 
-  static void _handler(RemoteMessage message) {
+  static void _onTokenListen(fcmToken) {
+    token = fcmToken;
+    subscribeToTopic(ApiManager.fcmTopic);
+    EventNotifierService.notify(AppEvents.firebaseTokenReceived);
+  }
+
+  static void _handlerTouchFcmNotification(RemoteMessage message) {
+    Future.delayed(const Duration(seconds: 1), (){
+      RouteTools.pushPage(RouteTools.materialContext!, const SentencesPage());
+    });
+
+    _addMessageId(message);
+  }
+
+  static void _handlerOpenAppWhenExistNotification(RemoteMessage message) {
+    Future.delayed(const Duration(seconds: 1), (){
+      RouteTools.pushPage(RouteTools.materialContext!, const SentencesPage());
+    });
+
+    _addMessageId(message);
     //if (message.data['type'] == 'chat') {}
   }
 
   static Future<String?> getTokenForce() async {
     LogTools.logger.logToAll('@@@@@@@@@: start get token ${Isolate.current.hashCode}'); //todo.
 
-    token = await FirebaseMessaging.instance.getToken(vapidKey: 'BLkHyiaxrQJA7eSDwjrCos0BcsGVPjxM8JGXJ1CFBAeFa2wNGoJDGkOJu6CqsPhjwhf2_EII8SoJmos0TqMOitE');
+    token = await FirebaseMessaging.instance.getToken(vapidKey: DefaultFirebaseOptions.fcmKey);
     LogTools.logger.logToAll('@@@@@@@@@: token: $token'); //todo.
     if(token != null) {
       lastUpdateToken = DateHelper.now();
@@ -217,5 +221,18 @@ class FireBaseService {
   static void _onNetConnected({data}) {
     EventNotifierService.removeListener(AppEvents.networkConnected, _onNetConnected);
     getTokenForce();
+  }
+
+  static void _addMessageId(RemoteMessage message){
+    try{
+      int? id = message.data['id'];
+
+      final ids = AppDB.fetchAsList(Keys.setting$dailyTextIds);
+
+      if(!ids.contains(id)) {
+        AppDB.addToList(Keys.setting$dailyTextIds, id ?? 0);
+      }
+    }
+    catch (e){/**/}
   }
 }

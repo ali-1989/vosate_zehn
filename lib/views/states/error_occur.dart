@@ -27,11 +27,11 @@ class ErrorOccur extends StatelessWidget {
       color: backgroundColor?? Colors.transparent,//Colors.grey.shade200
       child: Column(
         children: [
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
 
           Visibility(
             visible: backButton != null,
-            child: backButton?? SizedBox(),
+            child: backButton?? const SizedBox(),
           ),
 
           Expanded(
@@ -55,12 +55,12 @@ class ErrorOccur extends StatelessWidget {
                       child: Center(
                         child: CustomCard(
                           color: Colors.white,
-                          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                                //Image.asset(AppIcons.close),
-                      	       Icon(AppIcons.close),
+                      	       const Icon(AppIcons.close),
                       		const SizedBox(width: 10),
                       		Text(message?? AppMessages.errorOccurTryAgain,
                                 style: textStyle?? const TextStyle(fontWeight: FontWeight.bold),
@@ -77,11 +77,11 @@ class ErrorOccur extends StatelessWidget {
                                       IconButton(
                                         padding: EdgeInsets.zero,
                                         iconSize: 23,
-                                        constraints: BoxConstraints.tightFor(),
+                                        constraints: const BoxConstraints.tightFor(),
                                         onPressed: (){
                                           onTryAgain?.call();
                                         },
-                                        icon: Icon(Icons.refresh, color: Colors.blue),
+                                        icon: const Icon(Icons.refresh, color: Colors.blue),
                                       )
                                     ],
                                   )

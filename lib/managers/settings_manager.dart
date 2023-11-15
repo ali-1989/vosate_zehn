@@ -31,7 +31,7 @@ class SettingsManager {
 	}
 
 	static void _netListener({data}) {
-		requestGlobalSettings();
+		//requestGlobalSettings();
 	}
 
 	static SettingsModel get localSettings {
@@ -110,6 +110,10 @@ class SettingsManager {
 		return;
 	}
 
+	static Future resetLocalSettings(){
+		return AppDB.deleteKv(Keys.setting$appSettings);
+	}
+
 	static Future<GlobalSettingsModel?> requestGlobalSettings() async {
 		if(!AppCache.canCallMethodAgain('requestGlobalSettings')){
 			return _globalSettings;
@@ -135,11 +139,11 @@ class SettingsManager {
 		};
 
 		final js = <String, dynamic>{};
-		js[Keys.requestZone] = 'get_app_parameters';
+		js[Keys.request] = 'get_app_parameters';
 
 		requester.bodyJson = js;
 		requester.prepareUrl();
-		requester.request(null, false);
+		requester.request();
 		return res.future;
 	}
 }

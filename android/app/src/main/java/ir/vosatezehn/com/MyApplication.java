@@ -21,6 +21,9 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import io.flutter.app.FlutterApplication;
 import io.flutter.embedding.engine.FlutterEngine;
@@ -37,10 +40,44 @@ public class MyApplication extends FlutterApplication {
         Log.i("▄▀▄ Err >>>>>>", "on create");
         Log.d("▄▀▄ Err >>>>>>", "on create B");
         Thread.setDefaultUncaughtExceptionHandler(this::handleUncaughtException);
+        Looper.myLooper().getThread().setDefaultUncaughtExceptionHandler(this::handleUncaughtException);
+        Looper.getMainLooper().getThread().setDefaultUncaughtExceptionHandler(this::handleUncaughtException);
         flutterEngine = new FlutterEngine(this);
 
         prepareAndroidChannel();
 
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                try {
+
+                }
+                catch (Exception e){
+                    Log.i("▄▀▄ Err >>>>>>", "helli " + e.toString());
+                }
+            }
+        };
+
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Log.i("▄▀▄ Err >>>>>>", "invokeMethod A ");
+                    androidChannel.invokeMethod("report_error", new HashMap<>());
+                    //androidChannel.invokeMethod("report_error", "err");
+                    Log.i("▄▀▄ Err >>>>>>", "invokeMethod B ");
+                }
+                catch (Exception e){
+                    Log.i("▄▀▄ Err >>>>>>", "-e " + e.toString());
+                }
+            }
+        };
+
+        Handler handler = new Handler(Objects.requireNonNull(Looper.getMainLooper()));
+        handler.post(r);
+
+        //timer.schedule(task, 12000L);
         // this is call main() method in dart
         //flutterEngine.getDartExecutor().executeDartEntrypoint(DartExecutor.DartEntrypoint.createDefault());
     }
@@ -98,7 +135,7 @@ public class MyApplication extends FlutterApplication {
             }
         };
 
-        Handler handler = new Handler(Looper.getMainLooper());
+        Handler handler = new Handler(Objects.requireNonNull(Looper.myLooper()));
         handler.post(r);
     }
 

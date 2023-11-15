@@ -42,7 +42,7 @@ class ApiManager {
     requester.prepareUrl(pathUrl: url);
     requester.methodType = methodType;
 
-    requester.request(null, false);
+    requester.request();
     return res.future;
   }
 

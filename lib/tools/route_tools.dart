@@ -32,20 +32,9 @@ class RouteTools {
     final contactUsPage = IrisPageRoute.by((ContactUsPage).toString(), const ContactUsPage());
     final favoritesPage = IrisPageRoute.by((FavoritesPage).toString(), const FavoritesPage());
     final lastSeenPage = IrisPageRoute.by((LastSeenPage).toString(), const LastSeenPage());
-    //final payWebPage = IrisPageRoute.by((PayWebPage).toString(), PayWebPage());
     final termPage = IrisPageRoute.by((TermPage).toString(), const TermPage());
     final e404Page = IrisPageRoute.by((E404Page).toString(), const E404Page());
-    //final imageFullScreen = IrisPageRoute.by((ImageFullScreen).toString(), ImageFullScreen());
-    //final videoPlayerPage = IrisPageRoute.by((VideoPlayerPage).toString(), VideoPlayerPage());
-    //final contentViewPage = IrisPageRoute.by((ContentViewPage).toString(), ContentViewPage());
-    //final bucketPage = IrisPageRoute.by((BucketPage).toString(), BucketPage());
-    //final subBucketPage = IrisPageRoute.by((SubBucketPage).toString(), SubBucketPage());
-    //final registerPage = IrisPageRoute.by((RegisterPage).toString(), RegisterPage());
-    //final audioPlayerPage = IrisPageRoute.by((AudioPlayerPage).toString(), AudioPlayerPage());
-
-    //final registerFormPage = IrisPageRoute.by((RegisterFormPage).toString(), RegisterFormPage());
-    //final profilePage = IrisPageRoute.by((ProfilePage).toString(), ProfilePage());
-
+    
     IrisNavigatorObserver.notFoundHandler = (settings) => null;
     IrisNavigatorObserver.allAppRoutes.add(aboutPage);
     IrisNavigatorObserver.allAppRoutes.add(homePage);

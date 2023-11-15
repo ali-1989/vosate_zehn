@@ -1,27 +1,34 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
+
 import 'package:iris_tools/api/system.dart';
 import 'package:iris_tools/plugins/javaBridge.dart';
 
+import 'package:app/main.dart';
 import 'package:app/services/firebase_service.dart';
+import 'package:app/tools/app/app_notification.dart';
 import 'package:app/tools/log_tools.dart';
 
 @pragma('vm:entry-point')
 Future onBridgeCall(call) async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await prepareDirectoriesAndLogger();
+  LogTools.logger.logToAll('========================================= native  yes');
+  await AppNotification.initial();
+  AppNotification.sendMessagesNotification('native', 'ali', 'Thanks God- native ${call.method}');
+
   if(call.method == 'report_error') {
     LogTools.reportError(call.arguments);
   }
   else if(call.method == 'androidReceiverIsCall') {
-    //await AppNotification.initial();
-    //AppNotification.sendMessagesNotification('t1', 'ali', 'Thanks God');
-
     await FireBaseService.initializeApp();
     await FireBaseService.start();
   }
 
   return null;
 }
-///===================================================================================
+///=============================================================================
 @pragma('vm:entry-point')
 class NativeCallService {
   static JavaBridge? androidAppBridge;

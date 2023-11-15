@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:iris_tools/api/helpers/colorHelper.dart';
+import 'package:iris_tools/api/helpers/mathHelper.dart';
+import 'package:iris_tools/api/managers/fonts_manager.dart';
 import 'package:iris_tools/api/system.dart';
 
 import 'package:app/structures/models/color_theme.dart';
 import 'package:app/tools/app/app_decoration.dart';
+import 'package:app/tools/app/app_sizes.dart';
 import '/managers/font_manager.dart';
 
 /// hlp:
@@ -14,7 +17,8 @@ import '/managers/font_manager.dart';
 /// https://colorhunt.co/
 
 /// notes:
-/// material library's theme is only supported by the material library widgets and not by RichText. use Text.rich.
+/// material library's theme is only supported by the material library widgets and not by RichText,
+/// use Text.rich.
 
 class AppThemes {
 	AppThemes._();
@@ -27,14 +31,13 @@ class AppThemes {
 	late ColorTheme currentTheme;
 	late ColorTheme defaultTheme;
 	late Font baseFont;
-	late Font subFont;
+	late Font lightFont;
 	late Font boldFont;
 	late ThemeData themeData;
 	ThemeMode currentThemeMode = ThemeMode.light;
 	Brightness currentBrightness = Brightness.light;
 	TextDirection textDirection = TextDirection.rtl;
 	/// sets minimum vertical layout metrics
-	StrutStyle strutStyle = const StrutStyle(forceStrutHeight: true, height: 1.08, leading: 0.36);
 
 	static AppThemes get instance {
 		init();
@@ -64,7 +67,7 @@ class AppThemes {
 
 			_instance.baseFont = Font();
 			_instance.boldFont = Font();
-			_instance.subFont = Font();
+			_instance.lightFont = Font();
 
 			prepareThemes();
 			applyDefaultTheme();
@@ -73,9 +76,9 @@ class AppThemes {
 
 	static void prepareFonts(String language) {
 		if(_isInit) {
-			_instance.baseFont = FontManager.instance.defaultFontFor(language, FontUsage.normal);
+			_instance.baseFont = FontManager.instance.defaultFontFor(language, FontUsage.regular);
 			_instance.boldFont = FontManager.instance.defaultFontFor(language, FontUsage.bold);
-			_instance.subFont = FontManager.instance.defaultFontFor(language, FontUsage.sub);
+			_instance.lightFont = FontManager.instance.defaultFontFor(language, FontUsage.thin);
 		}
 	}
 
@@ -109,8 +112,8 @@ class AppThemes {
 	}
 
 	static void prepareDefaultFontFor(String lang){
-		AppThemes._instance.baseFont = FontManager.instance.defaultFontFor(lang, FontUsage.normal);
-		AppThemes._instance.subFont = FontManager.instance.defaultFontFor(lang, FontUsage.sub);
+		AppThemes._instance.baseFont = FontManager.instance.defaultFontFor(lang, FontUsage.regular);
+		AppThemes._instance.lightFont = FontManager.instance.defaultFontFor(lang, FontUsage.thin);
 		AppThemes._instance.boldFont = FontManager.instance.defaultFontFor(lang, FontUsage.bold);
 	}
 
@@ -122,7 +125,7 @@ class AppThemes {
 			catch (e) {/**/}
 		}
 	}
-	///--------------------------------------------------------------------------------------------------
+	///---------------------------------------------------------------------------
 	static void _checkTheme(ColorTheme th) {
 		th.buttonsColorScheme = ColorScheme.fromSwatch(
 			primarySwatch: th.primarySwatch,
@@ -134,23 +137,23 @@ class AppThemes {
 			brightness: _instance.currentBrightness,
 		);
 
-		final raw = FontManager.instance.rawTextTheme;
+		const raw = TextStyle();
 
-		th.baseTextStyle = raw.bodyMedium!.copyWith(
+		th.baseTextStyle = raw.copyWith(
 			fontSize: _instance.baseFont.size,
 			fontFamily: _instance.baseFont.family,
 			height: _instance.baseFont.height,
 			color: th.textColor,
 		);
 
-		th.subTextStyle = raw.titleMedium!.copyWith(
-			fontSize: _instance.subFont.size,
-			fontFamily: _instance.subFont.family,
-			height: _instance.subFont.height,
+		th.lightTextStyle = raw.copyWith(
+			fontSize: _instance.lightFont.size,
+			fontFamily: _instance.lightFont.family,
+			height: _instance.lightFont.height,
 			color: th.textColor,
 		);
 
-		th.boldTextStyle = raw.displayLarge!.copyWith(
+		th.boldTextStyle = raw.copyWith(
 			fontSize: _instance.boldFont.size,
 			fontFamily: _instance.boldFont.family,
 			height: _instance.boldFont.height,
@@ -171,15 +174,16 @@ class AppThemes {
 		}
 
 		_checkTheme(th);
+		final pixelRatio = PlatformDispatcher.instance.implicitView!.devicePixelRatio;
 
 		final baseFamily = th.baseTextStyle.fontFamily;
-		final subFamily = th.subTextStyle.fontFamily;
+		final subFamily = th.lightTextStyle.fontFamily;
 		final boldFamily = th.boldTextStyle.fontFamily;
-		final height = th.baseTextStyle.height?? 1.0;
-		final raw = FontManager.instance.rawThemeData;
+		final height = th.baseTextStyle.height;
+		final raw = ThemeData();
 		TextTheme primaryTextTheme;
 
-		double? fontSize = _instance.baseFont.size ?? FontManager.appFontSizeIfSet();
+		double? fontSize = _instance.baseFont.size ?? FontManager.instance.appFontSize();
 
 		double? calcFontSize(int p){
 			if(fontSize == null){
@@ -194,7 +198,7 @@ class AppThemes {
 					fontFamily: baseFamily, color: th.textColor, height: height, fontSize: calcFontSize(1),
 				),
 				bodyMedium: raw.textTheme.bodyMedium!.copyWith(
-					fontFamily: baseFamily, color: th.textColor, height: height,fontSize: calcFontSize(0),
+					fontFamily: baseFamily, color: th.textColor, height: height, fontSize: calcFontSize(0),
 				),
 				bodySmall: raw.textTheme.bodySmall!.copyWith(
 					fontFamily: subFamily, color: th.textColor, height: height, fontSize: calcFontSize(-1),
@@ -245,7 +249,7 @@ class AppThemes {
 			selectedColor: th.differentColor,
 			disabledColor: th.inactiveTextColor,
 			shadowColor: th.shadowColor,
-			labelStyle: th.subTextStyle.copyWith(color: chipTextColor),
+			labelStyle: th.lightTextStyle.copyWith(color: chipTextColor),
 			elevation: ColorHelper.isNearLightness(th.primaryColor, Colors.black)? 0.0: 1.0,
 			padding: const EdgeInsets.all(0.0),
 		);
@@ -332,8 +336,9 @@ class AppThemes {
 
 		/// https://flutter.dev/docs/release/breaking-changes/buttons
 
-		const buttonTheme = ButtonThemeData(
-		);
+		final buttonBorder = MaterialStateProperty.all(const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))));
+
+		const buttonTheme = ButtonThemeData();
 
 		const iconButtonTheme = IconButtonThemeData(
 			style: ButtonStyle(
@@ -341,15 +346,29 @@ class AppThemes {
 			),
 		);
 
-		final buttonBorder = MaterialStateProperty.all(const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))));
+		final btnVisualDensity = VisualDensity(vertical: MathHelper.between(0, 3.5, -3.5, 0.8, pixelRatio));
 
 		final elevatedButtonTheme = ElevatedButtonThemeData(
 			style: ButtonStyle(
 				shape: buttonBorder,
-				//padding: MaterialStateProperty.all(const EdgeInsets.symmetric(vertical: 14, horizontal: 8)),
+				minimumSize: MaterialStateProperty.all(Size(30,35 * MathHelper.between(1.2, 3.5, 1.2, 0.8, pixelRatio))),
+				visualDensity: kIsWeb? null : btnVisualDensity,
 				tapTargetSize: MaterialTapTargetSize.padded,
-				//backgroundColor: MaterialStateProperty.all(th.buttonBackColor),
-				foregroundColor: MaterialStateProperty.all(th.buttonTextColor),
+				//padding: MaterialStateProperty.all(const EdgeInsets.symmetric(vertical: 1)),
+				foregroundColor: MaterialStateProperty.resolveWith<Color>(
+							(Set<MaterialState> states) {
+						if (states.contains(MaterialState.disabled)) {
+							return th.inactiveTextColor;
+						}
+
+						if (states.contains(MaterialState.focused) ||
+								states.contains(MaterialState.pressed)) {
+							return th.buttonTextColor;
+						}
+
+						return th.buttonTextColor;
+					},
+				),
 				backgroundColor: MaterialStateProperty.resolveWith<Color>(
 							(Set<MaterialState> states) {
 						if (states.contains(MaterialState.disabled)) {
@@ -373,23 +392,22 @@ class AppThemes {
 
 		final textButtonTheme = TextButtonThemeData(
 			style: ButtonStyle(
-				//foregroundColor: MaterialStateProperty.all(AppThemes.checkPrimaryByWB(th.primaryColor, th.differentColor)),
-				//foregroundColor: MaterialStateProperty.all(Colors.lightBlue),
-				visualDensity: VisualDensity.comfortable,
+				visualDensity: kIsWeb? null : btnVisualDensity,
 				tapTargetSize: MaterialTapTargetSize.padded,
+				//foregroundColor: MaterialStateProperty.all(AppThemes.checkPrimaryByWB(th.primaryColor, th.differentColor)),
 				foregroundColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
 							if (states.contains(MaterialState.disabled)) {
-								return th.inactiveBackColor;
+								return th.inactiveTextColor;
 							}
 							if (states.contains(MaterialState.hovered)) {
-								return Colors.lightBlue.withAlpha(200);
+								return th.underLineDecorationColor.withAlpha(200);
 							}
 							if (states.contains(MaterialState.focused) ||
 									states.contains(MaterialState.pressed)) {
-								return Colors.lightBlue;
+								return th.underLineDecorationColor;
 							}
 
-							return Colors.lightBlue;
+							return th.underLineDecorationColor;
 						},
 				),
 				overlayColor: MaterialStateProperty.all(
@@ -401,16 +419,42 @@ class AppThemes {
 		final outlinedButtonTheme = OutlinedButtonThemeData(
 			style: ButtonStyle(
 				tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-				//backgroundColor: MaterialStateProperty.all(th.buttonBackColor),
-				foregroundColor: MaterialStateProperty.all(th.textColor),
+				visualDensity: kIsWeb? null : btnVisualDensity,
 				shape: buttonBorder,
+				foregroundColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+					if (states.contains(MaterialState.disabled)) {
+						return th.inactiveTextColor;
+					}
+					if (states.contains(MaterialState.hovered)) {
+						return th.textColor.withAlpha(200);
+					}
+					if (states.contains(MaterialState.focused) ||
+							states.contains(MaterialState.pressed)) {
+						return th.textColor;
+					}
+
+					return th.textColor;
+				},
+				),
 			),
 		);
 
-		final tableThemeData = DataTableThemeData(
-			dataRowColor: MaterialStateProperty.all(th.primaryColor),
-			headingRowColor: MaterialStateProperty.all(th.differentColor),
-			dataTextStyle: primaryTextTheme.bodySmall,
+		final dataTableThemeData = DataTableThemeData(
+				headingRowColor: MaterialStateProperty.all(th.primaryColor),
+				dataRowColor: MaterialStateProperty.all(Colors.transparent),
+				dataTextStyle: primaryTextTheme.bodySmall,
+				headingRowHeight: 32,
+				dataRowMinHeight: 20,
+				dataRowMaxHeight: 32,
+				columnSpacing: 15,
+				horizontalMargin: 5,
+				dividerThickness: 1,
+				headingTextStyle: th.baseTextStyle.copyWith(
+					color: Colors.white,
+				),
+				decoration: BoxDecoration(
+					border: Border.all(color: Colors.black, style: BorderStyle.none, width: 0.7),
+				),
 		);
 
 		final radioThemeData = RadioThemeData(
@@ -444,14 +488,15 @@ class AppThemes {
 
 		final inputDecoration = InputDecorationTheme(
 			hintStyle: th.baseTextStyle.copyWith(color: th.hintColor),
-			labelStyle: th.subTextStyle.copyWith(color: th.hintColor),
+			labelStyle: th.lightTextStyle.copyWith(color: th.hintColor),
 			focusColor: th.hintColor,
 			hoverColor: th.infoTextColor,//webHoverColor
 			floatingLabelBehavior: FloatingLabelBehavior.auto,
-			border: UnderlineInputBorder(borderSide: BorderSide(color: th.hintColor)),
+			contentPadding: EdgeInsets.symmetric(vertical: 6 * (AppSizes.instance.heightRelative * AppSizes.instance.heightRelative), horizontal: 10),
+			//border: UnderlineInputBorder(borderSide: BorderSide(color: th.hintColor)),
 			focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: th.hintColor)),
 			enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: th.hintColor)),
-			disabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: th.inactiveTextColor)),
+			disabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: th.hintColor)),
 			errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: th.errorColor)),
 			focusedErrorBorder: UnderlineInputBorder(borderSide: BorderSide(color: th.errorColor)),
 		); ///OutlineInputBorder, UnderlineInputBorder
@@ -464,6 +509,7 @@ class AppThemes {
 		
 		///-------------- themeData ----------------------------------
 		final myThemeData = ThemeData(
+			useMaterial3: false,
 			visualDensity: VisualDensity.adaptivePlatformDensity,
 			applyElevationOverlayColor: true,
 			platform: System.getTargetPlatform(),
@@ -473,7 +519,6 @@ class AppThemes {
 			primaryTextTheme: primaryTextTheme,
 			textTheme: primaryTextTheme,
 			dialogTheme: dialogTheme,
-			buttonBarTheme: const ButtonBarThemeData(buttonTextTheme: ButtonTextTheme.accent),
 			iconTheme: iconTheme,
 			primaryIconTheme: iconTheme,
 			sliderTheme: sliderTheme,
@@ -482,37 +527,36 @@ class AppThemes {
 			textSelectionTheme: textSelectionTheme,
 			cardTheme: cardTheme,
 			iconButtonTheme: iconButtonTheme,
+			buttonBarTheme: const ButtonBarThemeData(buttonTextTheme: ButtonTextTheme.accent),
 			buttonTheme: buttonTheme,
 			textButtonTheme: textButtonTheme,
 			elevatedButtonTheme: elevatedButtonTheme,
 			outlinedButtonTheme: outlinedButtonTheme,
-			dataTableTheme: tableThemeData,
+			dataTableTheme: dataTableThemeData,
 			radioTheme: radioThemeData,
 			checkboxTheme: checkboxThemeData,
 			dividerTheme: dividerTheme,
+			bottomAppBarTheme: bottomAppAppBarTheme,
+			colorScheme: colorScheme,
+			chipTheme: chipThemeData,
+			scrollbarTheme: scrollbarTheme,
 			primaryColorDark: ColorHelper.darkIfIsLight(th.primaryColor),
 			primaryColorLight: ColorHelper.lightPlus(th.primaryColor),
 			// canvasColor: drawer & dropDown backColor
 			canvasColor: th.drawerBackColor,
 			primarySwatch: th.primarySwatch,
 			primaryColor: th.primaryColor,
-			//accentColor: th.accentColor, use: colorScheme.secondary [this is used for btn if 'primaryColorScheme' not set]
 			scaffoldBackgroundColor: th.backgroundColor,
+			dialogBackgroundColor: th.dialogBackColor,
 			dividerColor: th.dividerColor,
 			cardColor: th.cardColor,
 			hintColor: th.hintColor,
-			dialogBackgroundColor: th.dialogBackColor,
-			//deprecate> buttonColor: th.buttonsColorScheme.background,
 			disabledColor: th.inactiveTextColor,
 			splashColor: th.accentColor,
 			indicatorColor: th.differentColor,
 			secondaryHeaderColor: th.differentColor,
 			highlightColor: ColorHelper.changeLight(th.primaryColor),
-			bottomAppBarTheme: bottomAppAppBarTheme,
-			colorScheme: colorScheme,
-			chipTheme: chipThemeData,
-			scrollbarTheme: scrollbarTheme,
-			unselectedWidgetColor: th.hintColor, // color: radioButton
+			unselectedWidgetColor: th.hintColor,
 			shadowColor: th.shadowColor,
 			hoverColor: th.webHoverColor,
 		);
@@ -523,7 +567,7 @@ class AppThemes {
 
 		return myThemeData;
 	}
-	///================================================================================================
+	///===========================================================================
 	static TextTheme textTheme() {
 		return AppThemes._instance.themeData.textTheme;
 	}
@@ -537,7 +581,7 @@ class AppThemes {
 	}
 
 	static TextStyle subTextStyle() {
-		return AppThemes._instance.currentTheme.subTextStyle;
+		return AppThemes._instance.currentTheme.lightTextStyle;
 	}
 
 	static TextDirection getOppositeDirection() {

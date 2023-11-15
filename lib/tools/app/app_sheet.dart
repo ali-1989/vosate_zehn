@@ -128,9 +128,11 @@ class AppSheet {
         bool dismissOnAction = true,
         bool isDismissible = true,
         String? routeName,
+        EdgeInsets? padding,
       }) {
 
     buttonText ??= AppMessages.ok;
+    padding ??= EdgeInsets.symmetric(vertical: 18, horizontal: 13 * AppSizes.instance.heightRelative);
     final theme = _genTheme();
 
     void close() {
@@ -138,7 +140,10 @@ class AppSheet {
       onButton?.call();
     }
 
-    final txtStyle = AppDecoration.relativeSheetTextStyle();
+    final txtStyle = AppDecoration.relativeSheetTextStyle().copyWith(
+      height: 1.4,
+      fontSize: AppDecoration.fontSizeAddRatio(2) ,
+    );
 
     final posBtn = TextButton(
         onPressed: dismissOnAction ? close : onButton,
@@ -150,21 +155,22 @@ class AppSheet {
     Widget? titleView;
 
     if (title != null) {
-      titleView = Text(title, style: txtStyle.copyWith(fontSize: txtStyle.fontSize!+2));
+      titleView = Text(title, style: txtStyle.copyWith(fontSize: txtStyle.fontSize! +2));
     }
 
-    var body = _buildBody(
+    final body = _buildBody(
       ctx :context,
       builder: (ctx) {
         return AppSheetCustomView(
           description: content,
           contentColor: theme.contentColor,
           title: titleView,
+          descriptionPadding: padding,
           positiveButton: posBtn,
         );
       },
       contentColor: theme.contentColor,
-      padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 18.0),
+      padding: EdgeInsets.symmetric(horizontal: 18.0, vertical: 14.0 * AppSizes.instance.heightRelative),
     );
 
     return showModalBottomSheet$<T>(

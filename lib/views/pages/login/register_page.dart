@@ -230,7 +230,7 @@ class _RegisterPageState extends StateSuper<RegisterPage> {
     final family = familyCtr.text.trim();
 
     final js = <String, dynamic>{};
-    js[Keys.requestZone] = 'register_user';
+    js[Keys.request] = 'register_user';
     js[Keys.name] = name;
     js[Keys.family] = family;
     js[Keys.birthdate] = DateHelper.toTimestampDateOnly(birthDate!);
@@ -269,6 +269,6 @@ class _RegisterPageState extends StateSuper<RegisterPage> {
     showLoading();
     requester.prepareUrl();
     requester.bodyJson = js;
-    requester.request(context);
+    requester.request();
   }
 }

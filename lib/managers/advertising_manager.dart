@@ -43,7 +43,7 @@ class AdvertisingManager {
   }
 
   static void init() async {
-    timer ??= Timer(Duration(minutes: 30), _onTimer);
+    timer ??= Timer(const Duration(minutes: 30), _onTimer);
 
     EventNotifierService.addListener(AppEvents.networkConnected, _listener);
 
@@ -61,8 +61,8 @@ class AdvertisingManager {
       return;
     }
 
-    await Future.delayed(Duration(seconds: 8), (){}); // for avoid call fast after init
-    if(lastRequest == null || DateHelper.isPastOf(lastRequest, Duration(minutes: 29))){
+    await Future.delayed(const Duration(seconds: 8), (){}); // for avoid call fast after init
+    if(lastRequest == null || DateHelper.isPastOf(lastRequest, const Duration(minutes: 29))){
       requestAdvertising();
     }
   }
@@ -177,11 +177,11 @@ class AdvertisingManager {
     };
 
     final js = <String, dynamic>{};
-    js[Keys.requestZone] = 'get_advertising_data';
+    js[Keys.request] = 'get_advertising_data';
 
     requester.bodyJson = js;
     requester.prepareUrl();
-    requester.request(null, false);
+    requester.request();
   }
 
   static bool hasAdv1(){

@@ -85,7 +85,7 @@ class _TermPageState extends StateSuper<TermPage> {
 
   void requestTerm() async {
     final js = <String, dynamic>{};
-    js[Keys.requestZone] = 'get_term_data';
+    js[Keys.request] = 'get_term_data';
     js[Keys.requesterId] = SessionService.getLastLoginUser()?.userId;
 
     requester.bodyJson = js;
@@ -102,6 +102,6 @@ class _TermPageState extends StateSuper<TermPage> {
     };
 
     requester.prepareUrl();
-    requester.request(context);
+    requester.request();
   }
 }

@@ -86,7 +86,7 @@ class _AboutUsPageState extends StateSuper<AboutUsPage> {
 
   void requestAboutUs() async {
     final js = <String, dynamic>{};
-    js[Keys.requestZone] = 'get_about_us_data';
+    js[Keys.request] = 'get_about_us_data';
     js[Keys.requesterId] = SessionService.getLastLoginUser()?.userId;
 
     requester.bodyJson = js;
@@ -103,6 +103,6 @@ class _AboutUsPageState extends StateSuper<AboutUsPage> {
     };
 
     requester.prepareUrl();
-    requester.request(context);
+    requester.request();
   }
 }

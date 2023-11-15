@@ -255,13 +255,13 @@ class _SentencesPageState extends StateSuper<SentencesPage> {
     };
 
     final js = <String, dynamic>{};
-    js[Keys.requestZone] = 'get_daily_text_data';
+    js[Keys.request] = 'get_daily_text_data';
     js[Keys.requesterId] = SessionService.getLastLoginUser()?.userId;
     js[Keys.date] = DateHelper.toTimestamp(dateTime);
     js['end_date'] = DateHelper.toTimestamp(DateTime.now());
 
     requester.bodyJson = js;
     requester.prepareUrl();
-    requester.request(context, false);
+    requester.request();
   }
 }

@@ -15,8 +15,8 @@ class EmptyData extends StatelessWidget {
     this.onTryAgain,
     this.backgroundColor,
     this.backButton,
-    Key? key,
-    }) : super(key: key);
+    super.key,
+    });
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +25,11 @@ class EmptyData extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
 
           Visibility(
             visible: backButton != null,
-            child: backButton?? SizedBox(),
+            child: backButton?? const SizedBox(),
           ),
 
           Expanded(
@@ -69,11 +69,11 @@ class EmptyData extends StatelessWidget {
                                   IconButton(
                                     padding: EdgeInsets.zero,
                                     iconSize: 23,
-                                    constraints: BoxConstraints.tightFor(),
+                                    constraints: const BoxConstraints.tightFor(),
                                     onPressed: (){
                                       onTryAgain?.call();
                                     },
-                                    icon: Icon(Icons.refresh, color: Colors.blue),
+                                    icon: const Icon(Icons.refresh, color: Colors.blue),
                                   )
                                 ],
                               )

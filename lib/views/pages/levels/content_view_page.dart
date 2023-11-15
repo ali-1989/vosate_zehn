@@ -34,19 +34,19 @@ import 'package:app/views/states/wait_to_load.dart';
 class ContentViewPageInjectData {
   late SubBucketModel subBucket;
 }
-///---------------------------------------------------------------------------------
+///-----------------------------------------------------------------------------
 class ContentViewPage extends StatefulWidget{
   final ContentViewPageInjectData injectData;
 
   ContentViewPage({
     required this.injectData,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<ContentViewPage> createState() => _LevelPageState();
 }
-///=================================================================================================
+///=============================================================================
 class _LevelPageState extends StateSuper<ContentViewPage> {
   Requester requester = Requester();
   bool isInFetchData = true;
@@ -389,7 +389,7 @@ class _LevelPageState extends StateSuper<ContentViewPage> {
 
   void requestData() async {
     final js = <String, dynamic>{};
-    js[Keys.requestZone] = 'get_bucket_content_data';
+    js[Keys.request] = 'get_bucket_content_data';
     js[Keys.requesterId] = SessionService.getLastLoginUser()?.userId;
     js[Keys.id] = widget.injectData.subBucket.id;
 
@@ -435,7 +435,7 @@ class _LevelPageState extends StateSuper<ContentViewPage> {
     };
 
     requester.prepareUrl();
-    requester.request(context);
+    requester.request();
   }
 
   void requestRegisterSeenContent(MediaModelWrapForContent media) async {
@@ -452,7 +452,7 @@ class _LevelPageState extends StateSuper<ContentViewPage> {
     }
 
     final js = <String, dynamic>{};
-    js[Keys.requestZone] = 'set_content_seen';
+    js[Keys.request] = 'set_content_seen';
     js[Keys.requesterId] = user.userId;
     js[Keys.id] = widget.injectData.subBucket.id;
     js['content_id'] = contentModel!.id;
@@ -474,6 +474,6 @@ class _LevelPageState extends StateSuper<ContentViewPage> {
 
     requester.bodyJson = js;
     requester.prepareUrl();
-    requester.request(context, false);
+    requester.request();
   }
 }

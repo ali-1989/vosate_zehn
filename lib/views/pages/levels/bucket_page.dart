@@ -188,7 +188,7 @@ class _BucketPageState extends StateSuper<BucketPage> {
 
 
     final js = <String, dynamic>{};
-    js[Keys.requestZone] = 'get_bucket_data';
+    js[Keys.request] = 'get_bucket_data';
     js[Keys.requesterId] = SessionService.getLastLoginUser()?.userId;
     js[Keys.key] = widget.injectData.bucketTypes.id();
     js[Keys.searchFilter] = searchFilter.toMap();
@@ -232,6 +232,6 @@ class _BucketPageState extends StateSuper<BucketPage> {
     };
 
     requester.prepareUrl();
-    requester.request(context);
+    requester.request();
   }
 }

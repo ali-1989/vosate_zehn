@@ -59,7 +59,7 @@ class AppSnack {
     return AppDecoration.buildSnackBar(message,
         action: action,
         replaceContent: replaceContent,
-        margin: const EdgeInsets.fromLTRB(20,0,20,60),
+        margin: const EdgeInsets.fromLTRB(20,0,20,50),
         durationMillis: millis,
     );
   }
@@ -108,7 +108,7 @@ class AppSnack {
     final v = Row(
       children: [
         Icon(AppIcons.lightBulb, size: 30, color: AppThemes.instance.currentTheme.infoColor),
-        const SizedBox(width: 30,),
+        const SizedBox(width: 30),
         Flexible(child: Text(message))
       ],
     );

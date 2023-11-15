@@ -47,9 +47,9 @@ class AudioPlayerPage extends StatefulWidget{
   final AudioPlayerPageInjectData injectData;
 
   AudioPlayerPage({
-    Key? key,
+    super.key,
     required this.injectData,
-  }) : super(key: key);
+  });
 
   @override
   State<StatefulWidget> createState() {
@@ -113,8 +113,8 @@ class AudioPlayerPageState extends StateSuper<AudioPlayerPage> {
 
               Positioned(
                   top: MathHelper.percent(AppSizes.instance.appHeight, 25),
-                  left: MathHelper.percent(AppSizes.instance.appWidthRelateWeb, 10),
-                  right: MathHelper.percent(AppSizes.instance.appWidthRelateWeb, 10),
+                  left: MathHelper.percent(AppSizes.instance.appWidth, 10),
+                  right: MathHelper.percent(AppSizes.instance.appWidth, 10),
                   child: Column(
                     children: [
                       Text(widget.injectData.title?? '').bold().fsR(5).color(Colors.white),
@@ -152,11 +152,11 @@ class AudioPlayerPageState extends StateSuper<AudioPlayerPage> {
                         onTap: playPauseButton,
                         child: CircleContainer(
                           backColor: Colors.white.withAlpha(50),
-                            size: 50*hr,
+                            size: 50* hRel,
                             border: Border.all(style: BorderStyle.none, width: 0),
                             child: Icon(isPlaying() ? AppIcons.pause : AppIcons.playArrow,
                               color: Colors.white,
-                              size: 40 *hr,
+                              size: 40 * hRel,
                             ),
                         ),
                       ),

@@ -68,8 +68,10 @@
     <uses-permission android:name="com.sec.android.provider.badge.permission.WRITE"/>
     <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE"/>
 
-    <!-- ..........................  uses-permission Location -->
+    <!-- ..........................  uses-permission Location / BSSID -->
     <!--
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
     -->
 

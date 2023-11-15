@@ -65,7 +65,7 @@ class LoginService {
   static void sendLogoffState(UserModel user){
     if(AppBroadcast.isNetConnected){
       final reqJs = <String, dynamic>{};
-      reqJs[Keys.requestZone] = 'Logoff_user_report';
+      reqJs[Keys.request] = 'Logoff_user_report';
       reqJs[Keys.requesterId] = user.userId;
       reqJs[Keys.forUserId] = user.userId;
 
@@ -147,7 +147,7 @@ class LoginService {
     final result = Completer<Map?>();
 
     final js = {};
-    js[Keys.requestZone] = 'send_otp';
+    js[Keys.request] = 'send_otp';
     js[Keys.mobileNumber] = phoneNumber;
     js.addAll(countryModel.toMap());
     DeviceInfoTools.attachDeviceInfo(js);
@@ -182,7 +182,7 @@ class LoginService {
     final result = Completer<TwoStateReturn<Map, Exception>>();
 
     final js = {};
-    js[Keys.requestZone] = 'verify_otp';
+    js[Keys.request] = 'verify_otp';
     js[Keys.mobileNumber] = phoneNumber;
     js['code'] = code;
     js.addAll(countryModel.toMap());
@@ -220,7 +220,7 @@ class LoginService {
     final result = Completer<TwoStateReturn<Map, Exception>>();
 
     final js = {};
-    js[Keys.requestZone] = 'verify_email';
+    js[Keys.request] = 'verify_email';
     js['email'] = email;
     js.addAll(DeviceInfoTools.mapDeviceInfo());
     DeviceInfoTools.attachDeviceInfo(js);
@@ -260,7 +260,7 @@ class LoginService {
     final http = HttpItem();
 
     final js = {};
-    js[Keys.requestZone] = 'send_verify_email';
+    js[Keys.request] = 'send_verify_email';
     js['email'] = email;
     js['hash_password'] = Generator.generateMd5(password);
     js.addAll(DeviceInfoTools.mapDeviceInfo());
@@ -318,7 +318,7 @@ class LoginService {
     final http = HttpItem();
 
     final js = {};
-    js[Keys.requestZone] = 'login_with_email';
+    js[Keys.request] = 'login_with_email';
     js['email'] = email;
     js['hash_password'] = Generator.generateMd5(password);
     js.addAll(DeviceInfoTools.mapDeviceInfo());
@@ -387,7 +387,7 @@ class LoginService {
     final http = HttpItem();
 
     final js = {};
-    js[Keys.requestZone] = 'is_email_verify';
+    js[Keys.request] = 'is_email_verify';
     js['code'] = code;
     js.addAll(DeviceInfoTools.mapDeviceInfo());
     DeviceInfoTools.attachDeviceInfo(js);

@@ -4,8 +4,8 @@ import 'package:app/system/keys.dart';
 import 'package:app/tools/app/app_messages.dart';
 import 'package:app/tools/app/app_snack.dart';
 
-class CommonHttpHandler {
-  CommonHttpHandler._();
+class HttpTools {
+  HttpTools._();
 
   static bool handler(BuildContext context, Map json) {
     final int causeCode = json[Keys.causeCode] ?? 0;
@@ -15,34 +15,36 @@ class CommonHttpHandler {
   }
 
   static bool handlerWithCause(BuildContext context, int causeCode, String? cause, Map json){
-    if(causeCode == HttpCodes.error_zoneKeyNotFound){
+    if(causeCode == HttpCodes.cCode$UserMessage && cause != null){
+      AppSnack.showInfo(context, cause);
+      return true;
+    }
+
+    if(causeCode == HttpCodes.cCode$RequestWasNotSent){
       AppSnack.showError(context, AppMessages.requestKeyNotExist);
       return true;
     }
-    else if(causeCode == HttpCodes.error_tokenNotCorrect){
+    else if(causeCode == HttpCodes.cCode$TokenNotCorrect){
       AppSnack.showError(context, AppMessages.tokenIsIncorrectOrExpire);
       return true;
     }
-    else if(causeCode == HttpCodes.error_databaseError){
+    else if(causeCode == HttpCodes.cCode$DatabaseError){
       AppSnack.showError(context, AppMessages.databaseError);
       return true;
     }
-    else if(causeCode == HttpCodes.error_userIsBlocked){
-      AppSnack.showInfo(context, AppMessages.accountIsBlock);
+    else if(causeCode == HttpCodes.cCode$UserIsBlocked){
+      AppSnack.showError(context, AppMessages.accountIsBlock);
       return true;
     }
-    else if(causeCode == HttpCodes.error_userNotFound){
-      AppSnack.showInfo(context, AppMessages.userNameOrPasswordIncorrect);
+    else if(causeCode == HttpCodes.cCode$LoginDataIncorrect){
+      AppSnack.showError(context, AppMessages.userNameOrPasswordIncorrect);
       return true;
     }
-    else if(causeCode == HttpCodes.error_parametersNotCorrect){
+    else if(causeCode == HttpCodes.cCode$ParametersNotCorrect){
       AppSnack.showError(context, AppMessages.errorOccurredInSubmittedParameters);
       return true;
     }
-    else if(causeCode == HttpCodes.error_requestNotDefined){
-      AppSnack.showInfo(context, AppMessages.thisRequestNotDefined);
-      return true;
-    }
+
 
     return false;
   }
@@ -51,14 +53,26 @@ class CommonHttpHandler {
 class HttpCodes {
   HttpCodes._();
 
-  static int error_zoneKeyNotFound = 10;
-  static int error_requestNotDefined = 15;
-  static int error_userIsBlocked = 20;
-  static int error_userNotFound = 25;
-  static int error_parametersNotCorrect = 30;
-  static int error_databaseError = 35;
-  static int error_internalError = 40;
-  static int error_tokenNotCorrect = 55;
+  static const databaseError = 'Database error';
+  static const noDataFound = 'No data found';
+  static const needDeviceId = 'Need to Device-ID';
+  static const needRequesterId = 'Need to Requester-ID';
+  static const requestWasNotSent = 'The request was not sent';
+  static const haveNotAccess = 'You do not have access';
+  static int cCode$SpacialError = 0;
+  static int cCode$UserMessage = -1;
+  static int cCode$RequestWasNotSent = 15;
+  static int cCode$NeedRequesterId = 16;
+  static int cCode$needDeviceId = 17;
+  static int cCode$HaveNotAccess = 19;
+  static int cCode$DatabaseError = 35;
+  static int cCode$UserIsBlocked = 20;
+  static int cCode$UserNotFound = 25;
+  static int cCode$ParametersNotCorrect = 30;
+  static int cCode$DataNotExist = 50;
+  static int cCode$TokenNotCorrect = 55;
+  static int cCode$NotUpload = 75;
+  static int cCode$LoginDataIncorrect = 80;
   //------------ sections -----------------------------------------------------
   static const sec_command = 'command';
   static const sec_userData = 'UserData';

@@ -19,7 +19,6 @@ import 'package:app/services/login_service.dart';
 import 'package:app/services/session_service.dart';
 import 'package:app/structures/abstract/state_super.dart';
 import 'package:app/structures/models/country_model.dart';
-import 'package:app/tools/http_tools.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/app_broadcast.dart';
@@ -32,6 +31,7 @@ import 'package:app/tools/app/app_snack.dart';
 import 'package:app/tools/app/app_themes.dart';
 import 'package:app/tools/app/app_toast.dart';
 import 'package:app/tools/country_tools.dart';
+import 'package:app/tools/http_tools.dart';
 import 'package:app/tools/route_tools.dart';
 import 'package:app/views/components/countrySelect.dart';
 import 'package:app/views/components/phoneNumberInput.dart';
@@ -39,7 +39,7 @@ import 'package:app/views/pages/login/register_page.dart';
 import 'package:app/views/pages/term_page.dart';
 
 class LoginPage extends StatefulWidget{
-
+  // ignore: prefer_const_constructors_in_immutables
   LoginPage({super.key});
 
   @override
@@ -800,7 +800,7 @@ class _LoginPageState extends StateSuper<LoginPage> {
       if(status == Keys.error){
         final causeCode = twoState.result1![Keys.causeCode]?? 0;
 
-        if(causeCode == HttpCodes.error_userIsBlocked){
+        if(causeCode == HttpCodes.cCode$UserIsBlocked){
           AppSheet.showSheetOk(context, AppMessages.accountIsBlock);
           return;
         }
@@ -944,7 +944,7 @@ class _LoginPageState extends StateSuper<LoginPage> {
         final causeCode = twoState.result1![Keys.causeCode]?? 0;
 
         if(status == Keys.error){
-          if(causeCode == HttpCodes.error_userIsBlocked){
+          if(causeCode == HttpCodes.cCode$UserIsBlocked){
             AppSheet.showSheetOk(context, AppMessages.accountIsBlock);
             return;
           }

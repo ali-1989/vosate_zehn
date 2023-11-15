@@ -28,8 +28,12 @@ class AppMessages {
     return _getContext().tInMap('loginSection', key)?? _noText;
   }
 
-  static String registerMessage(String key) {
-    return _getContext().tInMap('registerSection', key)?? _noText;
+  static String trans(String key) {
+    return _getContext().t(key)?? _noText;
+  }
+
+  static String transCap(String key) {
+    return _getContext().tC(key)?? _noText;
   }
 
   static String get ok {
@@ -45,31 +49,31 @@ class AppMessages {
   }
 
   static String get select {
-    return _getContext().tC('select')?? _noText;
+    return _getContext().t('select')?? _noText;
   }
 
   static String get name {
-    return _getContext().tC('name')?? _noText;
+    return _getContext().t('name')?? _noText;
   }
 
   static String get family {
-    return _getContext().tC('family')?? _noText;
+    return _getContext().t('family')?? _noText;
   }
 
   static String get age {
-    return _getContext().tC('age')?? _noText;
+    return _getContext().t('age')?? _noText;
   }
 
   static String get gender {
-    return _getContext().tC('gender')?? _noText;
+    return _getContext().t('gender')?? _noText;
   }
 
   static String get man {
-    return _getContext().tC('man')?? _noText;
+    return _getContext().t('man')?? _noText;
   }
 
   static String get woman {
-    return _getContext().tC('woman')?? _noText;
+    return _getContext().t('woman')?? _noText;
   }
 
   static String get notice {
@@ -108,12 +112,25 @@ class AppMessages {
     return _getContext().t('password')?? _noText;
   }
 
+  static String get repeatPassword {
+    final l1 = _getContext().tInMap('loginSection', 'repeatPassword');
+    return l1?? _noText;
+  }
+
   static String get pay {
     return _getContext().t('pay')?? _noText;
   }
   
   static String get register {
     return _getContext().t('register')?? _noText;
+  }
+
+  static String get signIn {
+    return _getContext().t('signIp')?? _noText;
+  }
+
+  static String get signUp {
+    return _getContext().t('signUp')?? _noText;
   }
 
   static String get logout {
@@ -176,6 +193,14 @@ class AppMessages {
     return loginMessage('loginWithGoogle');
   }
 
+  static String get forgotPassword {
+    return loginMessage('forgotPassword');
+  }
+
+  static String get passwordRecovery {
+    return loginMessage('passwordRecovery');
+  }
+
   static String get countrySelection {
     return _getContext().tInMap('countrySection', 'countrySelection')?? _noText;
   }
@@ -200,16 +225,40 @@ class AppMessages {
     return _getContext().t('login')?? _noText;
   }
 
+  static String get nameMustBigger2Char {
+    return loginMessage('nameMustBigger2Char');
+  }
+
+  static String get familyMustBigger2Char {
+    return loginMessage('familyMustBigger2Char');
+  }
+
+  static String get emailIsNotCorrect {
+    return loginMessage('emailIsNotCorrect');
+  }
+
   static String get otherNumber {
-    return registerMessage('otherNumber');
+    return loginMessage('otherNumber');
   }
 
   static String get enterVerifyCodeDesc {
-    return registerMessage('validationDescription');
+    return loginMessage('validationDescription');
   }
 
  static String get pleaseEnterAPassword {
-    return registerMessage('selectPassword');
+    return loginMessage('selectPassword');
+  }
+
+  static String get passwordsNotSame {
+    return loginMessage('passwordsNotSame');
+  }
+
+  static String get passwordMust4Char {
+    return loginMessage('passwordMust4Char');
+  }
+
+  static String get emailVerifyIsSentClickOn {
+    return _getContext().t('emailVerifyIsSentClickOn')?? _noText;
   }
 
   static String get errorOccur {
@@ -221,15 +270,19 @@ class AppMessages {
   }
 
   static String get wantToLeave {
-    return _getContext().tC('wantToLeave')?? _noText;
+    return _getContext().t('wantToLeave')?? _noText;
   }
 
   static String get e404 {
-    return _getContext().tC('thisPageNotFound')?? _noText;
+    return _getContext().t('thisPageNotFound')?? _noText;
   }
 
   static String get tryAgain {
     return _getContext().t('tryAgain')?? _noText;
+  }
+
+  static String get cancel {
+    return _getContext().t('cancel')?? _noText;
   }
 
   static String get tokenIsIncorrectOrExpire {
@@ -301,15 +354,15 @@ class AppMessages {
   }
 
   static String get sorryYouDoNotHaveAccess {
-    return _getContext().tC('sorryYouDoNotHaveAccess')?? _noText;
+    return _getContext().t('sorryYouDoNotHaveAccess')?? _noText;
   }
 
   static String get youMustRegister {
-    return _getContext().tC('youMustRegister')?? _noText;
+    return _getContext().t('youMustRegister')?? _noText;
   }
 
   static String get thereAreNoResults {
-    return _getContext().tC('thereAreNoResults')?? _noText;
+    return _getContext().t('thereAreNoResults')?? _noText;
   }
   
   static String get requestDataIsNotJson {
@@ -318,6 +371,10 @@ class AppMessages {
   
   static String get requestKeyNotExist {
     return "'request' key not exist";
+  }
+
+  static String get iRealized {
+    return _getContext().t('IRealized')?? _noText;
   }
 
   static String get unKnow {
@@ -330,6 +387,18 @@ class AppMessages {
 
   static String get close {
     return _getContext().t('close')?? _noText;
+  }
+
+  static String get email {
+    return _getContext().t('email')?? _noText;
+  }
+
+  static String get inEmailSignOutError {
+    return _getContext().t('inEmailSignOutError')?? _noText;
+  }
+
+  static String get verifyEmail {
+    return _getContext().t('verifyEmail')?? _noText;
   }
 
   ///-----------------------------------------------------------------------------------
@@ -449,20 +518,12 @@ class AppMessages {
     return 'به منتخب ها اضافه شد';
   }
 
-  static String get email {
-    return 'ایمیل';
-  }
-
   static String get mobile {
     return 'موبایل';
   }
 
   static String get welcome {
     return 'خوش آمدید';
-  }
-
-  static String get inEmailSignOutError {
-    return 'هنگام خروج از ایمیل خطایی رخ داده است';
   }
   
   static String get payWitIran {

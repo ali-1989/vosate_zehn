@@ -34,7 +34,7 @@ import 'package:app/views/states/error_occur.dart';
 import 'package:app/views/states/wait_to_load.dart';
 
 class HomePage extends StatefulWidget {
-
+  // ignore: prefer_const_constructors_in_immutables
   HomePage({
     Key? key,
   }) : super(key: key);
@@ -581,7 +581,7 @@ class _HomePageState extends StateSuper<HomePage> {
 
   void requestData() async {
     final js = <String, dynamic>{};
-    js[Keys.requestZone] = 'get_home_page_data';
+    js[Keys.request] = 'get_home_page_data';
     js[Keys.requesterId] = SessionService.getLastLoginUser()?.userId;
 
     requester.httpRequestEvents.onFailState = (req, r) async {
@@ -630,6 +630,6 @@ class _HomePageState extends StateSuper<HomePage> {
 
     requester.bodyJson = js;
     requester.prepareUrl();
-    requester.request(context);
+    requester.request();
   }
 }

@@ -76,7 +76,7 @@ class DailyTextService {
 
   static Future<List<DailyTextModel>?> _requestData() async {
     final js = <String, dynamic>{};
-    js[Keys.requestZone] = 'get_daily_text_data';
+    js[Keys.request] = 'get_daily_text_data';
     js[Keys.requesterId] = SessionService.getLastLoginUser()?.userId;
 
     final List<DailyTextModel> result = [];
@@ -99,7 +99,7 @@ class DailyTextService {
 
     requester.bodyJson = js;
     requester.prepareUrl();
-    requester.request(null, false);
+    requester.request();
 
     return comp.future;
   }

@@ -136,7 +136,7 @@ class _AidPageState extends StateSuper<AidPage> {
 
   void requestAidData() async {
     final js = <String, dynamic>{};
-    js[Keys.requestZone] = 'get_aid_data';
+    js[Keys.request] = 'get_aid_data';
     js[Keys.requesterId] = SessionService.getLastLoginUser()?.userId;
 
     requester.bodyJson = js;
@@ -153,7 +153,7 @@ class _AidPageState extends StateSuper<AidPage> {
     };
 
     requester.prepareUrl();
-    requester.request(context);
+    requester.request();
   }
 
   void onPayIranCall() async {

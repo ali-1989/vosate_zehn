@@ -2,7 +2,7 @@
 class Keys {
   Keys._();
 
-  static const requestZone = 'request_zone';
+  static const request = 'request_zone';
   static const status = 'status';
   static const command = 'command';
   static const section = 'section';

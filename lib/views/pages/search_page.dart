@@ -353,7 +353,7 @@ class _SearchPageState extends StateSuper<SearchPage> {
 
 
     final js = <String, dynamic>{};
-    js[Keys.requestZone] = 'search_on_data';
+    js[Keys.request] = 'search_on_data';
     js[Keys.requesterId] = SessionService.getLastLoginUser()?.userId;
     js[Keys.searchFilter] = searchFilter.toMap();
 
@@ -398,7 +398,7 @@ class _SearchPageState extends StateSuper<SearchPage> {
 
     requester.bodyJson = js;
     requester.prepareUrl();
-    requester.request(context);
+    requester.request();
   }
 
 }

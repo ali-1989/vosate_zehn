@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:app/tools/app/app_cache.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:iris_route/iris_route.dart';
 import 'package:iris_tools/widgets/maxWidth.dart';
+import 'package:iris_tools/widgets/path/box_clipper.dart';
 
 import 'package:app/managers/font_manager.dart';
 import 'package:app/managers/settings_manager.dart';
@@ -17,6 +17,7 @@ import 'package:app/services/native_call_service.dart';
 import 'package:app/structures/models/settings_model.dart';
 import 'package:app/system/constants.dart';
 import 'package:app/tools/app/app_broadcast.dart';
+import 'package:app/tools/app/app_cache.dart';
 import 'package:app/tools/app/app_directories.dart';
 import 'package:app/tools/app/app_locale.dart';
 import 'package:app/tools/app/app_sizes.dart';
@@ -54,18 +55,21 @@ void main() {
               return MaxWidth(
                 maxWidth: AppSizes.webMaxWidthSize,
                 apply: kIsWeb,
-                child: Directionality(
-                  textDirection: AppThemes.instance.textDirection,
-                  child: DefaultTextHeightBehavior(
-                    textHeightBehavior: const TextHeightBehavior(applyHeightToFirstAscent: false, applyHeightToLastDescent: false),
-                    child: DefaultTextStyle(
-                      style: AppThemes.instance.themeData.textTheme.bodySmall?? const TextStyle(),
-                      child: OrientationBuilder( /// detect orientation change and rotate screen
-                          builder: (context, orientation) {
-                            return Toaster(
-                              child: MyApp(),
-                            );
-                          }
+                child: ClipRect(
+                  clipper: BoxClipper(width: kIsWeb? AppSizes.webMaxWidthSize : double.infinity),
+                  child: Directionality(
+                    textDirection: AppThemes.instance.textDirection,
+                    child: DefaultTextHeightBehavior(
+                      textHeightBehavior: AppThemes.instance.baseFont.textHeightBehavior?? const TextHeightBehavior(),
+                      child: DefaultTextStyle(
+                        style: AppThemes.instance.themeData.textTheme.bodySmall?? const TextStyle(),
+                        child: OrientationBuilder( /// detect orientation change and rotate screen
+                            builder: (context, orientation) {
+                              return Toaster(
+                                child: MyApp(),
+                              );
+                            }
+                        ),
                       ),
                     ),
                   ),
@@ -81,6 +85,7 @@ void main() {
 }
 
 Future<void> mainInitialize() async {
+  FontManager.init(calcFontSize: true);
   await FireBaseService.initializeApp();
 
   usePathUrlStrategy();
@@ -111,7 +116,7 @@ Future<(bool, String?)> prepareDirectoriesAndLogger() async {
 ///=============================================================================
 class MyApp extends StatelessWidget {
   // ignore: prefer_const_constructors_in_immutables
-  MyApp({Key? key}) : super(key: key);
+  MyApp({super.key}) : super();
 
   ///============ call on any hot reload
   @override
@@ -158,10 +163,10 @@ class MyApp extends StatelessWidget {
     return Builder(
       builder: (context) {
 
-        if(factor > 1.0 && FontManager.firstFontSize != null){
-          final themeFs = FontManager.instance.getThemeFontSizeOrRelative(context);
+        if(factor > 1.0 && FontManager.instance.startFontSize != null){
+          final themeFs = FontManager.instance.themeFontSizeOrRelative(context);
 
-          while(factor > 1.0 && (themeFs * factor) > FontManager.maxForFontSize){
+          while(factor > 1.0 && (themeFs * factor) > FontManager.instance.maximumAppFontSize){
             factor = factor - 0.09;
           }
         }
@@ -189,16 +194,13 @@ class MyApp extends StatelessWidget {
     if(!AppCache.canCallMethodAgain('testCodes')){
       return;
     }
-
-    //await AppDB.db.clearTable(AppDB.tbKv);
-    //NativeCallService.assistanceBridge?.invokeMethodByArgs('throw_error', [{'delay': 5000}]);
   }
 }
 ///=============================================================================
 class MyErrorApp extends StatelessWidget {
   final String? errorLog;
 
-  const MyErrorApp({Key? key, this.errorLog}) : super(key: key);
+  const MyErrorApp({super.key, this.errorLog});
 
   @override
   Widget build(BuildContext context) {

@@ -13,18 +13,19 @@ class ColorTheme {
   Color differentColor = Colors.pinkAccent;
   Color textColor = Colors.black;
   Color backgroundColor = Colors.white;
-  Color infoTextColor = Colors.black.withAlpha(170); //in Init
+  /// TextField (hint & label) in AppTheme
+  Color hintColor = Colors.black.withAlpha(150); //in Init
+  Color infoTextColor = Colors.black.withAlpha(180); //in Init
+  Color inactiveBackColor = Colors.grey[400]!;
+  Color inactiveTextColor = Colors.grey[600]!;
   Color webHoverColor = Colors.black.withAlpha(40); //in Init
-  Color hintColor = Colors.blue[200]!;
   Color dividerColor = Colors.blue.withAlpha(140); //in Init
   Color activeItemColor = Colors.blue; //in Init
-  Color inactiveBackColor = Colors.grey[400]!;
-  Color inactiveTextColor = Colors.grey[700]!;
   Color buttonTextColor = Colors.white;
   Color buttonTextColorOnPrimary = Colors.black;
   Color buttonBackColor = Colors.blue;
   Color buttonBackColorOnPrimary = Colors.white;
-  Color underLineDecorationColor = Colors.blue[700]!;
+  Color underLineDecorationColor = Colors.blue[500]!;
   Color cardColor = Colors.white;
   Color dialogBackColor = Colors.white;
   Color dialogTextColor = Colors.black;
@@ -48,7 +49,7 @@ class ColorTheme {
 
   late ColorScheme buttonsColorScheme;  //in Init & create
   late TextStyle baseTextStyle; //in Init
-  late TextStyle subTextStyle; //in Init
+  late TextStyle lightTextStyle; //in Init
   late TextStyle boldTextStyle; //in Init
   late TextStyle textUnderlineStyle; //in Init
   Function(ColorTheme to)? executeOnStart;
@@ -71,8 +72,8 @@ class ColorTheme {
 
     appBarBackColor = primaryColor;
     buttonBackColor = ColorHelper.isDarkColor(primaryColor) ? primarySwatch[700]! : primarySwatch[800]!;
-    hintColor = textColor.withAlpha(200);//primarySwatch[200]!;
-    infoTextColor = textColor.withAlpha(170);
+    hintColor = textColor.withAlpha(150);
+    infoTextColor = textColor.withAlpha(180);
     webHoverColor = primaryColor.withAlpha(40);
     textDifferentColor = accentColor;
 
@@ -95,8 +96,6 @@ class ColorTheme {
 
     textUnderlineStyle = baseTextStyle.copyWith(
         fontWeight: FontWeight.bold,
-        //decoration: TextDecoration.underline,
-        //decorationColor: underLineDecorationColor,
         color: underLineDecorationColor
     );
 

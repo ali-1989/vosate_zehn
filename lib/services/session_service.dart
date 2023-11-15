@@ -90,7 +90,7 @@ class SessionService {
 
 		//newUser.token?.refreshToken = json['refreshToken'];
 
-		newUser.loginDate = DateHelper.now().toUtc();
+		newUser.loginDate = DateHelper.nowMinusUtcOffset();
 
 		final wasLoginUser = getExistLoginUserById(userId);
 		var oldDbUser = wasLoginUser;

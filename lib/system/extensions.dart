@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/helpers/focusHelper.dart';
 import 'package:iris_tools/api/helpers/mathHelper.dart';
-import 'package:iris_tools/widgets/border/dotted_border.dart';
+import 'package:iris_tools/widgets/border/dot_dash_border.dart';
 
 import 'package:app/managers/font_manager.dart';
 import 'package:app/tools/app/app_decoration.dart';
 import 'package:app/tools/app/app_locale.dart';
+import 'package:app/tools/app/app_sizes.dart';
 import 'package:app/tools/app/app_themes.dart';
 
-///==========================================================================================================
+///=============================================================================
 extension StringExtension on String {
   String get L {
     return toLowerCase();
@@ -40,14 +41,14 @@ extension StringExtension on String {
     return AppLocale.numberRelative(this)?? this;
   }
 }
-///==========================================================================================================
+///=============================================================================
 extension FunctionExtension on Function {
   /// (await fn.delay()).call(args);
   Future<Function> delay({Duration dur = const Duration(milliseconds: 200)}) {
     return Future.delayed(dur, () => this);
   }
 }
-///==========================================================================================================
+///=============================================================================
 extension ContextExtension on BuildContext {
   void focusNextEditableText() {
     do {
@@ -70,7 +71,7 @@ extension ContextExtension on BuildContext {
     }
   }
 
-  //--------------------------------------------------
+  //----------------------------------------------------------------------------
   String? t(String key, {String? key2, String? key3}) {
     var res1 = AppLocale.appLocalize.translate(key);
 
@@ -88,7 +89,7 @@ extension ContextExtension on BuildContext {
 
     return res1;
   }
-  //--------------------------------------------------
+  //----------------------------------------------------------------------------
   String? tC(String key, {String? key2, String? key3}) {
     var res1 = AppLocale.appLocalize.translateCapitalize(key);
 
@@ -106,7 +107,7 @@ extension ContextExtension on BuildContext {
 
     return res1;
   }
-  //--------------------------------------------------
+  //----------------------------------------------------------------------------
   Map<String, dynamic>? tAsMap(String key) {
     return AppLocale.appLocalize.translateAsMap(key);
   }
@@ -167,7 +168,7 @@ extension ContextExtension on BuildContext {
     return res;
   }
 }
-///==========================================================================================================
+///=============================================================================
 extension IterableExtension<E> on Iterable<E> {
   E? firstWhereSafe(bool Function(E element) test) {
     try {
@@ -178,7 +179,7 @@ extension IterableExtension<E> on Iterable<E> {
     }
   }
 }
-///==========================================================================================================
+///=============================================================================
 extension RowExtension<E> on Row {
   Row min() {
     return Row(
@@ -193,7 +194,7 @@ extension RowExtension<E> on Row {
     );
   }
 }
-///==========================================================================================================
+///=============================================================================
 extension ColumnExtension<E> on Column {
   Column min() {
     return Column(
@@ -208,7 +209,7 @@ extension ColumnExtension<E> on Column {
     );
   }
 }
-///==========================================================================================================
+///=============================================================================
 extension WidgetExtension on Widget {
   Widget wrapMaterial({
     MaterialType type = MaterialType.circle,
@@ -312,7 +313,7 @@ extension WidgetExtension on Widget {
 
     color ??= AppThemes.instance.currentTheme.fabBackColor;
 
-    return DottedBorder(
+    return DotDashBorder(
       dashPattern: dashPattern,
       padding: padding,
       color: color.withAlpha(alpha),
@@ -340,7 +341,7 @@ extension WidgetExtension on Widget {
     );
   }
 }
-///==========================================================================================================
+///=============================================================================
 extension IconExtension on Icon {
   Icon btnTextColor() {
     final replace = AppThemes.instance.currentTheme.buttonTextColor;
@@ -431,7 +432,54 @@ extension IconExtension on Icon {
     return siz(cSiz + s);
   }
 }
-///==========================================================================================================
+///=============================================================================
+extension TextStyleExtension on TextStyle {
+
+  TextStyle fs(double size){
+    return TextStyle(
+      fontSize: size,
+      height: height,
+      color: color,
+      shadows: shadows,
+      background: background,
+      fontWeight: fontWeight,
+      wordSpacing: wordSpacing,
+      letterSpacing: letterSpacing,
+      backgroundColor: backgroundColor,
+      overflow: overflow,
+      debugLabel: debugLabel,
+      decoration: decoration,
+      decorationColor: decorationColor,
+      decorationStyle: decorationStyle,
+      decorationThickness: decorationThickness,
+      fontFamily: fontFamily,
+      fontFamilyFallback: fontFamilyFallback,
+      fontFeatures: fontFeatures,
+      fontStyle: fontStyle,
+      fontVariations: fontVariations,
+      foreground: foreground,
+      inherit: inherit,
+      leadingDistribution: leadingDistribution,
+      locale: locale,
+      textBaseline: textBaseline,
+    );
+  }
+
+  TextStyle fsR(double size) {
+    var siz = fontSize?? AppThemes.instance.currentTheme.baseTextStyle.fontSize;
+    siz = (siz?? FontManager.instance.appFontSizeOrRelative()) + size;
+
+    return fs(siz);
+  }
+
+  TextStyle fsRRatio(double size) {
+    var siz = fontSize?? AppThemes.instance.currentTheme.baseTextStyle.fontSize;
+    siz = (siz?? FontManager.instance.appFontSizeOrRelative()) + (size * AppSizes.instance.fontRatio);
+
+    return fs(siz);
+  }
+}
+///=============================================================================
 extension TextExtension on Text {
 
   Text infoColor({bool baseStyle = false}) {
@@ -574,7 +622,7 @@ extension TextExtension on Text {
     var ts = style ?? (baseStyle ? AppThemes.instance.currentTheme.baseTextStyle : const TextStyle());
 
     ts = ts.copyWith(
-        fontFamily: AppThemes.instance.currentTheme.subTextStyle.fontFamily,
+        fontFamily: AppThemes.instance.currentTheme.lightTextStyle.fontFamily,
     );
 
     return Text(
@@ -645,11 +693,11 @@ extension TextExtension on Text {
     );
   }
 
-  Text englishFont() {
+  Text englishRegularFont() {
     var ts = style ?? AppThemes.instance.currentTheme.baseTextStyle;
 
     ts = ts.copyWith(
-        fontFamily: FontManager.instance.getEnglishFont()!.family!,
+        fontFamily: FontManager.instance.getEnglishRegularFont()!.family!,
     );
 
     return Text(
@@ -692,15 +740,28 @@ extension TextExtension on Text {
     );
   }
 
-  Text fsR(double size, {double? max /*20*/}) {
+  Text fsR(double size, {double? max}) {
     var siz = style?.fontSize?? AppThemes.instance.currentTheme.baseTextStyle.fontSize;
-    siz = (siz?? FontManager.appFontSize()) + size;
+    siz = (siz?? FontManager.instance.appFontSizeOrRelative()) + size;
 
     if (max != null) {
       siz = MathHelper.minDouble(siz, max);
     }
 
     return fs(siz);
+  }
+
+  Text fsRRatio(double size) {
+    var siz = style?.fontSize?? AppThemes.instance.currentTheme.baseTextStyle.fontSize;
+    siz = (siz?? FontManager.instance.appFontSizeOrRelative()) + (size * AppSizes.instance.fontRatio);
+
+    return fs(siz);
+  }
+
+  Text fsSetR(double size) {
+    //final x = MathHelper.between(1.3, 3.5, 0.7, 1.0, AppSizes.instance.pixelRatio!);
+
+    return fs(size * AppSizes.instance.fontRatio);
   }
 
   Text alpha({int alpha = 160, bool baseStyle = false}) {
@@ -760,7 +821,7 @@ extension TextExtension on Text {
         }
 
         if (myStyle!.fontSize == null) {
-          myStyle = myStyle.copyWith(fontSize: FontManager.appFontSize());
+          myStyle = myStyle.copyWith(fontSize: FontManager.instance.appFontSizeOrRelative());
         }
 
         var tp = TextPainter(
@@ -845,13 +906,39 @@ extension TextExtension on Text {
     );
   }
 
-  Text underLineClickable() {
+  Text clickableColor() {
     return bold()
-        .fsR(4)// fs(18)
         .color(AppThemes.instance.currentTheme.underLineDecorationColor);
   }
+
+  Text underLine({Color? color}) {
+    var ts = style ?? AppThemes.instance.currentTheme.baseTextStyle;
+    ts = ts.copyWith(
+        decorationStyle: TextDecorationStyle.solid,
+        decoration: TextDecoration.underline,
+      decorationColor: color?? AppThemes.instance.currentTheme.underLineDecorationColor,
+    );
+
+    return Text(
+        data!,
+        key: key,
+        style: ts,
+        strutStyle: strutStyle,
+        textAlign: textAlign,
+        locale: locale,
+        maxLines: maxLines,
+        overflow: overflow,
+        semanticsLabel: semanticsLabel,
+        softWrap: softWrap,
+        textDirection: textDirection,
+        textHeightBehavior: textHeightBehavior,
+        textScaleFactor: textScaleFactor,
+        textWidthBasis: textWidthBasis,
+      selectionColor: selectionColor,
+    );
+  }
 }
-///==========================================================================================================
+///=============================================================================
 extension SelectableTextExtension on SelectableText {
 
   SelectableText infoColor({bool baseStyle = false}) {
@@ -952,7 +1039,7 @@ extension SelectableTextExtension on SelectableText {
     var ts = style ?? (baseStyle ? AppThemes.instance.currentTheme.baseTextStyle : const TextStyle());
 
     ts = ts.copyWith(
-        fontFamily: AppThemes.instance.currentTheme.subTextStyle.fontFamily,
+        fontFamily: AppThemes.instance.currentTheme.lightTextStyle.fontFamily,
     );
 
     return SelectableText(
@@ -1014,11 +1101,11 @@ extension SelectableTextExtension on SelectableText {
     );
   }
 
-  SelectableText englishFont() {
+  SelectableText englishRegularFont() {
     var ts = style ?? AppThemes.instance.currentTheme.baseTextStyle;
 
     ts = ts.copyWith(
-        fontFamily: FontManager.instance.getEnglishFont()!.family!,
+        fontFamily: FontManager.instance.getEnglishRegularFont()!.family!,
     );
 
     return SelectableText(
@@ -1060,7 +1147,7 @@ extension SelectableTextExtension on SelectableText {
     var siz = style?.fontSize;
     siz ??= AppThemes.instance.currentTheme.baseTextStyle.fontSize;
 
-    siz = (siz?? FontManager.appFontSize()) + size;
+    siz = (siz?? FontManager.instance.appFontSizeOrRelative()) + size;
 
     if (max != null) {
       siz = MathHelper.minDouble(siz, max);
@@ -1134,7 +1221,7 @@ extension SelectableTextExtension on SelectableText {
         .color(AppThemes.instance.currentTheme.underLineDecorationColor);
   }
 }
-///==========================================================================================================
+///=============================================================================
 extension DropdownButtonExtension on DropdownButton {
   Widget wrap(
     BuildContext context, {
@@ -1186,26 +1273,6 @@ extension DropdownButtonExtension on DropdownButton {
           disabledHint: disabledHint,
         ),
       ),
-    );
-  }
-}
-///==========================================================================================================
-extension TextHeightBehaviorExtension on TextHeightBehavior {
-  Map<String, dynamic> toMap(){
-    return <String, dynamic>{
-      'applyHeightToFirstAscent': applyHeightToFirstAscent,
-      'applyHeightToLastDescent': applyHeightToLastDescent,
-    };
-  }
-
-  TextHeightBehavior? fromMap(Map<String, dynamic>? map){
-    if(map == null){
-      return null;
-    }
-
-    return TextHeightBehavior(
-        applyHeightToLastDescent: map['applyHeightToLastDescent'],
-        applyHeightToFirstAscent: map['applyHeightToFirstAscent']
     );
   }
 }

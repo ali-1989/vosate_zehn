@@ -12,7 +12,6 @@ import 'package:app/services/login_service.dart';
 import 'package:app/services/session_service.dart';
 import 'package:app/structures/models/settings_model.dart';
 import 'package:app/system/application_signal.dart';
-import 'package:app/tools/http_tools.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/app_broadcast.dart';
 import 'package:app/tools/app/app_db.dart';
@@ -20,6 +19,7 @@ import 'package:app/tools/app/app_dialog_iris.dart';
 import 'package:app/tools/app/app_messages.dart';
 import 'package:app/tools/app/app_notification.dart';
 import 'package:app/tools/device_info_tools.dart';
+import 'package:app/tools/http_tools.dart';
 import 'package:app/tools/route_tools.dart';
 
 class WebsocketService {
@@ -56,15 +56,15 @@ class WebsocketService {
 		try {
 			_ws = GetSocket(_uri!);
 
-			_ws!.onOpen(_onConnected);
+			_ws!.addOpenListener(_onConnected);
 			/// onData
-			_ws!.onMessage(_handlerNewMessage);
+			_ws!.addMessageListener(_handlerNewMessage);
 
-			_ws!.onClose((c) {
+			_ws!.addCloseListener((c) {
 				_onDisConnected();
 			});
 
-			_ws!.onError((e) {
+			_ws!.addErrorListener((e) {
 				_onDisConnected();
 			});
 

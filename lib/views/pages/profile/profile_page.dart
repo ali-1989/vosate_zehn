@@ -104,8 +104,8 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
 
         Positioned(
           top: MathHelper.percent(AppSizes.instance.appHeight, 25),
-            left: MathHelper.percent(AppSizes.instance.appWidthRelateWeb, 10),
-            right: MathHelper.percent(AppSizes.instance.appWidthRelateWeb, 16),
+            left: MathHelper.percent(AppSizes.instance.appWidth, 10),
+            right: MathHelper.percent(AppSizes.instance.appWidth, 16),
             child: Column(
               children: [
                 Glowstone(
@@ -535,7 +535,7 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
     final fileName = PathHelper.getFileName(filePath);
 
     final js = <String, dynamic>{};
-    js[Keys.requestZone] = 'Update_profile_avatar';
+    js[Keys.request] = 'Update_profile_avatar';
     js[Keys.requesterId] = user.userId;
     js[Keys.forUserId] = user.userId;
     js[Keys.fileName] = fileName;
@@ -558,14 +558,14 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
     requester.httpItem.addFormFile(partName, fileName, File(filePath));
 
     showLoading(canBack: false);
-    requester.request(context, false);
+    requester.request();
   }
 
   void deleteProfile(){
     AppSheet.closeSheet(context);
 
     final js = <String, dynamic>{};
-    js[Keys.requestZone] = 'delete_profile_avatar';
+    js[Keys.request] = 'delete_profile_avatar';
     js[Keys.requesterId] = user.userId;
     js[Keys.forUserId] = user.userId;
 
@@ -589,12 +589,12 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
     requester.bodyJson = js;
     requester.prepareUrl();
 
-    requester.request(context, false);
+    requester.request();
   }
   
   void uploadName(String name, String family){
     final js = <String, dynamic>{};
-    js[Keys.requestZone] = 'update_user_nameFamily';
+    js[Keys.request] = 'update_user_nameFamily';
     js[Keys.requesterId] = user.userId;
     js[Keys.forUserId] = user.userId;
     js[Keys.name] = name;
@@ -622,12 +622,12 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
     requester.bodyJson = js;
     requester.prepareUrl();
 
-    requester.request(context, false);
+    requester.request();
   }
 
   void uploadGender(int gender){
     final js = <String, dynamic>{};
-    js[Keys.requestZone] = 'update_user_gender';
+    js[Keys.request] = 'update_user_gender';
     js[Keys.requesterId] = user.userId;
     js[Keys.forUserId] = user.userId;
     js[Keys.sex] = gender;
@@ -652,12 +652,12 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
     requester.bodyJson = js;
     requester.prepareUrl();
 
-    requester.request(context, false);
+    requester.request();
   }
 
   void uploadBirthdate(DateTime dt){
     final js = <String, dynamic>{};
-    js[Keys.requestZone] = 'update_user_birthdate';
+    js[Keys.request] = 'update_user_birthdate';
     js[Keys.requesterId] = user.userId;
     js[Keys.forUserId] = user.userId;
     js[Keys.date] = DateHelper.toTimestamp(dt);
@@ -682,7 +682,7 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
     requester.bodyJson = js;
     requester.prepareUrl();
 
-    requester.request(context, false);
+    requester.request();
   }
 
   void requestProfileData() async {
@@ -693,7 +693,7 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
     }
 
     final js = <String, dynamic>{};
-    js[Keys.requestZone] = 'get_profile_data';
+    js[Keys.request] = 'get_profile_data';
     js[Keys.requesterId] = user.userId;
     js[Keys.forUserId] = js[Keys.requesterId];
 
@@ -710,7 +710,7 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
 
     requester.bodyJson = js;
     requester.prepareUrl();
-    requester.request(context);
+    requester.request();
   }
 
   void checkPermission() async {

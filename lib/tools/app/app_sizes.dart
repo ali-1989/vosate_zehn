@@ -1,11 +1,10 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/helpers/mathHelper.dart';
-
-import 'package:app/managers/font_manager.dart';
 
 /// realWidth: 1080.0, realHeight: 2274.0, pixelRatio: 2.625, Padding(left: 0, top: 83, right: 0, bottom: 0)
 /// realWidth: 720, realHeight: 1280.0, pixelRatio: 2.0, Padding(left: 0, top: 48, right: 0, bottom: 0)
@@ -17,7 +16,7 @@ class AppSizes {
   static bool _initialState = false;
 
   static double sizeOfBigScreen = 700;
-  static double webMaxWidthSize = 500;
+  static double webMaxWidthSize = 400;
 
   double? realPixelWidth;
   double? realPixelHeight;
@@ -47,8 +46,9 @@ class AppSizes {
     final isLandscape = realPixelWidth! > realPixelHeight!;
 
     if(kIsWeb) {
-      appWidth = realPixelWidth! / pixelRatio!;
+      appWidth = min(realPixelWidth! / pixelRatio!, webMaxWidthSize);
       appHeight = realPixelHeight! / pixelRatio!;
+      pixelRatio = realPixelHeight! / webMaxWidthSize;
     }
     else {
       appWidth = (isLandscape ? realPixelHeight : realPixelWidth)! / pixelRatio!;
@@ -95,11 +95,14 @@ class AppSizes {
     onMetricListeners.remove(lis);
   }
 
-  double get appWidthRelateWeb => webMaxWidthSize;
+  // pixel6 pro  => [411 * 843]  rate: 3.5
+  // WQVGA       => [320 * 533]  rate: 0.75
+  double get heightRelative => MathHelper.relativeOf(appHeight, 530, 40, 0.1);
+  double get widthRelative => MathHelper.relativeOf(appWidth, 320, 20, 0.1);
+  double get fontRatio => MathHelper.between(1.4, 3.5, 0.8, 0.8, pixelRatio!);
+  double get iconRatio => MathHelper.between(1.3, 3.5, 0.7, 0.8, pixelRatio!);
 
-  double get heightRatio => MathHelper.between(1.0, 750, 0.86, 570, appHeight);
-  double get fontRatio => MathHelper.between(1.0, 20, 0, 12, FontManager.appFontSize());
-  ///●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●
+  ///●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●
   static FlutterView? getWindow(){
     return PlatformDispatcher.instance.implicitView;
   }

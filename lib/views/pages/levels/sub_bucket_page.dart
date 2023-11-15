@@ -327,7 +327,7 @@ class _SubBucketPageState extends StateSuper<SubBucketPage> {
     searchFilter.lower = ul.lowerAsTS;
 
     final js = <String, dynamic>{};
-    js[Keys.requestZone] = 'get_sub_bucket_data';
+    js[Keys.request] = 'get_sub_bucket_data';
     js[Keys.requesterId] = SessionService.getLastLoginUser()?.userId;
     js[Keys.id] = widget.injectData.bucketModel!.id?? 1;
     js[Keys.searchFilter] = searchFilter.toMap();
@@ -372,6 +372,6 @@ class _SubBucketPageState extends StateSuper<SubBucketPage> {
     };
 
     requester.prepareUrl();
-    requester.request(context, false);
+    requester.request();
   }
 }

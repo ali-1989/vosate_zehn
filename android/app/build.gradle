@@ -85,15 +85,6 @@ android {
         versionName flutterVersionName
 
         multiDexEnabled false
-        dexOptions {
-            javaMaxHeapSize "3g"
-            keepRuntimeAnnotatedClasses false //false: if do not use reflection and need more space in their main dex
-            preDexLibraries = false
-            incremental false
-            jumboMode = false
-            maxProcessCount 2
-            threadCount 10
-        }
 
         def documentsAuthorityValue = applicationId + ".documentsProvider"
         manifestPlaceholders.documentsAuthority = documentsAuthorityValue
@@ -128,7 +119,10 @@ flutter {
 }
 
 dependencies {
-    implementation platform('com.google.firebase:firebase-bom:32.3.1')
+    implementation platform('com.google.firebase:firebase-bom:32.5.0')
+    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
+    //implementation 'com.google.firebase:firebase-analytics'
     //implementation 'androidx.annotation:annotation:1.4.0'
     //implementation 'androidx.multidex:multidex:2.0.1'
     //implementation fileTree(dir: 'E:\\Programming\\.gradle\\caches\\modules-2\\files-2.1\\io.flutter\\flutter_embedding_debug\\1.0.0-d44b5a94c976fbb65815374f61ab5392a220b084\\5ad0fb193f143c1352aef2c48ca10a99b3eadd1e', include: ['*.aar', '*.jar'], exclude: [])

@@ -1,20 +1,24 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/helpers/colorHelper.dart';
+import 'package:iris_tools/api/helpers/mathHelper.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:app/managers/font_manager.dart';
 import 'package:app/tools/app/app_messages.dart';
 import 'package:app/tools/app/app_sizes.dart';
 import 'package:app/tools/app/app_themes.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class AppDecoration {
   AppDecoration._();
 
-  static Color mainColor = Colors.amber;
-  static Color secondColor = Colors.orange;
-  static Color differentColor = const Color(0xFFFF006E);
-  static Color orange = const Color(0xFFFF006E);
+  static const Color mainColor = Colors.amber;
+  static const Color secondColor = Colors.orange;
+  static const Color differentColor = const Color(0xFFFF006E);
+  static const Color orange = const Color(0xFFFF006E);
+  
+  static get strutStyle => const StrutStyle(forceStrutHeight: true, height: 1.08, leading: 0.36);
   //--------------------------------------------------
   static ClassicFooter classicFooter = const ClassicFooter(
     loadingText: '',
@@ -23,6 +27,7 @@ class AppDecoration {
     failedText: '',
     loadStyle: LoadStyle.ShowWhenLoading,
   );
+  
   static TextStyle infoHeadLineTextStyle() {
     return AppThemes.instance.themeData.textTheme.headlineSmall!.copyWith(
       color: AppThemes.instance.themeData.textTheme.headlineSmall!.color!.withAlpha(150),
@@ -33,7 +38,7 @@ class AppDecoration {
     return AppThemes.instance.themeData.textTheme.headlineSmall!.copyWith(
       color: AppThemes.instance.themeData.textTheme.headlineSmall!.color!.withAlpha(150),
       fontSize: AppThemes.instance.themeData.textTheme.headlineSmall!.fontSize! -2,
-      height: 1.5,
+      height: 1.4,
     );
     //return currentTheme.baseTextStyle.copyWith(color: currentTheme.infoTextColor);
   }
@@ -69,7 +74,7 @@ class AppDecoration {
     final app = AppThemes.instance.themeData.appBarTheme.toolbarTextStyle!;
     final color = ColorHelper.getUnNearColor(/*app.color!*/Colors.white, AppThemes.instance.currentTheme.primaryColor, Colors.white);
 
-    return app.copyWith(color: color, fontSize: 14);//currentTheme.appBarItemColor
+    return app.copyWith(color: color, fontSize: fontSizeAddRatio(14));//currentTheme.appBarItemColor
   }
 
   static Text sheetText(String text) {
@@ -85,7 +90,12 @@ class AppDecoration {
 
   static double fontSizeRelative(double size) {
     var siz = AppThemes.instance.currentTheme.baseTextStyle.fontSize;
-    return (siz?? FontManager.appFontSize()) + size;
+    return (siz?? FontManager.instance.appFontSizeOrRelative()) + size;
+  }
+
+  static double fontSizeAddRatio(double size) {
+    var siz = AppThemes.instance.currentTheme.baseTextStyle.fontSize;
+    return (siz?? FontManager.instance.appFontSizeOrRelative()) + (size * AppSizes.instance.fontRatio);
   }
   ///------------------------------------------------------------------
   static InputDecoration noneBordersInputDecoration = const InputDecoration(
@@ -97,14 +107,19 @@ class AppDecoration {
     errorBorder: InputBorder.none,
   );
 
-  static InputDecoration outlineBordersInputDecoration = const InputDecoration(
-    border: OutlineInputBorder(),
-    enabledBorder: OutlineInputBorder(),
-    focusedBorder: OutlineInputBorder(),
-    focusedErrorBorder: OutlineInputBorder(),
-    disabledBorder: OutlineInputBorder(),
-    errorBorder: OutlineInputBorder(),
-  );
+  static InputDecoration get outlineBordersInputDecoration {
+    final cTheme = AppThemes.instance.currentTheme;
+    // infoTextColor
+
+    return InputDecoration(
+      border: OutlineInputBorder(),
+      enabledBorder: OutlineInputBorder(),
+      focusedBorder: OutlineInputBorder(),
+      disabledBorder: OutlineInputBorder(),
+      errorBorder: OutlineInputBorder(borderSide: BorderSide(color: cTheme.errorColor)),
+      focusedErrorBorder: OutlineInputBorder(),
+    );
+  }
 
   static InputDecoration textFieldInputDecoration({int alpha = 255}) {
     final border = OutlineInputBorder(
@@ -162,6 +177,12 @@ class AppDecoration {
     Clip clip = Clip.hardEdge,
   }){
 
+    double? w;
+
+    if(width != null){
+      w = kIsWeb? MathHelper.minDouble(width, AppSizes.webMaxWidthSize) : width;
+    }
+
     return SnackBar(
       content: replaceContent?? Text(message),
       behavior: behavior,
@@ -169,10 +190,10 @@ class AppDecoration {
       backgroundColor: backgroundColor,
       dismissDirection: DismissDirection.horizontal,
       action: action,
-      width: width?? (AppSizes.isBigWidth()? AppSizes.webMaxWidthSize: null),
+      width: w,
       elevation: elevation,
       padding: padding,
-      margin: margin, /*default: fromLTRB(15.0, 5.0, 15.0, 10.0)*/
+      margin: margin, /* default: fromLTRB(15.0, 5.0, 15.0, 10.0) */
       clipBehavior: clip,
       shape: shape,
     );

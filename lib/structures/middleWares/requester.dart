@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
 
 import 'package:dio/dio.dart';
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
@@ -7,11 +6,8 @@ import 'package:iris_tools/api/logger/logger.dart';
 import 'package:iris_tools/api/tools.dart';
 
 import 'package:app/managers/api_manager.dart';
-import 'package:app/tools/http_tools.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/app_http_dio.dart';
-import 'package:app/tools/app/app_messages.dart';
-import 'package:app/tools/app/app_sheet.dart';
 import 'package:app/tools/device_info_tools.dart';
 
 ///=============================================================================
@@ -67,7 +63,7 @@ class Requester {
     _http.fullUrl = ApiManager.serverApi + pathUrl;
   }
 
-  void request([BuildContext? context, bool promptErrors = true]){
+  void request(){
     _http.debugMode = debug;
 
     switch(methodType){
@@ -113,7 +109,7 @@ class Requester {
       return null;
     });
 
-    f = f.then((val) async {
+    f = f.then((response) async {
       if(kDebugMode && !kIsWeb) {
         final url = _httpRequester.requestOptions?.uri;
         var request = '';
@@ -135,7 +131,14 @@ class Requester {
           request = 'GET';
         }
 
-        Tools.verboseLog('@@@@@ API CALLED >>> url:[$url]\n\nrequest:[$request]\n\nresponse ====>>  status:[${_httpRequester.responseData?.statusCode}] data:$val \n');
+        var pr = '_._._._._._._.__._._._._._._._ API CALLED >>>'
+            '\nurl:[$url]'
+            '\n\nrequest:[$request]'
+            '\n\nresponse ====>>  status:[${_httpRequester.responseData?.statusCode}]'
+            '\ndata:$response'
+            '\n_._._._._._._.__._._._._._._.__._._._._._._.__._._._._._._._';
+
+        Tools.verboseLog(pr);
       }
 
       /*if(_httpRequester.responseData?.statusCode == 401 && SessionService.getLastLoginUser() != null){
@@ -158,10 +161,10 @@ class Requester {
 
       if(!_httpRequester.isOk){
         if(debug){
-          Logger.L.logToScreen('>> Response receive, but is not ok | $val');
+          Logger.L.logToScreen('>> Response receive, but is not ok | $response');
         }
 
-        await httpRequestEvents.onFailState?.call(_httpRequester, val);
+        await httpRequestEvents.onFailState?.call(_httpRequester, response);
         return;
       }
 
@@ -169,10 +172,10 @@ class Requester {
 
       if (js == null) {
         if(debug){
-          Logger.L.logToScreen('>> Response receive, but is not json | $val');
+          Logger.L.logToScreen('>> Response receive, but is not json | $response');
         }
 
-        await httpRequestEvents.onFailState?.call(_httpRequester, val);
+        await httpRequestEvents.onFailState?.call(_httpRequester, response);
         return;
       }
 
@@ -191,13 +194,7 @@ class Requester {
         await httpRequestEvents.onStatusOk?.call(_httpRequester, js);
       }
       else {
-        await httpRequestEvents.onFailState?.call(_httpRequester, val);
-
-        if(context != null && context.mounted) {
-          if (promptErrors && !CommonHttpHandler.handler(context, js)) {
-            await AppSheet.showSheetOk(context, AppMessages.serverNotRespondProperly);
-          }
-        }
+        await httpRequestEvents.onFailState?.call(_httpRequester, response);
       }
 
       return null;
