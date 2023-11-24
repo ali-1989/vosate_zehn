@@ -7,8 +7,8 @@ class WaitToLoad extends StatelessWidget {
   const WaitToLoad({
     this.backgroundColor,
     this.backButton,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,14 +17,14 @@ class WaitToLoad extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
 
           Visibility(
             visible: backButton != null,
-            child: backButton?? SizedBox(),
+            child: backButton?? const SizedBox(),
           ),
 
-          Expanded(
+          const Expanded(
             child: Center(
               child: CircularProgressIndicator(),
             ),

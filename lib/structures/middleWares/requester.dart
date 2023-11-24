@@ -151,7 +151,7 @@ class Requester {
         }
         else {
           await httpRequestEvents.onAnyState?.call(_httpRequester);
-          await httpRequestEvents.onFailState?.call(_httpRequester, val);
+          await httpRequestEvents.onFailState?.call(_httpRequester, response);
         }
 
         return;

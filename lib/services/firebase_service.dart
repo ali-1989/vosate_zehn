@@ -89,7 +89,6 @@ class FireBaseService {
   static Future start() async {
     //FirebaseMessaging.instance.isSupported()
     LogTools.logger.logToAll('@@@@@@@@@: start fire ${Isolate.current.hashCode}'); //todo.
-
     try {
       await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
         alert: true,

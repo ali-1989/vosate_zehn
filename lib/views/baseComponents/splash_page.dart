@@ -16,6 +16,7 @@ import 'package:app/views/baseComponents/splash_widget.dart';
 import 'package:app/views/states/wait_to_load.dart';
 
 class SplashPage extends StatefulWidget {
+  // ignore: prefer_const_constructors_in_immutables
   SplashPage({super.key});
 
   @override

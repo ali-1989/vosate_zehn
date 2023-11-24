@@ -165,7 +165,7 @@ class AppSheet {
           description: content,
           contentColor: theme.contentColor,
           title: titleView,
-          descriptionPadding: padding,
+          descriptionPadding: padding!,
           positiveButton: posBtn,
         );
       },
