@@ -812,7 +812,7 @@ class _LoginPageState extends StateSuper<LoginPage> {
           RouteTools.pushPage(context, RegisterPage(injectData: injectData));
         }
         else {
-          final userModel = await SessionService.login$newProfileData(twoState.result1!);
+          final userModel = await SessionService.loginByProfileData(twoState.result1!);
 
           if(userModel != null) {
             //RouteTools.pushPage(context, LayoutPage(key: AppBroadcast.layoutPageKey));
@@ -959,7 +959,7 @@ class _LoginPageState extends StateSuper<LoginPage> {
             RouteTools.pushPage(context, RegisterPage(injectData: injectData));
           }
           else {
-            final userModel = await SessionService.login$newProfileData(twoState.result1!);
+            final userModel = await SessionService.loginByProfileData(twoState.result1!);
 
             if(userModel != null) {
               //RouteTools.pushPage(context, LayoutPage(key: AppBroadcast.layoutPageKey));

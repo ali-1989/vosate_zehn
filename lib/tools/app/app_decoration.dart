@@ -27,6 +27,24 @@ class AppDecoration {
     failedText: '',
     loadStyle: LoadStyle.ShowWhenLoading,
   );
+
+  static InputDecoration getFilledInputDecoration(){
+    const oBorder = OutlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(12)),
+        borderSide: BorderSide(color: Colors.transparent)
+    );
+
+    return InputDecoration(
+      fillColor: Colors.white,
+      filled: true,
+      enabledBorder: oBorder,
+      focusedBorder: oBorder,
+      disabledBorder: oBorder,
+      errorBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: AppThemes.instance.currentTheme.errorColor)
+      ),
+    );
+  }
   
   static TextStyle infoHeadLineTextStyle() {
     return AppThemes.instance.themeData.textTheme.headlineSmall!.copyWith(

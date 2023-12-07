@@ -6,6 +6,7 @@ import 'package:iris_tools/api/notifiers/appEventListener.dart';
 import 'package:iris_tools/net/netManager.dart';
 
 import 'package:app/structures/enums/app_events.dart';
+import 'package:app/tools/app/app_broadcast.dart';
 import 'package:app/tools/app/app_cache.dart';
 
 class ApplicationSignal {
@@ -47,9 +48,11 @@ class ApplicationSignal {
     EventNotifierService.notify(AppEvents.networkStateChange);
 
     if(connectivityResult != ConnectivityResult.none) {
+      AppBroadcast.isNetConnected = true;
       EventNotifierService.notify(AppEvents.networkConnected);
     }
     else {
+      AppBroadcast.isNetConnected = false;
       EventNotifierService.notify(AppEvents.networkDisConnected);
 
       AppCache.clearDownloading();
@@ -57,11 +60,14 @@ class ApplicationSignal {
   }
 
   static void onWsConnectedListener(){
+    AppBroadcast.isWsConnected = true;
     EventNotifierService.notify(AppEvents.webSocketStateChange);
     EventNotifierService.notify(AppEvents.webSocketConnected);
   }
 
   static void onWsDisConnectedListener(){
+    AppBroadcast.isWsConnected = false;
+    EventNotifierService.notify(AppEvents.webSocketStateChange);
     EventNotifierService.notify(AppEvents.webSocketDisConnected);
   }
 }

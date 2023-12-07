@@ -1,7 +1,6 @@
 import 'package:iris_download_manager/downloadManager/downloadManager.dart';
 import 'package:iris_download_manager/uploadManager/uploadManager.dart';
 import 'package:iris_notifier/iris_notifier.dart';
-import 'package:iris_tools/api/helpers/jsonHelper.dart';
 
 import 'package:app/structures/enums/app_events.dart';
 import 'package:app/system/constants.dart';
@@ -23,7 +22,7 @@ class DownloadUploadService {
   static void commonDownloadListener(DownloadItem di) async {
     if(di.isComplete()) {
       if(di.isInCategory(DownloadCategory.userProfile)){
-        EventNotifierService.notify(AppEvents.userProfileChange);
+        EventNotifierService.notify(AppEvents.userPersonalInfoChange);
       }
     }
   }
@@ -35,12 +34,12 @@ class DownloadUploadService {
           return;
         }
 
-        final json = JsonHelper.jsonToMap<String, dynamic>(ui.response!.data)!;
+        //final json = JsonHelper.jsonToMap<String, dynamic>(ui.response!.data)!;
       }
     }
   }
 }
-///==========================================================================
+///=============================================================================
 class DownloadCategory {
   static const userProfile = 'user_profile';
 }

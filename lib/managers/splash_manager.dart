@@ -112,7 +112,7 @@ class SplashManager {
       print(rec?.$2);
       print('@@@@@@@');*/
 
-      WebsocketService.prepareWebSocket(SettingsManager.localSettings.wsAddress);
+      WebsocketService.startWebSocket(SettingsManager.localSettings.wsAddress);
       LoginService.init();
       DownloadUploadService.init();
       SettingsManager.requestGlobalSettings();

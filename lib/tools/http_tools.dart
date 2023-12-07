@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/app_messages.dart';
 import 'package:app/tools/app/app_snack.dart';
@@ -44,6 +45,10 @@ class HttpTools {
       AppSnack.showError(context, AppMessages.errorOccurredInSubmittedParameters);
       return true;
     }
+    else if(causeCode == HttpCodes.cCode$UserNotFound){
+      AppSnack.showError(context, AppMessages.accountNotFound.capitalize);
+      return true;
+    }
 
 
     return false;
@@ -74,14 +79,14 @@ class HttpCodes {
   static int cCode$NotUpload = 75;
   static int cCode$LoginDataIncorrect = 80;
   //------------ sections -----------------------------------------------------
-  static const sec_command = 'command';
-  static const sec_userData = 'UserData';
+  static const command$section = 'command';
+  static const userData$section = 'UserData';
   //------------ commands -----------------------------------------------------
-  static const com_forceLogOff = 'ForceLogOff';
-  static const com_forceLogOffAll = 'ForceLogOffAll';
-  static const com_talkMeWho = 'TalkMeWho';
-  static const com_sendDeviceInfo = 'SendDeviceInfo';
-  static const com_messageForUser = 'messageForUser';
-  static const com_dailyText = 'dailyText';
-  static const com_updateProfileSettings = 'UpdateProfileSettings';
+  static const forceLogOff$command = 'ForceLogOff';
+  static const forceLogOffAll$command = 'ForceLogOffAll';
+  static const talkMeWho$command = 'TalkMeWho';
+  static const sendDeviceInfo$command = 'SendDeviceInfo';
+  static const messageForUser$command = 'messageForUser';
+  static const updateProfileSettings$command = 'UpdateProfileSettings';
+    static const dailyText$command = 'dailyText';
 }

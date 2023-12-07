@@ -211,4 +211,35 @@ class PermissionTools {
 			return PermissionStatus.granted;
 		});
 	}
+
+	static Future<PermissionStatus> requestWifiPermission() async {
+		if (await Permission.nearbyWifiDevices.isGranted) {
+			return Future<PermissionStatus>.value(PermissionStatus.granted);
+		}
+
+		if (await Permission.nearbyWifiDevices.isPermanentlyDenied) {
+			// ignore: unawaited_futures
+			openAppSettings();
+			return Future<PermissionStatus>.value(PermissionStatus.permanentlyDenied);
+		}
+		else {
+			return await Permission.nearbyWifiDevices.request();
+		}
+	}
+
+	static Future<PermissionStatus> requestLocationPermission() async {
+		if (await Permission.locationWhenInUse.isGranted) {
+			return Future<PermissionStatus>.value(PermissionStatus.granted);
+		}
+
+		if (await Permission.locationWhenInUse.isPermanentlyDenied) {
+			// ignore: unawaited_futures
+			openAppSettings();
+			return Future<PermissionStatus>.value(PermissionStatus.permanentlyDenied);
+		}
+		else {
+			return await Permission.locationWhenInUse.request();
+		}
+	}
+
 }

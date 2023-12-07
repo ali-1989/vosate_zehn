@@ -126,7 +126,7 @@ class DeviceInfoTools {
     return js;
   }
 
-  static Map attachDeviceInfo(Map src, {UserModel? curUser}) {
+  static Map attachDeviceAndTokenInfo(Map src, {UserModel? curUser}) {
     src.addAll(mapDeviceInfo());
 
     final token = curUser?.token ?? SessionService.getLastLoginUser()?.token;

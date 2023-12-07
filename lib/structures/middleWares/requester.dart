@@ -6,6 +6,7 @@ import 'package:iris_tools/api/logger/logger.dart';
 import 'package:iris_tools/api/tools.dart';
 
 import 'package:app/managers/api_manager.dart';
+import 'package:app/services/websocket_service.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/app_http_dio.dart';
 import 'package:app/tools/device_info_tools.dart';
@@ -42,7 +43,7 @@ class Requester {
     _bodyJs = js;
 
     if(js != null) {
-      DeviceInfoTools.attachDeviceInfo(_bodyJs!);
+      DeviceInfoTools.attachDeviceAndTokenInfo(_bodyJs!);
     }
   }
 
@@ -141,7 +142,8 @@ class Requester {
         Tools.verboseLog(pr);
       }
 
-      /*if(_httpRequester.responseData?.statusCode == 401 && SessionService.getLastLoginUser() != null){
+      /* refresh token
+       if(_httpRequester.responseData?.statusCode == 401 && SessionService.getLastLoginUser() != null){
         JwtService.stopRefreshService();
         final getNewToken = await JwtService.requestNewToken(SessionService.getLastLoginUser()!);
 
@@ -168,6 +170,7 @@ class Requester {
         return;
       }
 
+      WebsocketService.connect();
       final Map? js = _httpRequester.getBodyAsJson();
 
       if (js == null) {
@@ -210,8 +213,8 @@ class HttpRequestEvents {
   Future Function(HttpRequester)? onAnyState;
   Future Function(HttpRequester requester, Response? response)? onFailState;
   Future Function(HttpRequester)? onNetworkError;
-  Future Function(HttpRequester, Map)? manageResponse;
-  Future Function(HttpRequester, Map)? onStatusOk;
+  Future Function(HttpRequester req, Map response)? manageResponse;
+  Future Function(HttpRequester req, Map response)? onStatusOk;
   
   void clear(){
     onAnyState = null;

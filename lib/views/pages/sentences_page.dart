@@ -29,12 +29,13 @@ import 'package:app/views/states/wait_to_load.dart';
 
 class SentencesPage extends StatefulWidget {
 
+  // ignore: use_super_parameters
   const SentencesPage({Key? key}) : super(key: key);
 
   @override
   State<SentencesPage> createState() => _SentencesPageState();
 }
-///==================================================================================
+///=============================================================================
 class _SentencesPageState extends StateSuper<SentencesPage> {
   Requester requester = Requester();
   List<String> backgrounds = [];
@@ -117,17 +118,19 @@ class _SentencesPageState extends StateSuper<SentencesPage> {
                 return const EmptyData(textStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 18),);
               }
 
-              return AppinioSwiper(
-                cardsCount: cards.length,
-                cardsBuilder: (BuildContext context, int index) {
-                  return cards[index];
-                },
+              return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 40),
-                direction: AppinioSwiperDirection.right,
-                swipeOptions: const AppinioSwipeOptions.all(),
-                allowUnswipe: true,
-                unlimitedUnswipe: false,
-                loop: true,
+                child: AppinioSwiper(
+                  cardCount: cards.length,
+                  defaultDirection: AxisDirection.left,
+                  swipeOptions: const SwipeOptions.all(),
+                  allowUnSwipe: true,
+                  allowUnlimitedUnSwipe: false,
+                  loop: true,
+                  cardBuilder: (BuildContext context, int index) {
+                    return cards[index];
+                  },
+                ),
               );
             },
           ),

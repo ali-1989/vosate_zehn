@@ -184,7 +184,7 @@ class DrawerMenuBuilder {
         child: Column(
           children: [
             StreamBuilder(
-              stream: EventNotifierService.getStream(AppEvents.userProfileChange),
+              stream: EventNotifierService.getStream(AppEvents.userPersonalInfoChange),
               builder: (ctx, data) {
                 return Builder(
                   builder: (ctx){
@@ -302,13 +302,13 @@ class DrawerMenuBuilder {
 
   static void onLogoffCall(){
     if(SessionService.isGuestCurrent()){
-      LoginService.forceLogoff(SessionService.getLastLoginUser()!.userId);
+      LoginService.forceLogoff(userId: SessionService.getLastLoginUser()!.userId);
       return;
     }
 
     void yesFn(_){
       //RouteTools.popTopView();
-      LoginService.forceLogoff(SessionService.getLastLoginUser()!.userId);
+      LoginService.forceLogoff(userId: SessionService.getLastLoginUser()!.userId);
     }
 
     AppDialogIris.instance.showYesNoDialog(

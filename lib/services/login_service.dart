@@ -49,7 +49,7 @@ class LoginService {
   LoginService._();
 
   static void init(){
-    EventNotifierService.addListener(AppEvents.userLogin, onLoginObservable);
+    EventNotifierService.addListener(AppEvents.newUserLogin, onLoginObservable);
     EventNotifierService.addListener(AppEvents.userLogoff, onLogoffObservable);
   }
 
@@ -69,7 +69,7 @@ class LoginService {
       reqJs[Keys.requesterId] = user.userId;
       reqJs[Keys.forUserId] = user.userId;
 
-      DeviceInfoTools.attachDeviceInfo(reqJs, curUser: user);
+      DeviceInfoTools.attachDeviceAndTokenInfo(reqJs, curUser: user);
 
       final info = HttpItem();
       info.fullUrl = '${SettingsManager.localSettings.httpAddress}/graph-v1';
@@ -81,37 +81,38 @@ class LoginService {
     }
   }
 
-  static Future forceLogoff(String userId) async {
+  static Future<void> forceLogoff({String? userId}) async {
+    var user = SessionService.getExistLoginUserById(userId?? '');
     final lastUser = SessionService.getLastLoginUser();
 
-    if(lastUser != null) {
-      final isCurrent = lastUser.userId == userId;
+    if(user == null && lastUser == null) {
+      return;
+    }
 
-      if(lastUser.email != null){
-        final google = GoogleService();
-        await google.signOut();
+    user ??= lastUser;
 
-        if(await google.isSignIn()){
-          AppToast.showToast(RouteTools.getTopContext()!, AppMessages.inEmailSignOutError);
-          return;
-        }
+    final isCurrent = lastUser != null && lastUser.userId == user!.userId;
 
-        await SessionService.logoff(userId);
+    if(user!.email != null){
+      final google = GoogleService();
+      await google.signOut();
+
+      if(await google.isSignIn()){
+        AppToast.showToast(RouteTools.getTopContext()!, AppMessages.inEmailSignOutError);
+        return;
       }
-      else {
-        await SessionService.logoff(userId);
-      }
 
-      UpdaterController.forId(AppBroadcast.drawerMenuRefresherId)?.update();
-      AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
+        await SessionService.logoff(user.userId);
+    }
+    else {
+    await SessionService.logoff(user.userId);
+    }
 
-      if (isCurrent && RouteTools.materialContext != null) {
-        RouteTools.backToRoot(RouteTools.getTopContext()!);
+    UpdaterController.forId(AppBroadcast.drawerMenuRefresherId)?.update();
+    AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
 
-        Future.delayed(const Duration(milliseconds: 400), (){
-          AppBroadcast.reBuildMaterial();
-        });
-      }
+    if(isCurrent){
+      resetApp();
     }
   }
 
@@ -132,12 +133,15 @@ class LoginService {
     UpdaterController.forId(AppBroadcast.drawerMenuRefresherId)?.update();
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
 
+    resetApp();
+  }
+
+  static void resetApp(){
     if (RouteTools.materialContext != null) {
       RouteTools.backToRoot(RouteTools.getTopContext()!);
 
-      Future.delayed(const Duration(milliseconds: 400), (){
+      Future.delayed(const Duration(milliseconds: 300), (){
         AppBroadcast.reBuildMaterial();
-        //RouteTools.pushReplacePage(RouteTools.getTopContext()!, LoginPage());
       });
     }
   }
@@ -150,7 +154,7 @@ class LoginService {
     js[Keys.request] = 'send_otp';
     js[Keys.mobileNumber] = phoneNumber;
     js.addAll(countryModel.toMap());
-    DeviceInfoTools.attachDeviceInfo(js);
+    DeviceInfoTools.attachDeviceAndTokenInfo(js);
 
     http.fullUrl = ApiManager.serverApi;
     http.method = 'POST';
@@ -187,7 +191,7 @@ class LoginService {
     js['code'] = code;
     js.addAll(countryModel.toMap());
     js.addAll(DeviceInfoTools.mapDeviceInfo());
-    DeviceInfoTools.attachDeviceInfo(js);
+    DeviceInfoTools.attachDeviceAndTokenInfo(js);
 
     http.fullUrl = ApiManager.serverApi;
     http.method = 'POST';
@@ -223,7 +227,7 @@ class LoginService {
     js[Keys.request] = 'verify_email';
     js['email'] = email;
     js.addAll(DeviceInfoTools.mapDeviceInfo());
-    DeviceInfoTools.attachDeviceInfo(js);
+    DeviceInfoTools.attachDeviceAndTokenInfo(js);
 
     http.fullUrl = ApiManager.serverApi;
     http.method = 'POST';
@@ -264,7 +268,7 @@ class LoginService {
     js['email'] = email;
     js['hash_password'] = Generator.generateMd5(password);
     js.addAll(DeviceInfoTools.mapDeviceInfo());
-    DeviceInfoTools.attachDeviceInfo(js);
+    DeviceInfoTools.attachDeviceAndTokenInfo(js);
 
     http.fullUrl = ApiManager.serverApi;
     http.method = 'POST';
@@ -322,7 +326,7 @@ class LoginService {
     js['email'] = email;
     js['hash_password'] = Generator.generateMd5(password);
     js.addAll(DeviceInfoTools.mapDeviceInfo());
-    DeviceInfoTools.attachDeviceInfo(js);
+    DeviceInfoTools.attachDeviceAndTokenInfo(js);
 
     http.fullUrl = ApiManager.serverApi;
     http.method = 'POST';
@@ -358,10 +362,10 @@ class LoginService {
         final mustVerify = resJs['must_verify']?? false;
 
         if (userId != null) {
-          final userModel = await SessionService.login$newProfileData(resJs);
+          final userModel = await SessionService.loginByProfileData(resJs);
 
           if(userModel != null) {
-            AppBroadcast.reBuildMaterial();
+            resetApp();
             res.complete((EmailLoginStatus.ok, null));
           }
           else {
@@ -390,7 +394,7 @@ class LoginService {
     js[Keys.request] = 'is_email_verify';
     js['code'] = code;
     js.addAll(DeviceInfoTools.mapDeviceInfo());
-    DeviceInfoTools.attachDeviceInfo(js);
+    DeviceInfoTools.attachDeviceAndTokenInfo(js);
 
     http.fullUrl = ApiManager.serverApi;
     http.method = 'POST';
@@ -429,10 +433,10 @@ class LoginService {
           RouteTools.pushPage(context, RegisterPage(injectData: injectData));
         }
         else {
-          final userModel = await SessionService.login$newProfileData(resJs);
+          final userModel = await SessionService.loginByProfileData(resJs);
 
           if(userModel != null) {
-            AppBroadcast.reBuildMaterial();
+            resetApp();
           }
           else {
             if(context.mounted){
@@ -450,10 +454,10 @@ class LoginService {
 
   static loginGuestUser(BuildContext context) async {
     final gUser = SessionService.getGuestUser();
-    final userModel = await SessionService.login$newProfileData(gUser.toMap());
+    final userModel = await SessionService.loginByProfileData(gUser.toMap());
 
     if(userModel != null) {
-      AppBroadcast.reBuildMaterial();
+      resetApp();
     }
     else {
       if(context.mounted) {

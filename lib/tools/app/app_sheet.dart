@@ -132,7 +132,7 @@ class AppSheet {
       }) {
 
     buttonText ??= AppMessages.ok;
-    padding ??= EdgeInsets.symmetric(vertical: 18, horizontal: 13 * AppSizes.instance.heightRelative);
+    EdgeInsets pad = padding ?? EdgeInsets.symmetric(vertical: 18, horizontal: 13 * AppSizes.instance.heightRelative);
     final theme = _genTheme();
 
     void close() {
@@ -165,7 +165,7 @@ class AppSheet {
           description: content,
           contentColor: theme.contentColor,
           title: titleView,
-          descriptionPadding: padding!,
+          descriptionPadding: pad,
           positiveButton: posBtn,
         );
       },
@@ -188,7 +188,7 @@ class AppSheet {
   }
 
   static Future<T?> showSheetNotice<T>(BuildContext context, String msg, {bool isDismissible = true}) {
-    return showSheetOneAction(context, msg, title: AppMessages.notice, isDismissible: isDismissible);
+    return showSheetOneAction(context, msg, title: AppMessages.notice.capitalize, isDismissible: isDismissible);
   }
 
   static Future<T?> showSheetYesNo<T>(

@@ -253,7 +253,7 @@ class _RegisterPageState extends StateSuper<RegisterPage> {
     };*/
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
-      final userModel = await SessionService.login$newProfileData(data);
+      final userModel = await SessionService.loginByProfileData(data);
 
       if(userModel != null) {
         AppToast.showToast(context, AppMessages.welcome);

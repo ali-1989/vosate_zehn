@@ -758,7 +758,7 @@ extension TextExtension on Text {
     return fs(siz);
   }
 
-  Text fsSetR(double size) {
+  Text fsMultiInRatio(double size) {
     //final x = MathHelper.between(1.3, 3.5, 0.7, 1.0, AppSizes.instance.pixelRatio!);
 
     return fs(size * AppSizes.instance.fontRatio);

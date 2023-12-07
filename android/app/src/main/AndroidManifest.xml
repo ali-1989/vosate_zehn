@@ -70,9 +70,11 @@
 
     <!-- ..........................  uses-permission Location / BSSID -->
     <!--
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"
+                         android:maxSdkVersion="32"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+    <uses-permission android:name="android.permission.NEARBY_WIFI_DEVICES"/>
     -->
 
     <!-- ..........................  Call SMS | Google play sensitive -->
@@ -197,6 +199,14 @@
             </intent-filter>
 
             <!--
+	    <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https://green-oasis-2023.firebaseapp.com/__/auth/handler"
+                      />
+            </intent-filter>
+	    
             <intent-filter
                     android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW"/>

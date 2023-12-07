@@ -123,7 +123,7 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
                           Transform.translate(
                             offset: const Offset(40, 0),
                             child: StreamBuilder(
-                                stream: EventNotifierService.getStream(AppEvents.userProfileChange),
+                                stream: EventNotifierService.getStream(AppEvents.userPersonalInfoChange),
                                 builder: (ctx, data) {
                                   if(user.profileModel?.url == null){
                                     return ColoredBox(color: AppThemes.instance.currentTheme.accentColor);
@@ -514,7 +514,7 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
 
     if(kIsWeb){
       await SessionService.sinkUserInfo(user);
-      EventNotifierService.notify(AppEvents.userProfileChange);
+      EventNotifierService.notify(AppEvents.userPersonalInfoChange);
       return;
     }
 
@@ -527,11 +527,11 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
     AppSnack.showSnack(context, Text(AppMessages.operationSuccess));
 
     await SessionService.sinkUserInfo(user);
-    EventNotifierService.notify(AppEvents.userProfileChange);
+    EventNotifierService.notify(AppEvents.userPersonalInfoChange);
   }
 
   void uploadAvatar(String filePath) {
-    final partName = 'ProfileAvatar';
+    const partName = 'ProfileAvatar';
     final fileName = PathHelper.getFileName(filePath);
 
     final js = <String, dynamic>{};
@@ -540,7 +540,7 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
     js[Keys.forUserId] = user.userId;
     js[Keys.fileName] = fileName;
     js[Keys.partName] = partName;
-    DeviceInfoTools.attachDeviceInfo(js);
+    DeviceInfoTools.attachDeviceAndTokenInfo(js);
 
     requester.httpRequestEvents.onFailState = (req, r) async {
       await hideLoading();
@@ -581,7 +581,7 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
     requester.httpRequestEvents.onStatusOk = (req, data) async {
       user.profileModel = null;
 
-      EventNotifierService.notify(AppEvents.userProfileChange);
+      EventNotifierService.notify(AppEvents.userPersonalInfoChange);
       SessionService.sinkUserInfo(user);
     };
 
@@ -615,7 +615,7 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
       assistCtr.updateHead();
       await SessionService.sinkUserInfo(user);
       AppOverlay.hideDialog(context);
-      EventNotifierService.notify(AppEvents.userProfileChange);
+      EventNotifierService.notify(AppEvents.userPersonalInfoChange);
     };
 
     showLoading(canBack: false);
@@ -645,7 +645,7 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
 
       assistCtr.updateHead();
       await SessionService.sinkUserInfo(user);
-      EventNotifierService.notify(AppEvents.userProfileChange);
+      EventNotifierService.notify(AppEvents.userPersonalInfoChange);
     };
 
     showLoading(canBack: false);
@@ -675,7 +675,7 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
 
       assistCtr.updateHead();
       await SessionService.sinkUserInfo(user);
-      EventNotifierService.notify(AppEvents.userProfileChange);
+      EventNotifierService.notify(AppEvents.userPersonalInfoChange);
     };
 
     showLoading(canBack: false);

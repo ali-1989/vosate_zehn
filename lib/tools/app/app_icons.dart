@@ -63,7 +63,8 @@ class AppIcons {
   static const IconData headset = Icons.headset;
   static const IconData pause = Icons.pause;
   static const IconData pauseCircle = Icons.pause_circle;
-  static const IconData chartBar = Icons.bar_chart;
+  static const IconData barChart = Icons.bar_chart;
+  static const IconData lineChart = Icons.show_chart;
   static const IconData edit = Icons.edit;
   static const IconData download = Icons.file_download;
   static const IconData downloadCloud = Icons.cloud_download_rounded;
