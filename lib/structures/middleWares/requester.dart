@@ -132,12 +132,12 @@ class Requester {
           request = 'GET';
         }
 
-        var pr = '_._._._._._._.__._._._._._._._ API CALLED >>>'
+        var pr = '>_._._._._._._.__._._._._._._._ API CALLED >>>'
             '\nurl:[$url]'
             '\n\nrequest:[$request]'
             '\n\nresponse ====>>  status:[${_httpRequester.responseData?.statusCode}]'
             '\ndata:$response'
-            '\n_._._._._._._.__._._._._._._.__._._._._._._.__._._._._._._._';
+            '\n<_._._._._._._.__._._._._._._.__._._._._._._.__._.End';
 
         Tools.verboseLog(pr);
       }

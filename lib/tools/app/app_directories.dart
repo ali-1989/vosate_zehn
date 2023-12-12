@@ -87,7 +87,7 @@ class AppDirectories {
     return pat + PathHelper.getSeparator() + fName;
   }
 
-  ///-----------------------------------------------------------------------------------------
+  ///---------------------------------------------------------------------------
   static Future<String> prepareStoragePaths(String appName) async {
     _appName = appName;
 

@@ -816,7 +816,7 @@ class _LoginPageState extends StateSuper<LoginPage> {
 
           if(userModel != null) {
             //RouteTools.pushPage(context, LayoutPage(key: AppBroadcast.layoutPageKey));
-            AppBroadcast.reBuildMaterial();
+            AppBroadcast.reBuildApp();
           }
           else {
             AppSheet.showSheetOk(context, AppMessages.operationFailed);
@@ -963,7 +963,7 @@ class _LoginPageState extends StateSuper<LoginPage> {
 
             if(userModel != null) {
               //RouteTools.pushPage(context, LayoutPage(key: AppBroadcast.layoutPageKey));
-              AppBroadcast.reBuildMaterial();
+              AppBroadcast.reBuildApp();
             }
             else {
               AppSheet.showSheetOk(context, AppMessages.operationFailed);

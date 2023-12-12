@@ -257,7 +257,7 @@ class _RegisterPageState extends StateSuper<RegisterPage> {
 
       if(userModel != null) {
         AppToast.showToast(context, AppMessages.welcome);
-        AppBroadcast.reBuildMaterial();
+        AppBroadcast.reBuildApp();
 
         RouteTools.popIfCan(context);
       }

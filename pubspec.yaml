@@ -40,19 +40,19 @@ dependencies:
   http: ^1.1.2
   dio: ^5.4.0
   connectivity_plus: ^5.0.2
-  url_launcher: ^6.2.1
+  url_launcher: ^6.2.2
   material_dialogs: ^1.1.4
   awesome_notifications: ^0.8.2                 # do not upgrade, occur error, 0.6.21, 0.7.4+1
   stop_watch_timer: ^3.0.2
   iris_notifier: ^0.0.7
   numberpicker: ^2.1.2
   pull_to_refresh: ^2.0.0
-  image_picker: ^1.0.4
+  image_picker: ^1.0.5
   file_picker: ^6.1.1
   toggle_switch: ^2.1.0
-  firebase_messaging: ^14.7.6
-  firebase_core: ^2.24.0
-  firebase_auth: ^4.15.0
+  firebase_messaging: ^14.7.9
+  firebase_core: ^2.24.2
+  firebase_auth: ^4.15.3
   lottie: ^2.7.0
   move_to_background: ^1.0.2
   workmanager: ^0.5.2
@@ -60,7 +60,7 @@ dependencies:
   animate_do: ^3.1.2                   # https://animate.style/
   badges: ^3.1.2
   photo_view: ^0.14.0                   # image view gallery
-  google_sign_in: ^6.1.6
+  google_sign_in: ^6.2.0
   #sign_in_with_apple: ^4.0.0
   pin_code_fields: ^8.0.1
   shaped_bottom_bar: ^1.1.0
@@ -96,7 +96,8 @@ dependency_overrides:
   win32: ^5.1.1    # 4.1.4 device_info_plus, wakelock_windows
   flutter_svg: 1.1.6 # xml
   http: ^1.1.2   # webviewx
-  #connectivity_plus: ^5.0.2
+  path: ^1.9.0
+
 
 dev_dependencies:
   flutter_test:

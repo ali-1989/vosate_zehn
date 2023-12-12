@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 
@@ -13,6 +14,7 @@ import 'package:app/structures/enums/app_events.dart';
 import 'package:app/structures/models/settings_model.dart';
 import 'package:app/system/application_signal.dart';
 import 'package:app/system/keys.dart';
+import 'package:app/tools/app/app_broadcast.dart';
 import 'package:app/tools/app/app_db.dart';
 import 'package:app/tools/app/app_dialog_iris.dart';
 import 'package:app/tools/app/app_messages.dart';
@@ -25,11 +27,11 @@ import 'package:app/tools/route_tools.dart';
 class WebsocketService {
 	WebsocketService._();
 
-	static GetSocket? _ws;
+	static IrisWebSocket? _ws;
 	static String? _uri;
 	static bool _isInit = false;
 	static bool _isConnected = false;
-	static Duration reconnectInterval = const Duration(seconds: 4);
+	static const Duration reconnectInterval = Duration(seconds: 3);
 	static Timer? periodicHeartTimer;
 	static Timer? reconnectTimer;
 	static int _tryReconnect = 0;
@@ -77,18 +79,22 @@ class WebsocketService {
 			return;
 		}
 
+		LogTools.logger.logToAll('Websocket is start connecting. [${DateTime.now()}]  url: $_uri');
+
 		try {
-			_ws = GetSocket(_uri!);
+			_ws = IrisWebSocket(_uri!);
 			_ws!.addOpenListener(_onConnected);
 			_ws!.addMessageListener(_handlerNewMessage);
-			_ws!.addCloseListener((c) => _onDisConnected());
-			_ws!.addErrorListener((e) => _onDisConnected());
+			_ws!.addCloseListener((e) => _onDisConnected(e));
+			_ws!.addErrorListener((e) => _onDisConnected(e));
 
 			//(_ws as BaseWebSocket).allowSelfSigned = true;
-			_ws!.connect();
+			final client = HttpClient();
+			client.connectionTimeout = const Duration(seconds: 10);
+			_ws!.connect(client: client);
 		}
 		catch(e){
-			_onDisConnected();
+			_onDisConnected(e);
 		}
 	}
 
@@ -96,8 +102,11 @@ class WebsocketService {
 		reconnectTimer?.cancel();
 
 		void timerFn() {
-			if(_tryReconnect < 10) {
-				_tryReconnect++;
+			if(_tryReconnect < 1200) {
+				if(AppBroadcast.isNetConnected){
+					_tryReconnect++;
+				}
+
 				connect();
 			}
 			else {
@@ -120,7 +129,9 @@ class WebsocketService {
 		_ws!.send(data);
 	}
 
-	static void _onDisConnected() async {
+	static void _onDisConnected(Object e) async {
+		LogTools.logger.logToAll('Websocket is disconnected. [${DateTime.now()}] $e');
+
 		_close();
 		_reconnect();
 	}
@@ -128,7 +139,6 @@ class WebsocketService {
 	///-------------- on new Connect ---------------------------------------------
 	static void _onConnected() async {
 		_isConnected = true;
-		reconnectInterval = const Duration(seconds: 4);
 		_tryReconnect = 0;
 
 		ApplicationSignal.onWsConnectedListener();
@@ -150,7 +160,7 @@ class WebsocketService {
 		}
 		catch(e){
 			_close();
-			_reconnect(const Duration(seconds: 2));
+			_reconnect();
 		}
 	}
 

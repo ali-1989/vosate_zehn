@@ -141,7 +141,7 @@ class LoginService {
       RouteTools.backToRoot(RouteTools.getTopContext()!);
 
       Future.delayed(const Duration(milliseconds: 300), (){
-        AppBroadcast.reBuildMaterial();
+        AppBroadcast.reBuildApp();
       });
     }
   }
@@ -420,7 +420,7 @@ class LoginService {
 
       if(status == Keys.error){
         AppSheet.showSheetOk(context, 'فرایند تایید به درستی انجام نشد، لطفا دوباره وارد شوید').then((value) {
-          AppBroadcast.reBuildMaterial();
+          AppBroadcast.reBuildApp();
         });
       }
       else {

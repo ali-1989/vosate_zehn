@@ -29,12 +29,12 @@ class AppBroadcast {
 
   /// this call build() method of all widgets
   /// this is effect on First Widgets tree, not rebuild Pushed pages
-  static void reBuildMaterialBySetTheme() {
+  static void reBuildAppBySetTheme() {
     AppThemes.applyTheme(AppThemes.instance.currentTheme);
-    reBuildMaterial();
+    reBuildApp();
   }
 
-  static void reBuildMaterial() {
+  static void reBuildApp() {
     if(kIsWeb){
       materialAppKey = UniqueKey();
     }
