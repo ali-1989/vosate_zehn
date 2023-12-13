@@ -253,7 +253,7 @@
     "enterFamily": "لطفا یک نام خانوادگی وارد کنید",
     "nameMustBigger2Char": "name must be longer than 1 characters",
     "familyMustBigger2Char": "last name must be longer than 1 characters",
-    "usernameMustBigger2Char": ""نام کاربری باید بزرگتر از 2 کاراکتر باشد",
+    "usernameMustBigger2Char": "نام کاربری باید بزرگتر از 2 کاراکتر باشد",
     "enterYourPassword": "لطفا رمز عبورتان را وارد کنید",
     "enterPassword": "لطفا رمز عبور را وارد کنید",
     "selectPassword": "لطفا یک رمز عبور انتخاب کنید",
