@@ -8,6 +8,8 @@
           package="ir.vosatezehn.com"
           android:installLocation="auto">
 
+    <uses-sdk android:minSdkVersion="21"/>
+
     <!--
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
@@ -27,7 +29,6 @@
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
 
     <!-- ..........................  shortcut -->
-    <uses-permission android:name="android.permission.INSTALL_SHORTCUT"/>
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
     <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT"/>
     <uses-permission android:name="com.htc.launcher.permission.UPDATE_SHORTCUT"/>
@@ -53,7 +54,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
    
     <!-- ..........................  uses-permission Storage -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE"/>
@@ -62,6 +63,7 @@
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED"/>
 
     <!-- ..........................  uses-permission Badge -->
     <uses-permission android:name="com.sec.android.provider.badge.permission.READ"/>
@@ -113,7 +115,7 @@
     <!-- Android 13+, for (notifications/create chanel) -->
     <!-- <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/> -->
 
-    <!-- need for launch app from services -->
+    <!-- need for launch app from services in below sdk 21 -->
     <uses-permission  android:name="android.permission.GET_TASKS"/>
 
     <!-- ============================== uses-feature ============================================== -->
@@ -176,7 +178,7 @@
             android:showWhenLocked="true"
             android:showOnLockScreen="true"
             android:turnScreenOn="true"
-            android:windowSoftInputMode="adjustResize">
+                android:windowSoftInputMode="adjustResize" tools:targetApi="o_mr1">
 
             <meta-data
               android:name="io.flutter.embedding.android.NormalTheme"

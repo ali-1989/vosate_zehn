@@ -53,10 +53,10 @@ class LoginService {
     EventNotifierService.addListener(AppEvents.userLogoff, onLogoffObservable);
   }
 
-  static void onLoginObservable({dynamic data}){
+  static Future<void> onLoginObservable({dynamic data}) async {
   }
 
-  static void onLogoffObservable({dynamic data}){
+  static Future<void> onLogoffObservable({dynamic data}) async {
     if(data is UserModel){
       sendLogoffState(data);
     }

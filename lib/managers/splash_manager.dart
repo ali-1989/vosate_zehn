@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app/structures/models/settings_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -71,9 +72,13 @@ class SplashManager {
       AppThemes.init();
       SettingsManager.init();
 
-      if(false){
-        SettingsManager.localSettings.httpAddress = 'http://192.168.1.104:20010';
-        SettingsManager.localSettings.wsAddress = 'ws://192.168.1.104:20015/ws';
+      if(true){
+        SettingsManager.localSettings.httpAddress = 'http://192.168.1.104:7436';
+        SettingsManager.localSettings.wsAddress = 'ws://192.168.1.104:7438/ws';
+      }
+      else {
+        SettingsManager.localSettings.httpAddress = SettingsModel.defaultHttpAddress;
+        SettingsManager.localSettings.wsAddress = SettingsModel.defaultWsAddress;
       }
 
       isBaseInitialize = true;

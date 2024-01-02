@@ -166,8 +166,6 @@
 
 -keep class androidx.constraintlayout.helper.widget.Flow { <init>(android.content.Context, android.util.AttributeSet); }
 
--keep class androidx.constraintlayout.widget.Barrier { <init>(android.content.Context, android.util.AttributeSet); }
-
 -keep class androidx.constraintlayout.widget.ConstraintLayout { <init>(android.content.Context, android.util.AttributeSet); }
 
 -keep class androidx.coordinatorlayout.widget.CoordinatorLayout { <init>(android.content.Context, android.util.AttributeSet); }
@@ -230,6 +228,58 @@
 -keep class androidx.lifecycle.DefaultLifecycleObserver
 
 # End of content from E:\Programming\Projects\FlutterProjects\VosateZehn\VosateZehn\build\flutter_plugin_android_lifecycle\intermediates\consumer_proguard_dir\debug\lib0\proguard.txt
+# The proguard configuration file for the following section is E:\Programming\.gradle\caches\transforms-3\285d55905070c92aa483ca0e7310f3cc\transformed\jetified-AndroidAwnCore-0.8.3\proguard.txt
+
+# End of content from E:\Programming\.gradle\caches\transforms-3\285d55905070c92aa483ca0e7310f3cc\transformed\jetified-AndroidAwnCore-0.8.3\proguard.txt
+# The proguard configuration file for the following section is E:\Programming\.gradle\caches\transforms-3\661371291045131959c346c16d06911b\transformed\material-1.11.0\proguard.txt
+# Copyright (C) 2015 The Android Open Source Project
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# CoordinatorLayout resolves the behaviors of its child components with reflection.
+-keep public class * extends androidx.coordinatorlayout.widget.CoordinatorLayout$Behavior {
+    public <init>(android.content.Context, android.util.AttributeSet);
+    public <init>();
+}
+
+# Make sure we keep annotations for CoordinatorLayout's DefaultBehavior
+-keepattributes RuntimeVisible*Annotation*
+
+# Copyright (C) 2018 The Android Open Source Project
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# AppCompatViewInflater reads the viewInflaterClass theme attribute which then
+# reflectively instantiates MaterialComponentsViewInflater using the no-argument
+# constructor. We only need to keep this constructor and the class name if
+# AppCompatViewInflater is also being kept.
+-if class androidx.appcompat.app.AppCompatViewInflater
+-keep class com.google.android.material.theme.MaterialComponentsViewInflater {
+    <init>();
+}
+
+
+# End of content from E:\Programming\.gradle\caches\transforms-3\661371291045131959c346c16d06911b\transformed\material-1.11.0\proguard.txt
 # The proguard configuration file for the following section is E:\Programming\.gradle\caches\transforms-3\404c342b26cb44f769780ca7a12cee83\transformed\jetified-firebase-auth-22.3.0\proguard.txt
 -dontwarn com.google.appengine.api.**
 -dontwarn okio.**
@@ -290,58 +340,6 @@
 }
 
 # End of content from E:\Programming\.gradle\caches\transforms-3\956cc39df18f2299fe853385f7fad22b\transformed\jetified-recaptcha-18.1.2\proguard.txt
-# The proguard configuration file for the following section is E:\Programming\.gradle\caches\transforms-3\8e98010be6888274cb5cbb6b3295e1c7\transformed\jetified-AndroidAwnCore-0.8.0\proguard.txt
-
-# End of content from E:\Programming\.gradle\caches\transforms-3\8e98010be6888274cb5cbb6b3295e1c7\transformed\jetified-AndroidAwnCore-0.8.0\proguard.txt
-# The proguard configuration file for the following section is E:\Programming\.gradle\caches\transforms-3\33f7f366355c417084c23349bbb29b4d\transformed\material-1.9.0\proguard.txt
-# Copyright (C) 2015 The Android Open Source Project
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-# CoordinatorLayout resolves the behaviors of its child components with reflection.
--keep public class * extends androidx.coordinatorlayout.widget.CoordinatorLayout$Behavior {
-    public <init>(android.content.Context, android.util.AttributeSet);
-    public <init>();
-}
-
-# Make sure we keep annotations for CoordinatorLayout's DefaultBehavior
--keepattributes RuntimeVisible*Annotation*
-
-# Copyright (C) 2018 The Android Open Source Project
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-# AppCompatViewInflater reads the viewInflaterClass theme attribute which then
-# reflectively instantiates MaterialComponentsViewInflater using the no-argument
-# constructor. We only need to keep this constructor and the class name if
-# AppCompatViewInflater is also being kept.
--if class androidx.appcompat.app.AppCompatViewInflater
--keep class com.google.android.material.theme.MaterialComponentsViewInflater {
-    <init>();
-}
-
-
-# End of content from E:\Programming\.gradle\caches\transforms-3\33f7f366355c417084c23349bbb29b4d\transformed\material-1.9.0\proguard.txt
 # The proguard configuration file for the following section is E:\Programming\.gradle\caches\transforms-3\b95d73ea8ec1b465d0b5174c95160d87\transformed\appcompat-1.6.1\proguard.txt
 # Copyright (C) 2018 The Android Open Source Project
 #
@@ -367,6 +365,105 @@
 }
 
 # End of content from E:\Programming\.gradle\caches\transforms-3\b95d73ea8ec1b465d0b5174c95160d87\transformed\appcompat-1.6.1\proguard.txt
+# The proguard configuration file for the following section is E:\Programming\.gradle\caches\transforms-3\0372e44d0800562566dddb65386e509c\transformed\jetified-exoplayer-core-2.18.7\proguard.txt
+# Proguard rules specific to the core module.
+
+# Constructors accessed via reflection in DefaultRenderersFactory
+-dontnote com.google.android.exoplayer2.ext.vp9.LibvpxVideoRenderer
+-keepclassmembers class com.google.android.exoplayer2.ext.vp9.LibvpxVideoRenderer {
+  <init>(long, android.os.Handler, com.google.android.exoplayer2.video.VideoRendererEventListener, int);
+}
+-dontnote com.google.android.exoplayer2.ext.av1.Libgav1VideoRenderer
+-keepclassmembers class com.google.android.exoplayer2.ext.av1.Libgav1VideoRenderer {
+  <init>(long, android.os.Handler, com.google.android.exoplayer2.video.VideoRendererEventListener, int);
+}
+-dontnote com.google.android.exoplayer2.ext.opus.LibopusAudioRenderer
+-keepclassmembers class com.google.android.exoplayer2.ext.opus.LibopusAudioRenderer {
+  <init>(android.os.Handler, com.google.android.exoplayer2.audio.AudioRendererEventListener, com.google.android.exoplayer2.audio.AudioSink);
+}
+-dontnote com.google.android.exoplayer2.ext.flac.LibflacAudioRenderer
+-keepclassmembers class com.google.android.exoplayer2.ext.flac.LibflacAudioRenderer {
+  <init>(android.os.Handler, com.google.android.exoplayer2.audio.AudioRendererEventListener, com.google.android.exoplayer2.audio.AudioSink);
+}
+-dontnote com.google.android.exoplayer2.ext.ffmpeg.FfmpegAudioRenderer
+-keepclassmembers class com.google.android.exoplayer2.ext.ffmpeg.FfmpegAudioRenderer {
+  <init>(android.os.Handler, com.google.android.exoplayer2.audio.AudioRendererEventListener, com.google.android.exoplayer2.audio.AudioSink);
+}
+
+# Constructors accessed via reflection in DefaultDownloaderFactory
+-dontnote com.google.android.exoplayer2.source.dash.offline.DashDownloader
+-keepclassmembers class com.google.android.exoplayer2.source.dash.offline.DashDownloader {
+  <init>(com.google.android.exoplayer2.MediaItem, com.google.android.exoplayer2.upstream.cache.CacheDataSource$Factory, java.util.concurrent.Executor);
+}
+-dontnote com.google.android.exoplayer2.source.hls.offline.HlsDownloader
+-keepclassmembers class com.google.android.exoplayer2.source.hls.offline.HlsDownloader {
+  <init>(com.google.android.exoplayer2.MediaItem, com.google.android.exoplayer2.upstream.cache.CacheDataSource$Factory, java.util.concurrent.Executor);
+}
+-dontnote com.google.android.exoplayer2.source.smoothstreaming.offline.SsDownloader
+-keepclassmembers class com.google.android.exoplayer2.source.smoothstreaming.offline.SsDownloader {
+  <init>(com.google.android.exoplayer2.MediaItem, com.google.android.exoplayer2.upstream.cache.CacheDataSource$Factory, java.util.concurrent.Executor);
+}
+
+# Constructors accessed via reflection in DefaultMediaSourceFactory
+-dontnote com.google.android.exoplayer2.source.dash.DashMediaSource$Factory
+-keepclasseswithmembers class com.google.android.exoplayer2.source.dash.DashMediaSource$Factory {
+  <init>(com.google.android.exoplayer2.upstream.DataSource$Factory);
+}
+-dontnote com.google.android.exoplayer2.source.hls.HlsMediaSource$Factory
+-keepclasseswithmembers class com.google.android.exoplayer2.source.hls.HlsMediaSource$Factory {
+  <init>(com.google.android.exoplayer2.upstream.DataSource$Factory);
+}
+-dontnote com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource$Factory
+-keepclasseswithmembers class com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource$Factory {
+  <init>(com.google.android.exoplayer2.upstream.DataSource$Factory);
+}
+-dontnote com.google.android.exoplayer2.source.rtsp.RtspMediaSource$Factory
+-keepclasseswithmembers class com.google.android.exoplayer2.source.rtsp.RtspMediaSource$Factory {
+  <init>();
+}
+
+# End of content from E:\Programming\.gradle\caches\transforms-3\0372e44d0800562566dddb65386e509c\transformed\jetified-exoplayer-core-2.18.7\proguard.txt
+# The proguard configuration file for the following section is E:\Programming\.gradle\caches\transforms-3\0a278103fc5d3b8736c2f76ccc17d2f3\transformed\webkit-1.5.0\proguard.txt
+# Copyright 2018 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+# We need to avoid obfuscating the support library boundary interface because
+# this API is shared with the Android Support Library.
+# Note that we only 'keep' the package org.chromium.support_lib_boundary itself,
+# any sub-packages of that package can still be obfuscated.
+-keep public class org.chromium.support_lib_boundary.* { public *; }
+
+# Copyright (C) 2018 The Android Open Source Project
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Prevent WebViewClientCompat from being renamed, since chromium depends on this name.
+-keepnames public class androidx.webkit.WebViewClientCompat
+
+
+# End of content from E:\Programming\.gradle\caches\transforms-3\0a278103fc5d3b8736c2f76ccc17d2f3\transformed\webkit-1.5.0\proguard.txt
+# The proguard configuration file for the following section is E:\Programming\.gradle\caches\transforms-3\4f2c880dd9a22e6f1b12db3dbfbcac37\transformed\work-runtime-2.8.1\proguard.txt
+-keep class * extends androidx.work.Worker
+-keep class * extends androidx.work.InputMerger
+# Keep all constructors on ListenableWorker, Worker
+-keep public class * extends androidx.work.ListenableWorker {
+    public <init>(...);
+}
+# We need to keep WorkerParameters for the ListenableWorker constructor
+-keep class androidx.work.WorkerParameters
+
+# End of content from E:\Programming\.gradle\caches\transforms-3\4f2c880dd9a22e6f1b12db3dbfbcac37\transformed\work-runtime-2.8.1\proguard.txt
 # The proguard configuration file for the following section is E:\Programming\.gradle\caches\transforms-3\4fe4fbafafa7d850f5bdf338fbecc3a1\transformed\jetified-play-services-auth-base-18.0.4\proguard.txt
 # We keep all fields for every generated proto file as the runtime uses
 # reflection over them that ProGuard cannot detect. Without this keep
@@ -534,106 +631,7 @@
 }
 
 # End of content from E:\Programming\.gradle\caches\transforms-3\5a127e1ab470cb5bf2342102fb823df4\transformed\fragment-1.3.6\proguard.txt
-# The proguard configuration file for the following section is E:\Programming\.gradle\caches\transforms-3\0372e44d0800562566dddb65386e509c\transformed\jetified-exoplayer-core-2.18.7\proguard.txt
-# Proguard rules specific to the core module.
-
-# Constructors accessed via reflection in DefaultRenderersFactory
--dontnote com.google.android.exoplayer2.ext.vp9.LibvpxVideoRenderer
--keepclassmembers class com.google.android.exoplayer2.ext.vp9.LibvpxVideoRenderer {
-  <init>(long, android.os.Handler, com.google.android.exoplayer2.video.VideoRendererEventListener, int);
-}
--dontnote com.google.android.exoplayer2.ext.av1.Libgav1VideoRenderer
--keepclassmembers class com.google.android.exoplayer2.ext.av1.Libgav1VideoRenderer {
-  <init>(long, android.os.Handler, com.google.android.exoplayer2.video.VideoRendererEventListener, int);
-}
--dontnote com.google.android.exoplayer2.ext.opus.LibopusAudioRenderer
--keepclassmembers class com.google.android.exoplayer2.ext.opus.LibopusAudioRenderer {
-  <init>(android.os.Handler, com.google.android.exoplayer2.audio.AudioRendererEventListener, com.google.android.exoplayer2.audio.AudioSink);
-}
--dontnote com.google.android.exoplayer2.ext.flac.LibflacAudioRenderer
--keepclassmembers class com.google.android.exoplayer2.ext.flac.LibflacAudioRenderer {
-  <init>(android.os.Handler, com.google.android.exoplayer2.audio.AudioRendererEventListener, com.google.android.exoplayer2.audio.AudioSink);
-}
--dontnote com.google.android.exoplayer2.ext.ffmpeg.FfmpegAudioRenderer
--keepclassmembers class com.google.android.exoplayer2.ext.ffmpeg.FfmpegAudioRenderer {
-  <init>(android.os.Handler, com.google.android.exoplayer2.audio.AudioRendererEventListener, com.google.android.exoplayer2.audio.AudioSink);
-}
-
-# Constructors accessed via reflection in DefaultDownloaderFactory
--dontnote com.google.android.exoplayer2.source.dash.offline.DashDownloader
--keepclassmembers class com.google.android.exoplayer2.source.dash.offline.DashDownloader {
-  <init>(com.google.android.exoplayer2.MediaItem, com.google.android.exoplayer2.upstream.cache.CacheDataSource$Factory, java.util.concurrent.Executor);
-}
--dontnote com.google.android.exoplayer2.source.hls.offline.HlsDownloader
--keepclassmembers class com.google.android.exoplayer2.source.hls.offline.HlsDownloader {
-  <init>(com.google.android.exoplayer2.MediaItem, com.google.android.exoplayer2.upstream.cache.CacheDataSource$Factory, java.util.concurrent.Executor);
-}
--dontnote com.google.android.exoplayer2.source.smoothstreaming.offline.SsDownloader
--keepclassmembers class com.google.android.exoplayer2.source.smoothstreaming.offline.SsDownloader {
-  <init>(com.google.android.exoplayer2.MediaItem, com.google.android.exoplayer2.upstream.cache.CacheDataSource$Factory, java.util.concurrent.Executor);
-}
-
-# Constructors accessed via reflection in DefaultMediaSourceFactory
--dontnote com.google.android.exoplayer2.source.dash.DashMediaSource$Factory
--keepclasseswithmembers class com.google.android.exoplayer2.source.dash.DashMediaSource$Factory {
-  <init>(com.google.android.exoplayer2.upstream.DataSource$Factory);
-}
--dontnote com.google.android.exoplayer2.source.hls.HlsMediaSource$Factory
--keepclasseswithmembers class com.google.android.exoplayer2.source.hls.HlsMediaSource$Factory {
-  <init>(com.google.android.exoplayer2.upstream.DataSource$Factory);
-}
--dontnote com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource$Factory
--keepclasseswithmembers class com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource$Factory {
-  <init>(com.google.android.exoplayer2.upstream.DataSource$Factory);
-}
--dontnote com.google.android.exoplayer2.source.rtsp.RtspMediaSource$Factory
--keepclasseswithmembers class com.google.android.exoplayer2.source.rtsp.RtspMediaSource$Factory {
-  <init>();
-}
-
-# End of content from E:\Programming\.gradle\caches\transforms-3\0372e44d0800562566dddb65386e509c\transformed\jetified-exoplayer-core-2.18.7\proguard.txt
-# The proguard configuration file for the following section is E:\Programming\.gradle\caches\transforms-3\0a278103fc5d3b8736c2f76ccc17d2f3\transformed\webkit-1.5.0\proguard.txt
-# Copyright 2018 The Chromium Authors. All rights reserved.
-# Use of this source code is governed by a BSD-style license that can be
-# found in the LICENSE file.
-
-# We need to avoid obfuscating the support library boundary interface because
-# this API is shared with the Android Support Library.
-# Note that we only 'keep' the package org.chromium.support_lib_boundary itself,
-# any sub-packages of that package can still be obfuscated.
--keep public class org.chromium.support_lib_boundary.* { public *; }
-
-# Copyright (C) 2018 The Android Open Source Project
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-# Prevent WebViewClientCompat from being renamed, since chromium depends on this name.
--keepnames public class androidx.webkit.WebViewClientCompat
-
-
-# End of content from E:\Programming\.gradle\caches\transforms-3\0a278103fc5d3b8736c2f76ccc17d2f3\transformed\webkit-1.5.0\proguard.txt
-# The proguard configuration file for the following section is E:\Programming\.gradle\caches\transforms-3\4f2c880dd9a22e6f1b12db3dbfbcac37\transformed\work-runtime-2.8.1\proguard.txt
--keep class * extends androidx.work.Worker
--keep class * extends androidx.work.InputMerger
-# Keep all constructors on ListenableWorker, Worker
--keep public class * extends androidx.work.ListenableWorker {
-    public <init>(...);
-}
-# We need to keep WorkerParameters for the ListenableWorker constructor
--keep class androidx.work.WorkerParameters
-
-# End of content from E:\Programming\.gradle\caches\transforms-3\4f2c880dd9a22e6f1b12db3dbfbcac37\transformed\work-runtime-2.8.1\proguard.txt
-# The proguard configuration file for the following section is E:\Programming\.gradle\caches\transforms-3\41af83c38050de52c4e49760f76cb3af\transformed\media-1.6.0\proguard.txt
+# The proguard configuration file for the following section is E:\Programming\.gradle\caches\transforms-3\57bd280dfb1b6f4cea845408a9946d05\transformed\media-1.7.0\proguard.txt
 # Copyright (C) 2017 The Android Open Source Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -657,7 +655,7 @@
 -keep class androidx.media.** implements android.os.Parcelable {
     public static final android.os.Parcelable$Creator *;
 }
-# End of content from E:\Programming\.gradle\caches\transforms-3\41af83c38050de52c4e49760f76cb3af\transformed\media-1.6.0\proguard.txt
+# End of content from E:\Programming\.gradle\caches\transforms-3\57bd280dfb1b6f4cea845408a9946d05\transformed\media-1.7.0\proguard.txt
 # The proguard configuration file for the following section is E:\Programming\.gradle\caches\transforms-3\7680e76b9fcaf0b896c3fc26222f4e23\transformed\jetified-window-1.0.0-beta04\proguard.txt
 # Copyright (C) 2020 The Android Open Source Project
 #
@@ -1007,7 +1005,7 @@
 -keep public class androidx.versionedparcelable.ParcelImpl
 
 # End of content from E:\Programming\.gradle\caches\transforms-3\1ccd2bdd1f8792d16593d2d7b15b85e8\transformed\versionedparcelable-1.1.1\proguard.txt
-# The proguard configuration file for the following section is E:\Programming\.gradle\caches\transforms-3\e4d9cb3c3222a69db81539dfb81b3999\transformed\rules\lib\META-INF\proguard\androidx-annotations.pro
+# The proguard configuration file for the following section is E:\Programming\.gradle\caches\transforms-3\26b6912455562c14eb08e8f814dbcd5a\transformed\rules\lib\META-INF\proguard\androidx-annotations.pro
 -keep,allowobfuscation @interface androidx.annotation.Keep
 -keep @androidx.annotation.Keep class * {*;}
 
@@ -1027,7 +1025,7 @@
   @androidx.annotation.DoNotInline <methods>;
 }
 
-# End of content from E:\Programming\.gradle\caches\transforms-3\e4d9cb3c3222a69db81539dfb81b3999\transformed\rules\lib\META-INF\proguard\androidx-annotations.pro
+# End of content from E:\Programming\.gradle\caches\transforms-3\26b6912455562c14eb08e8f814dbcd5a\transformed\rules\lib\META-INF\proguard\androidx-annotations.pro
 # The proguard configuration file for the following section is E:\Programming\.gradle\caches\transforms-3\5686e3665b5313226034d0a4ff901925\transformed\jetified-ShortcutBadger-1.1.22\proguard.txt
 #https://github.com/leolin310148/ShortcutBadger/issues/46
 -keep class me.leolin.shortcutbadger.impl.AdwHomeBadger { <init>(...); }

@@ -499,7 +499,7 @@ extension TextExtension on Text {
       softWrap: softWrap,
       textDirection: textDirection,
       textHeightBehavior: textHeightBehavior,
-      textScaleFactor: textScaleFactor,
+      textScaler: textScaler,
       textWidthBasis: textWidthBasis,
     );
   }
@@ -518,7 +518,7 @@ extension TextExtension on Text {
       softWrap: softWrap,
       textDirection: TextDirection.ltr,
       textHeightBehavior: textHeightBehavior,
-      textScaleFactor: textScaleFactor,
+      textScaler: textScaler,
       textWidthBasis: textWidthBasis,
     );
   }
@@ -541,7 +541,7 @@ extension TextExtension on Text {
       softWrap: false,
       textDirection: textDirection,
       textHeightBehavior: textHeightBehavior,
-      textScaleFactor: textScaleFactor,
+      textScaler: textScaler,
       textWidthBasis: textWidthBasis,
     );
   }
@@ -564,7 +564,7 @@ extension TextExtension on Text {
       softWrap: false,
       textDirection: textDirection,
       textHeightBehavior: textHeightBehavior,
-      textScaleFactor: textScaleFactor,
+      textScaler: textScaler,
       textWidthBasis: textWidthBasis,
     );
   }
@@ -586,7 +586,7 @@ extension TextExtension on Text {
       softWrap: softWrap,
       textDirection: textDirection,
       textHeightBehavior: textHeightBehavior,
-      textScaleFactor: textScaleFactor,
+      textScaler: textScaler,
       textWidthBasis: textWidthBasis,
     );
   }
@@ -613,7 +613,7 @@ extension TextExtension on Text {
       softWrap: softWrap,
       textDirection: textDirection,
       textHeightBehavior: textHeightBehavior,
-      textScaleFactor: textScaleFactor,
+      textScaler: textScaler,
       textWidthBasis: textWidthBasis,
     );
   }
@@ -638,7 +638,7 @@ extension TextExtension on Text {
       softWrap: softWrap,
       textDirection: textDirection,
       textHeightBehavior: textHeightBehavior,
-      textScaleFactor: textScaleFactor,
+      textScaler: textScaler,
       textWidthBasis: textWidthBasis,
     );
   }
@@ -663,7 +663,7 @@ extension TextExtension on Text {
       softWrap: softWrap,
       textDirection: textDirection,
       textHeightBehavior: textHeightBehavior,
-      textScaleFactor: textScaleFactor,
+      textScaler: textScaler,
       textWidthBasis: textWidthBasis,
     );
   }
@@ -688,7 +688,7 @@ extension TextExtension on Text {
       softWrap: softWrap,
       textDirection: textDirection,
       textHeightBehavior: textHeightBehavior,
-      textScaleFactor: textScaleFactor,
+      textScaler: textScaler,
       textWidthBasis: textWidthBasis,
     );
   }
@@ -713,7 +713,7 @@ extension TextExtension on Text {
       softWrap: softWrap,
       textDirection: textDirection,
       textHeightBehavior: textHeightBehavior,
-      textScaleFactor: textScaleFactor,
+      textScaler: textScaler,
       textWidthBasis: textWidthBasis,
     );
   }
@@ -735,7 +735,7 @@ extension TextExtension on Text {
       softWrap: softWrap,
       textDirection: textDirection,
       textHeightBehavior: textHeightBehavior,
-      textScaleFactor: textScaleFactor,
+      textScaler: textScaler,
       textWidthBasis: textWidthBasis,
     );
   }
@@ -783,7 +783,7 @@ extension TextExtension on Text {
       softWrap: softWrap,
       textDirection: textDirection,
       textHeightBehavior: textHeightBehavior,
-      textScaleFactor: textScaleFactor,
+      textScaler: textScaler,
       textWidthBasis: textWidthBasis,
     );
   }
@@ -805,7 +805,7 @@ extension TextExtension on Text {
       softWrap: softWrap,
       textDirection: textDirection,
       textHeightBehavior: textHeightBehavior,
-      textScaleFactor: textScaleFactor,
+      textScaler: textScaler,
       textWidthBasis: textWidthBasis,
     );
   }
@@ -831,7 +831,7 @@ extension TextExtension on Text {
           textHeightBehavior: textHeightBehavior,
           strutStyle: strutStyle,
           locale: locale,
-          textScaleFactor: textScaleFactor?? MediaQuery.of(context).textScaleFactor,
+          textScaler: textScaler?? MediaQuery.of(context).textScaler,
           textWidthBasis: textWidthBasis?? TextWidthBasis.parent,
           text: TextSpan(text: data, style: myStyle),
         );
@@ -855,7 +855,7 @@ extension TextExtension on Text {
             textHeightBehavior: textHeightBehavior,
             strutStyle: strutStyle,
             locale: locale,
-            textScaleFactor: textScaleFactor?? MediaQuery.of(context).textScaleFactor,
+            textScaler: textScaler?? MediaQuery.of(context).textScaler,
             textWidthBasis: textWidthBasis?? TextWidthBasis.parent,
             text: TextSpan(text: data, style: myStyle),
           );
@@ -877,7 +877,7 @@ extension TextExtension on Text {
           softWrap: softWrap,
           textDirection: textDirection,
           textHeightBehavior: textHeightBehavior,
-          textScaleFactor: textScaleFactor,
+          textScaler: textScaler,
           textWidthBasis: textWidthBasis,
         );
       },
@@ -901,7 +901,7 @@ extension TextExtension on Text {
       softWrap: softWrap,
       textDirection: textDirection,
       textHeightBehavior: textHeightBehavior,
-      textScaleFactor: textScaleFactor,
+      textScaler: textScaler,
       textWidthBasis: textWidthBasis,
     );
   }
@@ -932,7 +932,7 @@ extension TextExtension on Text {
         softWrap: softWrap,
         textDirection: textDirection,
         textHeightBehavior: textHeightBehavior,
-        textScaleFactor: textScaleFactor,
+        textScaler: textScaler,
         textWidthBasis: textWidthBasis,
       selectionColor: selectionColor,
     );
@@ -955,7 +955,7 @@ extension SelectableTextExtension on SelectableText {
       semanticsLabel: semanticsLabel,
       textDirection: textDirection,
       textHeightBehavior: textHeightBehavior,
-      textScaleFactor: textScaleFactor,
+      textScaler: textScaler,
       textWidthBasis: textWidthBasis,
     );
   }
@@ -971,7 +971,7 @@ extension SelectableTextExtension on SelectableText {
       semanticsLabel: semanticsLabel,
       textDirection: TextDirection.ltr,
       textHeightBehavior: textHeightBehavior,
-      textScaleFactor: textScaleFactor,
+      textScaler: textScaler,
       textWidthBasis: textWidthBasis,
     );
   }
@@ -991,7 +991,7 @@ extension SelectableTextExtension on SelectableText {
       semanticsLabel: semanticsLabel,
       textDirection: textDirection,
       textHeightBehavior: textHeightBehavior,
-      textScaleFactor: textScaleFactor,
+      textScaler: textScaler,
       textWidthBasis: textWidthBasis,
     );
   }
@@ -1011,7 +1011,7 @@ extension SelectableTextExtension on SelectableText {
       semanticsLabel: semanticsLabel,
       textDirection: textDirection,
       textHeightBehavior: textHeightBehavior,
-      textScaleFactor: textScaleFactor,
+      textScaler: textScaler,
       textWidthBasis: textWidthBasis,
     );
   }
@@ -1030,7 +1030,7 @@ extension SelectableTextExtension on SelectableText {
       semanticsLabel: semanticsLabel,
       textDirection: textDirection,
       textHeightBehavior: textHeightBehavior,
-      textScaleFactor: textScaleFactor,
+      textScaler: textScaler,
       textWidthBasis: textWidthBasis,
     );
   }
@@ -1052,7 +1052,7 @@ extension SelectableTextExtension on SelectableText {
       semanticsLabel: semanticsLabel,
       textDirection: textDirection,
       textHeightBehavior: textHeightBehavior,
-      textScaleFactor: textScaleFactor,
+      textScaler: textScaler,
       textWidthBasis: textWidthBasis,
     );
   }
@@ -1074,7 +1074,7 @@ extension SelectableTextExtension on SelectableText {
       semanticsLabel: semanticsLabel,
       textDirection: textDirection,
       textHeightBehavior: textHeightBehavior,
-      textScaleFactor: textScaleFactor,
+      textScaler: textScaler,
       textWidthBasis: textWidthBasis,
     );
   }
@@ -1096,7 +1096,7 @@ extension SelectableTextExtension on SelectableText {
       semanticsLabel: semanticsLabel,
       textDirection: textDirection,
       textHeightBehavior: textHeightBehavior,
-      textScaleFactor: textScaleFactor,
+      textScaler: textScaler,
       textWidthBasis: textWidthBasis,
     );
   }
@@ -1118,7 +1118,7 @@ extension SelectableTextExtension on SelectableText {
       semanticsLabel: semanticsLabel,
       textDirection: textDirection,
       textHeightBehavior: textHeightBehavior,
-      textScaleFactor: textScaleFactor,
+      textScaler: textScaler,
       textWidthBasis: textWidthBasis,
     );
   }
@@ -1138,7 +1138,7 @@ extension SelectableTextExtension on SelectableText {
       semanticsLabel: semanticsLabel,
       textDirection: textDirection,
       textHeightBehavior: textHeightBehavior,
-      textScaleFactor: textScaleFactor,
+      textScaler: textScaler,
       textWidthBasis: textWidthBasis,
     );
   }
@@ -1172,7 +1172,7 @@ extension SelectableTextExtension on SelectableText {
       semanticsLabel: semanticsLabel,
       textDirection: textDirection,
       textHeightBehavior: textHeightBehavior,
-      textScaleFactor: textScaleFactor,
+      textScaler: textScaler,
       textWidthBasis: textWidthBasis,
     );
   }
@@ -1191,7 +1191,7 @@ extension SelectableTextExtension on SelectableText {
       semanticsLabel: semanticsLabel,
       textDirection: textDirection,
       textHeightBehavior: textHeightBehavior,
-      textScaleFactor: textScaleFactor,
+      textScaler: textScaler,
       textWidthBasis: textWidthBasis,
     );
   }
@@ -1210,7 +1210,7 @@ extension SelectableTextExtension on SelectableText {
       semanticsLabel: semanticsLabel,
       textDirection: textDirection,
       textHeightBehavior: textHeightBehavior,
-      textScaleFactor: textScaleFactor,
+      textScaler: textScaler,
       textWidthBasis: textWidthBasis,
     );
   }

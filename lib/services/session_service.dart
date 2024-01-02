@@ -119,7 +119,7 @@ class SessionService {
 				thisUserBeforeLogin.matchBy(newUser);
 				_setLastLoginUser(thisUserBeforeLogin);
 
-				EventNotifierService.notify(AppEvents.userPersonalInfoChange, data: thisUserBeforeLogin);
+				await EventNotifierService.notify(AppEvents.userPersonalInfoChange, data: thisUserBeforeLogin);
 
 				return thisUserBeforeLogin;
 			}
@@ -127,7 +127,7 @@ class SessionService {
 				currentLoginList.add(newUser);
 				_setLastLoginUser(newUser);
 
-				EventNotifierService.notify(AppEvents.newUserLogin, data: newUser);
+				await EventNotifierService.notify(AppEvents.newUserLogin, data: newUser);
 
 				return newUser;
 			}
@@ -168,7 +168,7 @@ class SessionService {
 				//final oldMap = thisUserBeforeUpdate.toMap();
 				thisUserBeforeUpdate.matchBy(newUser);
 
-				EventNotifierService.notify(AppEvents.userPersonalInfoChange, data: thisUserBeforeUpdate);
+				await EventNotifierService.notify(AppEvents.userPersonalInfoChange, data: thisUserBeforeUpdate);
 			}
 		}
 	}
@@ -217,14 +217,14 @@ class SessionService {
 				Conditions().add(Condition()..key = Keys.userId..value = user.userId));
 
 		if(res > 0) {
-			EventNotifierService.notify(AppEvents.userPersonalInfoChange, data: user);
+			await EventNotifierService.notify(AppEvents.userPersonalInfoChange, data: user);
 			return true;
 		}
 
 		return false;
 	}
 
-	static Future<bool> logoff(String userId) async{
+	static Future<bool> logoff(String userId) async {
 		final user = getExistLoginUserById(userId);
 
 		if(user == null) {
@@ -245,7 +245,7 @@ class SessionService {
 		  _setLastLoginUser(null);
 		}
 
-		EventNotifierService.notify(AppEvents.userLogoff, data: user);
+		await EventNotifierService.notify(AppEvents.userLogoff, data: user);
 
 		return true;
 	}
@@ -260,15 +260,15 @@ class SessionService {
 		return logoff(user.userId);
 	}
 
-	static Future<bool> logoffAll() async{
+	static Future<bool> logoffAll() async {
 		final val = <String, dynamic>{};
 		val[Keys.setting$lastLoginDate] = null;
 
 		final con = Conditions().add(Condition(ConditionType.DefinedNotNull)..key = Keys.userId);
 		await AppDB.db.update(AppDB.tbUsers, val, con);
 
-		for(var u in currentLoginList){
-			EventNotifierService.notify(AppEvents.userLogoff, data: u);
+		for(final u in currentLoginList){
+			await EventNotifierService.notify(AppEvents.userLogoff, data: u);
 		}
 
 		currentLoginList.clear();

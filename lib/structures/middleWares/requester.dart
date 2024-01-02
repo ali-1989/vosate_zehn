@@ -137,7 +137,7 @@ class Requester {
             '\n\nrequest:[$request]'
             '\n\nresponse ====>>  status:[${_httpRequester.responseData?.statusCode}]'
             '\ndata:$response'
-            '\n<_._._._._._._.__._._._._._._.__._._._._._._.__._.End';
+            '\n<_._._._._._._.__._._._._._._.__._._._._._._._ End';
 
         Tools.verboseLog(pr);
       }
@@ -209,10 +209,11 @@ class Requester {
   }
 }
 ///=============================================================================
+/// HttpTools.handler(RouteTools.getTopContext()!, req.getBodyAsJson()?? {});
 class HttpRequestEvents {
-  Future Function(HttpRequester)? onAnyState;
-  Future Function(HttpRequester requester, Response? response)? onFailState;
-  Future Function(HttpRequester)? onNetworkError;
+  Future Function(HttpRequester req)? onAnyState;
+  Future Function(HttpRequester req, Response? response)? onFailState;
+  Future Function(HttpRequester req)? onNetworkError;
   Future Function(HttpRequester req, Map response)? manageResponse;
   Future Function(HttpRequester req, Map response)? onStatusOk;
   

@@ -465,6 +465,7 @@ class AppThemes {
 		);
 
 		final checkboxThemeData = CheckboxThemeData(
+			/// background-color
 			fillColor: MaterialStateProperty.resolveWith((Set<MaterialState> states) {
 				if(states.contains(MaterialState.selected)){
 					return th.primaryColor;
@@ -472,8 +473,11 @@ class AppThemes {
 
 				return Colors.transparent;
 			}),
-			checkColor: MaterialStateProperty.all(th.primaryColor),
+			/// tick-color
+			checkColor: MaterialStateProperty.all(Colors.white),
 			overlayColor: MaterialStateProperty.all(th.differentColor),
+			/// for border-color: must change unselectedWidgetColor in theme. [shape] > side: not word
+			/// for border-shape: use [shape] property here or for widget.
 			materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
 			visualDensity: VisualDensity.comfortable,
 		);

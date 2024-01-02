@@ -1,3 +1,4 @@
+import 'package:app/services/login_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:app/system/extensions.dart';
@@ -8,14 +9,14 @@ import 'package:app/tools/app/app_snack.dart';
 class HttpTools {
   HttpTools._();
 
-  static bool handler(BuildContext context, Map json) {
+  static bool handler(BuildContext context, Map json, {bool canChangeRoute = true}) {
     final int causeCode = json[Keys.causeCode] ?? 0;
     final String cause = json[Keys.cause] ?? Keys.error;
 
-    return handlerWithCause(context, causeCode, cause, json);
+    return handlerWithCause(context, causeCode, cause, json, canChangeRoute: canChangeRoute);
   }
 
-  static bool handlerWithCause(BuildContext context, int causeCode, String? cause, Map json){
+  static bool handlerWithCause(BuildContext context, int causeCode, String? cause, Map json, {bool canChangeRoute = true}){
     if(causeCode == HttpCodes.cCode$UserMessage && cause != null){
       AppSnack.showInfo(context, cause);
       return true;
@@ -27,6 +28,11 @@ class HttpTools {
     }
     else if(causeCode == HttpCodes.cCode$TokenNotCorrect){
       AppSnack.showError(context, AppMessages.tokenIsIncorrectOrExpire);
+
+      if(canChangeRoute){
+        LoginService.forceLogoff();
+      }
+
       return true;
     }
     else if(causeCode == HttpCodes.cCode$DatabaseError){
