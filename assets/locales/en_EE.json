@@ -302,25 +302,6 @@
     "term" : "شرایط و قوانین"
   },
 
-  "settingsScreen": {
-    "commonSettings": "تنظیمات عمومی",
-    "color&fontSettings": "رنگ و قلم",
-    "fontSettings": "قلم",
-    "date&calendarSettings": "تاریخ و تقویم",
-    "descriptionAutoDownloadImage": "دانلود خودکار عکس ها",
-    "descriptionAutoDownloadVideo": "دانلود خودکار فیلم ها",
-    "descriptionConfirmOnExit": "تایید  گرفتن هنگام خروج",
-    "sampleText_fontSize": "این متن نمونه هست برای اینکه شما اندازه ی قلم را ببینید",
-    "sampleText_fontFamily": "این متن نمونه هست برای اینکه شما نوع قلم را ببینید",
-    "fontSize": "اندازه قلم",
-    "baseFont": "قلم پایه",
-    "font": "قلم",
-    "notifications": "اعلان ها",
-    "media": "رسانه",
-    "chats": "گفتگوها",
-    "calendar": "تقویم"
-  },
-
   "dividerTrans": "===========================================================================",
 
   "payWitIran": "پرداخت با عضو شتاب",

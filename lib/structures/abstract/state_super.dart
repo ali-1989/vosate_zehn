@@ -51,7 +51,7 @@ abstract class StateSuper<W extends StatefulWidget> extends State<W> {
 
 	@override
 	void dispose() {
-		RouteTools.removeWidgetState();
+		RouteTools.removeWidgetState(this);
 
 		if(kIsWeb){
 			AppSizes.instance.removeMetricListener(onResize);

@@ -16,6 +16,7 @@ class AppIcons {
   static const IconData light = Icons.highlight_rounded;
   static const IconData lightBulb = Icons.lightbulb;
   static const IconData add = Icons.add;
+  static const IconData removeMinus = Icons.remove;
   static const IconData addCircle = Icons.add_circle_outlined;
   static const IconData apps = Icons.apps;
   static const IconData apps2 = Icons.widgets_rounded;

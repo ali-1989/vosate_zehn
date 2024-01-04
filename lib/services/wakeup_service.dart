@@ -29,7 +29,7 @@ Future<bool> _callbackWorkManager(task, inputData) async {
       LogTools.logger.logToFile('work manager B, isAppRun: $isAppRun');
     }
     catch (e) {
-      LogTools.logger.logToFile('work manager C, err: $e');
+      LogTools.logger.logToFile('work manager, err: $e');
     }
 
     if (isAppRun) {

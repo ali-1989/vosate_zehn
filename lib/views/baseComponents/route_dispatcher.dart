@@ -15,7 +15,6 @@ class RouteDispatcher {
   RouteDispatcher._();
 
   static Widget dispatch(){
-
     if(!SessionService.hasAnyLogin()){
       if(kIsWeb){
         final query = IrisNavigatorObserver.getPathQuery(IrisNavigatorObserver.currentUrl());

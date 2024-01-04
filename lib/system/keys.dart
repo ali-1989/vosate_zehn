@@ -14,7 +14,9 @@ class Keys {
   static const userId = 'user_id';
   static const forUserId = 'for_user_id';
   static const userName = 'user_name';
+  static const email = 'email';
   static const password = 'password';
+  static const hashPassword = 'hash_password';
   static const userType = 'user_type';
   static const fileName = 'file_name';
   static const partName = 'part_name';

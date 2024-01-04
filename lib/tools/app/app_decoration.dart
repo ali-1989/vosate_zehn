@@ -130,12 +130,12 @@ class AppDecoration {
     // infoTextColor
 
     return InputDecoration(
-      border: OutlineInputBorder(),
-      enabledBorder: OutlineInputBorder(),
-      focusedBorder: OutlineInputBorder(),
-      disabledBorder: OutlineInputBorder(),
+      border: const OutlineInputBorder(),
+      enabledBorder: const OutlineInputBorder(),
+      focusedBorder: const OutlineInputBorder(),
+      disabledBorder: const OutlineInputBorder(),
       errorBorder: OutlineInputBorder(borderSide: BorderSide(color: cTheme.errorColor)),
-      focusedErrorBorder: OutlineInputBorder(),
+      focusedErrorBorder: const OutlineInputBorder(),
     );
   }
 
