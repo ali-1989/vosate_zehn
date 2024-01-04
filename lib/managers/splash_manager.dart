@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:app/structures/models/settings_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -20,6 +19,7 @@ import 'package:app/services/native_call_service.dart';
 import 'package:app/services/session_service.dart';
 import 'package:app/services/wakeup_service.dart';
 import 'package:app/services/websocket_service.dart';
+import 'package:app/structures/models/settings_model.dart';
 import 'package:app/system/application_signal.dart';
 import 'package:app/tools/app/app_broadcast.dart';
 import 'package:app/tools/app/app_cache.dart';
