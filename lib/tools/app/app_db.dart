@@ -43,10 +43,10 @@ class AppDB {
   ///-------- tables -----------------------------------------------------------
   static String tbKv = 'KvTable';
   static String tbUsers = 'UserModel';
+  static String tbLanguages = 'Languages';
   static String tbFavorites = 'Favorites';
   static String tbLastSeen = 'LastSeen';
   static String tbMedia = 'Media';
-  static String tbLanguages = 'Languages';
   static String tbAdvertising = 'Advertising';
 
 

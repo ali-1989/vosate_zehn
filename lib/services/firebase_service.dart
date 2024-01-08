@@ -1,5 +1,6 @@
 import 'dart:isolate';
 
+import 'package:app/tools/app/app_cache.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -37,10 +38,8 @@ Future<void> _fbMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 Future<void> _onNewNotification(RemoteMessage message) async {
-  int? id;
-
   try{
-    id = message.data['id'];
+    int? id = message.data['id'];
 
     final ids = AppDB.fetchAsList(Keys.setting$dailyTextIds);
 
@@ -87,8 +86,16 @@ class FireBaseService {
   }
 
   static Future start() async {
-    //FirebaseMessaging.instance.isSupported()
     LogTools.logger.logToAll('@@@@@@@@@: start fire ${Isolate.current.hashCode}'); //todo.
+    final isSupported = await FirebaseMessaging.instance.isSupported();
+
+    if(!isSupported){
+      return;
+    }
+
+    LogTools.logger.logToAll('@@@@@@@@@: start fire2 ${Isolate.current.hashCode}'); //todo.
+    EventNotifierService.addListener(AppEvents.networkConnected, _onNetConnected);
+
     try {
       await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
         alert: true,
@@ -163,19 +170,32 @@ class FireBaseService {
 
   static Future<String?> getTokenForce() async {
     LogTools.logger.logToAll('@@@@@@@@@: start get token ${Isolate.current.hashCode}'); //todo.
+    try {
+      token = await FirebaseMessaging.instance.getToken(vapidKey: DefaultFirebaseOptions.fcmKey);
+    }
+    catch (e){
+      int? v = AppCache.timeoutCache.getValue('getTokenForce');
 
-    token = await FirebaseMessaging.instance.getToken(vapidKey: DefaultFirebaseOptions.fcmKey);
-    LogTools.logger.logToAll('@@@@@@@@@: token: $token'); //todo.
+      if(v == null){
+        AppCache.timeoutCache.addTimeout('getTokenForce', const Duration(seconds: 15), value: 1);
+        return getToken();
+      }
+      else {
+        if(v < 7){
+          AppCache.timeoutCache.changeValue('getTokenForce', v+1);
+          return getToken();
+        }
+      }
+    }
+
     if(token != null) {
       lastUpdateToken = DateHelper.now();
       EventNotifierService.notify(AppEvents.firebaseTokenReceived);
 
       return token;
     }
-    else {
-      EventNotifierService.addListener(AppEvents.networkConnected, _onNetConnected);
-      return null;
-    }
+
+    return null;
   }
 
   static Future<String?> getToken() async {
@@ -218,8 +238,7 @@ class FireBaseService {
   }
 
   static void _onNetConnected({data}) {
-    EventNotifierService.removeListener(AppEvents.networkConnected, _onNetConnected);
-    getTokenForce();
+    getToken();
   }
 
   static void _addMessageId(RemoteMessage message){

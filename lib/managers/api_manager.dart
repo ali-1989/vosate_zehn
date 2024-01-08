@@ -18,7 +18,7 @@ class ApiManager {
   ApiManager._();
 
   static String serverApi = '${SettingsManager.localSettings.httpAddress}/graph-v1';
-  static String errorReportApi = '${SettingsManager.localSettings.httpAddress}/errors/add';
+  static String logReportApi = '${SettingsManager.localSettings.httpAddress}/logs';
   static String fcmTopic = 'daily_text';
 
   static Future<TwoStateReturn<Map, Response>> publicApiCaller(String url, MethodType methodType, Map<String, dynamic>? body){
@@ -27,6 +27,7 @@ class ApiManager {
 
     requester.httpRequestEvents.onFailState = (req, response) async {
       res.complete(TwoStateReturn(r2: response));
+      return true;
     };
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
@@ -64,7 +65,7 @@ class ApiManager {
 
     final users = [];
 
-    for(var um in SessionService.currentLoginList) {
+    for(final um in SessionService.currentLoginList) {
       users.add(um.userId);
     }
 

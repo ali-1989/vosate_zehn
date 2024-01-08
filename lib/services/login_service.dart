@@ -14,7 +14,6 @@ import 'package:iris_tools/models/two_state_return.dart';
 import 'package:iris_tools/modules/stateManagers/updater_state.dart';
 
 import 'package:app/managers/api_manager.dart';
-import 'package:app/managers/settings_manager.dart';
 import 'package:app/services/google_service.dart';
 import 'package:app/services/session_service.dart';
 import 'package:app/structures/enums/app_events.dart';
@@ -72,7 +71,7 @@ class LoginService {
       DeviceInfoTools.attachDeviceAndTokenInfo(reqJs, curUser: user);
 
       final info = HttpItem();
-      info.fullUrl = '${SettingsManager.localSettings.httpAddress}/graph-v1';
+      info.fullUrl = ApiManager.serverApi;
       info.method = 'POST';
       info.body = JsonHelper.mapToJson(reqJs);
       info.setResponseIsPlain();
@@ -99,13 +98,12 @@ class LoginService {
 
       if(await google.isSignIn()){
         AppToast.showToast(RouteTools.getTopContext()!, AppMessages.inEmailSignOutError);
-        return;
       }
 
-        await SessionService.logoff(user.userId);
+      await SessionService.logoff(user.userId);
     }
     else {
-    await SessionService.logoff(user.userId);
+      await SessionService.logoff(user.userId);
     }
 
     UpdaterController.forId(AppBroadcast.drawerMenuRefresherId)?.update();

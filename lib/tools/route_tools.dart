@@ -37,6 +37,8 @@ class RouteTools {
     final e404Page = IrisPageRoute.by((E404Page).toString(), const E404Page());
     
     IrisNavigatorObserver.notFoundHandler = (settings) => null;
+    IrisNavigatorObserver.homeName = homePage.routeName;
+
     IrisNavigatorObserver.allAppRoutes.add(aboutPage);
     IrisNavigatorObserver.allAppRoutes.add(homePage);
     IrisNavigatorObserver.allAppRoutes.add(supportPage);
@@ -50,8 +52,6 @@ class RouteTools {
     IrisNavigatorObserver.allAppRoutes.add(e404Page);
     //IrisNavigatorObserver.allAppRoutes.add(registerPage);
     //IrisNavigatorObserver.allAppRoutes.add(audioPlayerPage);
-
-    IrisNavigatorObserver.homeName = homePage.routeName;
   }
 
   static void addWidgetState(State state){
@@ -133,7 +133,11 @@ class RouteTools {
   /// note: Navigator.of()... not change url automatic in browser. if use [MaterialApp.router]
   /// and can not effect on back/pre buttons in browser
   static Future pushPage(BuildContext context, Widget page, {dynamic args, String? name}) async {
-    final n = name?? (page).toString();
+    String n = name?? (page).toString();
+
+    if(!n.startsWith('/')){
+      n = '/$n';
+    }
 
     final r = MaterialPageRoute(
         builder: (ctx){return page;},
@@ -144,7 +148,11 @@ class RouteTools {
   }
 
   static Future pushReplacePage(BuildContext context, Widget page, {dynamic args, String? name}) {
-    final n = name?? (page).toString();
+    String n = name?? (page).toString();
+
+    if(!n.startsWith('/')){
+      n = '/$n';
+    }
 
     final r = MaterialPageRoute(
         builder: (ctx){return page;},

@@ -574,6 +574,10 @@ class AppNavigator {
   }
 
   static Future<T?> pushNextPage<T>(BuildContext context, Widget next, {String? name, dynamic arguments, bool maintainState = true}) {
+    if(name != null && !name.startsWith('/')){
+      name = '/$name';
+    }
+
     final p = MaterialPageRoute<T>(
         builder: (ctx) {return next;},
         settings: RouteSettings(name: name, arguments: arguments),
@@ -589,6 +593,11 @@ class AppNavigator {
     bool maintainState = true,
     Duration duration = const Duration(milliseconds: 700),
   }) {
+
+    if(!name.startsWith('/')){
+      name = '/$name';
+    }
+
     return Navigator.push<T>(
       context,
         PageRouteBuilder(
@@ -611,6 +620,10 @@ class AppNavigator {
 
   // Material(type: MaterialType.transparency,)
   static Future pushNextTransparentPage(BuildContext context, Widget page, {required String name}) {
+    if(!name.startsWith('/')){
+      name = '/$name';
+    }
+
     return Navigator.push(context,
         PageRouteBuilder(
             opaque: false,
@@ -620,11 +633,19 @@ class AppNavigator {
   }
 
   static Future replaceCurrentRoute(BuildContext context, Widget next, {required String name, dynamic data}) {
+    if(!name.startsWith('/')){
+      name = '/$name';
+    }
+
     return Navigator.pushReplacement(context,
       MaterialPageRoute(builder: (buildContext) {return next;}, settings: RouteSettings(name: name, arguments: data)),);
   }
 
   static Future pushNextAndRemoveUntilRoot(BuildContext context, Widget next, {required String name, dynamic data}) {
+    if(!name.startsWith('/')){
+      name = '/$name';
+    }
+
     final mpr = MaterialPageRoute(builder: (buildContext) {return next;},
         settings: RouteSettings(name: name, arguments: data));
 

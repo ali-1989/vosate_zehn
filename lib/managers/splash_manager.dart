@@ -44,7 +44,7 @@ class SplashManager {
   static bool isBaseInitialize = false;
 
   static bool mustWaitInSplash(){
-    return !kIsWeb && (mustWaitToSplashTimer || mustWaitToLoadingSettings || !isConnectToServer);
+    return mustWaitToSplashTimer || mustWaitToLoadingSettings || !isConnectToServer;
   }
 
   static void gotoSplash() {
@@ -56,6 +56,11 @@ class SplashManager {
     try {
       await FireBaseService.initializeApp();
       usePathUrlStrategy();
+
+      if(kIsWeb){
+        splashWaitingMil = 0;
+      }
+
       return null;
     }
     catch (e){
@@ -72,7 +77,7 @@ class SplashManager {
       AppThemes.init();
       SettingsManager.init();
 
-      if(true){
+      if(false){
         SettingsManager.localSettings.httpAddress = 'http://192.168.1.104:7436';
         SettingsManager.localSettings.wsAddress = 'ws://192.168.1.104:7438/ws';
       }
@@ -117,7 +122,6 @@ class SplashManager {
         await precacheImage(AppCache.screenBack!, context);
       }
 
-
       AppThemes.instance.textDirection = AppLocale.detectLocaleDirection(SettingsManager.localSettings.appLocale);
     }
     catch (e){
@@ -150,15 +154,19 @@ class SplashManager {
       MediaManager.loadAllRecords();
       AdvertisingManager.init();
       AdvertisingManager.check();
-      await FireBaseService.start();
 
-      /*if (System.isWeb()) {
-        void onSizeCheng(oldW, oldH, newW, newH) {
+      if (kIsWeb) {
+        FireBaseService.start();
+
+        /*void onSizeCheng(oldW, oldH, newW, newH) {
           AppDialogIris.prepareDialogDecoration();
         }
 
-        AppSizes.instance.addMetricListener(onSizeCheng);
-      }*/
+        AppSizes.instance.addMetricListener(onSizeCheng);*/
+      }
+      else {
+        await FireBaseService.start();
+      }
 
       if(RouteTools.materialContext != null) {
         AidService.checkShowDialog();

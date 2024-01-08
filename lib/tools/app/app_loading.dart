@@ -116,6 +116,28 @@ class AppLoading {
     AppOverlay.hideDialog(context);
   }
 
+  /*Future<void> showProgress(BuildContext context, Stream<double> stream, {
+    String? message,
+    String? buttonText,
+    VoidCallback? buttonEvent,
+  }){
+    final over = OverlayScreenView(
+      content: SizedBox.expand(
+        child: Center(
+          child: ProgressBarPrompt(
+            stream: stream,
+            message: message,
+            buttonEvent: buttonEvent,
+            buttonText: buttonText,
+          ),
+        ),
+      ),
+      backgroundColor: Colors.black26,
+    );
+
+    return AppOverlay.showDialogScreen(context, over, canBack: false);
+  }*/
+
   Widget _getLoadingView(){
     var lottieColor = AppThemes.instance.currentTheme.primaryColor;
 

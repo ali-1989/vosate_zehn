@@ -68,7 +68,7 @@ class _MyAppState extends State<MyApp> {
                                 themeMode: AppThemes.instance.currentThemeMode,
                                 theme: AppThemes.instance.themeData,
                                 //darkTheme: ThemeData.dark(),
-                                onGenerateRoute: IrisNavigatorObserver.onGenerateRoute,
+                                onGenerateRoute: IrisNavigatorObserver.generateRoute,
                                 navigatorObservers: [IrisNavigatorObserver.instance()],
                                 scrollBehavior: ScrollConfiguration.of(context).copyWith(
                                   dragDevices: {
@@ -122,7 +122,6 @@ class _MyAppState extends State<MyApp> {
                       }
                       else {
                         testCodes(localContext);
-
                         return RouteDispatcher.dispatch();
                       }
                     }

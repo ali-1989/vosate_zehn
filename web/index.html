@@ -19,13 +19,13 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-title" content="vosate zehn">
-    <link rel="apple-touch-icon" href="icons/Icon-192.png">
+    <link rel="apple-touch-icon" href="./icons/Icon-192.png">
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="favicon.png"/>
+    <link rel="icon" type="image/png" href="./favicon.png"/>
 
     <title>وسعت ذهن</title>
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="./manifest.json">
 
     <style>
         body {
@@ -41,26 +41,11 @@
             position: absolute;
         }
 
-        .loading {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            -ms-transform: translate(-50%, -50%);
-            transform: translate(-50%, -50%);
-        }
-
         .loader {
-            border: 12px solid #f3f3f3;
             border-radius: 50%;
-            border: 11px solid;
-            border-top: 12px solid #e77212;
-            border-right: 12px solid white;
-            border-bottom: 12px solid #e77212;
-            border-left: 12px solid white;
+            border: 12px solid #e77212;
+            border-right-color: white;
+            border-left-color: white;
             width: 50px;
             height: 50px;
             -webkit-animation: spin 2s linear infinite;
@@ -104,12 +89,15 @@
 <script src="https://apis.google.com/js/platform.js" async defer>
 </script>
 
-<!-- Google Sign in ---------------------------------- -->
+<!-- Google/firebase ---------------------------------- -->
+<!--
 <script type="module">
     // sample: https://dit-gis-test.web.app/#/
     // https://firebase.google.com/docs/web/setup#available-libraries
 
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js";
+    import { getMessaging } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-messaging.js";
+    import { onBackgroundMessage } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-messaging-sw.js";
     //import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-analytics.js";
     //import { getAuth, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-auth.js";
     //import { getFirestore } from 'https://www.gstatic.com/firebasejs/9.19.1/firebase-firestore.js'
@@ -125,11 +113,13 @@
     };
 
     const app = initializeApp(firebaseConfig);
+    const messaging = getMessaging(app);
+    const backMessaging = onBackgroundMessage(app);
     //const storage = getStorage(app);
     //const store = getFirestore(app);
     //const auth = getAuth(app);
     //const analytics = getAnalytics(app);
-</script>
+</script> -->
 
 <script>
     window.addEventListener('load', function (ev) {

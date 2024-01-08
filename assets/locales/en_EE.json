@@ -264,7 +264,8 @@
     "thanksRegisterDescription" : "Your registration is done. You can login with your profile",
     "incorrectVerifyCode": "کد وارد شده نادرست است",
     "thisUserNameExist": "این نام کاربری وجود دارد، لطفا یک نام دیگر وارد کنید",
-    "validationDescription": "لطفا کد ارسال شده به شماره ی # را وارد کنید"
+    "validationDescription": "لطفا کد ارسال شده به شماره ی # را وارد کنید",
+    "loginWithGoogle": "جیمیل"
   },
 
   "calendarOptions": {

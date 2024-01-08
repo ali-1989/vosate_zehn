@@ -1,3 +1,5 @@
+import 'package:app/tools/http_tools.dart';
+import 'package:app/tools/route_tools.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:dio/dio.dart';
@@ -197,7 +199,17 @@ class Requester {
         await httpRequestEvents.onStatusOk?.call(_httpRequester, js);
       }
       else {
-        await httpRequestEvents.onFailState?.call(_httpRequester, response);
+        final stop = HttpTools.handlerTokenOrBlock(RouteTools.materialContext!, js);
+
+        if(stop){
+         return;
+        }
+
+        final process = await httpRequestEvents.onFailState?.call(_httpRequester, response);
+
+        if(process == null || !process) {
+          HttpTools.handler(RouteTools.materialContext!, js);
+        }
       }
 
       return null;
@@ -212,7 +224,7 @@ class Requester {
 /// HttpTools.handler(RouteTools.getTopContext()!, req.getBodyAsJson()?? {});
 class HttpRequestEvents {
   Future Function(HttpRequester req)? onAnyState;
-  Future Function(HttpRequester req, Response? response)? onFailState;
+  Future<bool?> Function(HttpRequester req, Response? response)? onFailState;
   Future Function(HttpRequester req)? onNetworkError;
   Future Function(HttpRequester req, Map response)? manageResponse;
   Future Function(HttpRequester req, Map response)? onStatusOk;

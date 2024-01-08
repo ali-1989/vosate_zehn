@@ -8,7 +8,8 @@ import 'package:app/tools/app/app_themes.dart';
 import 'package:app/tools/date_tools.dart';
 
 class SettingsModel {
-  static const defaultHttpAddress = 'http://vosatezehn.com:7436'; // http://vosatezehn.com, http://192.168.43.140, 1.103
+  // http://192.168.43.140, 1.103
+  static const defaultHttpAddress = 'http://vosatezehn.com:7436';
   static const defaultWsAddress = 'ws://vosatezehn.com:7438/ws';
   static const Locale defaultAppLocale = Locale('fa', 'IR');
   static const CalendarType defaultCalendarType = CalendarType.solarHijri;
@@ -82,7 +83,7 @@ class SettingsModel {
     return map;
   }
 
-  void matchBy(SettingsModel other){
+  void matchBy(SettingsModel other) {
     lastUserId = other.lastUserId;
     appLocale = other.appLocale;
     calendarType = other.calendarType;

@@ -238,7 +238,7 @@ class AppMessages {
   }
 
   static String get otherNumber {
-    return loginMessage('otherNumber');
+    return 'شماره ی دیگر';
   }
 
   static String get enterVerifyCodeDesc {

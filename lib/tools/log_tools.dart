@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:app/system/constants.dart';
+import 'package:app/system/keys.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:http/http.dart' as http;
@@ -44,7 +46,6 @@ class LogTools {
   }
 
   static void reportError(Map<String, dynamic> map) async {
-    return;
     final String txt = map['error']?? '';
 
     for(final x in avoidReport){
@@ -54,17 +55,25 @@ class LogTools {
     }
 
     void fn(){
-      final url = Uri.parse(ApiManager.errorReportApi);
+      final url = Uri.parse(ApiManager.logReportApi);
+
+      final data = <String, dynamic>{};
+      data['deviceId'] = DeviceInfoTools.deviceId;
+      data['app_version'] = Constants.appVersionName;
+      data['code'] = Generator.hashMd5(txt);
+      data['info'] = map.toString();
 
       final body = <String, dynamic>{
-        'data': map.toString(),
-        'deviceId': DeviceInfoTools.deviceId,
-        'code': Generator.hashMd5(txt),
+        Keys.key: 'app_exception',
+        'data': data,
+        'app_name': Constants.appName
       };
 
       if(SessionService.hasAnyLogin()){
+        data['user_id'] = SessionService.getLastLoginUser()?.userId;
         body['user_id'] = SessionService.getLastLoginUser()?.userId;
       }
+
 
       final headers = {
         'Content-Type': 'application/json',

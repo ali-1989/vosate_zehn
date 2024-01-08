@@ -100,6 +100,10 @@ class AppSheet {
       }) {
     FocusHelper.hideKeyboardByUnFocus(context);
 
+    if(!routeName.startsWith('/')){
+      routeName = '/$routeName';
+    }
+
     return showModalBottomSheet<T>(
         context: context,
         builder: builder,

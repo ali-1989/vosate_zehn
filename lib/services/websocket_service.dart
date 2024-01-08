@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_notifier/iris_notifier.dart';
@@ -79,7 +80,7 @@ class WebsocketService {
 			return;
 		}
 
-		LogTools.logger.logToAll('Websocket is start connecting. [${DateTime.now()}]  url: $_uri');
+		LogTools.logger.logToAll('Websocket is start connecting. [TS: ${DateTime.now()}]  URL: $_uri');
 
 		try {
 			_ws = IrisWebSocket(_uri!);
@@ -89,9 +90,14 @@ class WebsocketService {
 			_ws!.addErrorListener((e) => _onDisConnected(e));
 
 			//(_ws as BaseWebSocket).allowSelfSigned = true;
-			final client = HttpClient();
-			client.connectionTimeout = const Duration(seconds: 10);
-			_ws!.connect(client: client);
+			if(kIsWeb){
+				_ws!.connect();
+			}
+			else {
+				final client = HttpClient();
+				client.connectionTimeout = const Duration(seconds: 10);
+				_ws!.connect(client: client);
+			}
 		}
 		catch(e){
 			_onDisConnected(e);
