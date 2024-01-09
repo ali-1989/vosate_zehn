@@ -7,7 +7,6 @@ import 'package:app/managers/splash_manager.dart';
 import 'package:app/services/native_call_service.dart';
 import 'package:app/system/constants.dart';
 import 'package:app/tools/app/app_directories.dart';
-import 'package:app/tools/device_info_tools.dart';
 import 'package:app/tools/log_tools.dart';
 import 'package:app/views/baseComponents/error_page.dart';
 import 'package:app/views/baseComponents/my_app.dart';
@@ -40,8 +39,8 @@ void main() {
     runApp(MyApp());
   }
 
-  runZonedGuarded(zoneFn, zonedGuardedCatch);
-  //zoneFn();
+  //runZonedGuarded(zoneFn, zonedGuardedCatch);
+  zoneFn();
 }
 
 @pragma('vm:entry-point')
@@ -74,11 +73,11 @@ void onErrorCatch(FlutterErrorDetails errorDetails) {
     txt += '\n STACK TRACE:: ${errorDetails.stack}';
   }
 
-  txt += '\n**************************************** [END CATCH]';
+  txt += '\n************************ [END CATCH]';
 
   LogTools.logger.logToAll(txt, isError: true);
 
-  final eMap = DeviceInfoTools.mapDeviceInfo();
+  final eMap = <String, dynamic>{};
   eMap['catcher'] = 'mainIsolateError';
   eMap['error'] = txt;
 
@@ -92,10 +91,10 @@ bool mainIsolateError(error, sTrace) {
     txt += '\n STACK TRACE:: $sTrace';
   }
 
-  txt += '\n**************************************** [END MAIN-ISOLATE]';
+  txt += '\n************************ [END MAIN-ISOLATE]';
   LogTools.logger.logToAll(txt, isError: true);
 
-  final eMap = DeviceInfoTools.mapDeviceInfo();
+  final eMap = <String, dynamic>{};
   eMap['catcher'] = 'mainIsolateError';
   eMap['error'] = txt;
 
@@ -115,10 +114,10 @@ void zonedGuardedCatch(error, sTrace) {
     txt += '\n STACK TRACE:: $sTrace';
   }
 
-  txt += '\n**************************************** [END ZONED-GUARDED]';
+  txt += '\n************************ [END ZONED-GUARDED]';
   LogTools.logger.logToAll(txt, isError: true);
 
-  final eMap = DeviceInfoTools.mapDeviceInfo();
+  final eMap = <String, dynamic>{};
   eMap['catcher'] = 'zonedGuardedCatch';
   eMap['error'] = txt;
 

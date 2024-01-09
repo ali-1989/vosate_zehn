@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:app/system/constants.dart';
 import 'package:app/system/keys.dart';
+import 'package:app/tools/app/app_cache.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:http/http.dart' as http;
@@ -36,6 +37,7 @@ class LogTools {
       avoidReport.add('slot == null');
       avoidReport.add('FIS_AUTH_ERROR'); // firebase
       avoidReport.add('RenderFlex overflowed by');
+      avoidReport.add('RenderFlex children have non-zero flex');
 
       return true;
     }
@@ -47,6 +49,11 @@ class LogTools {
 
   static void reportError(Map<String, dynamic> map) async {
     final String txt = map['error']?? '';
+    final hash = Generator.hashMd5(txt);
+
+    if(!AppCache.canCallMethodAgain(hash)){
+      return;
+    }
 
     for(final x in avoidReport){
       if(txt.contains(x)){
@@ -59,20 +66,17 @@ class LogTools {
 
       final data = <String, dynamic>{};
       data['deviceId'] = DeviceInfoTools.deviceId;
-      data['app_version'] = Constants.appVersionName;
-      data['code'] = Generator.hashMd5(txt);
-      data['info'] = map.toString();
+      data['user_id'] = SessionService.getLastLoginUser()?.userId;
+      //data['code'] = hash;
+      data['info'] = DeviceInfoTools.mapDeviceInfo();
+      data['log'] = map;
 
       final body = <String, dynamic>{
         Keys.key: 'app_exception',
         'data': data,
+        'user_id' : SessionService.getLastLoginUser()?.userId,
         'app_name': Constants.appName
       };
-
-      if(SessionService.hasAnyLogin()){
-        data['user_id'] = SessionService.getLastLoginUser()?.userId;
-        body['user_id'] = SessionService.getLastLoginUser()?.userId;
-      }
 
 
       final headers = {

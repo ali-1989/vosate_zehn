@@ -68,7 +68,6 @@ class HttpTools {
       return true;
     }
 
-
     return false;
   }
 }
