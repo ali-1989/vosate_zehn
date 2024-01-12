@@ -76,24 +76,24 @@ class FireBaseService {
 
       await Firebase.initializeApp(options: options)
           .then<FirebaseApp?>((v) => v).catchError((e){
-        LogTools.logger.logToAll('@@@@@@@@@: e1e -$e  ${Isolate.current.hashCode}'); //todo.
+        //LogTools.logger.logToAll('@@@@@@@@@: e1e -$e  ${Isolate.current.hashCode}'); //todo.
         return null;
       });
 
-      LogTools.logger.logToAll('@@@@@@@@@: B - Ok ${Isolate.current.hashCode}'); //todo.
+      //LogTools.logger.logToAll('@@@@@@@@@: B - Ok ${Isolate.current.hashCode}'); //todo.
     }
     catch (e){/**/}
   }
 
   static Future start() async {
-    LogTools.logger.logToAll('@@@@@@@@@: start fire ${Isolate.current.hashCode}'); //todo.
+    //LogTools.logger.logToAll('@@@@@@@@@: start fire ${Isolate.current.hashCode}'); //todo.
     final isSupported = await FirebaseMessaging.instance.isSupported();
 
     if(!isSupported){
       return;
     }
 
-    LogTools.logger.logToAll('@@@@@@@@@: start fire2 ${Isolate.current.hashCode}'); //todo.
+    //LogTools.logger.logToAll('@@@@@@@@@: start fire2 ${Isolate.current.hashCode}'); //todo.
     EventNotifierService.addListener(AppEvents.networkConnected, _onNetConnected);
 
     try {
@@ -169,7 +169,7 @@ class FireBaseService {
   }
 
   static Future<String?> getTokenForce() async {
-    LogTools.logger.logToAll('@@@@@@@@@: start get token ${Isolate.current.hashCode}'); //todo.
+    //LogTools.logger.logToAll('@@@@@@@@@: start get token ${Isolate.current.hashCode}'); //todo.
     try {
       token = await FirebaseMessaging.instance.getToken(vapidKey: DefaultFirebaseOptions.fcmKey);
     }
