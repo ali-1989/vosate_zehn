@@ -95,8 +95,8 @@ class AppDirectories {
       _externalStorage = StorageHelper.getWebExternalStorage();
       _internalStorage = _externalStorage;
       _documentDir = PathHelper.resolvePath('$_externalStorage/Documents/$_appName')!;
-
-    } else {
+    }
+    else {
       _externalStorage = '/';
 
       if (Platform.isAndroid) {
@@ -110,8 +110,7 @@ class AppDirectories {
 
       final p = await StorageHelper.getDocumentsDirectory$external();
       _documentDir = p + PathHelper.getSeparator() + _appName;
-  }
-
+    }
 
     return _externalStorage;
   }

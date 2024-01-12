@@ -198,7 +198,7 @@ class AppDecoration {
     double? w;
 
     if(width != null){
-      w = kIsWeb? MathHelper.minDouble(width, AppSizes.webMaxWidthSize) : width;
+      w = kIsWeb? MathHelper.minDouble(width, AppSizes.descktopMaxWidthSize) : width;
     }
 
     return SnackBar(

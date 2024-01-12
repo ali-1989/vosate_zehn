@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_route/iris_route.dart';
+import 'package:iris_tools/api/system.dart';
 import 'package:iris_tools/widgets/maxWidth.dart';
 import 'package:iris_tools/widgets/path/box_clipper.dart';
 
@@ -31,6 +32,16 @@ class MyApp extends StatefulWidget {
 }
 ///=============================================================================
 class _MyAppState extends State<MyApp> {
+  /* before ancestors:
+  depth:
+  == 7  MediaQuery
+  == 6  _MediaQueryFromView
+  == 5  _PipelineOwnerScope
+  == 4  _ViewScope
+  == 3  _RawView
+  == 2  View
+  == 1  [root]
+   */
   @override
   Widget build(BuildContext context) {
     return ColoredBox(
@@ -43,46 +54,58 @@ class _MyAppState extends State<MyApp> {
               return EmptyApp();
             }
 
-            return MaxWidth(
-              maxWidth: AppSizes.webMaxWidthSize,
-              apply: kIsWeb,
-              child: ClipRect(
-                clipper: BoxClipper(width: kIsWeb? AppSizes.webMaxWidthSize : double.infinity),
-                child: Directionality(
-                  textDirection: AppThemes.instance.textDirection,
-                  child: DefaultTextHeightBehavior(
-                    textHeightBehavior: AppThemes.instance.baseFont.textHeightBehavior?? const TextHeightBehavior(),
-                    child: DefaultTextStyle(
-                      style: AppThemes.instance.themeData.textTheme.bodySmall?? const TextStyle(),
-                      /// detect orientation change and rotate screen
-                      child: OrientationBuilder(
-                          builder: (context, orientation) {
-                            //isLand = orientation == Orientation.landscape;
-                            return Toaster(
-                              child: MaterialApp(
-                                key: AppBroadcast.materialAppKey,
-                                navigatorKey: AppBroadcast.rootNavigatorKey,
-                                scaffoldMessengerKey: AppBroadcast.rootScaffoldMessengerKey,
-                                debugShowCheckedModeBanner: false,
-                                title: Constants.appTitle,
-                                themeMode: AppThemes.instance.currentThemeMode,
-                                theme: AppThemes.instance.themeData,
-                                //darkTheme: ThemeData.dark(),
-                                onGenerateRoute: IrisNavigatorObserver.generateRoute,
-                                navigatorObservers: [IrisNavigatorObserver.instance()],
-                                scrollBehavior: ScrollConfiguration.of(context).copyWith(
-                                  dragDevices: {
-                                    PointerDeviceKind.mouse,
-                                    PointerDeviceKind.touch,
-                                  },
+            var mData = MediaQuery.of(context);
+
+            if(!System.isMobile()){
+              mData = mData.copyWith(
+                size: Size(AppSizes.descktopMaxWidthSize, AppSizes.getMediaQueryHeight(context)),
+              );
+            }
+
+            /// this effect on [MediaQuery.of(), Overlay.of()]
+            return MediaQuery(
+              data: mData,
+              child: MaxWidth(
+                maxWidth: AppSizes.descktopMaxWidthSize,
+                apply: !System.isMobile(),
+                child: ClipRect(
+                  clipper: BoxClipper(width: System.isMobile()? double.infinity: AppSizes.descktopMaxWidthSize),
+                  child: Directionality(
+                    textDirection: AppThemes.instance.textDirection,
+                    child: DefaultTextHeightBehavior(
+                      textHeightBehavior: AppThemes.instance.baseFont.textHeightBehavior?? const TextHeightBehavior(),
+                      child: DefaultTextStyle(
+                        style: AppThemes.instance.themeData.textTheme.bodySmall?? const TextStyle(),
+                        /// detect orientation change and rotate screen
+                        child: OrientationBuilder(
+                            builder: (context, orientation) {
+                              //isLand = orientation == Orientation.landscape;
+                              return Toaster(
+                                child: MaterialApp(
+                                  key: AppBroadcast.materialAppKey,
+                                  navigatorKey: AppBroadcast.rootNavigatorKey,
+                                  scaffoldMessengerKey: AppBroadcast.rootScaffoldMessengerKey,
+                                  debugShowCheckedModeBanner: false,
+                                  title: Constants.appTitle,
+                                  themeMode: AppThemes.instance.currentThemeMode,
+                                  theme: AppThemes.instance.themeData,
+                                  //darkTheme: ThemeData.dark(),
+                                  onGenerateRoute: IrisNavigatorObserver.generateRoute,
+                                  navigatorObservers: [IrisNavigatorObserver.instance()],
+                                  scrollBehavior: ScrollConfiguration.of(context).copyWith(
+                                    dragDevices: {
+                                      PointerDeviceKind.mouse,
+                                      PointerDeviceKind.touch,
+                                    },
+                                  ),
+                                  locale: SplashManager.mustWaitToLoadingSettings? SettingsModel.defaultAppLocale : SettingsManager.localSettings.appLocale,
+                                  supportedLocales: AppLocale.getAssetSupportedLocales(), /// this do Rtl/Ltr
+                                  localizationsDelegates: AppLocale.getLocaleDelegates(), /// this do Rtl/Ltr
+                                  home: materialHomeBuilder(),
                                 ),
-                                locale: SplashManager.mustWaitToLoadingSettings? SettingsModel.defaultAppLocale : SettingsManager.localSettings.appLocale,
-                                supportedLocales: AppLocale.getAssetSupportedLocales(), /// this do Rtl/Ltr
-                                localizationsDelegates: AppLocale.getLocaleDelegates(), /// this do Rtl/Ltr
-                                home: materialHomeBuilder(),
-                              ),
-                            );
-                          }
+                              );
+                            }
+                        ),
                       ),
                     ),
                   ),

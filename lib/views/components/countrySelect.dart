@@ -21,7 +21,7 @@ class CountrySelectScreen extends StatefulWidget {
     return CountrySelectScreenState();
   }
 }
-///========================================================================================================
+///=============================================================================
 class CountrySelectScreenState extends StateSuper<CountrySelectScreen> {
   Map<String, dynamic> resultMap = {};
   CountryModel? result;
@@ -45,13 +45,7 @@ class CountrySelectScreenState extends StateSuper<CountrySelectScreen> {
     return getScaffold();
   }
 
-  @override
-  Future<bool> onWillBack<S extends StateSuper>(S state) {
-    //CountrySelectScreenState state = state as CountrySelectScreenState;
 
-    RouteTools.popTopView(context: context, data: result);
-    return Future<bool>.value(false);
-  }
 
   void fetchCountries() {
     /*AssetsManager.loadAsString('assets/raw /countries.json').then((data) {
@@ -69,8 +63,8 @@ class CountrySelectScreenState extends StateSuper<CountrySelectScreen> {
   }
 
   Widget getScaffold() {
-    return WillPopScope(
-      onWillPop: () => onWillBack(this),
+    return PopScope(
+      canPop: true,
       child: Scaffold(
         appBar: getAppbar(),
         body: getBody(),
@@ -88,8 +82,8 @@ class CountrySelectScreenState extends StateSuper<CountrySelectScreen> {
     filter();
 
     return SizedBox(
-      width: AppSizes.getScreenWidth(context),
-      height: AppSizes.getScreenHeight(context),
+      width: AppSizes.getMediaQueryWidth(context),
+      height: AppSizes.getMediaQueryHeight(context),
       child: Column(
         children: <Widget>[
           const SizedBox(height: 4,),

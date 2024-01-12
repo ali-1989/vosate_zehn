@@ -49,7 +49,7 @@ class AppSnack {
       backgroundColor: backColor,
       shape: shape,
       onVisible: onVisible,
-      width: AppSizes.isBigWidth()? AppSizes.webMaxWidthSize: null,
+      width: AppSizes.isBigWidth()? AppSizes.descktopMaxWidthSize: null,
     );
 
     return getScaffoldMessenger(context).showSnackBar(snackBar);

@@ -155,6 +155,7 @@ class WebsocketService {
 		periodicHeartTimer = Timer.periodic(dur, (timer) {
 			sendHeartAndUsers();
 		});
+		LogTools.logger.logToAll('Websocket is connected. [TS: ${DateTime.now()}]');
 	}
 
 	///------------ heart every 3 min --------------------------------------------

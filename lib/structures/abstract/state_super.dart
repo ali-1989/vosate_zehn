@@ -1,7 +1,7 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/managers/orientationManager.dart';
+import 'package:iris_tools/api/system.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 
 import 'package:app/tools/app/app_loading.dart';
@@ -14,12 +14,12 @@ import '/managers/settings_manager.dart';
 
 abstract class StateSuper<W extends StatefulWidget> extends State<W> {
 	final AssistController assistCtr = AssistController();
-	late double ws;
-	late double hs;
-	late double wRel;
-	late double hRel;
-	late double iconR;
-	late double fontR;
+	double get ws => AppSizes.instance.appWidth;
+	double get hs => AppSizes.instance.appHeight;
+	double get wRel => AppSizes.instance.widthRelative;
+	double get hRel => AppSizes.instance.heightRelative;
+	double get iconR => AppSizes.instance.iconRatio;
+	double get fontR => AppSizes.instance.fontRatio;
 
 	@override
   void didUpdateWidget(W oldWidget) {
@@ -32,16 +32,9 @@ abstract class StateSuper<W extends StatefulWidget> extends State<W> {
 
 		RouteTools.addWidgetState(this);
 
-		if(kIsWeb){
+		if(!System.isMobile()){
 			AppSizes.instance.addMetricListener(onResize);
 		}
-
-		ws = AppSizes.instance.appWidth;
-		hs = AppSizes.instance.appHeight;
-		wRel = AppSizes.instance.widthRelative;
-		hRel = AppSizes.instance.heightRelative;
-		iconR = AppSizes.instance.iconRatio;
-		fontR = AppSizes.instance.fontRatio;
 	}
 
 	@override
@@ -52,10 +45,7 @@ abstract class StateSuper<W extends StatefulWidget> extends State<W> {
 	@override
 	void dispose() {
 		RouteTools.removeWidgetState(this);
-
-		if(kIsWeb){
-			AppSizes.instance.removeMetricListener(onResize);
-		}
+		AppSizes.instance.removeMetricListener(onResize);
 
 		super.dispose();
 	}
@@ -117,42 +107,9 @@ abstract class StateSuper<W extends StatefulWidget> extends State<W> {
 		Navigator.of(state.context).maybePop(result);
 	}
 
-	// before close (mayPop), keyboard backKey, onBackButton
-	Future<bool> onWillBack<s extends StateSuper>(s state) {
-		/*if (false) {
-			Navigator.of(state.context).pop();
-			return Future<bool>.value(false);
-		}*/
-
-		// true: pop,  false: not close page
-		return Future<bool>.value(true);
-	}
-
 	void onResize(oldW, oldH, newW, newH){
-		// must override if need
+		// must override if need.
+		// any page that is pushed by Navigator.push() not listen Resize by default.
+		// must override this to listen.but widget tree before first Push receive changes.
 	}
 }
-
-/*
-	## override onWillBack in children (Screen|Page):
-
-	@override
-  Future<bool> onWillBack<s extends StateSuper>(s state) {
-    if (weSlideController.isOpened) {
-      weSlideController.hide();
-      return Future<bool>.value(false);
-    }
-
-		return Future<bool>.value(true);
-    // do not use this, not work: return super.onWillBack(state);
-  }
-
-	.............
-	WillPopScope(
-			onWillPop: () => state.onWillBack(state),
-			onWillPop: () => onWillBack(this),
-			child: ...
-	)
- -------------------------------------------------------------------------------
-
-*/

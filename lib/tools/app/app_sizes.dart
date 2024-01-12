@@ -14,17 +14,16 @@ class AppSizes {
 
   static final _instance = AppSizes._();
   static bool _initialState = false;
-
   static double sizeOfBigScreen = 700;
-  static double webMaxWidthSize = 400;
+  static double descktopMaxWidthSize = 400;
 
   double? realPixelWidth;
   double? realPixelHeight;
-  double? pixelRatio;
+  double? _pixelRatio;
   double appWidth = 0;    //Tecno: 360.0  Web: 1200
   double appHeight = 0;  //Tecno: 640.0  Web: 620
   ViewPadding? rootPadding;
-  List<Function> onMetricListeners = [];
+  final List<Function> _onMetricListeners = [];
   Function? _systemMetricFunc;
 
   static AppSizes get instance {
@@ -41,18 +40,18 @@ class AppSizes {
   void _prepareSizes() {
     realPixelWidth = PlatformDispatcher.instance.implicitView!.physicalSize.width;
     realPixelHeight = PlatformDispatcher.instance.implicitView!.physicalSize.height;
-    pixelRatio = PlatformDispatcher.instance.implicitView!.devicePixelRatio;
+    _pixelRatio = PlatformDispatcher.instance.implicitView!.devicePixelRatio;
     rootPadding = PlatformDispatcher.instance.implicitView!.padding;
     final isLandscape = realPixelWidth! > realPixelHeight!;
 
     if(kIsWeb) {
-      appWidth = min(realPixelWidth! / pixelRatio!, webMaxWidthSize);
-      appHeight = realPixelHeight! / pixelRatio!;
-      pixelRatio = realPixelHeight! / webMaxWidthSize;
+      appWidth = min(realPixelWidth! / _pixelRatio!, descktopMaxWidthSize);
+      appHeight = realPixelHeight! / _pixelRatio!;
+      _pixelRatio = realPixelHeight! / descktopMaxWidthSize;
     }
     else {
-      appWidth = (isLandscape ? realPixelHeight : realPixelWidth)! / pixelRatio!;
-      appHeight = (isLandscape ? realPixelWidth : realPixelHeight)! / pixelRatio!;
+      appWidth = (isLandscape ? realPixelHeight : realPixelWidth)! / _pixelRatio!;
+      appHeight = (isLandscape ? realPixelWidth : realPixelHeight)! / _pixelRatio!;
     }
   }
 
@@ -70,7 +69,7 @@ class AppSizes {
         return;
       }*/
 
-      for(final f in onMetricListeners){
+      for(final f in _onMetricListeners){
         try{
           f.call(oldW, oldH, realPixelWidth, realPixelHeight);
         }
@@ -88,21 +87,23 @@ class AppSizes {
   }
 
   void addMetricListener(Function(double oldW, double oldH, double newW, double newH) lis){
-    onMetricListeners.add(lis);
+    _onMetricListeners.add(lis);
   }
 
   void removeMetricListener(Function lis){
-    onMetricListeners.remove(lis);
+    _onMetricListeners.remove(lis);
   }
+
+  double? get pixelRatio => _pixelRatio;
 
   // pixel6 pro  => [411 * 843]  rate: 3.5
   // WQVGA       => [320 * 533]  rate: 0.75
   double get heightRelative => MathHelper.relativeOf(appHeight, 530, 40, 0.06);
   double get widthRelative => MathHelper.relativeOf(appWidth, 320, 40, 0.1);
-  double get fontRatio => MathHelper.between(1.4, 3.5, 0.8, 0.8, pixelRatio!);
-  double get iconRatio => MathHelper.between(1.3, 3.5, 0.7, 0.8, pixelRatio!);
+  double get fontRatio => MathHelper.between(1.4, 3.5, 0.8, 0.8, _pixelRatio!);
+  double get iconRatio => MathHelper.between(1.3, 3.5, 0.7, 0.8, _pixelRatio!);
 
-  ///●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●
+  ///●●●● static ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●
   static FlutterView? getWindow(){
     return PlatformDispatcher.instance.implicitView;
   }
@@ -115,41 +116,37 @@ class AppSizes {
     return instance.appWidth > sizeOfBigScreen;
   }
 
-  double? getPixelRatio(){
-    return pixelRatio;
-  }
-
-  static double getPixelRatioBy(BuildContext context){
+  static double getPixelRatio(BuildContext context){
     return MediaQuery.of(context).devicePixelRatio;
   }
 
-  static Size getScreenRealSize(BuildContext context){
+  static TextScaler getTextScaleFactor(BuildContext context){
+    return MediaQuery.of(context).textScaler;
+  }
+
+  /// is include statusBarHeight
+  static Size getMediaQuerySize(BuildContext context){
+    return MediaQuery.of(context).size;
+  }
+
+  static Size getMediaQueryRealSize(BuildContext context){
     final r = MediaQuery.of(context).devicePixelRatio;
     final s = MediaQuery.of(context).size;
 
     return Size(s.width * r, s.height * r);
   }
 
-  static double getTextScaleFactorBy(BuildContext context){
-    return MediaQuery.of(context).textScaleFactor;
-  }
-
-  /// is include statusBarHeight
-  static Size getScreenSizeBy(BuildContext context){
-    return MediaQuery.of(context).size;
-  }
-
   /// same of appWidth.  Tecno: 360.0   ,Web: deferToWindow [1200]
-  static double getScreenWidth(BuildContext context){
+  static double getMediaQueryWidth(BuildContext context){
     return MediaQuery.of(context).size.width;
   }
 
   /// is include statusBarHeight
   /// same of appHeight.   Tecno: 640.0   ,Web: deferToWindow [620]
-  static double getScreenHeight(BuildContext context){
+  static double getMediaQueryHeight(BuildContext context){
     return MediaQuery.of(context).size.height;
   }
-  ///-----------------------------------------------------------------------------------------
+
   static double getStatusBarHeight(BuildContext context){
     return MediaQuery.of(context).padding.top;
   }
@@ -158,6 +155,7 @@ class AppSizes {
     return kToolbarHeight;
   }
 
+  /// screen widthOut statusBar
   static double getViewPortHeight(BuildContext context){
     final full = MediaQuery.of(context).size.height;
     final status = MediaQuery.of(context).viewPadding.top; // this is variable

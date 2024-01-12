@@ -55,7 +55,7 @@ class AppSheet {
     return showBottomSheet<T>(
       context: ctx,
       shape: shape,
-      constraints: AppSizes.isBigWidth()? BoxConstraints.tightFor(width: AppSizes.webMaxWidthSize) : null,
+      constraints: AppSizes.isBigWidth()? BoxConstraints.tightFor(width: AppSizes.descktopMaxWidthSize) : null,
       clipBehavior: shape != null ? Clip.antiAlias : Clip.none,
       elevation: elevation,
       backgroundColor: backgroundColor ?? Colors.transparent,
@@ -110,7 +110,7 @@ class AppSheet {
         elevation: elevation,
         shape: shape,
         enableDrag: true,
-        constraints: AppSizes.isBigWidth()? BoxConstraints.tightFor(width: AppSizes.webMaxWidthSize) : null,
+        constraints: AppSizes.isBigWidth()? BoxConstraints.tightFor(width: AppSizes.descktopMaxWidthSize) : null,
         isDismissible: isDismissible,
         clipBehavior: shape != null ? Clip.antiAlias : Clip.none,
         backgroundColor: backgroundColor ?? Colors.transparent,

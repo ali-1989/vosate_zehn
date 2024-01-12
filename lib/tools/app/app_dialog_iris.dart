@@ -67,7 +67,7 @@ class AppDialogIris {
 			double factor = 0.8;
 			double wid = AppSizes.instance.appWidth * factor;
 
-			while(wid > (AppSizes.webMaxWidthSize - 50)){
+			while(wid > (AppSizes.descktopMaxWidthSize - 50)){
 				factor -= 0.05;
 				wid = AppSizes.instance.appWidth * factor;
 			}
@@ -75,7 +75,7 @@ class AppDialogIris {
 			_dialogDecoration.widthFactor = factor;
 		}
 	}
-	///============================================================================================================
+	///===========================================================================
 	Future showIrisDialog(
 			BuildContext context, {
 				String? title,
@@ -262,7 +262,6 @@ class _TextInputView extends StatefulWidget {
 		this.initValue,
 		this.textInputType,
 		this.inputDecoration,
-		super.key,
 	});
 
   @override

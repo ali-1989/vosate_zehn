@@ -26,7 +26,10 @@ class LogTools {
 
   static Future<bool> init() async {
     try {
-      if (!kIsWeb) {
+      if (kIsWeb) {
+        LogTools.reporter = Reporter('/', 'report');
+      }
+      else {
         LogTools.reporter = Reporter(AppDirectories.getExternalAppFolder(), 'report');
       }
 
@@ -38,6 +41,7 @@ class LogTools {
       avoidReport.add('FIS_AUTH_ERROR'); // firebase
       avoidReport.add('RenderFlex overflowed by');
       avoidReport.add('RenderFlex children have non-zero flex');
+      avoidReport.add('Could not navigate');
 
       return true;
     }

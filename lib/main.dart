@@ -53,10 +53,7 @@ void dartFunction() async {
 @pragma('vm:entry-point')
 Future<(bool, String?)> prepareDirectoriesAndLogger() async {
   try {
-    if (!kIsWeb) {
-      await AppDirectories.prepareStoragePaths(Constants.appName);
-    }
-
+    await AppDirectories.prepareStoragePaths(Constants.appName);
     LogTools.init();
 
     return (true, null);
