@@ -77,7 +77,7 @@ class SplashManager {
       AppThemes.init();
       SettingsManager.init();
 
-      if(false){
+      if(true){
         SettingsManager.localSettings.httpAddress = 'http://192.168.1.104:7436';
         SettingsManager.localSettings.wsAddress = 'ws://192.168.1.104:7438/ws';
       }

@@ -37,7 +37,7 @@ class RegisterPage extends StatefulWidget {
   @override
   State<RegisterPage> createState() => _RegisterPageState();
 }
-///=================================================================================================
+///=============================================================================
 class _RegisterPageState extends StateSuper<RegisterPage> {
   late TextEditingController nameCtr;
   late TextEditingController familyCtr;
@@ -248,9 +248,9 @@ class _RegisterPageState extends StateSuper<RegisterPage> {
       hideLoading();
     };
 
-    /*requester.httpRequestEvents.onFailState = (req, r) async {
-      AppToast.showToast(context, AppMessages.);
-    };*/
+    requester.httpRequestEvents.onFailState = (req, r) async {
+      AppToast.showToast(context, AppMessages.errorOccurTryAgain);
+    };
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
       final userModel = await SessionService.loginByProfileData(data);

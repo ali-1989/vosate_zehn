@@ -1,25 +1,16 @@
-import 'dart:async';
 
-import 'package:flutter/foundation.dart';
+import 'package:app/services/google_sign_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:iris_tools/api/checker.dart';
-import 'package:iris_tools/api/helpers/localeHelper.dart';
-import 'package:iris_tools/api/helpers/mathHelper.dart';
 import 'package:iris_tools/api/system.dart';
-import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:iris_tools/widgets/page_switcher.dart';
 import 'package:iris_tools/widgets/text/autoDirection.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:stop_watch_timer/stop_watch_timer.dart';
 
-import 'package:app/services/google_service.dart';
 import 'package:app/services/login_service.dart';
 import 'package:app/services/session_service.dart';
 import 'package:app/structures/abstract/state_super.dart';
-import 'package:app/structures/models/country_model.dart';
-import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/app_broadcast.dart';
 import 'package:app/tools/app/app_decoration.dart';
@@ -28,15 +19,9 @@ import 'package:app/tools/app/app_loading.dart';
 import 'package:app/tools/app/app_messages.dart';
 import 'package:app/tools/app/app_sheet.dart';
 import 'package:app/tools/app/app_snack.dart';
-import 'package:app/tools/app/app_themes.dart';
-import 'package:app/tools/app/app_toast.dart';
-import 'package:app/tools/country_tools.dart';
 import 'package:app/tools/http_tools.dart';
 import 'package:app/tools/route_tools.dart';
-import 'package:app/views/components/countrySelect.dart';
-import 'package:app/views/components/phoneNumberInput.dart';
 import 'package:app/views/pages/login/register_page.dart';
-import 'package:app/views/pages/term_page.dart';
 
 class LoginEmailPart extends StatefulWidget{
   // ignore: prefer_const_constructors_in_immutables
@@ -135,7 +120,7 @@ class _LoginEmailPartState extends StateSuper<LoginEmailPart> {
                     backgroundColor: AppDecoration.secondColor
                 ),
                   onPressed: onSignWithGoogleClick,
-                  icon: Image.asset(AppImages.appIcon, height: iconR * 18),
+                icon: Image.asset(AppImages.googleIco, height: 18* iconR),
                 label: const Text(''),
               ),
             ),
@@ -160,76 +145,68 @@ class _LoginEmailPartState extends StateSuper<LoginEmailPart> {
   }
 
   Widget buildRegisterEmail() {
-    return Card(
-      color: Colors.white,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          children: [
-            const SizedBox(height: 30),
-            Text(AppMessages.pleaseEnterEmailToRegistering,
-                style: const TextStyle(fontWeight: FontWeight.bold)
-            ),
-
-            const SizedBox(height: 30),
-            TextField(
-              controller: emailCtr,
-              decoration: AppDecoration.outlineBordersInputDecoration.copyWith(
-                hintText: 'ایمیل',
-              ),
-              keyboardType: TextInputType.emailAddress,
-              textDirection: TextDirection.ltr,
-            ),
-
-            const SizedBox(height: 20),
-
-            Align(
-                alignment: Alignment.topRight,
-                child: Text(AppMessages.pleaseEnterAPassword, style: const TextStyle(fontWeight: FontWeight.bold))),
-
-            const SizedBox(height: 8),
-
-            AutoDirection(
-              builder: (BuildContext context, AutoDirectionController direction) {
-                return TextField(
-                  controller: passwordCtr,
-                  decoration: AppDecoration.outlineBordersInputDecoration.copyWith(
-                    hintText: 'رمز عبور',
-                  ),
-                  keyboardType: TextInputType.text,
-                  textDirection: direction.getTextDirection(passwordCtr.text),
-                  onChanged: (v){
-                    direction.onChangeText(v);
-                  },
-                );
-              },
-            ),
-
-            const SizedBox(height: 10),
-
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(shape: const StadiumBorder()),
-                  onPressed: onRegisterEmailClick,
-                  child: Text(AppMessages.register)
-              ),
-            ),
-            const SizedBox(height: 10),
-            UnconstrainedBox(
-              child: TextButton(
-                  onPressed: (){
-                    pageCtr.changePageTo(0);
-                  },
-                  child: Text(AppMessages.back)
-              ),
-            ),
-
-            const SizedBox(height: 32),
-          ],
+    return Column(
+      children: [
+        const SizedBox(height: 20),
+        Text(AppMessages.pleaseEnterEmailToRegistering,
+            style: const TextStyle(fontWeight: FontWeight.bold)
         ),
-      ),
+
+        const SizedBox(height: 10),
+        TextField(
+          controller: emailCtr,
+          decoration: AppDecoration.outlineBordersInputDecoration.copyWith(
+            hintText: 'ایمیل',
+          ),
+          keyboardType: TextInputType.emailAddress,
+          textDirection: TextDirection.ltr,
+        ),
+
+        const SizedBox(height: 16),
+        Align(
+            alignment: Alignment.topRight,
+            child: Text(AppMessages.pleaseEnterAPassword, style: const TextStyle(fontWeight: FontWeight.bold))),
+
+        const SizedBox(height: 6),
+
+        AutoDirection(
+          builder: (BuildContext context, AutoDirectionController direction) {
+            return TextField(
+              controller: passwordCtr,
+              decoration: AppDecoration.outlineBordersInputDecoration.copyWith(
+                hintText: 'رمز عبور',
+              ),
+              keyboardType: TextInputType.text,
+              textDirection: direction.getTextDirection(passwordCtr.text),
+              onChanged: (v){
+                direction.onChangeText(v);
+              },
+            );
+          },
+        ),
+
+        const SizedBox(height: 10),
+
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+              style: ElevatedButton.styleFrom(shape: const StadiumBorder()),
+              onPressed: onRegisterEmailClick,
+              child: Text(AppMessages.register)
+          ),
+        ),
+        const SizedBox(height: 5),
+        UnconstrainedBox(
+          child: TextButton(
+              onPressed: (){
+                pageCtr.changePageTo(0);
+              },
+              child: Text(AppMessages.loginBtn)
+          ),
+        ),
+
+        const SizedBox(height: 5),
+      ],
     );
   }
 
@@ -258,7 +235,7 @@ class _LoginEmailPartState extends StateSuper<LoginEmailPart> {
     }
 
     if(state == EmailVerifyStatus.mustLogin) {
-      pageCtr.changePageTo(1);
+      pageCtr.changePageTo(0);
       AppSheet.showSheetOk(context, 'این ایمیل وجود دارد، لطفا وارد شوید');
     }
     else if(state == EmailVerifyStatus.mustRegister){
@@ -269,7 +246,7 @@ class _LoginEmailPartState extends StateSuper<LoginEmailPart> {
     }
     else if(state == EmailVerifyStatus.waitToVerify){
       AppSheet.showSheetOk(context, 'ایمیلی جهت فعال ساری برای شما ارسال شد، لطفا روی لینک فعال سازی کلیک کنید.');
-      pageCtr.changePageTo(1);
+      pageCtr.changePageTo(0);
     }
   }
 
@@ -310,23 +287,13 @@ class _LoginEmailPartState extends StateSuper<LoginEmailPart> {
   }
 
   void onSignWithGoogleClick() async {
-    final google = GoogleService();
+    final google = GoogleSignService();
+    (GoogleSignInAccount?, Exception?) googleResult;
 
     AppLoading.instance.showWaiting(context);
-    GoogleSignInAccount? googleResult;
-
-    final timer = Timer(const Duration(seconds: kIsWeb? 300: 60), (){
-      AppLoading.instance.hideLoading(context);
-      AppSheet.showSheetOk(context, AppMessages.operationFailed);
-      return;
-    });
 
     try {
       googleResult = await google.signIn();
-
-      if(timer.isActive){
-        timer.cancel();
-      }
     }
     catch(e){
       AppLoading.instance.hideLoading(context);
@@ -334,54 +301,50 @@ class _LoginEmailPartState extends StateSuper<LoginEmailPart> {
       return;
     }
 
-    if(googleResult == null){
+    if(googleResult.$1 == null){
       AppLoading.instance.hideLoading(context);
       AppSheet.showSheetOk(context, AppMessages.operationFailed);
+      return;
     }
-    else {
-      final twoState = await LoginService.requestVerifyGmail(email: googleResult.email);
-      AppLoading.instance.cancel(context);
 
-      if(twoState.hasResult1()){
-        final status = twoState.result1![Keys.status];
-        final causeCode = twoState.result1![Keys.causeCode]?? 0;
+    final twoState = await LoginService.requestVerifyGmail(email: googleResult.$1!.email);
+    AppLoading.instance.cancel(context);
 
-        if(status == Keys.error){
-          if(causeCode == HttpCodes.cCode$UserIsBlocked){
-            AppSheet.showSheetOk(context, AppMessages.accountIsBlock);
-            return;
-          }
+    if(twoState.hasResult1()){
+      final status = twoState.result1![Keys.status];
+      final causeCode = twoState.result1![Keys.causeCode]?? 0;
+
+      if(status == Keys.error){
+        if(causeCode == HttpCodes.cCode$UserIsBlocked){
+          AppSheet.showSheetOk(context, AppMessages.accountIsBlock);
         }
         else {
-          final userId = twoState.result1![Keys.userId];
-
-          if (userId == null) {
-            final injectData = RegisterPageInjectData();
-            injectData.email = googleResult.email;
-
-            RouteTools.pushPage(context, RegisterPage(injectData: injectData));
-          }
-          else {
-            final userModel = await SessionService.loginByProfileData(twoState.result1!);
-
-            if(userModel != null) {
-              //RouteTools.pushPage(context, LayoutPage(key: AppBroadcast.layoutPageKey));
-              AppBroadcast.reBuildApp();
-            }
-            else {
-              AppSheet.showSheetOk(context, AppMessages.operationFailed);
-            }
-          }
+          AppSheet.showSheetOk(context, AppMessages.errorOccurTryAgain);
         }
       }
       else {
-        AppSheet.showSheetOk(context, AppMessages.errorCommunicatingServer);
-        return;
+        final userId = twoState.result1![Keys.userId];
+
+        if (userId == null) {
+          final injectData = RegisterPageInjectData();
+          injectData.email = googleResult.$1!.email;
+
+          RouteTools.pushPage(context, RegisterPage(injectData: injectData));
+        }
+        else {
+          final userModel = await SessionService.loginByProfileData(twoState.result1!);
+
+          if(userModel != null) {
+            AppBroadcast.reBuildApp();
+          }
+          else {
+            AppSheet.showSheetOk(context, AppMessages.operationFailed);
+          }
+        }
       }
     }
-  }
-
-  void onEnterWithEmailClick() {
-    pageCtr.changePageTo(1);
+    else {
+      AppSheet.showSheetOk(context, AppMessages.errorCommunicatingServer);
+    }
   }
 }

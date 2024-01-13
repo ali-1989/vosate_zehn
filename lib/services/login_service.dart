@@ -1,7 +1,8 @@
 import 'dart:async';
-import 'dart:io';
-import 'dart:math';
 
+import 'package:app/services/google_sign_service.dart';
+import 'package:app/services/websocket_service.dart';
+import 'package:app/structures/middleWares/requester.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:dio/dio.dart';
@@ -14,7 +15,6 @@ import 'package:iris_tools/models/two_state_return.dart';
 import 'package:iris_tools/modules/stateManagers/updater_state.dart';
 
 import 'package:app/managers/api_manager.dart';
-import 'package:app/services/google_service.dart';
 import 'package:app/services/session_service.dart';
 import 'package:app/structures/enums/app_events.dart';
 import 'package:app/structures/models/country_model.dart';
@@ -53,6 +53,7 @@ class LoginService {
   }
 
   static Future<void> onLoginObservable({dynamic data}) async {
+    WebsocketService.sendHeartAndUsers();
   }
 
   static Future<void> onLogoffObservable({dynamic data}) async {
@@ -93,7 +94,7 @@ class LoginService {
     final isCurrent = lastUser != null && lastUser.userId == user!.userId;
 
     if(user!.email != null){
-      final google = GoogleService();
+      final google = GoogleSignService();
       await google.signOut();
 
       if(await google.isSignIn()){
@@ -120,7 +121,7 @@ class LoginService {
 
       if(lastUser != null) {
         if (lastUser.email != null) {
-          final google = GoogleService();
+          final google = GoogleSignService();
           await google.signOut();
         }
       }
@@ -219,7 +220,7 @@ class LoginService {
 
   static Future<TwoStateReturn<Map, Exception>> requestVerifyGmail({required String email}) async {
     final http = HttpItem();
-    final result = Completer<TwoStateReturn<Map, Exception>>();
+    final Completer<TwoStateReturn<Map, Exception>> result = Completer();
 
     final js = {};
     js[Keys.request] = 'verify_email';
@@ -251,6 +252,54 @@ class LoginService {
       final resJs = request.getBodyAsJson()!;
 
       result.complete(TwoStateReturn(r1: resJs));
+      return null;
+    });
+
+    return result.future;
+  }
+
+  static Future<bool> loginWithAuthEmail({required String email}) async {
+    final http = HttpItem();
+    final result = Completer<bool>();
+
+    final js = {};
+    js[Keys.request] = 'login_with_auth_email';
+    js['email'] = email;
+    DeviceInfoTools.attachDeviceAndTokenInfo(js);
+
+    http.fullUrl = ApiManager.serverApi;
+    http.method = 'POST';
+    http.setBodyJson(js);
+
+    final request = AppHttpDio.send(http);
+
+    var f = request.response.catchError((e){
+      result.complete(false);
+
+      return null;
+    });
+
+    f = f.then((Response? response) async {
+      if(response == null || !request.isOk) {
+        if(!result.isCompleted){
+          result.complete(false);
+        }
+
+        return;
+      }
+
+      final status = request.getBodyAsJson()![Keys.status];
+
+      if(status == Keys.error){
+        if(!result.isCompleted){
+          result.complete(false);
+        }
+        return;
+      }
+      final resJs = request.getBodyAsJson()!;
+      await SessionService.loginByProfileData(resJs);
+
+      result.complete(true);
       return null;
     });
 
@@ -464,108 +513,13 @@ class LoginService {
     }
   }
 
-  static Future<String> findCountryWithIP() async {
-    var res = await findCountryWithIP1();
-    res ??= await findCountryWithIP2();
-    res ??= await findCountryWithIP3();
-    res ??= await findCountryWithIP4();
+  static Requester requestALoginCommand(Map<String, dynamic> body, HttpRequestEvents eventHandler){
+    final request = Requester();
+    request.bodyJson = body;
+    request.httpRequestEvents = eventHandler;
+    request.prepareUrl();
+    request.request();
 
-    return res?? 'US';
-  }
-
-  static Future<String?> findCountryWithIP1() async {
-    const url = 'http://ip-api.com/json';
-
-    HttpItem http = HttpItem(fullUrl: url);
-    http.method = 'GET';
-
-    final res = AppHttpDio.send(http);
-
-    return res.response.then((value) {
-      if(res.isOk){
-        return res.getBodyAsJson()!['countryCode'] as String;
-      }
-
-      return null;
-    })
-        .onError((error, stackTrace) => null);
-  }
-
-  static Future<String?> findCountryWithIP2() async {
-    const url = 'https://api.country.is';
-
-    HttpItem http = HttpItem(fullUrl: url);
-    http.method = 'GET';
-
-    final res = AppHttpDio.send(http);
-
-    return res.response.then((value) async {
-          if(res.isOk){
-            return res.getBodyAsJson()!['country'] as String;
-          }
-
-          return null;
-    })
-    .onError((error, stackTrace) => null);
-  }
-
-  static Future<String?> findCountryWithIP3() async {
-    const url = 'https://api.db-ip.com/v2/free/self';
-
-    HttpItem http = HttpItem(fullUrl: url);
-    http.method = 'GET';
-
-    final res = AppHttpDio.send(http);
-
-    return res.response.then((value) {
-      if(res.isOk){
-        return res.getBodyAsJson()!['countryCode'] as String;
-      }
-
-      return null;
-    })
-        .onError((error, stackTrace) => null);
-  }
-
-  static Future<String?> findCountryWithIP4() async {
-    const url = 'https://hutils.loxal.net/whois';
-
-    HttpItem http = HttpItem(fullUrl: url);
-    http.method = 'GET';
-
-    final res = AppHttpDio.send(http);
-
-    return res.response.then((value) {
-      if(res.isOk){
-        return res.getBodyAsJson()!['countryIso'] as String;
-      }
-
-      return null;
-    })
-        .onError((error, stackTrace) => null);
-  }
-
-  static Future<InternetAddress> retrieveIPAddress() async {
-    int code = Random().nextInt(255);
-    final dgSocket = await RawDatagramSocket.bind(InternetAddress.anyIPv4, 0);
-    dgSocket.readEventsEnabled = true;
-    dgSocket.broadcastEnabled = true;
-
-    Future<InternetAddress> ret = dgSocket.timeout(const Duration(milliseconds: 100), onTimeout: (sink) {
-      sink.close();
-    }).expand<InternetAddress>((event) {
-      if (event == RawSocketEvent.read) {
-        Datagram? dg = dgSocket.receive();
-
-        if (dg != null && dg.data.length == 1 && dg.data[0] == code) {
-          dgSocket.close();
-          return [dg.address];
-        }
-      }
-      return [];
-    }).firstWhere((InternetAddress? a) => a != null);
-
-    dgSocket.send([code], InternetAddress('255.255.255.255'), dgSocket.port);
-    return ret;
+    return request;
   }
 }

@@ -5,11 +5,12 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:iris_tools/api/cancelable_future.dart';
 
 class GoogleSignService {
+  static GoogleSignService? _instance;
+
   GoogleSignIn? _signObj;
   GoogleSignInAccount? _signUser;
   UserCredential? _credentialUser;
 
-  static GoogleSignService? _instance;
 
   GoogleSignService._();
 
@@ -19,32 +20,38 @@ class GoogleSignService {
     return _instance!;
   }
 
+  GoogleSignInAccount? get signedUser => _signUser;
+  UserCredential? get credentialUser => _credentialUser;
+
+  /// this usable after sign with Credential
+  User? get currentAuthUser => FirebaseAuth.instance.currentUser;
+
   GoogleSignIn get googleSignIn {
     if(_signObj == null){
+      final scopes = [
+        'https://www.googleapis.com/auth/userinfo.email',
+        'https://www.googleapis.com/auth/userinfo.profile',
+        //'https://www.googleapis.com/auth/cloud-platform.read-only',
+        //'https://www.googleapis.com/auth/contacts.readonly',
+        //'https://accounts.google.com/o/oauth2/auth',
+      ];
+
       if(kIsWeb){
         _signObj = GoogleSignIn();
 
-        /*signObj = GoogleSignIn(
-        //client_type:3
+        /*
+        ///client_type:3
+        /// for web this id must insert in index.html
+        signObj = GoogleSignIn(
         clientId: '579668054514-ojuoo3o4cj1vjbcqfavq6upv9e8h4d1h.apps.googleusercontent.com',
         signInOption: SignInOption.standard,
-        scopes: [
-          'https://www.googleapis.com/auth/userinfo.email',
-          'https://www.googleapis.com/auth/userinfo.profile',
-        ],
+        scopes: scopes,
       );*/
       }
       else {
-        //signObj = GoogleSignIn();
         _signObj = GoogleSignIn(
           signInOption: SignInOption.standard,
-          scopes: [
-            'https://www.googleapis.com/auth/userinfo.email',
-            'https://www.googleapis.com/auth/userinfo.profile',
-            //'https://www.googleapis.com/auth/cloud-platform.read-only',
-            //'https://www.googleapis.com/auth/contacts.readonly',
-            //'https://accounts.google.com/o/oauth2/auth',
-          ],
+          scopes: scopes,
         );
       }
     }
@@ -52,18 +59,12 @@ class GoogleSignService {
     return _signObj!;
   }
 
-  GoogleSignInAccount? get signedUser => _signUser;
-  UserCredential? get credentialUser => _credentialUser;
-
-  /// this usable after sign with Credential
-  User? get currentAuthUser => FirebaseAuth.instance.currentUser;
-
   Future<(GoogleSignInAccount?, Exception?)> signIn() async {
     try {
       final CancelableFuture canF;
 
       if (kIsWeb) {
-        canF = CancelableFuture.timeout(googleSignIn.signIn(), const Duration(seconds: 120));
+        canF = CancelableFuture.timeout(googleSignIn.signIn(), const Duration(seconds: 360));
       }
       else {
         canF = CancelableFuture.timeout(googleSignIn.signIn(), const Duration(seconds: 120));
@@ -77,7 +78,8 @@ class GoogleSignService {
     }
   }
 
-  /// (Need Vpn in Iran), must add localhost:2023 to js domain in auth section GoogleCloud
+  /// (Need Vpn in Iran),
+  /// must add localhost:2023 to js domain in auth section GoogleCloud
   /// after this operation, can call some google API without problem.
   Future<(UserCredential? , Exception?)> getCredentialInfo({GoogleSignInAccount? signedUser}) async {
     signedUser ??= this.signedUser;

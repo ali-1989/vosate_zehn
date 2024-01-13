@@ -91,7 +91,7 @@ class AppLoading {
   void cancel(BuildContext context){
     AppOverlay.hideDialog(context);
   }
-  ///-----------------------------------------------------------------------------------
+  ///---------------------------------------------------------------------------
   Future<void> showLoading(BuildContext context, {bool dismiss = false}) async {
     final easyView = OverlayContainer(
       overlayTheme: _overlayTheme,
