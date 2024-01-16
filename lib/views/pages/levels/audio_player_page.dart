@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app/tools/app/app_cache.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +15,6 @@ import 'package:iris_tools/widgets/circle_container.dart';
 import 'package:app/structures/abstract/state_super.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/tools/app/app_icons.dart';
-import 'package:app/tools/app/app_images.dart';
 import 'package:app/tools/app/app_sizes.dart';
 import 'package:app/views/baseComponents/appbar_builder.dart';
 import 'package:app/views/pages/levels/playback_disposition.dart';
@@ -46,6 +46,7 @@ class AudioPlayerPage extends StatefulWidget{
 
   final AudioPlayerPageInjectData injectData;
 
+  // ignore: prefer_const_constructors_in_immutables
   AudioPlayerPage({
     super.key,
     required this.injectData,
@@ -56,12 +57,11 @@ class AudioPlayerPage extends StatefulWidget{
     return AudioPlayerPageState();
   }
 }
-///=========================================================================================
+///=============================================================================
 class AudioPlayerPageState extends StateSuper<AudioPlayerPage> {
   bool isAudioInit = false;
-  String background = '';
+  late ImageProvider background;
   AudioPlayer audioPlayer = AudioPlayer();
-  List<String> backgrounds = [];
   Duration totalTime = const Duration();
   Duration currentTime = const Duration();
   late StreamController<PlaybackDisposition> durationStreamCtr;
@@ -71,13 +71,7 @@ class AudioPlayerPageState extends StateSuper<AudioPlayerPage> {
   void initState() {
     super.initState();
 
-    backgrounds.add(AppImages.back1);
-    backgrounds.add(AppImages.back2);
-    backgrounds.add(AppImages.back3);
-    backgrounds.add(AppImages.back4);
-    backgrounds.add(AppImages.back5);
-
-    background = Generator.getRandomFrom(backgrounds);
+    background = Generator.getRandomFrom(AppCache.backgroundList);
     durationStreamCtr = StreamController<PlaybackDisposition>.broadcast();
     _initAudio();
   }
@@ -99,7 +93,7 @@ class AudioPlayerPageState extends StateSuper<AudioPlayerPage> {
       controller: assistCtr,
       builder: (ctx, ctr, data) {
         return Scaffold(
-          backgroundColor: widget.injectData.backColor?? Colors.black,
+          backgroundColor: widget.injectData.backColor?? Colors.white,
           appBar: AppBarCustom(
             backgroundColor: Colors.transparent,
             elevation: 0,
@@ -109,7 +103,7 @@ class AudioPlayerPageState extends StateSuper<AudioPlayerPage> {
           body: Stack(
             fit: StackFit.expand,
             children: [
-              Image.asset(background, fit: BoxFit.fill),
+              Image(image: background, fit: BoxFit.fill),
 
               Positioned(
                   top: MathHelper.percent(AppSizes.instance.appHeight, 25),

@@ -26,19 +26,20 @@ import 'package:app/views/states/wait_to_load.dart';
 class BucketPageInjectData {
   late BucketTypes bucketTypes;
 }
-///---------------------------------------------------------------------------------
+///-----------------------------------------------------------------------------
 class BucketPage extends StatefulWidget{
   final BucketPageInjectData injectData;
 
+  // ignore: prefer_const_constructors_in_immutables
   BucketPage({
     required this.injectData,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<BucketPage> createState() => _BucketPageState();
 }
-///==================================================================================
+///=============================================================================
 class _BucketPageState extends StateSuper<BucketPage> {
   Requester requester = Requester();
   bool isInFetchData = true;
@@ -91,7 +92,7 @@ class _BucketPageState extends StateSuper<BucketPage> {
 
     return RefreshConfiguration(
       headerBuilder: () => const MaterialClassicHeader(),
-      footerBuilder:  () => AppDecoration.classicFooter,
+      footerBuilder: () => AppDecoration.classicFooter,
       //headerTriggerDistance: 80.0,
       //maxOverScrollExtent :100,
       //maxUnderScrollExtent:0,
@@ -199,6 +200,7 @@ class _BucketPageState extends StateSuper<BucketPage> {
     requester.httpRequestEvents.onFailState = (req, r) async {
       isInFetchData = false;
       assistCtr.removeStateAndUpdateHead(state$fetchData);
+      return false;
     };
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {

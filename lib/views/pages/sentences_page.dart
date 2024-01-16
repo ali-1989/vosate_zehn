@@ -17,7 +17,6 @@ import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/app_cache.dart';
 import 'package:app/tools/app/app_icons.dart';
-import 'package:app/tools/app/app_images.dart';
 import 'package:app/tools/app/app_messages.dart';
 import 'package:app/tools/app/app_overlay.dart';
 import 'package:app/tools/app_tools.dart';
@@ -38,8 +37,7 @@ class SentencesPage extends StatefulWidget {
 ///=============================================================================
 class _SentencesPageState extends StateSuper<SentencesPage> {
   Requester requester = Requester();
-  List<String> backgrounds = [];
-  String background = '';
+  late ImageProvider background;
   List<DailyTextModel> dailyList = [];
   List<Widget> cards = [];
 
@@ -47,13 +45,7 @@ class _SentencesPageState extends StateSuper<SentencesPage> {
   void initState(){
     super.initState();
 
-    backgrounds.add(AppImages.back1);
-    backgrounds.add(AppImages.back2);
-    backgrounds.add(AppImages.back3);
-    backgrounds.add(AppImages.back4);
-    backgrounds.add(AppImages.back5);
-
-    background = Generator.getRandomFrom(backgrounds);
+    background = Generator.getRandomFrom(AppCache.backgroundList);
 
     var now = GregorianDate();
     now.changeTime(0, 0, 0, 0);
@@ -88,7 +80,7 @@ class _SentencesPageState extends StateSuper<SentencesPage> {
     return Stack(
       fit: StackFit.expand,
       children: [
-        Image.asset(background, fit: BoxFit.fill),
+        Image(image: background, fit: BoxFit.fill),
 
         Positioned(
           top: 80,
@@ -231,6 +223,7 @@ class _SentencesPageState extends StateSuper<SentencesPage> {
     requester.httpRequestEvents.onFailState = (req, r) async {
       assistCtr.addStateWithClear(AssistController.state$error);
       assistCtr.updateHead();
+      return false;
     };
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {

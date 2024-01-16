@@ -228,9 +228,9 @@
 -keep class androidx.lifecycle.DefaultLifecycleObserver
 
 # End of content from E:\Programming\Projects\FlutterProjects\VosateZehn\VosateZehn\build\flutter_plugin_android_lifecycle\intermediates\consumer_proguard_dir\debug\lib0\proguard.txt
-# The proguard configuration file for the following section is E:\Programming\.gradle\caches\transforms-3\4463997bb7464a3afc02ca6627efda20\transformed\jetified-AndroidAwnCore-0.9.0\proguard.txt
+# The proguard configuration file for the following section is E:\Programming\.gradle\caches\transforms-3\e3d674a3efbf4e5d0e1e0f635cb25deb\transformed\jetified-AndroidAwnCore-0.9.1\proguard.txt
 
-# End of content from E:\Programming\.gradle\caches\transforms-3\4463997bb7464a3afc02ca6627efda20\transformed\jetified-AndroidAwnCore-0.9.0\proguard.txt
+# End of content from E:\Programming\.gradle\caches\transforms-3\e3d674a3efbf4e5d0e1e0f635cb25deb\transformed\jetified-AndroidAwnCore-0.9.1\proguard.txt
 # The proguard configuration file for the following section is E:\Programming\.gradle\caches\transforms-3\661371291045131959c346c16d06911b\transformed\material-1.11.0\proguard.txt
 # Copyright (C) 2015 The Android Open Source Project
 #

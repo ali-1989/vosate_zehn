@@ -58,6 +58,10 @@ class HttpTools {
       AppSnack.showError(context, AppMessages.accountNotFound.capitalize);
       return true;
     }
+    else if(causeCode == HttpCodes.cCode$HaveNotAccess){
+      AppSnack.showError(context, AppMessages.sorryYouDoNotHaveAccess.capitalize);
+      return true;
+    }
     else if(causeCode == HttpCodes.cCode$TokenNotCorrect){
       AppSnack.showError(context, AppMessages.tokenIsIncorrectOrExpire);
 

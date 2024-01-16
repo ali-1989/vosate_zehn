@@ -26,19 +26,19 @@ class LayoutPage extends StatefulWidget{
   @override
   State<LayoutPage> createState() => LayoutPageState();
 }
-///=================================================================================================
+///=============================================================================
 class LayoutPageState extends StateSuper<LayoutPage> {
   GlobalKey<ScaffoldState> scaffoldState = GlobalKey<ScaffoldState>();
   int selectedPage = 0;
   late PageController pageController;
-  ValueKey<int> bottomBarKey = ValueKey<int>(1);
+  ValueKey<int> bottomBarKey = const ValueKey<int>(1);
 
+  bool onPop<s extends StateSuper>(s state, bool? last) {
+    if(last != null){
+      MoveToBackground.moveTaskToBack();
+    }
 
-  @override
-  Future<bool> onWillBack<s extends StateSuper>(s state) {
-    MoveToBackground.moveTaskToBack();
-
-    return Future<bool>.value(false);
+    return false;
   }
 
   @override
@@ -50,8 +50,9 @@ class LayoutPageState extends StateSuper<LayoutPage> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: ()=> onWillBack(this),
+    return PopScope(
+      canPop: onPop(this, null),
+      onPopInvoked: (s)=> onPop(this, s),
       child: Assist(
         controller: assistCtr,
           builder: (context, ctr, data) {
@@ -73,9 +74,9 @@ class LayoutPageState extends StateSuper<LayoutPage> {
 
   Widget buildBody(){
     return Padding(
-      padding: EdgeInsets.only(bottom: 50),
+      padding: const EdgeInsets.only(bottom: 50),
       child: PageView(
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
         allowImplicitScrolling: false,
         controller: pageController,
         children: [
@@ -105,7 +106,7 @@ class LayoutPageState extends StateSuper<LayoutPage> {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(AppIcons.cashMultiple, size: 20,),
+              const Icon(AppIcons.cashMultiple, size: 20,),
               Text(AppMessages.aid, maxLines: 1, softWrap: false),
             ],
           ),
@@ -113,9 +114,9 @@ class LayoutPageState extends StateSuper<LayoutPage> {
 
         IconButton(
             onPressed: (){
-              RouteTools.pushPage(context, SearchPage());
+              RouteTools.pushPage(context, const SearchPage());
             },
-            icon: Icon(AppIcons.search)
+            icon: const Icon(AppIcons.search)
         ),
       ],
     );

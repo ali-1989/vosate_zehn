@@ -140,7 +140,7 @@ class _MyAppState extends State<MyApp> {
                       RouteTools.materialContext = localContext;
 
                       if (SplashManager.mustWaitInSplash()) {
-                        SplashManager.initOnSplash(context);
+                        SplashManager.initOnSplash(localContext);
                         return SplashPage();
                       }
                       else {

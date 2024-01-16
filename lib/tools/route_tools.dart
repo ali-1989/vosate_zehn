@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:iris_route/iris_route.dart';
-import 'package:iris_tools/api/stack_list.dart';
 
 import 'package:app/tools/app/app_navigator.dart';
 import 'package:app/views/pages/about_us_page.dart';
@@ -67,7 +66,7 @@ class RouteTools {
   }
 
   static BuildContext? getTopContext() {
-    var res = WidgetsBinding.instance.focusManager.rootScope.focusedChild?.context;//deep: 50,66
+    var res = WidgetsBinding.instance.focusManager.rootScope.focusedChild?.context;
 
     Navigator? nav1 = res?.findAncestorWidgetOfExactType();
 
@@ -75,11 +74,19 @@ class RouteTools {
       res = AppNavigator.getTopBuildContext();//WidgetsBinding.instance.focusManager.rootScope.context;
     }
 
-    return res?? getBaseContext();
+    if(res != null && res.mounted){
+      return res;
+    }
+
+    return getBaseContext();
   }
 
   static BuildContext? getBaseContext() {
-    return materialContext?? AppNavigator.getDeepBuildContext();
+    if(materialContext != null && materialContext!.mounted){
+      return materialContext!;
+    }
+
+    return AppNavigator.getDeepBuildContext();
   }
 
   /*static Future<bool> saveRouteName(String routeName) async {

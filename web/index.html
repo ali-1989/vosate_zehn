@@ -8,20 +8,11 @@
     <meta content="IE=Edge" http-equiv="X-UA-Compatible">
     <meta name="description" content="Vosate Zehn">
 
-    <!-- firebase on web  -->
-    <!-- https://console.developers.google.com/apis/credentials -->
-    <!-- https://console.cloud.google.com/apis/credentials?project=vosate-zehn-7d8fe -->
-
-    <!-- SRC>> client_type:3 in google-service.json OR in above page in (Credentials > web > Client IDs - web) -->
-    <meta name="google-signin-client_id" content="731359726004-om1nsl47c9l9mjm246h3ebe0rt5lkgdi.apps.googleusercontent.com">
-
-    <!-- iOS meta tags & icons -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-title" content="vosate zehn">
     <link rel="apple-touch-icon" href="./icons/Icon-192.png">
 
-    <!-- Favicon -->
     <link rel="icon" type="image/png" href="./favicon.png"/>
 
     <title>وسعت ذهن</title>
@@ -72,54 +63,19 @@
     </style>
 
     <script>
-        //window.flutterWebRenderer = "html";
         let serviceWorkerVersion = null;
     </script>
 
-    <script src="includeHtml.js"></script>
     <script src="flutter.js" defer></script>
 </head>
 
 <body>
 <div id="loading" class='centered'>
-    <!--<img src="loading.gif" alt="loading-image">-->
     <div class="loader"></div>
 </div>
 
-<script src="https://apis.google.com/js/platform.js" async defer>
-</script>
-
-<!-- Google/firebase ---------------------------------- -->
-<!--
-<script type="module">
-    // sample: https://dit-gis-test.web.app/#/
-    // https://firebase.google.com/docs/web/setup#available-libraries
-
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js";
-    import { getMessaging } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-messaging.js";
-    import { onBackgroundMessage } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-messaging-sw.js";
-    //import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-analytics.js";
-    //import { getAuth, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-auth.js";
-    //import { getFirestore } from 'https://www.gstatic.com/firebasejs/9.19.1/firebase-firestore.js'
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyC2gsyD1HYpP6LwXws6hZc_PTFoK68rl8c",
-        authDomain: "vosate-zehn-7d8fe.firebaseapp.com",
-        projectId: "vosate-zehn-7d8fe",
-        storageBucket: "vosate-zehn-7d8fe.appspot.com",
-        messagingSenderId: "731359726004",
-        appId: "1:731359726004:web:7b371dd04042f69cb20ae1",
-        measurementId: "G-8ZKZGGLXRW"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const messaging = getMessaging(app);
-    const backMessaging = onBackgroundMessage(app);
-    //const storage = getStorage(app);
-    //const store = getFirestore(app);
-    //const auth = getAuth(app);
-    //const analytics = getAnalytics(app);
-</script> -->
+<!--<script src="https://apis.google.com/js/platform.js" async defer>
+</script>-->
 
 <script>
     window.addEventListener('load', function (ev) {
@@ -141,20 +97,5 @@
     });
 </script>
 
-<!--<script>
-  window.addEventListener('load', function(ev) {
-    // Download main.dart.js
-    _flutter.loader.loadEntrypoint({
-      serviceWorker: {
-        serviceWorkerVersion: serviceWorkerVersion,
-      },
-      onEntrypointLoaded: function(engineInitializer) {
-        engineInitializer.initializeEngine().then(function(appRunner) {
-          appRunner.runApp();
-        });
-      }
-    });
-  });
-</script>-->
 </body>
 </html>

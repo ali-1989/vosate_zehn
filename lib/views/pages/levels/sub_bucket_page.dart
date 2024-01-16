@@ -37,7 +37,7 @@ import 'package:app/views/states/wait_to_load.dart';
 class SubBucketPageInjectData {
   BucketModel? bucketModel;
 }
-///---------------------------------------------------------------------------------
+///-----------------------------------------------------------------------------
 class SubBucketPage extends StatefulWidget{
 
   final SubBucketPageInjectData injectData;
@@ -50,7 +50,7 @@ class SubBucketPage extends StatefulWidget{
   @override
   State<SubBucketPage> createState() => _SubBucketPageState();
 }
-///==================================================================================
+///=============================================================================
 class _SubBucketPageState extends StateSuper<SubBucketPage> {
   Requester requester = Requester();
   bool isInFetchData = true;
@@ -337,6 +337,7 @@ class _SubBucketPageState extends StateSuper<SubBucketPage> {
     requester.httpRequestEvents.onFailState = (req, r) async {
       isInFetchData = false;
       assistCtr.removeStateAndUpdateHead(state$fetchData);
+      return false;
     };
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {

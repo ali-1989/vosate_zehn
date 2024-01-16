@@ -113,3 +113,20 @@ abstract class StateSuper<W extends StatefulWidget> extends State<W> {
 		// must override this to listen.but widget tree before first Push receive changes.
 	}
 }
+
+
+/**
+ onPop:
+		bool onPop<s extends StateSuper>(s state, bool? last) {
+			if(last != null){
+				MoveToBackground.moveTaskToBack();
+			}
+
+			return false;
+		}
+
+		PopScope(
+		canPop: onPop(this, null),
+		onPopInvoked: (s)=> onPop(this, s),
+		child:
+ */

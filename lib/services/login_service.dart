@@ -241,6 +241,8 @@ class LoginService {
     });
 
     f = f.then((Response? response){
+      AppToast.showToast(RouteTools.materialContext!, '${response?.toString()}');//todo
+
       if(response == null || !request.isOk) {
         if(!result.isCompleted){
           result.complete(TwoStateReturn(r2: Exception()));

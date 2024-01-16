@@ -62,17 +62,17 @@ class _LoginPageState extends StateSuper<LoginPage> {
   }
 
   Widget buildBody(){
-    return Column(
-      children: [
-        SizedBox(
-          height: MathHelper.percent(hs, 25),
-          child: Center(
-            child: Image.asset(AppImages.appIcon, width: 100, height: 100),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          SizedBox(
+            height: MathHelper.percent(hs, 25),
+            child: Center(
+              child: Image.asset(AppImages.appIcon, width: 100, height: 100),
+            ),
           ),
-        ),
 
-        Expanded(
-          child: Padding(
+          Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
             child: Column(
               children: [
@@ -96,10 +96,11 @@ class _LoginPageState extends StateSuper<LoginPage> {
                               },
                               child: ColoredBox(
                                 color: selectedTabIndex == 0? selectedTabColor : Colors.transparent,
-                                child: const Center(
+                                child: Center(
                                   child: Padding(
-                                    padding: EdgeInsets.symmetric(vertical: 8.0),
-                                    child: Text('ایمیل'),
+                                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                    child: Text('ایمیل',
+                                    style: TextStyle(color: selectedTabIndex == 0? Colors.white: Colors.blue)),
                                   ),
                                 ),
                               ),
@@ -116,10 +117,12 @@ class _LoginPageState extends StateSuper<LoginPage> {
                             },
                             child: ColoredBox(
                               color: selectedTabIndex == 1? selectedTabColor : Colors.transparent,
-                              child: const Center(
+                              child: Center(
                                 child: Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 8.0),
-                                  child: Text('موبایل'),
+                                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                  child: Text('موبایل',
+                                      style: TextStyle(color: selectedTabIndex == 1? Colors.white: Colors.blue)
+                                  ),
                                 ),
                               ),
                             ),
@@ -184,8 +187,8 @@ class _LoginPageState extends StateSuper<LoginPage> {
               ],
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

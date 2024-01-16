@@ -14,7 +14,7 @@ import 'package:app/tools/route_tools.dart';
 
 class CountrySelectScreen extends StatefulWidget {
 
-  const CountrySelectScreen({Key? key}) : super(key: key);
+  const CountrySelectScreen({super.key});
 
   @override
   State<StatefulWidget> createState() {
