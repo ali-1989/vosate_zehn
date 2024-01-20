@@ -30,23 +30,21 @@ class GoogleSignService {
     if(_signObj == null){
       final scopes = [
         'https://www.googleapis.com/auth/userinfo.email',
-        'https://www.googleapis.com/auth/userinfo.profile',
+        //'https://www.googleapis.com/auth/userinfo.profile',
         //'https://www.googleapis.com/auth/cloud-platform.read-only',
         //'https://www.googleapis.com/auth/contacts.readonly',
         //'https://accounts.google.com/o/oauth2/auth',
       ];
 
       if(kIsWeb){
-        _signObj = GoogleSignIn();
+       // _signObj = GoogleSignIn();
 
-        /*
         ///client_type:3
-        /// for web this id must insert in index.html
-        signObj = GoogleSignIn(
-        clientId: '579668054514-ojuoo3o4cj1vjbcqfavq6upv9e8h4d1h.apps.googleusercontent.com',
-        signInOption: SignInOption.standard,
-        scopes: scopes,
-      );*/
+        _signObj = GoogleSignIn(
+          clientId: '731359726004-om1nsl47c9l9mjm246h3ebe0rt5lkgdi.apps.googleusercontent.com',
+          signInOption: SignInOption.standard,
+          scopes: scopes,
+        );
       }
       else {
         _signObj = GoogleSignIn(
@@ -59,22 +57,23 @@ class GoogleSignService {
     return _signObj!;
   }
 
-  Future<(GoogleSignInAccount?, Exception?)> signIn() async {
+  Future<(GoogleSignInAccount?, Object?)> signIn() async {
     try {
       final CancelableFuture canF;
 
-      if (kIsWeb) {
+      /*if (kIsWeb) {
         canF = CancelableFuture.timeout(googleSignIn.signIn(), const Duration(seconds: 360));
       }
       else {
         canF = CancelableFuture.timeout(googleSignIn.signIn(), const Duration(seconds: 120));
-      }
+      }*/
 
-      _signUser = await canF.future;
+      //_signUser = await canF.future;
+      _signUser = await googleSignIn.signIn();
       return (_signUser, null);
     }
     catch (e) {
-      return (null, e as Exception);
+      return (null, e);
     }
   }
 

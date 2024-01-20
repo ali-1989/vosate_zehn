@@ -17,8 +17,8 @@ import 'package:app/tools/route_tools.dart';
 class ApiManager {
   ApiManager._();
 
-  static String serverApi = '${SettingsManager.localSettings.httpAddress}/graph-v1';
-  static String logReportApi = '${SettingsManager.localSettings.httpAddress}/logs';
+  static String get serverApi => '${SettingsManager.localSettings.httpAddress}/graph-v1';
+  static String get logReportApi => '${SettingsManager.localSettings.httpAddress}/logs';
   static String fcmTopic = 'daily_text';
 
   static Future<TwoStateReturn<Map, Response>> publicApiCaller(String url, MethodType methodType, Map<String, dynamic>? body){

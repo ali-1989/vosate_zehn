@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_web_plugins/url_strategy.dart';
+import 'package:iris_route/iris_route.dart';
 import 'package:iris_tools/net/trustSsl.dart';
 
 import 'package:app/managers/advertising_manager.dart';
@@ -19,7 +20,6 @@ import 'package:app/services/native_call_service.dart';
 import 'package:app/services/session_service.dart';
 import 'package:app/services/wakeup_service.dart';
 import 'package:app/services/websocket_service.dart';
-import 'package:app/structures/models/settings_model.dart';
 import 'package:app/system/application_signal.dart';
 import 'package:app/tools/app/app_broadcast.dart';
 import 'package:app/tools/app/app_cache.dart';
@@ -77,13 +77,28 @@ class SplashManager {
       AppThemes.init();
       SettingsManager.init();
 
-      if(true){
+      if(false){
         SettingsManager.localSettings.httpAddress = 'http://192.168.1.104:7436';
-        SettingsManager.localSettings.wsAddress = 'ws://192.168.1.104:7438/ws';
+        SettingsManager.localSettings.wsAddress = 'ws://192.168.1.104:7436/ws';
       }
       else {
-        SettingsManager.localSettings.httpAddress = SettingsModel.defaultHttpAddress;
-        SettingsManager.localSettings.wsAddress = SettingsModel.defaultWsAddress;
+        //SettingsManager.localSettings.httpAddress = SettingsModel.defaultHttpAddress;
+      }
+
+      if(kIsWeb){
+        bool isSecure = IrisNavigatorObserver.appBaseUrl().contains('https');
+        String httpUrl = SettingsManager.localSettings.httpAddress;
+        String wsUrl = SettingsManager.localSettings.wsAddress;
+
+        if(isSecure && !httpUrl.contains('https')){
+          httpUrl = httpUrl.replaceFirst('http:', 'https:');
+          SettingsManager.localSettings.httpAddress = httpUrl;
+        }
+
+        if(isSecure && !wsUrl.contains('wss')){
+          wsUrl = wsUrl.replaceFirst('ws:', 'wss:');
+          SettingsManager.localSettings.wsAddress = wsUrl;
+        }
       }
 
       isBaseInitialize = true;
@@ -120,6 +135,7 @@ class SplashManager {
         RouteTools.prepareRoutes();
         AppCache.screenBack = const AssetImage(AppImages.background);
         await precacheImage(AppCache.screenBack!, context);
+        AppCache.preLoadImages();
       }
 
       AppThemes.instance.textDirection = AppLocale.detectLocaleDirection(SettingsManager.localSettings.appLocale);
