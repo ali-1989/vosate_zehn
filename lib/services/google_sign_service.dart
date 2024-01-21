@@ -61,15 +61,15 @@ class GoogleSignService {
     try {
       final CancelableFuture canF;
 
-      /*if (kIsWeb) {
+      if (kIsWeb) {
         canF = CancelableFuture.timeout(googleSignIn.signIn(), const Duration(seconds: 360));
       }
       else {
         canF = CancelableFuture.timeout(googleSignIn.signIn(), const Duration(seconds: 120));
-      }*/
+      }
 
-      //_signUser = await canF.future;
-      _signUser = await googleSignIn.signIn();
+      _signUser = await canF.future;
+
       return (_signUser, null);
     }
     catch (e) {

@@ -90,14 +90,30 @@ class SplashManager {
         String httpUrl = SettingsManager.localSettings.httpAddress;
         String wsUrl = SettingsManager.localSettings.wsAddress;
 
-        if(isSecure && !httpUrl.contains('https')){
-          httpUrl = httpUrl.replaceFirst('http:', 'https:');
-          SettingsManager.localSettings.httpAddress = httpUrl;
-        }
+        if(isSecure) {
+          RegExp pattern = RegExp(r':(\d+)');
 
-        if(isSecure && !wsUrl.contains('wss')){
-          wsUrl = wsUrl.replaceFirst('ws:', 'wss:');
-          SettingsManager.localSettings.wsAddress = wsUrl;
+          Match? match = pattern.firstMatch(httpUrl);
+          String? capturedNumber = match?.group(1);
+          int? number = int.tryParse(capturedNumber!);
+          int port = (number??0) + 1;
+          httpUrl = httpUrl.replaceFirst(pattern, ':$port');
+
+          match = pattern.firstMatch(wsUrl);
+          capturedNumber = match?.group(1);
+          number = int.tryParse(capturedNumber!);
+          port = (number??0) + 1;
+          wsUrl = wsUrl.replaceFirst(pattern, ':$port');
+
+          if (!httpUrl.contains('https')) {
+            httpUrl = httpUrl.replaceFirst('http:', 'https:');
+            SettingsManager.localSettings.httpAddress = httpUrl;
+          }
+
+          if (!wsUrl.contains('wss')) {
+            wsUrl = wsUrl.replaceFirst('ws:', 'wss:');
+            SettingsManager.localSettings.wsAddress = wsUrl;
+          }
         }
       }
 

@@ -1,7 +1,5 @@
 
 import 'package:app/services/google_sign_service.dart';
-import 'package:app/tools/app/app_toast.dart';
-import 'package:app/tools/app_tools.dart';
 import 'package:flutter/material.dart';
 
 import 'package:google_sign_in/google_sign_in.dart';
@@ -299,21 +297,15 @@ class _LoginEmailPartState extends StateSuper<LoginEmailPart> {
     }
     catch(e){
       AppLoading.instance.hideLoading(context);
-      AppToast.showToast(context, '${e.toString()}');//todo
       AppSheet.showSheetOk(context, AppMessages.operationFailed);
       return;
     }
 
     if(googleResult.$1 == null){
-      AppToast.showToast(context, 'g-sign not ok');//todo
-
       AppLoading.instance.hideLoading(context);
-      //AppSheet.showSheetOk(context, AppMessages.operationFailed);
-      AppSheet.showSheetOk(context, 'e : ${googleResult.$2}');
+      AppSheet.showSheetOk(context, AppMessages.operationFailed);
       return;
     }
-
-    AppToast.showToast(context, '${googleResult.$1?.email}');//todo
 
     final twoState = await LoginService.requestVerifyGmail(email: googleResult.$1!.email);
     AppLoading.instance.cancel(context);

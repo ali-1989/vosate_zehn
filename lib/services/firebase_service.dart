@@ -1,4 +1,3 @@
-import 'dart:isolate';
 
 import 'package:app/tools/app/app_cache.dart';
 import 'package:flutter/foundation.dart';
@@ -16,7 +15,6 @@ import 'package:app/structures/enums/app_events.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/app_db.dart';
 import 'package:app/tools/app/app_notification.dart';
-import 'package:app/tools/log_tools.dart';
 import 'package:app/tools/route_tools.dart';
 import 'package:app/views/pages/sentences_page.dart';
 
