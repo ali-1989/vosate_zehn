@@ -1,5 +1,7 @@
 
 import 'package:app/services/google_sign_service.dart';
+import 'package:app/views/sign_in/google_sign_button.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:google_sign_in/google_sign_in.dart';
@@ -15,7 +17,6 @@ import 'package:app/system/keys.dart';
 import 'package:app/tools/app/app_broadcast.dart';
 import 'package:app/tools/app/app_decoration.dart';
 import 'package:app/tools/app/app_images.dart';
-import 'package:app/tools/app/app_loading.dart';
 import 'package:app/tools/app/app_messages.dart';
 import 'package:app/tools/app/app_sheet.dart';
 import 'package:app/tools/app/app_snack.dart';
@@ -40,12 +41,18 @@ class _LoginEmailPartState extends StateSuper<LoginEmailPart> {
   @override
   void initState(){
     super.initState();
+
+    if(kIsWeb){
+      GoogleSignService().addListener(onGoogleSignInWeb);
+      GoogleSignService().signInSilently();
+    }
   }
 
   @override
   void dispose(){
     emailCtr.dispose();
     passwordCtr.dispose();
+    GoogleSignService().removeListener(onGoogleSignInWeb);
 
     super.dispose();
   }
@@ -115,13 +122,23 @@ class _LoginEmailPartState extends StateSuper<LoginEmailPart> {
         Row(
           children: [
             Expanded(
-              child: ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: AppDecoration.secondColor
-                ),
-                  onPressed: onSignWithGoogleClick,
-                icon: Image.asset(AppImages.googleIco, height: 18* iconR),
-                label: const Text(''),
+              child: Builder(
+                  builder: (_){
+                    if(kIsWeb){
+                      return FittedBox(
+                        child: buildSignInButton(onPressed: onSignWithGoogleClick),
+                      );
+                    }
+
+                    return ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: AppDecoration.secondColor
+                      ),
+                      onPressed: onSignWithGoogleClick,
+                      icon: Image.asset(AppImages.googleIco, height: 18* iconR),
+                      label: const Text(''),
+                    );
+                  }
               ),
             ),
 
@@ -286,29 +303,34 @@ class _LoginEmailPartState extends StateSuper<LoginEmailPart> {
     }
   }
 
-  void onSignWithGoogleClick() async {
-    final google = GoogleSignService();
-    (GoogleSignInAccount?, Object?) googleResult;
-
-    AppLoading.instance.showWaiting(context);
-
-    try {
-      googleResult = await google.signIn();
-    }
-    catch(e){
-      AppLoading.instance.hideLoading(context);
-      AppSheet.showSheetOk(context, AppMessages.operationFailed);
+  void onGoogleSignInWeb(GoogleSignInAccount? signInAccount) {
+    if(signInAccount == null){
       return;
     }
+
+    showLoading();
+    requestSignWithGoogle(signInAccount.email);
+  }
+
+  Future<void> onSignWithGoogleClick() async {
+    showLoading();
+
+    final google = GoogleSignService();
+    (GoogleSignInAccount?, Object?) googleResult = await google.signIn();
 
     if(googleResult.$1 == null){
-      AppLoading.instance.hideLoading(context);
+      await hideLoading();
       AppSheet.showSheetOk(context, AppMessages.operationFailed);
       return;
     }
 
-    final twoState = await LoginService.requestVerifyGmail(email: googleResult.$1!.email);
-    AppLoading.instance.cancel(context);
+    requestSignWithGoogle(googleResult.$1!.email);
+  }
+
+  Future<void> requestSignWithGoogle(String email) async {
+    //final reLaunch = await LoginService.loginWithAuthEmail(email: res.$1!.email);
+    final twoState = await LoginService.requestVerifyGmail(email: email);
+    await hideLoading();
 
     if(twoState.hasResult1()){
       final status = twoState.result1![Keys.status];
@@ -323,11 +345,12 @@ class _LoginEmailPartState extends StateSuper<LoginEmailPart> {
         }
       }
       else {
+        GoogleSignService().getCredentialInfo();
         final userId = twoState.result1![Keys.userId];
 
         if (userId == null) {
           final injectData = RegisterPageInjectData();
-          injectData.email = googleResult.$1!.email;
+          injectData.email = email;
 
           RouteTools.pushPage(context, RegisterPage(injectData: injectData));
         }

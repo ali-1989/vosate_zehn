@@ -195,6 +195,4 @@ class _LoginPageState extends StateSuper<LoginPage> {
   void gotoTermPage(){
     RouteTools.pushPage(context, const TermPage());
   }
-
-
 }

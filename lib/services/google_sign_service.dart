@@ -1,18 +1,39 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:iris_tools/api/cancelable_future.dart';
 
+typedef OnChangeUser = void Function(GoogleSignInAccount? signInAccount);
+///==============================================
 class GoogleSignService {
   static GoogleSignService? _instance;
+  static final List<OnChangeUser> _listeners = [];
 
   GoogleSignIn? _signObj;
   GoogleSignInAccount? _signUser;
   UserCredential? _credentialUser;
-
+  StreamSubscription? changUserSubscription;
 
   GoogleSignService._();
+
+  void addListener(OnChangeUser listener){
+    if(!_listeners.contains(listener)){
+      _listeners.add(listener);
+    }
+
+    _listenUserChanged();
+  }
+
+  void removeListener(OnChangeUser listener){
+    _listeners.remove(listener);
+
+    if(_listeners.isEmpty){
+      unListen();
+    }
+  }
 
   factory GoogleSignService(){
     _instance ??= GoogleSignService._();
@@ -39,9 +60,9 @@ class GoogleSignService {
       if(kIsWeb){
        // _signObj = GoogleSignIn();
 
-        ///client_type:3
+        ///Credentials > web > Client IDs - web
         _signObj = GoogleSignIn(
-          clientId: '731359726004-om1nsl47c9l9mjm246h3ebe0rt5lkgdi.apps.googleusercontent.com',
+          clientId: '731359726004-e3svv7n4orm66gg1om4errr1kmeg80dj.apps.googleusercontent.com',
           signInOption: SignInOption.standard,
           scopes: scopes,
         );
@@ -55,6 +76,29 @@ class GoogleSignService {
     }
 
     return _signObj!;
+  }
+
+  void _listenUserChanged(){
+    if(_listeners.isEmpty){
+      return;
+    }
+
+    changUserSubscription = GoogleSignService().googleSignIn.onCurrentUserChanged.listen((event) {
+      changUserSubscription?.cancel();
+
+      _signUser = event;
+
+      for(final x in _listeners){
+        try{
+          x.call(_signUser);
+        }
+        catch (e){/**/}
+      }
+    });
+  }
+
+  void unListen(){
+    changUserSubscription?.cancel();
   }
 
   Future<(GoogleSignInAccount?, Object?)> signIn() async {

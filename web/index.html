@@ -8,6 +8,8 @@
     <meta content="IE=Edge" http-equiv="X-UA-Compatible">
     <meta name="description" content="Vosate Zehn">
 
+    <meta name="google-signin-client_id" content="731359726004-e3svv7n4orm66gg1om4errr1kmeg80dj.apps.googleusercontent.com">
+
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-title" content="vosate zehn">
@@ -64,6 +66,13 @@
 
     <script>
         let serviceWorkerVersion = null;
+
+        if (window.location.protocol.indexOf('https') === 0){
+            let mt = document.createElement('meta')
+            mt.setAttribute('http-equiv', 'Content-Security-Policy')
+            mt.setAttribute('content', 'upgrade-insecure-requests')
+            document.head.append(mt)
+        }
     </script>
 
     <script src="flutter.js" defer></script>
@@ -73,9 +82,6 @@
 <div id="loading" class='centered'>
     <div class="loader"></div>
 </div>
-
-<!--<script src="https://apis.google.com/js/platform.js" async defer>
-</script>-->
 
 <script>
     window.addEventListener('load', function (ev) {

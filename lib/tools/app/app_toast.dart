@@ -11,10 +11,10 @@ class AppToast {
     Widget toast = Material(
       color: Colors.transparent,
       child: Card(
-        color: Color(0xff303030),
+        color: const Color(0xff303030),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal:12.0, vertical: 20),
-          child: Text(msg, style: TextStyle(color: Colors.white)),
+          child: Text(msg, style: const TextStyle(color: Colors.white)),
         ),
       )
     );
@@ -23,15 +23,16 @@ class AppToast {
     Future.delayed(duration, () => Toaster.showToast(null));
   }
 }
-///=========================================================================================================
+///=============================================================================
 class Toaster extends StatefulWidget {
   final Widget child;
   static late ToasterState _state;
 
+  // ignore: prefer_const_constructors_in_immutables
   Toaster({
     required this.child,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<StatefulWidget> createState() {
@@ -42,7 +43,7 @@ class Toaster extends StatefulWidget {
     _state.showToast(toast);
   }
 }
-///=========================================================================================================
+///=============================================================================
 class ToasterState extends State<Toaster> {
   Widget? toast;
 
@@ -61,7 +62,7 @@ class ToasterState extends State<Toaster> {
             padding: const EdgeInsets.only(bottom: 40),
             child: Visibility(
               visible: toast != null,
-                child: toast?? SizedBox()
+                child: toast?? const SizedBox()
             ),
           ),
         ),

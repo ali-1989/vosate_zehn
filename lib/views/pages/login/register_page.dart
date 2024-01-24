@@ -102,7 +102,10 @@ class _RegisterPageState extends StateSuper<RegisterPage> {
                   child: Image.asset(AppImages.appIcon, width: 100, height: 100,),
                 ),
               ),
-              //Text('${AppMessages.name}:'),
+
+              const SizedBox(height: 5),
+              Text(widget.injectData.email ?? ''),
+              const SizedBox(height: 12),
 
               TextField(
                 controller: nameCtr,
@@ -250,6 +253,7 @@ class _RegisterPageState extends StateSuper<RegisterPage> {
 
     requester.httpRequestEvents.onFailState = (req, r) async {
       AppToast.showToast(context, AppMessages.errorOccurTryAgain);
+      return true;
     };
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {

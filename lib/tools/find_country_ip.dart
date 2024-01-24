@@ -7,30 +7,11 @@ class FindCountryIp {
   FindCountryIp._();
 
   static Future<String> findCountryWithIP() async {
-    var res = await findCountryWithIP1();
-    res ??= await findCountryWithIP2();
+    var res = await findCountryWithIP2();
     res ??= await findCountryWithIP3();
     res ??= await findCountryWithIP4();
 
     return res?? 'US';
-  }
-
-  static Future<String?> findCountryWithIP1() async {
-    const url = 'http://ip-api.com/json';
-
-    HttpItem http = HttpItem(fullUrl: url);
-    http.method = 'GET';
-
-    final res = AppHttpDio.send(http);
-
-    return res.response.then((value) {
-      if(res.isOk){
-        return res.getBodyAsJson()!['countryCode'] as String;
-      }
-
-      return null;
-    })
-        .onError((error, stackTrace) => null);
   }
 
   static Future<String?> findCountryWithIP2() async {

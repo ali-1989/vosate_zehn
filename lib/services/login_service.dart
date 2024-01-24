@@ -100,12 +100,9 @@ class LoginService {
       if(await google.isSignIn()){
         AppToast.showToast(RouteTools.getTopContext()!, AppMessages.inEmailSignOutError);
       }
+    }
 
-      await SessionService.logoff(user.userId);
-    }
-    else {
-      await SessionService.logoff(user.userId);
-    }
+    await SessionService.logoff(user.userId);
 
     UpdaterController.forId(AppBroadcast.drawerMenuRefresherId)?.update();
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
@@ -241,7 +238,6 @@ class LoginService {
     });
 
     f = f.then((Response? response){
-      AppToast.showToast(RouteTools.materialContext!, '${response?.toString()}');//todo
 
       if(response == null || !request.isOk) {
         if(!result.isCompleted){

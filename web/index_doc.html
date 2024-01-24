@@ -11,12 +11,16 @@
     <meta content="IE=Edge" http-equiv="X-UA-Compatible">
     <meta name="description" content="Vosate Zehn">
 
+    <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">  Strict-Transport-Security -->
+	
     <!-- firebase on web  -->
     <!-- https://console.developers.google.com/apis/credentials -->
     <!-- https://console.cloud.google.com/apis/credentials?project=vosate-zehn-7d8fe -->
 
-    <!-- SRC>> client_type:3 in google-service.json OR in above page in (Credentials > web > Client IDs - web) -->
+    <!-- Need for signIn web -->
+    <!-- SRC>> in above page in (Credentials > web > Client IDs - web) -->
     <!--<meta name="google-signin-client_id" content="731359726004-om1nsl47c9l9mjm246h3ebe0rt5lkgdi.apps.googleusercontent.com"> -->
+
     <!-- iOS meta tags & icons -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -76,6 +80,13 @@
     <script>
         //window.flutterWebRenderer = "html";
         let serviceWorkerVersion = null;
+
+        if (window.location.protocol.indexOf('https') === 0){
+            let mt = document.createElement('meta')
+            mt.setAttribute('http-equiv', 'Content-Security-Policy')
+            mt.setAttribute('content', 'upgrade-insecure-requests')
+            document.head.append(mt)
+        }
     </script>
 
     <script src="includeHtml.js"></script>
@@ -92,7 +103,7 @@
 </script>
 
 <!-- Google/firebase ---------------------------------- -->
-<!--
+
 <script type="module">
     // sample: https://dit-gis-test.web.app/#/
     // https://firebase.google.com/docs/web/setup#available-libraries
@@ -121,7 +132,7 @@
     //const store = getFirestore(app);
     //const auth = getAuth(app);
     //const analytics = getAnalytics(app);
-</script> -->
+</script>
 
 <script>
     window.addEventListener('load', function (ev) {
