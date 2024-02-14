@@ -3,6 +3,7 @@ import 'package:app/tools/app/app_decoration.dart';
 import 'package:app/tools/find_country_ip.dart';
 import 'package:app/views/pages/login/login_email_part.dart';
 import 'package:app/views/pages/login/login_mobile_part.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/helpers/mathHelper.dart';
@@ -38,6 +39,12 @@ class _LoginPageState extends StateSuper<LoginPage> {
     super.initState();
 
     isIran = countryIso == 'IR';
+
+    if(!kIsWeb){
+      selectedTabIndex = 1;
+
+      addPostOrCall(fn: (){pageCtr.changePageTo(1);});
+    }
 
     FindCountryIp.findCountryWithIP().then((value) {
       countryIso = value;

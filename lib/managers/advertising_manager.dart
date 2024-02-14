@@ -229,6 +229,7 @@ class AdvertisingManager {
     }
 
     if(adv.type == 'url'){
+      // https://t.me/VosateZehnApp, https://eitaa.com/VosateZehnApp
       UrlHelper.launchWeb(adv.clickUrl!, mode: LaunchMode.externalApplication);
     }
 

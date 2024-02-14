@@ -122,12 +122,13 @@ class CarouselManager {
     }
 
     if(itm.type == 'url'){
-      // https://t.me/VosateZehnApp, https://eitaa.com/Roshangari_ir
+      // https://t.me/VosateZehnApp, https://eitaa.com/VosateZehnApp
       UrlHelper.launchWeb(itm.clickUrl!, mode: LaunchMode.externalApplication);
     }
 
     else if(itm.type == 'sub_bucket'){
-      final sub = SubBucketModel.fromMap(JsonHelper.jsonToMap(itm.clickUrl)!);
+      final t = JsonHelper.jsonToMap(itm.clickUrl);
+      final sub = SubBucketModel.fromMap(t!);
       sub.mediaModel = MediaManager.getById(sub.mediaId);
 
       _onCarouselClickSubBucket(sub);

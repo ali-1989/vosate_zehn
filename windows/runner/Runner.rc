@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "ir.iris" "\0"
-            VALUE "FileDescription", "green" "\0"
+            VALUE "FileDescription", "vosate_zehn" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "green" "\0"
+            VALUE "InternalName", "vosate_zehn" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 ir.iris. All rights reserved." "\0"
-            VALUE "OriginalFilename", "green.exe" "\0"
-            VALUE "ProductName", "green" "\0"
+            VALUE "OriginalFilename", "vosate_zehn.exe" "\0"
+            VALUE "ProductName", "vosate zehn" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

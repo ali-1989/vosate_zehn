@@ -6,7 +6,7 @@ import 'package:lottie/lottie.dart';
 import 'package:app/tools/app/app_images.dart';
 
 class SplashView extends StatelessWidget {
-  const SplashView({Key? key}) : super(key: key);
+  const SplashView({super.key});
 
   @override
   Widget build(BuildContext context) {

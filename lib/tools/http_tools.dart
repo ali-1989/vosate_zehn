@@ -109,5 +109,5 @@ class HttpCodes {
   static const sendDeviceInfo$command = 'SendDeviceInfo';
   static const messageForUser$command = 'messageForUser';
   static const updateProfileSettings$command = 'UpdateProfileSettings';
-    static const dailyText$command = 'dailyText';
+  static const dailyText$command = 'dailyText';
 }
