@@ -1,10 +1,12 @@
 import 'dart:async';
-
+import 'dart:io';
+import 'package:app/system/build_flavor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:iris_route/iris_route.dart';
+import 'package:iris_tools/api/tools.dart';
 import 'package:iris_tools/net/trustSsl.dart';
 
 import 'package:app/managers/advertising_manager.dart';
@@ -77,7 +79,12 @@ class SplashManager {
       AppThemes.init();
       SettingsManager.init();
 
-      if(false){
+      String? buildFlavor = Platform.environment['hell'];
+      BuildFlavor.initial(buildFlavor);
+
+      print('@@@@@@@@@@@@@@@@@ $buildFlavor > ${BuildFlavor.connectToLocal()}, ${BuildFlavor.isForBazar()}');
+      Tools.verboseLog('@@@@@@@@@@@@@@@@@@ ${Platform.environment}');
+      if(BuildFlavor.connectToLocal()){
         SettingsManager.localSettings.httpAddress = 'http://192.168.1.104:7436';
         SettingsManager.localSettings.wsAddress = 'ws://192.168.1.104:7436/ws';
       }

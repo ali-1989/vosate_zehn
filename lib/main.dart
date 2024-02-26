@@ -12,13 +12,19 @@ import 'package:app/views/baseComponents/error_page.dart';
 import 'package:app/views/baseComponents/my_app.dart';
 
 ///================ call on any hot restart
-void main() {
+
+void main(List<String>? args) {
   PlatformDispatcher.instance.onError = mainIsolateError;
   FlutterError.onError = onErrorCatch;
 
   void zoneFn() async {
     if (defaultTargetPlatform != TargetPlatform.linux && defaultTargetPlatform != TargetPlatform.windows) {
       WidgetsFlutterBinding.ensureInitialized();
+      const some = String.fromEnvironment('SOME_VAR');
+
+      print('@@@@@@@@@@@@');
+      print(some);
+      print(const String.fromEnvironment('SOME_VAR'));
     }
 
     final initOk = await prepareDirectoriesAndLogger();
