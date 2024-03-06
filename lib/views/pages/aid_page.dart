@@ -1,3 +1,4 @@
+import 'package:app/system/build_flavor.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_html/flutter_html.dart';
@@ -21,12 +22,12 @@ import 'package:app/views/states/wait_to_load.dart';
 
 class AidPage extends StatefulWidget{
 
-  const AidPage({Key? key}) : super(key: key);
+  const AidPage({super.key});
 
   @override
   State<AidPage> createState() => _AidPageState();
 }
-///==================================================================================
+///=============================================================================
 class _AidPageState extends StateSuper<AidPage> {
   Requester requester = Requester();
   bool isInFetchData = true;
@@ -105,20 +106,23 @@ class _AidPageState extends StateSuper<AidPage> {
 
           const SizedBox(height: 15),
 
-          /// for bazar:comment
-          MaxWidth(
-            maxWidth: 300,
-            child: SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    //minimumSize: Size(180, 46),
-                    backgroundColor: AppThemes.instance.currentTheme.successColor,
+          /// for bazar: hidden this
+          Visibility(
+            visible: !BuildFlavor.isForBazar(),
+              child: MaxWidth(
+                maxWidth: 300,
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        //minimumSize: Size(180, 46),
+                        backgroundColor: AppThemes.instance.currentTheme.successColor,
+                      ),
+                      onPressed: onPayPalCall,
+                      child: Text(AppMessages.payWitPaypal, textDirection: TextDirection.ltr)
                   ),
-                  onPressed: onPayPalCall,
-                  child: Text(AppMessages.payWitPaypal, textDirection: TextDirection.ltr)
+                ),
               ),
-            ),
           ),
 
           const SizedBox(height: 10),
@@ -144,6 +148,7 @@ class _AidPageState extends StateSuper<AidPage> {
     requester.httpRequestEvents.onFailState = (req, r) async {
       isInFetchData = false;
       assistCtr.removeStateAndUpdateHead(state$fetchData);
+      return true;
     };
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {

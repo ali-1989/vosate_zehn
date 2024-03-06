@@ -8,11 +8,11 @@ import 'package:iris_tools/api/cache/timeoutCache.dart';
 class AppCache {
   AppCache._();
 
-  static ImageProvider? screenBack;
-  static MemoryCache appCache = MemoryCache();
-  static TimeoutCache timeoutCache = TimeoutCache();
-  static TimeoutCache downloadingCache = TimeoutCache();
-  static List<ImageProvider> backgroundList = [];
+  static late final ImageProvider? screenBack;
+  static final MemoryCache appCache = MemoryCache();
+  static final TimeoutCache timeoutCache = TimeoutCache();
+  static final TimeoutCache downloadingCache = TimeoutCache();
+  static final List<ImageProvider> backgroundList = [];
 
   //-------- Download ----------------------------------------------------------
   static void addStartToDownload(String tag){
@@ -36,6 +36,9 @@ class AppCache {
   }
 
   static void preLoadImages() async {
+    screenBack = const AssetImage(AppImages.background);
+    await precacheImage(screenBack!, RouteTools.getBaseContext()!);
+
     const p1 = AssetImage(AppImages.back1);
     const p2 = AssetImage(AppImages.back2);
     const p3 = AssetImage(AppImages.back3);
@@ -43,18 +46,18 @@ class AppCache {
     const p5 = AssetImage(AppImages.back5);
 
     try {
-      await precacheImage(p1, RouteTools.getBaseContext()!);
-      await precacheImage(p2, RouteTools.getBaseContext()!);
-      await precacheImage(p3, RouteTools.getBaseContext()!);
-      await precacheImage(p4, RouteTools.getBaseContext()!);
-      await precacheImage(p5, RouteTools.getBaseContext()!);
-    }
-    catch(e){}
+      /*await*/ precacheImage(p1, RouteTools.getBaseContext()!);
+      precacheImage(p2, RouteTools.getBaseContext()!);
+      precacheImage(p3, RouteTools.getBaseContext()!);
+      precacheImage(p4, RouteTools.getBaseContext()!);
+      precacheImage(p5, RouteTools.getBaseContext()!);
 
-    backgroundList.add(p1);
-    backgroundList.add(p2);
-    backgroundList.add(p3);
-    backgroundList.add(p4);
-    backgroundList.add(p4);
+      backgroundList.add(p1);
+      backgroundList.add(p2);
+      backgroundList.add(p3);
+      backgroundList.add(p4);
+      backgroundList.add(p4);
+    }
+    catch(e){/**/}
   }
 }

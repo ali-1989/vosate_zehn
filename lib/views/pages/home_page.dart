@@ -36,13 +36,13 @@ import 'package:app/views/states/wait_to_load.dart';
 class HomePage extends StatefulWidget {
   // ignore: prefer_const_constructors_in_immutables
   HomePage({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
-///==================================================================================
+///=============================================================================
 class _HomePageState extends StateSuper<HomePage> {
   Requester requester = Requester();
   bool isInFetchData = true;
@@ -587,6 +587,7 @@ class _HomePageState extends StateSuper<HomePage> {
     requester.httpRequestEvents.onFailState = (req, r) async {
       isInFetchData = false;
       assistCtr.removeStateAndUpdateHead(state$fetchData);
+      return true;
     };
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {

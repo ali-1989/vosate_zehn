@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!--<base href="/admin/"> -->               <!-- need for custom build -->
+    <!--<base href="/admin/"> -->               <!-- need for custom folder / change after build -->
     <base href="$FLUTTER_BASE_HREF">            <!-- need for run -->
 
     <meta charset="UTF-8">
@@ -83,7 +83,7 @@
     <div class="loader"></div>
 </div>
 
-<script>
+<script defer>
     window.addEventListener('load', function (ev) {
         const loading = document.getElementById('loading');
 

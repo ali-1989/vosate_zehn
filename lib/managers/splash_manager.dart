@@ -1,12 +1,10 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:app/system/build_flavor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:iris_route/iris_route.dart';
-import 'package:iris_tools/api/tools.dart';
 import 'package:iris_tools/net/trustSsl.dart';
 
 import 'package:app/managers/advertising_manager.dart';
@@ -26,7 +24,6 @@ import 'package:app/system/application_signal.dart';
 import 'package:app/tools/app/app_broadcast.dart';
 import 'package:app/tools/app/app_cache.dart';
 import 'package:app/tools/app/app_db.dart';
-import 'package:app/tools/app/app_images.dart';
 import 'package:app/tools/app/app_locale.dart';
 import 'package:app/tools/app/app_notification.dart';
 import 'package:app/tools/app/app_themes.dart';
@@ -78,18 +75,12 @@ class SplashManager {
       FontManager.init(calcFontSize: true);
       AppThemes.init();
       SettingsManager.init();
+      BuildFlavor.initial();
 
-      String? buildFlavor = Platform.environment['hell'];
-      BuildFlavor.initial(buildFlavor);
-
-      print('@@@@@@@@@@@@@@@@@ $buildFlavor > ${BuildFlavor.connectToLocal()}, ${BuildFlavor.isForBazar()}');
-      Tools.verboseLog('@@@@@@@@@@@@@@@@@@ ${Platform.environment}');
       if(BuildFlavor.connectToLocal()){
         SettingsManager.localSettings.httpAddress = 'http://192.168.1.104:7436';
         SettingsManager.localSettings.wsAddress = 'ws://192.168.1.104:7436/ws';
-      }
-      else {
-        //SettingsManager.localSettings.httpAddress = SettingsModel.defaultHttpAddress;
+        //SettingsModel.defaultHttpAddress
       }
 
       if(kIsWeb){
@@ -156,8 +147,6 @@ class SplashManager {
 
       if(context != null && context.mounted){
         RouteTools.prepareRoutes();
-        AppCache.screenBack = const AssetImage(AppImages.background);
-        await precacheImage(AppCache.screenBack!, context);
         AppCache.preLoadImages();
       }
 

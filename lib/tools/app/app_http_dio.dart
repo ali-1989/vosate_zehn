@@ -19,7 +19,7 @@ class AppHttpDio {
 
 	static BaseOptions _genOptions(){
 		return BaseOptions(
-			connectTimeout: const Duration(seconds: 15),
+			//connectTimeout: const Duration(seconds: 15), error on web when upload file
 		);
 	}
 
@@ -635,7 +635,7 @@ class HttpItem {
 		body = newBody;
 	}
 }
-///========================================================================================================
+///=============================================================================
 class FormDataItem {
 	late String partName;
 	late String fileName;

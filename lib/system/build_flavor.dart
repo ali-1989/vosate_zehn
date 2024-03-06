@@ -1,10 +1,11 @@
+
 class BuildFlavor {
-  static String? _flavor;
+  static late final String? _flavor;
 
   BuildFlavor._();
 
-  static void initial(String? flavor){
-    _flavor = flavor;
+  static void initial(){
+    _flavor = const String.fromEnvironment('flavor');
   }
 
   static bool isForBazar(){
