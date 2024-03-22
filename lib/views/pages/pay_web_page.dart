@@ -11,12 +11,12 @@ import 'package:app/views/states/wait_to_load.dart';
 class PayWebPage extends StatefulWidget{
   final String url;
 
-  const PayWebPage({required this.url, Key? key}) : super(key: key);
+  const PayWebPage({required this.url, super.key});
 
   @override
   State<PayWebPage> createState() => _PayWebPageState();
 }
-///==================================================================================
+///=============================================================================
 class _PayWebPageState extends StateSuper<PayWebPage> {
   bool isInPreparing = true;
   WebViewXController? webController;

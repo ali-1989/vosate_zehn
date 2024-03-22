@@ -65,9 +65,6 @@ class AppSizes {
       _prepareSizes();
 
       _systemMetricFunc?.call();
-      /*if(oldW == realHeight && oldH == realWidth) {
-        return;
-      }*/
 
       for(final f in _onMetricListeners){
         try{

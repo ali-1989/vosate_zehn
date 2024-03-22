@@ -106,7 +106,7 @@ class _AidPageState extends StateSuper<AidPage> {
 
           const SizedBox(height: 15),
 
-          /// for bazar: hidden this
+          /// for bazar: hidden paypal
           Visibility(
             visible: !BuildFlavor.isForBazar(),
               child: MaxWidth(

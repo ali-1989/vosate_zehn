@@ -170,6 +170,7 @@ class _HomePageState extends StateSuper<HomePage> {
           if(adv == null || adv.mediaModel == null){
             return const SizedBox();
           }
+
           return GestureDetector(
             onTap: (){
               AdvertisingManager.onAdvertisingClick(adv);

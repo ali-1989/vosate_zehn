@@ -92,7 +92,7 @@ class UserModel {
     map[Keys.sex] = sex;
     map['profile_image_model'] = profileModel?.toMap();
     map['email'] = email;
-    map['user_type'] = userType.type();
+    map['user_type'] = userType.id();
 
     if (token != null) {
       map[Keys.token] = token!.toMap();

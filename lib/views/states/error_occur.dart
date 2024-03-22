@@ -12,14 +12,14 @@ class ErrorOccur extends StatelessWidget {
   final Color? backgroundColor;
   final Widget? backButton;
 
-  ErrorOccur({
+  const ErrorOccur({
     this.textStyle,
     this.message,
     this.backgroundColor,
     this.onTryAgain,
     this.backButton,
-    Key? key,
-    }) : super(key: key);
+    super.key,
+    });
 
   @override
   Widget build(BuildContext context) {

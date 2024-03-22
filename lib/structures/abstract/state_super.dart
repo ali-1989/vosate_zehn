@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/managers/orientationManager.dart';
@@ -108,9 +109,12 @@ abstract class StateSuper<W extends StatefulWidget> extends State<W> {
 	}
 
 	void onResize(oldW, oldH, newW, newH){
+		if(kIsWeb && mounted){
+			setState(() {});
+		}
 		// must override if need.
 		// any page that is pushed by Navigator.push() not listen Resize by default.
-		// must override this to listen.but widget tree before first Push receive changes.
+		// must override this to listen. but widget tree before first Push receive changes.
 	}
 }
 

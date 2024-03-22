@@ -44,15 +44,15 @@ class AppSheet {
   static _SheetTheme _genTheme() {
     return _SheetTheme();
   }
-  ///======= flutter api ==========================================================================================
-  static PersistentBottomSheetController<T> showBottomSheetInScaffold<T>(
+  ///======= flutter api =======================================================
+  static PersistentBottomSheetController showBottomSheetInScaffold<T>(
       BuildContext ctx,
       Widget Function(BuildContext context) builder, {
       Color? backgroundColor,
       double elevation = 0.0,
       ShapeBorder? shape,
       }) {
-    return showBottomSheet<T>(
+    return showBottomSheet(
       context: ctx,
       shape: shape,
       constraints: AppSizes.isBigWidth()? BoxConstraints.tightFor(width: AppSizes.descktopMaxWidthSize) : null,

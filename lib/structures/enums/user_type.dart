@@ -3,21 +3,27 @@ enum UserType {
   common(1),
   admin(9);
 
-  final int _type;
+  final int _id;
 
-  const UserType(this._type);
+  const UserType(this._id);
 
-  static UserType from(int type){
-    for(final k in UserType.values){
-      if(k._type == type){
-        return k;
-      }
+  static UserType from(dynamic data){
+    if(data == null){
+      return UserType.common;
+    }
+
+    if(data is String) {
+      values.firstWhere((e) => e.name == data, orElse: ()=> UserType.common);
+    }
+
+    if(data is int) {
+      values.firstWhere((e) => e._id == data, orElse: ()=> UserType.common);
     }
 
     return UserType.common;
   }
 
-  int type(){
-    return _type;
+  int id(){
+    return _id;
   }
 }

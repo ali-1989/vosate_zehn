@@ -12,6 +12,7 @@ import 'package:iris_tools/api/converter.dart';
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
 import 'package:iris_tools/api/helpers/listHelper.dart';
 
+import 'package:app/tools/device_info_tools.dart';
 import 'package:app/tools/log_tools.dart';
 
 class AppHttpDio {
@@ -561,6 +562,16 @@ class HttpItem {
 		}
 
 		_getFormField()!.add(MapEntry(key, value));
+	}
+
+	void addFormFieldAsMap(String key, Map value){
+		if(body is! FormData) {
+			body = FormData();
+		}
+
+		DeviceInfoTools.attachDeviceAndTokenInfo(value);
+
+		_getFormField()!.add(MapEntry(key, JsonHelper.mapToJson(value)));
 	}
 
 	void addFormFile(String partName, String fileName, File file){

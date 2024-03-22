@@ -1,24 +1,24 @@
 
-///=====================================================================================
+///=============================================================================
 enum VideoSourceType {
   file,
   network,
   bytes,
   asset
 }
-///=====================================================================================
+///=============================================================================
 enum SavePathType {
   userProfile,
   anyOnInternal,
 }
-///=====================================================================================
+///=============================================================================
 enum ImageType {
   file,
   bytes,
   asset,
   network,
 }
-///=====================================================================================
+///=============================================================================
 enum SubBucketTypes {
   video(1),
   audio(2),
@@ -32,7 +32,7 @@ enum SubBucketTypes {
     return _type;
   }
 }
-///=====================================================================================
+///=============================================================================
 enum BucketTypes {
   video(1),
   motion(2),
@@ -43,8 +43,20 @@ enum BucketTypes {
 
   const BucketTypes(this._id);
 
-  factory BucketTypes.fromId(int id) {
-    return values.firstWhere((e) => e._id == id);
+  factory BucketTypes.from(dynamic data){
+    if (data == null) {
+      return BucketTypes.video;
+    }
+
+    if (data is String) {
+      values.firstWhere((e) => e.name == data, orElse: () => BucketTypes.video);
+    }
+
+    if (data is int) {
+      values.firstWhere((e) => e._id == data, orElse: () => BucketTypes.video);
+    }
+
+    return BucketTypes.video;
   }
 
   int id(){
@@ -67,6 +79,6 @@ enum BucketTypes {
       return 'مدیتیشن';
     default:
       return '';
+    }
   }
-}
 }
