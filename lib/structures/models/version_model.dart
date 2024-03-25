@@ -8,7 +8,7 @@ class VersionModel {
   Map<String, String> markets = {};
   String? newVersionTs;
   String? pkgName;
-  int? os;
+  String? os;
 
   VersionModel();
 

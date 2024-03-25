@@ -78,8 +78,8 @@ class SplashManager {
       BuildFlavor.initial();
 
       if(BuildFlavor.connectToLocal()){
-        SettingsManager.localSettings.httpAddress = 'http://192.168.1.104:7436';
-        SettingsManager.localSettings.wsAddress = 'ws://192.168.1.104:7436/ws';
+        SettingsManager.localSettings.httpAddress = 'http://192.168.1.100:7436';
+        SettingsManager.localSettings.wsAddress = 'ws://192.168.1.100:7436/ws';
         //SettingsModel.defaultHttpAddress
       }
 

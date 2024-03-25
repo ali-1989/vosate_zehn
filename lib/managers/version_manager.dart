@@ -64,11 +64,11 @@ class VersionManager {
 
     requester.httpRequestEvents.onFailState = (req, response) async {
       res.complete(null);
+      return true;
     };
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
       newVersionModel = VersionModel.fromMap(data);
-
       res.complete(newVersionModel);
     };
 
