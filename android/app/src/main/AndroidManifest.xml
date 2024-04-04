@@ -24,6 +24,7 @@
     <!-- RECEIVE_BOOT_COMPLETED: show AutoStart switch in app info, allow auto boot like alarm, must enable by user -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
@@ -178,16 +179,7 @@
             android:showOnLockScreen="true"
             android:turnScreenOn="true"
                 android:windowSoftInputMode="adjustResize" tools:targetApi="o_mr1">
-
-            <meta-data
-              android:name="io.flutter.embedding.android.NormalTheme"
-              android:resource="@style/NormalTheme"
-              />
-
-            <!--  launching App with a URI -->
-            <meta-data
-                    android:name="flutter_deeplinking_enabled"
-                    android:value="true" />
+          
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -198,6 +190,15 @@
                 <action android:name="FLUTTER_NOTIFICATION_CLICK"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
+
+            <meta-data
+                    android:name="io.flutter.embedding.android.NormalTheme"
+                    android:resource="@style/NormalTheme"/>
+
+            <!--  launching App with a URI -->
+            <meta-data
+                    android:name="flutter_deeplinking_enabled"
+                    android:value="true" />
 
             <!--
 	    <intent-filter>
@@ -226,6 +227,27 @@
 	    
         </activity>
 
+
+        /*<receiver
+                android:exported="false"
+                android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
+
+        <receiver
+                android:exported="false"
+                android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
+            </intent-filter>
+        </receiver>
+
+        <receiver
+                android:exported="false"
+                android:name="com.dexterous.flutterlocalnotifications.ActionBroadcastReceiver" />
+	*/
+	
         <!-- for open app files by others -->
         <!-- old: android.support.v4.content.FileProvider -->
         <provider

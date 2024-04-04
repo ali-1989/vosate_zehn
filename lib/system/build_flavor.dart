@@ -12,7 +12,11 @@ class BuildFlavor {
     return _flavor != null && _flavor!.contains('bazar');
   }
 
-  static bool connectToLocal(){
+  static bool connectToTest(){
     return _flavor != null && _flavor!.contains('local');
+  }
+
+  static bool resetToRelease(){
+    return _flavor != null && _flavor!.contains('resetHttp');
   }
 }

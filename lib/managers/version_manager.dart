@@ -188,28 +188,26 @@ class VersionManager {
             ),
           ),
       );
+
+      views.add(const SizedBox(height: 5));
     }
 
-    if (vm.directLink != null) {
-      views.add(const SizedBox(height: 5));
+    for(final market in vm.markets.entries){
+      views.add(
+          RichText(
+              text: TextSpan(
+                text: market.key,
+                style: const TextStyle(color: Colors.blue),
+                recognizer: TapGestureRecognizer()..onTap = (){
+                  UrlHelper.launchLink(market.value);
 
-      for(final market in vm.markets.entries){
-        views.add(
-            RichText(
-                text: TextSpan(
-                  text: market.key,
-                  style: const TextStyle(color: Colors.blue),
-                  recognizer: TapGestureRecognizer()..onTap = (){
-                    UrlHelper.launchLink(market.value);
-
-                    if(!vm.restricted){
-                      Navigator.of(RouteTools.getBaseContext()!).pop();
-                    }
-                    },
-                )
-            )
-        );
-      }
+                  if(!vm.restricted){
+                    Navigator.of(RouteTools.getBaseContext()!).pop();
+                  }
+                },
+              )
+          )
+      );
     }
 
     return Column(

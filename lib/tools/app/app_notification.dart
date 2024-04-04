@@ -3,11 +3,12 @@ import 'dart:typed_data';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:iris_tools/api/generator.dart';
 
-import 'package:app/structures/models/statusbar_notification_model.dart';
+import 'package:app/structures/models/notification_settings_model.dart';
 import 'package:app/system/constants.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/app_db.dart';
 import 'package:app/tools/app/app_decoration.dart';
+import 'package:iris_tools/api/system.dart';
 
 // icon generator:
 // https://romannurik.github.io/AndroidAssetStudio/icons-notification.html#source.type=image&source.space.trim=1&source.space.pad=0&name=notif
@@ -47,73 +48,83 @@ Future<void> awesomeTapListener(ReceivedAction action){
 	return Future.value();
 }
 
-///=======================================================================================
+///=============================================================================
 class AppNotification {
 	AppNotification._();
 
-	static Future<void> generateAndSinkNotificationIds() async {
-		await AppDB.setReplaceKv(Keys.setting$notificationChanelKey, 'C_${Constants.appName}');
-		await AppDB.setReplaceKv(Keys.setting$notificationChanelGroup, 'CG_${Generator.generateName(8)}');
-
-		return;
+	static NotificationSettingsModel fetchNotificationSettingModel(){
+		return NotificationSettingsModel.fromMap(AppDB.fetchKv(Keys.setting$notificationModel));
 	}
 
-	static String? fetchChannelKey(){
-		return AppDB.fetchKv(Keys.setting$notificationChanelKey);
-	}
-
-	static StatusBarNotificationModel fetchNotificationModel(){
-		return StatusBarNotificationModel.fromMap(AppDB.fetchKv(Keys.setting$notificationModel));
-	}
-
-	static Future saveNotificationModel(StatusBarNotificationModel model){
+	static Future saveNotificationModel(NotificationSettingsModel model){
 		return AppDB.setReplaceKv(Keys.setting$notificationModel, model.toMap());
 	}
 
 	static Future<bool> initial() async {
 		await AppDB.init();
-		var ch = fetchChannelKey();
+		final defaultNotifySetting = fetchNotificationSettingModel();
+		saveNotificationModel(defaultNotifySetting);
 
-		/* no need: because initialize do update last channel.
-		if(ch != null){
-			AwesomeNotifications().removeChannel(ch);
-			return true;
-		}*/
+		await requestPermission();
 
-		if(ch == null){
-			await generateAndSinkNotificationIds();
-			ch = fetchChannelKey();
+		if(System.isAndroid()){
+			final nc1 = NotificationChannel(
+				channelKey: defaultNotifySetting.channelId,
+				channelGroupKey: defaultNotifySetting.groupId,
+				channelName: defaultNotifySetting.channelId,
+				channelDescription: Constants.appName,
+				defaultColor: defaultNotifySetting.defaultColor,
+				ledColor: defaultNotifySetting.ledColor,
+				defaultPrivacy: defaultNotifySetting.isPublic? NotificationPrivacy.Public : NotificationPrivacy.Private,
+				importance: defaultNotifySetting.importance.getImportance(),
+				enableLights: defaultNotifySetting.enableLights,
+				enableVibration: defaultNotifySetting.enableVibration,
+				playSound: defaultNotifySetting.playSound,
+				//soundSource: ,
+				vibrationPattern: getVibration(),
+				ledOnMs: 500,
+				ledOffMs: 500,
+			);
+
+			///* resource://drawable/firebase_icon
+			AwesomeNotifications().initialize(
+				'resource://drawable/firebase_icon',
+				[nc1],
+				debug: false,
+			);
+		}
+		else {
+			AwesomeNotifications().initialize(
+				null, [],
+				debug: false,
+			);
 		}
 
-		final chg = AppDB.fetchKv(Keys.setting$notificationChanelGroup);
-		final lastNotifyModel = fetchNotificationModel();
-		final nc1 = NotificationChannel(
-			channelKey: ch?? '',
-			channelGroupKey: chg,
-			channelName: lastNotifyModel.name,
-			channelDescription: Constants.appName,
-			defaultColor: lastNotifyModel.defaultColor,
-			ledColor: lastNotifyModel.ledColor,
-			defaultPrivacy: lastNotifyModel.isPublic? NotificationPrivacy.Public : NotificationPrivacy.Private,
-			importance: lastNotifyModel.importanceIsHigh? NotificationImportance.High : NotificationImportance.Default,
-			enableLights: lastNotifyModel.enableLights,
-			enableVibration: lastNotifyModel.enableVibration,
-			playSound: lastNotifyModel.playSound,
-			//soundSource: ,
-			vibrationPattern: getVibration(),
-			ledOnMs: 500,
-			ledOffMs: 500,
-		);
-
-		///* resource://drawable/firebase_icon
-		AwesomeNotifications().initialize(
-			'resource://drawable/firebase_icon',
-			[nc1],
-			debug: false,
-		);
-
-		requestPermission();
 		return true;
+	}
+
+	static Future<void> requestPermission() async {
+		try {
+			final isAllowed = await AwesomeNotifications().isNotificationAllowed();
+
+			if (!isAllowed) {
+				final defaultNotifySetting = fetchNotificationSettingModel();
+
+				AwesomeNotifications().requestPermissionToSendNotifications(
+						channelKey: defaultNotifySetting.channelId,
+						permissions: [
+							NotificationPermission.Alert,
+							NotificationPermission.Sound,
+							NotificationPermission.Badge,
+							NotificationPermission.Vibration,
+							NotificationPermission.Light,
+							NotificationPermission.PreciseAlarms, // allows the scheduled notifications to be displayed at the expected time
+							NotificationPermission.FullScreenIntent, // pop up even if the user is using another app
+						]
+				);
+			}
+		}
+		catch (e){/**/}
 	}
 
 	static Int64List getVibration() {
@@ -124,28 +135,6 @@ class AppNotification {
 		vibrationPattern[3] = 0;
 
 		return vibrationPattern;
-	}
-
-	static void requestPermission() {
-		try {
-			AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
-				if (!isAllowed) {
-					AwesomeNotifications().requestPermissionToSendNotifications(
-							channelKey: fetchChannelKey(),
-							permissions: [
-								NotificationPermission.Alert,
-								NotificationPermission.Sound,
-								NotificationPermission.Badge,
-								NotificationPermission.Vibration,
-								NotificationPermission.Light,
-								NotificationPermission.PreciseAlarms, // allows the scheduled notifications to be displayed at the expected time
-								NotificationPermission.FullScreenIntent, // pop up even if the user is using another app
-							]
-					);
-				}
-			});
-		}
-		catch (e){/**/}
 	}
 
 	static void startListenTap() {
@@ -184,9 +173,11 @@ class AppNotification {
 	}
 
 	static void sendNotification(String? title, String text, {int? id, Map<String, String>? payload}) {
+		final defaultNotifySetting = fetchNotificationSettingModel();
+
 		final n = NotificationContent(
 			id: id ?? Generator.generateIntId(5),
-			channelKey: fetchChannelKey()?? '',
+			channelKey: defaultNotifySetting.channelId,
 			title: title,
 			body: text,
 			autoDismissible: true,
@@ -202,10 +193,12 @@ class AppNotification {
 	}
 
 	static void sendMessagesNotification(String? title, String user, String message, {int? id}) {
+		final defaultNotifySetting = fetchNotificationSettingModel();
+
 		AwesomeNotifications().createNotification(
 			content: NotificationContent(
 				id: id ?? Generator.generateIntId(5),
-				channelKey: fetchChannelKey()?? '',
+				channelKey: defaultNotifySetting.channelId,
 				title: title,
 				summary: user,
 				autoDismissible: true,

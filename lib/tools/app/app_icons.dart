@@ -104,6 +104,7 @@ class AppIcons {
   static const IconData infoSolid = Icons.info;
   static const IconData bookmark = Icons.bookmark_border;
   static const IconData bookmarkSolid = Icons.bookmark;
+  static const IconData buyBasket = Icons.add_shopping_cart;
   static const IconData lastSeenClock = CommunityMaterialIcons.history;
   static const IconData heartSolid = CommunityMaterialIcons.heart;
   static const IconData heart = CommunityMaterialIcons.heart_outline;

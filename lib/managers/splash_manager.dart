@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:app/structures/models/settings_model.dart';
 import 'package:app/system/build_flavor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -77,10 +78,12 @@ class SplashManager {
       SettingsManager.init();
       BuildFlavor.initial();
 
-      if(BuildFlavor.connectToLocal()){
+      if(BuildFlavor.connectToTest()){
         SettingsManager.localSettings.httpAddress = 'http://192.168.1.100:7436';
         SettingsManager.localSettings.wsAddress = 'ws://192.168.1.100:7436/ws';
-        //SettingsModel.defaultHttpAddress
+      }
+      else if(BuildFlavor.resetToRelease()) {
+        SettingsManager.localSettings.httpAddress = SettingsModel.defaultHttpAddress;
       }
 
       if(kIsWeb){
@@ -223,12 +226,9 @@ class SplashManager {
     }
     else {
       isConnectToServer = true;
-
       SessionService.fetchLoginUsers();
-
-      if(context.mounted){
-        callState();
-      }
+      AppBroadcast.reBuildApp();
+    }
     }*/
   }
 }

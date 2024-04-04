@@ -28,12 +28,12 @@ if (minSdkVersionVal == null) {
 
 def compileSdkVersionVal = localProperties.getProperty('flutter.compileSdkVersion')
 if (compileSdkVersionVal == null) {
-    compileSdkVersionVal = '33'
+    compileSdkVersionVal = '34'
 }
 
 def targetSdkVersionVal = localProperties.getProperty('flutter.targetSdkVersion')
 if (targetSdkVersionVal == null) {
-    targetSdkVersionVal = '33'
+    targetSdkVersionVal = '34'
 }
 
 
@@ -50,6 +50,7 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+        //coreLibraryDesugaringEnabled true
     }
 
     sourceSets {
@@ -125,5 +126,8 @@ dependencies {
     //implementation 'com.google.firebase:firebase-analytics'
     //implementation 'androidx.annotation:annotation:1.4.0'
     //implementation 'androidx.multidex:multidex:2.0.1'
+    //coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
+    //implementation 'androidx.window:window:1.0.0'
+    //implementation 'androidx.window:window-java:1.0.0'
     //implementation fileTree(dir: 'E:\\Programming\\.gradle\\caches\\modules-2\\files-2.1\\io.flutter\\flutter_embedding_debug\\1.0.0-d44b5a94c976fbb65815374f61ab5392a220b084\\5ad0fb193f143c1352aef2c48ca10a99b3eadd1e', include: ['*.aar', '*.jar'], exclude: [])
 }

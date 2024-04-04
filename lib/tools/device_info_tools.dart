@@ -26,27 +26,34 @@ class DeviceInfoTools {
   static WindowsDeviceInfo? windowInfo;
   static LinuxDeviceInfo? linuxInfo;
   static MacOsDeviceInfo? macOsInfo;
+  static String? deviceType;
 
   static Future<void> prepareDeviceInfo() async {
     final deviceInfoPlugin = DeviceInfoPlugin();
 
     if(System.isWeb()) {
       webDeviceInfo = await deviceInfoPlugin.webBrowserInfo;
+      deviceType = 'web';
     }
     else if (Platform.isAndroid) {
       androidDeviceInfo = await deviceInfoPlugin.androidInfo;
+      deviceType = 'android';
     }
     else if (Platform.isIOS) {
       iosDeviceInfo = await deviceInfoPlugin.iosInfo;
+      deviceType = 'ios';
     }
     else if (Platform.isWindows) {
       windowInfo = await deviceInfoPlugin.windowsInfo;
+      deviceType = 'windows';
     }
     else if (Platform.isLinux) {
       linuxInfo = await deviceInfoPlugin.linuxInfo;
+      deviceType = 'linux';
     }
     else if (Platform.isMacOS) {
       macOsInfo = await deviceInfoPlugin.macOsInfo;
+      deviceType = 'mac';
     }
   }
 

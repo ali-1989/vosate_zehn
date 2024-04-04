@@ -21,6 +21,7 @@ class UserModel {
   CountryModel countryModel = CountryModel();
   String? email;
   late UserType userType;
+  VipOptionsModel vipOptions = VipOptionsModel();
   //---------------- locale
   DateTime? loginDate;
 
@@ -30,6 +31,7 @@ class UserModel {
     final tLoginDate = map[Keys.setting$lastLoginDate];
     final brDate = map[Keys.birthdate];
     final regDate = map[Keys.registerDate];
+    final vip = map['vip_model'];
 
     userId = map[Keys.userId].toString();
     userName = map[Keys.userName];
@@ -70,6 +72,10 @@ class UserModel {
       registerDate = DateHelper.timestampToSystem(regDate);
     }
 
+    if(vip is Map){
+      vipOptions = VipOptionsModel.fromMap(vip);
+    }
+
     profileModel?.url = UriTools.correctAppUrl(profileModel?.url, domain: domain);
     //----------------------- local
     if (tLoginDate is int) {
@@ -101,6 +107,8 @@ class UserModel {
     if(countryModel.countryIso != null) {
       map['country_js'] = countryModel.toMap();
     }
+
+    map['vip_model'] = vipOptions?.toMap();
     //-------------------------- local
     map[Keys.setting$lastLoginDate] = loginDate == null ? null : DateHelper.toTimestamp(loginDate!);
 
@@ -121,7 +129,7 @@ class UserModel {
     userType = other.userType;
     countryModel = other.countryModel;
     token = other.token;
-
+    vipOptions = other.vipOptions;
     //--------------------------------- local
     //_profilePath = read._profilePath;
     loginDate = other.loginDate;
@@ -182,7 +190,7 @@ class UserModel {
     return '$userId _ userName: $userName _ name: $name _ family: $family _ mobile: $mobile _ sex: $sex | token: ${token?.token} , refresh Token: ${token?.refreshToken} ';
   }
 }
-///=======================================================================================================
+///=============================================================================
 class Token {
   String? token;
   String? refreshToken;
@@ -220,5 +228,54 @@ class Token {
   @override
   String toString(){
     return 'Token: $token | refreshToken: $refreshToken | expire Date: $expireDate';
+  }
+}
+///=============================================================================
+class VipOptionsModel {
+  int hours = 0;
+
+  VipOptionsModel();
+
+  VipOptionsModel.fromMap(Map map){
+    hours = map['hours']?? 0;
+  }
+
+  Map<String, dynamic> toMap(){
+    final res = <String, dynamic>{};
+    res['hours'] = hours;
+
+    return res;
+  }
+
+  int getDays(){
+    return hours ~/ 24;
+  }
+
+  int getHours(){
+    return hours - (getDays() * 24);
+  }
+
+  bool isVip(){
+    return hours > 0;
+  }
+
+  String getHumanVipTime(){
+    String ret = '';
+
+    if(getDays() > 0){
+      ret = '${getDays()} روز ';
+
+      if(getHours() > 0){
+        ret += ' و ${getHours()} ساعت ';
+      }
+
+      return ret;
+    }
+
+    if(getHours() > 0){
+      return '${getHours()} ساعت ';
+    }
+
+    return '-';
   }
 }

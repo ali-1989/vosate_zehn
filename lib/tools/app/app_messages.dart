@@ -557,4 +557,28 @@ class AppMessages {
   static String get pleaseEnterEmailToRegistering {
     return 'لطفا آدرس ایمیل خود را جهت ثبت نام وارد کنید';
   }
+
+  static String get vipType {
+    return 'نوع حساب';
+  }
+
+  static String get savedVtiTime {
+    return 'باقیمانده اشتراک';
+  }
+
+  static String get normalUser {
+    return 'معمولی';
+  }
+
+  static String get vipUser {
+    return 'ویژه';
+  }
+
+  static String get vipPlanPage {
+    return 'خرید اشتراک';
+  }
+
+  static String get vipPlanDescription {
+    return 'جهت استفاده از محتوای ویژه نیاز هست که شما نیز یک کاربر ویژه باشید. با خرید اشتراک ، حساب کاربری شما ویژه خواهد شد.';
+  }
 }

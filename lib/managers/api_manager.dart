@@ -17,7 +17,7 @@ import 'package:app/tools/route_tools.dart';
 class ApiManager {
   ApiManager._();
 
-  static String get serverApi => '${SettingsManager.localSettings.httpAddress}/graph-v1';
+  static String get serverApi => '${SettingsManager.localSettings.httpAddress}/graph-v2';
   static String get logReportApi => '${SettingsManager.localSettings.httpAddress}/logs';
   static String fcmTopic = 'daily_text';
 
@@ -53,6 +53,7 @@ class ApiManager {
     heart['app_name'] = Constants.appName;
     heart['app_version_code'] = Constants.appVersionCode;
     heart['app_version_name'] = Constants.appVersionName;
+    heart['device_type'] = DeviceInfoTools.deviceType;
     heart['fcm_token'] = FireBaseService.token;
     heart[Keys.deviceId] = DeviceInfoTools.deviceId;
 

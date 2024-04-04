@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:app/views/pages/profile/buy_vip_plan_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -56,7 +57,7 @@ class ProfilePage extends StatefulWidget{
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
-///==================================================================================
+///=============================================================================
 class _ProfilePageState extends StateSuper<ProfilePage> {
   Requester requester = Requester();
   UserModel user = SessionService.getLastLoginUser()!;
@@ -96,14 +97,16 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
   Widget buildBody(){
     return Stack(
       children: [
+        /// background
         SizedBox.expand(
             child: Image.asset(AppImages.background,
               fit: BoxFit.fill,
             )
         ),
 
+        /// background
         Positioned(
-          top: MathHelper.percent(AppSizes.instance.appHeight, 25),
+            top: MathHelper.percent(AppSizes.instance.appHeight, 25),
             left: MathHelper.percent(AppSizes.instance.appWidth, 10),
             right: MathHelper.percent(AppSizes.instance.appWidth, 16),
             child: Column(
@@ -242,7 +245,7 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
                               ],
                             ),
 
-                          const SizedBox(height: 15,),
+                          const SizedBox(height: 8),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -255,7 +258,7 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
                             ],
                           ),
 
-                          const SizedBox(height: 15),
+                          const SizedBox(height: 8),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -266,7 +269,41 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
                                   onPressed: changeGenderClick,
                               ),
                             ],
-                          )
+                          ),
+
+                          const SizedBox(height: 8),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('${AppMessages.vipType}:').color(Colors.white),
+
+                              Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: onChangeVipPlan,
+                                    child: const Icon(AppIcons.buyBasket, color: Colors.green),
+                                  ),
+
+                                  ActionChip(
+                                    backgroundColor: AppThemes.instance.currentTheme.differentColor,
+                                    label: Text(user.vipOptions.isVip()? AppMessages.vipUser: AppMessages.normalUser).color(Colors.white),
+                                    onPressed: onChangeVipPlan,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+
+                          Visibility(
+                            visible: user.vipOptions.isVip(),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text('${AppMessages.savedVtiTime}:').color(Colors.white),
+                                  Text(user.vipOptions.getHumanVipTime()).color(Colors.white),
+                                ],
+                              )
+                          ),
 
                         ],
                       ),
@@ -724,6 +761,15 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
           assistCtr.updateHead();
         }
       }
+    }
+  }
+
+  void onChangeVipPlan() async {
+    final res = await RouteTools.pushPage(context, const BuyVipPlanPage());
+
+    if(res is bool && res){
+      //requestProfileData();
+      assistCtr.updateHead();
     }
   }
 }

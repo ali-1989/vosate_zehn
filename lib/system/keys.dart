@@ -69,8 +69,6 @@ class Keys {
   static const setting$colorThemeName = 'color_theme_name';
   static const setting$toBackgroundTs = 'to_background_ts';
   static const setting$confirmOnExit = 'confirm_on_exit';
-  static const setting$notificationChanelKey = 'notification_chanel_key';
-  static const setting$notificationChanelGroup = 'notification_chanel_group';
   static const setting$notificationModel = 'notification_model';
   static const setting$currentVersion = 'current_version';
   static const setting$webDeviceId = 'web_device_id';
