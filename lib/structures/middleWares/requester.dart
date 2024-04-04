@@ -13,7 +13,7 @@ import 'package:app/tools/device_info_tools.dart';
 import 'package:app/tools/http_tools.dart';
 import 'package:app/tools/route_tools.dart';
 
-///=============================================================================
+
 enum MethodType {
   post,
   get,
@@ -137,8 +137,8 @@ class Requester {
         var pr = '>_._._._._._._.__._._._._._._._ API CALLED >>>'
             '\nurl:[$url]'
             '\n\nrequest:[$request]'
-            '\n\nresponse ====>>  status:[${_httpRequester.responseData?.statusCode}]'
-            '\ndata:$response'
+            '\n\n ====>>  status:[${_httpRequester.responseData?.statusCode}]'
+            '\rresponse>:$response'
             '\n<_._._._._._._.__._._._._._._.__._._._._._._._ End';
 
         Tools.verboseLog(pr);

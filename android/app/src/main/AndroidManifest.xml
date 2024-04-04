@@ -200,37 +200,44 @@
                     android:name="flutter_deeplinking_enabled"
                     android:value="true" />
 
-            <!--
-	    <intent-filter>
+
+            <!--After Android 12 must add autoVerify
+             And must be verified by adding assetlinks.json to the .well-known directory -->
+
+            <intent-filter
+                    android:autoVerify="true"
+                    android:label="vosateZehn_deep_link" >
                 <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="https://green-oasis-2023.firebaseapp.com/__/auth/handler"
-                      />
-            </intent-filter>
-	    
-            <intent-filter
-                    android:autoVerify="true">
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
+                <category android:name="android.intent.category.LAUNCHER" />
 
-                <data android:scheme="appName" android:host="com.companyName.appName"/>
+                <data
+                        android:scheme="https"
+                        android:host="vosatezehn.com"
+                        android:pathPrefix="/buy"/>
+
+                <data
+                        android:scheme="app"
+                        android:host="vosatezehn.com"
+                        android:pathPrefix="/buy"/>
             </intent-filter>
-	    
+
+            <!--
 	    <intent-filter>
                 <action android:name="ir.nicode.bigbango.WALLET"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
             </intent-filter>
             -->
-	    
+
         </activity>
 
 
-        /*<receiver
-                android:exported="false"
-                android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
+    <!--<receiver
+            android:exported="false"
+            android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
 
         <receiver
                 android:exported="false"
@@ -246,7 +253,7 @@
         <receiver
                 android:exported="false"
                 android:name="com.dexterous.flutterlocalnotifications.ActionBroadcastReceiver" />
-	*/
+	-->
 	
         <!-- for open app files by others -->
         <!-- old: android.support.v4.content.FileProvider -->
