@@ -1,3 +1,6 @@
+import 'package:app/tools/app/app_dialog.dart';
+import 'package:app/tools/app/app_snack.dart';
+import 'package:app/views/pages/profile/buy_vip_plan_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/duration/durationFormatter.dart';
@@ -44,8 +47,8 @@ class SubBucketPage extends StatefulWidget{
 
   SubBucketPage({
     required this.injectData,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<SubBucketPage> createState() => _SubBucketPageState();
@@ -154,6 +157,8 @@ class _SubBucketPageState extends StateSuper<SubBucketPage> {
               borderRadius: BorderRadius.circular(10),
               child: Column(
                 children: [
+
+                  /// image, video/audio icon, vip
                   Stack(
                     children: [
                       Builder(
@@ -172,6 +177,7 @@ class _SubBucketPageState extends StateSuper<SubBucketPage> {
                         },
                       ),
 
+                      /// video/audio icon
                       Positioned(
                           top: 0,
                           left: 0,
@@ -198,6 +204,21 @@ class _SubBucketPageState extends StateSuper<SubBucketPage> {
                                     elevation: 0,
                                     label: const Icon(AppIcons.headset, size: 15, color: Colors.white),
                                   );
+                                }
+
+                                return const SizedBox();
+                              }
+                          )
+                      ),
+
+                      /// vip
+                      Positioned(
+                          top: 3,
+                          right: 3,
+                          child: Builder(
+                              builder: (context) {
+                                if(itm.isVip){
+                                  return Image.asset(AppImages.vip1, width: 30, height: 30);
                                 }
 
                                 return const SizedBox();
@@ -290,6 +311,42 @@ class _SubBucketPageState extends StateSuper<SubBucketPage> {
   }
 
   void onItemClick(SubBucketModel itm) {
+    final user = SessionService.getLastLoginUser();
+
+    if(itm.isVip && (user == null || user.userId == '0')){
+      AppSnack.showError(context, 'برای دسترسی یه این محنوا باید ثبت نام کنید.');
+      return;
+    }
+
+    if(itm.isVip && !user!.vipOptions.isVip()){
+      final decor = AppDialog.instance.dialogDecoration.copy();
+      decor.descriptionStyle = AppThemes.boldTextStyle().copyWith(
+          fontSize: 18,
+          fontWeight: FontWeight.w800
+      );
+
+      AppDialog.instance.showDialog(
+          context,
+          decorationConfig: decor,
+          desc: 'این محتوا فقط برای کاربران ویژه می باشد',
+          actions: [
+            ElevatedButton(
+                onPressed: ()=> Navigator.of(context).pop(),
+                child: const Text('متوجه شدم')
+            ),
+
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                ),
+                onPressed: gotoBuyVipPage,
+                child: const Text('خرید اشتراک')
+            ),
+          ]
+      );
+      return;
+    }
+
     LastSeenService.addItem(itm);
 
     if(itm.type == SubBucketTypes.video.id()){
@@ -374,5 +431,10 @@ class _SubBucketPageState extends StateSuper<SubBucketPage> {
 
     requester.prepareUrl();
     requester.request();
+  }
+
+  void gotoBuyVipPage() async {
+    Navigator.of(context).pop();
+    final res = await RouteTools.pushPage(context, const BuyVipPlanPage());
   }
 }

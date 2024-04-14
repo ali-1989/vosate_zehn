@@ -39,9 +39,9 @@ class AudioPlayerPageInjectData {
   Color? backColor;
   OnFullTimePlay? onFullTimePlay;
 }
-///---------------------------------------------------------------------------------
+///-----------------------------------------------------------------------------
 typedef OnFullTimePlay = void Function();
-///---------------------------------------------------------------------------------
+///-----------------------------------------------------------------------------
 class AudioPlayerPage extends StatefulWidget{
 
   final AudioPlayerPageInjectData injectData;
@@ -203,6 +203,13 @@ class AudioPlayerPageState extends StateSuper<AudioPlayerPage> {
 
       audioPlayer.resume();
     });
+
+    /*
+    final headers = <String, String>{};
+
+    headers['user'] = '${SessionService.getLastLoginUser()?.userId}';
+    headers['token'] = '${SessionService.getLastLoginUser()?.token?.token}';
+     */
   }
 
   void eventListener(AudioEvent event){

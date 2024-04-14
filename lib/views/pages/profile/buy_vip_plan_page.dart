@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:app/managers/api_manager.dart';
 import 'package:app/services/session_service.dart';
 import 'package:app/structures/middleWares/requester.dart';
 import 'package:app/structures/models/vip_plan_model.dart';
@@ -8,10 +7,10 @@ import 'package:app/system/keys.dart';
 import 'package:app/tools/app/app_decoration.dart';
 import 'package:app/tools/app/app_icons.dart';
 import 'package:app/tools/app/app_snack.dart';
+import 'package:app/tools/app/app_toast.dart';
 import 'package:app/tools/currency_tools.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:app/tools/log_tools.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:iris_tools/api/helpers/urlHelper.dart';
 
 import 'package:iris_tools/modules/stateManagers/assist.dart';
@@ -37,6 +36,7 @@ class _BuyVipPlanPageState extends StateSuper<BuyVipPlanPage> {
   Requester requester = Requester();
   late AppLifecycleListener lifecycleListener;
   List<VipPlanModel> listItems = [];
+  bool callBankGetWay = false;
 
   @override
   void initState(){
@@ -44,8 +44,8 @@ class _BuyVipPlanPageState extends StateSuper<BuyVipPlanPage> {
 
     assistCtr.addState(AssistController.state$loading);
     lifecycleListener = AppLifecycleListener(
-      onResume: ()=> print('====== resume'),
-      onPause: ()=> print('====== pause'),
+      onResume: onResumeLifecycle,
+      //onStateChange: (state){
     );
 
     requestData();
@@ -152,7 +152,7 @@ class _BuyVipPlanPageState extends StateSuper<BuyVipPlanPage> {
                     children: [
                       const Text('قیمت: ').color(Colors.white),
                       Text(CurrencyTools.formatCurrency(itm.amount/10))
-                          .color(Colors.green).bold(),
+                          .color(AppDecoration.differentColor).bold(),
 
                       const Text(' تومان').color(Colors.white),
 
@@ -253,6 +253,7 @@ class _BuyVipPlanPageState extends StateSuper<BuyVipPlanPage> {
       else {
         await hideLoading();
         AppSnack.showError(context, 'متاسفانه درگاه پرداخت جواب نداد.');
+        LogTools.logger.logToAll('BankGetWay: $r', isError: true);
       }
     };
 
@@ -266,8 +267,8 @@ class _BuyVipPlanPageState extends StateSuper<BuyVipPlanPage> {
     js['amount'] = itm.amount/10;
     js['description'] = itm.title;
     js['metadata'] = {
-      'mobile': user!.mobile,
-      'email': user.email,
+      'mobile': '${user!.mobile}',
+      'email': '${user.email}',
       'id': user.userId,
     };
 
@@ -283,11 +284,12 @@ class _BuyVipPlanPageState extends StateSuper<BuyVipPlanPage> {
     final retCompleted = Completer<bool>();
 
     requester.httpRequestEvents.manageResponse = (req, r) async {
-      await hideLoading();
       final data = r['status'];
 
       if(data == 'ok'){
-        retCompleted.complete(true);
+        if(!retCompleted.isCompleted) {
+          retCompleted.complete(true);
+        }
       }
       else {
         retCompleted.complete(false);
@@ -313,8 +315,47 @@ class _BuyVipPlanPageState extends StateSuper<BuyVipPlanPage> {
   }
 
   void gotoPayWebPage(VipPlanModel itm, String authority) {
+    callBankGetWay = true;
     final url = 'https://www.zarinpal.com/pg/StartPay/$authority';
-    //UrlHelper.launchWeb(url);
-    UrlHelper.launchLink(url, mode: LaunchMode.externalApplication);
+    UrlHelper.launchLink(url, mode: LaunchMode.platformDefault);
   }
+
+  void onResumeLifecycle() async {
+    if(callBankGetWay){
+      await requestProfileData();
+      Navigator.pop(context, true);
+    }
+  }
+
+  Future<void> requestProfileData() async {
+    final retCom = Completer();
+    final user = SessionService.getLastLoginUser();
+
+    if(user == null || user.userId == '0'){
+      return;
+    }
+
+    final js = <String, dynamic>{};
+    js[Keys.request] = 'get_profile_data';
+    js[Keys.requesterId] = user.userId;
+    js[Keys.forUserId] = user.userId;
+
+
+    requester.httpRequestEvents.onStatusOk = (req, data) async {
+      await SessionService.newProfileData(data as Map<String, dynamic>);
+      AppToast.showToast(context, 'دسترسی شما امکان پذیر شد.');
+    };
+
+    requester.httpRequestEvents.onAnyState = (req) async {
+      await Future.delayed(const Duration(seconds: 1));
+      retCom.complete();
+    };
+
+    requester.bodyJson = js;
+    requester.prepareUrl();
+    requester.request();
+
+    return retCom.future;
+  }
+
 }

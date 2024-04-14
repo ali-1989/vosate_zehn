@@ -108,7 +108,7 @@ class UserModel {
       map['country_js'] = countryModel.toMap();
     }
 
-    map['vip_model'] = vipOptions?.toMap();
+    map['vip_model'] = vipOptions.toMap();
     //-------------------------- local
     map[Keys.setting$lastLoginDate] = loginDate == null ? null : DateHelper.toTimestamp(loginDate!);
 
@@ -232,31 +232,36 @@ class Token {
 }
 ///=============================================================================
 class VipOptionsModel {
-  int hours = 0;
+  late DateTime expireDate;
 
-  VipOptionsModel();
+  VipOptionsModel() : expireDate = DateHelper.nowMinusUtcOffset();
 
   VipOptionsModel.fromMap(Map map){
-    hours = map['hours']?? 0;
+    expireDate = map['expire_time']?? DateHelper.nowMinusUtcOffset();
   }
 
   Map<String, dynamic> toMap(){
     final res = <String, dynamic>{};
-    res['hours'] = hours;
+    res['expire_time'] = DateHelper.toTimestampNullable(expireDate);
 
     return res;
   }
 
+  Duration _getDuration(){
+    return expireDate.difference(DateHelper.nowMinusUtcOffset());
+  }
+
   int getDays(){
-    return hours ~/ 24;
+    return _getDuration().inDays;
   }
 
   int getHours(){
-    return hours - (getDays() * 24);
+    final dur = _getDuration();
+    return dur.inHours - (dur.inDays * 24);
   }
 
   bool isVip(){
-    return hours > 0;
+    return getDays() > 0 || getHours() > 0;
   }
 
   String getHumanVipTime(){

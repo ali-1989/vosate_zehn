@@ -169,16 +169,18 @@
         tools:ignore="GoogleAppIndexingWarning">
 
 
+        <!-- singleTop | singleTask  -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:showWhenLocked="true"
             android:showOnLockScreen="true"
             android:turnScreenOn="true"
-                android:windowSoftInputMode="adjustResize" tools:targetApi="o_mr1">
+            android:windowSoftInputMode="adjustResize"
+            tools:targetApi="o_mr1">
           
 
             <intent-filter>
@@ -208,10 +210,8 @@
                     android:autoVerify="true"
                     android:label="vosateZehn_deep_link" >
                 <action android:name="android.intent.action.VIEW" />
-                <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <category android:name="android.intent.category.LAUNCHER" />
 
                 <data
                         android:scheme="https"

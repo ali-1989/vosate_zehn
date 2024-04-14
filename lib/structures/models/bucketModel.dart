@@ -12,6 +12,7 @@ class BucketModel with DateFieldMixin {
   int? mediaId;
   int bucketType = 0; // focus, video, ...
   bool isHide = true;
+  bool isVip = false;
   //--------------- local
   MediaModel? imageModel;
   //List<SubBucketModel> subList = [];
@@ -29,6 +30,7 @@ class BucketModel with DateFieldMixin {
     bucketType = map['bucket_type']?? 0;
     mediaId = map['media_id'];
     isHide = map['is_hide']?? true;
+    isVip = map['is_vip']?? false;
     date = DateHelper.timestampToSystem(map[Keys.date]);
 
     /*if(map[Keys.dataList] is List){
@@ -47,6 +49,7 @@ class BucketModel with DateFieldMixin {
     map['bucket_type'] = bucketType;
     map['media_id'] = mediaId;
     map['is_hide'] = isHide;
+    map['is_vip'] = isVip;
 
     if(date != null){
       map[Keys.date] = DateHelper.toTimestampNullable(date);

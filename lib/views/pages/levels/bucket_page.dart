@@ -131,6 +131,8 @@ class _BucketPageState extends StateSuper<BucketPage> {
           margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
           child: Row(
             children: [
+
+              /// image
               Builder(
                 builder: (ctx){
                   if(itm.imageModel?.url != null){
@@ -150,13 +152,32 @@ class _BucketPageState extends StateSuper<BucketPage> {
 
               const SizedBox(width: 8),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Stack(
                   children: [
-                    Text(itm.title, maxLines: 1,).bold().fsR(1),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(itm.title, maxLines: 1,).bold().fsR(1),
 
-                    const SizedBox(height: 8,),
-                    Text('${itm.description}').alpha().thinFont(),
+                        const SizedBox(height: 8,),
+                        Text('${itm.description}').alpha().thinFont(),
+                      ],
+                    ),
+
+                    /// vip icon
+                    Positioned(
+                        bottom: 3,
+                        left: 3,
+                        child: Builder(
+                            builder: (context) {
+                              if(itm.isVip){
+                                return Image.asset(AppImages.vip1, width: 30, height: 30);
+                              }
+
+                              return const SizedBox();
+                            }
+                        )
+                    ),
                   ],
                 ),
               ),

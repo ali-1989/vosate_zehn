@@ -1,3 +1,6 @@
+import 'package:app/tools/app/app_dialog.dart';
+import 'package:app/tools/app/app_snack.dart';
+import 'package:app/views/pages/profile/buy_vip_plan_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:carousel_slider/carousel_slider.dart';
@@ -92,7 +95,7 @@ class _HomePageState extends StateSuper<HomePage> {
       return ErrorOccur(onTryAgain: tryLoadClick);
     }
 
-    if(newItems.isEmpty || meditationItems.isEmpty){
+    if(newItems.isEmpty && meditationItems.isEmpty){
       return const EmptyData();
     }
 
@@ -361,7 +364,7 @@ class _HomePageState extends StateSuper<HomePage> {
   Widget buildListItem(SubBucketModel itm){
     return KeepAliveWrap(
       child: SizedBox(
-        width: 160,
+        width: 170,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0),
           child: InkWell(
@@ -380,6 +383,7 @@ class _HomePageState extends StateSuper<HomePage> {
                   borderRadius: BorderRadius.circular(10),
                   child: Column(
                     children: [
+                      /// logo, icons
                       Stack(
                         children: [
                           Builder(
@@ -398,6 +402,7 @@ class _HomePageState extends StateSuper<HomePage> {
                             },
                           ),
 
+                          /// video / audio icon
                           Positioned(
                               top: 0,
                               left: 0,
@@ -430,18 +435,33 @@ class _HomePageState extends StateSuper<HomePage> {
                                   }
                               )
                           ),
+
+                          /// vip
+                          Positioned(
+                              top: 3,
+                              right: 3,
+                              child: Builder(
+                                  builder: (context) {
+                                    if(itm.isVip){
+                                      return Image.asset(AppImages.vip1, width: 30, height: 30);
+                                    }
+
+                                    return const SizedBox();
+                                  }
+                              )
+                          ),
                         ],
                       ),
 
+                      /// title
                       const SizedBox(height: 8),
-
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: Text(itm.title, maxLines: 1).bold(),
                       ),
 
+                      /// duration , like icon
                       const SizedBox(height: 8),
-
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 7.0),
                         child: Row(
@@ -461,17 +481,17 @@ class _HomePageState extends StateSuper<HomePage> {
                             IconButton(
                                 constraints: const BoxConstraints.tightFor(),
                                 padding: const EdgeInsets.all(4),
-                                splashRadius: 20,
+                                splashRadius: 18,
                                 visualDensity: VisualDensity.compact,
-                                iconSize: 20,
+                                iconSize: 18,
                                 onPressed: (){
                                   setFavorite(itm);
                                 },
                                 icon: Icon(itm.isFavorite ? AppIcons.heartSolid: AppIcons.heart,
-                                  size: 20,
+                                  size: 18,
                                   color: itm.isFavorite ? Colors.red: Colors.black,
                                 )
-                            )
+                            ),
                           ],
                         ),
                       )
@@ -549,6 +569,42 @@ class _HomePageState extends StateSuper<HomePage> {
   }
 
   void onItemClick(SubBucketModel itm) {
+    final user = SessionService.getLastLoginUser();
+
+    if(itm.isVip && (user == null || user.userId == '0')){
+      AppSnack.showError(context, 'برای دسترسی یه این محنوا باید ثبت نام کنید.');
+      return;
+    }
+
+    if(itm.isVip && !user!.vipOptions.isVip()){
+      final decor = AppDialog.instance.dialogDecoration.copy();
+      decor.descriptionStyle = AppThemes.boldTextStyle().copyWith(
+        fontSize: 18,
+        fontWeight: FontWeight.w800
+      );
+
+      AppDialog.instance.showDialog(
+        context,
+        decorationConfig: decor,
+        desc: 'این محتوا فقط برای کاربران ویژه می باشد',
+        actions: [
+          ElevatedButton(
+              onPressed: ()=> Navigator.of(context).pop(),
+              child: const Text('متوجه شدم')
+          ),
+
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green,
+            ),
+              onPressed: gotoBuyVipPage,
+              child: const Text('خرید اشتراک')
+          ),
+        ]
+      );
+      return;
+    }
+
     LastSeenService.addItem(itm);
 
     if(itm.type == SubBucketTypes.video.id()){
@@ -633,5 +689,10 @@ class _HomePageState extends StateSuper<HomePage> {
     requester.bodyJson = js;
     requester.prepareUrl();
     requester.request();
+  }
+
+  void gotoBuyVipPage() async {
+    Navigator.of(context).pop();
+    final res = await RouteTools.pushPage(context, const BuyVipPlanPage());
   }
 }

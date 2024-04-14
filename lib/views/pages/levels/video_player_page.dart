@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:app/services/session_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:chewie/chewie.dart';
@@ -20,23 +21,23 @@ class VideoPlayerPageInjectData {
   Color? backColor;
   OnFullTimePlay? onFullTimePlay;
 }
-///---------------------------------------------------------------------------------
+///-----------------------------------------------------------------------------
 typedef OnFullTimePlay = void Function();
-///---------------------------------------------------------------------------------
+///-----------------------------------------------------------------------------
 class VideoPlayerPage extends StatefulWidget {
   final VideoPlayerPageInjectData injectData;
 
-  VideoPlayerPage({
-    Key? key,
+  const VideoPlayerPage({
+    super.key,
     required this.injectData,
-  }) : super(key: key);
+  });
 
   @override
   State<StatefulWidget> createState() {
     return VideoPlayerPageState();
   }
 }
-///=========================================================================================
+///=============================================================================
 class VideoPlayerPageState extends StateSuper<VideoPlayerPage> {
   VideoPlayerController? playerController;
   ChewieController? chewieVideoController;
@@ -147,12 +148,20 @@ class VideoPlayerPageState extends StateSuper<VideoPlayerPage> {
     } */
 
     //widget.injectData.srcAddress = widget.injectData.srcAddress.replaceFirst('vosatezehn.com', '162.223.90.121');
+    final headers = <String, String>{};
+
+    headers['user'] = '${SessionService.getLastLoginUser()?.userId}';
+    headers['token'] = '${SessionService.getLastLoginUser()?.token?.token}';
+
     switch (widget.injectData.videoSourceType) {
       case VideoSourceType.file:
         playerController = VideoPlayerController.file(File(widget.injectData.srcAddress));
         break;
       case VideoSourceType.network:
-        playerController = VideoPlayerController.networkUrl(Uri.parse(widget.injectData.srcAddress));
+        playerController = VideoPlayerController.networkUrl(
+            Uri.parse(widget.injectData.srcAddress),
+            httpHeaders: headers
+          );
         break;
       case VideoSourceType.bytes:
         break;

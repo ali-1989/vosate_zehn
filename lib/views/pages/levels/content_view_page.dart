@@ -38,7 +38,7 @@ class ContentViewPageInjectData {
 class ContentViewPage extends StatefulWidget{
   final ContentViewPageInjectData injectData;
 
-  ContentViewPage({
+  const ContentViewPage({
     required this.injectData,
     super.key,
   });
@@ -92,6 +92,7 @@ class _LevelPageState extends StateSuper<ContentViewPage> {
         children: [
           const SizedBox(height: 20),
 
+          /// image
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 8),
             child: ClipRRect(
@@ -115,13 +116,14 @@ class _LevelPageState extends StateSuper<ContentViewPage> {
             ),
           ),
 
+          /// description
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
             child: Text(widget.injectData.subBucket.description?? '').bold().fsR(2),
           ),
 
+          /// content (speaker and voices)
           const SizedBox(height: 40),
-
            Builder(
               builder: (ctx){
                 if(isInFetchData) {
@@ -159,29 +161,39 @@ class _LevelPageState extends StateSuper<ContentViewPage> {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: AvatarChip(
-                          label: Text(contentModel!.speakerModel?.name?? ''),
-                          avatar: contentModel!.speakerModel?.profileModel != null?
-                          ClipOval(
-                              child: IrisImageView(
-                                width: 60,
-                                height: 60,
-                                fit: BoxFit.fill,
-                                url: contentModel!.speakerModel!.profileModel!.url!,
-                                imagePath: AppDirectories.getSavePathMedia(contentModel!.speakerModel!.profileModel, SavePathType.anyOnInternal, null),
-                              )
-                          )
-                              : null,
-                        ),
-                      ),
+                    /// speaker
+                    Builder(
+                      builder: (context) {
+                        if(contentModel!.speakerModel != null){
+                          return Align(
+                            alignment: Alignment.centerRight,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 20),
+                              child: AvatarChip(
+                                label: Text(contentModel!.speakerModel?.name?? ''),
+                                avatar: contentModel!.speakerModel?.profileModel != null?
+                                ClipOval(
+                                    child: IrisImageView(
+                                      width: 60,
+                                      height: 60,
+                                      fit: BoxFit.fill,
+                                      url: contentModel!.speakerModel!.profileModel!.url!,
+                                      imagePath: AppDirectories.getSavePathMedia(contentModel!.speakerModel!.profileModel, SavePathType.anyOnInternal, null),
+                                    )
+                                )
+                                    : null,
+                              ),
+                            ),
+                          );
+                        }
+
+                        return const SizedBox(height: 20);
+                      }
                     ),
 
-                    const SizedBox(height: 16),
 
+                    /// voices
+                    const SizedBox(height: 16),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                       child: Align(

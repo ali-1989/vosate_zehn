@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app/tools/app/app_decoration.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -159,7 +160,7 @@ class DrawerMenuBuilder {
             ),
 
             ColoredBox(
-              color: Colors.amberAccent.shade200,
+              color: AppDecoration.mainColor,
               child: Row(
                 children: [
                   Padding(

@@ -20,6 +20,8 @@ class SubBucketModel with DateFieldMixin {
   int type = 0; // 1:video, 2:audio, 10:content list
   int contentType = 0;
 
+  bool isVip = false;
+
   //-------- local
   bool isFavorite = false;
   MediaModel? imageModel;
@@ -43,6 +45,7 @@ class SubBucketModel with DateFieldMixin {
     contentId = map['content_id'];
     contentType = map['content_type']?? 0;
     duration = map['duration']?? 0;
+    isVip = map['is_vip']?? false;
 
     isFavorite = map['is_favorite']?? false;
   }
@@ -68,6 +71,8 @@ class SubBucketModel with DateFieldMixin {
     if(duration > 0){ //if duration is not exist, server calc this
       map['duration'] = duration;
     }
+
+    map['is_vip'] = isVip;
 
     map['is_favorite'] = isFavorite;
 

@@ -13,10 +13,12 @@ import 'package:app/tools/app/app_themes.dart';
 class AppDecoration {
   AppDecoration._();
 
-  static const Color mainColor = Colors.amber;
-  static const Color secondColor = Colors.orange;
-  static const Color differentColor = const Color(0xFFFF006E);
-  static const Color orange = const Color(0xFFFF006E);
+  //static const Color mainColor = Colors.amber;
+  static const Color mainColor = Color(0xFF9BCF53);
+  //static const Color secondColor = Colors.orange;
+  static const Color secondColor = Color(0xFF5D8D1E);
+  static const Color differentColor = Color(0xFFFF006E);
+  static const Color orange = Color(0xFFFF006E);
   
   static get strutStyle => const StrutStyle(forceStrutHeight: true, height: 1.08, leading: 0.36);
   //--------------------------------------------------

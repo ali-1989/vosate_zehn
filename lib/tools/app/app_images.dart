@@ -13,6 +13,8 @@ class AppImages {
   static const back3 = 'assets/images/b3.jpg';
   static const back4 = 'assets/images/b4.jpg';
   static const back5 = 'assets/images/b5.jpg';
+  static const vip1 = 'assets/images/vip.png';
+  //static const vip1 = 'assets/images/vip2b.png';
 }
 
 

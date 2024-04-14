@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:app/tools/app/app_decoration.dart';
 import 'package:app/views/pages/profile/buy_vip_plan_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -280,14 +281,15 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
                               Row(
                                 children: [
                                   GestureDetector(
-                                    onTap: onChangeVipPlan,
-                                    child: const Icon(AppIcons.buyBasket, color: Colors.green),
+                                    onTap: onBuyVipPlan,
+                                    child: const Icon(AppIcons.buyBasket, color: AppDecoration.differentColor),
                                   ),
 
+                                  const SizedBox(width: 6),
                                   ActionChip(
                                     backgroundColor: AppThemes.instance.currentTheme.differentColor,
                                     label: Text(user.vipOptions.isVip()? AppMessages.vipUser: AppMessages.normalUser).color(Colors.white),
-                                    onPressed: onChangeVipPlan,
+                                    onPressed: onBuyVipPlan,
                                   ),
                                 ],
                               ),
@@ -764,11 +766,10 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
     }
   }
 
-  void onChangeVipPlan() async {
+  void onBuyVipPlan() async {
     final res = await RouteTools.pushPage(context, const BuyVipPlanPage());
 
     if(res is bool && res){
-      //requestProfileData();
       assistCtr.updateHead();
     }
   }

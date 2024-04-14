@@ -61,7 +61,7 @@ class AppDialog {
 		_dialogTheme.positiveButtonBackColor = AppDecoration.buttonBackgroundColor();
 		_dialogTheme.negativeButtonBackColor = AppDecoration.buttonBackgroundColor();
 	}
-	///============================================================================================================
+	///===========================================================================
 	Future showDialog(
 			BuildContext context, {
 				String? title,
@@ -70,11 +70,11 @@ class AppDialog {
 				Widget? icon,
 				Function? yesFn,
 				bool barrierDismissible = true,
-				DialogDecoration? decoration,
+				DialogDecoration? decorationConfig,
 				List<Widget>? actions,
 			}) {
 
-		decoration ??= AppDialog.instance.dialogDecoration;
+		DialogDecoration decoration = decorationConfig ?? AppDialog.instance.dialogDecoration;
 		var topView = Dialogs.holder;
 
 		if(icon != null){
@@ -110,7 +110,9 @@ class AppDialog {
 				color: decoration.backgroundColor,
 				barrierColor: decoration.dimColor,
 				msg: desc,
+				msgStyle: decoration.descriptionStyle,
 				title: title,
+				//titleStyle: decoration.titleStyle,
 				context: context,
 				barrierDismissible: barrierDismissible,
 				customView: topView,
@@ -226,7 +228,7 @@ class AppDialog {
 				icon: Icon(AppIcons.close, size: 48, color: AppThemes.instance.currentTheme.errorColor)
 		);
 	}
-	///============================================================================================================
+	///===========================================================================
 	Future showDialog$NetDisconnected(BuildContext context) {
 		return showErrorDialog(
 			context,
@@ -235,7 +237,7 @@ class AppDialog {
 		);
 	}
 }
-///========================================================================================
+///=============================================================================
 class DialogDecoration {
 	ThemeData? themeData;
 	Color? dimColor;
