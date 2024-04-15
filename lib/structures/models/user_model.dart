@@ -237,7 +237,7 @@ class VipOptionsModel {
   VipOptionsModel() : expireDate = DateHelper.nowMinusUtcOffset();
 
   VipOptionsModel.fromMap(Map map){
-    expireDate = map['expire_time']?? DateHelper.nowMinusUtcOffset();
+    expireDate = DateHelper.timestampToSystem(map['expire_time'])?? DateHelper.nowMinusUtcOffset();
   }
 
   Map<String, dynamic> toMap(){

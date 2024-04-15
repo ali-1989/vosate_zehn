@@ -1,24 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!--<base href="/admin/"> -->               <!-- need for custom folder / change after build -->
+    <!--<base href="/admin/"> -->               <!-- need for custom folder, change after build -->
     <base href="$FLUTTER_BASE_HREF">            <!-- need for run -->
 
     <meta charset="UTF-8">
     <meta content="IE=Edge" http-equiv="X-UA-Compatible">
     <meta name="description" content="Vosate Zehn">
-
-    <meta name="google-signin-client_id" content="731359726004-e3svv7n4orm66gg1om4errr1kmeg80dj.apps.googleusercontent.com">
-
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-title" content="vosate zehn">
-    <link rel="apple-touch-icon" href="./icons/Icon-192.png">
 
-    <link rel="icon" type="image/png" href="./favicon.png"/>
+    <link rel="apple-touch-icon" href="icons/Icon-192.png">
+    <link rel="icon" type="image/png" href="favicon.png"/>
+    <link rel="manifest" href="manifest.json">
+
+    <meta name="google-signin-client_id" content="731359726004-e3svv7n4orm66gg1om4errr1kmeg80dj.apps.googleusercontent.com">
 
     <title>وسعت ذهن</title>
-    <link rel="manifest" href="./manifest.json">
 
     <style>
         body {
@@ -64,9 +63,7 @@
         }
     </style>
 
-    <script>
-        let serviceWorkerVersion = null;
-
+    <script type="application/javascript">
         if (window.location.protocol.indexOf('https') === 0){
             let mt = document.createElement('meta')
             mt.setAttribute('http-equiv', 'Content-Security-Policy')
@@ -75,7 +72,7 @@
         }
     </script>
 
-    <script src="flutter.js" defer></script>
+    <script src="flutter.js" type="application/javascript" defer></script>
 </head>
 
 <body>
@@ -83,22 +80,28 @@
     <div class="loader"></div>
 </div>
 
-<script defer>
+<script type="application/javascript">
     window.addEventListener('load', function (ev) {
+        console.log("---1: " + (new Date().toISOString()));
         const loading = document.getElementById('loading');
 
         _flutter.loader.loadEntrypoint({
-            serviceWorker: {
-                serviceWorkerVersion: serviceWorkerVersion,
-            }
+            /*serviceWorker: {
+                serviceWorkerVersion: 123,
+            }*/
         }).then(function (engineInitializer) {
+            console.log("---2: " + (new Date().toISOString()));
             return engineInitializer.initializeEngine();
         }).then(function (appRunner) {
-            return appRunner.runApp();
-        }).then(function (app) {
-            window.setTimeout(function () {
+            console.log("---3: " + (new Date().toISOString()));
+			window.setTimeout(function () {
                 loading.remove();
             }, 200);
+			
+            return appRunner.runApp();
+        }).then(function (app) {
+			console.log("---4: " + (new Date().toISOString()));
+            // 10~14 seconds to load
         });
     });
 </script>
