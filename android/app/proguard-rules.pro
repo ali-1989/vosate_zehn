@@ -41,8 +41,8 @@
 -dontskipnonpubliclibraryclasses
 
 -keepnames class **
--keep ,allowshrinking,allowoptimization class **.R
--keep ,allowshrinking,allowoptimization class **.R$*
+-keep ,allowshrinking, allowoptimization class **.R
+-keep ,allowshrinking, allowoptimization class **.R$*
 -keepclassmembers class **.R.** { <fields>;}
 -keepclassmembers class **.R$* { <fields>;}
 
@@ -68,9 +68,12 @@
 }
 
 # Others
--keep ,allowshrinking,allowoptimization class * extends java.lang.Exception
--keep ,allowshrinking,allowoptimization class * extends android.app.Service
+-keep ,allowshrinking, allowoptimization class * extends java.lang.Exception
+-keep ,allowshrinking, allowoptimization class * extends android.app.Service
 ######################################################################################################
 ######################################################################################################
 ## flutter_local_notification plugin rules
 -keep class com.dexterous.** { *; }
+
+## cafe-bazar
+-keep class com.android.vending.billing { *; }
