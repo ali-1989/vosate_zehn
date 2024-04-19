@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:app/tools/app/app_decoration.dart';
-import 'package:app/views/pages/profile/buy_vip_plan_page.dart';
+import 'package:app/tools/app_tools.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -767,7 +767,7 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
   }
 
   void onBuyVipPlan() async {
-    final res = await RouteTools.pushPage(context, const BuyVipPlanPage());
+    final res = await RouteTools.pushPage(context, AppTools.getPayPage());
 
     if(res is bool && res){
       assistCtr.updateHead();

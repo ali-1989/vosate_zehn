@@ -1,4 +1,3 @@
-import 'dart:async';
 
 import 'package:app/services/cafe_bazar_service.dart';
 import 'package:app/services/session_service.dart';
@@ -7,10 +6,15 @@ import 'package:app/structures/models/vip_plan_model.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/app_decoration.dart';
 import 'package:app/tools/app/app_icons.dart';
-import 'package:app/tools/app/app_snack.dart';
+import 'package:app/tools/app/app_sheet.dart';
+import 'package:app/tools/app/app_toast.dart';
 import 'package:app/tools/currency_tools.dart';
-import 'package:app/tools/log_tools.dart';
+import 'package:app/tools/route_tools.dart';
+import 'package:app/views/states/error_occur.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_poolakey/flutter_poolakey.dart';
+import 'package:iris_tools/api/helpers/mathHelper.dart';
+import 'package:iris_tools/dateSection/dateHelper.dart';
 
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:iris_tools/widgets/custom_card.dart';
@@ -32,7 +36,6 @@ class CafeBazarPage extends StatefulWidget{
 ///=============================================================================
 class _CafeBazarPageState extends StateSuper<CafeBazarPage> {
   Requester requester = Requester();
-  late AppLifecycleListener lifecycleListener;
   List<VipPlanModel> listItems = [];
   bool callBankGetWay = false;
 
@@ -41,19 +44,14 @@ class _CafeBazarPageState extends StateSuper<CafeBazarPage> {
     super.initState();
 
     assistCtr.addState(AssistController.state$loading);
-    lifecycleListener = AppLifecycleListener(
-      onResume: onResumeLifecycle,
-      //onStateChange: (state){
-    );
 
-    requestData();
+    //requestData();
     connectToBazar();
   }
 
   @override
   void dispose(){
     requester.dispose();
-    lifecycleListener.dispose();
 
     super.dispose();
   }
@@ -64,19 +62,23 @@ class _CafeBazarPageState extends StateSuper<CafeBazarPage> {
       appBar: AppBarCustom(
         title: Text(AppMessages.vipPlanPage),
       ),
-      body: buildBody(),
+      body: buildScaffoldBody(),
     );
   }
 
-  Widget buildBody(){
+  Widget buildScaffoldBody(){
     if(assistCtr.hasState(AssistController.state$loading)) {
       return const WaitToLoad();
     }
 
-    return buildSubBody1();
+    if(assistCtr.hasState(AssistController.state$error)) {
+      return ErrorOccur(onTryAgain: onTryToConnect);
+    }
+
+    return buildAlterBody1();
   }
 
-  Widget buildSubBody1(){
+  Widget buildAlterBody1(){
     return Column(
       children: [
         const SizedBox(height: 30),
@@ -94,13 +96,13 @@ class _CafeBazarPageState extends StateSuper<CafeBazarPage> {
         const SizedBox(height: 30),
 
         Expanded(
-            child: buildSubBody2()
+            child: buildAlterBody2()
         ),
       ],
     );
   }
 
-  Widget buildSubBody2(){
+  Widget buildAlterBody2(){
     if(listItems.isEmpty) {
       return const EmptyData();
     }
@@ -158,16 +160,19 @@ class _CafeBazarPageState extends StateSuper<CafeBazarPage> {
                     ],
                   ),
 
-                  CustomCard(
-                    color: Colors.deepPurple,
-                    padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 6),
-                    child: Row(
-                      children: [
-                        Text('${itm.days}')
-                            .color(Colors.white),
+                  Visibility(
+                    visible: itm.days > 0,
+                    child: CustomCard(
+                      color: Colors.deepPurple,
+                      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 6),
+                      child: Row(
+                        children: [
+                          Text('${itm.days}')
+                              .color(Colors.white),
 
-                        const Text(' روز').color(Colors.white),
-                      ],
+                          const Text(' روز').color(Colors.white),
+                        ],
+                      ),
                     ),
                   ),
                 ],
@@ -181,7 +186,7 @@ class _CafeBazarPageState extends StateSuper<CafeBazarPage> {
                     backgroundColor: Colors.green,
                     minimumSize: const Size(100, 50),
                   ),
-                    onPressed: ()=> onBuyClick(itm),
+                    onPressed: ()=> subscribe(itm),
                     child: const Text('خرید')
                 ),
               )
@@ -191,145 +196,98 @@ class _CafeBazarPageState extends StateSuper<CafeBazarPage> {
     );
   }
 
-  void requestData() async {
-    requester.httpRequestEvents.onFailState = (req, r) async {
-      assistCtr.clearStates();
-      assistCtr.addStateAndUpdateHead(AssistController.state$error);
-      callState();
-      return true;
-    };
-
-    requester.httpRequestEvents.onStatusOk = (req, data) async {
-      assistCtr.clearStates();
-      listItems.clear();
-
-      final list = data['data'];
-
-      if(list is List){
-        for(final k in list){
-          listItems.add(VipPlanModel.fromMap(k));
-        }
-      }
-
-      callState();
-    };
-
-    final user = SessionService.getLastLoginUser();
-
-    final js = <String, dynamic>{};
-    js[Keys.request] = 'get_vip_plans';
-    js[Keys.requesterId] = user!.userId;
-
-    requester.bodyJson = js;
-    requester.prepareUrl();
-    requester.request();
-  }
-
-  void onBuyClick(VipPlanModel itm) {
-    requester.httpRequestEvents.manageResponse = (req, r) async {
-      final data = r['data'];
-
-      if(data is Map){
-        final code = data['code'];
-
-        if(code == 100){
-          final authority = data['authority'];
-          final res = await requestPreTransaction(itm, authority, itm.amount);
-          await hideLoading();
-
-
-        }
-        else {
-          await hideLoading();
-          AppSnack.showError(context, 'متاسفانه درگاه پرداخت خطا دارد.');
-        }
-      }
-      else {
-        await hideLoading();
-        AppSnack.showError(context, 'متاسفانه درگاه پرداخت جواب نداد.');
-        LogTools.logger.logToAll('BankGetWay: $r', isError: true);
-      }
-    };
-
-
-    final user = SessionService.getLastLoginUser();
-
-    final js = <String, dynamic>{};
-    js['merchant_id'] = '27b220df-c1b3-489f-af52-7faadddcf4b3';
-    js['currency'] = 'IRT';
-    js['callback_url'] = 'https://vosatezehn.com:7437/callback_gate';
-    js['amount'] = itm.amount/10;
-    js['description'] = itm.title;
-    js['metadata'] = {
-      'mobile': '${user!.mobile}',
-      'email': '${user.email}',
-      'id': user.userId,
-    };
-
-    showLoading();
-    requester.bodyJson = js;
-    requester.httpItem.headers['accept'] = 'application/json';
-    requester.httpItem.headers['content-type'] = 'application/json';
-    requester.prepareUrl(fullUrl: 'https://api.zarinpal.com/pg/v4/payment/request.json');
-    requester.request();
-  }
-
-  Future<bool> requestPreTransaction(VipPlanModel itm, String authority, int amount) {
-    final retCompleted = Completer<bool>();
-
-    requester.httpRequestEvents.manageResponse = (req, r) async {
-      final data = r['status'];
-
-      if(data == 'ok'){
-        if(!retCompleted.isCompleted) {
-          retCompleted.complete(true);
-        }
-      }
-      else {
-        retCompleted.complete(false);
-      }
-    };
-
-
-    final user = SessionService.getLastLoginUser();
-
-    final js = <String, dynamic>{};
-    js[Keys.request] = 'register_pre_transaction';
-    js[Keys.requesterId] = user!.userId;
-    js['authority'] = authority;
-    js['merchant_id'] = '27b220df-c1b3-489f-af52-7faadddcf4b3';
-    js['amount'] = amount;
-    js['days'] = itm.days;
-
-    requester.bodyJson = js;
-    requester.prepareUrl();
-    requester.request();
-
-    return retCompleted.future;
-  }
-
-  void onResumeLifecycle() async {
-    if(callBankGetWay){
-      //await requestProfileData();
-      Navigator.pop(context, true);
-    }
-  }
-
  void connectToBazar() async {
    final res = await CafeBazarService().connect();
 
-   print('====== connected: $res');
+   if(res){
+     assistCtr.clearStates();
+     getVipList();
+   }
+   else {
+     assistCtr.addStateWithClear(AssistController.state$error);
+   }
+
+   callState();
  }
 
- void subscribe(String pId) async {
-   final res = await CafeBazarService().subscribe(pId);
+ void subscribe(VipPlanModel model) async {
+   final res = await CafeBazarService().subscribe('c${model.id}', payload: '${model.id}');
 
-   print('------------------------');
-   print(res.orderId);
-   print(res.packageName);
-   print(res.productId);
-   print(res.purchaseState);
-   print(res.purchaseToken);
+   if(res != null && res.payload == '${model.id}'){
+     sendDataToServer(res, model);
+   }
+   else {
+     AppToast.showToast(context, 'خرید انجام نشد.');
+   }
  }
 
+  void sendDataToServer(PurchaseInfo itm, VipPlanModel model) async {
+    final user = SessionService.getLastLoginUser();
+
+    final js = <String, dynamic>{};
+    js[Keys.request] = 'register_cafe_bazar_purchase';
+    js[Keys.requesterId] = user!.userId;
+    js[Keys.userId] = user.userId;
+    js['amount'] = model.amount;
+    js['plan_id'] = model.id;
+    js['days'] = model.days;
+    js['purchase_token'] = itm.purchaseToken;
+    js['product_id'] = itm.productId;
+    js['package_name'] = itm.packageName;
+    js['purchase_state'] = itm.purchaseState.name;
+    js['purchase_ts'] = DateHelper.toTimestampNullable(DateTime.fromMillisecondsSinceEpoch(itm.purchaseTime));
+    js['data_signature'] = itm.dataSignature;
+    js['order_id'] = itm.orderId;
+
+    void subFn(bool isFirst) async {
+      showLoading();
+      final res = await CafeBazarService().sendDataToServer(js, isFirst: isFirst);
+      await hideLoading();
+
+      if(res){
+        RouteTools.popIfCan(context);
+      }
+      else {
+        AppSheet.showSheetOneAction(context,
+          'فرایند به درستی انجام نشد.لطفا دوباره تلاش کنید.',
+          buttonText: 'تلاش مجدد',
+          onButton: ()=> subFn(false),
+        );
+      }
+    }
+
+    subFn(true);
+  }
+
+  void onTryToConnect() {
+    assistCtr.addStateWithClear(AssistController.state$loading);
+    callState();
+    connectToBazar();
+  }
+
+  void getVipList() async {
+    final nList = <String>[];
+    for(var i=10; i< 400; i=i+5){
+      nList.add('c$i');
+    }
+
+    final res = await CafeBazarService().getSubscriptionSkuDetails(nList);
+
+    for(final i in res){
+      final vip = VipPlanModel();
+      vip.title = i.title;
+      vip.id = MathHelper.clearToInt(i.sku);
+      vip.amount = MathHelper.clearToInt(i.price);
+      vip.description = i.description;
+      vip.days = vip.id;
+
+      if(vip.amount == 250){
+        continue;
+      }
+
+      listItems.add(vip);
+    }
+
+    callState();
+  }
 }

@@ -37,6 +37,7 @@ class AppDB {
     await AppDB.db.openTable(AppDB.tbLastSeen);
     await AppDB.db.openTable(AppDB.tbMedia);
     await AppDB.db.openTable(AppDB.tbAdvertising);
+    await AppDB.db.openTable(AppDB.cafeBazarBuy);
 
     return AppDB.db;
   }
@@ -48,6 +49,7 @@ class AppDB {
   static String tbLastSeen = 'LastSeen';
   static String tbMedia = 'Media';
   static String tbAdvertising = 'Advertising';
+  static String cafeBazarBuy = 'cafeBazarBuy';
 
 
   static Future<bool> firstLaunch() async {

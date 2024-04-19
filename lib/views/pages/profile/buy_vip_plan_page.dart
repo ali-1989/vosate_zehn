@@ -7,7 +7,7 @@ import 'package:app/system/keys.dart';
 import 'package:app/tools/app/app_decoration.dart';
 import 'package:app/tools/app/app_icons.dart';
 import 'package:app/tools/app/app_snack.dart';
-import 'package:app/tools/app/app_toast.dart';
+import 'package:app/tools/app_tools.dart';
 import 'package:app/tools/currency_tools.dart';
 import 'package:app/tools/log_tools.dart';
 import 'package:flutter/material.dart';
@@ -322,40 +322,8 @@ class _BuyVipPlanPageState extends StateSuper<BuyVipPlanPage> {
 
   void onResumeLifecycle() async {
     if(callBankGetWay){
-      await requestProfileData();
+      await AppTools.requestProfileDataForVip();
       Navigator.pop(context, true);
     }
   }
-
-  Future<void> requestProfileData() async {
-    final retCom = Completer();
-    final user = SessionService.getLastLoginUser();
-
-    if(user == null || user.userId == '0'){
-      return;
-    }
-
-    final js = <String, dynamic>{};
-    js[Keys.request] = 'get_profile_data';
-    js[Keys.requesterId] = user.userId;
-    js[Keys.forUserId] = user.userId;
-
-
-    requester.httpRequestEvents.onStatusOk = (req, data) async {
-      await SessionService.newProfileData(data as Map<String, dynamic>);
-      AppToast.showToast(context, 'دسترسی شما امکان پذیر شد.');
-    };
-
-    requester.httpRequestEvents.onAnyState = (req) async {
-      await Future.delayed(const Duration(seconds: 1));
-      retCom.complete();
-    };
-
-    requester.bodyJson = js;
-    requester.prepareUrl();
-    requester.request();
-
-    return retCom.future;
-  }
-
 }

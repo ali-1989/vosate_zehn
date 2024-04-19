@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:app/services/cafe_bazar_service.dart';
 import 'package:app/structures/models/settings_model.dart';
 import 'package:app/system/build_flavor.dart';
 import 'package:flutter/foundation.dart';
@@ -185,6 +186,7 @@ class SplashManager {
       MediaManager.loadAllRecords();
       AdvertisingManager.init();
       AdvertisingManager.check();
+      CafeBazarService().reSendFailed();
 
       if (kIsWeb) {
         FireBaseService.start();

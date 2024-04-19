@@ -44,18 +44,18 @@ class ApplicationSignal {
   }
 
   /// this fn call on app launch: if (wifi/cell data) is on. on Web not call
-  static void onNetListener(ConnectivityResult connectivityResult) async {
+  static void onNetListener(List<ConnectivityResult> connectivityResult) async {
     EventNotifierService.notify(AppEvents.networkStateChange);
 
-    if(connectivityResult != ConnectivityResult.none) {
-      AppBroadcast.isNetConnected = true;
-      EventNotifierService.notify(AppEvents.networkConnected);
-    }
-    else {
+    if(connectivityResult.isEmpty || connectivityResult.contains(ConnectivityResult.none)) {
       AppBroadcast.isNetConnected = false;
       EventNotifierService.notify(AppEvents.networkDisConnected);
 
       AppCache.clearDownloading();
+    }
+    else {
+      AppBroadcast.isNetConnected = true;
+      EventNotifierService.notify(AppEvents.networkConnected);
     }
   }
 

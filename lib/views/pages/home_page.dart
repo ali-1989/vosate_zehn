@@ -1,6 +1,6 @@
 import 'package:app/tools/app/app_dialog.dart';
 import 'package:app/tools/app/app_snack.dart';
-import 'package:app/views/pages/profile/buy_vip_plan_page.dart';
+import 'package:app/tools/app_tools.dart';
 import 'package:flutter/material.dart';
 
 import 'package:carousel_slider/carousel_slider.dart';
@@ -693,6 +693,6 @@ class _HomePageState extends StateSuper<HomePage> {
 
   void gotoBuyVipPage() async {
     Navigator.of(context).pop();
-    final res = await RouteTools.pushPage(context, const BuyVipPlanPage());
+    final res = await RouteTools.pushPage(context, AppTools.getPayPage());
   }
 }
