@@ -768,10 +768,7 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
   }
 
   void onBuyVipPlan() async {
-    final res = await RouteTools.pushPage(context, AppTools.getPayPage());
-
-    if(res is bool && res){
-      assistCtr.updateHead();
-    }
+    await RouteTools.pushPage(context, AppTools.getPayPage());
+    callState();
   }
 }
