@@ -134,12 +134,12 @@ class Requester {
           request = 'GET';
         }
 
-        var pr = '>_._._._._._._.__._._._._._._._ API CALLED >>>'
+        var pr = '>_._._._._._._.__._._ API CALLED __._._._._._._._'
             '\nurl:[$url]'
             '\n\nrequest:[$request]'
-            '\n\n ====>>  status:[${_httpRequester.responseData?.statusCode}]'
-            '\rresponse>:$response'
-            '\n<_._._._._._._.__._._._._._._.__._._._._._._._ End';
+            '\n\n >>> status code:[${_httpRequester.responseData?.statusCode}]'
+            '\nresponse >:$response'
+            '\n_._._._._._._.__._._._._._._.__._._._ End';
 
         Tools.verboseLog(pr);
       }
@@ -169,6 +169,7 @@ class Requester {
         }
 
         await httpRequestEvents.onFailState?.call(_httpRequester, response);
+        await httpRequestEvents.manageResponse?.call(_httpRequester, {});
         return;
       }
 
@@ -181,6 +182,7 @@ class Requester {
         }
 
         await httpRequestEvents.onFailState?.call(_httpRequester, response);
+        await httpRequestEvents.manageResponse?.call(_httpRequester, {});
         return;
       }
 

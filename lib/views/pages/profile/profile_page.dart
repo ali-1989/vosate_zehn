@@ -478,6 +478,7 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
   }
 
   Future<XFile?> selectImageFromCamera() async {
+    /* no need to permission. used of Intent.
     final hasPermission = await PermissionTools.requestCameraPermission();
 
     if(hasPermission != PermissionStatus.granted) {
@@ -489,7 +490,7 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
       });
 
       return null;
-    }
+    }*/
 
     final pick = await ImagePicker().pickImage(source: ImageSource.camera);
 

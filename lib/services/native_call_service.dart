@@ -14,12 +14,12 @@ import 'package:app/tools/log_tools.dart';
 Future onBridgeCall(call) async {
   WidgetsFlutterBinding.ensureInitialized();
   await prepareDirectoriesAndLogger();
-  LogTools.logger.logToAll('========================================= native  yes');
+  LogTools.logger.logToAll('========================================= native  yes');//dodo.
   await AppNotification.initial();
   AppNotification.sendMessagesNotification('native', 'ali', 'Thanks God- native ${call.method}');
 
   if(call.method == 'report_error') {
-    LogTools.reportError(call.arguments);
+    LogTools.reportLogToServer(LogTools.buildServerLog('native_report', data: call.arguments));
   }
   else if(call.method == 'androidReceiverIsCall') {
     await FireBaseService.initializeApp();

@@ -211,7 +211,7 @@ class _CafeBazarPageState extends StateSuper<CafeBazarPage> {
  }
 
  void subscribe(VipPlanModel model) async {
-   final res = await CafeBazarService().subscribe('c${model.id}', payload: '${model.id}');
+   final res = await CafeBazarService().doSubscribe('c${model.id}', payload: '${model.id}');
 
    if(res != null && res.payload == '${model.id}'){
      sendDataToServer(res, model);
@@ -223,6 +223,7 @@ class _CafeBazarPageState extends StateSuper<CafeBazarPage> {
 
   void sendDataToServer(PurchaseInfo itm, VipPlanModel model) async {
     final user = SessionService.getLastLoginUser();
+    final ts = DateTime.fromMillisecondsSinceEpoch(itm.purchaseTime);
 
     final js = <String, dynamic>{};
     js[Keys.request] = 'register_cafe_bazar_purchase';
@@ -235,7 +236,7 @@ class _CafeBazarPageState extends StateSuper<CafeBazarPage> {
     js['product_id'] = itm.productId;
     js['package_name'] = itm.packageName;
     js['purchase_state'] = itm.purchaseState.name;
-    js['purchase_ts'] = DateHelper.toTimestampNullable(DateTime.fromMillisecondsSinceEpoch(itm.purchaseTime));
+    js['purchase_ts'] = DateHelper.toTimestampNullable(ts);
     js['data_signature'] = itm.dataSignature;
     js['order_id'] = itm.orderId;
 

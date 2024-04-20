@@ -21,27 +21,27 @@ class LogTools {
   LogTools._();
 
   static late Logger logger;
-  static late Reporter reporter;
-  static List avoidReport = <String>[];
+  static late Reporter localReporter;
+  static List avoidReportMessageList = <String>[];
 
   static Future<bool> init() async {
     try {
       if (kIsWeb) {
-        LogTools.reporter = Reporter('/', 'report');
+        LogTools.localReporter = Reporter('/', 'report');
       }
       else {
-        LogTools.reporter = Reporter(AppDirectories.getExternalAppFolder(), 'report');
+        LogTools.localReporter = Reporter(AppDirectories.getExternalAppFolder(), 'report');
       }
 
       LogTools.logger = Logger('${AppDirectories.getExternalTempDir()}/logs');
 
-      avoidReport.add('\'hasSize\': RenderBox');
-      avoidReport.add('has a negative minimum');
-      avoidReport.add('slot == null');
-      avoidReport.add('FIS_AUTH_ERROR'); // firebase
-      avoidReport.add('RenderFlex overflowed by');
-      avoidReport.add('RenderFlex children have non-zero flex');
-      avoidReport.add('Could not navigate');
+      avoidReportMessageList.add('\'hasSize\': RenderBox');
+      avoidReportMessageList.add('has a negative minimum');
+      avoidReportMessageList.add('slot == null');
+      avoidReportMessageList.add('FIS_AUTH_ERROR'); // firebase
+      avoidReportMessageList.add('RenderFlex overflowed by');
+      avoidReportMessageList.add('RenderFlex children have non-zero flex');
+      avoidReportMessageList.add('Could not navigate');
 
       return true;
     }
@@ -51,16 +51,36 @@ class LogTools {
     }
   }
 
-  static void reportError(Map<String, dynamic> map) async {
-    final String txt = map['error']?? '';
-    final hash = Generator.hashMd5(txt);
+  static Map<String, dynamic> buildServerLog(String subject, {dynamic data, String? error}){
+    final map = <String, dynamic>{};
+    map['subject'] = subject;
+
+    if(error != null) {
+      map['error'] = error;
+    }
+
+    if(data != null) {
+      map['data'] = data;
+    }
+
+    return map;
+  }
+  /// must map include a 'subject' key.
+  static void reportLogToServer(Map<String, dynamic> map) async {
+    final String? subjectKey = map['subject'];
+
+    if(subjectKey == null){
+      return;
+    }
+
+    final hash = Generator.hashMd5(subjectKey);
 
     if(!AppCache.canCallMethodAgain(hash)){
       return;
     }
 
-    for(final x in avoidReport){
-      if(txt.contains(x)){
+    for(final x in avoidReportMessageList){
+      if(subjectKey.contains(x)){
         return;
       }
     }
@@ -68,16 +88,14 @@ class LogTools {
     void fn(){
       final url = Uri.parse(ApiManager.logReportApi);
 
-      final data = <String, dynamic>{};
-      data['deviceId'] = DeviceInfoTools.deviceId;
-      data['user_id'] = SessionService.getLastLoginUser()?.userId;
-      //data['code'] = hash;
-      data['info'] = DeviceInfoTools.mapDeviceInfo();
-      data['log'] = map;
+      map['hash'] = hash;
+      map['device_id'] = DeviceInfoTools.deviceId;
+      map['user_id'] = SessionService.getLastLoginUser()?.userId;
+      map['device_info'] = DeviceInfoTools.mapDeviceInfo();
 
       final body = <String, dynamic>{
         Keys.key: 'app_exception',
-        'data': data,
+        'log_data': map,
         'user_id' : SessionService.getLastLoginUser()?.userId,
         'app_name': Constants.appName
       };
@@ -93,7 +111,7 @@ class LogTools {
 
 
     runZonedGuarded(fn, (error, stack) {
-      LogTools.logger.logToAll('::::::::::::: report is failed ::::::::::: ${error.toString()}');
+      LogTools.logger.logToAll('::::::::::::: Reporting to Server is failed ::::::::::: ${error.toString()}');
     });
   }
 }

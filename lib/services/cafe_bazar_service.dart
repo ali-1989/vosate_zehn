@@ -4,7 +4,10 @@ import 'dart:async';
 import 'package:app/structures/middleWares/requester.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/app_db.dart';
+import 'package:app/tools/app/app_toast.dart';
 import 'package:app/tools/app_tools.dart';
+import 'package:app/tools/log_tools.dart';
+import 'package:app/tools/route_tools.dart';
 import 'package:flutter_poolakey/flutter_poolakey.dart';
 import 'package:iris_db/iris_db.dart';
 
@@ -28,26 +31,47 @@ class CafeBazarService {
       return _isConnected;
     }
 
-    try {
-      return FlutterPoolakey.connect(rsa, onDisconnected: () {
-        _isConnected = false;
-        print('************ bazar disconnected ***********');
-      }).catchError((e)=> false);
-    }
-    catch (e){
+    return FlutterPoolakey.connect(rsa, onDisconnected: () {
+      _isConnected = false;
+    }).catchError((e){
+      if(e.toString().contains('BazaarNotFoundException')){
+        AppToast.showToast(RouteTools.materialContext!, 'لطقا برنامه ی بازار را نصب یا به روز رسانی کنید.');
+        return false;
+      }
+
+      LogTools.reportLogToServer(LogTools.buildServerLog('BazarConnect', error: e.toString()));
+      AppToast.showToast(RouteTools.materialContext!, '$e');
+
       return false;
-    }
+    });
   }
 
   /// for InApp buy (coin,...)
-  Future<PurchaseInfo> purchase(String productId, {String payload = ''}) async {
-     return FlutterPoolakey.purchase(productId, payload: payload);
+  Future<PurchaseInfo?> purchase(String productId, {String payload = ''}) async {
+    return FlutterPoolakey.purchase(productId, payload: payload)
+        .then<PurchaseInfo?>((value) => value)
+        .catchError((e){
+          if(e.toString().contains('PURCHASE_CANCELLED')){
+            return null;
+          }
+
+          LogTools.reportLogToServer(LogTools.buildServerLog('BazarPurchase', error: e.toString()));
+          return null;
+    });
   }
 
   /// for subscription (30 days, 1 year,...)
-  Future<PurchaseInfo?> subscribe(String productId, {String payload = ''}) async {
+  Future<PurchaseInfo?> doSubscribe(String productId, {String payload = ''}) async {
     return FlutterPoolakey.subscribe(productId, payload: payload)
-        .then<PurchaseInfo?>((value) => null).catchError((e)=> null);
+        .then<PurchaseInfo?>((value) => value)
+        .catchError((e){
+          if(e.toString().contains('PURCHASE_CANCELLED')){
+            return null;
+          }
+
+          LogTools.reportLogToServer(LogTools.buildServerLog('BazarSubscribe', error: e.toString()));
+          return null;
+    });
   }
 
   /// all user's subscriptions, must user be login in bazar app.
@@ -93,8 +117,6 @@ class CafeBazarService {
     final ret = Completer<bool>();
 
     requester.httpRequestEvents.manageResponse = (req, r) async {
-      requester.dispose();
-
       if(req.isOk){
         await AppTools.requestProfileDataForVip();
 
@@ -102,6 +124,7 @@ class CafeBazarService {
           deleteFailedBuy(js);
         }
 
+        requester.dispose();
         return ret.complete(true);
       }
       else {
@@ -109,6 +132,7 @@ class CafeBazarService {
           await sinkFailedSendBuy(js);
         }
 
+        requester.dispose();
         return ret.complete(false);
       }
     };

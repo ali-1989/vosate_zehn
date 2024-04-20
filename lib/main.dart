@@ -10,6 +10,7 @@ import 'package:app/tools/app/app_directories.dart';
 import 'package:app/tools/log_tools.dart';
 import 'package:app/views/baseComponents/error_page.dart';
 import 'package:app/views/baseComponents/my_app.dart';
+import 'package:iris_tools/api/generator.dart';
 
 ///================ call on any hot restart
 void main(List<String>? args) {
@@ -64,38 +65,28 @@ Future<(bool, String?)> prepareDirectoriesAndLogger() async {
 }
 ///=============================================================================
 void onErrorCatch(FlutterErrorDetails errorDetails) {
-  var txt = 'AN ERROR HAS OCCURRED:: ${errorDetails.exception.toString()}';
+  var txt = 'MAIN-ERROR-CATCH:: ${errorDetails.exception.toString()}';
 
   if(!kIsWeb) {
     txt += '\n STACK TRACE:: ${errorDetails.stack}';
   }
 
-  txt += '\n************************ [END CATCH]';
+  txt += '\n*************** [END CATCH]';
 
   LogTools.logger.logToAll(txt, isError: true);
-
-  final eMap = <String, dynamic>{};
-  eMap['catcher'] = 'mainIsolateError';
-  eMap['error'] = txt;
-
-  LogTools.reportError(eMap);
+  LogTools.reportLogToServer(LogTools.buildServerLog('MainError:${Generator.hashMd5(txt)}', error: txt));
 }
 ///=============================================================================
 bool mainIsolateError(error, sTrace) {
-  var txt = 'main-isolate CAUGHT AN ERROR:: ${error.toString()}';
+  var txt = 'MAIN-ISOLATE:: ${error.toString()}';
 
   if(!(kDebugMode || kIsWeb)) {
     txt += '\n STACK TRACE:: $sTrace';
   }
 
-  txt += '\n************************ [END MAIN-ISOLATE]';
+  txt += '\n*************** [END MAIN-ISOLATE]';
   LogTools.logger.logToAll(txt, isError: true);
-
-  final eMap = <String, dynamic>{};
-  eMap['catcher'] = 'mainIsolateError';
-  eMap['error'] = txt;
-
-  LogTools.reportError(eMap);
+  LogTools.reportLogToServer(LogTools.buildServerLog('MainIsolate:${Generator.hashMd5(txt)}', error: txt));
 
   if(kDebugMode) {
     return false;
@@ -105,20 +96,15 @@ bool mainIsolateError(error, sTrace) {
 }
 ///=============================================================================
 void zonedGuardedCatch(error, sTrace) {
-  var txt = 'ZONED-GUARDED CAUGHT AN ERROR:: ${error.toString()}';
+  var txt = 'MAIN-ZONED-GUARDED:: ${error.toString()}';
 
   if(!(kDebugMode || kIsWeb)) {
     txt += '\n STACK TRACE:: $sTrace';
   }
 
-  txt += '\n************************ [END ZONED-GUARDED]';
+  txt += '\n************** [END ZONED-GUARDED]';
   LogTools.logger.logToAll(txt, isError: true);
-
-  final eMap = <String, dynamic>{};
-  eMap['catcher'] = 'zonedGuardedCatch';
-  eMap['error'] = txt;
-
-  LogTools.reportError(eMap);
+  LogTools.reportLogToServer(LogTools.buildServerLog('MainZonedGuarded:${Generator.hashMd5(txt)}', error: txt));
 
   if(kDebugMode) {
     throw error;
