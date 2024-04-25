@@ -1,5 +1,4 @@
 # Flutter: 3.19.0      old: 3.14.3
-# Dart: 3.3.0        old: 3.1.0
 # Java: 17
 
 name: app     		  # vosate_zehn
@@ -9,7 +8,7 @@ homepage: https://vosatezehn.ir
 
 publish_to: 'none'
 
-version: 5.4.0+31
+version: 5.4.0+32
 
 
 environment:
@@ -28,7 +27,7 @@ dependencies:
     sdk: flutter
 
   #device_preview: ^1.1.0
-  #cupertino_icons: ^1.0.6
+  #cupertino_icons: ^1.0.8
   community_material_icon: ^5.9.55      # https://materialdesignicons.com/  https://www.fluttericon.com/
   device_info_plus: ^10.1.0
   platform_device_id: ^1.0.1
@@ -80,7 +79,7 @@ dependencies:
 
   iris_tools:
     git: https://github.com/ali-1989/IrisTools.git
-#    path: ../../#FlutterPackages/IrisTools
+    #path: ../../#FlutterPackages/IrisTools
   iris_db:
     git: https://github.com/ali-1989/IrisDB.git
   iris_download_manager:

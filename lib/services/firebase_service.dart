@@ -1,4 +1,3 @@
-import 'package:app/tools/app/app_cache.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -12,6 +11,7 @@ import 'package:app/managers/settings_manager.dart';
 import 'package:app/services/firebase_options.dart';
 import 'package:app/structures/enums/app_events.dart';
 import 'package:app/system/keys.dart';
+import 'package:app/tools/app/app_cache.dart';
 import 'package:app/tools/app/app_db.dart';
 import 'package:app/tools/app/app_notification.dart';
 import 'package:app/tools/route_tools.dart';

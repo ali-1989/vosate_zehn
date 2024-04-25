@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:app/tools/app/app_decoration.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -22,6 +21,7 @@ import 'package:app/structures/models/user_model.dart';
 import 'package:app/system/constants.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/tools/app/app_broadcast.dart';
+import 'package:app/tools/app/app_decoration.dart';
 import 'package:app/tools/app/app_dialog_iris.dart';
 import 'package:app/tools/app/app_directories.dart';
 import 'package:app/tools/app/app_icons.dart';

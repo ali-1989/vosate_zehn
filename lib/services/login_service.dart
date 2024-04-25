@@ -1,8 +1,5 @@
 import 'dart:async';
 
-import 'package:app/services/google_sign_service.dart';
-import 'package:app/services/websocket_service.dart';
-import 'package:app/structures/middleWares/requester.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:dio/dio.dart';
@@ -15,8 +12,11 @@ import 'package:iris_tools/models/two_state_return.dart';
 import 'package:iris_tools/modules/stateManagers/updater_state.dart';
 
 import 'package:app/managers/api_manager.dart';
+import 'package:app/services/google_sign_service.dart';
 import 'package:app/services/session_service.dart';
+import 'package:app/services/websocket_service.dart';
 import 'package:app/structures/enums/app_events.dart';
+import 'package:app/structures/middleWares/requester.dart';
 import 'package:app/structures/models/country_model.dart';
 import 'package:app/structures/models/user_model.dart';
 import 'package:app/system/keys.dart';
@@ -47,7 +47,7 @@ enum EmailLoginStatus {
 class LoginService {
   LoginService._();
 
-  static void init(){
+  static void init() {
     EventNotifierService.addListener(AppEvents.newUserLogin, onLoginObservable);
     EventNotifierService.addListener(AppEvents.userLogoff, onLogoffObservable);
   }
@@ -57,13 +57,13 @@ class LoginService {
   }
 
   static Future<void> onLogoffObservable({dynamic data}) async {
-    if(data is UserModel){
+    if (data is UserModel) {
       sendLogoffState(data);
     }
   }
 
-  static void sendLogoffState(UserModel user){
-    if(AppBroadcast.isNetConnected){
+  static void sendLogoffState(UserModel user) {
+    if (AppBroadcast.isNetConnected) {
       final reqJs = <String, dynamic>{};
       reqJs[Keys.request] = 'Logoff_user_report';
       reqJs[Keys.requesterId] = user.userId;
@@ -82,10 +82,10 @@ class LoginService {
   }
 
   static Future<void> forceLogoff({String? userId}) async {
-    var user = SessionService.getExistLoginUserById(userId?? '');
+    var user = SessionService.getExistLoginUserById(userId ?? '');
     final lastUser = SessionService.getLastLoginUser();
 
-    if(user == null && lastUser == null) {
+    if (user == null && lastUser == null) {
       return;
     }
 
@@ -93,7 +93,7 @@ class LoginService {
 
     final isCurrent = lastUser != null && lastUser.userId == user!.userId;
 
-    if(user!.email != null){
+    if (user!.email != null) {
       final google = GoogleSignService();
       await google.signOut();
 
@@ -132,11 +132,11 @@ class LoginService {
     resetApp();
   }
 
-  static void resetApp(){
+  static void resetApp() {
     if (RouteTools.materialContext != null) {
       RouteTools.backToRoot(RouteTools.getTopContext()!);
 
-      Future.delayed(const Duration(milliseconds: 300), (){
+      Future.delayed(const Duration(milliseconds: 300), () {
         AppBroadcast.reBuildApp();
       });
     }
@@ -158,14 +158,14 @@ class LoginService {
 
     final request = AppHttpDio.send(http);
 
-    var f = request.response.catchError((e){
+    var f = request.response.catchError((e) {
       result.complete(null);
 
       return null;
     });
 
-    f = f.then((Response? response){
-      if(response == null || !request.isOk) {
+    f = f.then((Response? response) {
+      if (response == null || !request.isOk) {
         result.complete(null);
         return;
       }
@@ -195,14 +195,14 @@ class LoginService {
 
     final request = AppHttpDio.send(http);
 
-    var f = request.response.catchError((e){
+    var f = request.response.catchError((e) {
       result.complete(TwoStateReturn(r2: e));
 
       return null;
     });
 
-    f = f.then((Response? response){
-      if(response == null || !request.isOk) {
+    f = f.then((Response? response) {
+      if (response == null || !request.isOk) {
         result.complete(TwoStateReturn(r2: Exception()));
         return;
       }
@@ -231,15 +231,14 @@ class LoginService {
 
     final request = AppHttpDio.send(http);
 
-    var f = request.response.catchError((e){
+    var f = request.response.catchError((e) {
       result.complete(TwoStateReturn(r2: e));
 
       return null;
     });
 
-    f = f.then((Response? response){
-
-      if(response == null || !request.isOk) {
+    f = f.then((Response? response) {
+      if (response == null || !request.isOk) {
         if(!result.isCompleted){
           result.complete(TwoStateReturn(r2: Exception()));
         }
@@ -447,7 +446,7 @@ class LoginService {
 
     final request = AppHttpDio.send(http);
 
-    var f = request.response.catchError((e){
+    var f = request.response.catchError((e) {
       return null;
     });
 
@@ -501,11 +500,11 @@ class LoginService {
     final gUser = SessionService.getGuestUser();
     final userModel = await SessionService.loginByProfileData(gUser.toMap());
 
-    if(userModel != null) {
+    if (userModel != null) {
       resetApp();
     }
     else {
-      if(context.mounted) {
+      if (context.mounted) {
         AppSheet.showSheetOk(context, AppMessages.operationFailed);
       }
     }

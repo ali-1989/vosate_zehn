@@ -1,7 +1,5 @@
 import 'dart:async';
-import 'package:app/services/cafe_bazar_service.dart';
-import 'package:app/structures/models/settings_model.dart';
-import 'package:app/system/build_flavor.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +13,7 @@ import 'package:app/managers/media_manager.dart';
 import 'package:app/managers/settings_manager.dart';
 import 'package:app/managers/version_manager.dart';
 import 'package:app/services/aid_service.dart';
+import 'package:app/services/cafe_bazar_service.dart';
 import 'package:app/services/download_upload_service.dart';
 import 'package:app/services/firebase_service.dart';
 import 'package:app/services/login_service.dart';
@@ -22,7 +21,9 @@ import 'package:app/services/native_call_service.dart';
 import 'package:app/services/session_service.dart';
 import 'package:app/services/wakeup_service.dart';
 import 'package:app/services/websocket_service.dart';
+import 'package:app/structures/models/settings_model.dart';
 import 'package:app/system/application_signal.dart';
+import 'package:app/system/build_flavor.dart';
 import 'package:app/tools/app/app_broadcast.dart';
 import 'package:app/tools/app/app_cache.dart';
 import 'package:app/tools/app/app_db.dart';

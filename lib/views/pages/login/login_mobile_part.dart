@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/helpers/localeHelper.dart';

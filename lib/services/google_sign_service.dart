@@ -69,8 +69,10 @@ class GoogleSignService {
       }
       else {
         _signObj = GoogleSignIn(
+          clientId: '731359726004-e3svv7n4orm66gg1om4errr1kmeg80dj.apps.googleusercontent.com',
           signInOption: SignInOption.standard,
           scopes: scopes,
+          //forceCodeForRefreshToken: true,
         );
       }
     }
@@ -117,6 +119,11 @@ class GoogleSignService {
       return (_signUser, null);
     }
     catch (e) {
+      /**
+        # -- some errors:
+       * ApiException 7: NETWORK_ERROR, Like VPN
+       * ApiException 10: DEVELOPER_ERROR, something's wrong with your app configuration, Like ClientID
+      **/
       return (null, e);
     }
   }

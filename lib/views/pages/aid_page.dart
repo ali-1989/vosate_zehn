@@ -1,4 +1,3 @@
-import 'package:app/system/build_flavor.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_html/flutter_html.dart';
@@ -10,6 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:app/services/session_service.dart';
 import 'package:app/structures/abstract/state_super.dart';
 import 'package:app/structures/middleWares/requester.dart';
+import 'package:app/system/build_flavor.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/app_messages.dart';
 import 'package:app/tools/app/app_themes.dart';

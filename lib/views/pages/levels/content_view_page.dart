@@ -119,7 +119,9 @@ class _LevelPageState extends StateSuper<ContentViewPage> {
           /// description
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-            child: Text(widget.injectData.subBucket.description?? '').bold().fsR(2),
+            child: Text(widget.injectData.subBucket.description?? '',
+              textAlign: TextAlign.justify,
+            ).bold().fsR(2),
           ),
 
           /// content (speaker and voices)

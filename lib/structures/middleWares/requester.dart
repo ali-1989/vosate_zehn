@@ -13,7 +13,6 @@ import 'package:app/tools/device_info_tools.dart';
 import 'package:app/tools/http_tools.dart';
 import 'package:app/tools/route_tools.dart';
 
-
 enum MethodType {
   post,
   get,

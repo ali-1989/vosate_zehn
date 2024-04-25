@@ -1,8 +1,3 @@
-
-import 'package:app/tools/app/app_decoration.dart';
-import 'package:app/tools/find_country_ip.dart';
-import 'package:app/views/pages/login/login_email_part.dart';
-import 'package:app/views/pages/login/login_mobile_part.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -12,10 +7,14 @@ import 'package:iris_tools/widgets/page_switcher.dart';
 import 'package:app/services/login_service.dart';
 import 'package:app/structures/abstract/state_super.dart';
 import 'package:app/system/extensions.dart';
+import 'package:app/tools/app/app_decoration.dart';
 import 'package:app/tools/app/app_images.dart';
 import 'package:app/tools/app/app_messages.dart';
 import 'package:app/tools/app/app_themes.dart';
+import 'package:app/tools/find_country_ip.dart';
 import 'package:app/tools/route_tools.dart';
+import 'package:app/views/pages/login/login_email_part.dart';
+import 'package:app/views/pages/login/login_mobile_part.dart';
 import 'package:app/views/pages/term_page.dart';
 
 class LoginPage extends StatefulWidget{

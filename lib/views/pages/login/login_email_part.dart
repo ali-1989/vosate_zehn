@@ -1,6 +1,3 @@
-
-import 'package:app/services/google_sign_service.dart';
-import 'package:app/views/sign_in/google_sign_button.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -10,6 +7,7 @@ import 'package:iris_tools/api/system.dart';
 import 'package:iris_tools/widgets/page_switcher.dart';
 import 'package:iris_tools/widgets/text/autoDirection.dart';
 
+import 'package:app/services/google_sign_service.dart';
 import 'package:app/services/login_service.dart';
 import 'package:app/services/session_service.dart';
 import 'package:app/structures/abstract/state_super.dart';
@@ -23,6 +21,7 @@ import 'package:app/tools/app/app_snack.dart';
 import 'package:app/tools/http_tools.dart';
 import 'package:app/tools/route_tools.dart';
 import 'package:app/views/pages/login/register_page.dart';
+import 'package:app/views/sign_in/google_sign_button.dart';
 
 class LoginEmailPart extends StatefulWidget{
   // ignore: prefer_const_constructors_in_immutables

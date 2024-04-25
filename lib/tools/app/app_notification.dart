@@ -2,13 +2,13 @@ import 'dart:typed_data';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:iris_tools/api/generator.dart';
+import 'package:iris_tools/api/system.dart';
 
 import 'package:app/structures/models/notification_settings_model.dart';
 import 'package:app/system/constants.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/app_db.dart';
 import 'package:app/tools/app/app_decoration.dart';
-import 'package:iris_tools/api/system.dart';
 
 // icon generator:
 // https://romannurik.github.io/AndroidAssetStudio/icons-notification.html#source.type=image&source.space.trim=1&source.space.pad=0&name=notif
