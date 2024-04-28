@@ -112,7 +112,7 @@ class Requester {
     });
 
     f = f.then((response) async {
-      if(kDebugMode && !kIsWeb) {
+      if(kDebugMode /*&& !kIsWeb*/) {
         final url = _httpRequester.requestOptions?.uri;
         var request = '';
 
