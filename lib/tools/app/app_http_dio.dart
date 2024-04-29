@@ -2,16 +2,18 @@ import 'dart:convert' as system_convert;
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:app/tools/device_info_tools.dart';
-import 'package:app/tools/log_tools.dart';
+import 'package:flutter/foundation.dart';
+
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:iris_tools/api/converter.dart';
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
 import 'package:iris_tools/api/helpers/listHelper.dart';
+
+import 'package:app/tools/device_info_tools.dart';
+import 'package:app/tools/log_tools.dart';
 
 class AppHttpDio {
 	AppHttpDio._();
@@ -45,7 +47,7 @@ class AppHttpDio {
 				txt += 'FormData: fields len> ${(httpItem.body as FormData).fields.length} \n------------------------- End';
 			}
 
-			LogTools.logger.logToAll(txt);
+			LogTools.logToAll(txt);
 		}
 
 		final itemRes = HttpRequester();
@@ -92,7 +94,7 @@ class AppHttpDio {
 							txt += 'statusCode:  ${res.statusCode}\n';
 							txt += 'response.data: ${res.data}\n----------------------- End Debug';
 
-							LogTools.logger.logToAll(txt);
+							LogTools.logToAll(txt);
 						}
 
 						itemRes._response = res;
@@ -112,7 +114,7 @@ class AppHttpDio {
 							txt += 'response.data: ${err.response?.data}\n';
 							txt += 'error: ${err.error} \n--------------------------- End Debug';
 
-							LogTools.logger.logToAll(txt);
+							LogTools.logToAll(txt);
 						}
 
 						final ro = RequestOptions(path: uri);
@@ -155,7 +157,7 @@ class AppHttpDio {
 
 	static HttpRequester download(HttpItem item, String savePath, {BaseOptions? options}){
 		if(item.debugMode && !kIsWeb) {
-			LogTools.logger.logToAll('==== Stack Trace : ${StackTrace.current.toString()}');
+			LogTools.logToAll('==== Stack Trace : ${StackTrace.current.toString()}');
 		}
 
 		final itemRes = HttpRequester();

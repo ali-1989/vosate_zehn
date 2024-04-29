@@ -2,6 +2,7 @@
 
 import 'dart:core';
 
+import 'package:app/services/vip_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
@@ -130,6 +131,7 @@ class CarouselManager {
       final t = JsonHelper.jsonToMap(itm.clickUrl);
       final sub = SubBucketModel.fromMap(t!);
       sub.mediaModel = MediaManager.getById(sub.mediaId);
+      sub.imageModel = MediaManager.getById(sub.coverId?? sub.mediaId);
 
       _onCarouselClickSubBucket(sub);
     }
@@ -143,6 +145,12 @@ class CarouselManager {
   }
 
   static void _onCarouselClickSubBucket(SubBucketModel itm) {
+    final canContinue = VipService.checkVip(RouteTools.getBaseContext()!, itm);
+
+    if(!canContinue){
+      return;
+    }
+
     LastSeenService.addItem(itm);
 
     if(itm.type == SubBucketTypes.video.id()){

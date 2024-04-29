@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:app/services/vip_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -42,7 +43,6 @@ import 'package:app/tools/app/app_sizes.dart';
 import 'package:app/tools/app/app_snack.dart';
 import 'package:app/tools/app/app_themes.dart';
 import 'package:app/tools/app/app_toast.dart';
-import 'package:app/tools/app_tools.dart';
 import 'package:app/tools/device_info_tools.dart';
 import 'package:app/tools/permission_tools.dart';
 import 'package:app/tools/route_tools.dart';
@@ -768,7 +768,7 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
   }
 
   void onBuyVipPlan() async {
-    await RouteTools.pushPage(context, AppTools.getPayPage());
+    await RouteTools.pushPage(context, VipService.getPayPage());
     callState();
   }
 }

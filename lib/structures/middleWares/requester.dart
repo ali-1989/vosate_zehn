@@ -114,23 +114,24 @@ class Requester {
     f = f.then((response) async {
       if(kDebugMode /*&& !kIsWeb*/) {
         final url = _httpRequester.requestOptions?.uri;
-        var request = '';
+        var request = '<${_http.method}> ';
 
-        if(_http.method != 'GET') {
+        if(_http.method?.toLowerCase() != 'get') {
           if (_http.body is String) {
-            request = _http.body as String;
+            request += _http.body as String;
           }
 
-          if (_http.body is Map) {
-            request = _http.body.toString();
+          else if (_http.body is Map) {
+            request += _http.body.toString();
+          }
+
+          else if (_http.body is FormData) {
+            request += (_http.body as FormData).fields.toString();
           }
 
           if (request.length > 500) {
-            request = request.substring(0, 500);
+            request += request.substring(0, 500);
           }
-        }
-        else {
-          request = 'GET';
         }
 
         var pr = '>_._._._._._._.__._._ API CALLED __._._._._._._._'

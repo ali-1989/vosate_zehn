@@ -1,3 +1,4 @@
+import 'package:app/services/vip_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/duration/durationFormatter.dart';
@@ -17,12 +18,10 @@ import 'package:app/structures/models/subBuketModel.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/app_decoration.dart';
-import 'package:app/tools/app/app_dialog.dart';
 import 'package:app/tools/app/app_directories.dart';
 import 'package:app/tools/app/app_icons.dart';
 import 'package:app/tools/app/app_images.dart';
 import 'package:app/tools/app/app_messages.dart';
-import 'package:app/tools/app/app_snack.dart';
 import 'package:app/tools/app/app_themes.dart';
 import 'package:app/tools/app/app_toast.dart';
 import 'package:app/tools/app_tools.dart';
@@ -310,39 +309,9 @@ class _SubBucketPageState extends StateSuper<SubBucketPage> {
   }
 
   void onItemClick(SubBucketModel itm) {
-    final user = SessionService.getLastLoginUser();
+    final canContinue = VipService.checkVip(context, itm);
 
-    if(itm.isVip && (user == null || user.userId == '0')){
-      AppSnack.showError(context, 'برای دسترسی یه این محنوا باید ثبت نام کنید.');
-      return;
-    }
-
-    if(itm.isVip && !user!.vipOptions.isVip()){
-      final decor = AppDialog.instance.dialogDecoration.copy();
-      decor.descriptionStyle = AppThemes.boldTextStyle().copyWith(
-          fontSize: 18,
-          fontWeight: FontWeight.w800
-      );
-
-      AppDialog.instance.showDialog(
-          context,
-          decorationConfig: decor,
-          desc: 'این محتوا فقط برای کاربران ویژه می باشد',
-          actions: [
-            ElevatedButton(
-                onPressed: ()=> Navigator.of(context).pop(),
-                child: const Text('متوجه شدم')
-            ),
-
-            ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                ),
-                onPressed: gotoBuyVipPage,
-                child: const Text('خرید اشتراک')
-            ),
-          ]
-      );
+    if(!canContinue){
       return;
     }
 
@@ -430,10 +399,5 @@ class _SubBucketPageState extends StateSuper<SubBucketPage> {
 
     requester.prepareUrl();
     requester.request();
-  }
-
-  void gotoBuyVipPage() async {
-    Navigator.of(context).pop();
-    await RouteTools.pushPage(context, AppTools.getPayPage());
   }
 }

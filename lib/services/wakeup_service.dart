@@ -17,7 +17,7 @@ Future<bool> _callbackWorkManager(task, inputData) async {
   try {
     WidgetsFlutterBinding.ensureInitialized();
     await prepareDirectoriesAndLogger();
-    LogTools.logger.logToFile('work manager - A');
+    LogTools.logToFile('work manager - A');
     NativeCallService.init();
     await AppNotification.initial();
     AppNotification.sendMessagesNotification('t1', 'ali', 't: ${DateHelper.now()}');
@@ -26,10 +26,10 @@ Future<bool> _callbackWorkManager(task, inputData) async {
 
     try {
       isAppRun = (await NativeCallService.assistanceBridge!.invokeMethod('isAppRun')).$1;
-      LogTools.logger.logToFile('work manager B, isAppRun: $isAppRun');
+      LogTools.logToFile('work manager B, isAppRun: $isAppRun');
     }
     catch (e) {
-      LogTools.logger.logToFile('work manager, err: $e');
+      LogTools.logToFile('work manager, err: $e');
     }
 
     if (isAppRun) {

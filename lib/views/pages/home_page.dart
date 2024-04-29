@@ -1,3 +1,4 @@
+import 'package:app/services/vip_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:carousel_slider/carousel_slider.dart';
@@ -19,15 +20,12 @@ import 'package:app/structures/models/subBuketModel.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/app_broadcast.dart';
-import 'package:app/tools/app/app_dialog.dart';
 import 'package:app/tools/app/app_directories.dart';
 import 'package:app/tools/app/app_icons.dart';
 import 'package:app/tools/app/app_images.dart';
 import 'package:app/tools/app/app_messages.dart';
-import 'package:app/tools/app/app_snack.dart';
 import 'package:app/tools/app/app_themes.dart';
 import 'package:app/tools/app/app_toast.dart';
-import 'package:app/tools/app_tools.dart';
 import 'package:app/tools/route_tools.dart';
 import 'package:app/views/pages/levels/audio_player_page.dart';
 import 'package:app/views/pages/levels/content_view_page.dart';
@@ -569,39 +567,9 @@ class _HomePageState extends StateSuper<HomePage> {
   }
 
   void onItemClick(SubBucketModel itm) {
-    final user = SessionService.getLastLoginUser();
+    final canContinue = VipService.checkVip(context, itm);
 
-    if(itm.isVip && (user == null || user.userId == '0')){
-      AppSnack.showError(context, 'برای دسترسی یه این محنوا باید ثبت نام کنید.');
-      return;
-    }
-
-    if(itm.isVip && !user!.vipOptions.isVip()){
-      final decor = AppDialog.instance.dialogDecoration.copy();
-      decor.descriptionStyle = AppThemes.boldTextStyle().copyWith(
-        fontSize: 18,
-        fontWeight: FontWeight.w800
-      );
-
-      AppDialog.instance.showDialog(
-        context,
-        decorationConfig: decor,
-        desc: 'این محتوا فقط برای کاربران ویژه می باشد',
-        actions: [
-          ElevatedButton(
-              onPressed: ()=> Navigator.of(context).pop(),
-              child: const Text('متوجه شدم')
-          ),
-
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.green,
-            ),
-              onPressed: gotoBuyVipPage,
-              child: const Text('خرید اشتراک')
-          ),
-        ]
-      );
+    if(!canContinue){
       return;
     }
 
@@ -689,10 +657,5 @@ class _HomePageState extends StateSuper<HomePage> {
     requester.bodyJson = js;
     requester.prepareUrl();
     requester.request();
-  }
-
-  void gotoBuyVipPage() async {
-    Navigator.of(context).pop();
-    final res = await RouteTools.pushPage(context, AppTools.getPayPage());
   }
 }

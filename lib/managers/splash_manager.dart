@@ -66,7 +66,7 @@ class SplashManager {
       return null;
     }
     catch (e){
-      LogTools.logger.logToAll('error in beforeRunApp >> $e');
+      LogTools.logToAll('error in beforeRunApp >> $e');
       return e;
     }
   }
@@ -125,7 +125,7 @@ class SplashManager {
     }
     catch (e){
       runApp(ErrorPage(errorLog: e.toString()));
-      LogTools.logger.logToAll('error in base Initial >> $e');
+      LogTools.logToAll('error in base Initial >> $e');
     }
   }
 
@@ -158,7 +158,7 @@ class SplashManager {
       AppThemes.instance.textDirection = AppLocale.detectLocaleDirection(SettingsManager.localSettings.appLocale);
     }
     catch (e){
-      LogTools.logger.logToAll('error in initOnSplash >> $e');
+      LogTools.logToAll('error in initOnSplash >> $e');
     }
 
     _lazyInitCommands();
@@ -208,7 +208,7 @@ class SplashManager {
       }
     }
     catch (e){
-      LogTools.logger.logToAll('error in lazyInitCommands >> $e');
+      LogTools.logToAll('error in lazyInitCommands >> $e');
     }
   }
 

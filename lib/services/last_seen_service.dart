@@ -24,7 +24,7 @@ class LastSeenService {
     value[Keys.value] = val;
 
     final res = await AppDB.db.insertOrUpdate(AppDB.tbLastSeen, value, con);
-    removeExtraItems();
+    keep20itemsAndDeleteOthers();
 
     return res > 0;
   }
@@ -38,7 +38,7 @@ class LastSeenService {
     return res > 0;
   }
 
-  static Future removeExtraItems() async {
+  static Future keep20itemsAndDeleteOthers() async {
     final all = getAllItems();
 
     if(all.length < 21){
@@ -48,7 +48,7 @@ class LastSeenService {
     final ids = [];
 
     for (int i=0; i < all.length - 20; i++){
-      ids.add(all[i+20]);
+      ids.add(all[i+20].id);
     }
 
     for(final k in ids){

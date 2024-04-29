@@ -80,7 +80,7 @@ class WebsocketService {
 			return;
 		}
 
-		LogTools.logger.logToAll('Websocket is start connecting. [TS: ${DateTime.now()}]  URL: $_uri');
+		LogTools.logToAll('Websocket is start connecting. [TS: ${DateTime.now()}]  URL: $_uri');
 
 		try {
 			_ws = IrisWebSocket(_uri!);
@@ -136,7 +136,7 @@ class WebsocketService {
 	}
 
 	static void _onDisConnected(Object e) async {
-		LogTools.logger.logToAll('Websocket is disconnected. [${DateTime.now()}] $e');
+		LogTools.logToAll('Websocket is disconnected. [${DateTime.now()}] $e');
 
 		_close();
 		_reconnect();
@@ -155,7 +155,7 @@ class WebsocketService {
 		periodicHeartTimer = Timer.periodic(dur, (timer) {
 			sendHeartAndUsers();
 		});
-		LogTools.logger.logToAll('Websocket is connected. [TS: ${DateTime.now()}]');
+		LogTools.logToAll('Websocket is connected. [TS: ${DateTime.now()}]');
 	}
 
 	///------------ heart every 3 min --------------------------------------------
@@ -221,7 +221,7 @@ class WebsocketService {
 			}
 		}
 		catch(e){
-			LogTools.logger.logToAll('== Websocket error: $e');
+			LogTools.logToAll('== Websocket error: $e');
 		}
 	}
 

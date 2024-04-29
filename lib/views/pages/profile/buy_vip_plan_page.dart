@@ -253,7 +253,7 @@ class _BuyVipPlanPageState extends StateSuper<BuyVipPlanPage> {
       else {
         await hideLoading();
         AppSnack.showError(context, 'متاسفانه درگاه پرداخت جواب نداد.');
-        LogTools.logger.logToAll('BankGetWay: $r', isError: true);
+        LogTools.logToAll('BankGetWay: $r', isError: true);
       }
     };
 

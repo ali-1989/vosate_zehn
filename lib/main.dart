@@ -74,7 +74,7 @@ void onErrorCatch(FlutterErrorDetails errorDetails) {
 
   txt += '\n*************** [END CATCH]';
 
-  LogTools.logger.logToAll(txt, isError: true);
+  LogTools.logToAll(txt, isError: true);
   LogTools.reportLogToServer(LogTools.buildServerLog('MainError:${Generator.hashMd5(txt)}', error: txt));
 }
 ///=============================================================================
@@ -86,7 +86,7 @@ bool mainIsolateError(error, sTrace) {
   }
 
   txt += '\n*************** [END MAIN-ISOLATE]';
-  LogTools.logger.logToAll(txt, isError: true);
+  LogTools.logToAll(txt, isError: true);
   LogTools.reportLogToServer(LogTools.buildServerLog('MainIsolate:${Generator.hashMd5(txt)}', error: txt));
 
   if(kDebugMode) {
@@ -104,7 +104,7 @@ void zonedGuardedCatch(error, sTrace) {
   }
 
   txt += '\n************** [END ZONED-GUARDED]';
-  LogTools.logger.logToAll(txt, isError: true);
+  LogTools.logToAll(txt, isError: true);
   LogTools.reportLogToServer(LogTools.buildServerLog('MainZonedGuarded:${Generator.hashMd5(txt)}', error: txt));
 
   if(kDebugMode) {

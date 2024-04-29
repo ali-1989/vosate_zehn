@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:core';
 
+import 'package:app/services/vip_service.dart';
 import 'package:iris_db/iris_db.dart';
 import 'package:iris_notifier/iris_notifier.dart';
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
@@ -33,7 +34,7 @@ class AdvertisingManager {
   
   static final List<AdvModel> _advList = [];
   static List<AdvModel> get advList => _advList;
-  ///-----------------------------------------------------------------------------------------
+  ///---------------------------------------------------------------------------
   static DateTime? lastRequest;
   static Timer? timer;
 
@@ -236,6 +237,7 @@ class AdvertisingManager {
     else if(adv.type == 'sub_bucket'){
       final sub = SubBucketModel.fromMap(JsonHelper.jsonToMap(adv.clickUrl)!);
       sub.mediaModel = MediaManager.getById(sub.mediaId);
+      sub.imageModel = MediaManager.getById(sub.coverId?? sub.mediaId);
 
       _onClickSubBucket(sub);
     }
@@ -249,6 +251,12 @@ class AdvertisingManager {
   }
 
   static void _onClickSubBucket(SubBucketModel itm) {
+    final canContinue = VipService.checkVip(RouteTools.getBaseContext()!, itm);
+
+    if(!canContinue){
+      return;
+    }
+
     LastSeenService.addItem(itm);
 
     if(itm.type == SubBucketTypes.video.id()){

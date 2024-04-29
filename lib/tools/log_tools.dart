@@ -20,9 +20,10 @@ import 'package:app/tools/device_info_tools.dart';
 class LogTools {
   LogTools._();
 
-  static late Logger logger;
+  static late Logger _logger;
   static late Reporter localReporter;
-  static List avoidReportMessageList = <String>[];
+  static final List avoidSendMessageList = <String>[];
+  static final List avoidLocalLogMessageList = <String>[];
 
   static Future<bool> init() async {
     try {
@@ -33,15 +34,15 @@ class LogTools {
         LogTools.localReporter = Reporter(AppDirectories.getExternalAppFolder(), 'report');
       }
 
-      LogTools.logger = Logger('${AppDirectories.getExternalTempDir()}/logs');
+      LogTools._logger = Logger('${AppDirectories.getExternalTempDir()}/logs');
 
-      avoidReportMessageList.add('\'hasSize\': RenderBox');
-      avoidReportMessageList.add('has a negative minimum');
-      avoidReportMessageList.add('slot == null');
-      avoidReportMessageList.add('FIS_AUTH_ERROR'); // firebase
-      avoidReportMessageList.add('RenderFlex overflowed by');
-      avoidReportMessageList.add('RenderFlex children have non-zero flex');
-      avoidReportMessageList.add('Could not navigate');
+      avoidSendMessageList.add('\'hasSize\': RenderBox');
+      avoidSendMessageList.add('has a negative minimum');
+      avoidSendMessageList.add('slot == null');
+      avoidSendMessageList.add('FIS_AUTH_ERROR'); // firebase
+      avoidSendMessageList.add('RenderFlex overflowed by');
+      avoidSendMessageList.add('RenderFlex children have non-zero flex');
+      avoidSendMessageList.add('Could not navigate');
 
       return true;
     }
@@ -49,6 +50,26 @@ class LogTools {
       log('$e\n\n${StackTrace.current}');
       return false;
     }
+  }
+
+  static void logToAll(String text, {String prefix = '', bool isError = false}){
+    for(final x in avoidLocalLogMessageList){
+      if(text.contains(x)){
+        return;
+      }
+    }
+
+    _logger.logToAll(text, type: prefix, isError: isError);
+  }
+
+  static void logToFile(String text, {String prefix = ''}){
+    for(final x in avoidLocalLogMessageList){
+      if(text.contains(x)){
+        return;
+      }
+    }
+
+    _logger.logToFile(text, type: prefix);
   }
 
   static Map<String, dynamic> buildServerLog(String subject, {dynamic data, String? error}){
@@ -65,6 +86,7 @@ class LogTools {
 
     return map;
   }
+
   /// must map include a 'subject' key.
   static void reportLogToServer(Map<String, dynamic> map) async {
     final String? subjectKey = map['subject'];
@@ -79,7 +101,7 @@ class LogTools {
       return;
     }
 
-    for(final x in avoidReportMessageList){
+    for(final x in avoidSendMessageList){
       if(subjectKey.contains(x)){
         return;
       }
@@ -111,7 +133,7 @@ class LogTools {
 
 
     runZonedGuarded(fn, (error, stack) {
-      LogTools.logger.logToAll('::::::::::::: Reporting to Server is failed ::::::::::: ${error.toString()}');
+      LogTools._logger.logToAll('::::::::::::: Reporting to Server is failed ::::::::::: ${error.toString()}');
     });
   }
 }
