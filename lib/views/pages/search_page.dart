@@ -24,7 +24,7 @@ import 'package:app/tools/app/app_messages.dart';
 import 'package:app/tools/app/app_themes.dart';
 import 'package:app/tools/app_tools.dart';
 import 'package:app/tools/route_tools.dart';
-import 'package:app/tools/search_filter_tool.dart';
+import 'package:app/tools/request_options.dart';
 import 'package:app/views/baseComponents/appbar_builder.dart';
 import 'package:app/views/pages/levels/audio_player_page.dart';
 import 'package:app/views/pages/levels/content_view_page.dart';
@@ -45,7 +45,7 @@ class _SearchPageState extends StateSuper<SearchPage> {
   List<SubBucketModel> foundList = [];
   late ThemeData chipTheme;
   Requester requester = Requester();
-  SearchFilterTool searchFilter = SearchFilterTool();
+  RequestOptions searchFilter = RequestOptions();
   RefreshController refreshController = RefreshController(initialRefresh: false);
 
   @override

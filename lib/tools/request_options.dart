@@ -1,6 +1,7 @@
-class SearchFilterTool {
+class RequestOptions {
   int limit = 50;
   int? offset;
+  int page = 1;
   String? searchText;
   String? orderBy;
   bool ascOrder = false;
@@ -8,7 +9,7 @@ class SearchFilterTool {
   dynamic lower;
   final Map<String, dynamic> _kv = {};
 
-  SearchFilterTool();
+  RequestOptions();
 
   void addFilter(String key, dynamic value){
     _kv[key] = value;
@@ -20,7 +21,7 @@ class SearchFilterTool {
 
   Map<String, dynamic> get filters => _kv;
 
-  SearchFilterTool.fromMap(Map? map){
+  RequestOptions.fromMap(Map? map){
     if(map == null){
       return;
     }

@@ -17,7 +17,7 @@ import 'package:app/tools/app/app_directories.dart';
 import 'package:app/tools/app/app_images.dart';
 import 'package:app/tools/app_tools.dart';
 import 'package:app/tools/route_tools.dart';
-import 'package:app/tools/search_filter_tool.dart';
+import 'package:app/tools/request_options.dart';
 import 'package:app/views/pages/levels/sub_bucket_page.dart';
 import 'package:app/views/states/empty_data.dart';
 import 'package:app/views/states/error_occur.dart';
@@ -46,7 +46,7 @@ class _BucketPageState extends StateSuper<BucketPage> {
   String state$fetchData = 'state_fetchData';
   List<BucketModel> listItems = [];
   RefreshController refreshController = RefreshController(initialRefresh: false);
-  SearchFilterTool searchFilter = SearchFilterTool();
+  RequestOptions searchFilter = RequestOptions();
 
 
   @override
@@ -214,7 +214,6 @@ class _BucketPageState extends StateSuper<BucketPage> {
     js[Keys.requesterId] = SessionService.getLastLoginUser()?.userId;
     js[Keys.key] = widget.injectData.bucketTypes.id();
     js[Keys.searchFilter] = searchFilter.toMap();
-
 
     requester.bodyJson = js;
 

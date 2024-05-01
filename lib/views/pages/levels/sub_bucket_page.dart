@@ -26,7 +26,7 @@ import 'package:app/tools/app/app_themes.dart';
 import 'package:app/tools/app/app_toast.dart';
 import 'package:app/tools/app_tools.dart';
 import 'package:app/tools/route_tools.dart';
-import 'package:app/tools/search_filter_tool.dart';
+import 'package:app/tools/request_options.dart';
 import 'package:app/views/baseComponents/appbar_builder.dart';
 import 'package:app/views/pages/levels/audio_player_page.dart';
 import 'package:app/views/pages/levels/content_view_page.dart';
@@ -58,15 +58,15 @@ class _SubBucketPageState extends StateSuper<SubBucketPage> {
   String state$fetchData = 'state_fetchData';
   List<SubBucketModel> listItems = [];
   RefreshController refreshController = RefreshController(initialRefresh: false);
-  SearchFilterTool searchFilter = SearchFilterTool();
+  RequestOptions requestOptions = RequestOptions();
 
 
   @override
   void initState(){
     super.initState();
 
-    searchFilter.limit = 20;
-    searchFilter.ascOrder = true;
+    requestOptions.limit = 20;
+    requestOptions.ascOrder = true;
     requestData();
   }
 
@@ -347,15 +347,20 @@ class _SubBucketPageState extends StateSuper<SubBucketPage> {
   }
 
   void requestData() async {
-    final ul = AppTools.findUpperLower(listItems, searchFilter.ascOrder);
-    searchFilter.upper = ul.upperAsTS;
-    searchFilter.lower = ul.lowerAsTS;
+    final ul = AppTools.findUpperLower(listItems, requestOptions.ascOrder);
+    requestOptions.upper = ul.upperAsTS;
+    requestOptions.lower = ul.lowerAsTS;
+
+    if(requestOptions.page > 1 && ((requestOptions.page-1) * requestOptions.limit) > listItems.length){
+      refreshController.loadNoData();
+      return;
+    }
 
     final js = <String, dynamic>{};
     js[Keys.request] = 'get_sub_bucket_data';
     js[Keys.requesterId] = SessionService.getLastLoginUser()?.userId;
     js[Keys.id] = widget.injectData.bucketModel!.id?? 1;
-    js[Keys.searchFilter] = searchFilter.toMap();
+    js[Keys.searchFilter] = requestOptions.toMap();
 
     requester.bodyJson = js;
 
@@ -371,9 +376,10 @@ class _SubBucketPageState extends StateSuper<SubBucketPage> {
       final List bList = data['sub_bucket_list']?? [];
       final List mList = data['media_list']?? [];
 
-      searchFilter.ascOrder = data[Keys.isAsc]?? true;
+      requestOptions.ascOrder = data[Keys.isAsc]?? requestOptions.ascOrder;
+      requestOptions.page++;
 
-      if(bList.length < searchFilter.limit){
+      if(bList.length < requestOptions.limit){
         refreshController.loadNoData();
       }
       else {
