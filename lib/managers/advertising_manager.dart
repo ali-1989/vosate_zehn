@@ -3,7 +3,6 @@
 import 'dart:async';
 import 'dart:core';
 
-import 'package:app/services/vip_service.dart';
 import 'package:iris_db/iris_db.dart';
 import 'package:iris_notifier/iris_notifier.dart';
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
@@ -14,6 +13,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:app/managers/carousel_manager.dart';
 import 'package:app/managers/media_manager.dart';
 import 'package:app/services/last_seen_service.dart';
+import 'package:app/services/vip_service.dart';
 import 'package:app/structures/enums/app_events.dart';
 import 'package:app/structures/enums/enums.dart';
 import 'package:app/structures/middleWares/requester.dart';

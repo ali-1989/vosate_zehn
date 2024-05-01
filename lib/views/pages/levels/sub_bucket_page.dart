@@ -1,4 +1,3 @@
-import 'package:app/services/vip_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/duration/durationFormatter.dart';
@@ -10,6 +9,7 @@ import 'package:app/managers/media_manager.dart';
 import 'package:app/services/favorite_service.dart';
 import 'package:app/services/last_seen_service.dart';
 import 'package:app/services/session_service.dart';
+import 'package:app/services/vip_service.dart';
 import 'package:app/structures/abstract/state_super.dart';
 import 'package:app/structures/enums/enums.dart';
 import 'package:app/structures/middleWares/requester.dart';
@@ -25,8 +25,8 @@ import 'package:app/tools/app/app_messages.dart';
 import 'package:app/tools/app/app_themes.dart';
 import 'package:app/tools/app/app_toast.dart';
 import 'package:app/tools/app_tools.dart';
-import 'package:app/tools/route_tools.dart';
 import 'package:app/tools/request_options.dart';
+import 'package:app/tools/route_tools.dart';
 import 'package:app/views/baseComponents/appbar_builder.dart';
 import 'package:app/views/pages/levels/audio_player_page.dart';
 import 'package:app/views/pages/levels/content_view_page.dart';

@@ -2,7 +2,6 @@
 
 import 'dart:core';
 
-import 'package:app/services/vip_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
@@ -12,6 +11,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:app/managers/media_manager.dart';
 import 'package:app/services/last_seen_service.dart';
+import 'package:app/services/vip_service.dart';
 import 'package:app/structures/enums/enums.dart';
 import 'package:app/structures/models/advModel.dart';
 import 'package:app/structures/models/subBuketModel.dart';

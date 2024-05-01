@@ -1,4 +1,3 @@
-import 'package:app/services/vip_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:carousel_slider/carousel_slider.dart';
@@ -13,6 +12,7 @@ import 'package:app/managers/media_manager.dart';
 import 'package:app/services/favorite_service.dart';
 import 'package:app/services/last_seen_service.dart';
 import 'package:app/services/session_service.dart';
+import 'package:app/services/vip_service.dart';
 import 'package:app/structures/abstract/state_super.dart';
 import 'package:app/structures/enums/enums.dart';
 import 'package:app/structures/middleWares/requester.dart';

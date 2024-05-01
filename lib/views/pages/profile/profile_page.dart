@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:app/services/vip_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -25,6 +24,7 @@ import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:app/services/session_service.dart';
+import 'package:app/services/vip_service.dart';
 import 'package:app/structures/abstract/state_super.dart';
 import 'package:app/structures/enums/app_events.dart';
 import 'package:app/structures/enums/enums.dart';
