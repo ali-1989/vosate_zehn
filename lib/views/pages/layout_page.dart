@@ -1,6 +1,10 @@
+import 'package:app/services/session_service.dart';
+import 'package:app/structures/enums/user_type.dart';
+import 'package:app/system/extensions.dart';
+import 'package:app/tools/app/app_broadcast.dart';
+import 'package:app/views/pages/profile/profile_page.dart';
 import 'package:flutter/material.dart';
 
-import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:move_to_background/move_to_background.dart';
 import 'package:shaped_bottom_bar/models/shaped_item_object.dart';
 import 'package:shaped_bottom_bar/shaped_bottom_bar.dart';
@@ -33,12 +37,13 @@ class LayoutPageState extends StateSuper<LayoutPage> {
   late PageController pageController;
   ValueKey<int> bottomBarKey = const ValueKey<int>(1);
 
-  bool onPop<s extends StateSuper>(s state, bool? last) {
-    if(last != null){
+  void onPop() {
+    if(DrawerMenuBuilder.drawerIsOpen()){
+      DrawerMenuBuilder.closeDrawer();
+    }
+    else {
       MoveToBackground.moveTaskToBack();
     }
-
-    return false;
   }
 
   @override
@@ -51,23 +56,18 @@ class LayoutPageState extends StateSuper<LayoutPage> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: onPop(this, null),
-      onPopInvoked: (s)=> onPop(this, s),
-      child: Assist(
-        controller: assistCtr,
-          builder: (context, ctr, data) {
-          return Scaffold(
-            key: scaffoldState,
-            appBar: buildAppBar(),
-            body: SafeArea(
-              bottom: false,
-                child: buildBody()
-            ),
-            drawer: DrawerMenuBuilder.getDrawer(),
-            extendBody: true,
-            bottomNavigationBar: buildNavBar(),
-          );
-        }
+      canPop: false,
+      onPopInvoked: (s)=> onPop(),
+      child: Scaffold(
+        key: scaffoldState,
+        appBar: buildAppBar(),
+        drawer: DrawerMenuBuilder.getDrawer(),
+        extendBody: true,
+        bottomNavigationBar: buildNavBar(),
+        body: SafeArea(
+          bottom: false,
+            child: buildBody()
+        ),
       ),
     );
   }
@@ -92,15 +92,42 @@ class LayoutPageState extends StateSuper<LayoutPage> {
 
   AppBar buildAppBar(){
     return AppBarCustom(
-      title: Text(AppMessages.appName),
-      /*leading: IconButton(
-          onPressed: (){
-          },
-          icon: Icon(AppIcons.list)
-      ),*/
+      title: Text(AppMessages.appName).color(Colors.blueAccent),
+
+      leadingWidth: 130,
+      leading: Row(
+        children: [
+          ///menu
+          GestureDetector(
+            onTap: (){
+              AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.openDrawer();
+            },
+            child: const Padding(
+              padding: EdgeInsets.only(right: 8),
+              child: Icon(AppIcons.list, size: 30, color: Colors.blueAccent),
+            ),
+          ),
+
+          /// profile
+          const SizedBox(width: 10),
+          if(SessionService.hasAnyLogin() && SessionService.getLastLoginUser()!.userType != UserType.guest)
+            GestureDetector(
+              onTap: gotoProfilePage,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(AppIcons.accountCircle, size: 20, color: Colors.white),
+                  const SizedBox(width: 5),
+                  Text(AppMessages.profileTitle, maxLines: 1, softWrap: false).color(Colors.white),
+                ],
+              ),
+            ),
+        ],
+      ),
 
       actions: [
-        GestureDetector(
+        /*GestureDetector(
           onTap: gotoAidPage,
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -110,13 +137,13 @@ class LayoutPageState extends StateSuper<LayoutPage> {
               Text(AppMessages.aid, maxLines: 1, softWrap: false),
             ],
           ),
-        ),
+        ),*/
 
         IconButton(
             onPressed: (){
               RouteTools.pushPage(context, const SearchPage());
             },
-            icon: const Icon(AppIcons.search)
+            icon: const Icon(AppIcons.search, color: Colors.white)
         ),
       ],
     );
@@ -156,6 +183,10 @@ class LayoutPageState extends StateSuper<LayoutPage> {
 
     bottomBarKey = ValueKey(bottomBarKey.value +1);
     setState(() {});
+  }
+
+  void gotoProfilePage(){
+    RouteTools.pushPage(context, const ProfilePage());
   }
 
   void gotoAidPage(){

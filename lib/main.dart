@@ -66,13 +66,18 @@ Future<(bool, String?)> prepareDirectoriesAndLogger() async {
 }
 ///=============================================================================
 void onErrorCatch(FlutterErrorDetails errorDetails) {
-  var txt = 'MAIN-ERROR-CATCH:: ${errorDetails.exception.toString()}';
+  var txt = 'MAIN-ERROR-CATCH:: ${errorDetails.exception}';
 
   if(!kIsWeb) {
-    txt += '\n STACK TRACE:: ${errorDetails.stack}';
+    txt += '\nLIBRARY: ${errorDetails.library}';
+    txt += '\nNAME: ${errorDetails.context?.name}';
+    txt += '\nVALUE: ${errorDetails.context?.value}';
+    txt += '\nLEVEL: ${errorDetails.context?.level}';
+    txt += '\nSTACK TRACE: ${errorDetails.stack}';
+    txt += '\ninformation: ${errorDetails.informationCollector?.call()}';
   }
 
-  txt += '\n*************** [END CATCH]';
+  txt += '\n************ [END CATCH]';
 
   LogTools.logToAll(txt, isError: true);
   LogTools.reportLogToServer(LogTools.buildServerLog('MainError:${Generator.hashMd5(txt)}', error: txt));
@@ -82,10 +87,10 @@ bool mainIsolateError(error, sTrace) {
   var txt = 'MAIN-ISOLATE:: ${error.toString()}';
 
   if(!(kDebugMode || kIsWeb)) {
-    txt += '\n STACK TRACE:: $sTrace';
+    txt += '\nSTACK TRACE: $sTrace';
   }
 
-  txt += '\n*************** [END MAIN-ISOLATE]';
+  txt += '\n************ [END MAIN-ISOLATE]';
   LogTools.logToAll(txt, isError: true);
   LogTools.reportLogToServer(LogTools.buildServerLog('MainIsolate:${Generator.hashMd5(txt)}', error: txt));
 
@@ -100,7 +105,7 @@ void zonedGuardedCatch(error, sTrace) {
   var txt = 'MAIN-ZONED-GUARDED:: ${error.toString()}';
 
   if(!(kDebugMode || kIsWeb)) {
-    txt += '\n STACK TRACE:: $sTrace';
+    txt += '\nSTACK TRACE: $sTrace';
   }
 
   txt += '\n************** [END ZONED-GUARDED]';

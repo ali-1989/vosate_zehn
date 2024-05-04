@@ -13,11 +13,11 @@ enum UserType {
     }
 
     if(data is String) {
-      values.firstWhere((e) => e.name == data, orElse: ()=> UserType.common);
+      return values.firstWhere((e) => e.name == data, orElse: ()=> UserType.common);
     }
 
     if(data is int) {
-      values.firstWhere((e) => e._id == data, orElse: ()=> UserType.common);
+      return values.firstWhere((e) => e._id == data, orElse: ()=> UserType.common);
     }
 
     return UserType.common;

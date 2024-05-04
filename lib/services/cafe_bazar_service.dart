@@ -83,7 +83,12 @@ class CafeBazarService {
     return FlutterPoolakey.getSubscriptionSkuDetails(products);
   }
 
-  Future<int> sinkFailedSendBuy(Map js) {
+  Future<int> sinkFailedSendBuy(Map<String, dynamic> js) {
+    /*var x = <String, dynamic>{};
+    x['subject'] = 'cafe_bazar_not_connect_to_app';
+    x.addAll(x);
+    LogTools.reportLogToServer(x);*///todo.
+
     final cons = Conditions();
     cons.add(Condition()..key = Keys.userId..value = js[Keys.userId]);
     cons.add(Condition()..key = 'plan_id'..value = js['plan_id']);

@@ -32,7 +32,6 @@ import 'package:app/structures/middleWares/requester.dart';
 import 'package:app/structures/models/user_model.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
-import 'package:app/tools/app/app_decoration.dart';
 import 'package:app/tools/app/app_directories.dart';
 import 'package:app/tools/app/app_icons.dart';
 import 'package:app/tools/app/app_images.dart';
@@ -282,7 +281,7 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
                                 children: [
                                   GestureDetector(
                                     onTap: onBuyVipPlan,
-                                    child: const Icon(AppIcons.buyBasket, color: AppDecoration.differentColor),
+                                    child: const Icon(AppIcons.buyBasket, color: Colors.blueAccent),
                                   ),
 
                                   const SizedBox(width: 6),

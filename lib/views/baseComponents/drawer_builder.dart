@@ -42,6 +42,27 @@ class DrawerMenuBuilder {
 
   //static Widget? _drawer;
 
+  static void openDrawer(){
+    AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.openDrawer();
+  }
+
+  static void closeDrawer(){
+    AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
+  }
+
+  static void toggleDrawer(){
+    if(drawerIsOpen()){
+      closeDrawer();
+    }
+    else {
+      openDrawer();
+    }
+  }
+
+  static bool drawerIsOpen(){
+    return AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.isDrawerOpen?? false;
+  }
+
   static Widget getDrawer(){
     return UpdaterBuilder(
       id: AppBroadcast.drawerMenuRefresherId,
@@ -72,9 +93,9 @@ class DrawerMenuBuilder {
 
                     if(SessionService.hasAnyLogin())
                       ListTile(
-                        title: Text(SessionService.isGuestCurrent()? AppMessages.registerTitle :AppMessages.logout).color(Colors.redAccent),
-                        leading: const Icon(AppIcons.logout, size: 18, color: Colors.redAccent),
-                        onTap: onLogoffCall,
+                        title: Text(SessionService.isGuestCurrent()? AppMessages.registerTitle :AppMessages.account).color(Colors.green),
+                        leading: const Icon(AppIcons.personLogin, size: 18, color: Colors.green),
+                        onTap: SessionService.isGuestCurrent()? onLogoffCall : gotoProfilePage,
                         dense: true,
                       ),
 
@@ -109,12 +130,12 @@ class DrawerMenuBuilder {
                       dense: true,
                     ),
 
-                    ListTile(
+                    /*ListTile(
                       title: Text(AppMessages.aidUs),
                       leading: const Icon(AppIcons.cashMultiple),
                       onTap: gotoAidPage,
                       dense: true,
-                    ),
+                    ),*/
 
                     ListTile(
                       title: Text(AppMessages.contactUs),
@@ -129,6 +150,14 @@ class DrawerMenuBuilder {
                       onTap: gotoAboutUsPage,
                       dense: true,
                     ),
+
+                    if(SessionService.hasAnyLogin())
+                      ListTile(
+                        title: Text(AppMessages.logout).color(Colors.redAccent),
+                        leading: const Icon(AppIcons.logout, size: 18, color: Colors.redAccent),
+                        onTap: onLogoffCall,
+                        dense: true,
+                      ),
 
                     Builder(
                       builder: (context) {

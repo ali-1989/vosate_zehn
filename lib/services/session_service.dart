@@ -91,7 +91,6 @@ class SessionService {
 		}
 
 		final newUser = UserModel.fromMap(json);
-
 		//newUser.token?.refreshToken = json['refreshToken'];
 
 		newUser.loginDate = DateHelper.nowMinusUtcOffset();
@@ -118,7 +117,6 @@ class SessionService {
 
 				thisUserBeforeLogin.matchBy(newUser);
 				_setLastLoginUser(thisUserBeforeLogin);
-
 				await EventNotifierService.notify(AppEvents.userPersonalInfoChange, data: thisUserBeforeLogin);
 
 				return thisUserBeforeLogin;

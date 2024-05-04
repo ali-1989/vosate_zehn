@@ -14,11 +14,11 @@ enum UiStates {
     }
 
     if(data is String) {
-      values.firstWhere((e) => e.name == data, orElse: ()=> UiStates.normal);
+      return values.firstWhere((e) => e.name == data, orElse: ()=> UiStates.normal);
     }
 
     if(data is int) {
-      values.firstWhere((e) => e._id == data, orElse: ()=> UiStates.normal);
+      return values.firstWhere((e) => e._id == data, orElse: ()=> UiStates.normal);
     }
 
     return UiStates.normal;

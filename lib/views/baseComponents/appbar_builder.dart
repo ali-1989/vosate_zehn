@@ -64,6 +64,7 @@ class AppBarCustom extends AppBar {
     super.toolbarTextStyle,
     super.titleTextStyle,
     super.systemOverlayStyle,
+    super.forceMaterialTransparency,
     //super.shape,
   }) : super(
   shape: const RoundedRectangleBorder(
