@@ -49,11 +49,11 @@ enum BucketTypes {
     }
 
     if (data is String) {
-      values.firstWhere((e) => e.name == data, orElse: () => BucketTypes.video);
+      return values.firstWhere((e) => e.name == data, orElse: () => BucketTypes.video);
     }
 
     if (data is int) {
-      values.firstWhere((e) => e._id == data, orElse: () => BucketTypes.video);
+      return values.firstWhere((e) => e._id == data, orElse: () => BucketTypes.video);
     }
 
     return BucketTypes.video;

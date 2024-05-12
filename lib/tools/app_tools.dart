@@ -1,5 +1,13 @@
 import 'dart:async';
 
+import 'package:app/services/last_seen_service.dart';
+import 'package:app/services/vip_service.dart';
+import 'package:app/structures/enums/enums.dart';
+import 'package:app/structures/models/bucketModel.dart';
+import 'package:app/structures/models/subBuketModel.dart';
+import 'package:app/views/pages/levels/audio_player_page.dart';
+import 'package:app/views/pages/levels/multi_item_page.dart';
+import 'package:app/views/pages/levels/video_player_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/dateSection/dateHelper.dart';
@@ -89,6 +97,68 @@ class AppTools {
     requester.request();
 
     return retCom.future;
+  }
+
+  static void onItemClick2(BuildContext context, SubBucketModel itm) {
+    if(itm.type == SubBucketTypes.video.id()){
+      final inject = VideoPlayerPageInjectData();
+      inject.srcAddress = itm.mediaModel!.url!;
+      inject.videoSourceType = VideoSourceType.network;
+
+      RouteTools.pushPage(context, VideoPlayerPage(injectData: inject));
+      return;
+    }
+
+    if(itm.type == SubBucketTypes.audio.id()){
+      final inject = AudioPlayerPageInjectData();
+      inject.srcAddress = itm.mediaModel!.url!;
+      inject.audioSourceType = AudioSourceType.network;
+      inject.title = '';//widget.injectData.level1model?.title;
+      inject.subTitle = itm.title;
+
+      RouteTools.pushPage(context, AudioPlayerPage(injectData: inject));
+      return;
+    }
+
+    if(itm.type == SubBucketTypes.list.id()){
+      RouteTools.pushPage(context, MultiItemPage(subBucket: itm));
+      return;
+    }
+  }
+
+  static void onItemClick(BuildContext context, SubBucketModel itm, {BucketModel? bucketModel}) {
+    final canContinue = VipService.checkVip(context, itm);
+
+    if(!canContinue){
+      return;
+    }
+
+    LastSeenService.addItem(itm);
+
+    if(itm.type == SubBucketTypes.video.id()){
+      final inject = VideoPlayerPageInjectData();
+      inject.srcAddress = itm.mediaModel!.url!;
+      inject.videoSourceType = VideoSourceType.network;
+
+      RouteTools.pushPage(context, VideoPlayerPage(injectData: inject));
+      return;
+    }
+
+    if(itm.type == SubBucketTypes.audio.id()){
+      final inject = AudioPlayerPageInjectData();
+      inject.srcAddress = itm.mediaModel!.url!;
+      inject.audioSourceType = AudioSourceType.network;
+      inject.title = bucketModel?.title;
+      inject.subTitle = itm.title;
+
+      RouteTools.pushPage(context, AudioPlayerPage(injectData: inject));
+      return;
+    }
+
+    if(itm.type == SubBucketTypes.list.id()){
+      RouteTools.pushPage(context, MultiItemPage(subBucket: itm));
+      return;
+    }
   }
 
 }

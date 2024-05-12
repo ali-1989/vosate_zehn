@@ -1,3 +1,4 @@
+import 'package:app/tools/app_tools.dart';
 import 'package:flutter/material.dart';
 
 import 'package:carousel_slider/carousel_slider.dart';
@@ -10,9 +11,7 @@ import 'package:app/managers/advertising_manager.dart';
 import 'package:app/managers/carousel_manager.dart';
 import 'package:app/managers/media_manager.dart';
 import 'package:app/services/favorite_service.dart';
-import 'package:app/services/last_seen_service.dart';
 import 'package:app/services/session_service.dart';
-import 'package:app/services/vip_service.dart';
 import 'package:app/structures/abstract/state_super.dart';
 import 'package:app/structures/enums/enums.dart';
 import 'package:app/structures/middleWares/requester.dart';
@@ -26,19 +25,13 @@ import 'package:app/tools/app/app_images.dart';
 import 'package:app/tools/app/app_messages.dart';
 import 'package:app/tools/app/app_themes.dart';
 import 'package:app/tools/app/app_toast.dart';
-import 'package:app/tools/route_tools.dart';
-import 'package:app/views/pages/levels/audio_player_page.dart';
-import 'package:app/views/pages/levels/content_view_page.dart';
-import 'package:app/views/pages/levels/video_player_page.dart';
 import 'package:app/views/states/empty_data.dart';
 import 'package:app/views/states/error_occur.dart';
 import 'package:app/views/states/wait_to_load.dart';
 
 class HomePage extends StatefulWidget {
-  // ignore: prefer_const_constructors_in_immutables
-  HomePage({
-    super.key,
-  });
+
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -367,7 +360,7 @@ class _HomePageState extends StateSuper<HomePage> {
           padding: const EdgeInsets.symmetric(horizontal: 12.0),
           child: InkWell(
             onTap: (){
-              onItemClick(itm);
+              AppTools.onItemClick(context, itm);
             },
             child: DecoratedBox(
               decoration: BoxDecoration(
@@ -564,44 +557,6 @@ class _HomePageState extends StateSuper<HomePage> {
     }
 
     //this is will call by broadcast : assistCtr.updateHead();
-  }
-
-  void onItemClick(SubBucketModel itm) {
-    final canContinue = VipService.checkVip(context, itm);
-
-    if(!canContinue){
-      return;
-    }
-
-    LastSeenService.addItem(itm);
-
-    if(itm.type == SubBucketTypes.video.id()){
-      final inject = VideoPlayerPageInjectData();
-      inject.srcAddress = itm.mediaModel!.url!;
-      inject.videoSourceType = VideoSourceType.network;
-
-      RouteTools.pushPage(context, VideoPlayerPage(injectData: inject));
-      return;
-    }
-
-    if(itm.type == SubBucketTypes.audio.id()){
-      final inject = AudioPlayerPageInjectData();
-      inject.srcAddress = itm.mediaModel!.url!;
-      inject.audioSourceType = AudioSourceType.network;
-      inject.title = '';
-      inject.subTitle = itm.title;
-
-      RouteTools.pushPage(context, AudioPlayerPage(injectData: inject));
-      return;
-    }
-
-    if(itm.type == SubBucketTypes.list.id()){
-      final inject = ContentViewPageInjectData();
-      inject.subBucket = itm;
-
-      RouteTools.pushPage(context, ContentViewPage(injectData: inject));
-      return;
-    }
   }
 
   void requestData() async {

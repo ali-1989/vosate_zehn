@@ -1,3 +1,5 @@
+import 'package:app/services/vip_service.dart';
+import 'package:app/tools/app/app_icons.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -31,23 +33,20 @@ import 'package:app/views/pages/levels/video_player_page.dart';
 import 'package:app/views/states/error_occur.dart';
 import 'package:app/views/states/wait_to_load.dart';
 
-class ContentViewPageInjectData {
-  late SubBucketModel subBucket;
-}
-///-----------------------------------------------------------------------------
-class ContentViewPage extends StatefulWidget{
-  final ContentViewPageInjectData injectData;
+// old name: ContentViewPage
+class MultiItemPage extends StatefulWidget{
+  final SubBucketModel subBucket;
 
-  const ContentViewPage({
-    required this.injectData,
+  const MultiItemPage({
+    required this.subBucket,
     super.key,
   });
 
   @override
-  State<ContentViewPage> createState() => _LevelPageState();
+  State<MultiItemPage> createState() => _LevelPageState();
 }
 ///=============================================================================
-class _LevelPageState extends StateSuper<ContentViewPage> {
+class _LevelPageState extends StateSuper<MultiItemPage> {
   Requester requester = Requester();
   bool isInFetchData = true;
   String state$fetchData = 'state_fetchData';
@@ -78,7 +77,7 @@ class _LevelPageState extends StateSuper<ContentViewPage> {
         builder: (context, ctr, data) {
           return Scaffold(
             appBar: AppBarCustom(
-              title: Text(widget.injectData.subBucket.title),
+              title: Text(widget.subBucket.title),
             ),
             body: buildBody(),
           );
@@ -99,14 +98,14 @@ class _LevelPageState extends StateSuper<ContentViewPage> {
               borderRadius: BorderRadius.circular(10),
               child: Builder(
                 builder: (ctx){
-                  if(widget.injectData.subBucket.imageModel?.url != null){
+                  if(widget.subBucket.imageModel?.url != null){
                     return IrisImageView(
                       width: double.infinity,
                       height: 160,
                       //beforeLoadWidget: SizedBox(height: 160),
                       fit: BoxFit.fill,
-                      url: widget.injectData.subBucket.imageModel!.url!,
-                      imagePath: AppDirectories.getSavePathMedia(widget.injectData.subBucket.imageModel, SavePathType.anyOnInternal, null),
+                      url: widget.subBucket.imageModel!.url!,
+                      imagePath: AppDirectories.getSavePathMedia(widget.subBucket.imageModel, SavePathType.anyOnInternal, null),
                     );
                   }
 
@@ -119,7 +118,7 @@ class _LevelPageState extends StateSuper<ContentViewPage> {
           /// description
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-            child: Text(widget.injectData.subBucket.description?? '',
+            child: Text(widget.subBucket.description?? '',
               textAlign: TextAlign.justify,
             ).bold().fsR(2),
           ),
@@ -147,7 +146,6 @@ class _LevelPageState extends StateSuper<ContentViewPage> {
                 if(!assistCtr.hasState(state$fetchData)){
                   return SizeInInfinity(
                       builder: (BuildContext context, double? top, double? realHeight, double? height) {
-
                         if(height == null){
                           return const SizedBox();
                         }
@@ -164,33 +162,58 @@ class _LevelPageState extends StateSuper<ContentViewPage> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     /// speaker
-                    Builder(
-                      builder: (context) {
-                        if(contentModel!.speakerModel != null){
-                          return Align(
-                            alignment: Alignment.centerRight,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 20),
-                              child: AvatarChip(
-                                label: Text(contentModel!.speakerModel?.name?? ''),
-                                avatar: contentModel!.speakerModel?.profileModel != null?
-                                ClipOval(
-                                    child: IrisImageView(
-                                      width: 60,
-                                      height: 60,
-                                      fit: BoxFit.fill,
-                                      url: contentModel!.speakerModel!.profileModel!.url!,
-                                      imagePath: AppDirectories.getSavePathMedia(contentModel!.speakerModel!.profileModel, SavePathType.anyOnInternal, null),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Builder(
+                          builder: (context) {
+                            if(contentModel!.speakerModel != null){
+                              return Align(
+                                alignment: Alignment.centerRight,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                                  child: AvatarChip(
+                                    label: Text(contentModel!.speakerModel?.name?? ''),
+                                    avatar: contentModel!.speakerModel?.profileModel != null?
+                                    ClipOval(
+                                        child: IrisImageView(
+                                          width: 60,
+                                          height: 60,
+                                          fit: BoxFit.fill,
+                                          url: contentModel!.speakerModel!.profileModel!.url!,
+                                          imagePath: AppDirectories.getSavePathMedia(contentModel!.speakerModel!.profileModel, SavePathType.anyOnInternal, null),
+                                        )
                                     )
-                                )
-                                    : null,
-                              ),
-                            ),
-                          );
-                        }
+                                        : null,
+                                  ),
+                                ),
+                              );
+                            }
 
-                        return const SizedBox(height: 20);
-                      }
+                            return const SizedBox(height: 20);
+                          }
+                        ),
+
+                        Builder(
+                            builder: (_){
+                              if(widget.subBucket.isVip){
+                                return Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                                      child: ElevatedButton(
+                                          onPressed: onBuyClick,
+                                          child: const Icon(AppIcons.buyBasket, size: 20)
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              }
+
+                              return const SizedBox();
+                            }
+                        )
+                      ],
                     ),
 
 
@@ -326,10 +349,10 @@ class _LevelPageState extends StateSuper<ContentViewPage> {
   }
 
   void onItemClick(MediaModelWrapForContent media) {
+    final curIdx = contentModel!.mediaIds.indexWhere((element) => element == media.id);
+
     if(!media.isSee && contentModel!.hasOrder){
       //final contentModel = widget.injectData.subBucket.contentModel;
-      final curIdx = contentModel!.mediaIds.indexWhere((element) => element == media.id);
-
       if(curIdx > 0){
         final preModelId = contentModel!.mediaIds.elementAt(curIdx-1);
         final preModel = mediaList.firstWhere((itm) => itm.id == preModelId);
@@ -341,14 +364,22 @@ class _LevelPageState extends StateSuper<ContentViewPage> {
       }
     }
 
+    if(curIdx > 0 && widget.subBucket.isVip){
+      final canContinue = VipService.checkVipForMultiItemPage(context, media);
+
+      if(!canContinue){
+        return;
+      }
+    }
+
     SubBucketTypes? type;
 
-    if(widget.injectData.subBucket.contentType > 0){
-      if(widget.injectData.subBucket.contentType == SubBucketTypes.video.id()){
+    if(widget.subBucket.contentType > 0){
+      if(widget.subBucket.contentType == SubBucketTypes.video.id()){
         type = SubBucketTypes.video;
       }
 
-      else if(widget.injectData.subBucket.contentType == SubBucketTypes.audio.id()){
+      else if(widget.subBucket.contentType == SubBucketTypes.audio.id()){
         type = SubBucketTypes.audio;
       }
     }
@@ -405,7 +436,7 @@ class _LevelPageState extends StateSuper<ContentViewPage> {
     final js = <String, dynamic>{};
     js[Keys.request] = 'get_bucket_content_data';
     js[Keys.requesterId] = SessionService.getLastLoginUser()?.userId;
-    js[Keys.id] = widget.injectData.subBucket.id;
+    js[Keys.id] = widget.subBucket.id;
 
     requester.bodyJson = js;
 
@@ -468,7 +499,7 @@ class _LevelPageState extends StateSuper<ContentViewPage> {
     final js = <String, dynamic>{};
     js[Keys.request] = 'set_content_seen';
     js[Keys.requesterId] = user.userId;
-    js[Keys.id] = widget.injectData.subBucket.id;
+    js[Keys.id] = widget.subBucket.id;
     js['content_id'] = contentModel!.id;
     js['media_id'] = media.id;
 
@@ -489,5 +520,8 @@ class _LevelPageState extends StateSuper<ContentViewPage> {
     requester.bodyJson = js;
     requester.prepareUrl();
     requester.request();
+  }
+
+  void onBuyClick() {
   }
 }

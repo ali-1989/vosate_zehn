@@ -88,7 +88,8 @@ class AppHttpDio {
 						//return handler.resolve(response);
 						//return handler.reject(dioError);
 					},
-					onResponse: (Response<dynamic> res, ResponseInterceptorHandler handler) {
+
+					onResponse: (Response<dynamic> res, ResponseInterceptorHandler handler) async {
 						if(httpItem.debugMode) {
 							var txt = '\n----------------- http Debug [onResponse]\n';
 							txt += 'statusCode:  ${res.statusCode}\n';
@@ -103,10 +104,19 @@ class AppHttpDio {
 								|| res.statusCode != 200
 								|| res.data == null);
 
+						//final exist = res.requestOptions.headers['Authorization'] == 'a';
+						/*if (res.statusCode == 401) {
+							String newAccessToken = '';//await refreshToken();
+							res.requestOptions.headers['Authorization'] = 'Bearer $newAccessToken';
+
+							return handler.resolve( await dio.fetch(res.requestOptions));
+						}*/
+
 						if(httpItem.onResponseCall?.call(res)?? true) {
-							handler.next(res);
+							handler.next(res); // same: handler.resolve(res);
 						}
 					},
+
 					onError: (DioException err, ErrorInterceptorHandler handler) async {
 						if(httpItem.debugMode) {
 							var txt = '\n----------------- http Debug [onError]\n';

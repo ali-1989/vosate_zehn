@@ -1,8 +1,4 @@
-import 'package:app/services/session_service.dart';
-import 'package:app/structures/enums/user_type.dart';
-import 'package:app/system/extensions.dart';
-import 'package:app/tools/app/app_broadcast.dart';
-import 'package:app/views/pages/profile/profile_page.dart';
+import 'package:app/services/vip_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:move_to_background/move_to_background.dart';
@@ -11,8 +7,12 @@ import 'package:shaped_bottom_bar/shaped_bottom_bar.dart';
 import 'package:shaped_bottom_bar/utils/arrays.dart';
 
 import 'package:app/services/aid_service.dart';
+import 'package:app/services/session_service.dart';
 import 'package:app/structures/abstract/state_super.dart';
 import 'package:app/structures/enums/enums.dart';
+import 'package:app/structures/enums/user_type.dart';
+import 'package:app/system/extensions.dart';
+import 'package:app/tools/app/app_broadcast.dart';
 import 'package:app/tools/app/app_icons.dart';
 import 'package:app/tools/app/app_messages.dart';
 import 'package:app/tools/app/app_themes.dart';
@@ -21,6 +21,7 @@ import 'package:app/views/baseComponents/appbar_builder.dart';
 import 'package:app/views/baseComponents/drawer_builder.dart';
 import 'package:app/views/pages/home_page.dart';
 import 'package:app/views/pages/levels/bucket_page.dart';
+import 'package:app/views/pages/profile/profile_page.dart';
 import 'package:app/views/pages/search_page.dart';
 
 class LayoutPage extends StatefulWidget{
@@ -138,6 +139,13 @@ class LayoutPageState extends StateSuper<LayoutPage> {
             ],
           ),
         ),*/
+
+        IconButton(
+            onPressed: (){
+              VipService.gotoBuyVipPage(context);
+            },
+            icon: const Icon(AppIcons.buyBasket, color: Colors.white)
+        ),
 
         IconButton(
             onPressed: (){

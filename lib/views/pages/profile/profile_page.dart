@@ -279,9 +279,17 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
 
                               Row(
                                 children: [
-                                  GestureDetector(
+                                  /*GestureDetector(
                                     onTap: onBuyVipPlan,
                                     child: const Icon(AppIcons.buyBasket, color: Colors.blueAccent),
+                                  ),*/
+
+                                  OutlinedButton(
+                                    style: OutlinedButton.styleFrom(
+                                      side: const BorderSide(color: Colors.blue),
+                                    ),
+                                      onPressed: onBuyVipPlan,
+                                      child: const Icon(AppIcons.buyBasket, color: Colors.blueAccent)
                                   ),
 
                                   const SizedBox(width: 6),

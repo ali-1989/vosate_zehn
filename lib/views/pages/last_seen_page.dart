@@ -1,3 +1,4 @@
+import 'package:app/tools/app_tools.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/duration/durationFormatter.dart';
@@ -16,22 +17,18 @@ import 'package:app/tools/app/app_images.dart';
 import 'package:app/tools/app/app_messages.dart';
 import 'package:app/tools/app/app_themes.dart';
 import 'package:app/tools/app/app_toast.dart';
-import 'package:app/tools/route_tools.dart';
 import 'package:app/views/baseComponents/appbar_builder.dart';
-import 'package:app/views/pages/levels/audio_player_page.dart';
-import 'package:app/views/pages/levels/content_view_page.dart';
-import 'package:app/views/pages/levels/video_player_page.dart';
 import 'package:app/views/states/empty_data.dart';
 import 'package:app/views/states/wait_to_load.dart';
 
 class LastSeenPage extends StatefulWidget{
 
-  const LastSeenPage({Key? key}) : super(key: key);
+  const LastSeenPage({super.key});
 
   @override
   State<LastSeenPage> createState() => _LastSeenPageState();
 }
-///==================================================================================
+///=============================================================================
 class _LastSeenPageState extends StateSuper<LastSeenPage> {
   List<SubBucketModel> listItems = [];
 
@@ -87,7 +84,7 @@ class _LastSeenPageState extends StateSuper<LastSeenPage> {
       height: 130,
       child: InkWell(
         onTap: (){
-          onItemClick(itm);
+          AppTools.onItemClick(context, itm);
         },
         child: Padding(
           padding: const EdgeInsets.all(12.0),
@@ -228,36 +225,6 @@ class _LastSeenPageState extends StateSuper<LastSeenPage> {
     listItems.removeWhere((element) => element.id == itm.id);
 
     assistCtr.updateHead();
-  }
-
-  void onItemClick(SubBucketModel itm) {
-    if(itm.type == SubBucketTypes.video.id()){
-      final inject = VideoPlayerPageInjectData();
-      inject.srcAddress = itm.mediaModel!.url!;
-      inject.videoSourceType = VideoSourceType.network;
-
-      RouteTools.pushPage(context, VideoPlayerPage(injectData: inject));
-      return;
-    }
-
-    if(itm.type == SubBucketTypes.audio.id()){
-      final inject = AudioPlayerPageInjectData();
-      inject.srcAddress = itm.mediaModel!.url!;
-      inject.audioSourceType = AudioSourceType.network;
-      inject.title = '';//widget.injectData.level1model?.title;
-      inject.subTitle = itm.title;
-
-      RouteTools.pushPage(context, AudioPlayerPage(injectData: inject));
-      return;
-    }
-
-    if(itm.type == SubBucketTypes.list.id()){
-      final inject = ContentViewPageInjectData();
-      inject.subBucket = itm;
-
-      RouteTools.pushPage(context, ContentViewPage(injectData: inject));
-      return;
-    }
   }
 
   void fetchData() async {

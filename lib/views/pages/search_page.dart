@@ -24,23 +24,19 @@ import 'package:app/tools/app/app_messages.dart';
 import 'package:app/tools/app/app_themes.dart';
 import 'package:app/tools/app_tools.dart';
 import 'package:app/tools/request_options.dart';
-import 'package:app/tools/route_tools.dart';
 import 'package:app/views/baseComponents/appbar_builder.dart';
-import 'package:app/views/pages/levels/audio_player_page.dart';
-import 'package:app/views/pages/levels/content_view_page.dart';
-import 'package:app/views/pages/levels/video_player_page.dart';
 import 'package:app/views/states/empty_data.dart';
 import 'package:app/views/states/error_occur.dart';
 import 'package:app/views/states/wait_to_load.dart';
 
 class SearchPage extends StatefulWidget {
 
-  const SearchPage({Key? key}) : super(key: key);
+  const SearchPage({super.key});
 
   @override
   State<SearchPage> createState() => _SearchPageState();
 }
-///====================================================================================================
+///=============================================================================
 class _SearchPageState extends StateSuper<SearchPage> {
   List<SubBucketModel> foundList = [];
   late ThemeData chipTheme;
@@ -301,34 +297,7 @@ class _SearchPageState extends StateSuper<SearchPage> {
 
   void onItemClick(SubBucketModel itm) {
     FocusHelper.hideKeyboardByUnFocus(context);
-
-    if(itm.type == SubBucketTypes.video.id()){
-      final inject = VideoPlayerPageInjectData();
-      inject.srcAddress = itm.mediaModel!.url!;
-      inject.videoSourceType = VideoSourceType.network;
-
-      RouteTools.pushPage(context, VideoPlayerPage(injectData: inject));
-      return;
-    }
-
-    if(itm.type == SubBucketTypes.audio.id()){
-      final inject = AudioPlayerPageInjectData();
-      inject.srcAddress = itm.mediaModel!.url!;
-      inject.audioSourceType = AudioSourceType.network;
-      inject.title = '';//widget.injectData.level1model?.title;
-      inject.subTitle = itm.title;
-
-      RouteTools.pushPage(context, AudioPlayerPage(injectData: inject));
-      return;
-    }
-
-    if(itm.type == SubBucketTypes.list.id()){
-      final inject = ContentViewPageInjectData();
-      inject.subBucket = itm;
-
-      RouteTools.pushPage(context, ContentViewPage(injectData: inject));
-      return;
-    }
+    AppTools.onItemClick(context, itm);
   }
 
   void onLoadingMoreCall(){

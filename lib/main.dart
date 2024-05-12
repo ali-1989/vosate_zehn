@@ -66,7 +66,7 @@ Future<(bool, String?)> prepareDirectoriesAndLogger() async {
 }
 ///=============================================================================
 void onErrorCatch(FlutterErrorDetails errorDetails) {
-  var txt = 'MAIN-ERROR-CATCH:: ${errorDetails.exception}';
+  var txt = 'MAIN-ERROR-CATCH:${Constants.appName}: ${errorDetails.exception}';
 
   if(!kIsWeb) {
     txt += '\nLIBRARY: ${errorDetails.library}';
@@ -84,7 +84,7 @@ void onErrorCatch(FlutterErrorDetails errorDetails) {
 }
 ///=============================================================================
 bool mainIsolateError(error, sTrace) {
-  var txt = 'MAIN-ISOLATE:: ${error.toString()}';
+  var txt = 'MAIN-ISOLATE:${Constants.appName}: ${error.toString()}';
 
   if(!(kDebugMode || kIsWeb)) {
     txt += '\nSTACK TRACE: $sTrace';
@@ -102,7 +102,7 @@ bool mainIsolateError(error, sTrace) {
 }
 ///=============================================================================
 void zonedGuardedCatch(error, sTrace) {
-  var txt = 'MAIN-ZONED-GUARDED:: ${error.toString()}';
+  var txt = 'MAIN-ZONED-GUARDED:${Constants.appName}: ${error.toString()}';
 
   if(!(kDebugMode || kIsWeb)) {
     txt += '\nSTACK TRACE: $sTrace';

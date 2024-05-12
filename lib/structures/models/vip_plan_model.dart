@@ -19,7 +19,6 @@ class VipPlanModel {
     title = map['title'];
     description = map['description'];
     expireDate = DateHelper.timestampToSystem(map['expire_date']);
-
   }
 
   Map<String, dynamic> toMap() {
