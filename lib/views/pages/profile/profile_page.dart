@@ -51,8 +51,7 @@ import 'package:app/views/components/dateComponents/selectDateCalendarView.dart'
 import 'package:app/views/components/selectGenderView.dart';
 
 class ProfilePage extends StatefulWidget{
-
-  const ProfilePage({Key? key}) : super(key: key);
+  const ProfilePage({super.key});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -67,6 +66,7 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
     super.initState();
 
     requestProfileData();
+    VipService.checkAutoBazarPurchase();
     //addPostOrCall(fn: checkPermission);
   }
 
@@ -286,10 +286,10 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
 
                                   OutlinedButton(
                                     style: OutlinedButton.styleFrom(
-                                      side: const BorderSide(color: Colors.blue),
+                                      side: const BorderSide(color: Colors.white),
                                     ),
                                       onPressed: onBuyVipPlan,
-                                      child: const Icon(AppIcons.buyBasket, color: Colors.blueAccent)
+                                      child: const Icon(AppIcons.buyBasket, color: Colors.white)
                                   ),
 
                                   const SizedBox(width: 6),

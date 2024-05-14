@@ -81,7 +81,7 @@ class LayoutPageState extends StateSuper<LayoutPage> {
         allowImplicitScrolling: false,
         controller: pageController,
         children: [
-          HomePage(),
+          const HomePage(),
           BucketPage(injectData: BucketPageInjectData()..bucketTypes = BucketTypes.meditation),
           BucketPage(injectData: BucketPageInjectData()..bucketTypes = BucketTypes.motion),
           BucketPage(injectData: BucketPageInjectData()..bucketTypes = BucketTypes.video),
@@ -93,7 +93,7 @@ class LayoutPageState extends StateSuper<LayoutPage> {
 
   AppBar buildAppBar(){
     return AppBarCustom(
-      title: Text(AppMessages.appName).color(Colors.blueAccent),
+      title: Text(AppMessages.appName).color(const Color(0xFF1446AF)),
 
       leadingWidth: 130,
       leading: Row(
@@ -105,7 +105,7 @@ class LayoutPageState extends StateSuper<LayoutPage> {
             },
             child: const Padding(
               padding: EdgeInsets.only(right: 8),
-              child: Icon(AppIcons.list, size: 30, color: Colors.blueAccent),
+              child: Icon(AppIcons.list, size: 30, color: Color(0xFF1446AF)),
             ),
           ),
 

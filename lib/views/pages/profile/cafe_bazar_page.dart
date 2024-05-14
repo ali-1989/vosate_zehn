@@ -1,25 +1,20 @@
+import 'package:app/services/vip_service.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter_poolakey/flutter_poolakey.dart';
 import 'package:iris_tools/api/helpers/mathHelper.dart';
-import 'package:iris_tools/dateSection/dateHelper.dart';
 import 'package:iris_tools/modules/stateManagers/assist.dart';
 import 'package:iris_tools/widgets/custom_card.dart';
 
 import 'package:app/services/cafe_bazar_service.dart';
-import 'package:app/services/session_service.dart';
 import 'package:app/structures/abstract/state_super.dart';
 import 'package:app/structures/middleWares/requester.dart';
 import 'package:app/structures/models/vip_plan_model.dart';
 import 'package:app/system/extensions.dart';
-import 'package:app/system/keys.dart';
 import 'package:app/tools/app/app_decoration.dart';
 import 'package:app/tools/app/app_icons.dart';
 import 'package:app/tools/app/app_messages.dart';
-import 'package:app/tools/app/app_sheet.dart';
 import 'package:app/tools/app/app_toast.dart';
 import 'package:app/tools/currency_tools.dart';
-import 'package:app/tools/route_tools.dart';
 import 'package:app/views/baseComponents/appbar_builder.dart';
 import 'package:app/views/states/empty_data.dart';
 import 'package:app/views/states/error_occur.dart';
@@ -213,51 +208,12 @@ class _CafeBazarPageState extends StateSuper<CafeBazarPage> {
    final res = await CafeBazarService().doSubscribe('c${model.id}', payload: '${model.id}');
 
    if(res != null && res.payload == '${model.id}'){
-     sendDataToServer(res, model);
+     VipService.sendCafeBazarPurchaseToServer(res, model, false);
    }
    else {
      AppToast.showToast(context, 'خرید انجام نشد.');
    }
  }
-
-  void sendDataToServer(PurchaseInfo itm, VipPlanModel model) async {
-    final user = SessionService.getLastLoginUser();
-    final ts = DateTime.fromMillisecondsSinceEpoch(itm.purchaseTime);
-
-    final js = <String, dynamic>{};
-    js[Keys.request] = 'register_cafe_bazar_purchase';
-    js[Keys.requesterId] = user!.userId;
-    js[Keys.userId] = user.userId;
-    js['amount'] = model.amount;
-    js['plan_id'] = model.id;
-    js['days'] = model.days;
-    js['purchase_token'] = itm.purchaseToken;
-    js['product_id'] = itm.productId;
-    js['package_name'] = itm.packageName;
-    js['purchase_state'] = itm.purchaseState.name;
-    js['purchase_ts'] = DateHelper.toTimestampNullable(ts);
-    js['data_signature'] = itm.dataSignature;
-    js['order_id'] = itm.orderId;
-
-    void subFn(bool isFirst) async {
-      showLoading();
-      final res = await CafeBazarService().sendDataToServer(js, isFirst: isFirst);
-      await hideLoading();
-
-      if(res){
-        RouteTools.popIfCan(context);
-      }
-      else {
-        AppSheet.showSheetOneAction(context,
-          'فرایند به درستی انجام نشد.لطفا دوباره تلاش کنید.',
-          buttonText: 'تلاش مجدد',
-          onButton: ()=> subFn(false),
-        );
-      }
-    }
-
-    subFn(true);
-  }
 
   void onTryToConnect() {
     assistCtr.addStateWithClear(AssistController.state$loading);

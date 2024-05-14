@@ -85,6 +85,7 @@ class Requester {
 
     if(_bodyJs != null) {
       _http.body = JsonHelper.mapToJson(_bodyJs!);
+      _http.headers.putIfAbsent('scope', () => _bodyJs![Keys.request]?? 'none');
     }
 
     AppHttpDio.cancelAndClose(_httpRequester);

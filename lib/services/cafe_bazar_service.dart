@@ -76,7 +76,17 @@ class CafeBazarService {
 
   /// all user's subscriptions, must user be login in bazar app.
   Future<List<PurchaseInfo>> getAllSubscribedProducts() async {
-    return FlutterPoolakey.getAllSubscribedProducts();
+    try{
+      return FlutterPoolakey.getAllSubscribedProducts();
+    }
+    catch(e){
+      return [];
+    }
+  }
+
+  /// check user's subscribe for a product
+  Future<PurchaseInfo?> querySubscribedProduct(String productId) async {
+    return FlutterPoolakey.querySubscribedProduct(productId);
   }
 
   Future<List<SkuDetails>> getSubscriptionSkuDetails(List<String> products) async {
@@ -84,10 +94,10 @@ class CafeBazarService {
   }
 
   Future<int> sinkFailedSendBuy(Map<String, dynamic> js) {
-    /*var x = <String, dynamic>{};
+    var x = <String, dynamic>{};
     x['subject'] = 'cafe_bazar_not_connect_to_app';
     x.addAll(x);
-    LogTools.reportLogToServer(x);*///todo.
+    LogTools.reportLogToServer(x);//todo.
 
     final cons = Conditions();
     cons.add(Condition()..key = Keys.userId..value = js[Keys.userId]);

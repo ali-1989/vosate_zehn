@@ -8,7 +8,7 @@ homepage: https://vosatezehn.ir
 
 publish_to: 'none'
 
-version: 5.4.1+34
+version: 5.4.2+35
 
 
 environment:

@@ -232,23 +232,30 @@ class Token {
 }
 ///=============================================================================
 class VipOptionsModel {
-  late DateTime expireDate;
+  DateTime? expireDate;
+  String? productId;
 
-  VipOptionsModel() : expireDate = DateHelper.nowMinusUtcOffset();
+  VipOptionsModel();// : expireDate = DateHelper.nowMinusUtcOffset();
 
   VipOptionsModel.fromMap(Map map){
-    expireDate = DateHelper.timestampToSystem(map['expire_time'])?? DateHelper.nowMinusUtcOffset();
+    expireDate = DateHelper.timestampToSystem(map['expire_time']);// ?? DateHelper.nowMinusUtcOffset();
+    productId = map['product_id'];
   }
 
   Map<String, dynamic> toMap(){
     final res = <String, dynamic>{};
     res['expire_time'] = DateHelper.toTimestampNullable(expireDate);
+    res['product_id'] = productId;
 
     return res;
   }
 
   Duration _getDuration(){
-    return expireDate.difference(DateHelper.nowMinusUtcOffset());
+    if(expireDate == null){
+      return const Duration(seconds: 0);
+    }
+
+    return expireDate!.difference(DateHelper.nowMinusUtcOffset());
   }
 
   int getDays(){

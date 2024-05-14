@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app/services/vip_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -188,6 +189,7 @@ class SplashManager {
       AdvertisingManager.init();
       AdvertisingManager.check();
       CafeBazarService().reSendFailed();
+      VipService.checkAutoBazarPurchase();
 
       if (kIsWeb) {
         FireBaseService.start();
