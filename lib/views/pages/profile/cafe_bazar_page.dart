@@ -223,7 +223,8 @@ class _CafeBazarPageState extends StateSuper<CafeBazarPage> {
 
   void getVipList() async {
     final nList = <String>[];
-    for(var i=10; i< 400; i=i+5){
+
+    for(var i=15; i< 400; i= i+5){ // for see test options, set i to 10
       nList.add('c$i');
     }
 

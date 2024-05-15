@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:app/system/build_flavor.dart';
+import 'package:app/tools/app/app_loading.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -279,11 +281,6 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
 
                               Row(
                                 children: [
-                                  /*GestureDetector(
-                                    onTap: onBuyVipPlan,
-                                    child: const Icon(AppIcons.buyBasket, color: Colors.blueAccent),
-                                  ),*/
-
                                   OutlinedButton(
                                     style: OutlinedButton.styleFrom(
                                       side: const BorderSide(color: Colors.white),
@@ -309,7 +306,21 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text('${AppMessages.savedVtiTime}:').color(Colors.white),
-                                  Text(user.vipOptions.getHumanVipTime()).color(Colors.white),
+
+                                  Row(
+                                    children: [
+                                      Visibility(
+                                        visible: BuildFlavor.isForBazar(),
+                                          child: GestureDetector(
+                                            onTap: onRefreshBazarVip,
+                                            child: const Icon(AppIcons.refresh, color: Colors.white),
+                                          ),
+                                      ),
+
+                                      const SizedBox(width: 5),
+                                      Text(user.vipOptions.getHumanVipTime()).color(Colors.white),
+                                    ],
+                                  ),
                                 ],
                               )
                           ),
@@ -777,5 +788,11 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
   void onBuyVipPlan() async {
     await RouteTools.pushPage(context, VipService.getPayPage());
     callState();
+  }
+
+  void onRefreshBazarVip() async {
+    await AppLoading.instance.showLoading(context);
+    await VipService.checkAutoBazarPurchase();
+    AppLoading.instance.hideLoading(context);
   }
 }

@@ -77,7 +77,8 @@ class CafeBazarService {
   /// all user's subscriptions, must user be login in bazar app.
   Future<List<PurchaseInfo>> getAllSubscribedProducts() async {
     try{
-      return FlutterPoolakey.getAllSubscribedProducts();
+      return FlutterPoolakey.getAllSubscribedProducts()
+          .catchError((e){return <PurchaseInfo>[];});
     }
     catch(e){
       return [];
@@ -86,11 +87,13 @@ class CafeBazarService {
 
   /// check user's subscribe for a product
   Future<PurchaseInfo?> querySubscribedProduct(String productId) async {
-    return FlutterPoolakey.querySubscribedProduct(productId);
+    return FlutterPoolakey.querySubscribedProduct(productId)
+        .catchError((e){return null;});
   }
 
   Future<List<SkuDetails>> getSubscriptionSkuDetails(List<String> products) async {
-    return FlutterPoolakey.getSubscriptionSkuDetails(products);
+    return FlutterPoolakey.getSubscriptionSkuDetails(products)
+        .catchError((e){return <SkuDetails>[];});
   }
 
   Future<int> sinkFailedSendBuy(Map<String, dynamic> js) {

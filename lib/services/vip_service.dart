@@ -139,7 +139,7 @@ class VipService {
     js[Keys.userId] = user.userId;
     js['amount'] = model?.amount;
     js['plan_id'] = model?.id;
-    js['days'] = model?.days;//todo. on server
+    js['days'] = model?.days;
     js['purchase_token'] = itm.purchaseToken;
     js['product_id'] = itm.productId;
     js['package_name'] = itm.packageName;
@@ -175,7 +175,7 @@ class VipService {
     subFn(true);
   }
 
-  static void checkAutoBazarPurchase() async {
+  static Future<void> checkAutoBazarPurchase() async {
     if(!BuildFlavor.isForBazar()){
       return;
     }
@@ -206,7 +206,6 @@ class VipService {
     }
 
     /* || user.vipOptions.expireDate == null*/
-
     if(!user.vipOptions.isVip() && last.purchaseState == PurchaseState.PURCHASED){
       await sendCafeBazarPurchaseToServer(last, null, true);
       AppTools.requestProfileDataForVip();

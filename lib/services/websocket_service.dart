@@ -174,7 +174,8 @@ class WebsocketService {
 
 	///-------------- onNew Ws Message -------------------------------------------
 	static void _handlerNewMessage(dynamic wsData) async {
-		Map<String, dynamic> js;
+		var js = <String, dynamic>{};
+
 		try {
 			if(wsData is! Map<String, dynamic>){
 				js = JsonHelper.jsonToMap<String, dynamic>(wsData)!;
@@ -201,7 +202,7 @@ class WebsocketService {
 						break;
 					case HttpCodes.forceLogOff$command:
 						// ignore: unawaited_futures
-						LoginService.forceLogoff(userId: userId);
+						LoginService.forceLogoff(userId: userId.toString());
 						break;
 					case HttpCodes.forceLogOffAll$command:
 						// ignore: unawaited_futures
@@ -220,8 +221,8 @@ class WebsocketService {
 				userDataSection(userId, command, data, js);
 			}
 		}
-		catch(e){
-			LogTools.logToAll('== Websocket error: $e');
+		catch(e, s){
+			LogTools.logToAll('== Websocket error: $e | $s \n $js');
 		}
 	}
 

@@ -28,7 +28,8 @@ class AppOverlay {
       );
     }*/
 
-    return OverlayDialog().show(context, v, canBack: canBack);
+    OverlayDialog().show(context, v, canBack: canBack);
+    return Future.delayed(const Duration(milliseconds: 250));
   }
 
   static void hideDialog(BuildContext context){
