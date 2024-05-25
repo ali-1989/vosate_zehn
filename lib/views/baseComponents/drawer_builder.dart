@@ -8,6 +8,7 @@ import 'package:iris_tools/api/helpers/colorHelper.dart';
 import 'package:iris_tools/api/helpers/fileHelper.dart';
 import 'package:iris_tools/api/helpers/mathHelper.dart';
 import 'package:iris_tools/modules/stateManagers/updater_state.dart';
+import 'package:iris_tools/widgets/custom_card.dart';
 import 'package:share_extend/share_extend.dart';
 
 import 'package:app/managers/version_manager.dart';
@@ -91,6 +92,12 @@ class DrawerMenuBuilder {
 
                     const SizedBox(height: 10),
 
+                    Center(child: CustomCard(
+                      color: AppDecoration.mainColor,
+                        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 3),
+                        child: Text(AppMessages.slogan))
+                    ),
+
                     if(SessionService.hasAnyLogin())
                       ListTile(
                         title: Text(SessionService.isGuestCurrent()? AppMessages.registerTitle :AppMessages.account).color(Colors.green),
@@ -98,6 +105,7 @@ class DrawerMenuBuilder {
                         onTap: SessionService.isGuestCurrent()? onLogoffCall : gotoProfilePage,
                         dense: true,
                       ),
+
 
                     ListTile(
                       title: Text(AppMessages.favorites),

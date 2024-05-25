@@ -25,7 +25,6 @@ dependencies:
 
   flutter_localizations:
     sdk: flutter
-
   #device_preview: ^1.1.0
   #cupertino_icons: ^1.0.8
   community_material_icon: ^5.9.55      # https://materialdesignicons.com/  https://www.fluttericon.com/
@@ -90,8 +89,9 @@ dependencies:
     git: https://github.com/ali-1989/IrisPicEditor.git
   iris_runtime_cache:
     git: https://github.com/ali-1989/irisRuntimeCache.git
-  iris_route:
-    git: https://github.com/ali-1989/iris_route.git
+  one_route:
+    #git: https://github.com/ali-1989/iris_route.git iris_route
+    path: ../../#FlutterPackages/OneRoute
 
 
 dependency_overrides:

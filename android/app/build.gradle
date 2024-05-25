@@ -21,7 +21,7 @@ if (flutterVersionCode == null) {
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
-    flutterVersionName = '0.0.1'
+    flutterVersionName = '0.1.0'
 }
 
 def minSdkVersionVal = localProperties.getProperty('flutter.minSdkVersion')
@@ -47,17 +47,12 @@ android {
     ndkVersion flutter.ndkVersion
     android.buildFeatures.buildConfig true
 
-    ndkVersion "25.1.8937393"
-
-    sourceSets {
-        main.java.srcDirs += 'src/main/java'
-    }
+    ndkVersion "25.1.8937393"    
 
     lintOptions {
         disable 'InvalidPackage'
         //checkReleaseBuilds false
     }
-
 
     java {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -80,6 +75,10 @@ android {
 
     kotlin {
         jvmToolchain(17)
+    }
+    
+    sourceSets {
+        main.java.srcDirs += 'src/main/java'
     }
 
     signingConfigs {

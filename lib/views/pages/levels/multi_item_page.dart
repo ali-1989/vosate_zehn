@@ -1,5 +1,6 @@
 import 'package:app/services/vip_service.dart';
 import 'package:app/tools/app/app_icons.dart';
+import 'package:app/tools/app/app_snack.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -523,5 +524,18 @@ class _LevelPageState extends StateSuper<MultiItemPage> {
   }
 
   void onBuyClick() {
+    final user = SessionService.getLastLoginUser();
+
+    if(user == null || user.userId == '0'){
+      AppSnack.showError(context, 'ابتدا باید ثبت نام کنید.');
+      return;
+    }
+
+    if(user != null && user.vipOptions.isVip()){
+      AppToast.showToast(context, 'شما در حال حاضر کاربر ویژه هستید و دسترسی کامل به محتوا دارید.');
+      return;
+    }
+
+    VipService.gotoBuyVipPage(context);
   }
 }

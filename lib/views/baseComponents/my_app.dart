@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-import 'package:iris_route/iris_route.dart';
 import 'package:iris_tools/api/system.dart';
 import 'package:iris_tools/widgets/maxWidth.dart';
 import 'package:iris_tools/widgets/path/box_clipper.dart';
@@ -90,8 +89,8 @@ class _MyAppState extends State<MyApp> {
                                   themeMode: AppThemes.instance.currentThemeMode,
                                   theme: AppThemes.instance.themeData,
                                   //darkTheme: ThemeData.dark(),
-                                  onGenerateRoute: IrisNavigatorObserver.generateRoute,
-                                  navigatorObservers: [IrisNavigatorObserver.instance()],
+                                  onGenerateRoute: RouteTools.oneNavigator.generateRoute,
+                                  navigatorObservers: [RouteTools.oneNavigator],
                                   scrollBehavior: ScrollConfiguration.of(context).copyWith(
                                     dragDevices: {
                                       PointerDeviceKind.mouse,

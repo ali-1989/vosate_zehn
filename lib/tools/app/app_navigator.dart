@@ -504,12 +504,12 @@ class AppNavigator {
       ModalRoute.of(ctx).addScopedWillPopCallback(popListener);
    */
 
-  static void addPopListener(BuildContext context, Future<bool> Function() fn){
-    ModalRoute.of(context)?.addScopedWillPopCallback(fn);
+  static void addPopListener(BuildContext context, PopEntry fn){
+    ModalRoute.of(context)?.registerPopEntry(fn);
   }
 
-  static void removePopListener(BuildContext context, Future<bool> Function() fn){
-    ModalRoute.of(context)?.removeScopedWillPopCallback(fn);
+  static void removePopListener(BuildContext context, PopEntry fn){
+    ModalRoute.of(context)?.unregisterPopEntry(fn);
   }
 
   static bool isDisabledAnimations(BuildContext context){

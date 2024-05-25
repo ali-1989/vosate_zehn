@@ -80,5 +80,25 @@ enum BucketTypes {
     default:
       return '';
     }
+
+    /*
+    if(_id == video._id){
+      return 'فیلم';
+    }
+
+    if(_id == motion._id){
+      return 'حرکت';
+    }
+
+    if(_id == loan._id){
+      return 'وام';
+    }
+
+    if(_id == installment._id){
+      return 'قسط وام';
+    }
+
+    return '-';
+    */
   }
 }

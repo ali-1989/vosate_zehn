@@ -1,7 +1,6 @@
+import 'package:app/tools/route_tools.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-import 'package:iris_route/iris_route.dart';
 
 import 'package:app/services/login_service.dart';
 import 'package:app/services/session_service.dart';
@@ -17,12 +16,12 @@ class RouteDispatcher {
   static Widget dispatch(){
     if(!SessionService.hasAnyLogin()){
       if(kIsWeb){
-        final query = IrisNavigatorObserver.getPathQuery(IrisNavigatorObserver.currentUrl());
-        bool contain = query.contains('register=');
+        final queryMap = RouteTools.oneNavigator.queryMap;
+        bool contain = queryMap.keys.contains('register');
 
         if(contain){
           if(AppCache.canCallMethodAgain('request_is_verify_email')){
-            final code = query.substring(9);
+            final code = queryMap['register'];
             LoginService.requestCanRegisterWithEmail(code: code);
           }
 

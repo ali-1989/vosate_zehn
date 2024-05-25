@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:dio/dio.dart';
 import 'package:iris_notifier/iris_notifier.dart';
-import 'package:iris_route/iris_route.dart';
 import 'package:iris_tools/api/generator.dart';
 import 'package:iris_tools/api/helpers/jsonHelper.dart';
 import 'package:iris_tools/api/system.dart';
@@ -459,7 +458,7 @@ class LoginService {
       final context = RouteTools.materialContext!;
       final status = resJs[Keys.status];
       //final causeCode = resJs[Keys.causeCode]?? 0;
-      IrisNavigatorObserver.setAddressBar(IrisNavigatorObserver.appBaseUrl());
+      RouteTools.oneNavigator.setAddressBar(RouteTools.oneNavigator.domain());
       await System.wait(const Duration(milliseconds: 250));
 
       if(status == Keys.error){

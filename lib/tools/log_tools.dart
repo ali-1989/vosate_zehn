@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:app/tools/route_tools.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:http/http.dart' as http;
@@ -113,6 +114,8 @@ class LogTools {
       map['hash'] = hash;
       map['device_id'] = DeviceInfoTools.deviceId;
       map['user_id'] = SessionService.getLastLoginUser()?.userId;
+      map['route_stack1'] = RouteTools.oneNavigator.currentRoutes().map((e) => '${e.name}/').toList();
+      map['route_stack2'] = RouteTools.widgetStateStack.map((e) => '${e.widget.toString()}/').toList();
       map['device_info'] = DeviceInfoTools.mapDeviceInfo();
 
       final body = <String, dynamic>{

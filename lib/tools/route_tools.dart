@@ -1,56 +1,33 @@
+import 'package:app/views/pages/home_page.dart';
 import 'package:flutter/material.dart';
 
-import 'package:iris_route/iris_route.dart';
 
 import 'package:app/tools/app/app_navigator.dart';
-import 'package:app/views/pages/about_us_page.dart';
-import 'package:app/views/pages/aid_page.dart';
-import 'package:app/views/pages/contact_us_page.dart';
-import 'package:app/views/pages/e404_page.dart';
-import 'package:app/views/pages/favorites_page.dart';
-import 'package:app/views/pages/home_page.dart';
-import 'package:app/views/pages/last_seen_page.dart';
-import 'package:app/views/pages/layout_page.dart';
-import 'package:app/views/pages/login/login_page.dart';
-import 'package:app/views/pages/profile/profile_page.dart';
-import 'package:app/views/pages/term_page.dart';
+import 'package:one_route/one_navigator.dart';
 
 class RouteTools {
   static BuildContext? materialContext;
-  //static final StackList<State> widgetStateStack = StackList();
   static final List<State> widgetStateStack = [];
+  static final oneNavigator = OneNavigator();
+
+  static late OneRoutePage homePage;
 
   RouteTools._();
 
   static prepareRoutes(){
-    final aboutPage = IrisPageRoute.by((ProfilePage).toString(), ProfilePage());
-    final homePage = IrisPageRoute.by((HomePage).toString(), HomePage());
-    final supportPage = IrisPageRoute.by((LoginPage).toString(), LoginPage());
-    final walletPage = IrisPageRoute.by((LayoutPage).toString(), const LayoutPage());
-    final aboutUsPage = IrisPageRoute.by((AboutUsPage).toString(), const AboutUsPage());
-    final aidPage = IrisPageRoute.by((AidPage).toString(), const AidPage());
-    final contactUsPage = IrisPageRoute.by((ContactUsPage).toString(), const ContactUsPage());
-    final favoritesPage = IrisPageRoute.by((FavoritesPage).toString(), const FavoritesPage());
-    final lastSeenPage = IrisPageRoute.by((LastSeenPage).toString(), const LastSeenPage());
-    final termPage = IrisPageRoute.by((TermPage).toString(), const TermPage());
-    final e404Page = IrisPageRoute.by((E404Page).toString(), const E404Page());
-    
-    IrisNavigatorObserver.notFoundHandler = (settings) => null;
-    IrisNavigatorObserver.homeName = homePage.routeName;
+    oneNavigator.debugLog = false;
+    oneNavigator.isRestrictName = false;
+    oneNavigator.notFoundHandler = (settings) => null;
 
-    IrisNavigatorObserver.allAppRoutes.add(aboutPage);
-    IrisNavigatorObserver.allAppRoutes.add(homePage);
-    IrisNavigatorObserver.allAppRoutes.add(supportPage);
-    IrisNavigatorObserver.allAppRoutes.add(walletPage);
-    IrisNavigatorObserver.allAppRoutes.add(aboutUsPage);
-    IrisNavigatorObserver.allAppRoutes.add(aidPage);
-    IrisNavigatorObserver.allAppRoutes.add(contactUsPage);
-    IrisNavigatorObserver.allAppRoutes.add(favoritesPage);
-    IrisNavigatorObserver.allAppRoutes.add(lastSeenPage);
-    IrisNavigatorObserver.allAppRoutes.add(termPage);
-    IrisNavigatorObserver.allAppRoutes.add(e404Page);
-    //IrisNavigatorObserver.allAppRoutes.add(registerPage);
-    //IrisNavigatorObserver.allAppRoutes.add(audioPlayerPage);
+    homePage = OneRoutePage.by('home', _pageBuilder);
+  }
+
+  static Widget _pageBuilder(BuildContext ctx, String routeName){
+    if(routeName == homePage.routeName){
+      return const HomePage();
+    }
+
+    return const SizedBox();
   }
 
   static void addWidgetState(State state){

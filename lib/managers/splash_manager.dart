@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_web_plugins/url_strategy.dart';
-import 'package:iris_route/iris_route.dart';
 import 'package:iris_tools/net/trustSsl.dart';
 
 import 'package:app/managers/advertising_manager.dart';
@@ -76,6 +75,7 @@ class SplashManager {
     try {
       await AppDB.init();
       await AppLocale.setFallBack();
+      RouteTools.prepareRoutes();
       FontManager.init(calcFontSize: true);
       AppThemes.init();
       SettingsManager.init();
@@ -90,7 +90,7 @@ class SplashManager {
       }
 
       if(kIsWeb){
-        bool isSecure = IrisNavigatorObserver.appBaseUrl().contains('https');
+        bool isSecure = RouteTools.oneNavigator.domain().contains('https');
         String httpUrl = SettingsManager.localSettings.httpAddress;
         String wsUrl = SettingsManager.localSettings.wsAddress;
 
@@ -152,7 +152,6 @@ class SplashManager {
       }
 
       if(context != null && context.mounted){
-        RouteTools.prepareRoutes();
         AppCache.preLoadImages();
       }
 
