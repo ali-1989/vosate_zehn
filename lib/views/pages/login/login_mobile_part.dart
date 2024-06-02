@@ -241,7 +241,7 @@ class _LoginMobilePartState extends StateSuper<LoginMobilePart> {
 
   void onTapCountryArrow() async {
     final value = await RouteTools.pushPage(
-        context, const CountrySelectScreen());
+        context, const CountrySelectScreen(), name: 'CountrySelect-Page'.toLowerCase());
 
     if (value is CountryModel) {
       countryModel = value;
@@ -332,7 +332,7 @@ class _LoginMobilePartState extends StateSuper<LoginMobilePart> {
           injectData.countryModel = countryModel;
           injectData.mobileNumber = phoneNumber;
 
-          RouteTools.pushPage(context, RegisterPage(injectData: injectData));
+          RouteTools.pushPage(context, RegisterPage(injectData: injectData), name: 'Register-Page'.toLowerCase());
         }
         else {
           final userModel = await SessionService.loginByProfileData(

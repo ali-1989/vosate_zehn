@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:app/tools/route_tools.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:http/http.dart' as http;
@@ -17,6 +16,7 @@ import 'package:app/system/keys.dart';
 import 'package:app/tools/app/app_cache.dart';
 import 'package:app/tools/app/app_directories.dart';
 import 'package:app/tools/device_info_tools.dart';
+import 'package:app/tools/route_tools.dart';
 
 class LogTools {
   LogTools._();
@@ -73,16 +73,26 @@ class LogTools {
     _logger.logToFile(text, type: prefix);
   }
 
+  static void logToScreen(String text, {String prefix = ''}){
+    /*for(final x in avoidLocalLogMessageList){
+      if(text.contains(x)){
+        return;
+      }
+    }*/
+
+    _logger.logToScreen(text, type: prefix);
+  }
+
   static Map<String, dynamic> buildServerLog(String subject, {dynamic data, String? error}){
     final map = <String, dynamic>{};
-    map['subject'] = subject;
+    map['SUBJECT'] = subject;
 
     if(error != null) {
-      map['error'] = error;
+      map['ERROR'] = error;
     }
 
     if(data != null) {
-      map['data'] = data;
+      map['DATA'] = data;
     }
 
     return map;
@@ -90,7 +100,7 @@ class LogTools {
 
   /// must map include a 'subject' key.
   static void reportLogToServer(Map<String, dynamic> map) async {
-    final String? subjectKey = map['subject'];
+    final String? subjectKey = map['SUBJECT'];
 
     if(subjectKey == null){
       return;
@@ -109,14 +119,11 @@ class LogTools {
     }
 
     void fn(){
-      final url = Uri.parse(ApiManager.logReportApi);
-
-      map['hash'] = hash;
       map['device_id'] = DeviceInfoTools.deviceId;
       map['user_id'] = SessionService.getLastLoginUser()?.userId;
-      map['route_stack1'] = RouteTools.oneNavigator.currentRoutes().map((e) => '${e.name}/').toList();
-      map['route_stack2'] = RouteTools.widgetStateStack.map((e) => '${e.widget.toString()}/').toList();
+      map['route_stack'] = RouteTools.oneNavigator.currentRoutes().map((e) => e.name).toList();
       map['device_info'] = DeviceInfoTools.mapDeviceInfo();
+      map['hash'] = hash;
 
       final body = <String, dynamic>{
         Keys.key: 'app_exception',
@@ -131,6 +138,7 @@ class LogTools {
         'Accept': 'application/json',
       };
 
+      final url = Uri.parse(ApiManager.logReportApi);
       http.post(url, body: JsonHelper.mapToJson(body), headers: headers);
     }
 

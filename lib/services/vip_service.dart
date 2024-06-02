@@ -1,26 +1,27 @@
 
 
-import 'package:app/services/cafe_bazar_service.dart';
-import 'package:app/structures/enums/enums.dart';
-import 'package:app/structures/models/mediaModelWrapForContent.dart';
-import 'package:app/structures/models/vip_plan_model.dart';
-import 'package:app/system/keys.dart';
-import 'package:app/tools/app/app_loading.dart';
-import 'package:app/tools/app/app_sheet.dart';
-import 'package:app/tools/app_tools.dart';
 import 'package:flutter/material.dart';
 
+import 'package:flutter_poolakey/purchase_info.dart';
+import 'package:iris_tools/dateSection/dateHelper.dart';
+
+import 'package:app/services/cafe_bazar_service.dart';
 import 'package:app/services/session_service.dart';
+import 'package:app/structures/enums/enums.dart';
+import 'package:app/structures/models/mediaModelWrapForContent.dart';
 import 'package:app/structures/models/subBuketModel.dart';
+import 'package:app/structures/models/vip_plan_model.dart';
 import 'package:app/system/build_flavor.dart';
+import 'package:app/system/keys.dart';
 import 'package:app/tools/app/app_dialog.dart';
+import 'package:app/tools/app/app_loading.dart';
+import 'package:app/tools/app/app_sheet.dart';
 import 'package:app/tools/app/app_snack.dart';
 import 'package:app/tools/app/app_themes.dart';
+import 'package:app/tools/app_tools.dart';
 import 'package:app/tools/route_tools.dart';
 import 'package:app/views/pages/profile/buy_vip_plan_page.dart';
 import 'package:app/views/pages/profile/cafe_bazar_page.dart';
-import 'package:flutter_poolakey/purchase_info.dart';
-import 'package:iris_tools/dateSection/dateHelper.dart';
 
 class VipService {
   VipService._();
@@ -113,12 +114,12 @@ class VipService {
   static void popAndGotoBuyVipPage() async {
     final context = RouteTools.getBaseContext()!;
     Navigator.of(context).pop();
-    RouteTools.pushPage(context, getPayPage());
+    RouteTools.pushPage(context, getPayPage(), name: 'getPay-Page'.toLowerCase());
   }
 
   static void gotoBuyVipPage(BuildContext? context) async {
     context ??= RouteTools.getBaseContext()!;
-    RouteTools.pushPage(context, getPayPage());
+    RouteTools.pushPage(context, getPayPage(), name: 'getPay-Page'.toLowerCase());
   }
 
   static Widget getPayPage(){

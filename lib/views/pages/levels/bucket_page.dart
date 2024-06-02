@@ -200,7 +200,7 @@ class _BucketPageState extends StateSuper<BucketPage> {
   }
 
   void onItemClick(BucketModel itm) {
-    RouteTools.pushPage(context, SubBucketPage(injectData: SubBucketPageInjectData()..bucketModel = itm));
+    RouteTools.pushPage(context, SubBucketPage(injectData: SubBucketPageInjectData()..bucketModel = itm), name: 'SubBucket-Page'.toLowerCase());
   }
 
   void requestData() async {

@@ -7,7 +7,7 @@ enum AssistGroup implements GroupId {
 
   const AssistGroup(this._number);
 
-  int getNumber(){
+  int id(){
     return _number;
   }
 }

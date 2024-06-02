@@ -7,7 +7,7 @@ enum BadgesGroup implements UpdaterGroupId {
 
   const BadgesGroup(this._number);
 
-  int getNumber(){
+  int id(){
     return _number;
   }
 }

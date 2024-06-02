@@ -1,9 +1,12 @@
-import 'package:app/views/pages/home_page.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'package:flutter_web_plugins/url_strategy.dart' as web_plugin;
+import 'package:one_route/one_navigator.dart';
 
 import 'package:app/tools/app/app_navigator.dart';
-import 'package:one_route/one_navigator.dart';
+import 'package:app/tools/log_tools.dart';
+import 'package:app/views/pages/home_page.dart';
 
 class RouteTools {
   static BuildContext? materialContext;
@@ -15,19 +18,24 @@ class RouteTools {
   RouteTools._();
 
   static prepareRoutes(){
+    //activeMemoryAllocationsForPush();
     oneNavigator.debugLog = false;
     oneNavigator.isRestrictName = false;
     oneNavigator.notFoundHandler = (settings) => null;
 
-    homePage = OneRoutePage.by('home', _pageBuilder);
+    homePage = OneRoutePage.by('home', _pageViewBuilder);
   }
 
-  static Widget _pageBuilder(BuildContext ctx, String routeName){
+  static Widget _pageViewBuilder(BuildContext ctx, String routeName){
     if(routeName == homePage.routeName){
       return const HomePage();
     }
 
-    return const SizedBox();
+    return Material(
+      child: Center(
+        child: Text('### pageViewBuilder : $routeName'),
+      ),
+    );
   }
 
   static void addWidgetState(State state){
@@ -104,45 +112,70 @@ class RouteTools {
     }
   }
 
-  /*static void pushNamed(BuildContext context, String name, {dynamic extra}) {
-    Navigator.of(context).pushNamed(name, arguments: extra);
-    ///updateAddressBar(url);
+  static String _correctName(String name){
+    if(web_plugin.urlStrategy is web_plugin.PathUrlStrategy){
+      if(!name.startsWith('/')){
+        name = '/$name';
+      }
+    }
+    else {
+      if(name.startsWith('/')){
+        name = name.substring(1);
+      }
+    }
+
+    return name;
   }
 
-  static void replaceNamed(BuildContext context, String name, {dynamic extra}) {
-    Navigator.of(context).pushReplacementNamed(name, arguments: extra);
-    ///updateAddressBar(url);
-  }*/
+  static void pushNamed(BuildContext context, String name, {dynamic args}) {
+    Navigator.of(context).pushNamed(_correctName(name), arguments: args);
+  }
+
+  static void replaceNamed(BuildContext context, String name, {dynamic args}) {
+    Navigator.of(context).pushReplacementNamed(_correctName(name), arguments: args);
+  }
 
   /// note: Navigator.of()... not change url automatic in browser. if use [MaterialApp.router]
   /// and can not effect on back/pre buttons in browser
-  static Future pushPage(BuildContext context, Widget page, {dynamic args, String? name}) async {
-    String n = name?? (page).toString();
-
-    if(!n.startsWith('/')){
-      n = '/$n';
-    }
-
+  static Future pushPage(BuildContext context, Widget page, {required String name, dynamic args}) async {
     final r = MaterialPageRoute(
         builder: (ctx){return page;},
-        settings: RouteSettings(name: n, arguments: args)
+        settings: RouteSettings(name: _correctName(name), arguments: args)
     );
 
     return Navigator.of(context).push(r);
   }
 
-  static Future pushReplacePage(BuildContext context, Widget page, {dynamic args, String? name}) {
-    String n = name?? (page).toString();
-
-    if(!n.startsWith('/')){
-      n = '/$n';
-    }
-
+  static Future pushReplacePage(BuildContext context, Widget page, {required String name, dynamic args}) {
     final r = MaterialPageRoute(
         builder: (ctx){return page;},
-        settings: RouteSettings(name: n, arguments: args)
+        settings: RouteSettings(name: _correctName(name), arguments: args)
     );
 
     return Navigator.of(context).pushReplacement(r);
+  }
+
+  static bool isMemoryAllocationsActive(){
+    const bool kMemoryAllocations = bool.fromEnvironment('flutter.memory_allocations');
+    return kMemoryAllocations || kDebugMode;
+  }
+
+  static void activeMemoryAllocationsForPush(){
+    if (kFlutterMemoryAllocationsEnabled) {
+      FlutterMemoryAllocations.instance.addListener((event) {
+        if (event is ObjectCreated && event.className.contains('Route')) {
+          LogTools.logToScreen('>> Route Created ${event.object.toString()}');
+        }
+        /*else if (event is ObjectDisposed) {
+          LogTools.logToScreen('>> ObjectDisposed');
+        }
+        else {
+          LogTools.logToScreen('>> ${event.object}');
+        }*/
+      });
+    }
+    else {
+      LogTools.logToScreen('>> >> >> FlutterMemoryAllocations is not Active. Run: --dart-define=flutter.memory_allocations=true');
+    }
   }
 }

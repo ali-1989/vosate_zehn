@@ -1,4 +1,3 @@
-import 'package:app/tools/app_tools.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/duration/durationFormatter.dart';
@@ -17,6 +16,7 @@ import 'package:app/tools/app/app_images.dart';
 import 'package:app/tools/app/app_messages.dart';
 import 'package:app/tools/app/app_themes.dart';
 import 'package:app/tools/app/app_toast.dart';
+import 'package:app/tools/app_tools.dart';
 import 'package:app/views/baseComponents/appbar_builder.dart';
 import 'package:app/views/states/empty_data.dart';
 import 'package:app/views/states/wait_to_load.dart';

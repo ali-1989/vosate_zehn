@@ -19,11 +19,11 @@ class AidService {
 
   static void gotoAidPage(){
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    RouteTools.pushPage(RouteTools.getTopContext()!, const AidPage());
+    RouteTools.pushPage(RouteTools.getTopContext()!, const AidPage(), name: 'Aid-Page'.toLowerCase());
   }
 
   static Future<bool> gotoZarinpalPage(BuildContext ctx) async {
-    RouteTools.pushPage(ctx, const PayWebPage(url: 'https://zarinp.al/vosatezehn.ir'));
+    RouteTools.pushPage(ctx, const PayWebPage(url: 'https://zarinp.al/vosatezehn.ir'), name: 'PayWeb-Page'.toLowerCase());
     return false;
   }
 

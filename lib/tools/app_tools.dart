@@ -1,24 +1,24 @@
 import 'dart:async';
 
-import 'package:app/services/last_seen_service.dart';
-import 'package:app/services/vip_service.dart';
-import 'package:app/structures/enums/enums.dart';
-import 'package:app/structures/models/bucketModel.dart';
-import 'package:app/structures/models/subBuketModel.dart';
-import 'package:app/views/pages/levels/audio_player_page.dart';
-import 'package:app/views/pages/levels/multi_item_page.dart';
-import 'package:app/views/pages/levels/video_player_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/dateSection/dateHelper.dart';
 
+import 'package:app/services/last_seen_service.dart';
 import 'package:app/services/session_service.dart';
+import 'package:app/services/vip_service.dart';
+import 'package:app/structures/enums/enums.dart';
 import 'package:app/structures/middleWares/requester.dart';
 import 'package:app/structures/mixins/date_field_mixin.dart';
+import 'package:app/structures/models/bucketModel.dart';
+import 'package:app/structures/models/subBuketModel.dart';
 import 'package:app/structures/models/upperLower.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/app_toast.dart';
 import 'package:app/tools/route_tools.dart';
+import 'package:app/views/pages/levels/audio_player_page.dart';
+import 'package:app/views/pages/levels/multi_item_page.dart';
+import 'package:app/views/pages/levels/video_player_page.dart';
 
 class AppTools {
   AppTools._();
@@ -105,7 +105,7 @@ class AppTools {
       inject.srcAddress = itm.mediaModel!.url!;
       inject.videoSourceType = VideoSourceType.network;
 
-      RouteTools.pushPage(context, VideoPlayerPage(injectData: inject));
+      RouteTools.pushPage(context, VideoPlayerPage(injectData: inject), name: 'VideoPlayer-Page'.toLowerCase());
       return;
     }
 
@@ -116,12 +116,12 @@ class AppTools {
       inject.title = '';//widget.injectData.level1model?.title;
       inject.subTitle = itm.title;
 
-      RouteTools.pushPage(context, AudioPlayerPage(injectData: inject));
+      RouteTools.pushPage(context, AudioPlayerPage(injectData: inject), name: 'AudioPlayer-Page'.toLowerCase());
       return;
     }
 
     if(itm.type == SubBucketTypes.list.id()){
-      RouteTools.pushPage(context, MultiItemPage(subBucket: itm));
+      RouteTools.pushPage(context, MultiItemPage(subBucket: itm), name: 'MultiItem-Page'.toLowerCase());
       return;
     }
   }
@@ -140,7 +140,7 @@ class AppTools {
       inject.srcAddress = itm.mediaModel!.url!;
       inject.videoSourceType = VideoSourceType.network;
 
-      RouteTools.pushPage(context, VideoPlayerPage(injectData: inject));
+      RouteTools.pushPage(context, VideoPlayerPage(injectData: inject), name: 'VideoPlayer-Page'.toLowerCase());
       return;
     }
 
@@ -151,12 +151,12 @@ class AppTools {
       inject.title = bucketModel?.title;
       inject.subTitle = itm.title;
 
-      RouteTools.pushPage(context, AudioPlayerPage(injectData: inject));
+      RouteTools.pushPage(context, AudioPlayerPage(injectData: inject), name: 'AudioPlayer-Page'.toLowerCase());
       return;
     }
 
     if(itm.type == SubBucketTypes.list.id()){
-      RouteTools.pushPage(context, MultiItemPage(subBucket: itm));
+      RouteTools.pushPage(context, MultiItemPage(subBucket: itm), name: 'MultiItem-Page'.toLowerCase());
       return;
     }
   }

@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:app/system/build_flavor.dart';
-import 'package:app/tools/app/app_loading.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -32,11 +30,13 @@ import 'package:app/structures/enums/app_events.dart';
 import 'package:app/structures/enums/enums.dart';
 import 'package:app/structures/middleWares/requester.dart';
 import 'package:app/structures/models/user_model.dart';
+import 'package:app/system/build_flavor.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/app_directories.dart';
 import 'package:app/tools/app/app_icons.dart';
 import 'package:app/tools/app/app_images.dart';
+import 'package:app/tools/app/app_loading.dart';
 import 'package:app/tools/app/app_messages.dart';
 import 'package:app/tools/app/app_overlay.dart';
 import 'package:app/tools/app/app_sheet.dart';
@@ -786,7 +786,7 @@ class _ProfilePageState extends StateSuper<ProfilePage> {
   }
 
   void onBuyVipPlan() async {
-    await RouteTools.pushPage(context, VipService.getPayPage());
+    await RouteTools.pushPage(context, VipService.getPayPage(), name: 'getpay-Page'.toLowerCase());
     callState();
   }
 

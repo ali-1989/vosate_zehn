@@ -19,7 +19,8 @@ class AppDecoration {
   static const Color secondColor = Color(0xFF5D8D1E);
   static const Color differentColor = Color(0xFFFF006E);
   static const Color orange = Color(0xFFFF006E);
-  
+  static const Color sormei = Color(0xFF1446AF);
+
   static get strutStyle => const StrutStyle(forceStrutHeight: true, height: 1.08, leading: 0.36);
   //--------------------------------------------------
   static ClassicFooter classicFooter = const ClassicFooter(

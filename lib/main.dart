@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iris_tools/api/generator.dart';
+import 'package:iris_tools/api/helpers/textHelper.dart';
 
 import 'package:app/managers/splash_manager.dart';
 import 'package:app/services/native_call_service.dart';
@@ -73,11 +74,11 @@ void onErrorCatch(FlutterErrorDetails errorDetails) {
     txt += '\nNAME: ${errorDetails.context?.name}';
     txt += '\nVALUE: ${errorDetails.context?.value}';
     txt += '\nLEVEL: ${errorDetails.context?.level}';
-    txt += '\nSTACK TRACE: ${errorDetails.stack}';
+    txt += '\nSTACK TRACE: ${TextHelper.subByCharCountSafe(errorDetails.stack?.toString()?? '', 400)}';
     txt += '\ninformation: ${errorDetails.informationCollector?.call()}';
   }
 
-  txt += '\n************ [END CATCH]';
+  txt += '\n[END CATCH]';
 
   LogTools.logToAll(txt, isError: true);
   LogTools.reportLogToServer(LogTools.buildServerLog('MainError:${Generator.hashMd5(txt)}', error: txt));
@@ -86,11 +87,11 @@ void onErrorCatch(FlutterErrorDetails errorDetails) {
 bool mainIsolateError(error, sTrace) {
   var txt = 'MAIN-ISOLATE:${Constants.appName}: ${error.toString()}';
 
-  if(!(kDebugMode || kIsWeb)) {
-    txt += '\nSTACK TRACE: $sTrace';
+  if(!(kDebugMode || kIsWeb) && sTrace != null) {
+    txt += '\nSTACK TRACE: ${TextHelper.subByCharCountSafe(sTrace.toString(), 400)}';
   }
 
-  txt += '\n************ [END MAIN-ISOLATE]';
+  txt += '\n[END MAIN-ISOLATE]';
   LogTools.logToAll(txt, isError: true);
   LogTools.reportLogToServer(LogTools.buildServerLog('MainIsolate:${Generator.hashMd5(txt)}', error: txt));
 
@@ -104,11 +105,11 @@ bool mainIsolateError(error, sTrace) {
 void zonedGuardedCatch(error, sTrace) {
   var txt = 'MAIN-ZONED-GUARDED:${Constants.appName}: ${error.toString()}';
 
-  if(!(kDebugMode || kIsWeb)) {
-    txt += '\nSTACK TRACE: $sTrace';
+  if(!(kDebugMode || kIsWeb) && sTrace != null) {
+    txt += '\nSTACK TRACE: ${TextHelper.subByCharCountSafe(sTrace.toString(), 400)}';
   }
 
-  txt += '\n************** [END ZONED-GUARDED]';
+  txt += '\n[END ZONED-GUARDED]';
   LogTools.logToAll(txt, isError: true);
   LogTools.reportLogToServer(LogTools.buildServerLog('MainZonedGuarded:${Generator.hashMd5(txt)}', error: txt));
 

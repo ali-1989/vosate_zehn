@@ -1,6 +1,3 @@
-import 'package:app/services/vip_service.dart';
-import 'package:app/tools/app/app_icons.dart';
-import 'package:app/tools/app/app_snack.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -11,6 +8,7 @@ import 'package:iris_tools/widgets/sizePosition/size_inInfinity.dart';
 
 import 'package:app/managers/media_manager.dart';
 import 'package:app/services/session_service.dart';
+import 'package:app/services/vip_service.dart';
 import 'package:app/structures/abstract/state_super.dart';
 import 'package:app/structures/enums/assist_groups.dart';
 import 'package:app/structures/enums/enums.dart';
@@ -23,8 +21,10 @@ import 'package:app/system/extensions.dart';
 import 'package:app/system/keys.dart';
 import 'package:app/tools/app/app_cache.dart';
 import 'package:app/tools/app/app_directories.dart';
+import 'package:app/tools/app/app_icons.dart';
 import 'package:app/tools/app/app_images.dart';
 import 'package:app/tools/app/app_messages.dart';
+import 'package:app/tools/app/app_snack.dart';
 import 'package:app/tools/app/app_themes.dart';
 import 'package:app/tools/app/app_toast.dart';
 import 'package:app/tools/route_tools.dart';
@@ -198,16 +198,13 @@ class _LevelPageState extends StateSuper<MultiItemPage> {
                         Builder(
                             builder: (_){
                               if(widget.subBucket.isVip){
-                                return Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 14.0),
-                                      child: ElevatedButton(
-                                          onPressed: onBuyClick,
-                                          child: const Icon(AppIcons.buyBasket, size: 20)
-                                      ),
-                                    ),
-                                  ],
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                                  child: ElevatedButton.icon(
+                                      onPressed: onBuyClick,
+                                      label: Text('خرید'),
+                                      icon: const Icon(AppIcons.buyBasket, size: 20)
+                                  ),
                                 );
                               }
 
@@ -400,7 +397,7 @@ class _LevelPageState extends StateSuper<MultiItemPage> {
       inject.videoSourceType = VideoSourceType.network;
       inject.onFullTimePlay = (){onFullTimePlay(media);};
 
-      RouteTools.pushPage(context, VideoPlayerPage(injectData: inject));
+      RouteTools.pushPage(context, VideoPlayerPage(injectData: inject), name: 'VideoPlayer-Page'.toLowerCase());
     }
     else if(type == SubBucketTypes.audio){
       final inject = AudioPlayerPageInjectData();
@@ -409,7 +406,7 @@ class _LevelPageState extends StateSuper<MultiItemPage> {
       inject.title = media.title;
       inject.onFullTimePlay = (){onFullTimePlay(media);};
 
-      RouteTools.pushPage(context, AudioPlayerPage(injectData: inject));
+      RouteTools.pushPage(context, AudioPlayerPage(injectData: inject), name: 'AudioPlayer-Page'.toLowerCase());
     }
   }
 
@@ -531,7 +528,7 @@ class _LevelPageState extends StateSuper<MultiItemPage> {
       return;
     }
 
-    if(user != null && user.vipOptions.isVip()){
+    if(user.vipOptions.isVip()){
       AppToast.showToast(context, 'شما در حال حاضر کاربر ویژه هستید و دسترسی کامل به محتوا دارید.');
       return;
     }

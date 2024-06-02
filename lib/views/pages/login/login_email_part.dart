@@ -258,7 +258,7 @@ class _LoginEmailPartState extends StateSuper<LoginEmailPart> {
       final injectData = RegisterPageInjectData();
       injectData.email = email;
 
-      RouteTools.pushPage(context, RegisterPage(injectData: injectData));
+      RouteTools.pushPage(context, RegisterPage(injectData: injectData), name: 'register-Page'.toLowerCase());
     }
     else if(state == EmailVerifyStatus.waitToVerify){
       AppSheet.showSheetOk(context, 'ایمیلی جهت فعال ساری برای شما ارسال شد، لطفا روی لینک فعال سازی کلیک کنید.');
@@ -295,7 +295,7 @@ class _LoginEmailPartState extends StateSuper<LoginEmailPart> {
       final injectData = RegisterPageInjectData();
       injectData.email = email;
 
-      RouteTools.pushPage(context, RegisterPage(injectData: injectData));
+      RouteTools.pushPage(context, RegisterPage(injectData: injectData), name: 'register-Page'.toLowerCase());
     }
     else if(status == EmailLoginStatus.waitToVerify){
       AppSheet.showSheetOk(context, 'ایمیلی جهت فعال ساری برای شما ارسال شد، لطفا روی لینک فعال سازی کلیک کنید.');
@@ -351,7 +351,7 @@ class _LoginEmailPartState extends StateSuper<LoginEmailPart> {
           final injectData = RegisterPageInjectData();
           injectData.email = email;
 
-          RouteTools.pushPage(context, RegisterPage(injectData: injectData));
+          RouteTools.pushPage(context, RegisterPage(injectData: injectData), name: 'register-Page'.toLowerCase());
         }
         else {
           final userModel = await SessionService.loginByProfileData(twoState.result1!);

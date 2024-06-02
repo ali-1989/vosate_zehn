@@ -20,7 +20,7 @@ enum AppEvents implements EventImplement {
 
   const AppEvents(this._number);
 
-  int getNumber(){
+  int id(){
     return _number;
   }
 }

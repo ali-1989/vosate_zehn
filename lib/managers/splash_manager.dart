@@ -1,10 +1,9 @@
 import 'dart:async';
 
-import 'package:app/services/vip_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter_web_plugins/url_strategy.dart';
+import 'package:flutter_web_plugins/url_strategy.dart' as web_plugin;
 import 'package:iris_tools/net/trustSsl.dart';
 
 import 'package:app/managers/advertising_manager.dart';
@@ -19,6 +18,7 @@ import 'package:app/services/firebase_service.dart';
 import 'package:app/services/login_service.dart';
 import 'package:app/services/native_call_service.dart';
 import 'package:app/services/session_service.dart';
+import 'package:app/services/vip_service.dart';
 import 'package:app/services/wakeup_service.dart';
 import 'package:app/services/websocket_service.dart';
 import 'package:app/structures/models/settings_model.dart';
@@ -57,7 +57,7 @@ class SplashManager {
   static Future<Object?> beforeRunApp() async {
     try {
       await FireBaseService.initializeApp();
-      usePathUrlStrategy();
+      web_plugin.usePathUrlStrategy();
 
       if(kIsWeb){
         splashWaitingMil = 0;

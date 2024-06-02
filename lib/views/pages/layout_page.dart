@@ -1,4 +1,3 @@
-import 'package:app/services/vip_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:move_to_background/move_to_background.dart';
@@ -8,11 +7,13 @@ import 'package:shaped_bottom_bar/utils/arrays.dart';
 
 import 'package:app/services/aid_service.dart';
 import 'package:app/services/session_service.dart';
+import 'package:app/services/vip_service.dart';
 import 'package:app/structures/abstract/state_super.dart';
 import 'package:app/structures/enums/enums.dart';
 import 'package:app/structures/enums/user_type.dart';
 import 'package:app/system/extensions.dart';
 import 'package:app/tools/app/app_broadcast.dart';
+import 'package:app/tools/app/app_decoration.dart';
 import 'package:app/tools/app/app_icons.dart';
 import 'package:app/tools/app/app_messages.dart';
 import 'package:app/tools/app/app_themes.dart';
@@ -93,7 +94,7 @@ class LayoutPageState extends StateSuper<LayoutPage> {
 
   AppBar buildAppBar(){
     return AppBarCustom(
-      title: Text(AppMessages.appName).color(const Color(0xFF1446AF)),
+      title: Text(AppMessages.appName).color(AppDecoration.sormei),
 
       leadingWidth: 130,
       leading: Row(
@@ -105,7 +106,7 @@ class LayoutPageState extends StateSuper<LayoutPage> {
             },
             child: const Padding(
               padding: EdgeInsets.only(right: 8),
-              child: Icon(AppIcons.list, size: 30, color: Color(0xFF1446AF)),
+              child: Icon(AppIcons.list, size: 30, color: AppDecoration.sormei),
             ),
           ),
 
@@ -140,16 +141,25 @@ class LayoutPageState extends StateSuper<LayoutPage> {
           ),
         ),*/
 
-        IconButton(
-            onPressed: (){
+
+        GestureDetector(
+            onTap: (){
               VipService.gotoBuyVipPage(context);
             },
-            icon: const Icon(AppIcons.buyBasket, color: Colors.white)
+            child: Row(
+              children: [
+                const Icon(AppIcons.buyBasket, color: Colors.white, size: 20,),
+                const SizedBox(width: 4),
+                const Text('خرید',).color(Colors.white)
+              ],
+            )
         ),
+
+        const SizedBox(width: 4),
 
         IconButton(
             onPressed: (){
-              RouteTools.pushPage(context, const SearchPage());
+              RouteTools.pushPage(context, const SearchPage(), name: 'Search-Page'.toLowerCase());
             },
             icon: const Icon(AppIcons.search, color: Colors.white)
         ),
@@ -194,7 +204,7 @@ class LayoutPageState extends StateSuper<LayoutPage> {
   }
 
   void gotoProfilePage(){
-    RouteTools.pushPage(context, const ProfilePage());
+    RouteTools.pushPage(context, const ProfilePage(), name: 'Profile-Page'.toLowerCase());
   }
 
   void gotoAidPage(){

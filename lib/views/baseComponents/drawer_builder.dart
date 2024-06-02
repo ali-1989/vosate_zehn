@@ -92,10 +92,12 @@ class DrawerMenuBuilder {
 
                     const SizedBox(height: 10),
 
-                    Center(child: CustomCard(
-                      color: AppDecoration.mainColor,
+                    Center(
+                      child: CustomCard(
+                        color: AppDecoration.mainColor,
                         padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 3),
-                        child: Text(AppMessages.slogan))
+                        child: Text(AppMessages.slogan).color(AppDecoration.sormei),
+                      )
                     ),
 
                     if(SessionService.hasAnyLogin())
@@ -298,12 +300,12 @@ class DrawerMenuBuilder {
 
   static void gotoFavoritesPage(){
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    RouteTools.pushPage(RouteTools.getTopContext()!, const FavoritesPage());
+    RouteTools.pushPage(RouteTools.getTopContext()!, const FavoritesPage(), name: 'Favorites-Page'.toLowerCase());
   }
 
   static void gotoLastSeenPage(){
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    RouteTools.pushPage(RouteTools.getTopContext()!, const LastSeenPage());
+    RouteTools.pushPage(RouteTools.getTopContext()!, const LastSeenPage(), name: 'LastSeen-Page'.toLowerCase());
   }
 
   static void gotoAidPage(){
@@ -312,17 +314,17 @@ class DrawerMenuBuilder {
 
   static void gotoContactUsPage(){
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    RouteTools.pushPage(RouteTools.getTopContext()!, const ContactUsPage());
+    RouteTools.pushPage(RouteTools.getTopContext()!, const ContactUsPage(), name: 'ContactUs-Page'.toLowerCase());
   }
 
   static void gotoSentencePage(){
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    RouteTools.pushPage(RouteTools.getTopContext()!, const SentencesPage());
+    RouteTools.pushPage(RouteTools.getTopContext()!, const SentencesPage(), name: 'Sentences-Page'.toLowerCase());
   }
 
   static void gotoAboutUsPage(){
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    RouteTools.pushPage(RouteTools.getTopContext()!, const AboutUsPage());
+    RouteTools.pushPage(RouteTools.getTopContext()!, const AboutUsPage(), name: 'AboutUs-Page'.toLowerCase());
   }
 
   static void downloadNewVersion(){
@@ -335,7 +337,7 @@ class DrawerMenuBuilder {
     }
 
     AppBroadcast.layoutPageKey.currentState?.scaffoldState.currentState?.closeDrawer();
-    RouteTools.pushPage(RouteTools.getTopContext()!, const ProfilePage());
+    RouteTools.pushPage(RouteTools.getTopContext()!, const ProfilePage(), name: 'Profile-Page'.toLowerCase());
   }
 
   static void onLogoffCall(){

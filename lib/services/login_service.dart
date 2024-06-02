@@ -473,7 +473,7 @@ class LoginService {
           final injectData = RegisterPageInjectData();
           injectData.email = resJs['email'];
 
-          RouteTools.pushPage(context, RegisterPage(injectData: injectData));
+          RouteTools.pushPage(context, RegisterPage(injectData: injectData), name: 'Register-Page'.toLowerCase());
         }
         else {
           final userModel = await SessionService.loginByProfileData(resJs);

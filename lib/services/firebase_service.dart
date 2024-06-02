@@ -150,7 +150,7 @@ class FireBaseService {
 
   static void _handlerTouchFcmNotification(RemoteMessage message) {
     Future.delayed(const Duration(seconds: 1), (){
-      RouteTools.pushPage(RouteTools.materialContext!, const SentencesPage());
+      RouteTools.pushPage(RouteTools.materialContext!, const SentencesPage(), name: 'Sentences-Page'.toLowerCase());
     });
 
     _addMessageId(message);
@@ -158,7 +158,7 @@ class FireBaseService {
 
   static void _handlerOpenAppWhenExistNotification(RemoteMessage message) {
     Future.delayed(const Duration(seconds: 1), (){
-      RouteTools.pushPage(RouteTools.materialContext!, const SentencesPage());
+      RouteTools.pushPage(RouteTools.materialContext!, const SentencesPage(), name: 'Sentences-Page'.toLowerCase());
     });
 
     _addMessageId(message);
