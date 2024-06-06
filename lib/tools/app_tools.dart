@@ -83,7 +83,10 @@ class AppTools {
 
     requester.httpRequestEvents.onStatusOk = (req, data) async {
       await SessionService.newProfileData(data as Map<String, dynamic>);
-      AppToast.showToast(RouteTools.materialContext!, 'دسترسی شما امکان پذیر شد.');
+
+      if(SessionService.getLastLoginUser()?.vipOptions.isVip()?? false){
+        AppToast.showToast(RouteTools.materialContext!, 'دسترسی شما امکان پذیر شد.');
+      }
     };
 
     requester.httpRequestEvents.onAnyState = (req) async {

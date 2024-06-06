@@ -228,6 +228,11 @@ class _BuyVipPlanPageState extends StateSuper<BuyVipPlanPage> {
 
   void onBuyClick(VipPlanModel itm) {
     requester.httpRequestEvents.manageResponse = (req, r) async {
+      if(req.responseData!.statusCode != 200){
+        AppSnack.showError(context, 'خطایی رخ داده است. کد: ${req.responseData!.statusCode}.');
+        return;
+      }
+
       final data = r['data'];
 
       if(data is Map){
@@ -250,10 +255,20 @@ class _BuyVipPlanPageState extends StateSuper<BuyVipPlanPage> {
           AppSnack.showError(context, 'متاسفانه درگاه پرداخت خطا دارد.');
         }
       }
+
       else {
         await hideLoading();
         AppSnack.showError(context, 'متاسفانه درگاه پرداخت جواب نداد.');
         LogTools.logToAll('BankGetWay: $r', isError: true);
+
+        await Future.delayed(const Duration(seconds: 2));
+        final errors = r['errors'];
+
+        if(errors is List && errors.isNotEmpty){
+          for(final e in errors){
+            AppSnack.showError(context, e.toString());
+          }
+        }
       }
     };
 
